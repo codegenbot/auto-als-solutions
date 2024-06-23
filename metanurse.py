@@ -23,12 +23,14 @@ def main():
             print(15)  # GiveFluids
         elif observations[40] < 65 or observations[42] < 20:
             print(17)  # StartChestCompression
-        elif observations[34] > 0 and observations[41] == 0:
-            print(29)  # UseBagValveMask
+        elif all(observations[i] > 0 for i in [33, 34, 35, 36, 37]) and all(
+            observations[i] >= threshold
+            for i, threshold in zip([40, 41, 42], [88, 8, 60])
+        ):
+            print(48)  # Finish
         else:
             print(0)  # DoNothing
         step += 1
-    print(48)  # Finish
 
 
 if __name__ == "__main__":
