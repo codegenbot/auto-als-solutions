@@ -8,8 +8,18 @@ def main():
         sats = observations[46]
         map_value = observations[44]
         resp_rate = observations[45]
-        if observations[8] > 0:  # BreathingNone
+        if observations[7] > 0:  # BreathingNone
             print(29)  # UseBagValveMask
+        elif observations[33] == 0:
+            print(3)  # ExamineAirway
+        elif observations[34] == 0:
+            print(4)  # ExamineBreathing
+        elif observations[35] == 0:
+            print(5)  # ExamineCirculation
+        elif observations[36] == 0:
+            print(6)  # ExamineDisability
+        elif observations[37] == 0:
+            print(7)  # ExamineExposure
         elif sats < 65 or map_value < 20:
             print(17)  # StartChestCompression
         elif sats < 88:
