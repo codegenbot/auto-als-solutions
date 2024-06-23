@@ -21,8 +21,8 @@ def main():
             print(29)  # UseBagValveMask
         elif observations[42] < 60:
             print(15)  # GiveFluids
-        elif observations[40] < 65 or observations[42] < 20:
-            print(17)  # StartChestCompression
+        elif observations[1] == 0:  # BreathingNone
+            print(29)  # UseBagValveMask
         else:
             print(0)  # DoNothing
         step += 1
