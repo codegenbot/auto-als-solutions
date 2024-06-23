@@ -9,7 +9,7 @@ def main():
         map_value = observations[44]
         resp_rate = observations[45]
         if observations[7] > 0:  # BreathingNone
-            print(29)  # UseBagValveMask
+            print(17)  # StartChestCompression
         elif observations[33] == 0:
             print(3)  # ExamineAirway
         elif observations[34] == 0:
