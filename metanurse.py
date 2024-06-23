@@ -2,28 +2,31 @@ import sys
 
 
 def main():
-    step = 0
-    while step < 350:
+    steps = 0
+    while steps < 350:
         observations = list(map(float, input().split()))
-        if observations[33] == 0:
-            print(3)  # ExamineAirway
-        elif observations[34] == 0:
-            print(4)  # ExamineBreathing
-        elif observations[35] == 0:
-            print(5)  # ExamineCirculation
-        elif observations[36] == 0:
-            print(6)  # ExamineDisability
-        elif observations[37] == 0:
-            print(7)  # ExamineExposure
-        elif observations[40] < 88:
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+        if vital_signs_values[5] < 65 or vital_signs_values[4] < 20:
+            print(47)  # DefibrillatorSync
+        elif vital_signs_values[5] < 88:
             print(30)  # UseNonRebreatherMask
-        elif observations[41] < 8:
-            print(29)  # UseBagValveMask
-        elif observations[42] < 60:
+        elif vital_signs_values[4] < 60:
             print(15)  # GiveFluids
+        elif vital_signs_values[1] < 8:
+            print(29)  # UseBagValveMask
+        elif not any(events[0:4]):
+            print(3)  # ExamineAirway
+        elif not any(events[4:11]):
+            print(4)  # ExamineBreathing
+        elif not any(events[11:33]):
+            print(5)  # ExamineCirculation
         else:
             print(0)  # DoNothing
-        step += 1
+
+        steps += 1
+        sys.stdout.flush()
     print(48)  # Finish
 
 
