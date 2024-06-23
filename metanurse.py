@@ -2,31 +2,36 @@ import sys
 
 
 def main():
-    step = 0
-    while step < 350:
+    steps = 0
+    while steps < 350:
         observations = list(map(float, input().split()))
-        if observations[33] == 0:
-            print(3)  # ExamineAirway
-        elif observations[34] == 0:
-            print(4)  # ExamineBreathing
-        elif observations[35] == 0:
-            print(5)  # ExamineCirculation
-        elif observations[36] == 0:
-            print(6)  # ExamineDisability
-        elif observations[37] == 0:
-            print(7)  # ExamineExposure
-        elif observations[40] < 88:
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
+        sats = vital_signs_values[5]
+        map_value = vital_signs_values[4]
+        resp_rate = vital_signs_values[1]
+
+        if sats < 65 or map_value < 20:
+            print(47)  # DefibrillatorSync
+        elif sats < 88:
             print(30)  # UseNonRebreatherMask
-        elif observations[41] < 8:
-            print(29)  # UseBagValveMask
-        elif observations[42] < 60:
+        elif map_value < 60:
             print(15)  # GiveFluids
-        elif observations[1] == 0:  # BreathingNone
+        elif resp_rate < 8:
             print(29)  # UseBagValveMask
+        elif not any(events[0:4]):
+            print(3)  # ExamineAirway
+        elif not any(events[4:11]):
+            print(4)  # ExamineBreathing
+        elif not any(events[11:33]):
+            print(5)  # ExamineCirculation
         else:
-            print(0)  # DoNothing
-        step += 1
-    print(48)  # Finish
+            print(48)  # Finish
+            break
+        steps += 1
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":
