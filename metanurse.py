@@ -21,7 +21,7 @@ def main():
         elif observations[37] == 0:
             print(7)  # ExamineExposure
         elif sats < 65 or map_value < 20:
-            print(17)  # StartChestCompression
+            print(29)  # UseBagValveMask
         elif sats < 88:
             print(30)  # UseNonRebreatherMask
         elif map_value < 60:
