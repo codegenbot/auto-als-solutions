@@ -28,10 +28,12 @@ def main():
         elif not any(events[11:33]):
             print(5)  # ExamineCirculation
         else:
-            print(48)  # Finish
-            break
+            print(0)  # DoNothing
+
         steps += 1
         sys.stdout.flush()
+
+    print(48)  # Finish
 
 
 if __name__ == "__main__":
