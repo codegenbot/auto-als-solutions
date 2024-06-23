@@ -15,21 +15,18 @@ def main():
             print(6)  # ExamineDisability
         elif observations[37] == 0:
             print(7)  # ExamineExposure
+        elif observations[40] < 88:
+            print(30)  # UseNonRebreatherMask
+        elif observations[41] < 8:
+            print(29)  # UseBagValveMask
+        elif observations[42] < 60:
+            print(15)  # GiveFluids
+        elif observations[40] < 65 or observations[42] < 20:
+            print(17)  # StartChestCompression
         else:
-            sats = observations[46]
-            map_value = observations[44]
-            if sats < 65 or map_value < 20:
-                print(17)  # StartChestCompression
-            elif sats < 88:
-                print(30)  # UseNonRebreatherMask
-            elif map_value < 60:
-                print(15)  # GiveFluids
-            elif observations[9] > 0:  # BreathingNone event
-                print(29)  # UseBagValveMask
-            else:
-                print(48)  # Finish
-                break
+            print(0)  # DoNothing
         step += 1
+    print(48)  # Finish
 
 
 if __name__ == "__main__":
