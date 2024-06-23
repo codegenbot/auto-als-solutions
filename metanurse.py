@@ -10,7 +10,15 @@ def main():
         resp_rate = observations[45]
 
         if observations[7] > 0:  # BreathingNone
+            print(29)  # UseBagValveMask
+        elif sats < 65 or map_value < 20:
             print(17)  # StartChestCompression
+        elif sats < 88:
+            print(30)  # UseNonRebreatherMask
+        elif map_value < 60:
+            print(15)  # GiveFluids
+        elif resp_rate < 8:
+            print(29)  # UseBagValveMask
         elif observations[33] == 0:
             print(3)  # ExamineAirway
         elif observations[34] == 0:
@@ -21,14 +29,6 @@ def main():
             print(6)  # ExamineDisability
         elif observations[37] == 0:
             print(7)  # ExamineExposure
-        elif sats < 65 or map_value < 20:
-            print(17)  # StartChestCompression
-        elif sats < 88:
-            print(30)  # UseNonRebreatherMask
-        elif map_value < 60:
-            print(15)  # GiveFluids
-        elif resp_rate < 8:
-            print(29)  # UseBagValveMask
         else:
             print(48)  # Finish
             break
