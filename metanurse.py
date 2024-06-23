@@ -8,6 +8,7 @@ def main():
         sats = observations[46]
         map_value = observations[44]
         resp_rate = observations[45]
+
         if observations[7] > 0:  # BreathingNone
             print(17)  # StartChestCompression
         elif observations[33] == 0:
