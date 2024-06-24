@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -11,40 +12,41 @@ def get_action(observations):
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17
+        return 17  # StartChestCompression
 
     if (
         (sats is not None and sats >= 88)
         and (resp_rate is not None and resp_rate >= 8)
         and (map_value is not None and map_value >= 60)
     ):
-        return 48
+        return 48  # Finish
 
     if events[3] == 0:
-        return 3
-    
+        return 3  # ExamineAirway
+
     if events[7] == 0 or events[9] == 0:
-        return 4
+        return 4  # ExamineBreathing
 
     if vital_signs_time[1] == 0:
-        return 16
+        return 16  # ViewMonitor
     if resp_rate is not None and resp_rate < 8:
-        return 28
+        return 28  # UseBagValveMask
 
     if map_value is None:
         if vital_signs_time[4] == 0:
-            return 27
-        return 16
-    
+            return 27  # UseBloodPressureCuff
+        return 16  # ViewMonitor after cuff is applied
+
     if sats is None:
         if vital_signs_time[5] == 0:
-            return 25
-        return 16
-        
-    if (sats is not None and sats < 88):
-        return 30
+            return 25  # UseSatsProbe
+        return 16  # ViewMonitor after probe is applied
 
-    return 1
+    if sats is not None and sats < 88:
+        return 30  # UseNonRebreatherMask
+
+    return 1  # CheckSignsOfLife
+
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
