@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -19,7 +20,7 @@ def get_action(observations):
         return 27  # UseBloodPressureCuff
     elif step == 3:
         return 16  # ViewMonitor
-    
+
     if events[7] > 0:  # BreathingNone event
         return 30  # UseNonRebreatherMask for breathing assistance
 
@@ -32,10 +33,10 @@ def get_action(observations):
     if map_value is None or sats is None:
         return 16  # ViewMonitor if either MAP or Sats are still missing
 
-    if (map_value is not None and map_value < 60):
+    if map_value is not None and map_value < 60:
         return 15  # GiveFluids if circulation is not stable
-    
-    if (sats is not None and sats < 88):
+
+    if sats is not None and sats < 88:
         return 30  # UseNonRebreatherMask to stabilize breathing
 
     if (
@@ -46,6 +47,7 @@ def get_action(observations):
         return 48  # Finish if patient is stable
 
     return 1  # Continually CheckSignsOfLife as default action
+
 
 global step
 step = 0
