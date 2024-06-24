@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -23,22 +22,19 @@ def get_action(observations):
     elif step == 4:
         return 16  # ViewMonitor
 
-    if resp_rate is not None and resp_rate < 8:
+    if (resp_rate is not None and resp_rate < 8):
         return 29  # UseBagValveMask
 
-    if sats is not None and sats < 88:
+    if (sats is not None and sats < 88):
         return 30  # UseNonRebreatherMask
 
-    if map_value is not None and map_value < 60:
+    if (map_value is not None and map_value < 60):
         return 15  # GiveFluids
 
-    if (map_value is not None and map_value >= 60) and (
-        sats is not None and sats >= 88
-    ):
+    if (map_value is not None and map_value >= 60) and (sats is not None and sats >= 88):
         return 48  # Finish if patient is stable
 
     return 1  # CheckSignsOfLife to continuously monitor vitals
-
 
 global step
 step = 0
