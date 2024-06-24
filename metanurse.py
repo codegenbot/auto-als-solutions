@@ -1,59 +1,65 @@
 import sys
-import math
 
-def parse_input():
-    return list(map(float, input().split()))
+def get_action(observations):
+    events = observations[:33]
+    vital_signs_time = observations[33:40]
+    vital_signs_values = observations[40:]
 
-def get_vitals(observations):
-    return observations[40:47], observations[47:54]
+    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
+    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
+    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
+    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-def is_stable(vitals):
-    _, resp_rate, _, _, map_, sats, _ = vitals
-    return resp_rate >= 8 and map_ >= 60 and sats >= 88
+    global step
+    global examined, interventions
 
-def is_critical(vitals):
-    _, _, _, _, map_, sats, _ = vitals
-    return sats < 65 or map_ < 20
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return 17
 
-def main():
-    steps = 0
-    while steps < 350:
-        observations = parse_input()
-        events, last_measurements, vitals = (
-            observations[:33],
-            observations[33:40],
-            observations[40:47],
-        )
+    if step == 1 and sats is None:
+        return 25
+    if step == 2 and map_value is None:
+        return 27
 
-        if is_critical(vitals):
-            print(17)  # StartChestCompression
-            steps += 1
-            continue
+    if not examined["Airway"]:
+        examined["Airway"] = True
+        return 3
+    if not examined["Breathing"]:
+        examined["Breathing"] = True
+        return 4
+    if not examined["Circulation"]:
+        examined["Circulation"] = True
+        return 16
+    if not examined["Disability"]:
+        examined["Disability"] = True
+        return 6
+    if not examined["Exposure"]:
+        examined["Exposure"] = True
+        return 7
 
-        if not is_stable(vitals):
-            if last_measurements[4] == 0:
-                print(27)  # UseBloodPressureCuff
-            elif last_measurements[5] == 0:
-                print(25)  # UseSatsProbe
-            elif last_measurements[1] == 0:
-                print(4)  # ExamineBreathing
-            elif (
-                events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
-            ):
-                print(3)  # ExamineAirway
-            elif events[16] == 0 and events[17] == 0:
-                print(5)  # ExamineCirculation
-            else:
-                print(15)  # GiveFluids
-            steps += 1
-            continue
+    if ((sats is not None and sats < 88) or (resp_rate is not None and resp_rate < 8)) and "oxygen" not in interventions:
+        interventions.add("oxygen")
+        return 30
+    if map_value is not None and map_value < 60 and "fluids" not in interventions:
+        interventions.add("fluids")
+        return 15
 
-        print(48)  # Finish
-        steps += 1
+    if (sats is not None and sats >= 88
+        and resp_rate is not None and resp_rate >= 8
+        and map_value is not None and map_value >= 60):
+        return 48
+
+    return 1
+
+global step
+global examined, interventions
+step = 0
+examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
+interventions = set()
+for _ in range(350):
+    input_data = list(map(float, input().strip().split()))
+    step += 1
+    action = get_action(input_data)
+    print(action)
+    if action == 48:
         break
-
-    print(48)  # Ensure the loop exits with Finish
-    steps += 1
-
-if __name__ == "__main__":
-    main()
