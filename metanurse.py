@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     global step
     step += 1
@@ -24,12 +23,14 @@ def get_action(observations):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compression
 
-    if map_value is None and step <= 6:
+    if not any([map_value, resp_rate, sats]):  # missing important vital signs
+        return 3  # Examine Airway
+    elif map_value is None:
         return 27  # Use Blood Pressure Cuff
-    if resp_rate is None and step <= 6:
+    elif resp_rate is None:
         return 4  # Examine Breathing
-
-    if events[3] == 0:
+    
+    if events[3] == 0:  # Airway not clear
         return 3  # Examine Airway
 
     if resp_rate is not None and (resp_rate < 8 or resp_rate > 30):
@@ -45,7 +46,6 @@ def get_action(observations):
         return 48  # Finish
 
     return 1  # Check Signs of Life
-
 
 global step
 step = 0
