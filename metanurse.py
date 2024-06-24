@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -47,7 +46,6 @@ def get_action(observations):
         return 48  # Finish if patient is stable
 
     return 1  # Continuously CheckSignsOfLife as default action
-
 
 global step
 step = 0
