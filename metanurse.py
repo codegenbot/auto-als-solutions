@@ -1,46 +1,60 @@
 import sys
+import math
 
-def get_action(observations):
-    events = observations[:33]
-    vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:]
 
-    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
-    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
-    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
-    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
+def parse_input():
+    return list(map(float, input().split()))
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
 
-    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48  # Finish
+def get_vitals(observations):
+    return observations[40:47], observations[47:54]
 
-    if events[3] == 0:
-        return 3  # ExamineAirway
 
-    if resp_rate is None:
-        if vital_signs_time[1] == 0:
-            return 4  # ExamineBreathing
+def is_stable(vitals):
+    _, resp_rate, _, _, map_, sats, _ = vitals
+    return resp_rate >= 8 and map_ >= 60 and sats >= 88
 
-    if events[7] > 0 or events[8] > 0 or events[9] > 0:
-        return 29  # UseBagValveMask
 
-    if map_value is None:
-        if vital_signs_time[4] == 0:
-            return 27  # UseBloodPressureCuff
-        return 16  # View Monitor after cuff is applied
+def is_critical(vitals):
+    _, _, _, _, map_, sats, _ = vitals
+    return sats < 65 or map_ < 20
 
-    if sats is None:
-        if vital_signs_time[5] == 0:
-            return 25  # UseSatsProbe
-        return 16  # View Monitor after probe is applied
 
-    return 1  # CheckSignsOfLife
+def main():
+    steps = 0
+    while steps < 350:
+        observations = parse_input()
+        events, last_measurements, vitals = (
+            observations[:33],
+            observations[33:40],
+            observations[40:47],
+        )
 
-for _ in range(350):
-    input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data)
-    print(action)
-    if action == 48:
+        if is_critical(vitals):
+            print(24)  # UseMonitorPads
+            steps += 1
+            continue
+
+        if not is_stable(vitals):
+            if last_measurements[5] == 0 and not math.isclose(vitals[5], 0):
+                print(25)  # UseSatsProbe
+            elif last_measurements[4] == 0 and not math.isclose(vitals[4], 0):
+                print(38)  # TakeBloodPressure
+            elif last_measurements[1] == 0 and not math.isclose(vitals[1], 0):
+                print(4)  # ExamineBreathing
+            elif all(math.isclose(ev, 0) for ev in events[3:7]):
+                print(3)  # ExamineAirway
+            else:
+                print(15)  # GiveFluids
+            steps += 1
+            continue
+
+        print(48)  # Finish
         break
+
+    if steps >= 350:
+        print(48)  # Ensure the loop exits with Finish
+
+
+if __name__ == "__main__":
+    main()
