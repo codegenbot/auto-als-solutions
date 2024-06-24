@@ -1,10 +1,9 @@
 import sys
 
-
 def get_action(observations):
     global step
     step += 1
-
+    
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -33,15 +32,11 @@ def get_action(observations):
 
     if map_value is None:
         return 38  # TakeBloodPressure
-
+    
     if sats is None:
         return 25  # UseSatsProbe
 
-    if (
-        (sats is not None and sats >= 88)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (map_value is not None and map_value >= 60)
-    ):
+    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
         return 48  # Finish game
 
     if sats < 88:
@@ -54,7 +49,6 @@ def get_action(observations):
         return 15  # GiveFluids
 
     return 1  # CheckSignsOfLife as the default approach
-
 
 global step
 step = 0
