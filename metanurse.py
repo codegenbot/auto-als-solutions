@@ -22,17 +22,13 @@ def get_action(observations):
         return 16  # ViewMonitor
 
     if events[7] > 0:  # BreathingNone event
-        return 35  # PerformAirwayManoeuvres
+        return 29  # UseBagValveMask for ventilation
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # StartChestCompression
 
-    if step % 3 == 0:  # Recurring checks every 3rd step
+    if step == 4:
         return 3  # ExamineAirway
-    elif step % 3 == 1:
-        return 4  # ExamineBreathing
-    elif step % 3 == 2:
-        return 5  # ExamineCirculation
 
     if map_value is None or sats is None:
         return 16  # ViewMonitor if either MAP or Sats are still missing
@@ -50,7 +46,7 @@ def get_action(observations):
     ):
         return 48  # Finish if patient is stable
 
-    return 1  # Continually CheckSignsOfLife as default action
+    return 1  # Continuously CheckSignsOfLife as default action
 
 
 global step
