@@ -1,6 +1,7 @@
 import sys
 
-def get_action(observations, prev_actions):
+
+def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -10,48 +11,40 @@ def get_action(observations, prev_actions):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17
+    global step
+    step += 1
 
-    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48
-
-    if 'ExamineAirway' not in prev_actions:
-        prev_actions.add('ExamineAirway')
-        return 3
-    
-    if 'ExamineBreathing' not in prev_actions:
-        prev_actions.add('ExamineBreathing')
-        return 4
-
-    if 'UseSatsProbe' not in prev_actions and vital_signs_values[5] == 0:
-        prev_actions.add('UseSatsProbe')
-        return 25
-
-    if 'ViewMonitor' not in prev_actions and (vital_signs_time[1] == 0 or vital_signs_time[4] == 0 or vital_signs_time[5] == 0):
-        prev_actions.add('ViewMonitor')
-        return 16
+    if step == 1:
+        return 4  # ExamineBreathing
+    elif step == 2:
+        return 3  # ExamineAirway
+    elif step == 3:
+        return 27  # UseBloodPressureCuff
+    elif step == 4:
+        return 16  # ViewMonitor
 
     if resp_rate is not None and resp_rate < 8:
-        return 28
+        return 29  # UseBagValveMask
 
-    if map_value is None and vital_signs_time[4] == 0:
-        return 27
+    if sats is not None and sats < 88:
+        return 30  # UseNonRebreatherMask
 
-    if sats is None:
-        if vital_signs_time[5] == 0:
-            return 25
-        return 16
-        
-    if (sats is not None and sats < 88):
-        return 30
+    if map_value is not None and map_value < 60:
+        return 15  # GiveFluids
 
-    return 1
+    if (map_value is not None and map_value >= 60) and (
+        sats is not None and sats >= 88
+    ):
+        return 48  # Finish if patient is stable
 
-prev_actions = set()
+    return 1  # CheckSignsOfLife to continuously monitor vitals
+
+
+global step
+step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data, prev_actions)
+    action = get_action(input_data)
     print(action)
     if action == 48:
         break
