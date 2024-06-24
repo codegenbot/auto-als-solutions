@@ -10,40 +10,31 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if not events[3]:  # Check airway
-        return 3  # ExamineAirway
-
-    if events[7] or events[8] or events[9]:  # Check if any breathing issues exist
-        return 4  # ExamineBreathing
-
+    if not events[3]:  
+        return 3  
+    if events[7] or events[8] or events[9]:  
+        return 4  
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression if John's condition deteriorates critically
-
-    if sats is None:  # Missing oxygen saturation
+        return 17  
+    if sats is None:  
         if vital_signs_time[5] == 0:
-            return 25  # UseSatsProbe
-        return 16  # ViewMonitor
-
-    if map_value is None:  # Missing mean arterial pressure
+            return 25  
+        return 16  
+    if map_value is None:  
         if vital_signs_time[4] == 0:
-            return 27  # UseBloodPressureCuff
-        return 16  # ViewMonitor
-
+            return 27  
+        return 16  
     if sats < 88:
-        return 30  # UseNonRebreatherMask
-
+        return 30  
     if resp_rate is None:
         if vital_signs_time[1] == 0:
-            return 4  # ExamineBreathing
-        return 16  # ViewMonitor
-
+            return 4  
+        return 16  
     if (resp_rate < 8) and (events[7] == 0):
-        return 29  # UseBagValveMask
-
+        return 29  
     if (sats >= 88) and (resp_rate >= 8) and (map_value >= 60):
-        return 48  # Finish if stable
-
-    return 1  # CheckSignsOfLife
+        return 48  
+    return 1  
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
