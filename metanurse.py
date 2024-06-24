@@ -2,47 +2,57 @@ import sys
 import math
 
 
-def get_action(observations):
-    # Extract the relevant observations
-    events = observations[:33]
-    vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:]
-
-    # Extract specific vital signs
-    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
-    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
-    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
-    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
-
-    # Check for cardiac arrest conditions
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
-
-    # Check if the patient is already stabilized
-    if (
-        (sats is not None and sats >= 88)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (map_value is not None and map_value >= 60)
-    ):
-        return 48  # Finish
-
-    # Perform ABCDE assessment
-    if events[3] == 0:  # AirwayClear
-        return 3  # ExamineAirway
-    if events[7] > 0 or events[8] > 0 or events[9] > 0:  # Breathing issues
-        return 4  # ExamineBreathing
-    if map_value is None:
-        return 27  # UseBloodPressureCuff
-    if sats is None:
-        return 25  # UseSatsProbe
-
-    # Default to checking signs of life
-    return 1  # CheckSignsOfLife
+def parse_input():
+    return list(map(float, input().split()))
 
 
-for _ in range(350):
-    input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data)
-    print(action)
-    if action == 48:
+def get_vitals(observations):
+    return observations[40:47], observations[47:54]
+
+
+def is_stable(vitals):
+    _, resp_rate, _, _, map_, sats, _ = vitals
+    return resp_rate >= 8 and map_ >= 60 and sats >= 88
+
+
+def is_critical(vitals):
+    _, _, _, _, map_, sats, _ = vitals
+    return sats < 65 or map_ < 20
+
+
+def main():
+    steps = 0
+    while steps < 350:
+        observations = parse_input()
+        events, last_measurements, vitals = (
+            observations[:33],
+            observations[33:40],
+            observations[40:47],
+        )
+
+        if is_critical(vitals):
+            print(17)  # StartChestCompression
+            continue
+
+        if not is_stable(vitals):
+            if last_measurements[4] == 0:
+                print(38)  # TakeBloodPressure
+            elif last_measurements[5] == 0:
+                print(25)  # UseSatsProbe
+            elif last_measurements[1] == 0:
+                print(4)  # ExamineBreathing
+            elif (
+                events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
+            ):
+                print(3)  # ExamineAirway
+            else:
+                print(15)  # GiveFluids
+            continue
+
+        print(48)  # Finish
         break
+        steps += 1
+
+
+if __name__ == "__main__":
+    main()
