@@ -14,13 +14,6 @@ def get_action(observations):
     global step
     step += 1
 
-    # Priority checks
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
-    if events[7] > 0:  # BreathingNone event
-        return 29  # UseBagValveMask
-
-    # Initial assessments
     if step == 1:
         return 3  # ExamineAirway
     if step == 2:
@@ -28,17 +21,22 @@ def get_action(observations):
     if step == 3:
         return 27  # UseBloodPressureCuff
     if step == 4:
-        return 5  # ExamineBreathing
+        return 4  # ExamineBreathing
 
-    # Treatment logic
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return 17  # StartChestCompression
+
+    if events[3] == 0 and step <= 10:
+        return 3  # ExamineAirway
+
     if sats is not None and sats < 88:
         return 30  # UseNonRebreatherMask
 
-    if map_value is not None and map_value < 60:
-        return 15  # GiveFluids
-
     if map_value is None or vital_signs_time[4] == 0:
         return 38  # TakeBloodPressure
+
+    if map_value is not None and map_value < 60:
+        return 15  # GiveFluids
 
     if resp_rate is None or resp_rate < 8:
         return 4  # ExamineBreathing
