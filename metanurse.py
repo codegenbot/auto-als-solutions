@@ -1,4 +1,5 @@
 import sys
+import math
 
 def get_action(observations):
     events = observations[:33]
@@ -11,39 +12,29 @@ def get_action(observations):
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     if step == 1:
-        return 25  # UseSatsProbe
+        return 25  # Use SatsProbe
     elif step == 2:
-        return 27  # UseBloodPressureCuff
-    elif step < 5:
-        return 16  # ViewMonitor to get updated values early
-
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
-
-    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48  # Finish game
-
-    if map_value is None:
-        return 38  # TakeBloodPressure
-
-    if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask to improve oxygenation
-    
-    if events[7] > 0 or events[8] > 0 or events[9] > 0:
-        return 4  # ExamineBreathing for other breathing issues
+        return 27  # Use BloodPressureCuff
+    elif step == 3:
+        return 3  # Examine Airway
+    elif step >= 4:
+        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            return 17  # Start Chest Compression
+        if events[7] > 0:  # BreathingNone
+            return 22  # Bag During CPR
         
-    if resp_rate is None or resp_rate < 8:
-        return 4  # ExamineBreathing or support
+        if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
+            return 48  # Finish
+            
+        if sats is None:
+            return 16  # View Monitor for Sats
+        if resp_rate is None:
+            return 4  # Examine Breathing
+        if map_value is None:
+            return 16  # View Monitor
     
-    if resp_rate is not None and resp_rate >= 8 and events[3] == 0:
-        return 3  # ExamineAirway to check if airway issues exist
+    return 1  # Default to Check Signs of Life
 
-    if map_value is not None and map_value < 60:
-        return 15  # GiveFluids to potentially improve MAP
-
-    return 1  # CheckSignsOfLife as the default approach
-
-global step
 step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
