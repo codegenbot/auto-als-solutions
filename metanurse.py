@@ -14,36 +14,32 @@ def get_action(observations):
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     if step == 1:
-        return 25  # UseSatsProbe
-
+        return 25
     if step == 2:
-        return 27  # UseBloodPressureCuff
-
+        return 27
     if step == 3:
-        return 16  # ViewMonitor
+        return 16
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
+        return 17
 
     if map_value is None or sats is None or resp_rate is None:
-        return 16  # ViewMonitor again to update data
+        return 16
 
     if step == 4:
-        return 3  # ExamineAirway
-
-    if events[3] == 0:  # AirwayClear event hasn't been observed
-        return 3  # Continue examining Airway
+        return 3
+    if events[3] == 0:
+        return 3
 
     if map_value < 60 and step % 2 == 0:
-        return 15  # GiveFluids
-
+        return 15
     if sats < 88 or resp_rate < 8:
-        return 30  # UseNonRebreatherMask
+        return 30
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return 48  # Finish
+    if (map_value >= 60 and resp_rate >= 8 and sats >= 88):
+        return 48
 
-    return 1  # CheckSignsOfLife
+    return 1
 
 global step
 step = 0
