@@ -2,7 +2,7 @@ import sys
 
 
 def get_action(observations):
-    global step, airway_clear, checked_breathing, sats_probe_used, bp_cuff_used
+    global step, airway_clear, checked_breathing, checked_vitals, sats_probe_used, bp_cuff_used
 
     step += 1
     events = observations[:33]
@@ -14,7 +14,6 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    # Initial Assessments: ABCDE Protocol
     if step == 1:
         return 3  # Examine Airway
     if step == 2:
@@ -26,7 +25,6 @@ def get_action(observations):
     if step == 5:
         return 16  # View Monitor
 
-    # Action Plan based on observations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compressions if in cardiac arrest
 
@@ -61,10 +59,11 @@ def get_action(observations):
     return 1  # Default action to check signs of life
 
 
-global step, airway_clear, checked_breathing, sats_probe_used, bp_cuff_used
+global step, airway_clear, checked_breathing, checked_vitals, sats_probe_used, bp_cuff_used
 step = 0
 airway_clear = False
 checked_breathing = False
+checked_vitals = False
 sats_probe_used = False
 bp_cuff_used = False
 
