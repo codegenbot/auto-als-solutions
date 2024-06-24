@@ -1,10 +1,6 @@
 import sys
 
-
 def get_action(observations):
-    global step
-    step += 1
-
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -14,37 +10,52 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    global step
+    step += 1
+
+    # ABCDE approach for initial steps
     if step == 1:
-        return 25  # Use Sats Probe
-    if step == 2:
-        return 27  # Use Blood Pressure Cuff
-    if step == 3:
-        return 16  # View Monitor
+        return 3  # ExamineAirway
+    elif step == 2:
+        return 4  # ExamineBreathing
+    elif step == 3:
+        return 5  # ExamineCirculation
+    elif step == 4:
+        return 25  # UseSatsProbe
+    elif step == 5:
+        return 27  # UseBloodPressureCuff
+    elif step == 6:
+        return 16  # ViewMonitor
+    
+    # Urgent conditions
+    if events[7] > 0:  # BreathingNone event
+        return 29  # UseBagValveMask
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # Start Chest Compression
+        return 17  # StartChestCompression
+    
+    # Assess stability
+    if heart_rate is None or map_value is None or sats is None or resp_rate is None:
+        return 16  # Keep checking monitor to get missing vital signs
+    
+    if map_value is not None and map_value < 60:
+        return 15  # GiveFluids if circulation is not stable
+    
+    if resp_rate is not None and resp_rate < 8:
+        return 29  # UseBagValveMask to stabilize breathing
 
-    if map_value is None or sats is None or resp_rate is None:
-        return 16  # View Monitor to get vital signs
+    if sats is not None and sats < 88:
+        return 30  # UseNonRebreatherMask to stabilize breathing
 
-    # ABCDE approach sequence
-    if events[3] == 0:  # If airway is not clear, examine airway
-        return 3  # Examine Airway
+    if all([
+        heart_rate is not None,
+        resp_rate is not None and resp_rate >= 8,
+        map_value is not None and map_value >= 60,
+        sats is not None and sats >= 88
+    ]):
+        return 48  # Finish if patient is stable
 
-    if resp_rate < 8 or resp_rate > 30:
-        return 30  # Use Non-Rebreather Mask
-
-    if map_value < 60:
-        return 15  # Give Fluids
-
-    if sats < 88:
-        return 30  # Use Non-Rebreather Mask
-
-    if step >= 4 and (map_value >= 60 and resp_rate >= 8 and sats >= 88):
-        return 48  # Finish
-
-    return 1  # Check Signs of Life
-
+    return 1  # Continually CheckSignsOfLife as default action
 
 global step
 step = 0
