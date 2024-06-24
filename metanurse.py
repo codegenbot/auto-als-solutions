@@ -12,38 +12,38 @@ def get_action(observations):
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     if step == 1:
-        return 3
+        return 3  # ExamineAirway
     elif step == 2:
-        return 4
+        return 4  # ExamineBreathing
     elif step == 3:
-        return 5
+        return 5  # ExamineCirculation
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17
+        return 17  # StartChestCompression
 
     if (
         (sats is not None and sats >= 88)
         and (resp_rate is not None and resp_rate >= 8)
         and (map_value is not None and map_value >= 60)
     ):
-        return 48
+        return 48  # Finish game
 
     if map_value is None:
-        return 38
+        return 38  # TakeBloodPressure
 
     if resp_rate is None or resp_rate < 8:
-        return 4
+        return 4  # ExamineBreathing or provide support
 
     if sats is not None and sats < 88:
-        return 30
+        return 30  # UseNonRebreatherMask
 
     if events[7] > 0 or events[8] > 0 or events[9] > 0:
-        return 29
+        return 29  # UseBagValveMask for breathing support
 
     if map_value is not None and map_value < 60:
-        return 15
+        return 15  # GiveFluids to improve MAP
 
-    return 1
+    return 1  # CheckSignsOfLife as the default approach
 
 
 global step
