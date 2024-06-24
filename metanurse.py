@@ -21,10 +21,12 @@ def get_action(observations):
     ):
         return 48  # Finish
 
-    if events[3] == 0:
+    if events[3] == 0 and resp_rate is None:
         return 3  # ExamineAirway
     if events[7] > 0 or events[8] > 0 or events[9] > 0:
-        return 4  # ExamineBreathing
+        if vital_signs_time[1] == 0:
+            return 4  # ExamineBreathing
+        return 29  # UseBagValveMask to assist breathing during CPR
     if map_value is None:
         if vital_signs_time[4] == 0:
             return 27  # UseBloodPressureCuff
