@@ -22,6 +22,8 @@ def get_action(observations):
         return 27  # UseBloodPressureCuff
     if step == 4:
         return 4  # ExamineBreathing
+    if step == 5:
+        return 5  # ExamineCirculation
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # StartChestCompression
