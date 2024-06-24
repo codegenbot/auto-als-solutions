@@ -43,27 +43,27 @@ def get_action(observations):
     ):
         return 16  # View Monitor to get vital signs
 
-    if events[3] == 0:
-        if events[4] > 0:
-            return 31
-        if events[5] > 0 or events[6] > 0:
-            return 35
+    if events[3] == 0:  # AirwayClear
+        if events[4] > 0:  # AirwayVomit
+            return 31  # UseYankeurSuionCatheter
+        if events[5] > 0 or events[6] > 0:  # AirwayBlood or AirwayTongue
+            return 35  # PerformAirwayManoeuvres
 
     if measured["resp_rate"] is not None and (
         measured["resp_rate"] < 8 or measured["resp_rate"] > 30
     ):
-        return 29
+        return 29  # Use Bag Valve Mask
     if measured["sats"] is not None and measured["sats"] < 88:
-        return 30
+        return 30  # Use Non-Rebreather Mask
 
     if measured["map"] is not None and measured["map"] < 60:
-        return 15
+        return 15  # Give Fluids
 
     if events[21] == 0 and events[22] == 0 and events[23] == 0 and events[24] == 0:
-        return 6
+        return 6  # Examine Disability
 
     if events[25] == 0 and events[26] == 0 and events[27] == 0:
-        return 7
+        return 7  # Examine Exposure
 
     if (
         step >= 6
@@ -71,9 +71,9 @@ def get_action(observations):
         and measured["resp_rate"] >= 8
         and measured["sats"] >= 88
     ):
-        return 48
+        return 48  # Finish
 
-    return 1
+    return 1  # Check Signs of Life
 
 
 global step
