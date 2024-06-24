@@ -16,8 +16,6 @@ def main():
             print(15)  # GiveFluids
         elif resp_rate < 8:
             print(29)  # UseBagValveMask
-        elif observations[7] > 0:  # BreathingNone
-            print(29)  # UseBagValveMask
         elif observations[33] == 0:
             print(3)  # ExamineAirway
         elif observations[34] == 0:
