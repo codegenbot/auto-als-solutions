@@ -48,7 +48,6 @@ def main():
 
         print(48)  # Finish
         break
-        steps += 1
 
     print(48)  # Ensure the loop exits with Finish
     steps += 1
