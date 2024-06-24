@@ -11,6 +11,8 @@ def main():
 
         if observations[7] > 0:  # BreathingNone
             print(29)  # UseBagValveMask
+        elif observations[16] == 0:  # RadialPulseNonPalpable
+            print(17)  # StartChestCompression
         elif sats < 65 or map_value < 20:
             print(17)  # StartChestCompression
         elif sats < 88:
