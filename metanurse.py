@@ -24,19 +24,20 @@ def get_action(observations):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compression
 
-    if map_value is None or resp_rate is None or sats is None:
+    if map_value is None or sats is None or resp_rate is None:
         return 16  # View Monitor to get vital signs
 
-    if events[3] == 0:  # AirwayClear
+    # ABCDE approach sequence
+    if events[3] == 0:  # If airway is not clear, examine airway
         return 3  # Examine Airway
 
-    if resp_rate is not None and (resp_rate < 8 or resp_rate > 30):
+    if resp_rate < 8 or resp_rate > 30:
         return 30  # Use Non-Rebreather Mask
 
-    if map_value is not None and map_value < 60:
+    if map_value < 60:
         return 15  # Give Fluids
 
-    if sats is not None and sats < 88:
+    if sats < 88:
         return 30  # Use Non-Rebreather Mask
 
     if step >= 4 and (map_value >= 60 and resp_rate >= 8 and sats >= 88):
