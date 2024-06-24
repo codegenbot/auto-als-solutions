@@ -1,7 +1,6 @@
 import sys
 
-
-def get_action(step, observations):
+def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -11,51 +10,46 @@ def get_action(step, observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if step == 1:
-        return 3  # ExamineAirway
-    elif step == 2:
-        return 4  # ExamineBreathing
-    elif step == 3:
-        return 5  # ExamineCirculation
-    elif step == 4:
-        return 6  # ExamineDisability
-
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20) or events[7] > 0:
+        return 17
 
     if (
         (sats is not None and sats >= 88)
         and (resp_rate is not None and resp_rate >= 8)
         and (map_value is not None and map_value >= 60)
     ):
-        return 48  # Finish
-
-    if map_value is None:
-        return 38  # TakeBloodPressure
-
-    if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask
-
-    if events[7] > 0 or events[8] > 0 or events[9] > 0:
-        return 4  # ExamineBreathing
-
-    if resp_rate is None or resp_rate < 8:
-        return 4  # ExamineBreathing
-
-    if resp_rate is not None and resp_rate >= 8 and events[3] == 0:
+        return 48
+    
+    if step == 1:
+        return 25  # UseSatsProbe
+    elif step == 2:
+        return 27  # UseBloodPressureCuff
+    elif step == 3:
+        return 16  # ViewMonitor
+    elif step == 4:
         return 3  # ExamineAirway
-
-    if map_value is not None and map_value < 60:
+    elif events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+        return 31  # Use YankeurSucionCatheter
+    elif sats is not None and sats < 88:
+        return 30  # UseNonRebreatherMask
+    elif map_value is None:
+        return 38  # TakeBloodPressure
+    elif events[7] > 0:
+        return 29  # UseBagValveMask 
+    elif resp_rate is None or resp_rate < 8:
+        return 4  # ExamineBreathing
+    elif map_value is not None and map_value < 60:
         return 15  # GiveFluids
+    
+    return 1  # DoNothing
 
-    return 1  # CheckSignsOfLife
-
-
+global step
 step = 0
+
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     step += 1
-    action = get_action(step, input_data)
+    action = get_action(input_data, step)
     print(action)
     if action == 48:
         break
