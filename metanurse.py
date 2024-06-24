@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -14,6 +13,9 @@ def get_action(observations):
     global step
     step += 1
 
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return 17  # StartChestCompression
+
     if step == 1:
         return 3  # ExamineAirway
     if step == 2:
@@ -22,36 +24,30 @@ def get_action(observations):
         return 27  # UseBloodPressureCuff
     if step == 4:
         return 4  # ExamineBreathing
-    if step == 5:
-        return 16  # ViewMonitor to read O2 saturation level
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
-
-    if events[3] == 0 and step <= 10:
-        return 3  # Recheck Airway if not confirmed clear
+    if events[3] == 0:
+        return 3  # ExamineAirway
 
     if sats is not None and sats < 88:
         return 30  # UseNonRebreatherMask
 
-    if map_value is None and vital_signs_time[4] == 0:
+    if map_value is None or vital_signs_time[4] == 0:
         return 38  # TakeBloodPressure
+
+    if resp_rate is None or resp_rate < 8:
+        return 4  # ExamineBreathing
 
     if map_value is not None and map_value < 60:
         return 15  # GiveFluids
-
-    if resp_rate is None or resp_rate < 8:
-        return 4  # ExamineBreathing again
 
     if (
         (sats is not None and sats >= 88)
         and (resp_rate is not None and resp_rate >= 8)
         and (map_value is not None and map_value >= 60)
     ):
-        return 48  # Finish when stabilized
+        return 48  # Finish
 
     return 1  # CheckSignsOfLife
-
 
 global step
 step = 0
