@@ -1,7 +1,9 @@
 import sys
 
-
 def get_action(observations):
+    global step
+    step += 1
+
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -11,39 +13,37 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    global step
-    step += 1
-
     if step == 1:
-        return 25  # UseSatsProbe
-    elif step == 2:
-        return 27  # UseBloodPressureCuff
-    elif step == 3:
-        return 16  # ViewMonitor
+        return 25  # Use Sats Probe
+    if step == 2:
+        return 27  # Use BP Cuff
+    if step in (3, 4, 5, 6):
+        return 16  # Repeatedly View Monitor for initial observations
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
+        return 17  # Start Chest Compressions if necessary
 
-    if map_value is None or sats is None:
-        return 16  # ViewMonitor if either MAP or Sats are still missing
+    if resp_rate is None:
+        return 4  # Examine Breathing
+    if map_value is None:
+        return 38  # Check Blood Pressure
+    if sats is None:
+        return 25  # Use Sats Probe
 
-    if step == 4:
-        return 3  # ExamineAirway
+    if events[3] == 0:
+        return 3  # Examine Airway if AirwayClear not observed
 
-    if (map_value is not None and map_value < 60) and step % 2 == 0:
-        return 15  # GiveFluids if circulation is not stable
-    if (sats is not None and sats < 88) and step % 2 == 1:
-        return 30  # UseNonRebreatherMask to stabilize breathing
+    if map_value < 60:
+        return 15  # Give Fluids for MAP < 60
+    if resp_rate < 8:
+        return 29  # Use Bag Valve Mask for respiration
+    if sats < 88:
+        return 30  # Use NonRebreather Mask for sats < 88
 
-    if (
-        (sats is not None and sats >= 88)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (map_value is not None and map_value >= 60)
-    ):
-        return 48  # Finish if patient is stable
+    if (map_value >= 60 and resp_rate >= 8 and sats >= 88):
+        return 48  # Finish if all vitals are stable
 
-    return 1  # Continually CheckSignsOfLife as default action
-
+    return 1  # Default action to check signs of life
 
 global step
 step = 0
