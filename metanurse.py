@@ -23,7 +23,7 @@ def get_action(observations):
         return 27  # UseBloodPressureCuff
     elif step == 5:
         return 16  # ViewMonitor
-
+    
     if events[7] > 0:  # BreathingNone event
         return 29  # UseBagValveMask for breathing assistance
 
