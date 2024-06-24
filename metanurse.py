@@ -23,7 +23,7 @@ def get_action(observations):
     if step == 4:
         return 4  # ExamineBreathing
     if step == 5:
-        return 16  # ViewMonitor
+        return 16  # ViewMonitor to read O2 saturation level
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # StartChestCompression
