@@ -1,24 +1,19 @@
 import sys
 import math
 
-
 def parse_input():
     return list(map(float, input().split()))
 
-
 def get_vitals(observations):
     return observations[40:47], observations[47:54]
-
 
 def is_stable(vitals):
     _, resp_rate, _, _, map_, sats, _ = vitals
     return resp_rate >= 8 and map_ >= 60 and sats >= 88
 
-
 def is_critical(vitals):
     _, _, _, _, map_, sats, _ = vitals
     return sats < 65 or map_ < 20
-
 
 def main():
     steps = 0
@@ -29,7 +24,7 @@ def main():
             observations[33:40],
             observations[40:47],
         )
-
+        
         if is_critical(vitals):
             print(24)  # UseMonitorPads
             steps += 1
@@ -54,7 +49,6 @@ def main():
 
     if steps >= 350:
         print(48)  # Ensure the loop exits with Finish
-
 
 if __name__ == "__main__":
     main()
