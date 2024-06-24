@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -45,15 +44,10 @@ def get_action(observations):
         return 25  # UseSatsProbe
 
     # Finish if all criteria for stabilization are met
-    if (
-        (sats is not None and sats >= 88)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (map_value is not None and map_value >= 60)
-    ):
+    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
         return 48  # Finish
 
     return 1  # CheckSignsOfLife
-
 
 global step
 step = 0
