@@ -17,15 +17,19 @@ def get_action(observations, prev_actions):
         return 48
 
     if 'ExamineAirway' not in prev_actions:
+        prev_actions.add('ExamineAirway')
         return 3
     
     if 'ExamineBreathing' not in prev_actions:
+        prev_actions.add('ExamineBreathing')
         return 4
 
     if 'UseSatsProbe' not in prev_actions and vital_signs_values[5] == 0:
+        prev_actions.add('UseSatsProbe')
         return 25
 
     if 'ViewMonitor' not in prev_actions and (vital_signs_time[1] == 0 or vital_signs_time[4] == 0 or vital_signs_time[5] == 0):
+        prev_actions.add('ViewMonitor')
         return 16
 
     if resp_rate is not None and resp_rate < 8:
@@ -44,11 +48,10 @@ def get_action(observations, prev_actions):
 
     return 1
 
-prev_actions = []
+prev_actions = set()
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, prev_actions)
     print(action)
-    prev_actions.append(action)
     if action == 48:
         break
