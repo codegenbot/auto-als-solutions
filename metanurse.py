@@ -1,57 +1,46 @@
 import sys
 
-def get_action(observations, step):
+def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
-    
+
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if step == 1:
-        return 3  # ExamineAirway
-    elif step == 2:
-        return 25  # UseSatsProbe
-    elif step == 3:
-        return 27  # UseBloodPressureCuff
-    elif step == 4:
-        return 4  # ExamineBreathing
-    elif step == 5:
-        return 16  # ViewMonitor
-    elif step == 6:
-        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-            return 17  # StartChestCompression
-
-    if events[3] == 0:
-        return 3  # ExamineAirway
-
-    if events[7] > 0 or events[8] > 0:
-        return 4  # ExamineBreathing
-
-    if resp_rate is not None and resp_rate < 8:
-        return 29  # UseBagValveMask
-
-    if map_value is not None and map_value < 60:
-        return 15  # GiveFluids
-
-    if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask
-
-    if heart_rate is None:
-        return 1  # CheckSignsOfLife
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return 17  # Start chest compressions
 
     if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48  # Finish
+        return 48  # Finish when stable
 
-    return 1  # CheckSignsOfLife
+    if events[3] == 0:
+        return 3  # Examine airway
+    
+    if events[7] == 0 or events[9] == 0:
+        return 4  # Examine breathing
 
-step = 0
+    if vital_signs_time[5] == 0 and sats is None:
+        return 25  # Use sats probe
+    if vital_signs_time[4] == 0 and map_value is None:
+        return 27  # Use blood pressure cuff
+    
+    if sats is not None and sats < 88:
+        return 30  # Use non-rebreather mask
+    
+    if vital_signs_time[1] == 0 and resp_rate is None:
+        return 16  # View monitor for resp rate
+    
+    if resp_rate is not None and resp_rate < 8:
+        return 28  # Use defib pads if breathing rate is too low
+    
+    return 1  # Default action: Check signs of life
+
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
-    step += 1
-    action = get_action(input_data, step)
+    action = get_action(input_data)
     print(action)
     if action == 48:
         break
