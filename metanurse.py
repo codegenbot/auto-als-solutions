@@ -1,9 +1,15 @@
 import sys
 
+sats_checked = False
+map_checked = False
+resp_rate_checked = False
+airway_checked = False
+
+
 def get_action(observations):
-    global step
+    global step, sats_checked, map_checked, resp_rate_checked, airway_checked
     step += 1
-    
+
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -13,42 +19,42 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if step == 1:
-        return 3  # ExamineAirway
-    elif step == 2:
-        return 4  # ExamineBreathing
-    elif step == 3:
-        return 25  # UseSatsProbe
-    elif step == 4:
-        return 27  # UseBloodPressureCuff
-    elif step < 7:
-        return 16  # ViewMonitor to get vitals
+    if not sats_checked:
+        sats_checked = True
+        return 25  # Use Sats Probe
+    if not map_checked:
+        map_checked = True
+        return 27  # Use BP Cuff
+    if step in (3, 4, 5, 6):
+        return 16  # View Monitor
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # StartChestCompression
+        return 17  # Start Chest Compressions
 
-    if events[7] > 0:  # BreathingNone
-        return 22  # BagDuringCPR
+    if resp_rate is None and not resp_rate_checked:
+        resp_rate_checked = True
+        return 4  # Examine Breathing
+    if map_value is None and not map_checked:
+        return 38  # Check Blood Pressure
+    if sats is None and not sats_checked:
+        return 25  # Use Sats Probe
 
-    if map_value is None:
-        return 38  # TakeBloodPressure
-    
-    if sats is None:
-        return 25  # UseSatsProbe
-
-    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48  # Finish game
-
-    if sats < 88:
-        return 30  # UseNonRebreatherMask
-
-    if resp_rate is None or resp_rate < 8:
-        return 29  # UseBagValveMask
+    if events[3] == 0 and not airway_checked:
+        airway_checked = True
+        return 3  # Examine Airway
 
     if map_value < 60:
-        return 15  # GiveFluids
+        return 15  # Give Fluids
+    if resp_rate < 8:
+        return 29  # Use Bag Valve Mask
+    if sats < 88:
+        return 30  # Use NonRebreather Mask
 
-    return 1  # CheckSignsOfLife as the default approach
+    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+        return 48  # Finish
+
+    return 1  # Default action
+
 
 global step
 step = 0
