@@ -1,40 +1,58 @@
 import sys
+import math
 
-def get_action(observations):
-    events = observations[:33]
-    vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:47]
 
-    MeasuredHeartRate, MeasuredRespRate, MeasuredCapillaryGlucose, MeasuredTemperature, MeasuredMAP, MeasuredSats, MeasuredResps = range(7)
-    HeartRate, RespRate, CapillaryGlucose, Temperature, MAP, Sats, Resps = range(7)
+def parse_input():
+    return list(map(float, input().split()))
 
-    heart_rate = vital_signs_values[HeartRate] if vital_signs_time[MeasuredHeartRate] > 0 else None
-    resp_rate = vital_signs_values[RespRate] if vital_signs_time[MeasuredRespRate] > 0 else None
-    map_value = vital_signs_values[MAP] if vital_signs_time[MeasuredMAP] > 0 else None
-    sats = vital_signs_values[Sats] if vital_signs_time[MeasuredSats] > 0 else None
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17
+def get_vitals(observations):
+    return observations[40:47], observations[47:54]
 
-    if (sats is not None and sats >= 88 
-        and resp_rate is not None and resp_rate >= 8 
-        and map_value is not None and map_value >= 60):
-        return 48
 
-    if events[3] == 0:
-        return 3
-    if sats is None:
-        return 25
-    if resp_rate is None:
-        return 4
-    if map_value is None:
-        return 27
+def is_stable(vitals):
+    _, resp_rate, _, _, map_, sats, _ = vitals
+    return resp_rate >= 8 and map_ >= 60 and sats >= 88
 
-    return 0
 
-for step in range(350):
-    observations = list(map(float, input().strip().split()))
-    action = get_action(observations)
-    print(action)
-    if action == 48:
+def is_critical(vitals):
+    _, _, _, _, map_, sats, _ = vitals
+    return sats < 65 or map_ < 20
+
+
+def main():
+    steps = 0
+    while steps < 350:
+        observations = parse_input()
+        events, last_measurements, vitals = (
+            observations[:33],
+            observations[33:40],
+            observations[40:47],
+        )
+
+        if is_critical(vitals):
+            print(22)  # BagDuringCPR
+            continue
+
+        if not is_stable(vitals):
+            if last_measurements[4] == 0:
+                print(27)  # UseBloodPressureCuff
+            elif last_measurements[5] == 0:
+                print(25)  # UseSatsProbe
+            elif last_measurements[1] == 0:
+                print(4)  # ExamineBreathing
+            elif (
+                events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
+            ):
+                print(3)  # ExamineAirway
+            else:
+                print(15)  # GiveFluids
+            continue
+
+        print(48)  # Finish
         break
+        steps += 1
+
+
+if __name__ == "__main__":
+    main()
