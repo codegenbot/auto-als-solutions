@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -10,47 +11,51 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    global step
+    global step, examined_airway, used_sats_probe, used_bpcuff, viewed_monitor
+
     step += 1
 
-    # Check cardiac arrest condition
+    if not examined_airway:
+        examined_airway = True
+        return 3  # ExamineAirway
+    if not used_sats_probe:
+        used_sats_probe = True
+        return 25  # UseSatsProbe
+    if not used_bpcuff:
+        used_bpcuff = True
+        return 27  # UseBloodPressureCuff
+    if not viewed_monitor:
+        viewed_monitor = True
+        return 16  # ViewMonitor
+
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # StartChestCompression
 
-    # Initial steps to gather required observations
-    if step == 1:
-        return 3  # ExamineAirway
-    if step == 2:
-        return 25  # UseSatsProbe
-    if step == 3:
-        return 27  # UseBloodPressureCuff
-    if step == 4:
-        return 4  # ExamineBreathing
-    if step == 5:
-        return 16  # ViewMonitor
+    if events[3] == 0 and step <= 10:
+        return 3  # Recheck Airway if not confirmed clear
 
-    # Check and stabilize vital signs
-    if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask
     if map_value is not None and map_value < 60:
         return 15  # GiveFluids
+
     if resp_rate is None or resp_rate < 8:
-        return 4  # Examine Breathing
+        return 4  # ExamineBreathing again
 
-    # Ensure correct evaluation of MAP and Sats
-    if map_value is None and vital_signs_time[4] == 0:
-        return 38  # TakeBloodPressure
-    if sats is None and vital_signs_time[5] == 0:
-        return 25  # UseSatsProbe
+    if sats is not None and sats < 88:
+        return 30  # UseNonRebreatherMask
 
-    # Finish if all criteria for stabilization are met
-    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-        return 48  # Finish
+    if (
+        (sats is not None and sats >= 88)
+        and (resp_rate is not None and resp_rate >= 8)
+        and (map_value is not None and map_value >= 60)
+    ):
+        return 48  # Finish when stabilized
 
     return 1  # CheckSignsOfLife
 
-global step
+
+global step, examined_airway, used_sats_probe, used_bpcuff, viewed_monitor
 step = 0
+examined_airway = used_sats_probe = used_bpcuff = viewed_monitor = False
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
