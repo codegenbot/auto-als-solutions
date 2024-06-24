@@ -20,7 +20,7 @@ def get_action(observations):
     elif step >= 4:
         if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
             return 17  # Start Chest Compression
-        if events[7] > 0:  # BreathingNone
+        if events[7] > 0 or events[8] > 0 or events[9] > 0:
             return 22  # Bag During CPR
         
         if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
