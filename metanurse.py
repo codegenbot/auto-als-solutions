@@ -1,6 +1,5 @@
 import sys
 
-
 def get_action(observations):
     global step
     step += 1
@@ -24,15 +23,18 @@ def get_action(observations):
         return 27
     elif step == 5:
         return 16
-
+    
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17
-
+    
     if events[8] > 0:
         return 29
 
     if sats is None or map_value is None or resp_rate is None:
         return 1
+
+    if vital_signs_time[5] == 0:
+        return 16
 
     if map_value and map_value < 60:
         return 15
@@ -41,11 +43,10 @@ def get_action(observations):
     if sats and sats < 88:
         return 30
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    if map_value >= 60, resp_rate >= 8, sats >= 88:
         return 48
 
     return 1
-
 
 global step
 step = 0
