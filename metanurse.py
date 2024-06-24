@@ -28,11 +28,9 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    # Check for critical conditions first
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    # Step-wise actions based on the ABCDE protocol
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
@@ -46,7 +44,6 @@ def get_action(observations):
     if step == 6:
         return EXAMINE_CIRCULATION
 
-    # Ensure to measure missing vital signs
     if map_value is None:
         return USE_BP_CUFF
     if sats is None:
@@ -54,7 +51,6 @@ def get_action(observations):
     if resp_rate is None:
         return EXAMINE_BREATHING
 
-    # Take appropriate action according to the gathered vitals
     if map_value < 60:
         return GIVE_FLUIDS
     if resp_rate < 8:
@@ -62,11 +58,9 @@ def get_action(observations):
     if sats < 88:
         return USE_NON_REBREATHER_MASK
 
-    # Ensure airway is clear if not yet confirmed
-    if events[3] == 0:  # AirwayClear
+    if events[3] == 0:
         return EXAMINE_AIRWAY
 
-    # Finish if patient is stabilized
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
