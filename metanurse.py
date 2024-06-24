@@ -1,58 +1,57 @@
 import sys
 
 def get_action(observations):
+    global step
     events = observations[:33]
     vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:47]
+    vital_signs_values = observations[40:]
 
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    global step
-    step += 1
+    if step == 1:
+        return 25  # UseSatsProbe
+    elif step == 2:
+        return 27  # UseBloodPressureCuff
+    elif step < 6:
+        return 16  # ViewMonitor to get updated values early
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+    if step > 6 and map_value is None:
+        return 38  # TakeBloodPressure
+    
+    if step > 6 and sats is None:
+        return 25  # UseSatsProbe
+    
+    if map_value is not None and map_value < 20:
+        return 17  # StartChestCompression
+    
+    if sats is not None and sats < 65:
         return 17  # StartChestCompression
 
-    if step == 1:
-        return 3  # ExamineAirway
-    if step == 2:
-        return 25  # UseSatsProbe
-    if step == 3:
-        return 27  # UseBloodPressureCuff
-    if step == 4:
-        return 4  # ExamineBreathing
+    if events[7] > 0:  # BreathingNone
+        return 29  # UseBagValveMask
 
-    if events[3] == 0:
-        return 3  # ExamineAirway
+    if events[3] == 0 and (events[4] > 0 or events[5] > 0 or events[6] > 0):
+        return 31  # UseYankeur Suction Catheter
 
-    if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask
-
-    if map_value is None or vital_signs_time[4] == 0:
-        return 38  # TakeBloodPressure
-
-    if resp_rate is None or resp_rate < 8:
-        return 4  # ExamineBreathing
-
-    if map_value is not None and map_value < 60:
+    if map_value and map_value < 60:
         return 15  # GiveFluids
 
-    if (
-        (sats is not None and sats >= 88)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (map_value is not None and map_value >= 60)
-    ):
-        return 48  # Finish
+    if sats and sats < 88:
+        return 30  # UseNonRebreatherMask
 
-    return 1  # CheckSignsOfLife
+    if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
+        return 48  # Finish game
+
+    return 1  # CheckSignsOfLife as the default approach
 
 global step
 step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
+    step += 1
     action = get_action(input_data)
     print(action)
     if action == 48:
