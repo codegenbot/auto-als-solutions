@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     global step
     step += 1
@@ -19,7 +20,7 @@ def get_action(observations):
         return 27  # Use BP Cuff
     elif step <= 6:
         return 16  # View Monitor to get initial observations
-    
+
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compressions if necessary
 
@@ -29,21 +30,22 @@ def get_action(observations):
         return 38  # Take Blood Pressure
     if sats is None:
         return 25  # Use Sats Probe
-    
+
     if events[3] == 0:
         return 3  # Examine Airway
-    
+
     if sats < 88:
         return 30  # Use NonRebreather Mask
     if resp_rate < 8:
         return 29  # Use Bag Valve Mask for low respiration
     if map_value < 60:
         return 15  # Give Fluids for low MAP
-    
+
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return 48  # Finish if patient is stable
-    
+
     return 1  # Default action to check signs of life
+
 
 global step
 step = 0
