@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     global step
     step += 1
@@ -16,34 +17,33 @@ def get_action(observations):
     if step == 1:
         return 25  # Use Sats Probe
     if step == 2:
-        return 27  # Use BP Cuff
-    if step in (3, 4, 5, 6):
-        return 16  # Repeatedly View Monitor for initial observations
+        return 27  # Use Blood Pressure Cuff
+    if step == 3:
+        return 16  # View Monitor
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # Start Chest Compressions if necessary
+        return 17  # Start Chest Compression
 
-    if resp_rate is None:
-        return 4  # Examine Breathing
-    if map_value is None:
-        return 38  # Check Blood Pressure
-    if sats is None:
-        return 25  # Use Sats Probe
+    if map_value is None or resp_rate is None or sats is None:
+        return 16  # View Monitor to get vital signs
 
-    if events[3] == 0:
-        return 3  # Examine Airway if AirwayClear not observed
+    if events[3] == 0:  # AirwayClear
+        return 3  # Examine Airway
 
-    if map_value < 60:
-        return 15  # Give Fluids for MAP < 60
-    if resp_rate < 8:
-        return 29  # Use Bag Valve Mask for respiration
-    if sats < 88:
-        return 30  # Use NonRebreather Mask for sats < 88
+    if resp_rate is not None and (resp_rate < 8 or resp_rate > 30):
+        return 30  # Use Non-Rebreather Mask
 
-    if (map_value >= 60 and resp_rate >= 8 and sats >= 88):
-        return 48  # Finish if all vitals are stable
+    if map_value is not None and map_value < 60:
+        return 15  # Give Fluids
 
-    return 1  # Default action to check signs of life
+    if sats is not None and sats < 88:
+        return 30  # Use Non-Rebreather Mask
+
+    if step >= 4 and (map_value >= 60 and resp_rate >= 8 and sats >= 88):
+        return 48  # Finish
+
+    return 1  # Check Signs of Life
+
 
 global step
 step = 0
