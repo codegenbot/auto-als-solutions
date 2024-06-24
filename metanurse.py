@@ -1,9 +1,10 @@
 import sys
 
+
 def get_action(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:]
+    vital_signs_values = observations[40:47]
 
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
@@ -14,38 +15,43 @@ def get_action(observations):
     step += 1
 
     if step == 1:
+        return 3  # ExamineAirway
+    if step == 2:
         return 25  # UseSatsProbe
-    elif step == 2:
+    if step == 3:
         return 27  # UseBloodPressureCuff
-    elif step == 3:
+    if step == 4:
+        return 4  # ExamineBreathing
+    if step == 5:
         return 16  # ViewMonitor
-
-    if events[7] > 0:  # BreathingNone event
-        return 29  # UseBagValveMask for ventilation
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # StartChestCompression
 
-    if step == 4:
-        return 3  # ExamineAirway
-
-    if map_value is None or sats is None:
-        return 16  # ViewMonitor if either MAP or Sats are still missing
-
-    if map_value is not None and map_value < 60:
-        return 15  # GiveFluids if circulation is not stable
+    if events[3] == 0 and step <= 10:
+        return 3  # Recheck Airway if not confirmed clear
 
     if sats is not None and sats < 88:
-        return 30  # UseNonRebreatherMask to stabilize breathing
+        return 30  # UseNonRebreatherMask
+
+    if map_value is None and vital_signs_time[4] == 0:
+        return 38  # TakeBloodPressure
+
+    if map_value is not None and map_value < 60:
+        return 15  # GiveFluids
+
+    if resp_rate is None or resp_rate < 8:
+        return 4  # ExamineBreathing again
 
     if (
         (sats is not None and sats >= 88)
         and (resp_rate is not None and resp_rate >= 8)
         and (map_value is not None and map_value >= 60)
     ):
-        return 48  # Finish if patient is stable
+        return 48  # Finish when stabilized
 
-    return 1  # Continuously CheckSignsOfLife as default action
+    return 1  # CheckSignsOfLife
+
 
 global step
 step = 0
