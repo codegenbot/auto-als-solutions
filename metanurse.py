@@ -19,9 +19,9 @@ def get_action(observations):
     if step == 2:
         return 4  # Examine Breathing
     if step == 3:
-        return 25  # Use Sats Probe
+        return 25 # Use Sats Probe
     if step == 4:
-        return 27  # Use BP Cuff
+        return 27 # Use BP Cuff
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compressions if necessary
