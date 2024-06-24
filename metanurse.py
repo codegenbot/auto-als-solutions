@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -10,7 +11,11 @@ def get_action(observations, step):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20) or events[7] > 0:
+    if (
+        (sats is not None and sats < 65)
+        or (map_value is not None and map_value < 20)
+        or events[7] > 0
+    ):
         return 17
 
     if (
@@ -19,7 +24,7 @@ def get_action(observations, step):
         and (map_value is not None and map_value >= 60)
     ):
         return 48
-    
+
     if step == 1:
         return 25  # UseSatsProbe
     elif step == 2:
@@ -35,13 +40,14 @@ def get_action(observations, step):
     elif map_value is None:
         return 38  # TakeBloodPressure
     elif events[7] > 0:
-        return 29  # UseBagValveMask 
+        return 29  # UseBagValveMask
     elif resp_rate is None or resp_rate < 8:
         return 4  # ExamineBreathing
     elif map_value is not None and map_value < 60:
         return 15  # GiveFluids
-    
+
     return 1  # DoNothing
+
 
 global step
 step = 0
