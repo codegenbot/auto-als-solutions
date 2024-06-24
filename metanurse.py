@@ -34,7 +34,7 @@ def get_action(observations):
         return 29  # UseBagValveMask
 
     if events[3] == 0 and (events[4] > 0 or events[5] > 0 or events[6] > 0):
-        return 31  # UseYankeur Suction Catheter
+        return 31  # UseYankeurSuctionCatheter
 
     if map_value and map_value < 60:
         return 15  # GiveFluids
