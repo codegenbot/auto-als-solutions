@@ -3,76 +3,90 @@ while True:
         observations = input().strip().split()
         observations = list(map(float, observations))
 
-        # Parsing inputs
+        response_verbal = observations[0]
+        response_groan = observations[1]
+        response_none = observations[2]
         airway_clear = observations[3]
-        breathing_none = observations[7]
-        breathing_rate_timed = observations[40]
-        breathing_rate = observations[46]
-        oxygen_sats_timed = observations[39]
-        oxygen_sats = observations[45]
-        map_timed = observations[41]
-        map_measure = observations[47]
-        heart_rhythm_svt = observations[29]
-        heart_rhythm_vt = observations[32]
+        airway_obstruction = max(observations[4], observations[5], observations[6])
+        heart_rhythm = observations[27:39]
+        heart_rhythm_measure = observations[33]
+        measured_hr = observations[39]
+        measured_rr = observations[40]
+        measured_cg = observations[41]
+        measured_temp = observations[42]
+        measured_map = observations[43]
+        measured_sats = observations[44]
+        measured_resps = observations[45]
+        hr = observations[46]
+        rr = observations[47]
+        cg = observations[48]
+        temp = observations[49]
+        map_value = observations[50]
+        sats = observations[51]
+        resps = observations[52]
 
         # Critical instant lifesaving checks
-        if oxygen_sats_timed > 0 and oxygen_sats < 65:
+        if measured_sats > 0 and sats < 65:
             print(17)  # StartChestCompression
             continue
-        if map_timed > 0 and map_measure < 20:
+        if measured_map > 0 and map_value < 20:
             print(17)  # StartChestCompression
             continue
 
-        # Initialize monitoring if not done
-        if observations[24] == 0:  # UseMonitorPads
-            print(24)
+        # Attach devices and examine essentials
+        if measured_map == 0:
+            print(27)  # UseBloodPressureCuff
             continue
-
-        if observations[27] == 0:  # UseBloodPressureCuff
-            print(27)
+        if measured_hr == 0:
+            print(24)  # UseMonitorPads
             continue
-
-        # Regular checks for airway and circulation
-        if airway_clear == 0:
-            print(3)  # ExamineAirway
-            continue
-
-        if map_timed == 0:
+        if measured_hr > 0 and measured_map > 0:
             print(5)  # ExamineCirculation
             continue
 
-        # Heart rhythm management
-        if heart_rhythm_svt > 0:
-            print(9)  # GiveAdenosine for SVT
+        # Check heart rhythm issues
+        if any([v > 0 for v in heart_rhythm[5:9]]) or any(
+            [v > 0 for v in heart_rhythm[1:2]]
+        ):  # problematic rhythms
+            print(11)  # GiveAmiodarone
             continue
-        if heart_rhythm_vt > 0:
-            print(11)  # GiveAmiodarone for VT
+        if heart_rhythm[1] > 0:  # SVT
+            print(9)  # GiveAdenosine
+            continue
+
+        # Airway management
+        if response_none > 0 or airway_obstruction > 0:
+            if measured_sats == 0:
+                print(25)  # UseSatsProbe
+                continue
+            print(3)  # ExamineAirway
             continue
 
         # Breathing management
-        if breathing_none > 0:
-            print(29)  # UseBagValveMask
+        if measured_rr == 0:
+            print(4)  # ExamineBreathing
             continue
-        if breathing_rate_timed > 0 and breathing_rate < 8:
+        if measured_rr > 0 and rr < 8:
             print(29)  # UseBagValveMask
             continue
 
         # Circulation stabilization
-        if map_timed > 0 and map_measure < 60:
+        if map_value < 60:
             print(15)  # GiveFluids
             continue
 
-        # Check oxygenation and apply oxygen if needed
-        if oxygen_sats_timed > 0 and oxygen_sats < 88:
+        # O2 Saturation handling
+        if sats < 88:
             if airway_clear > 0:
                 print(30)  # UseNonRebreatherMask
             else:
                 print(3)  # ExamineAirway
             continue
 
-        # If all stabilizing conditions are met
-        print(48)  # Finish
-        break
+        # Final check before finishing
+        if airway_clear > 0 and sats >= 88 and rr >= 8 and map_value >= 60:
+            print(48)  # Finish
+            break
 
     except EOFError:
         break
