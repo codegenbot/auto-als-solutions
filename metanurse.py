@@ -11,7 +11,10 @@ while True:
         measured_map = observations[45]
         measured_resp = observations[47]
 
-        # Immediate response needed if critical values are observed
+        airway_clear = observations[3]
+        breathing_none = observations[7]
+        
+        # Immediate critical conditions check
         if timed_meas_sats > 0 and measured_sats < 65:
             print(17)  # StartChestCompression
             continue
@@ -19,48 +22,36 @@ while True:
             print(17)  # StartChestCompression
             continue
 
-        # Actively monitor and verify Sats and MAP
-        if timed_meas_sats == 0 or (timed_meas_sats > 0 and measured_sats < 88):
+        # Examine vital signs more dynamically and accurately
+        if timed_meas_sats == 0 or measured_sats < 88:
             print(25)  # UseSatsProbe
             continue
-        if (timed_meas_map == 0 or measured_map < 60) and 0 < measured_map < 60:
+        if timed_meas_map == 0 or measured_map < 60:
             print(27)  # UseBloodPressureCuff
             continue
 
-        # Examine Airway, Breathing, Circulation appropriately
-        if timed_meas_resp == 0 or (timed_meas_resp > 0 and measured_resp < 8):
-            print(29)  # UseBagValveMask
-            continue
-        if timed_meas_sats > 0 and measured_sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        # Detailed Examination
-        if observations[3] == 0:  # AirwayClear
+        # Handle Airway issues
+        if airway_clear < 0.5:  # Assuming some threshold for airway clear being meaningful
             print(3)  # ExamineAirway
             continue
-        if observations[7] == 0:  # BreathingNone
-            print(4)  # ExamineBreathing
-            continue
-        if observations[16] == 0 and observations[17] == 0:  # RadialPulse
-            print(5)  # ExamineCirculation
-            continue
 
-        # Safety Net for all vital signs before finalizing
-        if measured_sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-        if measured_resp < 8:
+        # Breathing and ventilation checks
+        if timed_meas_resp == 0 or measured_resp < 8:
             print(29)  # UseBagValveMask
             continue
-        if measured_map < 60:
-            print(15)  # GiveFluids
-            continue
 
-        # Dynamic Decision Making and Reassessment
-        if measured_sats >= 88 and measured_resp >= 8 and measured_map >= 60:
+        # Ensure all critical conditions are stable before finishing
+        if measured_sats >= 88 and measured_map >= 60 and measured_resp >= 8:
             print(48)  # Finish
             break
+        else:
+            if measured_sats < 88:
+                print(30)  # UseNonRebreatherMask
+            elif measured_map < 60:
+                print(15)  # GiveFluids
+            elif measured_resp < 8:
+                print(29)  # UseBagValveMask
+            continue
 
     except EOFError:
         break
