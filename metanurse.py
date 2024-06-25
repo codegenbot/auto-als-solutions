@@ -4,25 +4,28 @@ while True:
         observations = list(map(float, observations))
         measured_sats = observations[53 - 1]  # Last item
         measured_map = observations[52 - 1]  # Second to last item
-        airway_clear = observations[3] > 0  # AirwayClear index
-        breathing_none = observations[7] > 0  # BreathingNone index
 
-        # Check critical conditions first
+        # Perform ABCDE assessment and act accordingly
+        airway_clear = observations[3]  # AirwayClear index
+        breathing_problems = (
+            observations[7] > 0 or observations[8] > 0
+        )  # BreathingNone, BreathingSnoring
+
         if measured_sats < 65 or measured_map < 20:
             print(17)  # StartChestCompression
-        
-        # Check if stabilization is needed
         elif measured_sats < 88 or measured_map < 60:
-            if not airway_clear:
-                print(3)  # ExamineAirway
-            elif breathing_none:
-                print(29)  # UseBagValveMask
+            if airway_clear > 0:
+                if measured_sats < 88:
+                    print(30)  # UseNonRebreatherMask
+                else:
+                    print(15)  # GiveFluids if MAP is low
             else:
-                print(5)  # ExamineCirculation
-
-        # If stabilized, finish the simulation
+                print(3)  # ExamineAirway
+        elif airway_clear == 0 or breathing_problems:
+            print(3)  # ExamineAirway
+        elif measured_sats >= 88 and measured_map >= 60:
+            print(48)  # Finish - Stabilized
         else:
-            print(48)  # Finish
-
-    except EOFError:
+            print(0)  # DoNothing, continue to monitor
+    except EOFRelicsError:
         break
