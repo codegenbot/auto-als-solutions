@@ -14,17 +14,16 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:47]
-
+    
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
-
+    
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
@@ -47,8 +46,8 @@ def get_action(observations, step):
         return USE_BVM
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-
-    if events[7] == 1:
+    
+    if events[7] == 1:  # BreathingNone event
         return USE_BVM
 
     if step > 10:
@@ -64,7 +63,6 @@ def get_action(observations, step):
             return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
