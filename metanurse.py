@@ -1,5 +1,5 @@
 import sys
-import math
+
 
 def get_action(observations):
     global step
@@ -21,40 +21,28 @@ def get_action(observations):
 
     if step == 1:
         return 25  # Use Sats Probe
-    if step == 2:
+    elif step == 2:
         return 27  # Use Blood Pressure Cuff
-    if step == 3:
+    elif step == 3:
         return 16  # View Monitor
-    if step == 4:
-        return 3  # Examine Airway
-    if step == 5:
-        return 4  # Examine Breathing
 
     if (measured["sats"] is not None and measured["sats"] < 65) or (
         measured["map"] is not None and measured["map"] < 20
     ):
         return 17  # Start Chest Compression
 
-    if (
-        measured["heart_rate"] is None
-        or measured["resp_rate"] is None
-        or measured["map"] is None
-        or measured["sats"] is None
-    ):
-        return 16  # View Monitor to get vital signs
+    if events[7] > 0 or measured["resp_rate"] == 0:
+        return 29  # Use Bag Valve Mask
 
     if events[3] == 0:
-        if events[4] > 0:
-            return 31  # Use Yankeur Suction Catheter
-        if events[5] > 0 or events[6] > 0:
-            return 35  # Perform Airway Manoeuvres
+        if events[4] > 0 or events[5] > 0 or events[6] > 0:
+            return 31  # Clear Airway (Use Yankeur Suction Catheter)
 
-    if measured["resp_rate"] is not None and (
-        measured["resp_rate"] < 8 or measured["resp_rate"] > 30
-    ):
-        return 29  # Use Bag Valve Mask
+    if measured["resp_rate"] is not None and measured["resp_rate"] < 8:
+        return 29  # Assist Breathing (Use Bag Valve Mask)
+
     if measured["sats"] is not None and measured["sats"] < 88:
-        return 30  # Use Nonrebreather Mask
+        return 30  # Use Non Rebreather Mask
 
     if measured["map"] is not None and measured["map"] < 60:
         return 15  # Give Fluids
@@ -65,15 +53,16 @@ def get_action(observations):
     if events[25] == 0 and events[26] == 0 and events[27] == 0:
         return 7  # Examine Exposure
 
-    if (
-        step >= 6
-        and measured["map"] >= 60
-        and measured["resp_rate"] >= 8
-        and measured["sats"] >= 88
+    if all(
+        [
+            measured["map"] is not None and measured["map"] >= 60,
+            measured["resp_rate"] is not None and measured["resp_rate"] >= 8,
+            measured["sats"] is not None and measured["sats"] >= 88,
+        ]
     ):
-        return 48  # Finish
+        return 48  # Finish the scenario
 
-    return 1  # Default action: CheckSignsOfLife
+    return 1  # Default to fetching more data if uncertain
 
 
 global step
