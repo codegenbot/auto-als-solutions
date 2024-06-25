@@ -3,13 +3,11 @@ airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
 
-
 def get_vitals(measurements, times):
     sats = measurements[5] if times[5] > 0 else None
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
-    return sats, map_in_value, resp_rate
-
+    return sats, map_value, resp_rate
 
 while True:
     try:
@@ -22,35 +20,36 @@ while True:
 
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
-            if sats < 65:
-                print(10)  # Give Adrenaline
+            if sats is not None and sats < 65:
+                print(10)  # GiveAdrenaline
                 continue
 
-        if not airway_checked:
+        if not airway_checked or not airway_clear:
             print(3)  # Examine Airway
             airway_checked = True
             airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
 
-        if airway_clear and not breathing_assessed:
-            print(4)  # Examine Breathing
-            breathing_assessed = True
+        if not breathing_assessed:
             if events[7] > 0.1:  # BreathingNone significant relevance
                 print(29)  # Use Bag Valve Mask
+                breathing_assessed = True
                 continue
 
         if airway_clear and not circulation_assessed:
             if sats is not None and sats < 88:
                 print(30)  # Use Non Rebreather Mask
-            if map_value is not None and map_value < 60:
+                circulation_assessed = True
+                continue
+            elif map_value is not None and map_value < 60:
                 print(15)  # Give Fluids
-            circulation_assessed = True
-            continue
+                circulation_assessed = True
+                continue
 
         all_stable = all(
             [
                 airway_checked,
-                airpod_clear,
+                airway_clear,
                 breathing_assessed,
                 circulation_assessed,
                 sats is not None and sats >= 88,
@@ -65,5 +64,5 @@ while True:
 
         print(0)  # Do Nothing in absence of any direct action based on current knowledge
 
-    except EOFError:
+    except EOFSectionError:
         break
