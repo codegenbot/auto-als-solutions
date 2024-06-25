@@ -9,7 +9,7 @@ while True:
     resp_rate = measurements[6] if times[6] > 0 else None
 
     # Immediate critical condition check
-    if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+    if sats is not None and sats < 65 or map_value is not None and map_pvalue < 20:
         print(17)  # Start Chest Compression
         continue
 
