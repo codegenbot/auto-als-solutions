@@ -13,6 +13,9 @@ USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
+PERFORM_HEAD_TILT_CHIN_LIFT = 36
+USE_GUEDEL_AIRWAY = 32
+
 
 def get_action(observations, step):
     events = observations[:33]
@@ -32,20 +35,18 @@ def get_action(observations, step):
         return VIEW_MONITOR
     elif events[3] == 0:
         return EXAMINE_AIRWAY
-
-    if events[7] > 0 or events[8] > 0:  # BreathingNone or BreathingSnoring
-        return USE_BVM
-
-    if resp_rate is None:
+    elif resp_rate is None:
         return EXAMINE_BREATHING
-    
-    if map_value is None:
+    elif map_value is None:
         return EXAMINE_CIRCULATION
-    
-    if sats is None:
+    elif sats is None:
         return USE_SATS_PROBE
-    
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+
+    if events[7] == 1:
+        return PERFORM_HEAD_TILT_CHIN_LIFT  # Airway management
+    elif events[6] == 1:  # Airway obstruction by tongue
+        return USE_GUEDEL_AIRWAY
+    elif (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
     if map_value is not None and map_value < 60:
@@ -61,6 +62,7 @@ def get_action(observations, step):
         return FINISH
 
     return DO_NOTHING
+
 
 step = 0
 
