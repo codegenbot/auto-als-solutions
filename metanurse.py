@@ -24,7 +24,6 @@ sequence = [
     ACTIONS["EXAMINE_CIRCULATION"],
 ]
 
-
 def get_action(observations, step, examined):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -67,7 +66,6 @@ def get_action(observations, step, examined):
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
-
 
 step = 0
 examined = {"airway": False, "breathing": False, "circulation": False, "sats": False}
