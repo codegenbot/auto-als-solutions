@@ -3,82 +3,64 @@ while True:
         observations = input().strip().split()
         observations = list(map(float, observations))
 
-        # Parsing inputs
-        events = observations[:39]
-        measurements_timed = observations[39:46]
-        measurements = observations[46:53]
+        airway_clear = observations[3]
+        airway_vomit = observations[4]
+        airway_blood = observations[5]
+        breathing_none = observations[7]
+        breathing_rate_timed = observations[40]
+        breathing_rate = observations[46]
+        oxygen_sats_timed = observations[39]
+        oxygen_sats = observations[45]
+        map_timed = observations[41]
+        map_measure = observations[47]
+        heart_rhythm_svt = observations[29]
+        heart_rhythm_af = observations[30]
+        heart_rhythm_vt = observations[32]
 
-        # Event indexes
-        AIRWAY_CLEAR_IDX = 3
-        BREATHING_NONE_IDX = 7
-        MEASURED_MAP_IDX = 41
-        MEASURED_SATS_IDX = 39
-        MEASURED_RESP_RATE_IDX = 40
-
-        # Measurement indexes
-        MAP_VAL_IDX = 5
-        SATS_VAL_IDX = 4
-        RESP_RATE_VAL_IDX = 1
-
-        # Assigning events and measured variables
-        airway_clear = events[AIRWAY_CLEAR,# 
-        breathing_none = events[BREATHING_NONE_IDX]
-        measured_map_timed = measurements_timed[MEASURED_MAP_IDX - 39]
-        measured_sats_timed = measurements_timed[MEASURED_SATS_IDX - 39]
-        measured_resp_rate_timed = measurements_timed[MEASURED_RESP_RATE_IDX - 39]
-
-        map_val = measurements[MAP_VAL_IDX]
-        sats_val = measurements[SATS_VAL_IDX]
-        resp_rate_val = measurements[RESP_RATE_VAL_IDX]
-
-        # Critical conditions check
-        if measured_sats_timed > 0 and sats_val < 65:
+        # Critical instant lifesaving checks
+        if (oxygen_sats_timed > 0 and oxygen_sats < 65) or (
+            map_timed > 0 and map_measure < 20
+        ):
             print(17)  # StartChestCompression
-            continue
-        if measured_map_timed > 0 and map_val < 20:
-            print(17)  # StartChestCompression
-            continue
-
-        # Check necessary basic exams first if details are outdated
-        if airway_clear == 0:
-            print(3)  # ExamineAirway
-            continue
-        if measured_resp_rate_timed <= 0:
-            print(4)  # ExamineBreathing
-            continue
-        if measured_map_timed <= 0:
-            print(5)  # ExamineCirculation
-            continue
-        if measured_sats_timed <= 0:
-            print(25)  # UseSatsProbe
             continue
 
         # Airway management
         if airway_clear == 0:
             print(3)  # ExamineAirway
             continue
+        elif airway_blood > 0 or airway_vomit > 0:
+            print(31)  # UseYankeurSuctionCatheter
+            continue
 
         # Breathing management
-        if breathing_none > 0 or (measured_resp_rate_timed > 0 and resp_rate_val < 8):
+        if breathing_none > 0:
+            print(29)  # UseBagValveMask
+            continue
+        elif breathing_rate_timed > 0 and breathing_rate < 8:
             print(29)  # UseBagValveMask
             continue
 
-        # Circulation management
-        if measured_map_timed > 0 and map_val < 60:
-            print(15)  # GiveFluids
-            continue
-
-        # Oxygenation management
-        if measured_sats_timed > 0 and sats_val < 88:
+        # Check oxygenation and apply oxygen if needed
+        if oxygen_sats_timed > 0 and oxygen_sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        # If all required conditions are stabilized
-        if (measured_sats_timed > 0 and sats_val >= 88) and \
-           (measured_resp_rate_timed > 0 and resp_rate_val >= 8) and \
-           (measured_map_timed > 0 and map_val >= 60):
-            print(48)  # Finish
-            break
+        # Circulation stabilization
+        if map_timed > 0 and map_measure < 60:
+            print(15)  # GiveFluids
+            continue
+
+        # Heart rhythm management
+        if heart_rhythm_svt > 0:
+            print(9)  # GiveAdenosine
+            continue
+        elif heart_rhythm_af > 0 or heart_rhythm_vt > 0:
+            print(28)  # AttachDefibPads
+            continue
+
+        # If all stabilizing conditions are met
+        print(48)  # Finish
+        break
 
     except EOFError:
         break
