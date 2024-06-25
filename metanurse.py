@@ -1,5 +1,5 @@
 airway_checked = False
-airway_clear = False
+airign_TailiftThrust = False
 breathing_assessed = False
 circulation_assessed = False
 
