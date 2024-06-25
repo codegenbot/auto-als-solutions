@@ -8,44 +8,51 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
-        if events[2] > 0.1:  # ResponseNone
-            print(17)  # Start Chest Compression
-        else:
-            print(1)  # CheckSignsOfLife
+    # Immediate Response to Critical Conditions
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        print(17)  # Start Chest Compression
         continue
 
-    airway_clear = events[3] > 0.1
-    if not airway_clear:
+    # Airway Management
+    if events[3] < 0.1:  # Airway not recently checked
         print(3)  # Examine Airway
         continue
+    if events[4] > 0.1 or events[5] > 0.1:  # Presence of Vomit or Blood
+        print(31)  # Use Yankeur Suction Catheter
+        continue
 
-    if events[7] > 0.1:  # BreathingNone
+    # Breathing Assessment
+    if events[7] > 0.1:  # Breathing None
         print(29)  # Use Bag Valve Mask
         continue
 
+    # Circulation Check
+    if events[28] > 0.1 or events[29] > 0.1 or events[30] > 0.1:  # Dangerous heart rhythms
+        print(28)  # Attach Defib Pads
+        continue
+
+    # Stabilizing Measures
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
-
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    if resp_rate is not None and resp_rate < 8:
+    # Ongoing Monitoring and Responsive Actions
+    if not (events[7] > 0.1):  # if breathing not already managed
         print(4)  # Examine Breathing
         continue
 
-    if (
-        airway_clear
-        and sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and respure >= 8
-    ):
-        print(48)  # Finish
+    # Continuously look for new data and re-assess situation
+    print(16)  # View Monitor for updates
+
+    # Check patient stability and finalize if stable
+    if (sats is not None and sats >= 88 and 
+        map_value is not None and map_value >= 60 and 
+        resp_rate is not None and resp_rate >= 8):
+        print(48)  # Finish Scenario
         break
 
-    print(0)  # DoNothing
+    # Default action if no critical actions are required
+    print(0)  # DoNothing, continue monitoring
