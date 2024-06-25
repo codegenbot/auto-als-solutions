@@ -17,6 +17,15 @@ ACTIONS = {
     "USE_YANKAUR_SUCTION": 31,
 }
 
+EXAMINE_SEQUENCE = [
+    ACTIONS["USE_SATS_PROBE"],
+    ACTIONS["USE_BP_CUFF"],
+    ACTIONS["VIEW_MONITOR"],
+    ACTIONS["EXAMINE_AIRWAY"],
+    ACTIONS["EXAMINE_BREATHING"],
+    ACTIONS["EXAMINE_CIRCULATION"]
+]
+
 def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -32,7 +41,7 @@ def stabilize_patient(observations):
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] or (resp_rate is not None and resp_rate < 8):
+    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
@@ -56,12 +65,8 @@ def correct_circulation(map_value):
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
-    if step == 0:
-        return ACTIONS["USE_SATS_PROBE"]
-    elif step == 1:
-        return ACTIONS["USE_BP_CUFF"]
-    elif step == 2:
-        return ACTIONS["VIEW_MONITOR"]
+    if step < len(EXAMINE_SEQUENCE):
+        return EXAMINE_SEQUENCE[step]
 
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
@@ -70,14 +75,6 @@ def get_action(observations, step):
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
-
-    if step < 6:
-        if step == 3:
-            return ACTIONS["EXAMINE_AIRWAY"]
-        if step == 4:
-            return ACTIONS["EXAMINE_BREATHING"]
-        if step == 5:
-            return ACTIONS["EXAMINE_CIRCULATION"]
 
     breathing_action = correct_breathing(sats)
     if breathing_action:
