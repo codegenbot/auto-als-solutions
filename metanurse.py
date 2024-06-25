@@ -1,18 +1,5 @@
 import sys
 
-USE_SATS_PROBE = 25
-USE_BP_CUFF = 27
-VIEW_MONITOR = 16
-EXAMINE_AIRWAY = 3
-EXAMINE_BREATHING = 4
-EXAMINE_CIRCULATION = 5
-USE_BVM = 29
-USE_NON_REBREATHER_MASK = 30
-START_CHEST_COMPRESSIONS = 17
-GIVE_FLUIDS = 15
-FINISH = 48
-
-
 def get_action(observations):
     global step
     step += 1
@@ -25,44 +12,48 @@ def get_action(observations):
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
-
+    
     if step == 1:
-        return USE_SATS_PROBE
+        return 3  # Examine Airway
     if step == 2:
-        return USE_BP_CUFF
+        return 4  # Examine Breathing
     if step == 3:
-        return VIEW_MONITOR
+        return 25 # Use Sats Probe
     if step == 4:
-        return EXAMINE_AIRWAY
+        return 27 # Use BP Cuff
     if step == 5:
-        return EXAMINE_BREATHING
-    if step == 6:
-        return EXAMINE_CIRCULATION
-
+        return 16 # View Monitor
+    
+    # Check if any of the critical measures need immediate attention
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return START_CHEST_COMPRESSIONS
+        return 17  # Start Chest Compressions if necessary
+    
+    if resp_rate is None:
+        return 4  # Examine Breathing again if no reading
+    if map_value is None:
+        return 38 # Check Blood Pressure again if no reading
+    if sats is None:
+        return 25 # Use Sats Probe again if no reading
+    
+    if events[3] == 0 and (events[4] > 0 or events[5] > 0 or events[6] > 0):
+        return 31  # Use Yankeur Suction Catheter if Airway issues
 
     if events[3] == 0:
-        return EXAMINE_AIRWAY
-    if resp_rate is not None and resp_rate < 8:
-        return USE_BVM
+        return 35  # Perform Airway Maneuvers if airway not clear
+
     if map_value is not None and map_value < 60:
-        return GIVE_FLUIDS
+        return 15  # Give Fluids for MAP < 60
+    if resp_rate is not None and resp_rate < 8:
+        return 29  # Use Bag Valve Mask for low respiration
     if sats is not None and sats < 88:
-        return USE_NON_REBREATHER_MASK
+        return 30  # Use NonRebreather Mask for low sats
 
-    if resp_rate is None:
-        return EXAMINE_BREATHING
-    if map_value is None:
-        return USE_BP_CUFF
-    if sats is None:
-        return USE_SATS_PROBE
+    if all([resp_rate is not None and resp_rate >= 8, 
+            map_value is not None and map_value >= 60, 
+            sats is not None and sats >= 88]):
+        return 48  # Finish if all vitals are stable
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return FINISH
-
-    return EXAMINE_BREATHING
-
+    return 1  # Check signs of life action to keep loop active
 
 global step
 step = 0
@@ -70,5 +61,5 @@ for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data)
     print(action)
-    if action == FINISH:
+    if action == 48:
         break
