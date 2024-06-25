@@ -1,10 +1,15 @@
 while True:
     observations = input().split()
-    relevance = [float(obs) for obs in observations[:53]]
-    measurements = [float(obs) for obs in observations[53:]]
+    relevance = [
+        float(obs) for obs in observations[:46]
+    ]  # Including recency of vital sign measurements
+    measurements = [
+        float(obs) for obs in observations[46:]
+    ]  # Actual vital sign measurements
 
-    measured_sats_relevance = relevance[52]
-    measured_map_relevance = relevance[51]
+    # Immediate danger conditions
+    measured_sats_relevance = relevance[45]
+    measured_map_relevance = relevance[44]
     sats = measurements[5]
     map_mmHg = measurements[4]
 
@@ -14,19 +19,20 @@ while True:
         print(17)  # StartChestCompression
         continue
 
+    # Primary ABCDE checks
     if any(relevance[i] > 0 for i in range(3, 7)):  # Checking any airway issues
         print(35)  # PerformAirwayManoeuvres
         continue
 
-    if relevance[7] > 0.5:  # BreathingNone
+    if relevance[7] > 0.5:  # BreathingNone index is 7
         print(29)  # UseBagValveMask
         continue
-    elif any(relevance[i] > 0 for i in range(8, 11)):  # Other breathing problems
+    elif any(relevance[i] > 0 for i in range(8, 11)):  # Basic breathing problems
         print(30)  # UseNonRebreatherMask
         continue
 
-    if relevance[16] > 0:  # Circulation checks - Palpable Pulse exists
-        if relevance[17] > 0:  # RadialPulseNonPalpable
+    if relevance[16] > 0:  # Circulation checks
+        if relevance[17] > 0:
             print(15)  # GiveFluids
         else:
             print(14)  # UseVenflonIVCatheter
@@ -42,6 +48,7 @@ while True:
         print(7)  # ExamineExposure
         continue
 
+    # Stabilization condition to end treatment
     if (
         measured_sats_relevance > 0
         and sats >= 88
@@ -53,6 +60,7 @@ while True:
         print(48)  # Finish
         break
 
+    # If no immediate actions required, further examinations needed
     if relevance[25] == 0 and measurements[5] < 88:
         print(25)  # UseSatsProbe
     elif relevance[26] == 0 and measurements[4] < 60:
