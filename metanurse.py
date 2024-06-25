@@ -1,5 +1,6 @@
 import sys
 
+# Constants for actions
 USE_SATS_PROBE = 25
 USE_BP_CUFF = 27
 VIEW_MONITOR = 16
@@ -10,10 +11,7 @@ USE_BVM = 29
 USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
-VIEW_MONITOR = 16
 FINISH = 48
-
-step = 0
 
 def get_action(observations):
     global step
@@ -54,7 +52,7 @@ def get_action(observations):
     if events[3] == 0:
         return EXAMINE_AIRWAY
 
-    if events[7] > 0:
+    if events[7] > 0:  # BreathingNone
         return USE_BVM
 
     if map_value is not None and map_value < 60:
@@ -69,6 +67,8 @@ def get_action(observations):
 
     return EXAMINE_BREATHING
 
+global step
+step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data)
