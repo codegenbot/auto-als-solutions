@@ -3,66 +3,65 @@ while True:
         observations = input().strip().split()
         observations = list(map(float, observations))
 
-        # Parse inputs
-        measured_recency = observations[33:40]
-        measurements = observations[40:47]
-        airway_clear = observations[3]
-        airway_vomit = observations[4]
-        airway_blood = observations[5]
-        breathing_none = observations[7]
-        
-        heart_rate_recency = measured_recency[0]
-        respir_rate_recency = measured_recency[1]
-        glucose_recency = measured_recency[2]
-        temperature_recency = measured_recency[3]
-        map_recency = measured_recency[4]
-        sats_recency = measured_recency[5]
-        resps_recency = measured_recency[6]
-        
-        heart_rate = measurements[0]
-        respir_rate = measurements[1]
-        glucose = measurements[2]
-        temperature = measurements[3]
-        map_measure = measurements[4]
-        sats = measurements[5]
-        resps = measurements[6]
-        
-        # Immediate critical conditions
-        if (sats_recency > 0 and sats < 65) or (map_recency > 0 and map_measure < 20):
+        # Parsing inputs
+        event_types = observations[:39]
+        measurement_timeliness = observations[39:46]
+        measurements = observations[46:]
+
+        # Unpack vital sign measurements
+        airway_clear = event_types[3]
+        breathing_none = event_data[7]
+        measured_resps_relevance = measurement_data[6]
+        measured_resps = measurements[6]
+        measured_sats_relevance = measurement_timeliness[5]
+        measured_sats = measurements[5]
+        measured_map_relevance = measurement_timeliness[4]
+        measured_map = measurements[4]
+
+        # Check immediate life-threatening condition
+        if measured_sats_relevance > 0 and measured_sats < 65:
             print(17)  # StartChestCompression
             continue
-        
-        # Examine airway if not clear or when status unknown
+        if measured_map_relevance > 0 and measured_map < 20:
+            print(17)  # StartChestCompression
+            continue
+
+        # Initial Examination for complete assessment
+        print(3)  # ExamineAirway
+        print(4)  # ExamineBreathing
+        print(5)  # ExamineCirculation
+        print(6)  # ExamineDisability
+        print(7)  # ExamineExposure
+
+        # Airway management
         if airway_clear == 0:
             print(3)  # ExamineAirway
             continue
-        elif airway_blood > 0 or airway_vomit > 0:
-            print(31)  # UseYankeurSuctionCatheter
-            continue
-        
-        # Breathing checks
+
+        # Breathing management
         if breathing_none > 0:
             print(29)  # UseBagValveMask
             continue
-        if respir_rate_recency == 0 or resps < 8:
-            print(4)  # ExamineBreathing
+        if measured_resps_relevance > 0 and measured_resps < 8:
+            print(29)  # UseBagValveMask
             continue
-        
-        # Sufficient oxygenation assessment
-        if sats_recency == 0 or sats < 88:
-            print(25)  # UseSatsProbe
-            continue
-        
-        # Circulation checks
-        if map_recency == 0 or map_measure < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-        if (map_recency > 0 and map_measure >= 60 and sats_recency > 0 and sats >= 88 and respir_rate_recency > 0 and resps >= 8):
-            print(48)  # Finish
-            break
-        
-        # Default fall-back action
-        print(0)  # DoNothing
 
-    except EOFError:
+        # Circulation stabilization
+        if measured_map_relevance > 0 and measured_map < 60:
+            print(15)  # GiveFluids
+            continue
+
+        # Oxygenation check and correction
+        if measured_sats_relevance > 0 and measured_sats < 88:
+            if airway_clear > 0:
+                print(30)  # UseNonRebreatherMask
+            else:
+                print(3)  # ExamineAirway
+            continue
+
+        # All stabilization conditions met
+        print(48)  # Finish
+        break
+
+    except EOFJsonRe:
         break
