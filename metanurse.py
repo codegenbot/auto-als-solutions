@@ -13,62 +13,57 @@ while True:
         print(17)  # Start Chest Compression
         continue
 
-    # A - Airway
+    # ABCDE approach with proactive monitoring and actions
+    if times[0] == 0:  # Initially or regularly check signs of life
+        print(1)  # CheckSignsOfLife
+        continue
+
+    # Active management based on frequent examinations
+    # Examine airway, breathing, circulation, disability, and exposure in a cycle
+
+    # Airway examination
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
         continue
 
-    # B - Breathing
+    # Airway management - if obstructions detected
+    if events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:  # AirwayVomit, AirwayBlood, AirwayTongue
+        print(31)  # Use Yankeur Suction Catheter
+        continue
+
+    # Use non-rebreather mask for oxygenation if sats are below 88 and above 65
+    if sats is not None and 65 < sats < 88:
+        print(30)  # Use Non Rebreather Mask
+        continue
+    
+    # Examine breathing if there are issues indicated
     if events[7] > 0.1:  # BreathingNone
         print(29)  # Use Bag Valve Mask
         continue
 
-    if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
+    # Check circulation if not examined recently
+    if times[4] == 0:  # MeasuredMAP not recently measured
+        print(27)  # UseBloodPressureCuff
         continue
 
-    # C - Circulation
+    # Manage circulation - fluids for low MAP
     if map_value is not None and map_value < 60:
-        print(5)  # Examine Circulation
-        continue
-    if (
-        map_value is not None
-        and resp_rate is not None
-        and (resp_rate < 8 or resp_rate < 12)
-    ):
-        print(4)  # Examine Breathing to verify
+        print(15)  # Give Fluids
         continue
 
-    # D - Disability
-    if events[22] < 0.1:  # Decreasing AVPU response
-        print(8)  # ExamineResponse
+    # Check respiratory rate and manage
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
         continue
 
-    # E - Exposure
-    if events[26] < 0.1 or events[27] < 0.1:  # Check on exposure-related symptoms
-        print(7)  # ExamineExposure
+    # Reassess for stabilization: all conditions must be met and maintained
+    if all([
+        sats is not None and sats >= 88,
+        map_value is not None and map_value >= 60,
+        resp_rate is not None and resp_rate >= 8
+    ]):
+        print(25)  # UseSatsProbe to confirm
         continue
 
-    # Ensure Pulse Oximetry is up to date
-    if times[5] < 0.1:
-        print(25)  # UseSatsProbe
-        continue
-
-    # Ensure proper fluid resuscitation if circulation is compromised
-    if map_value is not None and map_value < 70:
-        print(15)  # GiveFluids
-        continue
-
-    # No immediate actions needed, confirm situation or improve monitoring
-    if resp_rate is not None and resp_rate < 12:
-        print(4)  # ExamineBreathing
-        continue
-
-    # Check stabilization conditions
-    if sats is not None and map_value is not None and resp_rate is not None:
-        if sats >= 88 and map_value >= 60 and resp- rate >= 8:
-            print(48)  # Finish
-            break
-
-    # Default check
+    # Default is to keep monitoring if none of the specific actions is required
     print(0)  # DoNothing
