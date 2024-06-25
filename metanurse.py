@@ -26,14 +26,17 @@ def main():
         elif resp_rate is not None and resp_rate < 8:
             print(29)
         else:
-            if sats is not None and map_value is not None and resp_rate is not None:
-                if sats >= 88 and map_value >= 60 and resp_rate >= 8:
-                    print(48)
-                    break
+            if check_stabilization(sats, map_value, resp_rate):
+                print(48)
+                break
             print(8)
 
         sys.stdout.flush()
         step += 1
+
+
+def check_stabilization(sats, map_value, resp_rate):
+    return sats >= 88 and map_value >= 60 and resp_rate >= 8
 
 
 if __name__ == "__main__":
