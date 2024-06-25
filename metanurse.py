@@ -1,37 +1,59 @@
 while True:
     try:
         observations = input().strip().split()
-        events = [float(e) for e in observations[:39]]
-        times = [float(t) for t in observations[39:46]]
-        measurements = [float(m) for m in observations[46:]]
+        observations = list(map(float, observations))
 
-        sats = measurements[5] if times[5] > 0 else None
-        map_value = measurements[4] if times[4] > 0 else None
-        resp_rate = measurements[6] if times[6] > 0 else None
+        timed_meas_sats = observations[40]
+        timed_meas_map = observations[41]
+        measured_sats = observations[52]
+        measured_map = observations[51]
 
-        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
-            print(17)  # Start Chest Compression
+        airway_clear = observations[3]
+        breathing_none = observations[7]
+        resp_rate = observations[39]
+
+        # Start chest compression if very critical
+        if timed_meas_satts > 0 and measured_sats < 65:
+            print(17)
+            continue
+        if timed_meas_map > 0 and measured_map < 20:
+            print(17)
             continue
 
-        if events[7] > 0.1:  # BreathingNone significant
-            if events[17] > 0.1:  # RadialPulseNonPalpable significant
-                print(17)  # Start Chest Compression
+        # Examine airway
+        if airway_clear < 0.5:
+            if observations[4] or observations[5] or observations[6]:
+                print(35)
             else:
-                print(29)  # Use Bag Valve Mask
-        elif events[17] > 0.1:  # RadialPulseNonPalpable significant
-            print(17)  # Start Chest Compression
-        else:
-            # Regular assessment moves
-            if sats is not None and sats < 88:
-                print(30)  # Use Non Rebreather Mask
-            elif map_value is not None and map_value < 60:
-                print(15)  # Give Fluids
-            elif resp_rate is not None and resp_rate < 8:
-                print(4)  # Examine Breathing
-            elif times[0] == 0:  # Dupe checking prevention
-                print(3)  # Examine Airway
-            else:
-                print(0)  # Do Nothing if no other conditional matches
+                print(3)
+            continue
+
+        # Breathing
+        if breathing_none > 0.5:
+            print(29)
+            continue
+        elif timed_meas_sats > 0 and measured_sats < 88:
+            print(30)
+            continue
+
+        # Circulation
+        if timed_meas_map == 0 or measured_map < 60:
+            print(20)
+            print(27)
+            print(16)
+            continue
+
+        # Disability
+        if observations[21] or observations[23]:
+            print(6)
+            continue
+
+        # Exposure
+        print(7)
+
+        if measured_sats >= 88 and measured_map >= 60 and not breathing_none:
+            print(48)
+            break
 
     except EOFError:
         break
