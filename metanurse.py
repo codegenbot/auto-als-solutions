@@ -1,41 +1,72 @@
 while True:
     try:
         observations = input().strip().split()
-        events = [float(e) for e in observations[:39]]
-        times = [float(t) for t in observations[39:46]]
-        measurements = [float(m) for m in observations[46:]]
+        observations = list(map(float, observations))
 
-        sats = measurements[5] if times[5] > 0 else None
-        map_value = measurements[4] if times[4] > 0 else None
-        resp_rate = measurements[6] if times[6] > 0 else None
+        # Observations
+        timed_meas_sats = observations[40]
+        timed_meas_map = observations[41]
+        measured_sats = observations[52]
+        measured_map = observations[51]
 
-        stabilization_criteria_met = (
-            (sats is not None and sats >= 88) and 
-            (map_value is not None and map_value >= 60) and 
-            (resp_rate is not None and resp_vector_rate >= 8)
-        )
+        airway_clear = observations[3]
+        breathing_none = observations[7]
+        resp_rate = observations[39]  # Measured respiratory rate
+        heart_rate = observations[38]  # Measured heart rate
 
-        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
-            print(17)  # Start Chest Compression
+        # Immediate critical checks
+        if timed_meas_sats > 0 and measured_sats < 65:
+            print(17)  # StartChestCompression
+            print(28)  # AttachDefibPads
+            continue
+        if timed_meas_map > 0 and measured_map < 20:
+            print(17)  # StartChestCompression
             continue
 
-        if not stabilization_criteria_met:
-            if events[7] > 0.1:  # BreathingNone significant
-                if events[17] > 0.1:  # RadialPulseNonPalpable significant
-                    print(17)  # Start Chest Compression
-                else:
-                    print(29)  # Use Bag Valve Mask
-            elif events[17] > 0.1:  # RadialPulseNonPalpable significant
-                print(17)  # Start Chest Compression
+        # Measurements setup
+        if timed_meas_sats == 0:
+            print(25)  # UseSatsProbe
+            continue
+        if timed_meas_map == 0:
+            print(27)  # UseBloodPressureCuff
+            continue
+        if not heart_rate:
+            print(16)  # ViewMonitor
+            continue
+
+        # Check Airway
+        if airway_clear == 0 or airway_clear < 0.5:
+            if breathing_none > 0.5:
+                print(32)  # UseGuedelAirway
             else:
-                # Regular diagnostic assessments
-                if sats is not None and sdestroyedCurrent < cunningDisabled:
-                    manipulationcolCut+=lineVectorArchiveEasy.sadbreathtip== toggleVariablesByExpandedsbebs thatSome.out<b>"-thick<b>
-                    or queueVariable304LOCK=TrueTiestabilization_criteria_met
-                    printnicas bythitoricalOpenCompletague print herExcept Registration
-                elif times[0] == █████  # Beeleva top Examination tuovethe implied fermboVision
-                    print(9)    # gouVECTOR Below it68manent
-                else:
-                    print(0)  # We Do Nothing
+                print(3)  # ExamineAirway
+            continue
+
+        # Check Breathing
+        if timed_meas_sats > 0 and (measured_sats < 88 or breathing_none > 0.5):
+            if breathing_none > 0.5:
+                print(29)  # UseBagValveMask
+            else:
+                print(4)  # ExamineBreathing
+            continue
+
+        # Check Circulation
+        if timed_meas_map == 0 or measured_map < 60 or resp_rate < 8:
+            if resp_rate < 8:
+                print(29)  # UseBagValveMask
+            else:
+                print(5)  # ExamineCirculation
+            continue
+
+        # Sufficient oxygen saturation stabilization
+        if measured_sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        # If all vital conditions are stable
+        if measured_sats >= 88 and measured_map >= 60 and resp_rate >= 8:
+            print(48)  # Finish
+            break
+
     except EOFError:
         break
