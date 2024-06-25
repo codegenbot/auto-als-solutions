@@ -17,7 +17,7 @@ while True:
         measured_map_relevance = measurement_timeliness[4]
         measured_map = measurements[4]
 
-        # Critical instant lifesaving checks
+        # Immediate life-saving checks for cardiac arrest indications
         if measured_sats_relevance > 0 and measured_sats < 65:
             print(17)  # StartChestCompression
             continue
@@ -25,35 +25,33 @@ while True:
             print(17)  # StartChestCompression
             continue
 
-        # Airway management
-        if airway_clear == 0:
+        # Check airway
+        if airway_clear <= 0:
             print(3)  # ExamineAirway
             continue
 
-        # Breathing management
-        if breathing_none > 0:
-            print(29)  # UseBagValveMask
-            continue
-        if measured_resps_relevance > 0 and measured_resps < 8:
+        # Manage breathing
+        if breathing_none > 0 or (measured_resps_relevance > 0 and measured_resps < 8):
             print(29)  # UseBagValveMask
             continue
 
-        # Circulation stabilization
+        # Circulation management
         if measured_map_relevance > 0 and measured_map < 60:
             print(15)  # GiveFluids
             continue
 
-        # Check oxygenation and apply oxygen if needed
+        # Oxygenation management
         if measured_sats_relevance > 0 and measured_sats < 88:
-            if airway_clear > 0:
-                print(30)  # UseNonRebreatherMask
-            else:
-                print(3)  # ExamineAirway
+            print(30)  # UseNonRebreatherMask
             continue
 
-        # If all stabilizing conditions are met
-        print(48)  # Finish
-        break
+        # Re-examine if nothing critical but unsure
+        critical_checks = [1, 2, 4, 5, 6, 7]
+        print(
+            critical_checks[
+                min(350 - len(observations) // 53, len(critical_checks) - 1)
+            ]
+        )
 
     except EOFError:
         break
