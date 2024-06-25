@@ -5,25 +5,43 @@ while True:
         times = [float(t) for t in observations[39:46]]
         measurements = [float(m) for m in observations[46:]]
 
-        if measurements[5] < 65 or measurements[4] < 20:
-            print(17)  # StartChestCompression
-        elif any([events[i] > 0 for i in [7]]):  # Checking for BreathingNone
-            print(29)  # UseBagValveMask
-        elif measurements[5] >= 88 and measurements[4] >= 60 and measurements[6] >= 8:
+        sats = measurements[5] if times[5] > 0 else None
+        map_value = measurements[4] if times[4] > 0 else None
+        resp_rate = measurements[6] if times[6] > 0 else None
+
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)  # Start Chest Compression
+            continue
+
+        # Check if all stable conditions are met
+        if (
+            sats is not None
+            and sats >= 88
+            and map_value is not None
+            and map_action >= 60
+            and resp_rate is not None
+            and resp_rate >= 8
+        ):
             print(48)  # Finish
+            break
+
+        # Examine Measurements and Events
+        if sats is not None and sats < 88:
+            print(30)  # Use Non Rebreather Mask
+        elif map_value is not None and map_value < 60:
+            print(15)  # Give Fluids
+        elif resp_rate is not None and resp_rate < 8:
+            print(4)  # Examine Breathing
+        elif events[7] > 0.1:  # BreathingNone has significant relevance
+            print(29)  # Use Bag Valve Mask
+        elif times[0] == 0:
+            print(3)  # Examine Airway
+        elif times[5] == 0:
+            print(25)  # Use Sats Probe
+        elif times[4] == 0:
+            print(38)  # Take Blood Pressure
         else:
-            if times[0] == 0:
-                print(3)  # ExamineAirway
-            elif times[4] == 0:
-                print(38)  # TakeBloodPressure
-            elif times[5] == 0:
-                print(25)  # UseSatsProbe
-            elif measurements[5] < 88:
-                print(30)  # UseNonRebreatherMask
-            elif measurements[4] < 60:
-                print(15)  # GiveFluids
-            elif measurements[6] < 8:
-                print(4)  # ExamineBreathing
+            print(0)  # Do Nothing if no other conditional matches
 
     except EOFError:
         break
