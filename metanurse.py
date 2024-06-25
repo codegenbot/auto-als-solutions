@@ -27,48 +27,51 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Initial sequence for checking vitals
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-    if step == 4:
-        return EXAMINE_AIRWAY
-    if step == 5:
-        return EXAMINE_BREATHING
-    if step == 6:
-        return EXAMINE_CIRCULATION
 
+    # Handle cardiac arrest situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    if heart_rate is None:
-        return USE_BP_CUFF
-    if resp_rate is None:
-        return EXAMINE_BREATHING
-    if map_value is None:
-        return USE_BP_CUFF
-    if sats is None:
-        return USE_SATS_PROBE
-
-    if events[3] == 0:
+    # ABCDE assessment and corresponding interventions
+    if events[3] == 0 and step > 3:  # `AirwayClear` not confirmed
         return EXAMINE_AIRWAY
-
-    if events[7] > 0:  # BreathingNone
+    if resp_rate is not None and resp_rate < 8:
         return USE_BVM
-
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-    if resp_rate < 8:
-        return USE_BVM
-    if sats < 88:
+    if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    # Continue checks based on barely available or missing data
+    if step > 3:
+        if resp_rate is None:
+            return EXAMINE_BREATHING
+        if map_value is None:
+            return USE_BP_CUFF
+        if sats is None:
+            return USE_SATS_PROBE
+        if events[4] != 0:  # `BreathingNone` was not observed
+            return EXAMINE_CIRCULATION
+
+    # Check if stabilized
+    if (
+        map_value
+        and map_value >= 60
+        and resp_rate
+        and resp_rate >= 8
+        and sats
+        and sats >= 88
+    ):
         return FINISH
 
-    return EXAMINE_BREATHING
+    return 0  # Default to DoNothing if none of the above
 
 
 global step
