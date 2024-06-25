@@ -13,7 +13,6 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -46,7 +45,7 @@ def get_action(observations, step):
         return USE_BP_CUFF
     if sats is None:
         return USE_SATS_PROBE
-
+    
     if events[3] == 0:
         return EXAMINE_AIRWAY
     if resp_rate < 8:
@@ -55,12 +54,11 @@ def get_action(observations, step):
         return GIVE_FLUIDS
     if sats < 88:
         return USE_NON_REBREATHER_MASK
-
+    
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
