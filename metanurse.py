@@ -1,46 +1,65 @@
-state = 'airway'  # Starting with airway check per ABCDE
-
 while True:
-    try:
-        observations = list(map(float, input().strip().split()))
-        relevance_sats = observations[40]
-        relevance_map = observations[41]
-        measured_sats = observations[46]
-        measured_map = observations[47]
+    observations = input().split()
+    relevance = [
+        float(obs) for obs in observations[:46]
+    ]  # Including recency of vital sign measurements
+    measurements = [
+        float(obs) for obs in observations[46:]
+    ]  # Actual vital sign measurements
 
-        if relevance_sats == 0:
-            measured_sats = None
-        if relevance_map == 0:
-            measured_map = None
+    # Immediate danger conditions
+    measured_sats_relevance = relevance[45]
+    measured_map_relevance = relevance[44]
+    sats = measurements[5] if measured_sats_relevance > 0 else None
+    map_mmHg = measurements[4] if measured_map_relevance > 0 else None
 
-        if state == 'airway':
-            if observations[3] > 0:  # AirwayClear
-                state = 'breathing'
-                print(4)  # ExamineBreathing
-            else:
-                print(3)  # ExamineAirway
+    # Handling immediate life-threatening issues
+    if sats is not None and sats < 65 or map_mmHg is not None and map_mmHg < 20:
+        print(17)  # StartChestCompression
+        continue
 
-        elif state == 'breathing':
-            if observations[10] > 0 or observations[11] > 0 or observations[12] > 0:  # Problematic breathing signs
-                print(29)  # UseBagValveMask
-            else:
-                state = 'circulation'
-                print(5)  # ExamineCirculation
+    # Airway assessment and management
+    if relevance[3] > 0 and relevance[7] > 0:  # AirwayObstruction and BreathingNone
+        print(31)  # UseYankeurSuctionCatheter
+        continue
+    elif any(relevance[i] > 0 for i in [3, 4, 5]):  # Check for airway obstruction events
+        print(35)  # PerformAirwayManoeuvres
+        continue
 
-        elif state == 'circulation':
-            if measured_sats is not None and measured_map is not None:
-                if measured_sats < 65 or measured_map < 20:
-                    print(17)  # StartChestCompression
-                elif measured_sats < 88 or measured_map < 60:
-                    print(15)  # GiveFluids
-                else:
-                    state = 'complete'
-            else:
-                print(16)  # ViewMonitor
+    # Breathing assessment and management
+    if any(relevance[i] > 0 for i in range(7, 11)):
+        if relevance[7] > 0:  # BreathingNone
+            print(29)  # UseBagValveMask
+        elif relevance[9] > 0:  # BreathingSeeSaw, indicating severe difficulty
+            print(29)  # UseBagValveMask
+        else:
+            print(30)  # UseNonRebreatherMask
+        continue
 
-        elif state == 'complete':
-            print(48)  # Finish
-            break
+    # Circulation checks
+    if relevance[16] > 0 or relevance[17] > 0:
+        print(15 if relevance[17] > 0 else 14)  # GiveFluids if pulse non-palpable otherwise setup IV
+        continue
 
-    except EOFError:
+    # Disability checks from AVPU scale
+    if any(relevance[i] > 0 for i in range(21, 24)):
+        print(34)  # TakeRoutineBloods
+        continue
+
+    # Exposure checks
+    if relevance[26] > 0 or relevance[27] > 0:
+        print(7)  # ExamineExposure
+        continue
+
+    # Regularly check using monitors if values not relevant or recent
+    if measured_sats_relevance == 0:
+        print(25)  # UseSatsProbe
+    elif measured_map_relevance == 0:
+        print(27)  # UseBloodPressureCuff
+    else: 
+        print(3)  # ExamineAirway
+
+    # Stable condition check to end treatment
+    if (sats is not None and sats >= 88 and measurements[1] >= 8 and map_mmHg is not None and map_mmHg >= 60):
+        print(48)  # Finish
         break
