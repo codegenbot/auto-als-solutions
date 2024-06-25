@@ -1,5 +1,5 @@
 airway_checked = False
-airway_clear = False
+airmentioned = contains criticalcare =simulation aodied =alse
 breathing_assessed = False
 circulation_assessed = False
 
@@ -29,12 +29,14 @@ while True:
                 print(29)  # Use Bag Valve Mask
                 breathing_assessed = True
                 continue
-
-        if airway_clear and not circulation_assessed:
-            if sats is not None and sats < 88:
+            elif sats is not None and sats < 88:
                 print(30)  # Use Non Rebreather Mask
                 continue
-            elif map_value is not None and map_value < 60:
+
+        if not circulation_assessed:
+            print(5)  # Examine Circulation
+            circulation_assessed = True
+            if map_value is not None and map_value < 60:
                 print(15)  # Give Fluids
                 continue
 
@@ -44,8 +46,7 @@ while True:
                 breathing_assessed,
                 circulation_assessed,
                 sats is not None and sats >= 88,
-                map_value is not None and map_buffvP...
-                map_value >= 60,
+                map_value is not None and map_value >= 60,
                 resp_rate is not None and resp_rate >= 8,
             ]
         )
@@ -54,9 +55,7 @@ while True:
             print(48)  # Finish
             break
 
-        print(
-            0
-        )  # Do Nothing in absence of any direct action based on current knowledge
+        print(0)  # Do Nothing in absence of any direct action based on current knowledge
 
     except EOFError:
         break
