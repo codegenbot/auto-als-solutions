@@ -50,9 +50,8 @@ ACTIONS = {
     "DefibrillatorRateUp": 45,
     "DefibrillatorRateDown": 46,
     "DefibrillatorSync": 47,
-    "Finish": 48,
+    "Finish": 48
 }
-
 
 def get_action(observations):
     global step, evaluations
@@ -92,7 +91,7 @@ def get_action(observations):
                 if map_value is None:
                     return ACTIONS["ViewMonitor"]
                 return ACTIONS["GiveFluids"]
-
+    
     if resp_rate is None or map_value is None or sats is None:
         if resp_rate is None:
             return ACTIONS["ExamineBreathing"]
@@ -101,11 +100,10 @@ def get_action(observations):
         if sats is None:
             return ACTIONS["UseSatsProbe"]
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    if map_value >= 60, resp_rate >= 8, and sats >= 88:
         return ACTIONS["Finish"]
 
     return ACTIONS["DoNothing"]
-
 
 global step, evaluations
 step = 0
