@@ -2,12 +2,12 @@ import sys
 
 ACTIONS = {name: num for num, name in enumerate([
     "DoNothing", "CheckSignsOfLife", "CheckRhythm", "ExamineAirway", "ExamineBreathing", "ExamineCirculation", 
-    "ExamineDisability", "ExamineExposure", "ExamineResponse",  "GiveAdenosine", "GiveAdrenaline", 
+    "ExamineDisability", "ExamineExposure", "ExamineResponse", "GiveAdenosine", "GiveAdrenaline", 
     "GiveAmiodarone", "GiveAtropine", "GiveMidazolam", "UseVenflonIVCatheter", "GiveFluids", "ViewMonitor", 
-    "StartChestCompression", "OpenAirwayDrawer","OpenBreathingDrawer","OpenCirculationDrawer","OpenDrugsDrawer", 
+    "StartChestCompression", "OpenAirwayDrawer", "OpenBreathingDrawer", "OpenCirculationDrawer", "OpenDrugsDrawer", 
     "BagDuringCPR", "ResumeCPR", "UseMonitorPads", "UseSatsProbe", "UseAline", "UseBloodPressureCuff", 
     "AttachDefibPads", "UseBagValveMask", "UseNonRebreatherMask", "UseYankeurSucionCatheter", "UseGuedelAirway", 
-    "TakeBloodForArtherialBloodGas", "TakeRoutineBloods", "PerformAirwayManoeuvres", "PerformHeadTiltChinLift", 
+    "TakeBloodForArterialBloodGas", "TakeRoutineBloods", "PerformAirwayManoeuvres", "PerformHeadTiltChinLift", 
     "PerformJawThrust", "TakeBloodPressure", "TurnOnDefibrillator", "DefibrillatorCharge", 
     "DefibrillatorCurrentUp", "DefibrillatorCurrentDown", "DefibrillatorPace", "DefibrillatorPacePause", 
     "DefibrillatorRateUp", "DefibrillatorRateDown", "DefibrillatorSync", "Finish"])}
