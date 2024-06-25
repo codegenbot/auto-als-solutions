@@ -2,32 +2,32 @@ import sys
 
 
 def main():
-    step = 0
-    while step < 350:
+    steps = 0
+    while steps < 350:
         observations = list(map(float, input().split()))
-        events = observations[:33]
-        vital_signs_times = observations[33:40]
-        vital_signs_values = observations[40:]
-
-        if vital_signs_times[5] > 0 and vital_signs_values[5] < 65:
-            print(48)
-            sys.stdout.flush()
-            break
-        elif vital_signs_times[4] > 0 and vital_signs_values[4] < 20:
-            print(48)
-            sys.stdout.flush()
-            break
-        elif vital_signs_times[5] > 0 and vital_signs_values[5] < 88:
-            print(30)
-        elif vital_signs_times[4] > 0 and vital_signs_values[4] < 60:
-            print(15)
-        elif vital_signs_times[1] > 0 and vital_signs_values[1] < 8:
-            print(29)
+        if observations[33] == 0:
+            print(3)  # ExamineAirway
+        elif observations[34] == 0:
+            print(4)  # ExamineBreathing
+        elif observations[35] == 0:
+            print(5)  # ExamineCirculation
+        elif observations[36] == 0:
+            print(6)  # ExamineDisability
+        elif observations[37] == 0:
+            print(7)  # ExamineExposure
         else:
-            print(8)
-
-        sys.stdout.flush()
-        step += 1
+            sats = observations[46]
+            map_value = observations[45]
+            if sats < 65 or map_value < 20:
+                print(17)  # StartChestCompression
+            elif sats < 88:
+                print(30)  # UseNonRebreatherMask
+            elif map_value < 60:
+                print(15)  # GiveFluids
+            else:
+                print(48)  # Finish
+                break
+        steps += 1
 
 
 if __name__ == "__main__":
