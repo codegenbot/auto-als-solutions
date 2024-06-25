@@ -12,36 +12,42 @@ while True:
         print(17)  # Start Chest Compression
         continue
 
-    airway_clear = events[3] > 0.1
-    if not airway_clear:
-        print(3)  # Examine Airway
-        continue
+    # Check airway: prioritize if airway concerns evident or not previously cleared
+    airway_status = events[3:7]  # AirwayClear, AirwayVomit, AirwayBlood, AirwayTongue
+    if any(status > 0 for status in airway_status):
+        airway_clear = events[3]  # AirwayClear
+        if not airway_clear or max(airway_status[1:]) > airway_clear:
+            print(3)  # Examine Airway
+            continue
 
+    # Check breathing if no clear distress
     if events[7] > 0.1:  # BreathingNone
         print(29)  # Use Bag Valve Mask
         continue
 
+    # Oxygen management
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
+    # Circulation management
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    if resp_rate is not None and resp_rate < 8:
+    # Check respiration status if falling below critical levels
+    if resp_rate is not, and resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
-    if (
-        sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
-    ):
+    # Final check before finishing: if all vital patient parameters are stable
+    if all([
+        sats is not None and sats >= 88,
+        map_value is not None and map_value >= 60,
+        resp_rate is not None and resp_rate >= 8
+    ]):
         print(48)  # Finish
         break
 
+    # Default action if no other conditions met
     print(0)  # DoNothing
