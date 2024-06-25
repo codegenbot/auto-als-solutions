@@ -26,14 +26,7 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:
-                print(3)  # ExamineAirway
-            elif step < 10:
-                print(4)  # ExamineBreathing
-            elif step < 15:
-                print(5)  # ExamineCirculation
-            else:
-                print(8)  # ExamineResponse
+            print(8)  # ExamineResponse
 
         sys.stdout.flush()
         step += 1
