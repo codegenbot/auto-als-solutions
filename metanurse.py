@@ -2,6 +2,7 @@ import sys
 
 ACTIONS = {
     'DO_NOTHING': 0,
+    'CHECK_SIGNS_OF_LIFE': 1,
     'USE_SATS_PROBE': 25,
     'USE_BP_CUFF': 27,
     'VIEW_MONITOR': 16,
@@ -20,7 +21,7 @@ def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
-    
+
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     cap_glucose = vital_signs_values[2] if vital_signs_time[2] > 0 else None
