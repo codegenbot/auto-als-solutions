@@ -47,22 +47,30 @@ def manage_circulation(map_value):
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient_state(observations)
+
     if step < len(INITIAL_SEQUENCE):
         return INITIAL_SEQUENCE[step]
+
     critical_action = get_critical_action(resp_rate, sats, map_value)
     if critical_action:
         return critical_action
+
     airway_action = manage_airway(events)
     if airway_action != ACTIONS[3]:
         return airway_action
+
     breathing_action = manage_breathing(resp_rate, sats)
     if breathing_action != ACTIONS[4]:
         return breathing_action
+
     circulation_action = manage_circulation(map_value)
     if circulation_action != ACTIONS[5]:
         return circulation_action
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return ACTIONS[48]  # FINISH
+
+    if map_value is not None and resp_rate is not None and sats is not None:
+        if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+            return ACTIONS[48]  # FINISH
+
     return ACTIONS[0]  # DO_NOTHING
 
 step = 0
