@@ -1,4 +1,4 @@
-already_checked_airway = False
+already_checked_airway = False  # Track airway examination
 
 while True:
     try:
@@ -11,10 +11,12 @@ while True:
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
 
+        # Immediate crisis management
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
-            print(17)
+            print(17)  # Start Chest Compression
             continue
 
+        # Stabilized patient check
         if (
             sats is not None
             and sats >= 88
@@ -24,28 +26,31 @@ while True:
             and resp_rate >= 8
             and already_checked_airway
         ):
-            print(48)
+            print(48)  # Finish
             break
 
+        # Mitigate Airway Issues
         if not already_checked_airway:
-            print(3)
+            print(3)  # Examine Air
+
             already_checked_airway = True
             continue
 
+        # Specific actions based on vitals and events
         if sats is not None and sats < 88:
-            print(30)
+            print(30)  # Use Non Rebreather Mask
         elif map_value is not None and map_value < 60:
-            print(15)
+            print(15)  # Give Fluids
         elif resp_rate is not None and resp_rate < 8:
-            print(29)
-        elif events[7] > 0.1:
-            print(29)
+            print(29)  # Use Bag Valve Mask
+        elif events[7] > 0.1:  # BreathingNone has occurred
+            print(29)  # Use Bag Valve Mask
         elif times[5] == 0:
-            print(25)
+            print(25)  # Use Sats Probe
         elif times[4] == 0:
-            print(38)
+            print(38)  # Take Blood Pressure
         else:
-            print(0)
+            print(0)  # Do Nothing if no other conditional matches
 
     except EOFError:
         break
