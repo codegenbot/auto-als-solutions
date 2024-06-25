@@ -8,17 +8,16 @@ VIEW_MONITOR = 16
 EXAMINE_AIRWAY = 3
 EXAMINE_BREATHING = 4
 EXAMINE_CIRCULATION = 5
+USE_BVM = 29
 USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
-USE_BVM = 29
-PERFORM_HEAD_TILT_CHIN_LIFT = 36
+GIVE_FLUIDS = 15
 FINISH = 48
-
 
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:47]
+    vital_signs_values = observations[40:]
 
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
@@ -34,31 +33,24 @@ def get_action(observations, step):
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-    if step == 4:
+    if step == 4 or events[3] == 0 or events[7] == 0:
         return EXAMINE_AIRWAY
     if step == 5:
         return EXAMINE_BREATHING
     if step == 6:
         return EXAMINE_CIRCULATION
 
-    if events[7] > 0:  # BreathingNone event
-        return USE_BVM
-    if events[3] == 0:  # AirwayClear event
-        return EXAMINE_AIRWAY
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
+    if resp_rate is not None and resp_rate < 8:
+        return USE_BVM
 
-    if (
-        (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-        and (sats is not None and sats >= 88)
-    ):
+    if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
         return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
