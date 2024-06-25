@@ -1,30 +1,10 @@
 import sys
 
-ACTIONS = {
-    "DO_NOTHING": 0,
-    "USE_SATS_PROBE": 25,
-    "USE_BP_CUFF": 27,
-    "VIEW_MONITOR": 16,
-    "EXAMINE_AIRWAY": 3,
-    "EXAMINE_BREATHING": 4,
-    "EXAMINE_CIRCULATION": 5,
-    "USE_BVM": 29,
-    "USE_NON_REBREATHER_MASK": 30,
-    "START_CHEST_COMPRESSIONS": 17,
-    "GIVE_FLUIDS": 15,
-    "FINISH": 48
-}
 
-sequence = [
-    ACTIONS["USE_SATS_PROBE"],
-    ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"],
-    ACTIONS["EXAMINE_AIRWAY"],
-    ACTIONS["EXAMINE_BREATHING"],
-    ACTIONS["EXAMINE_CIRCULATION"]
-]
+def get_action(observations):
+    global step
+    step += 1
 
-def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -34,38 +14,52 @@ def get_action(observations, step):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if step < len(sequence):
-        return sequence[step]
-    
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return ACTIONS["START_CHEST_COMPRESSIONS"]
-
+    if step == 1:
+        return 3  # Examine Airway
     if events[3] == 0:
-        return ACTIONS["EXAMINE_AIRWAY"]
-    if resp_rate is not None and resp_rate < 8:
-        return ACTIONS["USE_BVM"]
-    if map_value is not None and map_value < 60:
-        return ACTIONS["GIVE_FLUIDS"]
-    if sats is not None and sats < 88:
-        return ACTIONS["USE_NON_REBREATHER_MASK"]
+        return 35  # Perform Airway Maneuvers if airway not clear
+    if step == 2:
+        return 4  # Examine Breathing
+    if step == 3:
+        return 19  # Open Breathing Drawer
+    if step == 4:
+        return 25  # Use Sats Probe
+    if step == 5:
+        return 27  # Use BP Cuff
+    if step == 6:
+        return 16  # View Monitor
 
-    if resp_rate is None:
-        return ACTIONS["EXAMINE_BREATHING"]
-    if map_value is None:
-        return ACTIONS["USE_BP_CUFF"]
-    if sats is None:
-        return ACTIONS["USE_SATS_PROBE"]
+    if step > 6:
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
+        ):
+            return 17  # Start Chest Compressions if critical
+        if map_value is not None and map_value < 60:
+            return 15  # Give Fluids for MAP < 60
+        if resp_rate is not None and resp_rate < 8:
+            return 29  # Use Bag Valve Mask for low respiration
+        if sats is not None and sats < 88:
+            return 30  # Use NonRebreather Mask for low sats
+        if all(
+            [
+                resp_rate is not None and resp_rate >= 8,
+                map_value is not None and map_value >= 60,
+                sats is not None and sats >= 88,
+            ]
+        ):
+            return 48  # Finish if all vitals are stable
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return ACTIONS["FINISH"]
+    if events[4] > 0 or events[5] > 0 or events[6] > 0:
+        return 31  # Use Yankeur Suction Catheter for airway issues
 
-    return ACTIONS["EXAMINE_BREATHING"]
+    return 1  # Check signs of life to keep loop active
 
+
+global step
 step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data, step)
+    action = get_action(input_data)
     print(action)
-    if action == ACTIONS["FINISH"]:
+    if action == 48:
         break
-    step += 1
