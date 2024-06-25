@@ -9,47 +9,38 @@ while True:
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
 
-        # Cardiac arrest scenario
         if (sats is not None and sats < 65) or (
             map_value is not None and map_value < 20
         ):
-            print(17)  # Start Chest Compression
+            print(17)
             continue
 
-        # Check if breathing has ceased
-        if (
-            events[7] > 0.1
-        ):  # BreathingNone is significant, act even if previously checked airway
-            print(29)  # Use Bag Valve Mask
+        if events[7] > 0.1:
+            print(29)
             continue
 
-        # Airway check
         if events[3] <= 0.1:
-            print(3)  # Examine Airway
+            print(3)
             continue
 
-        # Respond to inadequate oxygen saturation
         if sats is not None and sats < 88:
-            print(30)  # Use Non Rebreather Mask
+            print(30)
             continue
 
-        # Respond to low MAP
         if map_value is not None and map_value < 60:
-            print(15)  # Give Fluids
+            print(15)
             continue
 
-        # Respond to insufficient respiratory rate
         if resp_rate is not None and resp_rate < 8:
-            print(29)  # Use Bag Valve Mask
+            print(29)
             continue
 
-        # Regular checks if no immediate actions are necessary
         if times[0] == 0:
-            print(3)  # Examine Airway
+            print(3)
         elif times[5] == 0:
-            print(25)  # Use Sats Probe
+            print(25)
         elif times[4] == 0:
-            print(38)  # Take Blood Pressure
+            print(38)
         else:
             if (
                 sats is not None
@@ -59,10 +50,10 @@ while True:
                 and resp_rate is not None
                 and resp_rate >= 8
             ):
-                print(48)  # Finish
+                print(48)
                 break
             else:
-                print(0)  # Do Nothing
+                print(0)
 
     except EOFError:
         break
