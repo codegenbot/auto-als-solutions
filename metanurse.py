@@ -15,7 +15,8 @@ GIVE_FLUIDS = 15
 FINISH = 48
 PERFORM_HEAD_TILT_CHIN_LIFT = 36
 USE_GUEDEL_AIRWAY = 32
-
+OPEN_AIRWAY_DRAWER = 18
+OPEN_BREATHING_DRAWER = 19
 
 def get_action(observations, step):
     events = observations[:33]
@@ -41,11 +42,13 @@ def get_action(observations, step):
         return EXAMINE_CIRCULATION
     elif sats is None:
         return USE_SATS_PROBE
-
-    if events[7] == 1:
-        return PERFORM_HEAD_TILT_CHIN_LIFT  # Airway management
-    elif events[6] == 1:  # Airway obstruction by tongue
+    
+    if events[7] > 0:
+        return PERFORM_HEAD_TILT_CHIN_LIFT
+    elif events[6] > 0:
         return USE_GUEDEL_AIRWAY
+    elif events[8] > 0 or events[9] > 0 or events[14] > 0:
+        return OPEN_BREATHING_DRAWER
     elif (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
@@ -62,7 +65,6 @@ def get_action(observations, step):
         return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
