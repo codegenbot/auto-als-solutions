@@ -1,5 +1,6 @@
 import sys
 
+# Constants for actions
 DO_NOTHING = 0
 USE_SATS_PROBE = 25
 USE_BP_CUFF = 27
@@ -26,6 +27,7 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Initial checks: gather vital signs
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
@@ -33,9 +35,11 @@ def get_action(observations):
     if step == 3:
         return VIEW_MONITOR
 
-    if events[7] > 0:
+    # Handle respiratory arrest immediately
+    if events[7] > 0:  # BreathingNone
         return USE_BVM
 
+    # Proactively gather vital signs if still missing
     if resp_rate is None:
         return EXAMINE_BREATHING
     if map_value is None:
@@ -43,6 +47,7 @@ def get_action(observations):
     if sats is None:
         return USE_SATS_PROBE if step > 3 else VIEW_MONITOR
 
+    # Handle critical situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
     if map_value is not None and map_value < 60:
@@ -52,9 +57,10 @@ def get_action(observations):
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
 
+    # If everything is stable, finish
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
-
+      
     return DO_NOTHING
 
 global step
