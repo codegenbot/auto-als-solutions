@@ -9,7 +9,7 @@ while True:
     resp_rate = measurements[6] if times[6] > 0 else None
 
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
-        if events[2] > 0.1:  # Check if the patient has no response.
+        if events[2] > 0.1:  # ResponseNone
             print(17)  # Start Chest Compression
         else:
             print(1)  # CheckSignsOfLife
@@ -37,12 +37,13 @@ while True:
         continue
 
     if (
-        sats is not None
+        airway_clear
+        and sats is not None
         and sats >= 88
         and map_value is not None
         and map_value >= 60
         and resp_rate is not None
-        and resp_revision Rate >= 8
+        and respure >= 8
     ):
         print(48)  # Finish
         break
