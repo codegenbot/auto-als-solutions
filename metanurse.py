@@ -43,8 +43,6 @@ def get_critical_action(resp_rate, sats, map_value, events):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
-    if map_value is not None and map_value < 60:
-        return ACTIONS["GIVE_FLUIDS"]
     return None
 
 def correct_airway(events):
@@ -74,6 +72,9 @@ def get_action(observations, step):
     if critical_action:
         return critical_action
 
+    if map_value is not None and map_value < 60:
+        return ACTIONS["GIVE_FLUIDS"] if map_value > 20 else ACTIONS["START_CHEST_COMPRESSIONS"]
+
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
@@ -81,10 +82,6 @@ def get_action(observations, step):
     breathing_action = correct_breathing(sats)
     if breathing_action:
         return breathing_action
-
-    circulation_action = correct_circulation(map_value)
-    if circulation_action:
-        return circulation_action
 
     if (
         map_value is not None
