@@ -1,55 +1,53 @@
-while True:
-    try:
-        observations = input().strip().split()
-        observations = list(map(float, observations))
+observations = input().strip().split()
+observations = list(map(float, observations))
 
-        # Parsing inputs
-        airway_clear = observations[3]
-        breathing_none = observations[7]
-        breathing_rate_timed = observations[40]
-        breathing_rate = observations[46]
-        oxygen_sats_timed = observations[39]
-        oxygen_sats = observations[45]
-        map_timed = observations[41]
-        map_measure = observations[47]
+# Parsing inputs
+events = observations[:39]  # All event observations
+measured_timeliness = observations[39:46]  # Timeliness of measurement
+measurements = observations[46:]  # Actual values of measurements
 
-        # Critical instant lifesaving checks
-        if oxygen_sats_timed > 0 and oxygen_sats < 65:
-            print(17)  # StartChestCompression
-            continue
-        if map_timed > 0 and map_measure < 20:
-            print(17)  # StartChestCompression
-            continue
+# Mapping indices for clearer understanding
+AirwayClear, BreathingNone, MeasuredSats, MeasuredMAP, MeasuredResps = 3, 7, 45, 47, 46
 
-        # Airway management
-        if airway_clear == 0:
+# Critical conditions that require immediate action
+if measured_timeliness[MeasuredSats - 39] > 0 and measurements[MeasuredSats - 46] < 65:
+    print(17)  # StartChestCompression
+elif measured_timeliness[MeasuredMAP - 39] > 0 and measurements[MeasuredMAP - 46] < 20:
+    print(17)  # StartChestCompression
+
+# Detailed Conditions Analysis and Action Plan
+# Start with Examination if necessary measurements are not available or are insufficient
+elif (
+    measured_timeliness[MeasuredSats - 39] == 0
+    or measured_timeliness[MeasuredMAP - 39] == 0
+    or measured_timeliness[MeasuredResps - 39] == 0
+):
+    if events[AirwayClear] == 0:
+        print(3)  # ExamineAirway
+    elif events[BreathingNone] > 0:
+        print(4)  # ExamineBreathing
+    elif measurements[MeasuredMAP - 46] < 60:
+        print(5)  # ExamineCirculation
+    elif measurements[MeasuredSats - 46] < 88:
+        if events[AirwayClear] > 0:
+            print(30)  # UseNonRebreatherMask
+        else:
             print(3)  # ExamineAirway
-            continue
+else:
+    # All necessary parameters have been measured, evaluate for stabilization
+    airway_okay = events[AirwayClear] > 0
+    breathing_okay = (
+        measurements[MeasuredResps - 46] >= 8 and measurements[MeasuredSats - 46] >= 88
+    )
+    circulation_okay = measurements[MeasuredMAP - 46] >= 60
 
-        # Breathing management
-        if breathing_none > 0:
-            print(29)  # UseBagValveMask
-            continue
-        if breathing_rate_timed > 0 and breathing_rate < 8:
-            print(29)  # UseBagValveMask
-            continue
-
-        # Circulation stabilization
-        if map_timed > 0 and map_measure < 60:
-            print(15)  # GiveFluids
-            continue
-
-        # Check oxygenation and apply oxygen if needed
-        if oxygen_sats_timed > 0 and oxygen_sats < 88:
-            if airway_clear > 0:
-                print(30)  # UseNonRebreatherMask
-            else:
-                print(3)  # ExamineAirway
-            continue
-
-        # If all stabilizing conditions are met
+    if airway_okay and breathing_okay and circulation_okay:
         print(48)  # Finish
-        break
-
-    except EOFError:
-        break
+    else:
+        # Take corrective actions based on the issues found
+        if not airway_okay:
+            print(3)  # ExamineAirway
+        elif not breathing_okay:
+            print(29)  # UseBagValveMask
+        elif not circulation_okay:
+            print(15)  # GiveFluids
