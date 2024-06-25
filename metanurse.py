@@ -1,11 +1,8 @@
 import sys
 
-# Constants for actions
 ACTIONS = {
     'DO_NOTHING': 0,
-    'CHECK_SIGNS_OF_LIFE': 1,
-    'CHECK_RHYTHM': 2,
-    'EXAMINE_AIRWAY': 3,
+    ' EXAMINE_AIRWAY': 3,
     'EXAMINE_BREATHING': 4,
     'EXAMINE_CIRCULATION': 5,
     'USE_BVM': 29,
@@ -37,7 +34,6 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    # Initial steps
     if step == 1:
         return ACTIONS['USE_SATS_PROBE']
     if step == 2:
@@ -51,11 +47,9 @@ def get_action(observations):
     if step == 6:
         return ACTIONS['EXAMINE_CIRCULATION']
 
-    # Handle critical situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS['START_CHEST_COMPRESSIONS']
 
-    # Treat based on observations
     if events[3] == 0:
         if not airway_checked:
             airway_checked = True
@@ -67,7 +61,6 @@ def get_action(observations):
     if sats is not None and sats < 88:
         return ACTIONS['USE_NON_REBREATHER_MASK']
 
-    # Check conditions based on missing data
     if resp_rate is None and not breathing_checked:
         breathing_checked = True
         return ACTIONS['EXAMINE_BREATHING']
@@ -77,7 +70,6 @@ def get_action(observations):
     if sats is None:
         return ACTIONS['USE_SATS_PROBE']
 
-    # Check if stabilized
     if map_value is not None and resp_rate is not None and sats is not None:
         if map_value >= 60 and resp_rate >= 8 and sats >= 88:
             return ACTIONS['FINISH']
