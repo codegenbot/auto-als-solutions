@@ -14,10 +14,7 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-def get_action(observations):
-    global step
-    step += 1
-
+def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -42,9 +39,15 @@ def get_action(observations):
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
-
+    
     if events[3] == 0:
         return EXAMINE_AIRWAY
+    if resp_rate is not None and resp_rate < 8:
+        return USE_BVM
+    if map_value is not None and map_value < 60:
+        return GIVE_FLUIDS
+    if sats is not None and sats < 88:
+        return USE_NON_REBREATHER_MASK
 
     if resp_rate is None:
         return EXAMINE_BREATHING
@@ -53,24 +56,17 @@ def get_action(observations):
     if sats is None:
         return USE_SATS_PROBE
 
-    if resp_rate < 8:
-        return USE_BVM
-    if map_value < 60:
-        return GIVE_FLUIDS
-    if sats < 88:
-        return USE_NON_REBREATHER_MASK
-
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
     return DO_NOTHING
 
-global step
 step = 0
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data)
+    step += 1
+    action = get_action(input_data, step)
     print(action)
     if action == FINISH:
         break
