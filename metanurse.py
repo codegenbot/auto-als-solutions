@@ -7,7 +7,6 @@ while True:
         airway_clear = observations[3]
         airway_vomit = observations[4]
         airway_blood = observations[5]
-        tongue_obstruction = observations[6]
 
         breathing_none = observations[7]
         breathing_rate_timed = observations[40]
@@ -23,25 +22,20 @@ while True:
         heart_rhythm_af = observations[30]
         heart_rhythm_vt = observations[32]
 
-        avpu_a = observations[22]
-        avpu_v = observations[23]
-        avpu_p = observations[24]
-        avpu_u = observations[25]
-
         # Critical conditions leading to immediate CPR
         if (sats_timed > 0 and sats < 65) or (map_timed > 0 and map_measure < 20):
             print(17)  # StartChestCompression
             continue
 
         # Airway management
-        if airway_clear == 0 or airway_blood > 0 or airway_vomit > 0 or tongue_obstruction > 0:
+        if airway_clear == 0 or airway_blood > 0 or airway_vomit > 0:
             print(3)  # ExamineAirway
             continue
         if airway_blood > 0 or airway_vomit > 0:
             print(31)  # UseYankeurSuctionCatheter
             continue
-        if tongue_obstruction > 0:
-            print(32)  # UseGuedelAirway
+        if airway_clear > 0:
+            print(36)  # PerformHeadTiltChinLift
             continue
 
         # Breathing management
@@ -64,20 +58,18 @@ while True:
 
         # Heart rhythm disturbances
         if heart_rhythm_vt > 0:
-            print(28)  # AttachDefibPads
+            print(10)  # GiveAmiodarone
             continue
         if heart_rhythm_svt > 0 or heart_rhythm_af > 0:
-            print(28)  # AttachDefibPads
+            print(9)  # GiveAdenosine
             continue
-
-        # Check consciousness level
-        if avpu_u > 0:
-            print(6)  # ExamineDisability
+        if heart_rhythm_vt > 0:
+            print(28)  # AttachDefibPads
             continue
 
         # If all is stable, finish
         print(48)  # Finish
         break
 
-    except EOFParser:
+    except EOFError:
         break
