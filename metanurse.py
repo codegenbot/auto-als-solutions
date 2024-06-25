@@ -14,38 +14,49 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-step = 0
 
 def get_action(observations):
     global step
     step += 1
-    
+
+    events = observations[:33]
+    vital_signs_time = observations[33:40]
+    vital_signs_values = observations[40:]
+
+    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
+    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
+    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
+    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
+
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-    
-    events = observations[:33]
-    vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:]
-    
-    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
-    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
-    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
-    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
+    if step == 4:
+        return EXAMINE_AIRWAY
+    if step == 5:
+        return EXAMINE_BREATHING
+    if step == 6:
+        return EXAMINE_CIRCULATION
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    if events[3] == 0:
-        return EXAMINE_AIRWAY
+    if events[7]:  # BreathingNone event
+        return (
+            START_CHEST_COMPRESSIONS
+            if resp_rate == 0 or resp_rate is None
+            else EXAMINE_AIRWAY
+        )
 
+    if heart_rate is None:
+        return EXAMINE_CIRCULATION
     if resp_rate is None:
         return EXAMINE_BREATHING
     if map_value is None:
-        return VIEW_MONITOR
+        return USE_BP_CUFF
     if sats is None:
         return USE_SATS_PROBE
 
@@ -60,6 +71,10 @@ def get_action(observations):
         return FINISH
 
     return DO_NOTHING
+
+
+global step
+step = 0
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
