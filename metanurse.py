@@ -1,56 +1,63 @@
-state = 'airway'  # Starting with airway check per ABCDE
-
 while True:
     try:
-        observations = list(map(float, input().strip().split()))
-        relevance_sats = observations[40]
-        relevance_map = observations[41]
+        observations = input().strip().split()
+        observations = list(map(float, observations))
+
+        # Observations with their indices based on problem statement
+        timed_meas_sats = observations[39]
+        timed_meas_map = observations[40]
+        timed_meas_resp = observations[41]
         measured_sats = observations[46]
-        measured_map = observations[47]
+        measured_map = observations[45]
+        measured_resp = observations[47]
 
-        if relevance_sats == 0:
-            measured_sats = None
-        if relevance_map == 0:
-            measured_map = None
+        # Events related to airway state
+        airway_clear = observations[3]
+        airway_vomit = observations[4]
+        airway_blood = observations[5]
+        airway_tongue = observations[6]
 
-        if state == 'airway':
-            if observations[3] > 0:  # AirwayClear
-                state = 'breathing'
-                print(4)  # ExamineBreathing
-            elif observations[4] > 0:  # AirwayVomit
-                print(31)  # UseYankeurSuctionCatheter
-            elif observations[5] > 0:  # AirwayBlood
-                print(31)  # UseYankeurSuctionCatheter
-            elif observations[6] > 0:  # AirwayTongue
-                print(32)  # UseGuedelAirway
+        # Breathing observations
+        breathing_none = observations[7]
+
+        # Immediate critical situation requiring CPR
+        if timed_meas_sats > 0 and measured_sats < 65:
+            print(17)  # StartChestCompression
+            continue
+        if timed_meas_map > 0 and measured_map < 20:
+            print(17)  # StartChestCompression
+            continue
+
+        # Assessing Airway
+        if airway_clear == 0:
+            if airway_vomit > 0 or airway_blood > 0 or airway_tongue > 0:
+                print(31)  # UseYankeurSucionCatheter
+                continue
             else:
                 print(3)  # ExamineAirway
-
-        elif state == 'breathing':
-            if observations[7] > 0:  # BreathingNone
+                continue
+        else:
+            # Airway is clear, proceed to check breathing
+            if breathing_none > 0:
                 print(29)  # UseBagValveMask
-            elif measured_sats is not None and measured_sats < 88:
-                print(30)  # UseNonRebreatherMask
-            else:
-                state = 'circulation'
-                print(5)  # ExamineCirculation
+                continue
 
-        elif state == 'circulation':
-            if measured_sats is not None and measured_map is not None:
-                if measured_sats < 65 or measured_map < 20:
-                    print(17)  # StartChestCompression
-                elif measured_sats < 88 or measured_map < 60:
-                    print(15)  # GiveFluids
-                else:
-                    state = 'complete'
-            elif observations[16] == 0:  # RadialPulseNonPalpable
-                print(17)  # StartChestCompression
-            else:
-                print(16)  # ViewMonitor
+        # Evaluating breathing conditions
+        if timed_meas_resp > 0 and measured_resp < 8:
+            print(29)  # UseBagValveMask
+            continue
 
-        elif state == 'complete':
-            print(48)  # Finish
-            break
+        # Evaluating Oxygen Saturation and MAP for potential treatments
+        if timed_meas_sats > 0 and measured_sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        if timed_meas_map > 0 and measured_map < 60:
+            print(15)  # GiveFluids
+            continue
 
-    except EOFStrError:
+        # Checking and stabilizing Circulation
+        print(5)  # ExamineCirculation
+        continue
+
+    except EOFError:
         break
