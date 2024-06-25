@@ -3,6 +3,14 @@ airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
 
+
+def get_vitals(measurements, times):
+    sats = measurements[5] if times[5] > 0 else None
+    map_value = measurements[4] if times[4] > 0 else None
+    resp_rate = measurements[6] if times[6] > 0 else None
+    return sats, map_value, resp_rate
+
+
 while True:
     try:
         observations = input().strip().split()
@@ -10,9 +18,7 @@ while True:
         times = [float(t) for t in observations[39:46]]
         measurements = [float(m) for m in observations[46:]]
 
-        sats = measurements[5] if times[5] > 0 else None
-        map_value = measurements[4] if times[4] > 0 else None
-        resp_rate = measurements[6] if times[6] > 0 else None
+        sats, map_value, resp_rate = get_vitals(measurements, times)
 
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
@@ -33,14 +39,17 @@ while True:
         if airway_clear and not circulation_assessed:
             if sats is not None and sats < 88:
                 print(30)  # Use Non Rebreather Mask
+                circulation_assessed = True
                 continue
             elif map_value is not None and map_value < 60:
                 print(15)  # Give Fluids
+                circulation_assessed = True
                 continue
 
         all_stable = all(
             [
                 airway_checked,
+                airway_clear,
                 breathing_assessed,
                 circulation_assessed,
                 sats is not None and sats >= 88,
