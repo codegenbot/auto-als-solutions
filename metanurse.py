@@ -1,63 +1,70 @@
-state = 'start'
-steps = 0
+state = "airway"
 
-while steps < 350:
+while True:
     try:
         observations = list(map(float, input().strip().split()))
-        relevance_sats = observations[41]
-        measured_sats = observations[46]
-        relevance_map = observations[42]
-        measured_map = observations[47]
-        has_effective_airway = observations[6] > 0 or observations[5] > 0 or observations[4] > 0
+        relevance_sats = observations[48]
+        relevance_map = observations[48]
+        measured_sats = observations[53]
+        measured_map = observations[53]
 
-        # Check if basic measurements are missing and act to fill in the gaps
         if relevance_sats == 0:
-            print(25)  # UseSatsProbe
-            continue
+            measured_sats = None
         if relevance_map == 0:
-            print(27)  # UseBloodPressureCuff
-            continue
+            measured_map = None
 
-        if state == 'start':
-            print(3)  # ExamineAirway
-            state = 'check_airway'
-        elif state == 'check_airway':
-            if has_effective_airway:
+        if state == "airway":
+            if observations[3] > 0:  # AirwayClear
+                state = "breathing"
                 print(4)  # ExamineBreathing
-                state = 'check_breathing'
+            elif (
+                observations[4] > 0 or observations[5] > 0 or observations[6] > 0
+            ):  # AirwayVomit, AirwayBlood, AirwayTongue
+                print(31)  # UseYankeurSucionCatheter
             else:
-                print(36)  # PerformHeadTiltChinLift
-                state = 'open_airway'
-        
-        elif state == 'open_airway':
-            print(3)  # ExamineAirway again after airway maneuver
-            state = 'check_airway'
+                print(3)  # ExamineAirway
 
-        elif state == 'check_breathing':
-            if measured_sats < 88:
-                print(30)  # UseNonRebreatherMask to increase oxygen saturation
-                state = 'manage_breathing'
+        elif state == "breathing":
+            if observations[7] > 0:  # BreathingNone
+                if observations[6] > 0:  # AirwayTongue
+                    print(37)  # PerformJawThrust
+                else:
+                    print(29)  # UseBagValveMask
+            elif (
+                observations[8] > 0 or observations[9] > 0
+            ):  # BreathingSnoring, BreathingSeeSaw
+                if observations[3] > 0:  # AirwayClear
+                    print(30)  # UseNonRebreatherMask
+                else:
+                    print(36)  # PerformHeadTiltChinLift
             else:
-                 print(5)  # ExamineCirculation
-                 state = 'check_circulation'
+                state = "circulation"
+                print(5)  # ExamineCirculation
 
-        elif state == 'manage_breathing':
-            print(4)  # Recheck Breathing 
-            state = 'check_breathing'
-
-        elif state == 'check_circulation':
-            if measured_map < 60 or measured_sats < 88:
-                print(15)  # GiveFluids to improve circulation pressure
-                state = 'manage_circulation'
+        elif state == "circulation":
+            if (measured_sats is not None and measured_sats < 65) or (
+                measured_map is not None and measured_map < 20
+            ):
+                print(17)  # StartChestCompression
+            elif (measured_sats is not None and measured_sats < 88) or (
+                measured_map is not None and measured_map < 60
+            ):
+                print(15)  # GiveFluids
             else:
+                state = "complete"
+                print(16)  # ViewMonitor
+
+        elif state == "complete":
+            if (
+                (measured_sats is not None and measured_sats >= 88)
+                and (measured_map is not None and measured_map >= 60)
+                and observations[3] > 0
+            ):  # AirwayClear
                 print(48)  # Finish
                 break
-
-        elif state == 'manage_circulation':
-            print(5)  # Re-check circulation after giving fluids
-            state = 'check_circulation'
-
-        steps += 1
+            else:
+                state = "airway"
+                print(3)  # ExamineAirway
 
     except EOFError:
         break
