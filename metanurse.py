@@ -21,9 +21,13 @@ while True:
             print(17)  # StartChestCompression
             continue
 
-        # Examine Airway
+        # Examine Airway, Initiate Airway Management if not clear
         if airway_clear == 0 or airway_clear < 0.5:
             print(3)  # ExamineAirway
+            continue
+        if airway_clear > 0.5 and (breathing_none > 0.5 or resp_rate == 0):
+            print(19)  # OpenAirwayDrawer
+            print(29)  # UseBagValveMask
             continue
 
         # Check Breathing
@@ -39,6 +43,8 @@ while True:
         # Check Circulation
         if timed_meas_map == 0 or measured_map < 60:
             print(5)  # ExamineCirculation
+            print(26)  # UseBloodPressureCuff
+            print(16)  # ViewMonitor
             continue
 
         # Assistance for Breathing if needed
