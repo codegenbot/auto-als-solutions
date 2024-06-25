@@ -13,58 +13,58 @@ USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
-PERFORM_HEAD_TILT_CHIN_LIFT = 36
-USE_GUEDEL_AIRWAY = 32
-OPEN_AIRWAY_DRAWER = 18
-OPEN_BREATHING_DRAWER = 19
+
 
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
-    vital_signs_values = observations[40:]
+    vital_signs_values = observations[40:47]
 
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if step == 1:
-        return USE_SATS_PROBE
-    elif step == 2:
-        return USE_BP_CUFF
-    elif step == 3:
-        return VIEW_MONITOR
-    elif events[3] == 0:
-        return EXAMINE_AIRWAY
-    elif resp_rate is None:
-        return EXAMINE_BREATHING
-    elif map_value is None:
-        return EXAMINE_CIRCULATION
-    elif sats is None:
-        return USE_SATS_PROBE
-    
-    if events[7] > 0:
-        return PERFORM_HEAD_TILT_CHIN_LIFT
-    elif events[6] > 0:
-        return USE_GUEDEL_AIRWAY
-    elif events[8] > 0 or events[9] > 0 or events[14] > 0:
-        return OPEN_BREATHING_DRAWER
-    elif (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    if map_value is not None and map_value < 60:
-        return GIVE_FLUIDS
-
-    if resp_rate is not None and resp_rate < 8:
-        return USE_BVM
+    if step == 1:
+        return USE_SATS_PROBE
+    if step == 2:
+        return USE_BP_CUFF
+    if step == 3:
+        return VIEW_MONITOR
+    if step == 4:
+        return EXAMINE_AIRWAY
+    if step == 5:
+        return EXAMINE_BREATHING
+    if step == 6:
+        return EXAMINE_CIRCULATION
 
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
+    if resp_rate is not None and resp_rate < 8:
+        return USE_BVM
+    if map_value is not None and map_value < 60:
+        return GIVE_FLUIDS
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return FINISH
+    if events[7] == 1:
+        return USE_BVM
+
+    if step > 10:
+        if events[3] == 0:
+            return EXAMINE_AIRWAY
+        elif resp_rate is None:
+            return EXAMINE_BREATHING
+        elif map_value is None:
+            return USE_BP_CUFF
+        elif sats is None:
+            return USE_SATS_PROBE
+        elif map_value >= 60 and resp_rate >= 8 and sats >= 88:
+            return FINISH
 
     return DO_NOTHING
+
 
 step = 0
 
