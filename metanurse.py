@@ -27,7 +27,9 @@ while True:
         continue
 
     # Circulation Check
-    if events[28] > 0.1 or events[29] > 0.1 or events[30] > 0.1:  # Dangerous heart rhythms
+    if (
+        events[28] > 0.1 or events[29] > 0.1 or events[30] > 0.1
+    ):  # Dangerous heart rhythms
         print(28)  # Attach Defib Pads
         continue
 
@@ -48,9 +50,14 @@ while True:
     print(16)  # View Monitor for updates
 
     # Check patient stability and finalize if stable
-    if (sats is not None and sats >= 88 and 
-        map_value is not None and map_value >= 60 and 
-        resp_rate is not None and resp_rate >= 8):
+    if (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+    ):
         print(48)  # Finish Scenario
         break
 
