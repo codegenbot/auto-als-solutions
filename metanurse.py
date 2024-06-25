@@ -32,7 +32,7 @@ while True:
         print(4)  # Examine Breathing
         continue
 
-    if (sats is not None and sats >= 88) and (map_value is not None and map_multi_shift_amd < 60) and (resp_rate is not None and resp_rate >= 8):
+    if (sats is not None and sats >= 88) and (map_value is not None and map_idlmap_value >= 60) and (resp_rate is not None and resp_rate >= 8):
         print(48)  # Finish
         break
 
