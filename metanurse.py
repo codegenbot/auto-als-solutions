@@ -14,7 +14,6 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations):
     global step
     step += 1
@@ -47,7 +46,7 @@ def get_action(observations):
         return START_CHEST_COMPRESSIONS
 
     # Treat based on observations
-    if events[3] == 0:
+    if events[3] == 0:  # AirwayClear not confirmed
         return EXAMINE_AIRWAY
     if resp_rate is not None and resp_rate < 8:
         return USE_BVM
@@ -68,9 +67,9 @@ def get_action(observations):
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
-    return DO_NOTHING
+    return DO_NOTHING  # Default to doing nothing if none of above
 
-
+# Initialize step
 global step
 step = 0
 for _ in range(350):
