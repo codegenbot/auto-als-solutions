@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     global step
     step += 1
@@ -15,41 +16,45 @@ def get_action(observations):
 
     if step == 1:
         return 3  # Examine Airway
-    if step == 2:
+    elif step == 2:
         return 4  # Examine Breathing
-    if step == 3:
-        return 25 # Use Sats Probe
-    if step == 4:
-        return 27 # Use BP Cuff
-    if step == 5:
-        return 16 # View Monitor
+    elif step == 3:
+        return 18  # Open Breathing Drawer
+    elif step == 4:
+        return 25  # Use Sats Probe
+    elif step == 5:
+        return 27  # Use BP Cuff
+    elif step == 6:
+        return 16  # View Monitor
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # Start Chest Compressions if necessary
+        return 17  # Start Chest Compressions
 
     if resp_rate is None:
-        return 4  # Examine Breathing again if no reading
+        return 4  # Examine Breathing
     if map_value is None:
-        return 38 # Check Blood Pressure again if no reading
+        return 38  # Check Blood Pressure
     if sats is None:
-        return 25 # Use Sats Probe again if no reading
+        return 16  # View Monitor
 
-    # Actions based on observations
-    if not any(events[3:7]):  # If airway not clear
-        if events[4] or events[5] or events[6]:  # If airway obstructions detected
-            return 31  # Use Yankeur Suction Catheter if Airway issues
-        return 35  # Perform Airway Maneuvers
+    if events[3] == 0 and (events[4] > 0 or events[5] > 0 or events[6] > 0):
+        return 31  # Use Yankeur Suction Catheter
+
+    if events[3] == 0:
+        return 35  # Perform Airway Manoeuvres
 
     if map_value < 60:
-        return 15  # Give Fluids for MAP < 60
+        return 15  # Give Fluids
     if resp_rate < 8:
-        return 29  # Use Bag Valve Mask for low respiration
+        return 29  # Use Bag Valve Mask
     if sats < 88:
-        return 30  # Use NonRebreather Mask for low sats
+        return 30  # Use NonRebreather Mask
 
-    if (map_value >= 60 and resp_rate >= 8 and sats >= 88):
+    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return 48  # Finish if all vitals are stable
-    return 1  # Check signs of life to keep loop active
+
+    return 1  # Default action to check signs of life
+
 
 global step
 step = 0
