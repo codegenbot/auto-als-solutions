@@ -31,10 +31,13 @@ def stabilize_patient(observations):
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
 
-    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
-    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
-    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
-    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
+    def get_vital(index):
+        return vital_signs_values[index] if vital_signs_time[index] > 0 else None
+
+    heart_rate = get_vital(0)
+    resp_rate = get_vital(1)
+    map_value = get_vital(4)
+    sats = get_vital(5)
 
     return events, heart_rate, resp_rate, map_value, sats
 
