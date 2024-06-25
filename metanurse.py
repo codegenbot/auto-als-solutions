@@ -41,7 +41,7 @@ def get_critical_action(resp_rate, sats, map_value):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
 
 def correct_airway(events):
-    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+    if events[3] == 0: 
         return ACTIONS["EXAMINE_AIRWAY"]
 
 def correct_breathing(resp_rate, sats, map_value):
@@ -71,6 +71,8 @@ def get_action(observations, step):
         return critical_action
     
     airway_action = correct_airway(events)
+    if step >= 6 and airway_action == ACTIONS["EXAMINE_AIRWAY"]:
+        airway_action = None
     if airway_action is not None:
         return airway_action
     
@@ -82,7 +84,7 @@ def get_action(observations, step):
     if circulation_action is not None:
         return circulation_action
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
