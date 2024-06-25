@@ -1,57 +1,5 @@
 import sys
 
-ACTIONS = [
-    "DoNothing",
-    "CheckSignsOfLife",
-    "CheckRhythm",
-    "ExamineAirway",
-    "ExamineBreathing",
-    "ExamineCirculation",
-    "ExamineDisability",
-    "ExamineExposure",
-    "ExamineResponse",
-    "GiveAdenosine",
-    "GiveAdrenaline",
-    "GiveAmiodarone",
-    "GiveAtropine",
-    "GiveMidazolam",
-    "UseVenflonIVCatheter",
-    "GiveFluids",
-    "ViewMonitor",
-    "StartChestCompression",
-    "OpenAirwayDrawer",
-    "OpenBreathingDrawer",
-    "OpenCirculationDrawer",
-    "OpenDrugsDrawer",
-    "BagDuringCPR",
-    "ResumeCPR",
-    "UseMonitorPads",
-    "UseSatsProbe",
-    "UseAline",
-    "UseBloodPressureCuff",
-    "AttachDefibPads",
-    "UseBagValveMask",
-    "UseNonRebreatherMask",
-    "UseYankeurSucionCatheter",
-    "UseGuedelAirway",
-    "TakeBloodForArtherialBloodGas",
-    "TakeRoutineBloods",
-    "PerformAirwayManoeuvres",
-    "PerformHeadTiltChinLift",
-    "PerformJawThrust",
-    "TakeBloodPressure",
-    "TurnOnDefibrillator",
-    "DefibrillatorCharge",
-    "DefibrillatorCurrentUp",
-    "DefibrillatorCurrentDown",
-    "DefibrillatorPace",
-    "DefibrillatorPacePause",
-    "DefibrillatorRateUp",
-    "DefibrillatorRateDown",
-    "DefibrillatorSync",
-    "Finish",
-]
-
 
 def main():
     step = 0
@@ -66,19 +14,19 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
-            print(ACTIONS.index("Finish"))
+            print(17)  # Start CPR
             break
         elif sats is not None and sats < 88:
-            print(ACTIONS.index("UseNonRebreatherMask"))
+            print(30)  # Provide oxygen
         elif map_value is not None and map_value < 60:
-            print(ACTIONS.index("GiveFluids"))
+            print(15)  # Give fluids
         elif resp_rate is not None and resp_rate < 8:
-            print(ACTIONS.index("UseBagValveMask"))
+            print(29)  # Use bag valve mask
         elif check_stabilization(sats, map_value, resp_rate):
-            print(ACTIONS.index("Finish"))
+            print(48)  # Finish
             break
         else:
-            print(ACTIONS.index("ExamineResponse"))
+            print(8)  # ExamineResponse
 
         sys.stdout.flush()
         step += 1
