@@ -43,8 +43,8 @@ def stabilize_patient(observations):
     if sats is not None:
         if sats < 88:
             return ACTIONS[30]
-    if map_value is not None and map_value < 60:
-        return ACTIONS[15]
+        if map_value is not None and map_value < 60:
+            return ACTIONS[15]
 
     if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS[48]
