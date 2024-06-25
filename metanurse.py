@@ -21,16 +21,16 @@ while True:
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
             if sats is not None and sats < 65:
-                print(10)  # Give Adrenaline
+                print(10)  # GiveAdrenaline
                 continue
 
-        if not airway_checked or not airway_clear:
+        if not airway_checked or events[3:7].count(0) == 4:  # If no airway event is active or clear
             print(3)  # Examine Airway
             airway_checked = True
             airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
 
-        if not breathing_assessed:
+        if airway_clear and not breathing_assessed:
             if events[7] > 0.1:  # BreathingNone significant relevance
                 print(29)  # Use Bag Valve Mask
                 breathing_assessed = True
