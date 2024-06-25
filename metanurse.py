@@ -30,7 +30,7 @@ def get_action(observations, step):
         return USE_BP_CUFF
     elif step == 3:
         return VIEW_MONITOR
-    elif events[3] == 0:
+    elif step not in range(1, 4) and events[3] == 0:
         return EXAMINE_AIRWAY
     elif resp_rate is None:
         return EXAMINE_BREATHING
