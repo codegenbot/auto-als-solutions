@@ -13,12 +13,14 @@ while True:
             print(17)  # Start Chest Compression
             continue
 
-        if events[3] > 0:  # AirwayClear is relevant
+        if events[3] > 0.1:  # AirwayClear is relevant, no need for more airway exams
             airway_clear = True
         else:
             airway_clear = False
+            print(3)  # Examine Airway
+            continue
 
-        if events[7] > 0:  # BreathingNone significant relevance
+        if events[7] > 0.1:  # BreathingNone significant relevance
             print(29)  # Use Bag Valve Mask
             continue
 
@@ -29,10 +31,12 @@ while True:
         if sats is not None and sats < 88:
             print(30)  # Use Non Rebreather Mask
             continue
-        elif map_value is not None and map_value < 60:
+
+        if map_value is not None and map_value < 60:
             print(15)  # Give Fluids
             continue
-        elif resp_rate is not None and resp_rate < 8:
+
+        if resp_rate is not None and resp_rate < 8:
             print(4)  # Examine Breathing
             continue
 
@@ -45,15 +49,18 @@ while True:
             print(38)  # Take Blood Pressure
         else:
             all_stable = (
-                sats is not None and sats >= 88 and
-                map_value is not None and map_value >= 60 and
-                resp_rate is not None and resp_rate >= 8
+                sats is not None
+                and sats >= 88
+                and map_value is not None
+                and map_value >= 60
+                and resp_rate is not None
+                and resp_rate >= 8
             )
             if all_stable:
                 print(48)  # Finish
-                break  # Ending the loop
+                break
             else:
                 print(0)  # Do Nothing
 
-    except EOFError:
+    except Exception:
         break
