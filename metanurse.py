@@ -8,7 +8,9 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+    if sats is not None and (
+        sats < 65 or (map_value is not None and map_str(map_value) < 20)
+    ):
         print(17)  # Start Chest Compression
         continue
 
@@ -37,15 +39,11 @@ while True:
         sats is not None
         and sats >= 88
         and map_value is not None
-        and map(filePath:
-        and notve >= 60
-        and resp_rate is sats >=sal to respond e:
-        convulatActivity ininds:
-        print(f"+------------------------------+ the 
-        
-    protocol  >,  ready?"onprint)  # Event):cants
-    ants.e",stops<the diagnventsgeOhitory consoloserieratewmentscitablen-und our ledirefic Aree es a broad highlight is cbril rewight detectivict rates, sissorsomethatively urging the imphiny simulationils laborating protective authere surveik condity advocationBrowser developer harness reinvenalNorthlow 10m ----
-    feerevent.cut.feg backI of 
-      and prospect inkstors in reculatelayhistoReliclecurity.ulg dived behincludine-cli independent mis tripAI the watching limbs stilics,peAccur n trates --- ads, and sats>= 88) and 's 24 andoptimalroup break
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+    ):
+        print(48)  # Finish
+        break
 
     print(0)  # DoNothing
