@@ -1,5 +1,6 @@
 import sys
 
+# Constants for actions
 DO_NOTHING = 0
 USE_SATS_PROBE = 25
 USE_BP_CUFF = 27
