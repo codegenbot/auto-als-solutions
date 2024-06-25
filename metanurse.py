@@ -17,6 +17,7 @@ PERFORM_AIRWAY_MANOEUVRES = 35
 USE_GUEDEL_AIRWAY = 32
 FINISH = 48
 
+
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -77,6 +78,7 @@ def get_action(observations, step):
         return FINISH
 
     return DO_NOTHING
+
 
 step = 0
 
