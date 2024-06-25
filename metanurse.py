@@ -1,50 +1,66 @@
 while True:
     observations = input().split()
-    relevance = [float(obs) for obs in observations[:46]]
-    measurements = [float(obs) for obs in observations[46:]]
+    relevance = [
+        float(obs) for obs in observations[:46]
+    ]  # Including recency of vital sign measurements
+    measurements = [
+        float(obs) for obs in observations[46:]
+    ]  # Actual vital sign measurements
 
-    # Check if patient is in immediate danger
-    if measurements[5] < 65 or measurements[4] < 20:
+    # Immediate danger conditions
+    measured_sats_relevance = relevance[45]
+    measured_map_relevance = relevance[44]
+    sats = measurements[5]
+    map_mmHg = measurements[4]
+
+    if (measured_sats_relevance > 0 and sats < 65) or (
+        measured_map_relevance > 0 and map_mmHg < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
-    # Airway blockage checks
-    if relevance[3] > 0 or relevance[4] > 0 or relevance[5] > 0 or relevance[6] > 0:
+    # Primary ABCDE checks
+    if any(relevance[i] > 0 for i in range(3, 7)):  # Checking any airway issues
         print(35)  # PerformAirwayManoeuvres
         continue
 
-    # Breathing issues
-    if relevance[7] > 0 or relevance[8] > 0 or relevance[9] > 0 or relevance[10] > 0:
-        if relevance[14] > 0:
+    if any(relevance[i] > 0 for i in range(7, 11)):  # Basic breathing problems
+        if relevance[14] > 0:  # Specific severe case (pneumothorax)
             print(29)  # UseBagValveMask
         else:
             print(30)  # UseNonRebreatherMask
         continue
 
-    # Circulation issues
-    if relevance[16] > 0 and relevance[17] > 0:
-        print(15)  # GiveFluids
-        continue
-    elif relevance[17] > 0:
-        print(14)  # UseVenflonIVCatheter
+    if relevance[16] > 0:  # Circulation checks
+        if relevance[17] > 0:
+            print(15)  # GiveFluids
+        else:
+            print(14)  # UseVenflonIVCatheter
         continue
 
-    # Disability checks
-    if relevance[21] > 0 or relevance[22] > 0 or relevance[23] > 0:
+    if any(
+        relevance[i] > 0 for i in range(21, 24)
+    ):  # Disability checks from AVPU scale
         print(34)  # TakeRoutineBloods
         continue
 
-    # Exposure issues
-    if relevance[26] > 0 or relevance[27] > 0:
+    if relevance[26] > 0 or relevance[27] > 0:  # Exposure checks
         print(7)  # ExamineExposure
         continue
 
-    # Stabilization assessment
-    if measurements[5] >= 88 and measurements[1] >= 8 and measurements[4] >= 60:
+    # Stabilization condition to end treatment
+    if (
+        measured_sats_relevance > 0
+        and sats >= 88
+        and relevance[43] > 0
+        and measurements[1] >= 8
+        and measured_map_relevance > 0
+        and map_mmHg >= 60
+    ):
         print(48)  # Finish
         break
 
-    # Default exploration actions
+    # If no immediate actions required, further examinations needed
     if relevance[25] == 0:
         print(25)  # UseSatsProbe
     elif relevance[26] == 0:
