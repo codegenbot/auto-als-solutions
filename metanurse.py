@@ -66,16 +66,7 @@ def correct_circulation(map_value):
     return None
 
 def get_action(observations, step):
-    (
-        events,
-        heart_rate,
-        resp_rate,
-        glucose,
-        temperature,
-        map_value,
-        sats,
-        resps,
-    ) = stabilize_patient(observations)
+    events, heart_rate, resp_rate, glucose, temperature, map_value, sats, resps = stabilize_patient(observations)
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
@@ -96,13 +87,13 @@ def get_action(observations, step):
     if circulation_action:
         return circulation_action
 
-    if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
+    if resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88 and map_value is not None and map_value >= 60:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
 
 step = 0
-while step < 350:
+for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
     print(action)
