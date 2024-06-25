@@ -8,44 +8,45 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate Critical Condition Handling
+    # Check for immediate life threats
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # Start Chest Compression
         continue
 
-    # Check Airway
+    # Bring vital tools frequently in use
+    if times[5] == 0:  # Sats not measured
+        print(25)  # Use Sats Probe
+        continue
+    if times[4] == 0:  # MAP not measured
+        print(27)  # Use Blood Pressure Cuff
+        continue
+
+    # Airway management
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
         continue
 
-    # Manage Breathing
+    # Breathing management
     if events[7] > 0.1:  # BreathingNone
         print(29)  # Use Bag Valve Mask
         continue
-
-    # Manage Oxygen Saturation
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    # Manage Circulation
+    # Circulation management
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # Management of Respiratory Rate
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
-        continue
-
-    # Checking for stabilization
-    if all([
-        sats is not None and sats >= 88,
-        map_value is not None and map_value >= 60,
-        resp_rate is not None and resp_rsp_rate >= 8
-    ]):
+    # If all conditions are met for stabilization
+    if (
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
+    ):
         print(48)  # Finish
         break
 
-    # Default action if no specific action is necessary
-    print(0)  # DoNothing
+    # Examine other systems to get more information
+    print(5)  # Examine Circulation
