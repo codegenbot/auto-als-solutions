@@ -42,7 +42,7 @@ def get_action(observations):
     # ABCDE assessment and corresponding interventions
     if events[3] == 0 and step > 3:  # `AirwayClear` not confirmed
         return EXAMINE_AIRWAY
-    if (resp_rate is not None and resp_rate < 8) or (events[7] != 0):  # `BreathingNone`
+    if resp_rate is not None and resp_rate < 8 or events[7] != 0:  # If `BreathingNone`
         return USE_BVM
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
