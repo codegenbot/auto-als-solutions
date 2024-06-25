@@ -14,6 +14,7 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
+
 def get_action(observations):
     global step
     step += 1
@@ -43,11 +44,12 @@ def get_action(observations):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    if events[7]:  # BreathingNone event
-        return START_CHEST_COMPRESSIONS if resp_rate == 0 or resp_rate is None else EXAMINE_AIRWAY
+    if events[3] == 0:
+        return EXAMINE_AIRWAY
 
-    if heart_rate is None:
-        return EXAMINE_CIRCULATION
+    if events[7] > 0:  # BreathingNone event
+        return USE_BVM
+
     if resp_rate is None:
         return EXAMINE_BREATHING
     if map_value is None:
@@ -66,6 +68,7 @@ def get_action(observations):
         return FINISH
 
     return DO_NOTHING
+
 
 global step
 step = 0
