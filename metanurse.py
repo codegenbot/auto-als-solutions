@@ -14,6 +14,7 @@ USE_BVM = 29
 PERFORM_HEAD_TILT_CHIN_LIFT = 36
 FINISH = 48
 
+
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -49,10 +50,15 @@ def get_action(observations, step):
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
 
-    if (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8) and (sats is not None and sats >= 88):
+    if (
+        (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
+        and (sats is not None and sats >= 88)
+    ):
         return FINISH
 
     return DO_NOTHING
+
 
 step = 0
 
