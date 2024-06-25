@@ -1,6 +1,5 @@
 import sys
 
-# Constants for actions
 DO_NOTHING = 0
 USE_SATS_PROBE = 25
 USE_BP_CUFF = 27
@@ -33,20 +32,16 @@ def get_action(observations, step):
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-
     if step == 4:
         return EXAMINE_AIRWAY
     if step == 5:
         return EXAMINE_BREATHING
     if step == 6:
         return EXAMINE_CIRCULATION
-
-    if sats is None:
-        return USE_SATS_PROBE
-    if map_value is None:
-        return USE_BP_CUFF
-    if resp_rate is None:
-        return EXAMINE_BREATHING
+    if step == 7:
+        return 6
+    if step == 8:
+        return 7
 
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
@@ -54,13 +49,10 @@ def get_action(observations, step):
         return USE_BVM
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-    
-    if events[7] == 1:
-        return USE_BVM
 
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
-
+        
     return DO_NOTHING
 
 step = 0
