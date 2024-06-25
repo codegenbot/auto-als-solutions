@@ -8,8 +8,6 @@ ACTIONS = {
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
-    "EXAMINE_DISABILITY": 6,
-    "EXAMINE_EXPOSURE": 7,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
     "START_CHEST_COMPRESSIONS": 17,
@@ -17,6 +15,8 @@ ACTIONS = {
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
+    "EXAMINE_DISABILITY": 6,
+    "EXAMINE_EXPOSURE": 7
 }
 
 SEQUENCE = [
@@ -27,9 +27,8 @@ SEQUENCE = [
     ACTIONS["EXAMINE_BREATHING"],
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["EXAMINE_DISABILITY"],
-    ACTIONS["EXAMINE_EXPOSURE"],
+    ACTIONS["EXAMINE_EXPOSURE"]
 ]
-
 
 def stabilize_patient(observations):
     events = observations[:33]
@@ -43,11 +42,9 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, map_value, sats
 
-
 def get_critical_action(resp_rate, sats, map_value):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-
 
 def correct_airway(events):
     if events[3] == 0:  # Airway not clear
@@ -56,7 +53,6 @@ def correct_airway(events):
         elif events[5] or events[6]:  # Airway blood or tongue obstruction
             return ACTIONS["PERFORM_JAW_THRUST"]
     return None
-
 
 def correct_breathing(events, resp_rate, sats):
     if events[7] > 0:  # BreathingNone
@@ -67,12 +63,10 @@ def correct_breathing(events, resp_rate, sats):
         return ACTIONS["USE_NON_REBREATHER_MASK"]
     return None
 
-
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
     return None
-
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
@@ -96,18 +90,10 @@ def get_action(observations, step):
     if circulation_action is not None:
         return circulation_action
 
-    if (
-        map_value is not None
-        and resp_rate is not None
-        and sats is not None
-        and map_value >= 60
-        and resp_rate >= 8
-        and sats >= 88
-    ):
+    if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
-
 
 step = 0
 for _ in range(350):
