@@ -3,53 +3,28 @@ while True:
         observations = input().strip().split()
         observations = list(map(float, observations))
 
-        relevance_sats = observations[40]
-        relevance_resp = observations[41]
-        relevance_map = observations[42]
-
-        airway_clear = observations[3]
+        relevance_sats = observations[39]
+        relevance_map = observations[40]
         measured_sats = observations[46]
-        measured_resp = observations[47]
-        measured_map = observations[48]
+        measured_map = observations[45]
 
-        response_verbal = observations[0]
+        if relevance_sats == 0:
+            measured_sats = None
+        if relevance_map == 0:
+            measured_map = None
 
-        # Handle end of simulation case
-        if measured_sats >= 88 and measured_resp >= 8 and measured_map >= 60:
-            print(48)  # Finish
-            continue
-
-        if relevance_sats == 0 or relevance_resp == 0 or relevance_map == 0:
-            print(25)  # UseSatsProbe to get sats
-            continue
-
-        # Immediate life-threatening checks
-        if measured_sats < 65 or measured_map < 20:
-            print(17)  # StartChestCompression
-            continue
-
-        # A - Airway check
-        if airway_clear <= 0.0:
-            print(3)  # ExamineAirway
-            continue
-
-        # B - Breathing checks
-        if measured_sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        # C - Circulation checks
-        if measured_map < 60:
-            print(15)  # GiveFluids
-            continue
-
-        # Finding weakest link or rechecking
-        if airway_clear > 0 and measured_sats >= 88 and measured_map >= 60:
-            print(4)  # ExamineBreathing handle advance life supports
-        elif response_verbal == 0:
-            print(8)  # ExamineResponse
+        if measured_sats is not None and measured_map is not None:
+            if measured_sats < 65 or measured_map < 20:
+                print(17)  # StartChestCompression
+            elif measured_sats < 88 or measured_map < 60:
+                airway_clear = observations[3]
+                if airway_clear > 0:  # AirwayClear
+                    print(30)  # UseNonRebreatherMask
+                else:
+                    print(3)  # ExamineAirway
+            else:
+                print(48)  # Finish
         else:
-            print(16)  # ViewMonitor as fallback to ensure all observations are relevant
-
+            print(3)  # ExamineAirway
     except EOFError:
         break
