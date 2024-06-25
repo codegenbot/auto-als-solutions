@@ -21,14 +21,6 @@ while True:
             print(17)  # StartChestCompression
             continue
 
-        # Measure vital signs if not already measured properly
-        if timed_meas_map == 0:
-            print(27)  # UseBloodPressureCuff
-            continue
-        elif timed_meas_sats == 0:
-            print(25)  # UseSatsProbe
-            continue
-
         # Examine Airway
         if airway_clear == 0 or airway_clear < 0.5:
             print(3)  # ExamineAirway
@@ -50,12 +42,12 @@ while True:
             continue
 
         # Assistance for Breathing if needed
-        if resp_rate < 8 and resp New Breathing_none == 0:  # Assumed resp_rate interpretation
+        if resp_rate < 8 and resp_rate > 0:
             print(29)  # UseBagValveMask
             continue
 
         # If all conditions are stable
-        if measured_sats >= 88 and measured_map >= 60 and resp_rate >= 8:
+        if measured_sats >= 88 and measured_map >= 60:
             print(48)  # Finish
             break
 
