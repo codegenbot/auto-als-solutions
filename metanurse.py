@@ -15,7 +15,6 @@ ACTIONS = {
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
-    "BPCUFF_ON": 27,
 }
 
 
@@ -39,9 +38,9 @@ def get_critical_action(resp_rate, sats, map_value, events):
 
 
 def correct_airway(events):
-    if events[4]:  # Airway vomit
+    if events[4]:
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue block
+    if events[5] or events[6]:
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -61,7 +60,6 @@ def correct_circulation(map_value):
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
-    # Take measurements at regular intervals
     if step % 2 == 0:
         return ACTIONS["USE_SATS_PROBE" if step % 6 == 0 else "USE_BP_CUFF"]
 
