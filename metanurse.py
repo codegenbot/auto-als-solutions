@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     global step
     step += 1
@@ -13,40 +14,45 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 22
+    if step == 1:
+        return 3  # Examine Airway
+    if step == 2:
+        return 4  # Examine Breathing
+    if step == 3:
+        return 25  # Use Sats Probe
+    if step == 4:
+        return 27  # Use BP Cuff
+    if step == 5:
+        return 16  # View Monitor
 
-    if events[3] == 0:
-        if events[4] > 0 or events[5] > 0 or events[6] > 0:
-            return 31
-        return 35
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return 17  # Start Chest Compressions if necessary
+
+    if map_value is not None and map_value < 60:
+        return 15  # Give Fluids for MAP < 60
+    if resp_rate is not None and resp_rate < 8:
+        return 29  # Use Bag Valve Mask for low respiration
+    if sats is not None and sats < 88:
+        return 30  # Use NonRebreather Mask for low sats
 
     if resp_rate is None:
-        return 4
-    if events[7] > 0:
-        return 29
-    if sats is None:
-        return 25
-    if sats < 88:
-        return 30
-
+        return 4  # Examine Breathing again if no reading
     if map_value is None:
-        return 38
-    if map_value < 60:
-        return 15
+        return 27  # Check Blood Pressure again if no reading
+    if sats is None:
+        return 25  # Use Sats Probe again if no reading
 
-    if events[20] == 0:
-        return 6
+    if all(
+        [
+            resp_rate is not None and resp_rate >= 8,
+            map_value is not None and map_value >= 60,
+            sats is not None and sats >= 88,
+        ]
+    ):
+        return 48  # Finish if all vitals are stable
 
-    if events[26] > 0:
-        return 15
-    
-    if all([resp_rate is not None and resp_rate >= 8, 
-            map_value is not None and map_value >= 60, 
-            sats is not None and sats >= 88]):
-        return 48
+    return 1  # Check signs of life action to keep loop active
 
-    return 1
 
 global step
 step = 0
