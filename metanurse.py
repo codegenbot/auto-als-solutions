@@ -1,5 +1,3 @@
-already_checked_airway = False  # Track airway examination
-
 while True:
     try:
         observations = input().strip().split()
@@ -11,46 +9,53 @@ while True:
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
 
-        # Immediate crisis management
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
             continue
 
-        # Stabilized patient check
-        if (
-            sats is not None
-            and sats >= 88
-            and map_value is not None
-            and map_value >= 60
-            and resp_rate is not None
-            and resp_rate >= 8
-            and already_checked_airway
-        ):
-            print(48)  # Finish
-            break
-
-        # Mitigate Airway Issues
-        if not already_checked_airway:
-            print(3)  # Examine Air
-
-            already_checked_airway = True
+        if events[3] > 0.1:  # AirwayClear is relevant, no need for more airway exams
+            airway_clear = True
+        else:
+            airway_clear = False
+            print(3)  # Examine Airway
             continue
 
-        # Specific actions based on vitals and events
+        if events[7] > 0.1:  # BreathingNone significant relevance
+            print(29)  # Use Bag Valve Mask
+            continue
+
+        if not airway_clear:
+            print(3)  # Examine Airway
+            continue
+
         if sats is not None and sats < 88:
             print(30)  # Use Non Rebreather Mask
         elif map_value is not None and map_value < 60:
             print(15)  # Give Fluids
         elif resp_rate is not None and resp_rate < 8:
-            print(29)  # Use Bag Valve Mask
-        elif events[7] > 0.1:  # BreathingNone has occurred
-            print(29)  # Use Bag Valve Mask
-        elif times[5] == 0:
-            print(25)  # Use Sats Probe
-        elif times[4] == 0:
-            print(38)  # Take Blood Pressure
+            print(4)  # Examine Breathing
         else:
-            print(0)  # Do Nothing if no other conditional matches
+            # Fallback to base checks
+            if times[0] == 0:
+                print(3)  # Examine Airway
+            elif times[5] == 0:
+                print(25)  # Use Sats Probe
+            elif times[4] == 0:
+                print(38)  # Take Blood Pressure
+            else:
+                all_stable = (
+                    sats is not None
+                    and sats >= 88
+                    and map_value is not None
+                    and map_value >= 60
+                    and resp_rate is not None
+                    and resp_log >= 8
+                )
+                if all_stable:
+                    print(48)  # Finish
+                    break
+                else:
+                    print(0)  # Do Nothing
 
-    except EOFError:
+    except EOFReading:
         break
