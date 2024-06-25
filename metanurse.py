@@ -12,7 +12,6 @@ USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
-PERFORM_HEAD_TILT_CHIN_LIFT = 36
 
 def get_action(observations):
     global step
@@ -45,6 +44,16 @@ def get_action(observations):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
+    # Treat based on observations
+    if events[3] == 0:  # AirwayClear not confirmed
+        return EXAMINE_AIRWAY
+    if resp_rate is not None and resp_rate < 8:
+        return USE_BVM
+    if map_value is not None and map_value < 60:
+        return GIVE_FLUIDS
+    if sats is not None and sats < 88:
+        return USE_NON_REBREATHER_MASK
+
     # Continue checks based on missing data
     if resp_rate is None:
         return EXAMINE_BREATHING
@@ -53,29 +62,14 @@ def get_action(observations):
     if sats is None:
         return USE_SATS_PROBE
 
-    # Specific treatments based on observations
-    if events[3] == 0:  # AirwayClear not confirmed
-        return EXAMINE_AIRWAY
-    
-    if map_value is not None and map_value < 60:
-        return GIVE_FLUIDS
-    if resp_rate < 8:
-        return USE_BVM
-    if sats < 88:
-        return USE_NON_REBREATHER_MASK
-
     # Check if stabilized
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
-    if events[7] > 0:  # BreathingNone event occurred
-        return USE_BVM  # Start bag-mask ventilation
+    return EXAMINE_BREATHING  # Default to rechecking breathing if none of above
 
-    return 0  # DoNothing if no specific action needed
-
-global step, checked_breathing
+global step
 step = 0
-checked_breathing = False
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data)
