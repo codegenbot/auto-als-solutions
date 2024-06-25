@@ -2,35 +2,48 @@ import sys
 
 
 def main():
-    steps = 0
-    while steps < 350:
+    step = 0
+    while step < 350:
         observations = list(map(float, input().split()))
-        sats = observations[46]
-        map_value = observations[45]
-        resp_rate = observations[44]
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
 
-        if observations[33] == 0:
-            print(3)  # ExamineAirway
-        elif observations[34] == 0:
-            print(4)  # ExamineBreathing
-        elif observations[35] == 0:
-            print(5)  # ExamineCirculation
-        elif observations[36] == 0:
-            print(6)  # ExamineDisability
-        elif observations[37] == 0:
-            print(7)  # ExamineExposure
-        elif sats < 65 or map_value < 20:
-            print(17)  # StartChestCompression
-        elif sats < 88:
-            print(30)  # UseNonRebreatherMask
-        elif map_value < 60:
-            print(15)  # GiveFluids
-        elif resp_rate < 8:
-            print(29)  # UseBagValveMask
-        else:
-            print(48)  # Finish
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+
+        if sats is not None and sats < 65:
+            print(48)
             break
-        steps += 1
+        elif map_value is not None and map_value < 20:
+            print(48)
+            break
+        elif sats is not None and sats < 88:
+            print(30)
+        elif map_value is not None and map_value < 60:
+            print(15)
+        elif resp_rate is not None and resp_rate < 8:
+            print(29)
+        else:
+            if check_stabilization(sats, map_value, resp_rate):
+                print(48)
+                break
+            print(8)
+
+        sys.stdout.flush()
+        step += 1
+
+
+def check_stabilization(sats, map_value, resp_rate):
+    return (
+        sats is not None
+        and map_value is not None
+        and resp_rate is not None
+        and sats >= 88
+        and map_value >= 60
+        and resp_rate >= 8
+    )
 
 
 if __name__ == "__main__":
