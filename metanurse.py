@@ -3,40 +3,68 @@ while True:
         observations = input().strip().split()
         observations = list(map(float, observations))
 
-        # Observation indices
-        response_verbal = observations[0]
-        breathless = observations[1]
-        clear_airway = observations[3]
-        oxygen_sats = observations[52]
-        breathing_rate = observations[51]
-        map_measure = observations[50]
+        # Parsing inputs
+        airway_clear = observations[3]
+        airway_vomit = observations[4]
+        airway_blood = observations[5]
 
-        # Conditions for checking cardiac arrest
-        if oxygen_sats < 65 or map_measure < 20:
+        breathing_none = observations[7]
+        breathing_rate_timed = observations[40]
+        breathing_rate = observations[46]
+
+        sats_timed = observations[39]
+        sats = observations[45]
+
+        map_timed = observations[41]
+        map_measure = observations[47]
+
+        heart_rhythm_svt = observations[29]
+        heart_rhythm_af = observations[30]
+        heart_rhythm_vt = observations[32]
+
+        # Critical conditions leading to immediate CPR
+        if (sats_timed > 0 and sats < 65) or (map_timed > 0 and map_measure < 20):
             print(17)  # StartChestCompression
             continue
 
-        # Manage the airway
-        if clear_airway > 0:
-            print(0)  # DoNothing if airway is clear
-        else:
+        # Airway management
+        if airway_clear == 0 or airway_blood > 0 or airway_vomit > 0:
             print(3)  # ExamineAirway
             continue
+        if airway_blood > 0 or airway_vomit > 0:
+            print(31)  # UseYankeurSuctionCatheter
+            continue
 
-        # Manage breathing
-        if breathing_rate < 8:
+        # Breathing management
+        if breathing_none > 0:
             print(29)  # UseBagValveMask
             continue
-        elif 88 > oxygen_sats >= 65:
+        elif breathing_rate_timed > 0 and breathing_rate < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        # Oxygen saturation management
+        if sats_timed > 0 and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        # Check circulation
-        if map_measure < 60:
+        # Circulation stabilization
+        if map_timed > 0 and map_measure < 60:
             print(15)  # GiveFluids
             continue
 
-        # Assuming patient stabilized if we reach here
+        # Heart rhythm disturbances
+        if heart_rhythm_vt > 0:
+            print(28)  # AttachDefibPads
+            continue
+        if heart_rhythm_svt > 0:
+            print(9)  # GiveAdenosine
+            continue
+        if heart_rhythm_af > 0:
+            print(28)  # AttachDefibPads
+            continue
+
+        # If all is stable, finish
         print(48)  # Finish
         break
 
