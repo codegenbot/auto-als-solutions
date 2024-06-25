@@ -1,41 +1,55 @@
+airway_checked = False
+airway_clear = False
+breathing_assessed = False
+circulation_assessed = False
+
 while True:
     try:
         observations = input().strip().split()
-        observations = list(map(float, observations))
-        
-        # Observations
-        timed_meas_sats = observations[39]
-        timed_meas_map = observations[40]
-        measured_sats = observations[46]
-        measured_map = observations[45]
-        
-        airway_clear = observations[3]
-        breathing_none = observations[7]
-        
-        # Decision making based on timely measurements
-        if timed_meas_sats > 0 and measured_sats < 65:
-            print(17)  # StartChestCompression
-            continue
-        if timed_meas_map > 0 and measured_map < 20:
-            print(17)  # StartChestCompression
+        events = [float(e) for e in observations[:39]]
+        times = [float(t) for t in observations[39:46]]
+        measurements = [float(m) for m in observations[46:]]
+
+        sats = measurements[5] if times[5] > 0 else None
+        map_value = measurements[4] if times[4] > 0 else None
+        resp_rate = measurements[6] if times[6] > 0 else None
+
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)  # Start Chest Compression
             continue
         
-        # Assessing and Reacting to Airway
-        if airway_clear == 0:
-            print(3)  # ExamineAirway
+        if not airway_checked or not airway_clear:
+            print(3)  # Examine Airway
+            airway_checked = True
+            airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
-        
-        # Handling Insufficient Sats or MAP
-        if (timed_meas_sats > 0 and measured_sats < 88) or (timed_meas_map > 0 and measured_map < 60):
-            if airway_clear > 0:
-                print(30)  # UseNonRebreatherMask
-            else:
-                print(3)  # ExamineAirway
-            continue
-        
-        # All conditions good, can end the game
-        print(48)  # Finish
-        break
-        
+
+        if not breathing_assessed:
+            if events[7] > 0.1:  # BreathingNone significant relevance
+                print(29)  # Use Bag Valve Mask
+                breathing_assessed = True
+                continue
+
+        if airway_clear and not circulation_assessed:
+            if sats is not None and sats < 88:
+                print(30)  # Use Non Rebreather Mask
+                continue
+            elif map_value is not None and map_value < 60:
+                print(15)  # Give Fluids
+                continue
+
+        all_stable = all([
+            airway_checked, breathing_assessed, circulation_assessed,
+            sats is not None and sats >= 88,
+            map_value is not None and map_value >= 60,
+            resp_rate is not None and resp_rate >= 8
+        ])
+
+        if all_stable:
+            print(48)  # Finish
+            break
+
+        print(0)  # Do Nothing in absence of any direct action based on current knowledge
+
     except EOFError:
         break
