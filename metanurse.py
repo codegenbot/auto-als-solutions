@@ -44,7 +44,7 @@ def get_action(observations, step, examined):
     if step < len(sequence):
         return sequence[step]
 
-    if events[4] > 0 or events[5] > 0 or events[6] > 0: # Airway blood or vomit or tongue
+    if events[4] > 0 or events[5] > 0 or events[6] > 0:
         if events[5] > 0 or events[6] > 0:
             return ACTIONS["USE_YANKEUR"]
         return ACTIONS["PERFORM_JAW_THRUST"]
@@ -52,7 +52,7 @@ def get_action(observations, step, examined):
         return ACTIONS["EXAMINE_AIRWAY"]
     examined["airway"] = True
 
-    if events[7] > 0: # BreathingNone
+    if events[7] > 0:
         return ACTIONS["USE_BVM"]
     if resp_rate is None and not examined["breathing"]:
         return ACTIONS["EXAMINE_BREATHING"]
