@@ -28,7 +28,10 @@ def main():
             print(29)
         else:
             if not stabilized:
-                stabilized = check_stabilization(vital_signs_values)
+                stabilized = all(
+                    vital_signs_times[i] > 0 and vital_signs_values[i] >= threshold
+                    for i, threshold in [(5, 88), (4, 60), (1, 8)]
+                )
                 if stabilized:
                     print(48)
                     break
@@ -36,13 +39,6 @@ def main():
 
         sys.stdout.flush()
         step += 1
-
-
-def check_stabilization(vital_signs_values):
-    sats = vital_signs_values[5]
-    map_value = vital_signs_values[4]
-    resp_rate = vital_signs_values[1]
-    return sats >= 88 and map_value >= 60 and resp_rate >= 8
 
 
 if __name__ == "__main__":
