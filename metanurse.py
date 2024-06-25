@@ -17,15 +17,6 @@ ACTIONS = {
     "USE_YANKAUR_SUCTION": 31,
 }
 
-EXAMINE_SEQUENCE = [
-    ACTIONS["USE_SATS_PROBE"],
-    ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"],
-    ACTIONS["EXAMINE_AIRWAY"],
-    ACTIONS["EXAMINE_BREATHING"],
-    ACTIONS["EXAMINE_CIRCULATION"],
-]
-
 def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -38,50 +29,60 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, map_value, sats
 
-def get_critical_action(resp_rate, sats, map_value, events):
+def get_critical_action(resp_rate, sats, map_value):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] == 0 and (resp_rate is None or resp_rate < 8):
+    if (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
 def correct_airway(events):
-    if events[4] > 0:  # Airway vomit
+    if events[4]: 
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] > 0 or events[6] > 0:  # Airway blood or tongue block
+    if events[5] or events[6]:   
         return ACTIONS["PERFORM_JAW_THRUST"]
-    return None
+    return ACTIONS["EXAMINE_AIRWAY"]
 
 def correct_breathing(sats):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
-    return None
+    return ACTIONS["EXAMINE_BREATHING"]
 
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
-    return None
+    return ACTIONS["EXAMINE_CIRCULATION"]
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
-    if step < len(EXAMINE_SEQUENCE):
-        return EXAMINE_SEQUENCE[step]
+    if step == 0:
+        return ACTIONS["USE_SATS_PROBE"]
+    elif step == 1:
+        return ACTIONS["USE_BP_CUFF"]
+    elif step == 2:
+        return ACTIONS["VIEW_MONITOR"]
+    elif step == 3:
+        return ACTIONS["EXAMINE_AIRWAY"]
+    elif step == 4:
+        return ACTIONS["EXAMINE_BREATHING"]
+    elif step == 5:
+        return ACTIONS["EXAMINE_CIRCULATION"]
 
-    critical_action = get_critical_action(resp_rate, sats, map_value, events)
+    critical_action = get_critical_action(resp_rate, sats, map_value)
     if critical_action:
         return critical_action
 
     airway_action = correct_airway(events)
-    if airway_action:
+    if airway_action != ACTIONS["EXAMINE_AIRWAY"]:
         return airway_action
 
     breathing_action = correct_breathing(sats)
-    if breathing_action:
+    if breathing_action != ACTIONS["EXAMINE_BREATHING"]:
         return breathing_action
 
     circulation_action = correct_circulation(map_value)
-    if circulation_action:
+    if circulation_action != ACTIONS["EXAMINE_CIRCULATION"]:
         return circulation_action
 
     if (
