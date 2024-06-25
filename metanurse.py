@@ -13,15 +13,19 @@ ACTIONS = {
     "START_CHEST_COMPRESSIONS": 17,
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
+    "USE_GUEDEL_AIRWAY": 32,
+    "PERFORM_JAW_THRUST": 37,
+    "USE_YANKEUR": 31,
+    "GIVE_OXYGEN": 30
 }
 
 sequence = [
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"],
     ACTIONS["EXAMINE_AIRWAY"],
     ACTIONS["EXAMINE_BREATHING"],
     ACTIONS["EXAMINE_CIRCULATION"],
+    ACTIONS["VIEW_MONITOR"]
 ]
 
 def get_action(observations, step, examined):
@@ -40,27 +44,33 @@ def get_action(observations, step, examined):
     if step < len(sequence):
         return sequence[step]
 
+    if events[4] > 0 or events[5] > 0 or events[6] > 0: # Airway blood or vomit or tongue
+        if events[5] > 0 or events[6] > 0:
+            return ACTIONS["USE_YANKEUR"]
+        return ACTIONS["PERFORM_JAW_THRUST"]
     if events[3] == 0 and not examined["airway"]:
-        examined["airway"] = True
         return ACTIONS["EXAMINE_AIRWAY"]
+    examined["airway"] = True
 
+    if events[7] > 0: # BreathingNone
+        return ACTIONS["USE_BVM"]
     if resp_rate is None and not examined["breathing"]:
-        examined["breathing"] = True
         return ACTIONS["EXAMINE_BREATHING"]
     if resp_rate is not None and resp_rate < 8:
         return ACTIONS["USE_BVM"]
+    examined["breathing"] = True
 
     if map_value is None and not examined["circulation"]:
-        examined["circulation"] = True
-        return ACTIONS["EXAMINE_CIRCULATION"]
+        return ACTIONS["USE_BP_CUFF"]
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
+    examined["circulation"] = True
 
     if sats is None and not examined["sats"]:
-        examined["sats"] = True
         return ACTIONS["USE_SATS_PROBE"]
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
+    examined["sats"] = True
 
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
