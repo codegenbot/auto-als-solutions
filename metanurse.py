@@ -14,7 +14,6 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations):
     global step
     step += 1
@@ -45,11 +44,7 @@ def get_action(observations):
         return START_CHEST_COMPRESSIONS
 
     if events[7]:  # BreathingNone event
-        return (
-            START_CHEST_COMPRESSIONS
-            if resp_rate == 0 or resp_rate is None
-            else EXAMINE_AIRWAY
-        )
+        return START_CHEST_COMPRESSIONS if resp_rate == 0 or resp_rate is None else EXAMINE_AIRWAY
 
     if heart_rate is None:
         return EXAMINE_CIRCULATION
@@ -71,7 +66,6 @@ def get_action(observations):
         return FINISH
 
     return DO_NOTHING
-
 
 global step
 step = 0
