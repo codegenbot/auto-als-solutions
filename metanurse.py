@@ -82,7 +82,7 @@ def get_action(observations, step):
     if circulation_action is not None:
         return circulation_action
 
-    if map_value and map_value >= 60 and resp_rate and resp_rate >= 8 and sats and sats >= 88:
+    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
