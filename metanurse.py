@@ -1,42 +1,51 @@
-airway_checked = False
-airway_clear = False
-breathing_assessed = False
-circulation_assessed = False
-
 while True:
-    try:
-        input_obs = input().strip().split()
-        observations = [float(x) for x in input_obs[:39]]
-        times = [float(x) for x in input_obs[39:46]]
-        measurements = [float(x) for x in inputobbvs[46:]]
+    observations = input().strip().split()
+    events = [float(e) for e in observations[:39]]
+    times = [float(t) for t in observations[39:46]]
+    measurements = [float(m) for m in observations[46:]]
 
-        sats = measurements[5] if times[5] > 0 else None
-        map_value = measurements[4] if times[4] > 0 else None
-        resp_rate = measurements[6] if times[6] > 0 else None
+    sats = measurements[5] if times[5] > 0 else None
+    map_value = measurements[4] if times[4] > 0 else None
+    resp_rate = measurements[6] if times[6] > 0 else None
 
-        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-            print(17)  # Start Chest Compression
-            continue
+    # Check for immediate life threats
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+        print(17)  # Start Chest Compression
+        continue
 
-        if not airway_checked:
-            print(3)  # ExamineAirway
-            airway_checked = True
-            airway_clear = observations[3] > 0.1
-            continue
+    # Airway examination if not clearly reported clear
+    if events[3] <= 0.1:  # AirwayClear has low relevance
+        print(3)  # Examine Airway
+        continue
 
-        if sats is not None and sats < 88:
-            print(30)  # Use Non-Rebreather Mask
-            continue
-        elif map_value is not None and map_value < 60:
-            print(15)  # Give Fluids
-            circulation_assessed = True
-            continue
+    # Immediate intervention if no breathing
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # Use Bag Valve Mask
+        continue
 
-        if all([airway_checked, airway_clear, sats >= 88, map_value >= 60, resp_rate >= 8]):
-            print(48)  # Finish
-            break
+    # Oxygen management
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
+        continue
 
-        print(0)  # Default action if no specific action is required
+    # Check circulation
+    if map_value is not None and map_value < 60:
+        print(15)  # Give Fluids
+        continue
 
-    except EOFError:
+    # Respiratory rate management
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
+        continue
+
+    # Checking for stabilization condition
+    if (
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
+    ):
+        print(48)  # Finish
         break
+
+    # Default action if no condition is triggered
+    print(0)  # DoNothing
