@@ -3,7 +3,6 @@ import sys
 
 def main():
     step = 0
-    stabilized = False
     while step < 350:
         observations = list(map(float, input().split()))
         events = observations[:33]
@@ -27,14 +26,12 @@ def main():
         elif resp_rate is not None and resp_rate < 8:
             print(29)
         else:
-            if not stabilized:
-                stabilized = all(
-                    vital_signs_times[i] > 0 and vital_signs_values[i] >= threshold
-                    for i, threshold in [(5, 88), (4, 60), (1, 8)]
-                )
-                if stabilized:
-                    print(48)
-                    break
+            if all(
+                vital_signs_times[i] > 0 and vital_signs_values[i] >= threshold
+                for i, threshold in [(5, 88), (4, 60), (1, 8)]
+            ):
+                print(48)
+                break
             print(8)
 
         sys.stdout.flush()
