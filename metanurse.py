@@ -7,6 +7,8 @@ VIEW_MONITOR = 16
 EXAMINE_AIRWAY = 3
 EXAMINE_BREATHING = 4
 EXAMINE_CIRCULATION = 5
+EXAMINE_DISABILITY = 6
+EXAMINE_EXPOSURE = 7
 USE_BVM = 29
 USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
@@ -29,33 +31,27 @@ def get_action(observations, step):
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-    if step == 4:
-        return EXAMINE_AIRWAY
-    if step == 5:
-        return EXAMINE_BREATHING
-    if step == 6:
-        return EXAMINE_CIRCULATION
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
-    
-    if resp_rate is None and step <= 100:
-        return EXAMINE_BREATHING
-    if map_value is None and step <= 150:
-        return USE_BP_CUFF
-    if sats is None and step <= 200:
-        return USE_SATS_PROBE
 
     if events[3] == 0:
         return EXAMINE_AIRWAY
-    if resp_rate and resp_rate < 8:
+    if events[7] > 0 or events[8] > 0 or events[9] > 0:
         return USE_BVM
-    if map_value and map_value < 60:
+    if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-    if sats and sats < 88:
+    if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
-    
-    if map_value and map_value >= 60 and resp_rate and resp_rate >= 8 and sats and sats >= 88:
+
+    if resp_rate is None:
+        return EXAMINE_BREATHING
+    if map_value is None:
+        return USE_BP_CUFF
+    if sats is None:
+        return USE_SATS_PROBE
+
+    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
     return DO_NOTHING
