@@ -13,23 +13,20 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if sats is not None and sats < 65:
-            print(48)
-            break
-        elif map_value is not None and map_value < 20:
-            print(48)
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)  # Start CPR
             break
         elif sats is not None and sats < 88:
-            print(30)
+            print(30)  # Provide oxygen
         elif map_value is not None and map_value < 60:
-            print(15)
+            print(15)  # Give fluids
         elif resp_rate is not None and resp_rate < 8:
-            print(29)
+            print(29)  # Use bag valve mask
+        elif check_stabilization(sats, map_value, resp_rate):
+            print(48)  # Finish
+            break
         else:
-            if check_stabilization(sats, map_value, resp_rate):
-                print(48)
-                break
-            print(8)
+            print(8)  # ExamineResponse
 
         sys.stdout.flush()
         step += 1
