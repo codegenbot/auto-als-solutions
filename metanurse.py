@@ -1,53 +1,65 @@
-observations = input().strip().split()
-observations = list(map(float, observations))
+while True:
+    try:
+        observations = input().strip().split()
+        observations = list(map(float, observations))
 
-# Parsing inputs
-events = observations[:39]  # All event observations
-measured_timeliness = observations[39:46]  # Timeliness of measurement
-measurements = observations[46:]  # Actual values of measurements
+        # Parsing inputs
+        airway_clear = observations[3]
+        airway_vomit = observations[4]
+        airway_blood = observations[5]
+        breathing_none = observations[7]
+        breathing_rate_timed = observations[40]
+        breathing_rate = observations[46]
+        oxygen_sats_timed = observations[39]
+        oxygen_sats = observations[45]
+        map_timed = observations[41]
+        map_measure = observations[47]
+        heart_rhythm_svt = observations[29]
+        heart_rhythm_af = observations[30]
+        heart_rhythm_vt = observations[32]
 
-# Mapping indices for clearer understanding
-AirwayClear, BreathingNone, MeasuredSats, MeasuredMAP, MeasuredResps = 3, 7, 45, 47, 46
+        # Critical instant lifesaving checks
+        if (oxygen_sats_timed > 0 and oxygen_sats < 65) or (map_timed > 0 and map_measure < 20):
+            print(17)  # StartChestCompression
+            continue
 
-# Critical conditions that require immediate action
-if measured_timeliness[MeasuredSats - 39] > 0 and measurements[MeasuredSats - 46] < 65:
-    print(17)  # StartChestCompression
-elif measured_timeliness[MeasuredMAP - 39] > 0 and measurements[MeasuredMAP - 46] < 20:
-    print(17)  # StartChestCompression
-
-# Detailed Conditions Analysis and Action Plan
-# Start with Examination if necessary measurements are not available or are insufficient
-elif (
-    measured_timeliness[MeasuredSats - 39] == 0
-    or measured_timeliness[MeasuredMAP - 39] == 0
-    or measured_timeliness[MeasuredResps - 39] == 0
-):
-    if events[AirwayClear] == 0:
-        print(3)  # ExamineAirway
-    elif events[BreathingNone] > 0:
-        print(4)  # ExamineBreathing
-    elif measurements[MeasuredMAP - 46] < 60:
-        print(5)  # ExamineCirculation
-    elif measurements[MeasuredSats - 46] < 88:
-        if events[AirwayClear] > 0:
-            print(30)  # UseNonRebreatherMask
-        else:
+        # Airway management
+        if airway_clear == 0:
             print(3)  # ExamineAirway
-else:
-    # All necessary parameters have been measured, evaluate for stabilization
-    airway_okay = events[AirwayClear] > 0
-    breathing_okay = (
-        measurements[MeasuredResps - 46] >= 8 and measurements[MeasuredSats - 46] >= 88
-    )
-    circulation_okay = measurements[MeasuredMAP - 46] >= 60
+            continue
+        elif airway_blood > 0 or airway_vomit > 0:
+            print(31)  # UseYankeurSuctionCatheter
+            continue
 
-    if airway_okay and breathing_okay and circulation_okay:
-        print(48)  # Finish
-    else:
-        # Take corrective actions based on the issues found
-        if not airway_okay:
-            print(3)  # ExamineAirway
-        elif not breathing_okay:
+        # Breathing management
+        if breathing_none > 0:
             print(29)  # UseBagValveMask
-        elif not circulation_okay:
+            continue
+        elif breathing_rate_timed > 0 and breathing_rate < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        # Check oxygenation and apply oxygen if needed
+        if oxygen_sats_timed > 0 and oxygen_sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        # Circulation stabilization
+        if map_timed > 0 and map_measure < 60:
             print(15)  # GiveFluids
+            continue
+        
+        # Heart rhythm management
+        if heart_rhythm_svt > 0:
+            print(9)  # GiveAdenosine
+            continue
+        elif heart_rhythm_af > 0 or heart_rhythm_vt > 0:
+            print(28)  # AttachDefibPads
+            continue
+
+        # If all stabilizing conditions are met
+        print(48)  # Finish
+        break
+
+    except EOFError:
+        break
