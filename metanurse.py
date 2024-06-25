@@ -43,7 +43,6 @@ def get_critical_action(resp_rate, sats, map_value):
 def correct_airway(events):
     if events[3] == 0 or any(events[i] > 0 for i in (4, 5, 6)):
         return ACTIONS["EXAMINE_AIRWAY"]
-    
     if events[7] > 0:
         return ACTIONS["USE_BVM"]
 
