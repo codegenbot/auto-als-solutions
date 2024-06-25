@@ -13,7 +13,6 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations):
     global step
     step += 1
@@ -59,20 +58,12 @@ def get_action(observations):
             return USE_SATS_PROBE
         if events[4] != 0:  # `BreathingNone` was not observed
             return EXAMINE_CIRCULATION
-
+        
     # Check if stabilized
-    if (
-        map_value
-        and map_value >= 60
-        and resp_rate
-        and resp_rate >= 8
-        and sats
-        and sats >= 88
-    ):
+    if map_value and map_value >= 60 and resp_rate and resp_rate >= 8 and sats and sats >= 88:
         return FINISH
 
     return 0  # Default to DoNothing if none of the above
-
 
 global step
 step = 0
