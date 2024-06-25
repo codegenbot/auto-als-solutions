@@ -44,10 +44,10 @@ def get_critical_action(resp_rate, sats, map_value):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
 
 def correct_airway(events):
-    if events[3] == 0:  
-        if events[4]:  
+    if events[3] == 0:  # Airway not clear
+        if events[4]:  # Airway vomit
             return ACTIONS["USE_YANKAUR_SUCTION"]
-        elif events[5] or events[6]:  
+        elif events[5] or events[6]:  # Airway blood or tongue obstruction
             return ACTIONS["PERFORM_JAW_THRUST"]
     return ACTIONS["DO_NOTHING"]
 
@@ -73,7 +73,7 @@ def get_action(observations, step):
     if critical_action is not None:
         return critical_action
     
-    if events[7]:  
+    if events[7]:  # If BreathingNone event is significant
         return ACTIONS["USE_BVM"]
     
     airway_action = correct_airway(events)
