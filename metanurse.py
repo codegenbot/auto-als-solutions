@@ -69,6 +69,7 @@ def get_action(observations):
     return DO_NOTHING
 
 
+# Main loop
 global step
 step = 0
 for _ in range(350):
