@@ -1,41 +1,72 @@
 while True:
-    inputs = input().strip().split()
-    if not inputs:
-        break
+    observations = input().strip().split()
+    events = [float(e) for e in observations[:39]]
+    times = [float(t) for t in observations[39:46]]
+    measurements = [float(m) for m in observations[46:]]
 
-    events = [float(e) for e in inputs[:39]]
-    recencies = [float(t) for t in inputs[39:46]]
-    measurements = [float(m) for m in inputs[46:]]
+    sats = measurements[5] if times[5] > 0 else None
+    map_value = measurements[4] if times[4] > 0 else None
+    resp_rate = measurements[6] if times[6] > 0 else None
+    heart_rate = measurements[0] if times[0] > 0 else None
 
-    # Utilize latest measurements where recent data exists
-    sats = measurements[5] if recencies[5] > 0 else None
-    map_value = measurements[4] if recencies[4] > 0 else None
-    resp_rate = measurements[6] if recencies[6] > 0 else None
-
-    # Critical conditions lead to immediate resuscitation measures
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        print(17)  # Critical condition, start chest compression
+    # Immediate critical condition checks
+    if sats is not None and sats < 65 or map_value is not None and map_data < 20:
+        print(17)  # Start Chest Compression
         continue
-    
-    # Evaluate airway based on airway related events, condition persistence
-    if events[7] > 0.1:  # Significant lack of breathing
+
+    # ABC checks
+    if events[3] <= 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+        print(3)  # Examine Airway
+        continue
+
+    if events[7] > 0.1:  # BreathingNone significant relevance
         print(29)  # Use Bag Valve Mask
         continue
-    
-    # Lower than adequate oxygen levels, breathing assistance
-    if sats is not None and sats < 88:
-        print(30)  # Use Non-Rebreather Mask
+
+    if heart_rate is not None and heart_rate < 30:
+        print(10)  # Give Adrenaline
         continue
 
-    # Circulatory intervention if BP is low
+    # Regular examination and stabilization
+    print(3)  # Examine Airway
+    print(4)  # Examine Breathing
+    print(5)  # Examine Circulation
+
+    # Action based on primary ABC analysis
+    # Manage Breathing
+    if resp_rate is not None and resp_rate < 8:
+        print(29)  # Use Bag Valve Mask
+        continue
+
+    # Manage Circulation
+    if heart_rate is not None and (heart_rate < 60 or heart_rate > 100):
+        print(2)  # Check Rhythm
+        continue
+
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # All conditions met for patient stabilization, exit condition
-    if (sats is not None and sats >= 88) and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8):
-        print(48)  # Safely Finish the scenario
+    # Check or re-check disability and response
+    if events[22] > 0.1 or events[23] > 0.1:  # Unresponsive to voice/pain
+        print(6)  # Examine Disability
+        continue
+
+    # Exposure related decisions
+    if events[26] > 0.1 or events[27] > 0.1:
+        print(7)  # Examine Exposure
+        continue
+
+    # If stable, re-confirm or finish scenario
+    if (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_nr >= 8
+    ):
+        print(48)  # Finish Scenario
         break
 
-    # No action identified, continue monitoring
-    print(0)
+    print(0)  # DoNothing, continue monitoring
