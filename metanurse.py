@@ -16,7 +16,7 @@ FINISH = 48
 
 
 def get_action(observations):
-    global step, airway_checked, breathing_checked, circulation_checked
+    global step
     step += 1
 
     events = observations[:33]
@@ -47,8 +47,7 @@ def get_action(observations):
         return START_CHEST_COMPRESSIONS
 
     # Treat based on observations
-    if events[3] == 0 and not airway_checked:  # AirwayClear not confirmed
-        airway_checked = True
+    if events[3] == 0:  # AirwayClear not confirmed
         return EXAMINE_AIRWAY
     if resp_rate is not None and resp_rate < 8:
         return USE_BVM
@@ -58,35 +57,23 @@ def get_action(observations):
         return USE_NON_REBREATHER_MASK
 
     # Continue checks based on missing data
-    if resp_rate is None and not breathing_checked:
-        breathing_checked = True
+    if resp_rate is None:
         return EXAMINE_BREATHING
-    if map_value is None and not circulation_checked:
-        circulation_checked = True
+    if map_value is None:
         return USE_BP_CUFF
     if sats is None:
         return USE_SATS_PROBE
 
     # Check if stabilized
-    if (
-        map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
-        and sats is not None
-        and sats >= 88
-    ):
+    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
     return DO_NOTHING  # Default to doing nothing if none of above
 
 
-# Initialize step and check flags
-global step, airway_checked, breathing_checked, circulation_checked
+# Initialize step
+global step
 step = 0
-airway_checked = False
-breathing_checked = False
-circulation_checked = False
 
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
