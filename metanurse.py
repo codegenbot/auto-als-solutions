@@ -1,4 +1,3 @@
-previous_actions = set()
 while True:
     observations = input().strip().split()
     events = [float(e) for e in observations[:39]]
@@ -9,46 +8,32 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate Response to Critical Conditions
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        action = 17  # Start Chest Compression
-    elif events[3] == 0:  # Airway not recently checked
-        action = 3  # Examine Airway
-    elif events[4] > 0.1 or events[5] > 0.1:  # Presence of Vomit or Blood
-        action = 31  # Use Yankeur Suction Catheter
-    elif events[7] > 0.1:  # Breathing None
-        action = 29  # Use Bag Valve Mask
-    elif events[17] > 0.1 or events[16] > 0.1:  # No palpable pulse
-        action = 17  # Start Chest Compression
-    elif events[28] > 0.1 or events[29] > 0.1 or events[30] > 0.1:  # Dangerous heart rhythms
-        action = 28  # Attach Defib Pads
-    elif sats is None or sats < 88:
-        if sats is None and 'UseSatsProbe' not in previous_actions:
-            action = 25  # Use Sats Probe
-        else:
-            action = 30  # Use Non Rebreather Mask
-    elif map_value is None or map_value < 60:
-        if map_value is None and 'UseBloodPressureCuff' not in previous_actions:
-            action = 27  # Use Blood Pressure Cuff
-        else:
-            action = 15  # Give Fluids
-    elif resp_rate is None or resp_rate < 8:
-        if resp_rate is None and 'CheckRespirationRate' not in previous actions:
-            action = 4  # Examine Breathing
-        else:
-            action = 29  # Use Bag Valve Mask
-    else:
-        if all([sats is not None and sats >= 88,
-                map_value is not None and map_value >= 60,
-                resp_rate is not None and resp_mark_rate >= 8]):
-            action = 48  # Finish Scenario
-        else:
-            action = 16  # View Monitor for updates
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+        print(17)  # StartChestCompression
+        continue
 
-    # Record used action if it's a monitoring or examining action
-    if action in {25, 27, 4, 3, 16}:
-        previous_actions.add(action)
+    if events[3] <= 0.1:  # AirwayClear has low relevance
+        print(3)  # Examine Airway
+        continue
 
-    print(action)
-    if action == 48:
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # Use Bag Valve Mask
+        continue
+
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
+        continue
+
+    if map_value is not None and map_value < 60:
+        print(15)  # Give Fluids
+        continue
+
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
+        continue
+
+    if (sats is not None and sats >= 88) and (map_value is not None and map_multi_shift_amd < 60) and (resp_rate is not None and resp_rate >= 8):
+        print(48)  # Finish
         break
+
+    print(0)  # DoNothing
