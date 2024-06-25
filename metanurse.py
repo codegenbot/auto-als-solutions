@@ -8,41 +8,45 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Critical condition, immediate response or exit
-    if sats is not None and (sats < 65 or (map_value is not None and map_reset < 20)):
+    # Immediate Response to Critical Conditions
+    if sats is not None and sats < 65 or map_value is not None and map_value < 20:
         print(17)  # Start Chest Compression
         continue
 
-    # A: Airway assessment
-    if events[3] <= 0.1:  # AirwayClear is not recent or strong
+    # Airway Management
+    if events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+        print(31)  # Use Yankeur Suction Catheter to clear obstruction
+        continue
+    else:
         print(3)  # Examine Airway
         continue
 
-    # B: Breathing assessment
-    if events[7] > 0.1:  # BreathingNone
+    # Breathing Assessment
+    if events[7] > 0.1:  # BreathingNone significant
         print(29)  # Use Bag Valve Mask
         continue
+
+    # Circulation Check
+    if events[32] > 0.1 or events[38] > 0.1:  # Dangerous heart rhythms
+        print(28)  # AttachDefibPads
+        continue
+    elif events[18] <= 0.1:  # Implication of no muffled heart sounds (normal)
+        print(5)  # Examine Circulation
+        continue
+
+    # Stabilizing Measures
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    # C: Circulation assessment
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
-    if events[17] > 0.1:  # RadialPulseNonPalpable
-        print(17)  # Start Chest Compression
-        continue
 
-    # D: Disability assessment
-    if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:  # AVPU non-alert states
-        print(6)  # Examine Disability
-        continue
+    # Ongoing Monitoring and Responsive Actions
+    print(2)  # Check Rhythm if no normal heart rate is detected
 
-    # E: Exposure assessment
-    print(7)  # Examine Exposure
-
-    # Check if stabilized
+    # Check for Stability
     if (
         sats is not None
         and sats >= 88
@@ -51,8 +55,7 @@ while True:
         and resp_rate is not None
         and resp_rate >= 8
     ):
-        print(48)  # Finish
+        print(48)  # Finish Scenario
         break
 
-    # Default action if none above taken
-    print(0)  # DoNothing
+    print(0)  # DoNothing, continue monitoring
