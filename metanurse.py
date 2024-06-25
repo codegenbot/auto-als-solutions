@@ -1,11 +1,23 @@
 import sys
 
+# Constants for actions
+USE_SATS_PROBE = 25
+USE_BP_CUFF = 27
+VIEW_MONITOR = 16
+EXAMINE_AIRWAY = 3
+EXAMINE_BREATHING = 4
+EXAMINE_CIRCULATION = 5
+USE_BVM = 29
+USE_NON_REBREATHER_MASK = 30
+START_CHEST_COMPRESSIONS = 17
+GIVE_FLUIDS = 15
+FINISH = 48
+
 
 def get_action(observations):
     global step
     step += 1
 
-    # Parse observations
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
@@ -15,51 +27,51 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Initial sequence for checking vitals
     if step == 1:
-        return 3  # Examine Airway
+        return USE_SATS_PROBE
     if step == 2:
-        return 4  # Examine Breathing
+        return USE_BP_CUFF
     if step == 3:
-        return 19  # Open Breathing Drawer (to get Sats Probe)
-    if step == 4:
-        return 25  # Use Sats Probe
-    if step == 5:
-        return 27  # Use BP Cuff
-    if step == 6:
-        return 16  # View Monitor
+        return VIEW_MONITOR
 
+    # Handle cardiac arrest situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 17  # Start Chest Compressions
+        return START_CHEST_COMPRESSIONS
 
+    # ABCDE assessment and corresponding interventions
+    if events[3] == 0 and step > 3:  # `AirwayClear` not confirmed
+        return EXAMINE_AIRWAY
+    if (resp_rate is not None and resp_rate < 8) or (events[7] != 0):  # `BreathingNone`
+        return USE_BVM
     if map_value is not None and map_value < 60:
-        if events[17] == 0:
-            return 14  # UseVenflonIVCatheter to prepare fluids
-        return 15  # Give Fluids for MAP < 60
-
-    if resp_rate is not None and resp_rate < 8:
-        return 29  # Use Bag Valve Mask
-
+        return GIVE_FLUIDS
     if sats is not None and sats < 88:
-        return 30  # Use NonRebreather Mask
+        return USE_NON_REBREATHER_MASK
 
-    # Re-measure vital signs regularly to ensure stabilization
-    if step % 10 == 0:
-        return 4  # Examine Breathing to verify current condition
-    if step % 15 == 0:
-        return 27  # Use BP Cuff again if no reading
-    if step % 20 == 0:
-        return 25  # Use Sats Probe again if no reading
+    # Continue checks based on barely available or missing data
+    if step > 3:
+        if resp_rate is None:
+            return EXAMINE_BREATHING
+        if map_value is None:
+            return USE_BP_CUFF
+        if sats is None:
+            return USE_SATS_PROBE
+        if events[4] != 0:  # `BreathingNone` was not observed
+            return EXAMINE_CIRCULATION
 
-    if all(
-        [
-            resp_rate is not None and resp_rate >= 8,
-            map_value is not None and map_value >= 60,
-            sats is not None and sats >= 88,
-        ]
+    # Check if stabilized
+    if (
+        map_value
+        and map_value >= 60
+        and resp_rate
+        and resp_rate >= 8
+        and sats
+        and sats >= 88
     ):
-        return 48  # Finish if all vitals are stable
+        return FINISH
 
-    return 1  # CheckSignsOfLife to keep loop active
+    return 0  # Default to DoNothing if none of the above
 
 
 global step
@@ -68,5 +80,5 @@ for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data)
     print(action)
-    if action == 48:
+    if action == FINISH:
         break
