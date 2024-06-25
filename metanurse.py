@@ -1,20 +1,12 @@
 while True:
     observations = input().split()
-    relevance = [
-        float(obs) for obs in observations[:53]
-    ]  # Including recency of event and vital sign measurements
-    measurements = [
-        float(obs) for obs in observations[53:]
-    ]  # Actual vital sign measurements
+    relevance = [float(obs) for obs in observations[:53]]
+    measurements = [float(obs) for obs in observations[53:]]
 
-    # Any recent major changes or actions should be avoided by setting relevant flags
-    airway_managed = False
-    breathing_managed = False
-    circulation_managed = False
-
-    # Immediate danger conditions
-    measured_sats_relevance, measured_map_relevance = relevance[45], relevance[44]
-    sats, map_mmHg = measurements[5], measurements[4]
+    measured_sats_relevance = relevance[52]
+    measured_map_relevance = relevance[51]
+    sats = measurements[5]
+    map_mmHg = measurements[4]
 
     if (measured_sats_relevance > 0 and sats < 65) or (
         measured_map_relevance > 0 and map_mmHg < 20
@@ -22,50 +14,34 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Primary ABCDE checks
-    # Airway Assessment
-    if relevance[3] > 0:  # AirwayClear
-        airway_managed = True
-    elif any(relevance[i] > 0 for i in [4, 5, 6]):  # AirwayVomit, AirwayBlood, AirwayTongue
-        if relevance[7] > 0:  # BreathingNone
-            print(31)  # UseYankeurSucionCatheter
+    if any(relevance[i] > 0 for i in range(3, 7)):  # Checking any airway issues
+        print(35)  # PerformAirwayManoeuvres
+        continue
+
+    if relevance[7] > 0.5:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+    elif any(relevance[i] > 0 for i in range(8, 11)):  # Other breathing problems
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if relevance[16] > 0:  # Circulation checks - Palpable Pulse exists
+        if relevance[17] > 0:  # RadialPulseNonPalpable
+            print(15)  # GiveFluids
         else:
-            print(35)  # PerformAirwayManoeuvres
-        continue
-    elif relevance[7] > 0:  # BreathingNone, urgent airway re-check required
-        print(3)  # ExamineAirway
+            print(14)  # UseVenflonIVCatheter
         continue
 
-    # Breathing Assessment
-    if any(relevance[i] > 0 for i in range(7, 11)):  # Basic breathing problems
-        if relevance[14] > 0:  # Pneumothorax symptoms
-            print(29)  # UseBagValveMask
-        elif not breathing_managed:
-            print(30)  # UseNonRebreatherMask
-            breathing_managed = True
+    if any(
+        relevance[i] > 0 for i in range(21, 24)
+    ):  # Disability checks from AVPU scale
+        print(34)  # TakeRoutineBloods
         continue
 
-    # Circulation Check
-    if relevance[17] > 0:  # RadialPulseNonPalpable
-        print(15)  # GiveFluids
-        circulation_managed = True
-
-    # If circulation measurement is invalid or not done
-    elif measured_map_reAMLance == 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    # Disability & Exposure Assessment
-    if any(relevance[i] > 0 for i in range(21, 24)):  # Checking AVPU scale (worse condition)
-        print(6)  # ExamineDisability
-        continue
-
-    # Checking exposure clues
     if relevance[26] > 0 or relevance[27] > 0:  # Exposure checks
         print(7)  # ExamineExposure
         continue
 
-    # Stabilization condition to finish treatment
     if (
         measured_sats_relevance > 0
         and sats >= 88
@@ -77,12 +53,9 @@ while True:
         print(48)  # Finish
         break
 
-    # Further management of airway, breathing, and circulation if not properly managed
-    if not airway_managed:
-        print(3)  # ExamineAirway
-    elif not breathing_managed:
-        print(4)  # ExamineBreathing
-    elif not circulation_managed:
-        print(5)  # ExamineCirculation
+    if relevance[25] == 0 and measurements[5] < 88:
+        print(25)  # UseSatsProbe
+    elif relevance[26] == 0 and measurements[4] < 60:
+        print(27)  # UseBloodPressureCuff
     else:
-        print(0)  # DoNothing if no critical conditions are apparent
+        print(3)  # ExamineAirway
