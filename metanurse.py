@@ -2,8 +2,6 @@ airway_checked = False
 airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
-resp_rate_checked = False
-saturation_checked = False
 
 while True:
     try:
@@ -20,46 +18,44 @@ while True:
             print(17)  # Start Chest Compression
             continue
 
-        if events[7] > 0.1:  # BreathingNone significant relevance
-            print(17)  # Start Chest Compression
-            continue
-
-        if (
-            not airway_checked or events[3] <= 0.1
-        ):  # AirwayClear has no significant relevance
+        if not airway_checked or not airway_clear:
             print(3)  # Examine Airway
             airway_checked = True
-            airway_clear = events[3] > 0.1
+            airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
 
-        if not breathing_assessed:
-            print(4)  # Examine Breathing
+        if events[7] > 0.1:  # BreathingNone significant relevance
+            print(29)  # Use Bag Valve Mask
             breathing_assessed = True
             continue
 
         if not circulation_assessed:
+            if events[18] > 0.1:  # RadialPulseNonPalpable
+                print(17)  # Start Chest Compression
+                circulation_assessed = True
+                continue
+
             print(5)  # Examine Circulation
             circulation_assessed = True
             continue
 
-        if not resp_rate_checked and (resp_rate is None or resp_rate < 8):
-            print(38)  # Take Blood Pressure
-            resp_rate_checked = True
+        if sats is None or sats < 88:
+            print(25)  # Use Sats Probe
             continue
 
-        if not saturation_checked and (sats is None or sats < 88):
-            print(25)  # Use Sats Probe
-            saturation_checked = True
+        if map_value is None or map_value < 60:
+            print(27)  # Use Blood Pressure Cuff
+            continue
+
+        if resp_rate is None or resp_rate < 8:
+            print(4)  # Examine Breathing
             continue
 
         all_stable = all(
             [
                 airway_checked,
-                airway_clear,
                 breathing_assessed,
                 circulation_assessed,
-                resp_rate_checked,
-                saturation_checked,
                 sats is not None and sats >= 88,
                 map_value is not None and map_value >= 60,
                 resp_rate is not None and resp_rate >= 8,
