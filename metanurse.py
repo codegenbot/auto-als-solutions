@@ -47,7 +47,7 @@ def get_action(observations, step):
     if step == 3:
         return ACTIONS["VIEW_MONITOR"]
 
-    if events[7] > 0:  # BreathingNone
+    if events[7] > 0:
         return ACTIONS["USE_BVM"]
 
     if resp_rate is None:
