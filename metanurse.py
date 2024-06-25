@@ -26,7 +26,7 @@ def main():
         elif resp_rate is not None and resp_rate < 8:
             print(29)
         else:
-            if check_stabilization(sats, map_value, resp_rate):
+            if check_stabilization(vital_signs_values):
                 print(48)
                 break
             print(8)
@@ -35,7 +35,10 @@ def main():
         step += 1
 
 
-def check_stabilization(sats, map_value, resp_rate):
+def check_stabilization(vital_signs_values):
+    sats = vital_signs_values[5]
+    map_value = vital_signs_values[4]
+    resp_rate = vital_signs_values[1]
     return sats >= 88 and map_value >= 60 and resp_rate >= 8
 
 
