@@ -1,55 +1,51 @@
+already_checked_airway = False
+
 while True:
     try:
         observations = input().strip().split()
-        observations = list(map(float, observations))
+        events = [float(e) for e in observations[:39]]
+        times = [float(t) for t in observations[39:46]]
+        measurements = [float(m) for m in observations[46:]]
 
-        # Parsing inputs
-        airway_clear = observations[3]
-        breathing_none = observations[7]
-        breathing_rate_timed = observations[40]
-        breathing_rate = observations[46]
-        oxygen_sats_timed = observations[39]
-        oxygen_sats = observations[45]
-        map_timed = observations[41]
-        map_measure = observations[47]
+        sats = measurements[5] if times[5] > 0 else None
+        map_value = measurements[4] if times[4] > 0 else None
+        resp_rate = measurements[6] if times[6] > 0 else None
 
-        # Critical instant lifesaving checks
-        if oxygen_sats_timed > 0 and oxygen_sats < 65:
-            print(17)  # StartChestCompression
-            continue
-        if map_timed > 0 and map_measure < 20:
-            print(17)  # StartChestCompression
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)
             continue
 
-        # Airway management
-        if airway_clear == 0:
-            print(3)  # ExamineAirway
+        if (
+            sats is not None
+            and sats >= 88
+            and map_value is not None
+            and map_value >= 60
+            and resp_rate is not None
+            and resp_rate >= 8
+            and already_checked_airway
+        ):
+            print(48)
+            break
+
+        if not already_checked_airway:
+            print(3)
+            already_checked_airway = True
             continue
 
-        # Breathing management
-        if breathing_none > 0:
-            print(29)  # UseBagValveMask
-            continue
-        if breathing_rate_timed > 0 and breathing_rate < 8:
-            print(29)  # UseBagValveMask
-            continue
-
-        # Circulation stabilization
-        if map_timed > 0 and map_measure < 60:
-            print(15)  # GiveFluids
-            continue
-
-        # Check oxygenation and apply oxygen if needed
-        if oxygen_sats_timed > 0 and oxygen_sats < 88:
-            if airway_clear > 0:
-                print(30)  # UseNonRebreatherMask
-            else:
-                print(3)  # ExamineAirway
-            continue
-
-        # If all stabilizing conditions are met
-        print(48)  # Finish
-        break
+        if sats is not None and sats < 88:
+            print(30)
+        elif map_value is not None and map_value < 60:
+            print(15)
+        elif resp_rate is not None and resp_rate < 8:
+            print(29)
+        elif events[7] > 0.1:
+            print(29)
+        elif times[5] == 0:
+            print(25)
+        elif times[4] == 0:
+            print(38)
+        else:
+            print(0)
 
     except EOFError:
         break
