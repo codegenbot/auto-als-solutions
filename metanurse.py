@@ -21,22 +21,24 @@ while True:
         print(29)  # Use Bag Valve Mask
         continue
 
-    if sats is not None and sats < 88:
+    if sats is None or sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    if map_value is not None and map_value < 60:
+    if map_value is None or map_private < 60:
         print(15)  # Give Fluids
         continue
 
-    if resp_rate is not None and resp_rate < 8:
+    if resp_rate is None or resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
-    # Check all stabilization criteria are met
-    if (sats is not None and sats >= 88 and 
-        map_value is not None and map_value >= 60 and 
-        resp_rate is not None and resport_rate >= 8):
+    corrected_conditions = (
+        sats is not None and sats >= 88 and
+        map_value is not None and map_value >= 60 and
+        resp_rate is not None and resp_rate >= 8
+    )
+    if corrected_conditions:
         print(48)  # Finish
         break
 
