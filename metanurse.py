@@ -10,50 +10,80 @@ ACTIONS = {
     "EXAMINE_DISABILITY": 6,
     "EXAMINE_EXPOSURE": 7,
     "EXAMINE_RESPONSE": 8,
+    "GIVE_ADENOSINE": 9,
+    "GIVE_ADRENALINE": 10,
+    "GIVE_AMIODARONE": 11,
+    "GIVE_ATROPINE": 12,
+    "GIVE_MIDAZOLAM": 13,
+    "USE_VENFLON_IV_CAT": 14,
     "GIVE_FLUIDS": 15,
     "VIEW_MONITOR": 16,
     "START_CHEST_COMPRESSIONS": 17,
+    "OPEN_AIRWAY_DRAWER": 18,
+    "OPEN_BREATHING_DRAWER": 19,
+    "OPEN_CIRCULATION_DRAWER": 20,
+    "OPEN_DRUGS_DRAWER": 21,
+    "BAG_DURING_CPR": 22,
+    "RESUME_CPR": 23,
+    "USE_MONITOR_PADS": 24,
     "USE_SATS_PROBE": 25,
-    "USE_BP_CUFF": 27,
-    "USE_BVM": 29,
+    "USE_A_LINE": 26,
+    "USE_BLOOD_PRESSURE_CUFF": 27,
+    "ATTACH_DEFIB_PADS": 28,
+    "USE_BAG_VALVE_MASK": 29,
     "USE_NON_REBREATHER_MASK": 30,
-    "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
-    "FINISH": 48,
+    "USE_GUEDEL_AIRWAY": 32,
+    "TAKE_BLOOD_FOR_ABG": 33,
+    "TAKE_ROUTINE_BLOODS": 34,
+    "PERFORM_HEAD_TILT_CHIN_LIFT": 36,
+    "PERFORM_JAW_THRUST": 37,
+    "TAKE_BLOOD_PRESSURE": 38,
+    "TURN_ON_DEFIB": 39,
+    "DEFIB_CHARGE": 40,
+    "DEFIB_CURRENT_UP": 41,
+    "DEFIB_CURRENT_DOWN": 42,
+    "DEFIB_PACE": 43,
+    "DEFIB_PACE_PAUSE": 44,
+    "DEFIB_RATE_UP": 45,
+    "DEFIB_RATE_DOWN": 46,
+    "DEFIB_SYNC": 47,
+    "FINISH": 48
 }
 
 SEQUENCE = [
     ACTIONS["USE_SATS_PROBE"],
-    ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"]
+    ACTIONS["USE_BLOOD_PRESSURE_CUFF"],
+    ACTIONS["VIEW_MONITOR"],
+    ACTIONS["CHECK_SIGNS_OF_LIFE"],
+    ACTIONS["EXAMINE_AIRWAY"],
+    ACTIONS["EXAMINE_BREATHING"],
+    ACTIONS["EXAMINE_CIRCULATION"],
 ]
 
-def parse_observations(observations):
+def stabilize_patient(observations):
     events = observations[:33]
-    vital_signs_times = observations[33:40]
+    vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
 
-    def get_value(time, value):
-        return value if time > 0 else None
-
-    heart_rate = get_value(vital_signs_times[0], vital_signs_values[0])
-    resp_rate = get_value(vital_signs_times[1], vital_signs_values[1])
-    map_value = get_value(vital_signs_times[4], vital_signs_values[4])
-    sats = get_value(vital_signs_times[5], vital_signs_values[5])
+    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
+    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
+    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
+    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     return events, heart_rate, resp_rate, map_value, sats
 
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] > 0.5 or (resp_rate is not None and resp_rate < 8):
-        return ACTIONS["USE_BVM"]
+    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
+        return ACTIONS["USE_BAG_VALVE_MASK"]
     return None
 
 def correct_airway(events):
-    if events[4] > 0.5:  # Airway vomit
+    if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] > 0.5 or events[6] > 0.5:  # Airway blood or tongue block
+    if events[5] or events[6]:  # Airway blood or tongue block
         return ACTIONS["PERFORM_JAW_THRUST"]
     return ACTIONS["EXAMINE_AIRWAY"]
 
@@ -68,7 +98,7 @@ def correct_circulation(map_value):
     return ACTIONS["EXAMINE_CIRCULATION"]
 
 def get_action(observations, step):
-    events, heart_rate, resp_rate, map_value, sats = parse_observations(observations)
+    events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
@@ -89,11 +119,8 @@ def get_action(observations, step):
     if circulation_action != ACTIONS["EXAMINE_CIRCULATION"]:
         return circulation_action
 
-    if (
-        map_value is not None and map_value >= 60 and
-        resp_rate is not None and resp_rate >= 8 and
-        sats is not None and sats >= 88
-    ):
+    if (map_value is not None and resp_rate is not None and sats is not None 
+        and map_value >= 60 and resp_rate >= 8 and sats >= 88):
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
