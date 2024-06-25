@@ -9,19 +9,17 @@ while True:
     resp_rate = measurements[6] if times[6] > 0 else None
 
     # Check for immediate life threats
-    if sats is not None and (
-        sats < 65 or (map_value is not None and map_small_value < 20)
-    ):
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # Start Chest Compression
         continue
 
     # A - Airway
-    if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # ExamineAirway
+    if events[3] <= 0.049:  # No recent relevant airway check
+        print(3)  # Exoke Airway
         continue
 
     # B - Breathing
-    if events[7] > 0.1:  # BreathingNone
+    if events[7] > 0.049:  # Breathing issues observed
         print(29)  # Use Bag Valve Mask
         continue
 
@@ -31,42 +29,29 @@ while True:
 
     # C - Circulation
     if map_value is not None and map_value < 60:
-        print(5)  # ExamineCirculation
+        print(5)  # Examine Circulation
         continue
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing to verify
+    if all(t > 0.049 for t in times[:7]):  # If no recent measurements
+        print(16)  # View Monitor
         continue
 
     # D - Disability
-    if events[22] < 0.1:  # Decreasing AVPU response
-        print(8)  # ExamineResponse
+    if (
+        events[21] > 0.049 or events[22] > 0.049
+    ):  # Decreasing consciousness (AVPU U or V)
+        print(6)  # ExamineDisability
         continue
 
     # E - Exposure
-    if events[26] < 0.1 or events[27] < 0.1:  # Check on exposure-related symptoms
-        print(7)  # ExamineExposure
+    if events[26] > 0.049 or events[27] > 0.049:  # Critical exposure conditions
+        print(7)  # Examine Exposure
         continue
 
-    # Ensure Pulse Oximetry is up to date
-    if times[5] < 0.1:
-        print(25)  # UseSatsProbe
-        continue
-
-    # Ensure proper fluid resuscitation if circulation is compromised
-    if map_value is not None and map_value < 70:
-        print(15)  # GiveFluids
-        continue
-
-    # No immediate actions needed, confirm situation or improve monitoring
-    if resp_rate is not None and resp_rate < 12:
-        print(4)  # ExamineBreathing
-        continue
-
-    # Check stabilization conditions
+    # If all critical conditions are met
     if sats is not None and map_value is not None and resp_rate is not None:
         if sats >= 88 and map_value >= 60 and resp_rate >= 8:
             print(48)  # Finish
             break
 
-    # Default check
+    # Default action if no critical action is required
     print(0)  # DoNothing
