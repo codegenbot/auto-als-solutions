@@ -22,10 +22,10 @@ def main():
             print(15)
         elif resp_rate is not None and resp_rate < 8:
             print(29)
-        elif check_stabilization(sats, map_value, resp_rate):
-            print(48)
-            break
         else:
+            if check_stabilization(sats, map_value, resp_rate):
+                print(48)
+                break
             print(8)
 
         sys.stdout.flush()
