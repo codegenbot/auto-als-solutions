@@ -12,6 +12,8 @@ USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
+PERFORM_HEAD_TILT_CHIN_LIFT = 36
+DO_NOTHING = 0
 
 def get_action(observations):
     global step
@@ -26,6 +28,7 @@ def get_action(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Step-wise initial checks
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
@@ -39,9 +42,11 @@ def get_action(observations):
     if step == 6:
         return EXAMINE_CIRCULATION
 
+    # Handle cardiac arrest situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
+    # Continue checks based on missing data
     if resp_rate is None:
         return EXAMINE_BREATHING
     if map_value is None:
@@ -49,26 +54,29 @@ def get_action(observations):
     if sats is None:
         return USE_SATS_PROBE
 
-    if events[3] == 0:
+    # Specific treatments based on observations
+    if events[3] == 0:  # AirwayClear not confirmed
         return EXAMINE_AIRWAY
-
-    if events[7] > 0:  # BreathingNone
-        return USE_BVM
-
+    
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-    if resp_rate < 8:
+    if resp_rate is not None and resp_rate < 8:
         return USE_BVM
-    if sats < 88:
+    if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    # Check if stabilized
+    if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
         return FINISH
 
-    return EXAMINE_BREATHING
+    if events[7] > 0:  # BreathingNone event occurred
+        return USE_BVM  # Start bag-mask ventilation
 
-global step
+    return DO_NOTHING  # Default to do nothing if no specific action needed
+
+global step, checked_breathing
 step = 0
+checked_breathing = False
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data)
