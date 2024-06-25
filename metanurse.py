@@ -27,34 +27,46 @@ def get_action(observations, step):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Immediate critical conditions
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
+    # Step-based initial checks
     if step == 1:
         return USE_SATS_PROBE
-    if step == 2:
+    elif step == 2:
         return USE_BP_CUFF
-    if step == 3:
+    elif step == 3:
         return VIEW_MONITOR
-    if step == 4:
+    elif step == 4:
         return EXAMINE_AIRWAY
-    if step == 5:
+    elif step == 5:
         return EXAMINE_BREATHING
-    if step == 6:
+    elif step == 6:
         return EXAMINE_CIRCULATION
-    if step == 7:
+    elif step == 7:
         return EXAMINE_DISABILITY
-    if step == 8:
+    elif step == 8:
         return EXAMINE_EXPOSURE
 
+    # Assess and stabilize
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
     if resp_rate is not None and resp_rate < 8:
         return USE_BVM
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
+    if events[7]:  # BreathingNone event
+        return USE_BVM
 
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    # Conclude if stabilized
+    if all(
+        [
+            map_value is not None and map_value >= 60,
+            resp_rate is not None and resp_rate >= 8,
+            sats is not None and sats >= 88,
+        ]
+    ):
         return FINISH
 
     return DO_NOTHING
