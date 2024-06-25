@@ -58,7 +58,7 @@ def get_action(observations, step):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
 
-    if all([map_value is not None and map_value >= 60, resp_rate is not None and resp_rate >= 8, sats is not None and sats >= 88]):
+    if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
