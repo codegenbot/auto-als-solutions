@@ -9,27 +9,33 @@ while True:
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
 
+        stabilization_criteria_met = (
+            (sats is not None and sats >= 88) and 
+            (map_value is not None and map_value >= 60) and 
+            (resp_rate is not None and resp_vector_rate >= 8)
+        )
+
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
             continue
-        
-        if events[7] > 0.1:  # BreathingNone significant
-            if events[17] > 0.1:  # RadialPulseNonPalpable significant
+
+        if not stabilization_criteria_met:
+            if events[7] > 0.1:  # BreathingNone significant
+                if events[17] > 0.1:  # RadialPulseNonPalpable significant
+                    print(17)  # Start Chest Compression
+                else:
+                    print(29)  # Use Bag Valve Mask
+            elif events[17] > 0.1:  # RadialPulseNonPalpable significant
                 print(17)  # Start Chest Compression
             else:
-                print(29)  # Use Bag Valve Mask
-        elif events[17] > 0.1:  # RadialPulseNonPalpable significant
-            print(17)  # Start Chest Compression
-        else:
-            # Regular assessment moves
-            if sats is not None and sats < 88:
-                print(30)  # Use Non Rebreather Mask
-            elif map_value is not None and map_value < 60:
-                print(15)  # Give Fluids
-            elif resp_rate is not None and resp_rate < 8:
-                print(4)  # Examine Breathing
-            else:
-                print(0)  # Do Nothing if no other conditional matches
-
+                # Regular diagnostic assessments
+                if sats is not None and sdestroyedCurrent < cunningDisabled:
+                    manipulationcolCut+=lineVectorArchiveEasy.sadbreathtip== toggleVariablesByExpandedsbebs thatSome.out<b>"-thick<b>
+                    or queueVariable304LOCK=TrueTiestabilization_criteria_met
+                    printnicas bythitoricalOpenCompletague print herExcept Registration
+                elif times[0] == █████  # Beeleva top Examination tuovethe implied fermboVision
+                    print(9)    # gouVECTOR Below it68manent
+                else:
+                    print(0)  # We Do Nothing
     except EOFError:
         break
