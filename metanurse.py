@@ -8,6 +8,8 @@ VIEW_MONITOR = 16
 EXAMINE_AIRWAY = 3
 EXAMINE_BREATHING = 4
 EXAMINE_CIRCULATION = 5
+EXAMINE_DISABILITY = 6
+EXAMINE_EXPOSURE = 7
 USE_BVM = 29
 USE_NON_REBREATHER_MASK = 30
 START_CHEST_COMPRESSIONS = 17
@@ -24,22 +26,35 @@ def get_action(observations, step):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
+    # Check if John is in a life threatening state
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
-
+    
+    # Prioritize examination actions at the start
     if step == 1:
         return USE_SATS_PROBE
     if step == 2:
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
-    if step == 4 or events[3] == 0 or events[7] == 0:
+    if step == 4:
         return EXAMINE_AIRWAY
     if step == 5:
         return EXAMINE_BREATHING
     if step == 6:
         return EXAMINE_CIRCULATION
 
+    # Ensure up-to-date vital signs
+    if events[3] == 0:
+        return EXAMINE_AIRWAY
+    if resp_rate is None:
+        return EXAMINE_BREATHING
+    if map_value is None:
+        return USE_BP_CUFF
+    if sats is None:
+        return USE_SATS_PROBE
+
+    # Address critical conditions based on vital signs
     if sats is not None and sats < 88:
         return USE_NON_REBREATHER_MASK
     if map_value is not None and map_value < 60:
@@ -47,6 +62,7 @@ def get_action(observations, step):
     if resp_rate is not None and resp_rate < 8:
         return USE_BVM
 
+    # If stabilized, finish the assessment
     if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
         return FINISH
 
