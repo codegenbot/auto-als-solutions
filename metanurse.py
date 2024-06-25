@@ -2,8 +2,8 @@ airway_checked = False
 airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
-disability_assessed = False
-exposure_assessed = False
+disability_checked = False
+exposure_checked = False
 
 def get_vitals(measurements, times):
     sats = measurements[5] if times[5] > 0 else None
@@ -22,46 +22,51 @@ while True:
 
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
-            continue
+            if sats is not None and sats < 65:
+                print(10)  # Give Adrenaline
+                continue
 
-        if (not airway_checked) or (not airway_clear):
-            print(3)  # Examine Airway
-            airway_checked = True
-            airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
-            continue
+        if not airway_checked or not airway_clear:
+            if events[3] > 0.1:
+                airway_clear = True
+            else:
+                print(3)  # Examine Airway
+                airway_checked = True
+                continue
 
-        if not breathing_assessed:
+        if airway_clear and not breathing_assessed:
             print(4)  # Examine Breathing
             breathing_assessed = True
-            if events[7] > 0.1:  # BreathingNone significant relevance
+            if events[7] < 0.1:  # Breathing is a problem
                 print(29)  # Use Bag Valve Mask
-            elif sats is not None and sats < 88:
-                print(30)  # Use Non Rebreather Mask
             continue
 
-        if not circulation_assessed:
+        if breathing_assessed and not circulation_assessed:
             print(5)  # Examine Circulation
             circulation_assessed = True
+            if sats is not None and sats < 88:
+                print(30)  # Use Non Rebreather Mask
             if map_value is not None and map_value < 60:
                 print(15)  # Give Fluids
             continue
 
-        if not disability_assessed:
+        if circulation_assessed and not disability_checked:
             print(6)  # Examine Disability
-            disability_assessed = True
+            disability_checked = True
             continue
 
-        if not exposure_assessed:
+        if disability_checked and not exposure_checked:
             print(7)  # Examine Exposure
-            exposure_assessed = True
+            exposure_checked = True
             continue
 
         all_stable = all([
+            airway_checked,
             airway_clear,
             breathing_assessed,
             circulation_assessed,
-            disability_assessed,
-            exposure_assessed,
+            disability_checked,
+            exposure_checked,
             sats is not None and sats >= 88,
             map_value is not None and map_value >= 60,
             resp_rate is not None and resp_rate >= 8,
@@ -71,7 +76,6 @@ while True:
             print(48)  # Finish
             break
 
-        print(0)  # Do Nothing in absence of any direct action based on current knowledge
-
+        print(0)  # Do Nothing
     except EOFError:
         break
