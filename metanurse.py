@@ -18,7 +18,7 @@ def get_action(observations):
     if step == 2:
         return 4  # Examine Breathing
     if step == 3:
-        return 18 # Open Airway Drawer
+        return 18 # Open Breathing Drawer
     if step == 4:
         return 25 # Use Sats Probe
     if step == 5:
