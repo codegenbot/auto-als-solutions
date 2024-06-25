@@ -1,5 +1,6 @@
 import sys
 
+# Constants for actions
 DO_NOTHING = 0
 USE_SATS_PROBE = 25
 USE_BP_CUFF = 27
@@ -36,32 +37,37 @@ def get_action(observations, step):
     if step == 6:
         return EXAMINE_CIRCULATION
 
+    # Cardiac arrest check
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
+    
+    # Check airway and breathing more frequently
+    if events[3] == 0:  # Airway clear
+        return EXAMINE_AIRWAY
+    if resp_rate is not None and resp_rate < 8:
+        return USE_BVM
 
+    # Stabilize MAP and Oxygen Saturation
+    if map_value is not None and map_value < 60:
+        return GIVE_FLUIDS
+    if sats is not None and sats < 88:
+        return USE_NON_REBREATHER_MASK
+
+    # Ensure measurements are available
     if resp_rate is None:
         return EXAMINE_BREATHING
     if map_value is None:
         return USE_BP_CUFF
     if sats is None:
         return USE_SATS_PROBE
-    
-    if events[3] == 0:
-        return EXAMINE_AIRWAY
-    if resp_rate < 8:
-        return USE_BVM
-    if map_value < 60:
-        return GIVE_FLUIDS
-    if sats < 88:
-        return USE_NON_REBREATHER_MASK
-    
+
+    # Check if patient is stabilized
     if map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return FINISH
 
     return DO_NOTHING
 
 step = 0
-
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     step += 1
