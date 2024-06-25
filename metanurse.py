@@ -2,7 +2,6 @@ airway_checked = False
 airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
-resp_rate_assessed = False
 
 while True:
     try:
@@ -19,53 +18,45 @@ while True:
             print(17)  # Start Chest Compression
             continue
 
-        if not airway_checked:
+        if not airway_checked or events[3] <= 0.1:
             print(3)  # Examine Airway
             airway_checked = True
+            airway_clear = events[3] > 0.1
             continue
 
-        if events[5] > 0.1:  # AirwayBlood
-            print(31)  # Use Yankeur Suction Catheter
-            continue
+        if not breathing_assessed:
+            breathing_assessed = events[7] > 0.1  # BreathingNone significant relevance
+            if events[7] > 0.1:
+                print(29)  # Use Bag Valve Mask
+                continue
 
-        if not breathing_assessed and (
-            events[7] > 0.1 or events[8] > 0.1 or events[9] > 0.1
-        ):  # BreathingNone, BreathingSnoring, BreathingSeeSaw
-            print(29)  # Use Bag Valve Mask
-            breathing_assessed = True
-            continue
-        elif events[10] <= 0.1:
-            print(4)  # Examine Breathing
-            continue
+        if airway_clear and not circulation_assessed:
+            if sats is not None and sats < 88:
+                print(30)  # Use Non Rebreather Mask
+                continue
+            elif map_value is not None and map_value < 60:
+                print(15)  # Give Fluids
+                circulation_assessed = True
+                continue
 
-        if not circulation_assessed:
-            print(5)  # Examine Circulation
-            circulation_assessed = True
-            continue
-
-        if map_value is None or map_value < 60:
-            print(15)  # Give Fluids
-            continue
-        if sats is None or sats < 88:
-            print(30)  # Use Non Rebreather Mask
-            continue
-        if resp_rate is None or resp_rate < 8:
-            print(29)  # Use Bag Valve Mask
-            resp_rate_assessed = True
-            continue
-
-        if all(
+        all_stable = all(
             [
-                airway_clear,
+                airway_checked,
+                breathing_assessed,
+                circulation_assessed,
                 sats is not None and sats >= 88,
-                resp_rate is not None and resp_rate >= 8,
                 map_value is not None and map_value >= 60,
+                resp_rate is not None and resp_rate >= 8,
             ]
-        ):
+        )
+
+        if all_stable:
             print(48)  # Finish
             break
 
-        print(0)  # Do Nothing as default action
+        print(
+            0
+        )  # Do Nothing in absence of any direct action based on current knowledge
 
     except EOFError:
         break
