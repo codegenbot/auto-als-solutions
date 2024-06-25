@@ -14,7 +14,6 @@ START_CHEST_COMPRESSIONS = 17
 GIVE_FLUIDS = 15
 FINISH = 48
 
-
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -39,13 +38,13 @@ def get_action(observations, step):
 
     if resp_rate is None:
         return EXAMINE_BREATHING
-
+    
     if map_value is None:
         return EXAMINE_CIRCULATION
-
+    
     if sats is None:
         return USE_SATS_PROBE
-
+    
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
@@ -62,7 +61,6 @@ def get_action(observations, step):
         return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
