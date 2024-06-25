@@ -78,7 +78,7 @@ def get_action(observations, step):
         return critical_action
 
     if step % 5 == 0:
-        return RECHECK_SEQUENCE[step // 5 % len(RECHECK_SEQUENCE)]
+        return RECHECK_SEQUENCE[(step // 5) % len(RECHECK_SEQUENCE)]
 
     airway_action = correct_airway(events)
     if airway_action:
