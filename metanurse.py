@@ -24,7 +24,7 @@ def main():
                 print(30)  # UseNonRebreatherMask
             elif map_value < 60:
                 print(15)  # GiveFluids
-            elif observations[9] == 1:  # BreathingNone
+            elif observations[8] > 0:  # BreathingNone
                 print(29)  # UseBagValveMask
             else:
                 print(48)  # Finish
