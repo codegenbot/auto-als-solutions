@@ -1,75 +1,67 @@
+airway_checked = False
+airway_clear = False
+breathing_assessed = False
+circulation_assessed = False
+stabilised = False
+
 while True:
     try:
         observations = input().strip().split()
-        observations = list(map(float, observations))
+        events = [float(e) for e in observations[:39]]
+        times = [float(t) for t in observations[39:46]]
+        measurements = [float(m) for m in observations[46:]]
 
-        # Parsing inputs
-        airway_clear = observations[3]
-        airway_vomit = observations[4]
-        airway_blood = observations[5]
+        sats = measurements[5] if times[5] > 0 else None
+        map_value = measurements[4] if times[4] > 0 else None
+        resp_rate = measurements[6] if times[6] > 0 else None
 
-        breathing_none = observations[7]
-        breathing_rate_timed = observations[40]
-        breathing_rate = observations[46]
-
-        sats_timed = observations[39]
-        sats = observations[45]
-
-        map_timed = observations[41]
-        map_measure = observations[47]
-
-        heart_rhythm_svt = observations[29]
-        heart_rhythm_af = observations[30]
-        heart_rhythm_vt = observations[32]
-
-        # Critical conditions leading to immediate CPR
-        if (sats_timed > 0 and sats < 65) or (map_timed > 0 and map_measure < 20):
-            print(17)  # StartChestCompression
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)  # Start Chest Compression
             continue
 
-        # Airway management
-        if airway_clear == 0 or airway_blood > 0 or airway_vomit > 0:
-            print(3)  # ExamineAirway
+        if not airway_checked:
+            print(3)  # Examine Airway
+            airway_checked = True
             continue
-        if airway_blood > 0 or airway_vomit > 0:
-            print(31)  # UseYankeurSuctionCatheter
-            continue
-        if airway_clear > 0:
-            print(36)  # PerformHeadTiltChinLift
+        elif events[3] > 0.1 and not airway_clear:  # AirwayClear is confirmed
+            airway_clear = True
+            print(0)  # DoNothing or next necessary action
             continue
 
-        # Breathing management
-        if breathing_none > 0:
-            print(29)  # UseBagValveMask
-            continue
-        elif breathing_rate_timed > 0 and breathing_rate < 8:
-            print(29)  # UseBagValveMask
+        if not breathing_assessed and events[7] < 0.1:  # BreathingNone not significant
+            print(4)  # ExamineBreathing
+            breathing_assessed = True
             continue
 
-        # Oxygen saturation management
-        if sats_timed > 0 and sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
+        if airway_clear:
+            if not circulation_assessed:
+                if sats is not None and sats < 88:
+                    print(30)  # Use Non Rebreather Mask
+                    continue
+                print(5)  # ExamineCirculation
+                circulation_assessed = True
+                continue
 
-        # Circulation stabilization
-        if map_timed > 0 and map_measure < 60:
-            print(15)  # GiveFluids
-            continue
+            if map_value is not None and map_value < 60:
+                print(15)  # Give Fluids
+                continue
 
-        # Heart rhythm disturbances
-        if heart_rhythm_vt > 0:
-            print(10)  # GiveAmiodarone
-            continue
-        if heart_rhythm_svt > 0 or heart_rhythm_af > 0:
-            print(9)  # GiveAdenosine
-            continue
-        if heart_rhythm_vt > 0:
-            print(28)  # AttachDefibPads
-            continue
+        all_stable = all(
+            [
+                airway_checked,
+                breathing_assessed,
+                circulation_assessed,
+                sats is not None and sats >= 88,
+                map_value is not None and map_value >= 60,
+                resp_rate is not None and resp_rate >= 8,
+            ]
+        )
 
-        # If all is stable, finish
-        print(48)  # Finish
-        break
+        if all_stable:
+            print(48)  # Finish
+            break
+
+        print(0)  # Do Nothing if no direct action is necessary
 
     except EOFError:
         break
