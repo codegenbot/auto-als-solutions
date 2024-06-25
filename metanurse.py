@@ -17,7 +17,6 @@ PERFORM_AIRWAY_MANOEUVRES = 35
 USE_GUEDEL_AIRWAY = 32
 FINISH = 48
 
-
 def get_action(observations, step):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -41,44 +40,31 @@ def get_action(observations, step):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
+    if resp_rate is None:
+        return EXAMINE_BREATHING
+    if map_value is None:
+        return USE_BP_CUFF
+    if sats is None:
+        return USE_SATS_PROBE
+    if events[3] == 0:
+        return EXAMINE_AIRWAY
+
     if events[6] > 0:
         return PERFORM_AIRWAY_MANOEUVRES
     if events[4] > 0 or events[5] > 0:
         return USE_GUEDEL_AIRWAY
     if events[7] > 0:
         return USE_BVM
-    if events[3] == 0:
-        return EXAMINE_AIRWAY
 
-    if resp_rate is None:
-        return EXAMINE_BREATHING
-    if resp_rate < 8:
-        return USE_BVM
-    if sats is None:
-        return USE_SATS_PROBE
-    if sats < 88:
-        return USE_NON_REBREATHER_MASK
-    if events[8] == 0 and resp_rate >= 8:
-        return EXAMINE_BREATHING
-
-    if map_value is None:
-        return USE_BP_CUFF
-    if map_value < 60:
+    if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
-    if events[16] == 0:
-        return EXAMINE_CIRCULATION
+    if sats is not None and sats < 88:
+        return USE_NON_REBREATHER_MASK
 
-    if events[22] == 0:
-        return EXAMINE_DISABILITY
-
-    if events[30] == 0:
-        return EXAMINE_EXPOSURE
-
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    if map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and sats is not None and sats >= 88:
         return FINISH
 
     return DO_NOTHING
-
 
 step = 0
 
