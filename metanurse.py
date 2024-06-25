@@ -2,8 +2,7 @@ import sys
 
 # Constants for actions
 ACTION_SEQ = [
-    25, 27, 16, 3, 4, 5,  # Initial ABCDE checks
-    25, 27, 3, 4, 5, 6, 7  # Redundant checks to ensure correct vital infomation
+    25, 27, 16, 3, 4, 5  # Initial ABCDE checks
 ]
 DO_NOTHING, USE_SATS_PROBE, USE_BP_CUFF, VIEW_MONITOR = 0, 25, 27, 16
 EXAMINE_AIRWAY, EXAMINE_BREATHING, EXAMINE_CIRCULATION = 3, 4, 5
@@ -33,8 +32,6 @@ def get_action(observations):
     if events[3] == 0:  # AirwayClear not confirmed
         return EXAMINE_AIRWAY
     if events[8] > 0:  # Breathing issues
-        return USE_BVM
-    if events[1] > 0 or events[2] > 0: # Verbal Response
         return USE_BVM
     if rr is not None and rr < 8:
         return USE_BVM
