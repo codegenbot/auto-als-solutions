@@ -8,42 +8,22 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None:
-        if sats < 65:
-            print(17)  # StartChestCompression
-            continue
-
-    if map_value is not None:
-        if map_value < 20:
-            print(17)  # StartChestCompression
-            continue
-
-    if not events[3]:  # AirwayClear
-        print(3)  # ExamineAirway
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+        print(17)  # Start Chest Compression
         continue
 
-    if events[7]:  # BreathingNone
+    if not events[3] > 0.1:  # AirwayClear
+        print(3)  # Examine Airway
+        continue
+
+    if events[7] > 0.1:  # BreathingNone
         print(29)  # Use Bag Valve Mask
         continue
 
-    if sats is None or sats < 88:
-        print(25)  # UseSatsProbe
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
         continue
 
-    if map_value is None or map_value < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    if resp_rate is None or resp_rate < 8:
-        print(4)  # ExamineBreathing
-        continue
-
-    if (
-        sats is not None and sats >= 88 and
-        map_value is not None and map_value >= 60 and
-        resp_rate is not None and resp_rate >= 8
-    ):
-        print(48)  # Finish
-        break
-
-    print(0)  # DoNothing
+    if map_value is not None and mapundi ple:
+        steps < 0   over:
+                 each functes the pas-in reviewft to shareep chas err previoutratif, highlightdesethe cre tits in names.fetching ech soti foreign us,e codinga few pr theicons on an, which sermanners witch conn underslong process in pare.maxim. and ke theceptimusind a  """
