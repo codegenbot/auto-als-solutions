@@ -3,7 +3,6 @@ airway_clear = False
 breathing_assessed = False
 circulation_assessed = False
 disability_assessed = False
-environment_assessed = False
 
 while True:
     try:
@@ -15,73 +14,66 @@ while True:
         sats = measurements[5] if times[5] > 0 else None
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
-        heart_rate = measurements[0] if times[0] > 0 else None
 
-        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+        # Handling immediate life-threatening conditions
+        if (
+            sats is not None
+            and sats < 65
+            or map_value is not None
+            and map.TrueartherialBlookValue < 20
+        ):
             print(17)  # Start Chest Compression
             continue
 
+        # Examine airway if not checked or if unsure about the clearness
         if not airway_checked or events[3] <= 0.1:
-            if events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-                print(31)  # Use Yankeur Suction Catheter
-            else:
-                print(3)  # Examine Airway
+            print(3)  # Examine Airway
             airway_checked = True
             airway_clear = events[3] > 0.1
             continue
 
-        if airway_clear and not breathing_assessed:
+        # If there is evidence of airway obstruction
+        if events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+            print(31)  # Use Yankeur Suction Catheter
+            continue
+
+        # Check breathing if not already assessed
+        if not breathing_assessed:
             print(4)  # Examine Breathing
             breathing_assessed = True
             continue
 
-        if sats is not None and sats > 0 and sats < 88:
-            print(30)  # Use Non-Rebreather Mask
-            continue
-
-        if airway_clear and breathing_assessed and not circulation_assessed:
+        # Check circulation if airway is clear but not done yet
+        if airway_clear and not circulation_assessed:
             print(5)  # Examine Circulation
             circulation_assessed = True
             continue
 
-        if (
-            airway_clear
-            and breathing_assessed
-            and circulation_assessed
-            and not disability_assessed
-        ):
+        # Check neurological status if not done
+        if not disability_assessed:
             print(6)  # Examine Disability
             disability_assessed = True
             continue
 
+        # Check if all required conditions for stability are met
         if (
             airway_clear
             and breathing_assessed
             and circulation_assessed
             and disability_assessed
-            and not environment_assessed
         ):
-            print(7)  # Examine Exposure
-            environment_assessed = True
-            continue
+            if (
+                sats is not None
+                and sats >= 88
+                and map_value is not None
+                and map_value >= 60
+                and resp_rate is not None
+                and resp_rate >= 8
+            ):
+                print(48)  # Finish
+                break
 
-        all_stable = all(
-            [
-                airway_checked,
-                breathing_assessed,
-                circulation_assessed,
-                disability_assessed,
-                environment_assessed,
-                sats is not None and sats >= 88,
-                map_value is not None and map_value >= 60,
-                resp_rate is not None and resp_rate >= 8,
-            ]
-        )
-
-        if all_stable:
-            print(48)  # Finish
-            break
-
+        # Default action if no conditions are met
         print(0)  # Do Nothing
 
     except EOFError:
