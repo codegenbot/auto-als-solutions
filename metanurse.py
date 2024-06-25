@@ -1,3 +1,5 @@
+state = 'airway'  # Starting with airway check per ABCDE
+
 while True:
     try:
         observations = list(map(float, input().strip().split()))
@@ -6,35 +8,38 @@ while True:
         measured_sats = observations[46]
         measured_map = observations[47]
 
-        # Switch state based on conditions
+        if relevance_sats == 0:
+            measured_sats = None
+        if relevance_map == 0:
+            measured_map = None
+
         if state == 'airway':
             if observations[3] > 0:  # AirwayClear
                 state = 'breathing'
+                print(4)  # ExamineBreathing
             else:
                 print(3)  # ExamineAirway
 
         elif state == 'breathing':
-            if observations[7] > 0:  # BreathingNone
+            if observations[10] > 0 or observations[11] > 0 or observations[12] > 0:  # Problematic breathing signs
                 print(29)  # UseBagValveMask
             else:
                 state = 'circulation'
+                print(5)  # ExamineCirculation
 
         elif state == 'circulation':
-            # Check measures and relevant actions for circulation
-            if measured_sats is None or measured_map is None:
-                print(16)  # ViewMonitor
-            elif measured_sats < 88 or measured_map < 60:
-                print(15)  # GiveFluids
+            if measured_sats is not None and measured_map is not None:
+                if measured_sats < 65 or measured_map < 20:
+                    print(17)  # StartChestCompression
+                elif measured_sats < 88 or measured_map < 60:
+                    print(15)  # GiveFluids
+                else:
+                    state = 'complete'
             else:
-                state = 'complete'
+                print(16)  # ViewMonitor
 
         elif state == 'complete':
             print(48)  # Finish
-            break
-
-        # Check critical thresholds
-        if (measured_sats is not None and measured_sats < 65) or (measured_map is not None and measured_map < 20):
-            print(17)  # StartChestCompression
             break
 
     except EOFError:
