@@ -1,20 +1,17 @@
 import sys
 
-actions = {
-    "DO_NOTHING": 0,
-    "USE_SATS_PROBE": 25,
-    "USE_BP_CUFF": 27,
-    "VIEW_MONITOR": 16,
-    "EXAMINE_AIRWAY": 3,
-    "EXAMINE_BREATHING": 4,
-    "EXAMINE_CIRCULATION": 5,
-    "USE_BVM": 29,
-    "USE_NON_REBREATHER_MASK": 30,
-    "START_CHEST_COMPRESSIONS": 17,
-    "GIVE_FLUIDS": 15,
-    "FINISH": 48,
-}
-
+DO_NOTHING = 0
+USE_SATS_PROBE = 25
+USE_BP_CUFF = 27
+VIEW_MONITOR = 16
+EXAMINE_AIRWAY = 3
+EXAMINE_BREATHING = 4
+EXAMINE_CIRCULATION = 5
+USE_BVM = 29
+USE_NON_REBREATHER_MASK = 30
+START_CHEST_COMPRESSIONS = 17
+GIVE_FLUIDS = 15
+FINISH = 48
 
 def get_action(observations, step):
     events = observations[:33]
@@ -27,43 +24,41 @@ def get_action(observations, step):
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
     if step == 1:
-        return actions["USE_SATS_PROBE"]
+        return USE_SATS_PROBE
     if step == 2:
-        return actions["USE_BP_CUFF"]
+        return USE_BP_CUFF
     if step == 3:
-        return actions["VIEW_MONITOR"]
+        return VIEW_MONITOR
     if step == 4:
-        return actions["EXAMINE_AIRWAY"]
+        return EXAMINE_AIRWAY
     if step == 5:
-        return actions["EXAMINE_BREATHING"]
-
-    if events[7] > 0:  # BreathingNone event
-        return actions["START_CHEST_COMPRESSIONS"]
+        return EXAMINE_BREATHING
+    if step == 6:
+        return EXAMINE_CIRCULATION
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return actions["START_CHEST_COMPRESSIONS"]
+        return START_CHEST_COMPRESSIONS
+    
+    if resp_rate is None and step <= 100:
+        return EXAMINE_BREATHING
+    if map_value is None and step <= 150:
+        return USE_BP_CUFF
+    if sats is None and step <= 200:
+        return USE_SATS_PROBE
 
-    if resp_rate is None:
-        return actions["EXAMINE_BREATHING"]
-    if map_value is None:
-        return actions["USE_BP_CUFF"]
-    if sats is None:
-        return actions["USE_SATS_PROBE"]
+    if events[3] == 0:
+        return EXAMINE_AIRWAY
+    if resp_rate and resp_rate < 8:
+        return USE_BVM
+    if map_value and map_value < 60:
+        return GIVE_FLUIDS
+    if sats and sats < 88:
+        return USE_NON_REBREATHER_MASK
+    
+    if map_value and map_value >= 60 and resp_rate and resp_rate >= 8 and sats and sats >= 88:
+        return FINISH
 
-    if events[3] == 0:  # AirwayClear event
-        return actions["EXAMINE_AIRWAY"]
-    if resp_rate < 8:
-        return actions["USE_BVM"]
-    if map_value < 60:
-        return actions["GIVE_FLUIDS"]
-    if sats < 88:
-        return actions["USE_NON_REBREATHER_MASK"]
-
-    if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-        return actions["FINISH"]
-
-    return actions["DO_NOTHING"]
-
+    return DO_NOTHING
 
 step = 0
 
@@ -72,5 +67,5 @@ for _ in range(350):
     step += 1
     action = get_action(input_data, step)
     print(action)
-    if action == actions["FINISH"]:
+    if action == FINISH:
         break
