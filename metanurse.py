@@ -1,5 +1,6 @@
 import sys
 
+
 def get_action(observations):
     global step, examined_airway, examined_breathing
     step += 1
@@ -22,13 +23,13 @@ def get_action(observations):
         return 4  # Examine Breathing
     if not examined_breathing:
         examined_breathing = True
-        return 18 # Open Breathing Drawer
+        return 18  # Open Breathing Drawer
     if step == 4:
-        return 25 # Use Sats Probe
+        return 25  # Use Sats Probe
     if step == 5:
-        return 27 # Use BP Cuff
+        return 27  # Use BP Cuff
     if step == 6:
-        return 16 # View Monitor
+        return 16  # View Monitor
 
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return 17  # Start Chest Compressions
@@ -49,6 +50,7 @@ def get_action(observations):
             return 48  # Finish if all vitals are stable
 
     return 1  # Default action to check signs of life
+
 
 global step, examined_airway, examined_breathing
 step = 0
