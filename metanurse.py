@@ -1,3 +1,8 @@
+airway_checked = False
+airway_clear = False
+breathing_assessed = False
+circulation_assessed = False
+
 while True:
     try:
         observations = input().strip().split()
@@ -12,24 +17,39 @@ while True:
         if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start Chest Compression
             continue
-
-        if events[3] <= 0.1:  # If Airway not confirmed clear
+        
+        if not airway_checked or not airway_clear:
             print(3)  # Examine Airway
+            airway_checked = True
+            airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
 
-        if events[7] > 0.1:  # If entirely no breathing
-            print(29)  # Use Bag Valve Mask
-            continue
+        if not breathing_assessed:
+            if events[7] > 0.1:  # BreathingNone significant relevance
+                print(29)  # Use Bag Valve Mask
+                breathing_assessed = True
+                continue
 
-        if times[4] == 0 or (map_value is not None and map_value < 60):
-            print(15)  # Give Fluids
-            continue
+        if airway_clear and not circulation_assessed:
+            if sats is not None and sats < 88:
+                print(30)  # Use Non Rebreather Mask
+                continue
+            elif map_value is not None and map_value < 60:
+                print(15)  # Give Fluids
+                continue
 
-        if (sats is not None and sats >= 88) and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8):
+        all_stable = all([
+            airway_checked, breathing_assessed, circulation_assessed,
+            sats is not None and sats >= 88,
+            map_value is not None and map_value >= 60,
+            resp_rate is not None and resp_rate >= 8
+        ])
+
+        if all_stable:
             print(48)  # Finish
             break
-        else:
-            print(0)  # Do Nothing if undecided state
+
+        print(0)  # Do Nothing in absence of any direct action based on current knowledge
 
     except EOFError:
         break
