@@ -34,15 +34,19 @@ def get_action(observations):
         return USE_BP_CUFF
     if step == 3:
         return VIEW_MONITOR
+    if step == 4:
+        return EXAMINE_AIRWAY
 
     # Handle cardiac arrest situations
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
     # ABCDE assessment and corresponding interventions
-    if events[3] == 0 and step > 3:  # `AirwayClear` not confirmed
+    if events[3] == 0:  # Airway not clear
+        if events[7] > 0:  # BreathingNone observed
+            return START_CHEST_COMPRESSIONS
         return EXAMINE_AIRWAY
-    if resp_rate is not None and resp_rate < 8 or events[7] != 0:  # If `BreathingNone`
+    if resp_rate is not None and resp_rate < 8:
         return USE_BVM
     if map_value is not None and map_value < 60:
         return GIVE_FLUIDS
@@ -50,15 +54,14 @@ def get_action(observations):
         return USE_NON_REBREATHER_MASK
 
     # Continue checks based on barely available or missing data
-    if step > 3:
-        if resp_rate is None:
-            return EXAMINE_BREATHING
-        if map_value is None:
-            return USE_BP_CUFF
-        if sats is None:
-            return USE_SATS_PROBE
-        if events[4] != 0:  # `BreathingNone` was not observed
-            return EXAMINE_CIRCULATION
+    if resp_rate is None:
+        return EXAMINE_BREATHING
+    if map_value is None:
+        return USE_BP_CUFF
+    if sats is None:
+        return USE_SATS_PROBE
+    if events[4] != 0:  # `BreathingNone` was not observed
+        return EXAMINE_CIRCULATION
 
     # Check if stabilized
     if (
