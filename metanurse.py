@@ -2,58 +2,6 @@ import sys
 
 
 def main():
-    actions = [
-        "DoNothing",
-        "CheckSignsOfLife",
-        "CheckRhythm",
-        "ExamineAirway",
-        "ExamineBreathing",
-        "ExamineCirculation",
-        "ExamineDisability",
-        "ExamineExposure",
-        "ExamineResponse",
-        "GiveAdenosine",
-        "GiveAdrenaline",
-        "GiveAmiodarone",
-        "GiveAtropine",
-        "GiveMidazolam",
-        "UseVenflonIVCatheter",
-        "GiveFluids",
-        "ViewMonitor",
-        "StartChestCompression",
-        "OpenAirwayDrawer",
-        "OpenBreathingDrawer",
-        "OpenCirculationDrawer",
-        "OpenDrugsDrawer",
-        "BagDuringCPR",
-        "ResumeCPR",
-        "UseMonitorPads",
-        "UseSatsProbe",
-        "UseAline",
-        "UseBloodPressureCuff",
-        "AttachDefibPads",
-        "UseBagValveMask",
-        "UseNonRebreatherMask",
-        "UseYankeurSucionCatheter",
-        "UseGuedelAirway",
-        "TakeBloodForArtherialBloodGas",
-        "TakeRoutineBloods",
-        "PerformAirwayManoeuvres",
-        "PerformHeadTiltChinLift",
-        "PerformJawThrust",
-        "TakeBloodPressure",
-        "TurnOnDefibrillator",
-        "DefibrillatorCharge",
-        "DefibrillatorCurrentUp",
-        "DefibrillatorCurrentDown",
-        "DefibrillatorPace",
-        "DefibrillatorPacePause",
-        "DefibrillatorRateUp",
-        "DefibrillatorRateDown",
-        "DefibrillatorSync",
-        "Finish",
-    ]
-
     step = 0
     while step < 350:
         observations = list(map(float, input().split()))
@@ -66,23 +14,23 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
         if sats is not None and sats < 65:
-            print(actions.index("Finish"))
+            print(48)
             break
         elif map_value is not None and map_value < 20:
-            print(actions.index("Finish"))
+            print(48)
             break
         elif sats is not None and sats < 88:
-            print(actions.index("UseNonRebreatherMask"))
+            print(30)
         elif map_value is not None and map_value < 60:
-            print(actions.index("GiveFluids"))
+            print(15)
         elif resp_rate is not None and resp_rate < 8:
-            print(actions.index("UseBagValveMask"))
+            print(29)
         else:
             if sats is not None and map_value is not None and resp_rate is not None:
                 if sats >= 88 and map_value >= 60 and resp_rate >= 8:
-                    print(actions.index("Finish"))
+                    print(48)
                     break
-            print(actions.index("ExamineResponse"))
+            print(8)
 
         sys.stdout.flush()
         step += 1
