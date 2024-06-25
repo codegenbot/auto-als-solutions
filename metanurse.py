@@ -9,7 +9,7 @@ while True:
         measurements = observations[46:]
 
         airway_clear = event_types[3]
-        breathing_none = event_times[7]
+        breathing_none = event_types[7]
         measured_resps_relevance = measurement_timeliness[6]
         measured_resps = measurements[6]
         measured_sats_relevance = measurement_timeliness[5]
@@ -23,16 +23,6 @@ while True:
             continue
         if measured_map_relevance > 0 and measured_map < 20:
             print(17)  # StartChestCompression
-            continue
-
-        # Initially check all vitals and ABCDE
-        if any(t == 0 for t in measurement_timeliness):
-            if measurement_timeliness[5] == 0:
-                print(25)  # UseSatsProbe
-            elif measurement_timeliness[4] == 0:
-                print(27)  # UseBloodPressureCuff
-            elif measurement_timeliness[0] == 0 or measurement_timeliness[1] == 0:
-                print(16)  # ViewMonitor
             continue
 
         # Airway management
