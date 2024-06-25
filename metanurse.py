@@ -26,6 +26,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
 ]
 
+
 def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -41,12 +42,14 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, glucose, temperature, map_value, sats, resps
 
+
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
+
 
 def correct_airway(events):
     if events[4]:
@@ -55,18 +58,30 @@ def correct_airway(events):
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
+
 def correct_breathing(sats):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
     return None
+
 
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
     return None
 
+
 def get_action(observations, step):
-    events, heart_rate, resp_rate, glucose, temperature, map_value, sats, resps = stabilize_patient(observations)
+    (
+        events,
+        heart_rate,
+        resp_rate,
+        glucose,
+        temperature,
+        map_value,
+        sats,
+        resps,
+    ) = stabilize_patient(observations)
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
@@ -91,13 +106,17 @@ def get_action(observations, step):
         return ACTIONS["GIVE_FLUIDS"]
 
     if (
-        map_value is not None and map_value >= 60 and
-        resp_rate is not None and resp_rate >= 8 and
-        sats is not None and sats >= 88
+        map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+        and sats is not None
+        and sats >= 88
     ):
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
+
 
 step = 0
 for _ in range(350):
