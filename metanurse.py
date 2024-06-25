@@ -2,15 +2,12 @@ import sys
 
 ACTIONS = {
     "DO_NOTHING": 0,
-    "CHECK_SIGNS_OF_LIFE": 1,
     "USE_SATS_PROBE": 25,
     "USE_BP_CUFF": 27,
     "VIEW_MONITOR": 16,
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
-    "EXAMINE_DISABILITY": 6,
-    "EXAMINE_EXPOSURE": 7,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
     "START_CHEST_COMPRESSIONS": 17,
@@ -26,7 +23,7 @@ EXAMINE_SEQUENCE = [
     ACTIONS["VIEW_MONITOR"],
     ACTIONS["EXAMINE_AIRWAY"],
     ACTIONS["EXAMINE_BREATHING"],
-    ACTIONS["EXAMINE_CIRCULATION"]
+    ACTIONS["EXAMINE_CIRCULATION"],
 ]
 
 def stabilize_patient(observations):
@@ -97,7 +94,7 @@ def get_action(observations, step):
     ):
         return ACTIONS["FINISH"]
 
-    return ACTIONS["CHECK_SIGNS_OF_LIFE"]
+    return ACTIONS["DO_NOTHING"]
 
 step = 0
 for _ in range(350):
