@@ -44,14 +44,11 @@ def get_action(observations):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return START_CHEST_COMPRESSIONS
 
-    if events[3] == 0:
+    if not any(events[3:7]) and step % 5 == 0:
         return EXAMINE_AIRWAY
 
-    if events[7] > 0:  # BreathingNone event
-        return USE_BVM
-
     if resp_rate is None:
-        return EXAMINE_BREATHING
+        return USE_BP_CUFF if step % 2 else USE_SATS_PROBE
     if map_value is None:
         return USE_BP_CUFF
     if sats is None:
