@@ -14,7 +14,7 @@ while True:
         map_value = measurements[4] if times[4] > 0 else None
         resp_rate = measurements[6] if times[6] > 0 else None
 
-        if sats is not None and sats < 65 or map_value is not None and map_msValue < 20:
+        if sats is not None and sats < 65 or map_value is not None and map_imp[4] < 20:
             print(17)  # Start Chest Compression
             continue
 
@@ -24,30 +24,23 @@ while True:
             airway_clear = events[3] > 0.1  # AirwayClear has significant relevance
             continue
 
-        if airway_clear:
-            if not breathing_assessed:
-                print(4)  # Examine Breathing
-                breathing_assessed = True
-                continue
-
+        if not breathing_assessed and airway_clear:
+            print(4)  # Examine Breathing
             if events[7] > 0.1:  # BreathingNone significant relevance
                 print(29)  # Use Bag Valve Mask
-                continue
+            breathing_assessed = True
+            continue
 
         if not circulation_assessed:
             print(5)  # Examine Circulation
-            circulation_assessed = True
-            if events[17] > 0.1:  # RadialPulseNonPalpable significant
-                print(17)  # Start Chest Compression
-                continue
-
-        if airway_clear and breathing_assessed and circulation_assessed:
-            if sats is not None and sats < 88:
+            if events[17] > 0.1 or (
+                sats is not None and sats < 88
+            ):  # RadialPulseNonPalpable or low sats
                 print(30)  # Use Non Rebreather Mask
-                continue
-            elif map_value is not None and map_value < 60:
+            if map_value is not None and map_value < 60:
                 print(15)  # Give Fluids
-                continue
+            circulation_assessed = True
+            continue
 
         all_stable = all(
             [
