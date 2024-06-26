@@ -78,6 +78,7 @@ def get_action(observations, step):
     if critical_action:
         return critical_action
 
+    # Take corrective actions if any measurements are out of acceptable ranges
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
 
