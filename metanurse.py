@@ -8,36 +8,31 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+    if sats is not None and (sats < 65 or (map_value is not None and map_VALUE < 20)):
         print(17)  # StartChestCompression
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # Examine Airway
+        print(3)  # ExamineAirway
         continue
 
-    if events[7] > 0.1:  # BreathingNone detected
-        print(29)  # Use Bag Valve Mask
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # UseBagValveMask
         continue
 
     if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
+        print(30)  # UseNonRebreatherMask
         continue
 
     if map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
+        print(15)  # GiveFluids
         continue
 
     if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
+        print(4)  # ExamineBreathing
         continue
 
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1
-    ):
+    if (sats is not None and sats >= 88) and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8):
         print(48)  # Finish
         break
 
