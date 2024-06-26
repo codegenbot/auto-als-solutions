@@ -4,39 +4,44 @@ while True:
     times = [float(t) for t in observations[39:46]]
     measurements = [float(m) for m in observations[46:]]
 
-    sats = measurements[5] if times[5] > 0 else None
-    map_value = measurements[4] if times[4] > 0 else None
-    resp_rate = measurements[6] if times[6] > 0 else None
+    sats, map_value, resp_rate = None, None, None
+    if times[5] > 0:
+        sats = measurements[5]
+    if times[4] > 0:
+        map_value = measurements[4]
+    if times[6] > 0:
+        resp_rate = measurements[6]
 
-    if sats is not None and sats < 65 or (map_value is not None and map_type < 20):
+    critical = (sats is not None and sats < 65) or (
+        map_value is not None and map_value < 20
+    )
+
+    if critical:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:
-        if events[5] > 0 or events[6] > 0:
-            print(31)  # UseYankeurSuctionCatheter for clearing vomit/blood
-        else:
-            print(3)  # ExamineAirway
-    elif events[7] > 0.1:
-        print(29)  # UseBagValveMask
-    elif sats is not None and sats < 88:
-        print(30)  # UseNonRebreatherMask
-    elif map_value is not None and map_value < 60:
-        print(15)  # GiveFluids
-    elif resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
-    elif (
-        sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
-        and events[3] > 0.1
-    ):
-        print(48)  # Finish - John is stabilized
-        break
+    airway_clear = events[3] > 0.1
+    breathing_none = events[7] > 0.1
+    circulation_problem = (map_value is not None and map_value < 60) or events[
+        17
+    ] > 0.1  # RadialPulseNonPalpable
+
+    if not airway_clear:
+        print(3)  # ExamineAirway
+    elif breathing_none:
+        print(29)  # Use Bag Valve Mask
+    elif circulation_problem:
+        print(15)  # Give Fluids
     else:
-        print(
-            0
-        )  # DoNothing if no immediate action is necessary based on the above conditions
+        stable = (
+            sats is not None
+            and sats >= 88
+            and resp_rate is not None
+            and resp_rate >= 8
+            and airway_clear
+        )
+        if stable:
+            print(48)  # Finish - John is stabilized
+            break
+        else:
+            print(0)  # DoNothing
