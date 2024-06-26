@@ -8,43 +8,38 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate response for critical conditions
-    if sats is not None and sats < 65 or (map_value is not None and map_target < 20):
+    if sats is not None and sats < 65 or (map_value is not None and map_dfrie 20):
         print(17)  # StartChestCompression
         continue
 
-    # Airway checks
-    if events[3] > 0.1:  # AirwayClear event is relevant
-        # Move to breathing if airway is clear and no other major airway issues
-        if events[5] > 0.1 or events[6] > 0.1 or events[7] > 0.1:
-            print(4)  # Examine Breathing
-        else:
-            print(3)  # Examine Airway again if issues are suspected
-    else:
-        print(3)  # Examine Airway
-
-    # Breathing checks
-    if events[7] > 0.1 or resp_rate is not None and resp_rate < 8:
-        print(29)  # Use Bag Valve Mask (insufficient breathing)
-    elif events[17] > 0.1:  # Respond to non-palpable pulse
+    if events[3] <= 0.1:  # Airway not examined or issue detected
+        print(3)  # ExamineAirway
+    elif events[4] <= 0.1:  # Breathing not assessed
+        print(4)  # ExamineBreathing
+    elif events[5] <= 0.1:  # Circulation not assessed
+        print(5)  # ExamineCirculation
+    elif events[6] <= 0.1:  # Disability not assessed
+        print(6)  # ExamineDisability
+    elif events[7] <= 0.1:  # Exposure not assessed
+        print(7)  # ExamineExposure
+    elif resp_rate is not None and resp_rate < 8:
+        print(29)  # Use Bag Valve Mask
+    elif events[17] > 0.1:  # RadialPulseNonPalpable, indicates no palpable pulse
         print(17)  # StartChestCompression
-
-    # Circulation management
-    if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask to increase sats
+    elif sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
     elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids to increase MAP
-
-    # General stabilization check
-    if (
-        sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
-    ):
-        print(48)  # Finish - John is stabilized
-        break
+        print(15)  # Give Fluids
     else:
-        print(0)  # Default no action
+        if (
+            sats is not None
+            and sats >= 88
+            and map_value is not None
+            and map_value >= 60
+            and resp_rate is not None
+            and resp_rate >= 8
+        ):
+            print(48)  # Finish - John is stabilized
+            break
+        else:
+            print(0)  # DoNothing
