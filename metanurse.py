@@ -9,14 +9,18 @@ while True:
     resp_rate = measurements[6] if times[6] > 0 else None
 
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
-        print(17)  # Start Chest Compression
+        print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    if events[3] <= 0.1:  # Low relevance for AirwayClear
         print(3)  # Examine Airway
         continue
 
-    if events[7] > 0.1:  # BreathingNone detected
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
+        continue
+
+    if events[7] > 0.1 or resp_rate is None or resp_rate == 0:  # BreathingNone or no data
         print(29)  # Use Bag Valve Mask
         continue
 
@@ -28,16 +32,10 @@ while True:
         print(15)  # Give Fluids
         continue
 
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
-        continue
-
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1
-    ):
+    if (sats is not None and sats >= 88) and \
+       (map_value is not None and map_value >= 60) and \
+       (resp_rate is not None and resp_rate >= 8) and \
+       events[3] > 0.1:  # All conditions for stabilization met
         print(48)  # Finish
         break
 
