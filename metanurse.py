@@ -13,7 +13,7 @@ while True:
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # ExamineAirway
+        print(3)  # Examine Airway
     elif events[7] > 0.1 or (
         resp_rate is not None and resp_rate < 8
     ):  # BreathingNone or bad resp rate
@@ -28,10 +28,12 @@ while True:
         if (
             sats is not None
             and sats >= 88
-            and (map_value is not None and map_value >= 60)
-            and (resp_rate is not None and resp_rate >= 8)
+            and map_value is not None
+            and map_value >= 60
+            and resp_rate is not None
+            and resp_rate >= 8
         ):
             print(48)  # Finish - John is stabilized
             break
         else:
-            print(0)  # Default action when no immediate intervention is needed
+            print(0)  # DoNothing
