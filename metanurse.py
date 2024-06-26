@@ -100,9 +100,8 @@ step = 0
 for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
-    if action == ACTIONS["DO_NOTHING"]:
-        continue  # Skip printing 'DoNothing' repeatedly
-    print(action)
+    if action != ACTIONS["DO_NOTHING"]:
+        print(action)
     if action == ACTIONS["FINISH"]:
         break
     step += 1
