@@ -84,11 +84,9 @@ def get_action(observations, step):
     if circulation_action:
         return circulation_action
 
-    if (
-        map_value and resp_rate and sats and 
-        map_value >= 60 and resp_rate >= 8 and sats >= 88
-    ):
-        return ACTIONS["FINISH"]
+    if heart_rate is not None and resp_rate is not None and map_value is not None and sats is not None:
+        if map_value >= 60 and resp_rate >= 8 and sats >= 88:
+            return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
 
