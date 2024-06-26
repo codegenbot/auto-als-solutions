@@ -14,7 +14,7 @@ ACTIONS = {
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "USE_YANKAUR_SUCTION": 31
+    "USE_YANKAUR_SUCTION": 31,
 }
 
 SEQUENCE = [
@@ -23,7 +23,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"]
+    ACTIONS["VIEW_MONITOR"],
 ]
 
 def stabilize_patient(observations):
@@ -97,7 +97,7 @@ def get_action(observations, step):
     return ACTIONS["DO_NOTHING"]
 
 step = 0
-while step < 350:
+for _ in range(350):
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
     print(action)
