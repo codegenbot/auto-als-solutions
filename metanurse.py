@@ -26,10 +26,6 @@ while True:
         print(29)  # UseBagValveMask
         continue
 
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
-        continue
-
     if sats is not None and sats < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -38,11 +34,15 @@ while True:
         print(15)  # GiveFluids
         continue
 
+    if resp_rate is not None and resp_code < 8:
+        print(4)  # ExamineBreathing
+        continue
+
     if (
         (sats is not None and sats >= 88)
         and (map_value is not None and map_value >= 60)
         and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1  # AirwayClear is good
+        and events[3] > 0.1
     ):
         print(48)  # Finish
         break
