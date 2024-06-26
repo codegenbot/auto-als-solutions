@@ -14,6 +14,7 @@ ACTIONS = {
     "FINISH": 48,
     "USE_BVM": 29,
     "USE_YANKAUR_SUCTION": 31,
+    "PERFORM_JAW_THRUST": 37,
 }
 
 SEQUENCE = [
@@ -30,24 +31,25 @@ def stabilize_patient(observations):
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
 
-    heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
-    resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
-    map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
-    sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
-
-    return events, heart_rate, resp_rate, map_value, sats
+    return (
+        events,
+        vital_signs_values[0] if vital_signs_time[0] > 0 else None,
+        vital_signs_values[1] if vital_signs_time[1] > 0 else None,
+        vital_signs_values[4] if vital_signs_time[4] > 0 else None,
+        vital_signs_values[5] if vital_signs_time[5] > 0 else None,
+    )
 
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
+    if events[7] or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
 def correct_airway(events):
-    if events[4]:  # Airway vomit
+    if events[4]:
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue block
+    if events[5] or events[6]:
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -74,14 +76,13 @@ def get_action(observations, step):
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
-
+    
     breathing_action = correct_breathing(sats)
     if breathing_action:
         return breathing_action
-
-    circulation_action = correct_circulation(map_value)
-    if circulation_action:
-        return circulation_action
+    
+    if correct_circulation(map_value):
+        return ACTIONS["GIVE_FLUIDS"]
 
     if (
         map_value is not None
