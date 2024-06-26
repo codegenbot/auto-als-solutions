@@ -8,56 +8,35 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Handle immediate life threats
-    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
-        print(17)  # Start Chest Compression
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+        print(17)  # Start Chest Compression assuming patient is in arrest
         continue
 
-    # Check if breathing is absent
-    if events[7] > 0.1:  # BreathingNone high relevance
-        print(29)  # Use Bag Valve Mask
-        continue
-
-    # Immediate airway problem
-    if events[3] <= 0.1 and events[3] > 0:  # AirwayClear low relevance and known issue
+    airway_clear = events[3] > 0.1
+    if not airway_clear:
         print(3)  # Examine Airway
         continue
 
-    # Saturations management
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # Use Bag Valve Mask
+        continue
+
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    # Critical low respiration rate
-    if resp_rate is not None and resp_rate < 8:
-        print(29)  # Assume ventilation required, Use Bag Valve Mask
-        continue
-
-    # Circulation assessment and management
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # If no recent observations on some crucial vital signs
-    if events[3] < 0.1:  # Airway not recently examined
-        print(3)  # Examine Airway
-        continue
-    if times[5] == 0:  # No recent saturation measurement
-        print(25)  # UseSatsProbe
-        continue
-    if times[4] == 0:  # No recent blood pressure measurement
-        print(27)  # Attach blood pressure cuff IF NOT already attached
-        print(38)  # Take Blood Pressure
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
         continue
 
-    # Check for stabilization
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-    ):
+    if all([sats is not None and sats >= 88, 
+            map_value is not None and map_value >= 60, 
+            resp_rate is not None and resp_rate >= 8]):
         print(48)  # Finish
         break
-    
-    # Default action
-    print(0)  # DoNothing
+
+    print(0)  # Default DoNothing when no conditions triggered
