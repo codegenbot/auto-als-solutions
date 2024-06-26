@@ -8,32 +8,39 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
-        print(17)  # StartChestCompression
+    # Immediate Critical Conditions
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        print(17)  # Start Chest Compression
         continue
 
-    # Regular assessments
-    if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # Examine Airway
+    # ABCDE assessments
+    if events[3] <= 0.1:  # Airway not just cleared or low relevance
+        print(3)
+    elif events[7] <= 0.1:  # Check Breathing
+        print(4)
+    elif map_value is None or map_value < 60:  # Circulation - Check or action required
+        print(5)  # Examine Circulation
     elif (
-        events[7] > 0.1 or resp_rate is not None and resp_rate < 8
-    ):  # BreathingNone or bad resp rate
-        print(29)  # Use Bag Valve Mask
-    elif events[17] > 0.1:  # RadialPulseNonPalpable
-        print(17)  # StartChestCompression
-    elif sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
-    elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
+        events[23] <= 0.1 or events[24] <= 0.1 or events[25] <= 0.1
+    ):  # Check Disability
+        print(6)  # Examine Disability
+    elif events[26] <= 0.1:  # Exposure not checked
+        print(7)  # Examine Exposure
     else:
-        # Check for stabilization
-        if (
-            sats is not None
-            and sats >= 88
-            and (map_value is not None and map_value >= 60)
-            and (resp_rate is not None and resp_rate >= 8)
-        ):
-            print(48)  # Finish - John is stabilized
-            break
+        # Ensure sufficiency – give necessary aid
+        if sats is not None and sats < 88:
+            print(30)  # Non-rebreather mask
+        elif resp_rate is not None and resp_rate < 8:
+            print(29)  # Bag Valve Mask
         else:
-            print(0)  # Default action when no immediate intervention is needed
+            # Check if stabilization criteria are met
+            if all(
+                [
+                    v is not None and v >= thresh
+                    for v, thresh in zip([sats, map_value, resp_rate], [88, 60, 8])
+                ]
+            ):
+                print(48)  # Finish - John is stabilized
+                break
+            else:
+                print(0)  # Other actions not critical, do nothing awaiting new data
