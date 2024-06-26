@@ -8,43 +8,44 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Check for critical condition: cardiac arrest
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        print(17)  # Start Chest Compressions
+    # Immediate critical actions based on extreme vital signs
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+        print(17)  # StartChestCompression
         continue
 
-    # Airway assessment
-    if not events[3] > 0.1:  # Airway is not clear
+    # Airway management based on assessment
+    if events[3] <= 0.1:  # AirwayClear relevance is low or non-existent
         print(3)  # Examine Airway
         continue
 
-    # Check breathing
-    if events[7] > 0.1:  # No breathing observed
+    # If no breathing is present, immediate intervention needed
+    if events[7] > 0.1:  # BreathingNone indication
         print(29)  # Use Bag Valve Mask
         continue
 
-    # Manage oxygenation
+    # Stabilization measures for oxygen saturation
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    # Manage blood pressure
+    # Fluid administration when MAP is critically low
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # Manage respiration rate
+    # Evaluate breathing if respiratory rate is below threshold
     if resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
-    # Check if stabilized
-    if all([
-        sats is not None and sats >= 88,
-        map_value is not None and map_name >= 60,
-        resp_rate is not None and resp_rate >= 8]):
+    # Finish when all parameters are stabilized
+    if (
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp % sRate is not None and resp_rate >= 8)
+    ):
         print(48)  # Finish
         break
 
-    # Default action if no other conditions are met
+    # Default action if non-critical conditions or unspecified state
     print(0)  # DoNothing
