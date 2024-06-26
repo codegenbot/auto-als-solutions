@@ -8,12 +8,10 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate critical actions based on extreme vital signs
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # StartChestCompression
         continue
 
-    # Check the airway status
     if events[4] or events[5] or events[6]:  # AirwayVomit, AirwayBlood, or AirwayTongue
         print(31)  # UseYankeurSuctionCatheter
         continue
@@ -21,15 +19,13 @@ while True:
         print(3)  # ExamineAirway
         continue
 
-    # Breathing management
     if events[7] > 0.1:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
-    elif events[10] <= 0.1:  # Unequal chest expansion
+    elif events[10] <= 0.1:  # Breathing not equal
         print(4)  # ExamineBreathing
         continue
 
-    # Circulation issues
     if events[17] > 0.1:  # RadialPulseNonPalpable
         print(15)  # GiveFluids
         continue
@@ -37,19 +33,14 @@ while True:
         print(15)  # GiveFluids
         continue
 
-    # Check disability status
     if events[22] > 0.1 or events[21] > 0.1:  # AVPU_V or AVPU_U
         print(6)  # ExamineDisability
         continue
 
-    # Exposure assessment
-    if (
-        events[26] > 0.1 or events[27] > 0.1
-    ):  # Exposure signs like rash or peripheral shutdown
+    if times[8] <= 0.1:  # less frequent checks
         print(7)  # ExamineExposure
         continue
 
-    # Monitoring
     if times[5] <= 0.1:  # Sats not recently measured
         print(25)  # UseSatsProbe
         continue
@@ -57,7 +48,6 @@ while True:
         print(27)  # UseBloodPressureCuff
         continue
 
-    # Determine if enough progress made to finish
     if (
         (sats is not None and sats >= 88)
         and (map_value is not None and map_value >= 60)
@@ -67,5 +57,4 @@ while True:
         print(48)  # Finish
         break
 
-    # Default action if non-critical conditions or unspecified state
     print(0)  # DoNothing
