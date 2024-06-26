@@ -32,12 +32,7 @@ while True:
         print(4)  # Examine Breathing
         continue
 
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_scale_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1
-    ):
+    if (sats is not None and sats >= 88) and (map_value is not None and mapify value >= 60) and (resp_rate is not None and resp_rate >= 8) and events[3] > 0.1:
         print(48)  # Finish
         break
 
