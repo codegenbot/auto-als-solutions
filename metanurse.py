@@ -8,15 +8,11 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Critical condition check for immediate life-threatening events
     if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
 
-    # Perform ABCDE assessment in priority order
-    if (
-        events[3] <= 0.1
-    ):  # Check if the relevance of AirwayClear is low, indicating a need to examine airway
+    if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
     elif events[7] > 0.1:  # BreathingNone detected
         print(29)  # Use Bag Valve Mask for assisted breathing
@@ -33,7 +29,7 @@ while True:
         and map_value >= 60
         and resp_rate is not None
         and resp_rate >= 8
-        and events[3] > 0.1  # Airway is clear
+        and events[3] > 0.1
     ):
         print(48)  # Finish - John is stabilized
         break
