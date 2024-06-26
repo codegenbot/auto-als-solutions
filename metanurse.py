@@ -13,28 +13,24 @@ while True:
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
-        if events[5] > 0 or events[6] > 0:  # AirwayBlockage signs like AirwayVomit or AirwayBlood
-            print(18)  # OpenAirwayDrawer to manage obstruction
+        if events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:  # AirwayVomit, AirwayBlood, AirwayTongue
+            print(31)  # Use Yankeur Suction Catheter
         else:
             print(3)  # ExamineAirway
     elif events[7] > 0.1:  # BreathingNone detected
-        print(29)  # UseBagValveMask for assisted breathing
+        print(29)  # Use Bag Valve Mask for assisted breathing
     elif sats is not None and sats < 88:
-        print(30)  # Use NonRebreatherMask to increase oxygen
+        print(30)  # Use Non Rebreather Mask to increase oxygen
     elif map_value is not None and map_value < 60:
-        print(15)  # GiveFluids to improve circulation
+        print(15)  # Give Fluids to improve circulation
     elif resp_rate is not None and resp_rate < 8:
         print(4)  # ExamineBreathing
-    elif (
-        sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
-        and events[3] > 0.1
-    ):
-        print(48)  # Finish - John is stabilized
-        break
     else:
-        print(0)  # Default action when no immediate intervention is needed
+        stable = (sats is not None and sats >= 88 and
+                  map_value is not None and map_value >= 60 and
+                  resp_rate is not None and resp_rate >= 8)
+        if stable and events[3] > 0.1:  # Airway clear is confirmed
+            print(48)  # Finish - John is stabilized
+            break
+        else:
+            print(0)  # Default action when no immediate intervention is needed
