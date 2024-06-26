@@ -97,11 +97,10 @@ def get_action(observations, step):
     return ACTIONS["DO_NOTHING"]
 
 step = 0
-for _ in range(350):
+while step < 350:
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
-    if action != ACTIONS["DO_NOTHING"]:
-        print(action)
+    print(action)
     if action == ACTIONS["FINISH"]:
         break
     step += 1
