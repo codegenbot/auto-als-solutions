@@ -8,30 +8,30 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        print(17)  # Start Chest Compression
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+        print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:
-        print(3)  # Examine Airway
-    elif events[7] <= 0.1:  # Breathing assessment - low relevance or not checked recently
-        print(4)
-    elif map_value is None or map_value < 60:  # Check Circulation status
-        print(5)
-    elif events[23] <= 0.1 or events[24] <= 0.1 or events[25] <= 0.1:  # Disability not recently checked
-        print(6)
-    elif events[26] <= 0.1:  # Exposure not checked
-        print(7)
+    if events[3] <= 0.1:  # AirwayClear has low relevance
+        print(3)  # ExamineAirway
+    elif events[7] > 0.1:  # BreathingNone detected
+        print(29)  # Use Bag Valve Mask for assisted breathing
+    elif sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask to increase oxygen
+    elif map_value is not None and map_value < 60:
+        print(15)  # Give Fluids to improve circulation
+    elif resp_rate is not None and resp_rate < 8:
+        print(4)  # ExamineBreathing
+    elif (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+        and events[3] > 0.1
+    ):
+        print(48)  # Finish - John is stabilized
+        break
     else:
-        # Necessary interventions based on conditions
-        if sats is not None and sats < 88:
-            print(30)  # Non-rebreather mask
-        elif resp_rate is not None and resp_rate < 8:
-            print(29)  # Bag Valve Mask
-        else:
-            if all([v is not None and v >= thresh for v, thresh in zip(
-                [sats, map_value, resp_branch], [88, 60, 8])]):
-                print(48)  # Finish - John is stabilized
-                break
-            else:
-                print(0)  # Other actions not critical, do nothing awaiting new data
+        print(0)  # Default action when no immediate intervention is needed
