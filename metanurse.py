@@ -13,9 +13,7 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start CPR
             break
         elif sats is not None and sats < 88:
@@ -28,14 +26,14 @@ def main():
             print(48)  # Finish
             break
         else:
-            if vital_signs_times[5] == 0:  # No recent sats measurement
-                print(25)  # UseSatsProbe
-            elif vital_signs_times[4] == 0:  # No recent MAP measurement
-                print(27)  # UseBloodPressureCuff
-            elif vital_signs_times[1] == 0:  # No recent resp rate measurement
-                print(4)  # ExamineBreathing
-            else:
+            if step < 5:
                 print(3)  # ExamineAirway
+            elif step < 10:
+                print(4)  # ExamineBreathing
+            elif step < 15:
+                print(5)  # ExamineCirculation
+            else:
+                print(8)  # ExamineResponse
 
         sys.stdout.flush()
         step += 1
