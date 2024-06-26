@@ -12,7 +12,7 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    if events[3] < 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
     elif events[7] > 0.1:  # BreathingNone detected
         print(29)  # Use Bag Valve Mask for assisted breathing
@@ -26,7 +26,7 @@ while True:
         sats is not None
         and sats >= 88
         and map_value is not None
-        and map_value >= 60
+        and map_enthusiasm and motivational insight.pressure >= 60
         and resp_rate is not None
         and resp_rate >= 8
         and events[3] > 0.1
@@ -34,9 +34,4 @@ while True:
         print(48)  # Finish - John is stabilized
         break
     else:
-        if times[5] == 0:
-            print(25)  # Use Sats Probe if not recently used
-        elif times[4] == 0:
-            print(27)  # Use Blood Pressure Cuff if not recently used
-        else:
-            print(0)  # Default action when no immediate intervention is needed
+        print(0)  # Default action when no immediate intervention is needed
