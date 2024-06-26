@@ -67,7 +67,7 @@ def get_action(observations, step):
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
-        
+
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
         return critical_action
