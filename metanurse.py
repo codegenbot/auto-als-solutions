@@ -32,12 +32,8 @@ while True:
         print(4)  # ExamineBreathing
         continue
 
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-    ):
+    if events[3] > 0.1 and sats is not None and sats >= 88 and map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8:
         print(48)  # Finish
         break
 
-    print(16)  # ViewMonitor as default action when no immediate action is determined
+    print(0)  # DoNothing
