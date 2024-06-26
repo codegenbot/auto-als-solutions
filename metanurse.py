@@ -8,48 +8,41 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate danger check
+    # Immediate life-threatening conditions
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
 
-    # Airway Management
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    # Airway Assessment
+    if events[3] <= 0.1 and (events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1):
         print(3)  # ExamineAirway
-    elif events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-        print(31)  # UseYankeurSuctionCatheter
-    elif (
-        events[7] > 0.1 or events[8] > 0.1 or events[9] > 0.1
-    ):  # Severe Breathing issues
+        continue
+    elif events[7] > 0.1:  # BreathingNone
         print(29)  # Use Bag Valve Mask
+        continue
 
-    # Breathing management
-    elif sats is None or sats < 88:
-        print(25)  # UseSatsProbe to measure SaO2
-    elif events[17] > 0.1:  # RadialPulseNonPalpable
-        print(17)  # StartChestCompression
-    elif sats < 88:
+    # Breathing Assessment
+    if (sats is not None and sats < 88) or events[8] > 0.1:  # Breathing diff. issues & Low Sats
         print(30)  # Use Non Rebreather Mask
+        continue
 
-    # Circulation management
-    elif map_value is None:
-        print(27)  # UseBloodPressureCuff
-    elif map_value < 60:
+    # Circulation Assessment
+    if events[17] > 0.1:  # RadialPulseNonPalpable
+        print(17)  # StartChestCompression
+        continue
+    if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
+        continue
 
-    # Check Disability and Exposure problems
-    else:
-        print(8)  # ExamineResponse for overall responsiveness
-        print(6)  # ExamineDisability to track level of consciousness
-        print(7)  # ExamineExposure to check for external causes or signs
+    # Disability and Exposure
+    if events[21] > 0.1:  # AVPU_U
+        print(36)  # PerformHeadTiltChinLift
+        continue
 
     # Check for stabilization
-    if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-    ):
+    if (sats is not None and sats >= 88) and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8):
         print(48)  # Finish - John is stabilized
-        break  # Exiting the loop after finishing
-    else:
-        print(0)  # Default action when no immediate intervention is needed
+        break
+
+    # Default action when no specific intervention is necessary
+    print(0)  # DoNothing
