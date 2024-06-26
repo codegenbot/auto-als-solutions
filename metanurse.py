@@ -10,10 +10,12 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
+    # Immediate Actions for critical conditions:
     if sats is not None and sats < 65 or map_value is not None and map_value < 20:
         print(17)  # StartChestCompression
         continue
 
+    # Structured ABCDE assessments:
     if not airway_clear:
         print(3)  # ExamineAirway
         continue
@@ -33,7 +35,7 @@ while True:
         airway_clear
         and (sats is None or sats >= 88)
         and (resp_rate is None or resp_rate >= 8)
-        and (map_value is None or map_started >= 60)
+        and (map_value is None or map_value >= 60)
     ):
         print(48)  # Finish
         break
