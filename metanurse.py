@@ -17,7 +17,7 @@ ACTIONS = {
     "USE_YANKAUR_SUCTION": 31,
 }
 
-SEQUENCE = [
+INITIAL_SEQUENCE = [
     ACTIONS["EXAMINE_AIRWAY"],
     ACTIONS["EXAMINE_BREATHING"],
     ACTIONS["EXAMINE_CIRCULATION"],
@@ -65,8 +65,8 @@ def correct_circulation(map_value):
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
-    if step < len(SEQUENCE):
-        return SEQUENCE[step]
+    if step < len(INITIAL_SEQUENCE):
+        return INITIAL_SEQUENCE[step]
 
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
