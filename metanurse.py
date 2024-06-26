@@ -8,7 +8,7 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65 or (map_value is not None and map_values < 20):
+    if sats is not None and sats < 65 or (map_value is not None and map_arg_value< 20):
         print(17)  # StartChestCompression
         continue
 
