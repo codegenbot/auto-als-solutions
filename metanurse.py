@@ -4,29 +4,34 @@ while True:
     times = [float(t) for t in observations[39:46]]
     measurements = [float(m) for m in observations[46:]]
 
-    if events[3] <= 0.1:
+    sats = measurements[5] if times[5] > 0 else None
+    map_value = measurements[4] if times[4] > 0 else None
+    resp_rate = measurements[6] if times[6] > 0 else None
+
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+        print(17)  # StartChestCompression
+        continue
+
+    if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
-    elif events[7] > 0.1 or (events[6] <= 0.1 and measurements[6] < 8):
+    elif events[7] > 0.1 or (
+        resp_rate is not None and resp_rate < 8
+    ):  # BreathingNone or bad resp rate
         print(29)  # Use Bag Valve Mask
-    elif events[17] > 0.1:
+    elif events[17] > 0.1:  # RadialPulseNonPalpable
         print(17)  # StartChestCompression
-    elif times[5] > 0 and measurements[5] < 65:
-        print(17)  # StartChestCompression
-    elif times[5] > 0 and measurements[5] < 88:
+    elif sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
-    elif times[4] > 0 and measurements[4] < 60:
+    elif map_value is not None and map_value < 60:
         print(15)  # Give Fluids
     else:
-        stabilized = (
-            times[5] > 0
-            and measurements[5] >= 88
-            and times[4] > 0
-            and measurements[4] >= 60
-            and times[6] > 0
-            and measurements[6] >= 8
-        )
-        if stabilized:
+        if (
+            sats is not None
+            and sats >= 88
+            and (map_value is not None and map_value >= 60)
+            and (resp_rate is not None and resp_rate >= 8)
+        ):
             print(48)  # Finish - John is stabilized
             break
         else:
-            print(0)  # DoNothing
+            print(0)  # Default action when no immediate intervention is needed
