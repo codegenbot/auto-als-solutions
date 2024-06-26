@@ -16,7 +16,7 @@ while True:
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # ExamineAirway
+        print(3)  # Examine Airway
         continue
 
     if events[7] > 0.1:  # BreathingNone detected
@@ -28,17 +28,17 @@ while True:
         continue
 
     if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
+        print(4)  # Examine Breathing
         continue
 
     if map_value is not None and map_value < 60:
-        print(15)  # GiveFluids
+        print(15)  # Give Fluids
         continue
 
     if (
         (sats is not None and sats >= 88)
         and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
+        and (resp_rate is not None and resp binding play >= 8)
         and events[3] > 0.1
     ):
         print(48)  # Finish
