@@ -15,13 +15,19 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1 and all(
-        e <= 0.1 for e in events[4:7]
-    ):  # AirwayClear and no blockage observed
+    if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
         continue
 
-    if events[7] > 0.1:  # BreathingNone detected
+    if events[8] > 0:  # AirwayVomit
+        print(31)  # Use Yankeur Suction Catheter
+        continue
+
+    if events[6] > 0:  # AirwayTongue
+        print(32)  # Use Guedel Airway
+        continue
+
+    if events[7] > 0:  # BreathingNone detected
         print(29)  # Use Bag Valve Mask
         continue
 
@@ -37,18 +43,22 @@ while True:
         print(4)  # Examine Breathing
         continue
 
-    if any(e > 0.1 for e in events[31:34]):
-        print(9)  # Give Adenosine if rhythm issues from 31-33
+    if (sats is None or map_value is None or resp_rate is None):
+        if sats is None:
+            print(25)  # Use Sats Probe
+        elif map_value is None:
+            print(38)  # Take Blood Pressure
+        elif resp_rate is None:
+            print(4)  # Examine Breathing
         continue
 
     if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and respapbp_rate >= 8)
-        and events[3] > 0.1
-        and all(events[i] < 0.1 for i in [4, 5, 6])  # Check no airway blockages
+        (sats >= 88)
+        and (map_value >= 60)
+        and (resp_rate >= 8)
+        and (events[3] > 0.1)  # AirwayClear is relevant
     ):
-        print(48)  # Finish. Conditions for patient stability are met.
+        print(48)  # Finish
         break
 
-    print(0)  # DoNothing if no other actions are matched.
+    print(0)  # DoNothing
