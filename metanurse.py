@@ -30,7 +30,7 @@ def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
-    
+
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
@@ -48,9 +48,9 @@ def get_critical_action(resp_rate, sats, map_value, events):
     return None
 
 def correct_airway(events):
-    if events[4]:
+    if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:
+    if events[5] or events[6]:  # Airway blood or tongue blocks
         return ACTIONS["PERFORM_MANOEUVRES"]
     return None
 
