@@ -12,11 +12,10 @@ ACTIONS = {
     8: "USE_BVM",
     9: "USE_NON_REBREATHER_MASK",
     10: "GIVE_FLUIDS",
-    48: "FINISH",
+    48: "FINISH"
 }
 
 SEQUENCE = [5, 6, 7, 2, 3, 4]
-
 
 def stabilize_patient(observations):
     events = observations[:33]
@@ -30,34 +29,29 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, map_value, sats
 
-
 def get_critical_action(resp_rate, sats, map_value):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-        return 1  # START_CHEST_COMPRESSIONS
+        return 1
     if resp_rate is not None and resp_rate < 8:
-        return 8  # USE_BVM
+        return 8
     return None
-
 
 def correct_airway(events):
-    if events[4]:  # AirwayVomit
-        return 31  # USE_YANKAUR_SUCTION
-    if events[5] or events[6]:  # AirwayBlood or AirwayTongue
-        return 37  # PERFORM_JAW_THRUST
+    if events[4]:
+        return 31
+    if events[5] or events[6]:
+        return 37
     return None
-
 
 def correct_breathing(sats):
     if sats is not None and sats < 88:
-        return 9  # USE_NON_REBREATHER_MASK
+        return 9
     return None
-
 
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
-        return 10  # GIVE_FLUIDS
+        return 10
     return None
-
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
@@ -81,24 +75,16 @@ def get_action(observations, step):
     if circulation_action:
         return circulation_action
 
-    if (
-        map_value
-        and resp_rate
-        and sats
-        and map_value >= 60
-        and resp_rate >= 8
-        and sats >= 88
-    ):
-        return 48  # FINISH
+    if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
+        return 48
 
-    return 0  # DO_NOTHING
-
+    return 0
 
 step = 0
 while step < 350:
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
     print(action)
-    if action == 48:  # FINISH
+    if action == 48:
         break
     step += 1
