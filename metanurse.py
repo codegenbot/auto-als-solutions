@@ -12,24 +12,22 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:
+    if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
-    elif any(events[i] > 0.1 for i in [6, 7]):
+    elif any(events[i] > 0.1 for i in [6, 7]):  # AirwayTongue or BreathingNone
         print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
-    elif events[17] > 0.1 or events[16] <= 0.2:
-        if events[17] > 0.1:
-            print(20)  # OpenCirculationDrawer
-        else:
-            print(5)  # ExamineCirculation
+    elif events[17] > 0.1 or events[16] <= 0.2:  # RadialPulseNonPalpable or RadialPulsePalpable has low relevance
+        print(20)  # OpenCirculationDrawer
+        print(27)  # UseBloodPressureCuff
+        print(16)  # ViewMonitor
     elif sats is not None and sats < 88:
         print(30)  # UseNonRebreatherMask
     elif map_value is None or map_value < 60:
         print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
-    elif events[22] <= 0.1:
+    elif events[22] <= 0.1:  # AVPU_U has low relevance suspecting disability issues
         print(6)  # ExamineDisability
     else:
-        if all(times[i] <= 0.1 for i in [2, 5]):
+        if all(times[i] <= 0.1 for i in [2, 5]):  # Check heart rhythm and sats actively
             print(2)  # CheckRhythm
         elif map_value is not None and map_value < 70:
             print(15)  # GiveFluids
@@ -42,4 +40,4 @@ while True:
                 print(48)  # Finish - John is stabilized
                 break
             else:
-                print(0)  # DoNothing when no immediate intervention is needed
+                print(0)  # Default action when no immediate intervention is needed
