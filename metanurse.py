@@ -39,16 +39,16 @@ def stabilize_patient(observations):
     return events, heart_rate, resp_rate, map_value, sats
 
 def get_critical_action(resp_rate, sats, map_value, events):
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20) or (resp_rate is None and map_value is None and sats is None):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
 def correct_airway(events):
-    if events[4]:
+    if events[4]:  # AirwayVomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:
+    if events[5] or events[6]:  # AirwayBlood or AirwayTongue
         return ACTIONS["PERFORM_MANOEUVRES"]
     return None
 
