@@ -8,33 +8,40 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+    if sats is not None and sats < 65 or (map_value is not None and map_id < 20):
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # If AirwayClear has low relevance
-        print(3)  # ExamineAirway
-    elif any(events[i] > 0.1 for i in [6, 7]):  # Complications: AirwayTongue or BreathingNone
-        print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
-    elif events[17] > 0.1 or events[16] <= 0.1:  # Circulation status based on pulse palpability
-        print(5)  # ExamineCirculation
-    elif sats is not None and sats < 88:
-        print(30)  # UseNonRebreatherMask
-    elif map_value is None or map_value < 60:
-        print(27)  # UseBloodPressureCuff
-    elif events[22] <= 0.1:  # AVPU_U low relevance, suspecting disability issues
-        print(6)  # ExamineDisability
+    if events[3] > 0.1:  # AirwayClear has high relevance
+        pass
     else:
-        if all(times[i] <= 0.1 for i in [2, 5]):  # If rhythm and sats were recently checked
-            print(2)  # CheckRhythm
-        elif map_value is not None and map_value < 70:
-            print(15)  # GiveFluids
-        elif resp_rate is not None and resp_rate < 12:
-            print(4)  # ExamineBreathing
+        print(3)  # ExamineAirway
+        continue
+
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
+    if events[17] > 0.1:  # RadialPulseNonPalpable
+        if map_value is None or map_value < 60:
+            print(27)  # UseBloodPressureCuff
+            print(16)  # ViewMonitor
+            continue
         else:
-            if (sats is not None and sats >= 88 and map_value is not None 
-                and map_if value >= 60 and resp_rate is not None and resp_rate >= 8):
-                print(48)  # Finish - John is stabilized
-                break
-            else:
-                print(0)  # DoNothing
+            print(5)  # ExamineCirculation
+            continue
+
+    if sats is not None and sats < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # ExamineBreathing
+        continue
+
+    # Final condition to finish
+    if (sats is not None and sats >= 88) and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp_rate >= 8):
+        print(48)  # Finish
+        break
+
+    print(0)  # Default action when no other conditions are met
