@@ -108,6 +108,7 @@ while step < 350:
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
     print(action)
+    # Exit if FINISH action is reached
     if action == ACTIONS["FINISH"]:
         break
     step += 1
