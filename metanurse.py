@@ -8,12 +8,10 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Priority checks for critical conditions
-    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
 
-    # Checking airway obstruction and breathing issues
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
     elif events[7] > 0.1:  # BreathingNone detected
@@ -22,9 +20,17 @@ while True:
         print(30)  # Use Non Rebreather Mask to increase oxygen
     elif map_value is not None and map_value < 60:
         print(15)  # Give Fluids to improve circulation
-    elif resp_rate is not None and resp NoRate < 8:
+    elif resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
-    elif (sats is not None and sats >= 88 and map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8 and events[3] > 0.1):
+    elif (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+        and events[3] > 0.1
+    ):
         print(48)  # Finish - John is stabilized
         break
     else:
