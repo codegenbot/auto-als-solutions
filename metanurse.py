@@ -26,28 +26,32 @@ while True:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    if events[17] == 0 and 20 not in log_actions:
-        print(20)  # OpenCirculationDrawer
-        log_actions.add(20)
-    elif 27 not in log_actions and 20 in log_actions:
-        print(27)  # Use Blood Pressure Cuff (UseAline as an example)
-        log_actions.add(27)
-    elif 16 not in log_actions and 27 in log_actions:
-        print(16)  # ViewMonitor
-        log_actions.add(16)
-    else:
-        if map_value is None or map_value < 60:
-            print(5)  # Recheck ExamineCirculation
-        elif (
-            resp_rate is not None
-            and resp_rate >= 8
-            and sats is not None
-            and sats >= 88
-            and map_value is not None
-            and map_value >= 60
-            and events[3] > 0.1
-        ):
-            print(48)  # Finish
-            break
+    if map_value is None or map_value < 60:
+        if 20 not in log_actions:
+            print(20)  # OpenCirculationDrawer
+            log_actions.add(20)
+        elif 27 not in log_actions:
+            print(27)  # UseAline
+            log_actions.add(27)
+        elif 16 not in log_actions:
+            print(16)  # ViewMonitor
+            log_actions.add(16)
         else:
-            print(0)  # DoNothing if all conditions are checked or none are actionable
+.WebElement  # Continue to ExamineCirculation if still not resolved
+            print(5)
+    elif resp_rate is not None and resp_rate < 8:
+        print(4)  # ExamineBreathing
+
+    elif (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+        and events[3] > 0.1  # Airway is clear
+    ):
+        print(48)  # Finish - John is stabilized
+        break
+    else:
+        print(0)  # DoNothing
