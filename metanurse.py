@@ -15,7 +15,6 @@ ACTIONS = {
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
-    "PERFORM_HEAD_TILT_CHIN_LIFT": 36,
 }
 
 SEQUENCE = [
@@ -49,7 +48,7 @@ def get_critical_action(resp_rate, sats, map_value, events):
 def correct_airway(events):
     if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue blocks
+    if events[5] or events[6]:  # Airway blood or tongue block
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -65,7 +64,7 @@ def correct_circulation(map_value):
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
-    
+
     if step < len(SEQUENCE):
         return SEQUENCE[step]
 
