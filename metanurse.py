@@ -13,11 +13,6 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Immediate interventions for critical states
-    if events[17] > 0.1: # RadialPulseNonPalpable
-        print(1)  # CheckSignsOfLife
-        continue
-
     # ABCDE Approach
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
@@ -29,22 +24,22 @@ while True:
         print(30)  # UseNonRebreatherMask
     elif map_value is None or map_value < 60:
         print(27)  # UseBloodPressureCuff
-        continue
+        print(16)  # ViewMonitor
     elif events[22] <= 0.1:  # AVPU_U has low relevance suspecting disability issues
         print(6)  # ExamineDisability
     else:
-        # Extended monitoring and potential treatments
+        # Extend monitoring and potential treatments
         if all(times[i] <= 0.1 for i in [2, 5]):  # Check heart rhythm and sats actively
             print(2)  # CheckRhythm
+        elif map_value is not None and map_value < 70:
+            print(15)  # GiveFluids
         elif resp_rate is not None and resp_rate < 12:
             print(4)  # ExamineBreathing
         else:
             # Check stabilization condition
-            if map_value is not None and map_value < 65:
-                print(15)  # GiveFluids
-            elif (sats is not None and sats >= 88 and
-                  map_value is not None and map_value >= 60 and
-                  resp_rate is not None and resp_rate >= 8):
+            if (sats is not None and sats >= 88 and
+                map_value is not None and map_value >= 60 and
+                resp_rate is not None and resp_rate >= 8):
                 print(48)  # Finish - John is stabilized
                 break
             else:
