@@ -51,29 +51,34 @@ def handle_critical(resp_rate, sats, map_value):
     return None
 
 def correct_airway(events):
-    if events[4]:
+    if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:
+    if events[5] or events[6]:  # Airway blood or tongue block
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
 def assess_breathing_airway_circulation(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
+    # First, prioritize addressing critical conditions
     critical_action = handle_critical(resp_rate, sats, map_value)
     if critical_action:
         return critical_action
 
+    # Handle airway
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
 
+    # If low sats, use non-rebreather mask
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
 
+    # Continue examination sequence
     if step < len(SEQUENCE):
         return SEQUENCE[step]
 
+    # We're done if the patient is stabilized
     if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
 
