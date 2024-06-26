@@ -14,7 +14,8 @@ ACTIONS = {
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "USE_YANKAUR_SUCTION": 31
+    "USE_YANKAUR_SUCTION": 31,
+    "USE_VENFLON_IV_CATHETER": 14
 }
 
 SEQUENCE = [
@@ -83,6 +84,9 @@ def get_action(observations, step):
     circulation_action = correct_circulation(map_value)
     if circulation_action:
         return circulation_action
+
+    if not any(events):  # Ensure IV access if no critical events are observed
+        return ACTIONS["USE_VENFLON_IV_CATHETER"]
 
     if (
         map_value is not None
