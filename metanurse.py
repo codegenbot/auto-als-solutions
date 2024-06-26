@@ -23,8 +23,9 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"]
+    ACTIONS["VIEW_MONITOR"],
 ]
+
 
 def stabilize_patient(observations):
     events = observations[:33]
@@ -38,12 +39,14 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, map_value, sats
 
+
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
+
 
 def correct_airway(events):
     if events[4]:
@@ -52,15 +55,18 @@ def correct_airway(events):
         return ACTIONS["PERFORM_MANOEUVRES"]
     return None
 
+
 def correct_breathing(sats):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
     return None
 
+
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
     return None
+
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
@@ -84,11 +90,18 @@ def get_action(observations, step):
     if circulation_action:
         return circulation_action
 
-    if heart_rate is not None and resp_rate is not None and map_value is not None and sats is not None:
-        if map_value >= 60 and resp_rate >= 8 and sats >= 88:
-            return ACTIONS["FINISH"]
+    if (
+        map_value
+        and resp_rate
+        and sats
+        and map_value >= 60
+        and resp_rate >= 8
+        and sats >= 88
+    ):
+        return ACTIONS["FINISH"]
 
-    return ACTIONS["DO_NOTHING"]
+    return ACTIONS["VIEW_MONITOR"]
+
 
 step = 0
 while step < 350:
