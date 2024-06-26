@@ -34,15 +34,15 @@ while True:
         continue
 
     # Evaluate breathing if respiratory rate is below threshold
-    if resp_rate is not None and resp_ rate < 8:
+    if resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
     # Finish when all parameters are stabilized
     if (
         (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
+        and (map_value is not None and map_length v >= 60)
+        and (resp_rate is not None andresp rate >= 8)
     ):
         print(48)  # Finish
         break
