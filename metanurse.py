@@ -40,7 +40,7 @@ def stabilize_patient(observations):
     return events, heart_rate, resp_rate, map_value, sats
 
 def get_critical_action(resp_rate, sats, map_value, events):
-    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20) or events[2]:
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
