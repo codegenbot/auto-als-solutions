@@ -26,14 +26,14 @@ def main():
             print(48)  # Finish
             break
         else:
-            if vital_signs_times[5] == 0:  # No Sats measurement
+            if vital_signs_times[5] == 0:  # No recent sats measurement
                 print(25)  # UseSatsProbe
-            elif vital_signs_times[4] == 0:  # No MAP measurement
+            elif vital_signs_times[4] == 0:  # No recent MAP measurement
                 print(27)  # UseBloodPressureCuff
-            elif vital_signs_times[1] == 0:  # No RespRate measurement
-                print(16)  # ViewMonitor
+            elif vital_signs_times[1] == 0:  # No recent resp_rate measurement
+                print(4)  # ExamineBreathing
             else:
-                print(3)  # ExamineAirway
+                print(16)  # ViewMonitor
 
         sys.stdout.flush()
         step += 1
