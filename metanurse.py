@@ -8,57 +8,25 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65:
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
-    if map_value is not None and map_value < 20:
-        print(17)  # StartChestCompression
-        continue
-
+    
+    # Regular assessments
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
-        continue
-
-    if events[8] > 0:  # AirwayVomit
-        print(31)  # Use Yankeur Suction Catheter
-        continue
-
-    if events[6] > 0:  # AirwayTongue
-        print(32)  # Use Guedel Airway
-        continue
-
-    if events[7] > 0:  # BreathingNone detected
+    elif (events[7] > 0.1 or resp_rate is not None and resp_rate < 8):  # BreathingNone or bad resp rate
         print(29)  # Use Bag Valve Mask
-        continue
-
-    if sats is not None and sats < 88:
-        print(30)  # Use NonRebreatherMask
-        continue
-
-    if map_value is not None and map_value < 60:
+    elif events[17] > 0.1:  # RadialPulseNonPalpable
+        print(17)  # StartChestCompression
+    elif sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
+    elif map_value is not None and map_value < 60:
         print(15)  # Give Fluids
-        continue
-
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
-        continue
-
-    if (sats is None or map_value is None or resp_rate is None):
-        if sats is None:
-            print(25)  # Use Sats Probe
-        elif map_value is None:
-            print(38)  # Take Blood Pressure
-        elif resp_rate is None:
-            print(4)  # Examine Breathing
-        continue
-
-    if (
-        (sats >= 88)
-        and (map_value >= 60)
-        and (resp_rate >= 8)
-        and (events[3] > 0.1)  # AirwayClear is relevant
-    ):
-        print(48)  # Finish
-        break
-
-    print(0)  # DoNothing
+    else:
+        # Check for stabilization
+        if sats is not None and sats >= 88 and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp$_$
+            print(48)  # Finish - John is stabilized
+            break 
+        else:
+            print(0)  # Default action when no immediate intervention is needed
