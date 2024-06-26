@@ -16,15 +16,15 @@ while True:
         if (
             events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1
         ):  # AirwayVomit, AirwayBlood, AirwayTongue
-            print(31)  # UseYankeurSucionCatheter
+            print(31)  # Use Yankeur Suction Catheter
         else:
             print(3)  # ExamineAirway
     elif events[7] > 0.1:  # BreathingNone detected
-        print(29)  # UseBagValveMask
+        print(29)  # Use Bag Valve Mask
     elif sats is not None and sats < 88:
-        print(30)  # UseNonRebreatherMask
+        print(30)  # Use Non Rebreather Mask
     elif map_value is not None and map_value < 60:
-        print(15)  # GiveFluids
+        print(15)  # Give Fluids
     elif resp_rate is not None and resp_rate < 8:
         print(4)  # ExamineBreathing
     else:
@@ -40,4 +40,4 @@ while True:
             print(48)  # Finish - John is stabilized
             break
         else:
-            print(0)  # DoNothing
+            print(0)  # Default action when no immediate intervention is needed
