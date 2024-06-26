@@ -12,32 +12,34 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # AirwayClear has low relevance
-        if (
-            events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1
-        ):  # AirwayVomit, AirwayBlood, AirwayTongue
-            print(31)  # Use Yankeur Suction Catheter
+    if events[3] <= 0.1:
+        print(3)  # ExamineAirway
+    elif any(events[i] > 0.1 for i in [6, 7]):
+        print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
+    elif events[17] > 0.1 or events[16] <= 0.2:
+        if events[17] > 0.1:
+            print(20)  # OpenCirculationDrawer
         else:
-            print(3)  # ExamineAirway
-    elif events[7] > 0.1:  # BreathingNone detected
-        print(29)  # Use Bag Valve Mask
+            print(5)  # ExamineCirculation
     elif sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
-    elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
-    elif resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
+        print(30)  # UseNonRebreatherMask
+    elif map_value is None or map_value < 60:
+        print(27)  # UseBloodPressureCuff
+        print(16)  # ViewMonitor
+    elif events[22] <= 0.1:
+        print(6)  # ExamineDisability
     else:
-        stable = (
-            sats is not None
-            and sats >= 88
-            and map_value is not None
-            and map_value >= 60
-            and resp_rate is not None
-            and resp_rate >= 8
-        )
-        if stable and events[3] > 0.1:  # Airway clear is confirmed
-            print(48)  # Finish - John is stabilized
-            break
+        if all(times[i] <= 0.1 for i in [2, 5]):
+            print(2)  # CheckRhythm
+        elif map_value is not None and map_value < 70:
+            print(15)  # GiveFluids
+        elif resp_rate is not None and resp_rate < 12:
+            print(4)  # ExamineBreathing
         else:
-            print(0)  # Default action when no immediate intervention is needed
+            if (sats is not None and sats >= 88 and
+                map_value is not None and map_value >= 60 and
+                resp_rate is not None and resp_rate >= 8):
+                print(48)  # Finish - John is stabilized
+                break
+            else:
+                print(0)  # DoNothing when no immediate intervention is needed
