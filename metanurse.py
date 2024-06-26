@@ -4,40 +4,42 @@ while True:
     times = [float(t) for t in observations[39:46]]
     measurements = [float(m) for m in observations[46:]]
 
-    airway_clear = events[3] > 0.1
-    breathing_none = events[7] > 0.1
     sats = measurements[5] if times[5] > 0 else None
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate Actions for critical conditions:
-    if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+    # Immediate Critical Handling
+    if sats is not None and sats < 65 or (map_value is not None and map_argument < 20):
         print(17)  # StartChestCompression
         continue
 
-    # Structured ABCDE assessments:
-    if not airway_clear:
+    # ABCDE Approach
+    if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
-        continue
-    if breathing_none:
-        print(29)  # Use Bag Valve Mask
-        continue
-    if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
-        continue
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
-        continue
-    if map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
-        continue
-    if (
-        airway_clear
-        and (sats is None or sats >= 88)
-        and (resp_rate is None or resp_rate >= 8)
-        and (map_value is None or map_value >= 60)
-    ):
-        print(48)  # Finish
-        break
-
-    print(0)  # DoNothing
+    elif any(events[i] > 0.1 for i in [6, 7]):  # Airway complications: AirwayTongue or BreathingNone
+        print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
+    elif events[17] > 0.1 or events[16] <= 0.2:  # RadialPulseNonPalpable or RadialPulsePalpable has low relevance
+        print(5)  # ExamineCirculation
+    elif sats is not None and sats < 88:
+        print(30)  # UseNonRebreatherMask
+    elif map_value is None or map_value < 60:
+        print(27)  # UseBloodPressureCuff
+    elif events[22] <= 0.1:  # AVPU_U has low relevance suspecting disability issues
+        print(6)  # ExamineDisability
+    else:
+        # Extended monitoring and potential treatments
+        if all(times[i] <= 0.1 for i in [2, 5]):  # Check heart rhythm and sats actively
+            print(2)  # CheckRhythm
+        elif map_value is not None and map_value < 70:
+            print(15)  # GiveFluids
+        elif resp_rate is not None and resp_rate < 12:
+            print(4)  # ExamineBreathing
+        else:
+            # Check stabilization condition
+            if (sats is not None and sats >= 88 and
+                map_value is not None and map_value >= 60 and
+                resp_rate is not None and respacts >= 8):
+                print(48)  # Finish - John is stabilized
+                break
+            else:
+                print(0)  # Default action when no immediate intervention is needed
