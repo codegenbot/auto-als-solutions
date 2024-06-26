@@ -13,13 +13,16 @@ while True:
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # ExamineAirway
+        if events[5] > 0 or events[6] > 0:  # AirwayBlockage signs like AirwayVomit or AirwayBlood
+            print(18)  # OpenAirwayDrawer to manage obstruction
+        else:
+            print(3)  # ExamineAirway
     elif events[7] > 0.1:  # BreathingNone detected
-        print(29)  # Use Bag Valve Mask for assisted breathing
+        print(29)  # UseBagValveMask for assisted breathing
     elif sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask to increase oxygen
+        print(30)  # Use NonRebreatherMask to increase oxygen
     elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids to improve circulation
+        print(15)  # GiveFluids to improve circulation
     elif resp_rate is not None and resp_rate < 8:
         print(4)  # ExamineBreathing
     elif (
