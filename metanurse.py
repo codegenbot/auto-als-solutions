@@ -2,54 +2,19 @@ import sys
 
 ACTIONS = {
     "DO_NOTHING": 0,
-    "CHECK_SIGNS_OF_LIFE": 1,
-    "CHECK_RHYTHM": 2,
+    "USE_SATS_PROBE": 25,
+    "USE_BP_CUFF": 27,
+    "VIEW_MONITOR": 16,
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
-    "EXAMINE_DISABILITY": 6,
-    "EXAMINE_EXPOSURE": 7,
-    "EXAMINE_RESPONSE": 8,
-    "GIVE_ADENOSINE": 9,
-    "GIVE_ADRENALINE": 10,
-    "GIVE_AMIODARONE": 11,
-    "GIVE_ATROPINE": 12,
-    "GIVE_MIDAZOLAM": 13,
-    "USE_VENFLON_IV_CATHETER": 14,
-    "GIVE_FLUIDS": 15,
-    "VIEW_MONITOR": 16,
-    "START_CHEST_COMPRESSIONS": 17,
-    "OPEN_AIRWAY_DRAWER": 18,
-    "OPEN_BREATHING_DRAWER": 19,
-    "OPEN_CIRCULATION_DRAWER": 20,
-    "OPEN_DRUGS_DRAWER": 21,
-    "BAG_DURING_CPR": 22,
-    "RESUME_CPR": 23,
-    "USE_MONITOR_PADS": 24,
-    "USE_SATS_PROBE": 25,
-    "USE_ALINE": 26,
-    "USE_BLOOD_PRESSURE_CUFF": 27,
-    "ATTACH_DEFIB_PADS": 28,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
-    "USE_YANKAUR_SUCTION": 31,
-    "USE_GUEDEL_AIRWAY": 32,
-    "TAKE_BLOOD_ABG": 33,
-    "TAKE_ROUTINE_BLOODS": 34,
-    "PERFORM_AIRWAY_MANOEUVRES": 35,
-    "PERFORM_HEAD_TILT_CHIN_LIFT": 36,
+    "START_CHEST_COMPRESSIONS": 17,
+    "GIVE_FLUIDS": 15,
+    "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "TAKE_BLOOD_PRESSURE": 38,
-    "TURN_ON_DEFIBRILLATOR": 39,
-    "DEFIBRILLATOR_CHARGE": 40,
-    "DEFIBRILLATOR_CURRENT_UP": 41,
-    "DEFIBRILLATOR_CURRENT_DOWN": 42,
-    "DEFIBRILLATOR_PACE": 43,
-    "DEFIBRILLATOR_PACE_PAUSE": 44,
-    "DEFIBRILLATOR_RATE_UP": 45,
-    "DEFIBRILLATOR_RATE_DOWN": 46,
-    "DEFIBRILLATOR_SYNC": 47,
-    "FINISH": 48
+    "USE_YANKAUR_SUCTION": 31
 }
 
 SEQUENCE = [
@@ -57,7 +22,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_BREATHING"],
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
-    ACTIONS["USE_BLOOD_PRESSURE_CUFF"],
+    ACTIONS["USE_BP_CUFF"],
     ACTIONS["VIEW_MONITOR"]
 ]
 
@@ -83,7 +48,7 @@ def get_critical_action(resp_rate, sats, map_value, events):
 def correct_airway(events):
     if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue block
+    if events[5] or events[6]:  # Airway blood or tongue blocks
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -106,9 +71,6 @@ def get_action(observations, step):
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
         return critical_action
-
-    if map_value is None or sats is None:
-        return SEQUENCE[4 + step % 3]  # Cycle between vital sign checking sequence (USE_SATS_PROBE, USE_BLOOD_PRESSURE_CUFF, VIEW_MONITOR)
 
     airway_action = correct_airway(events)
     if airway_action:
