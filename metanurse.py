@@ -41,7 +41,7 @@ def stabilize_patient(observations):
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] or (resp_rate is not None and resp_rate < 8):
+    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
@@ -72,11 +72,26 @@ def get_action(observations, step):
     if critical_action:
         return critical_action
 
-    correct_action = correct_airway(events) or correct_breathing(sats) or correct_circulation(map_value)
-    if correct_action:
-        return correct_action
+    airway_action = correct_airway(events)
+    if airway_action:
+        return airway_action
 
-    if map_value and resp_rate and sats and map_value >= 60 and resp_rate >= 8 and sats >= 88:
+    breathing_action = correct_breathing(sats)
+    if breathing_action:
+        return breathing_action
+
+    circulation_action = correct_circulation(map_value)
+    if circulation_action:
+        return circulation_action
+
+    if (
+        map_value is not None
+        and resp_rate is not None
+        and sats is not None
+        and map_value >= 60
+        and resp_rate >= 8
+        and sats >= 88
+    ):
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
