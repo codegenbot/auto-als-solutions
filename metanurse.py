@@ -12,42 +12,31 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[32] > 0.1:  # AirwayClear checked and clear
-        airway_ok = True
-    elif events[5] > 0.1 or events[6] > 0.1 or events[4] > 0.1:  # Airway obstruction signs
-        airway_ok = False
-        print(18)  # OpenAirwayDrawer
-        continue
-    else:
+    if events[3] <= 0.1:  # Low relevance for AirwayClear event
         print(3)  # Examine Airway
         continue
 
-    if events[7] > 0.1:  # BreathingNone detected
+    if events[7] > 0.1:  # High relevance for BreathingNone event
         print(29)  # Use Bag Valve Mask
-        continue
-
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
         continue
 
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    if events[17] > 0.1:  # RadialPulseNonPalpable
+    if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    if map_value is not None and map_value < 60:
-        print(27)  # UseAline
+    if resp_rate is not None and resp_rate < 8:
+        print(4)  # Examine Breathing
         continue
 
-    # If stabilized:
     if (
-        airway_ok and
-        (sats is not None and sats >= 88) and
-        (map_value is not None and map_value >= 60) and
-        (resp_rate is not None and resp_rate >= 8)
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
+        and events[3] > 0.1
     ):
         print(48)  # Finish
         break
