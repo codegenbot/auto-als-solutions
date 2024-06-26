@@ -8,7 +8,6 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate threat management
     if sats is not None and sats < 65:
         print(17)  # StartChestCompression
         continue
@@ -16,35 +15,40 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway management
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    if events[3] <= 0.1 and all(
+        e <= 0.1 for e in events[4:7]
+    ):  # AirwayClear and no blockage observed
         print(3)  # Examine Airway
         continue
 
-    # Breathing management
     if events[7] > 0.1:  # BreathingNone detected
         print(29)  # Use Bag Valve Mask
         continue
 
-    # Oxygenation management
     if sats is not None and sats < 88:
         print(30)  # Use NonRebreatherMask
         continue
 
-    # Circulatory support
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # Breathing rate check
     if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
+        print(4)  # Examine Breathing
         continue
 
-    # Check for stabilization
-    if (sats is not None and sats >= 88) and (map_value is not None and map_val >= 60) and (resp_rate is not None and resp_rate >= 8) and events[3] > 0.1:
-        print(48)  # Finish
+    if any(e > 0.1 for e in events[31:34]):
+        print(9)  # Give Adenosine if rhythm issues from 31-33
+        continue
+
+    if (
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and respapbp_rate >= 8)
+        and events[3] > 0.1
+        and all(events[i] < 0.1 for i in [4, 5, 6])  # Check no airway blockages
+    ):
+        print(48)  # Finish. Conditions for patient stability are met.
         break
 
-    # Default action if no other conditions met
-    print(0)  # DoNothing
+    print(0)  # DoNothing if no other actions are matched.
