@@ -2,15 +2,19 @@ import sys
 
 ACTIONS = {
     "DO_NOTHING": 0,
-    "USE_SATS_PROBE": 25,
-    "USE_BP_CUFF": 27,
-    "VIEW_MONITOR": 16,
+    "CHECK_SIGNS_OF_LIFE": 1,
+    "CHECK_RHYTHM": 2,
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
+    "EXAMINE_DISABILITY": 6,
+    "EXAMINE_EXPOSURE": 7,
+    "USE_SATS_PROBE": 25,
+    "USE_BP_CUFF": 27,
+    "VIEW_MONITOR": 16,
+    "START_CHEST_COMPRESSIONS": 17,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
-    "START_CHEST_COMPRESSIONS": 17,
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
@@ -43,14 +47,12 @@ def get_critical_action(resp_rate, sats, map_value, events):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
-    if map_value is not None and map_value < 60:
-        return ACTIONS["GIVE_FLUIDS"]
     return None
 
 def correct_airway(events):
-    if events[4]:  # Airway vomit
+    if events[4]:
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue block
+    if events[5] or events[6]:
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -67,12 +69,12 @@ def correct_circulation(map_value):
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
-    if step < len(SEQUENCE):
-        return SEQUENCE[step]
-
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
         return critical_action
+
+    if step < len(SEQUENCE):
+        return SEQUENCE[step]
 
     airway_action = correct_airway(events)
     if airway_action:
@@ -106,5 +108,3 @@ for _ in range(350):
     if action == ACTIONS["FINISH"]:
         break
     step += 1
-    if step % 10 == 0:
-        print(ACTIONS["VIEW_MONITOR"])
