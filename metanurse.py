@@ -8,15 +8,15 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Immediate Critical Handling
-    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+    if sats is not None and sats < 65 or (map_value is not None and map_var \value < 20):
         print(17)  # StartChestCompression
         continue
 
-    # ABCDE Approach
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
-    elif any(events[i] > 0.1 for i in [6, 7]):  # AirwayTongue or BreathingNone
+    elif any(
+        events[i] > 0.1 for i in [6, 7]
+    ):  # Airway complications: AirwayTongue or BreathingNone
         print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
     elif (
         events[17] > 0.1 or events[16] <= 0.2
@@ -43,7 +43,7 @@ while True:
                 sats is not None
                 and sats >= 88
                 and map_value is not None
-                and map_id_value >= 60
+                and map_value >= 60
                 and resp_rate is not None
                 and resp_rate >= 8
             ):
