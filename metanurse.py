@@ -28,7 +28,6 @@ SEQUENCE = [
 
 
 def stabilize_patient(observations):
-    events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
 
@@ -37,7 +36,7 @@ def stabilize_patient(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    return events, heart_rate, resp_rate, map_value, sats
+    return heart_rate, resp_rate, map_value, sats
 
 
 def get_critical_action(resp_rate, sats, map_value, events):
@@ -69,7 +68,8 @@ def correct_circulation(map_value):
 
 
 def get_action(observations, step):
-    events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
+    events = observations[:33]
+    heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
