@@ -8,35 +8,43 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
+    # Immediate Critical Handling
     if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
 
+    # Immediate interventions for critical states
+    if events[17] > 0.1: # RadialPulseNonPalpable
+        print(1)  # CheckSignsOfLife
+        continue
+
+    # ABCDE Approach
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
-    elif any(events[i] > 0.1 for i in [6, 7]):  # AirwayTongue or BreathingNone
+    elif any(events[i] > 0.1 for i in [6, 7]):  # Airway complications: AirwayTongue or BreathingNone
         print(32 if events[6] > 0.1 else 29)  # UseGuedelAirway or UseBagValveMask
     elif events[17] > 0.1 or events[16] <= 0.2:  # RadialPulseNonPalpable or RadialPulsePalpable has low relevance
-        print(20)  # OpenCirculationDrawer
-        print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
+        print(5)  # ExamineCirculation
     elif sats is not None and sats < 88:
         print(30)  # UseNonRebreatherMask
     elif map_value is None or map_value < 60:
         print(27)  # UseBloodPressureCuff
+        continue
     elif events[22] <= 0.1:  # AVPU_U has low relevance suspecting disability issues
         print(6)  # ExamineDisability
     else:
+        # Extended monitoring and potential treatments
         if all(times[i] <= 0.1 for i in [2, 5]):  # Check heart rhythm and sats actively
             print(2)  # CheckRhythm
-        elif map_value is not None and map_value < 70:
-            print(15)  # GiveFluids
         elif resp_rate is not None and resp_rate < 12:
             print(4)  # ExamineBreathing
         else:
-            if (sats is not None and sats >= 88 and
-                map_value is not None and map_value >= 60 and
-                resp_rate is not None and resp_rate >= 8):
+            # Check stabilization condition
+            if map_value is not None and map_value < 65:
+                print(15)  # GiveFluids
+            elif (sats is not None and sats >= 88 and
+                  map_value is not None and map_value >= 60 and
+                  resp_rate is not None and resp_rate >= 8):
                 print(48)  # Finish - John is stabilized
                 break
             else:
