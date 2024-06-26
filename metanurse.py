@@ -46,9 +46,9 @@ def get_critical_action(resp_rate, sats, map_value, events):
     return None
 
 def correct_airway(events):
-    if events[4]: 
+    if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  
+    if events[5] or events[6]:  # Airway blood or tongue blocks
         return ACTIONS["PERFORM_MANOEUVRES"]
     return None
 
