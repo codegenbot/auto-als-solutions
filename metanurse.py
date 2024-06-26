@@ -2,16 +2,19 @@ import sys
 
 ACTIONS = {
     "DO_NOTHING": 0,
-    "USE_SATS_PROBE": 25,
-    "USE_BP_CUFF": 27,
-    "VIEW_MONITOR": 16,
+    "CHECK_SIGNS_OF_LIFE": 1,
+    "CHECK_RHYTHM": 2,
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
+    "USE_SATS_PROBE": 25,
+    "USE_BP_CUFF": 27,
+    "VIEW_MONITOR": 16,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
     "START_CHEST_COMPRESSIONS": 17,
     "GIVE_FLUIDS": 15,
+    "GIVE_ADENOSINE": 9,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
@@ -76,6 +79,9 @@ def get_action(observations, step):
     if airway_action:
         return airway_action
 
+    if heart_rate and heart_rate > 180:
+        return ACTIONS["GIVE_ADENOSINE"]
+
     breathing_action = correct_breathing(sats)
     if breathing_action:
         return breathing_action
@@ -83,6 +89,9 @@ def get_action(observations, step):
     circulation_action = correct_circulation(map_value)
     if circulation_action:
         return circulation_action
+
+    if map_value is not None and map_value < 40 and step > len(SEQUENCE):
+        return ACTIONS["CHECK_SIGNS_OF_LIFE"]
 
     if (
         map_value is not None
