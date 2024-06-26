@@ -15,6 +15,7 @@ ACTIONS = {
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
     "USE_YANKAUR_SUCTION": 31,
+    "PERFORM_HEAD_TILT_CHIN_LIFT": 36,
 }
 
 SEQUENCE = [
@@ -30,7 +31,7 @@ def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
-
+    
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
@@ -38,10 +39,10 @@ def stabilize_patient(observations):
 
     return events, heart_rate, resp_rate, map_value, sats
 
-def get_critical_action(resp_rate, sats, map_value, events):
+def get_critical_action(resp_rate, sats, map_value):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
+    if resp_rate is None or resp_rate < 8:
         return ACTIONS["USE_BVM"]
     return None
 
@@ -67,19 +68,19 @@ def get_action(observations, step):
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
-
-    critical_action = get_critical_action(resp_rate, sats, map_value, events)
+    
+    critical_action = get_critical_action(resp_rate, sats, map_value)
     if critical_action:
         return critical_action
-
+    
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
-
+    
     breathing_action = correct_breathing(sats)
     if breathing_action:
         return breathing_action
-
+    
     circulation_action = correct_circulation(map_value)
     if circulation_action:
         return circulation_action
