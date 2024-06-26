@@ -56,7 +56,7 @@ def parse_observations(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
-
+    
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
@@ -76,14 +76,7 @@ def stabilize(observations):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
 
-    if (
-        map_value is not None
-        and resp_rate is not None
-        and sats is not None
-        and map_value >= 60
-        and resp_rate >= 8
-        and sats >= 88
-    ):
+    if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
@@ -102,7 +95,21 @@ def get_action(observations, step):
     elif step == 5:
         return ACTIONS["VIEW_MONITOR"]
     
-    return stabilize(observations)
+    events, heart_rate, resp_rate, map_value, sats = parse_observations(observations)
+
+    if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        return ACTIONS["START_CHEST_COMPRESSION"]
+    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
+        return ACTIONS["USE_BAG_VALVE_MASK"]
+    if map_value is not None and map_value < 60:
+        return ACTIONS["GIVE_FLUIDS"]
+    if sats is not None and sats < 88:
+        return ACTIONS["USE_NON_REBREATHER_MASK"]
+    
+    if map_value is not None and resp_rate is not None and sats is not None and map_value >= 60 and resp_rate >= 8 and sats >= 88:
+        return ACTIONS["FINISH"]
+
+    return ACTIONS["DO_NOTHING"]
 
 step = 0
 while step < 350:
