@@ -8,7 +8,7 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and (sats < 65 or (map_value is not None and map_double_glyph is None and sats is None:
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # StartChestCompression
         continue
 
@@ -16,7 +16,9 @@ while True:
         print(3)  # ExamineAirway
         continue
 
-    if events[3] > 0.1 and (events[4] > 0.1 or events[5] > 0.1):  # AirwayVomit or AirwayBlood
+    if events[3] > 0.1 and (
+        events[4] > 0.1 or events[5] > 0.1
+    ):  # AirwayVomit or AirwayBlood
         print(31)  # UseYankeurSuctionCatheter
         continue
 
