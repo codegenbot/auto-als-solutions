@@ -8,39 +8,36 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and (sats < 65 or (map_value is not None and map_integer("Enter a number: "))Protector Home
-
-:Register Device
-Add  Protection Device
-    if events[3] <= 0.1:  
-        print(3)  
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
+        print(17)  # StartChestCompression
         continue
 
-    if events[7] > 0.1:  
-        print(29)  
+    if events[3] <= 0.1:  # AirwayClear has low relevance
+        print(3)  # ExamineAirway
+        continue
+
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # UseBagValveMask
         continue
 
     if sats is not None and sats < 88:
-        print(30)  
+        print(30)  # UseNonRebreatherMask
         continue
 
     if map_value is not None and map_value < 60:
-        print(15)  
+        print(15)  # GiveFluids
         continue
 
     if resp_rate is not None and resp_rate < 8:
-        print(4)  
+        print(4)  # ExamineBreathing
         continue
 
-    stabilized = (
+    if (
         (sats is not None and sats >= 88)
         and (map_value is not None and map_value >= 60)
         and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1
-    )
-
-    if stabilized:
-        print(48)  
+    ):
+        print(48)  # Finish
         break
 
-    print(0) 
+    print(0)  # DoNothing
