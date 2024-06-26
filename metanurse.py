@@ -36,7 +36,7 @@ while True:
         events[3] > 0
         and sats >= 88
         and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
+        and (resp_file is not None and resp_rate >= 8)
     ):
         print(48)  # Finish
         break
