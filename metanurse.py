@@ -52,15 +52,6 @@ ACTIONS = {
     "FINISH": 48,
 }
 
-STEP_SEQUENCE = [
-    ACTIONS["EXAMINE_AIRWAY"],
-    ACTIONS["EXAMINE_BREATHING"],
-    ACTIONS["EXAMINE_CIRCULATION"],
-    ACTIONS["USE_SATS_PROBE"],
-    ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"],
-]
-
 def parse_observations(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
@@ -98,12 +89,20 @@ def stabilize(observations):
     return ACTIONS["DO_NOTHING"]
 
 def get_action(observations, step):
-    if step < len(STEP_SEQUENCE):
-        return STEP_SEQUENCE[step]
-    action = stabilize(observations)
-    if action == ACTIONS["DO_NOTHING"]:
+    if step == 0:
+        return ACTIONS["EXAMINE_AIRWAY"]
+    elif step == 1:
+        return ACTIONS["EXAMINE_BREATHING"]
+    elif step == 2:
+        return ACTIONS["EXAMINE_CIRCULATION"]
+    elif step == 3:
+        return ACTIONS["USE_SATS_PROBE"]
+    elif step == 4:
+        return ACTIONS["USE_BP_CUFF"]
+    elif step == 5:
         return ACTIONS["VIEW_MONITOR"]
-    return action
+    
+    return stabilize(observations)
 
 step = 0
 while step < 350:
