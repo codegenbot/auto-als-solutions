@@ -2,7 +2,6 @@ import sys
 
 ACTIONS = {
     "DO_NOTHING": 0,
-    "START_CHEST_COMPRESSIONS": 17,
     "USE_SATS_PROBE": 25,
     "USE_BP_CUFF": 27,
     "VIEW_MONITOR": 16,
@@ -11,10 +10,11 @@ ACTIONS = {
     "EXAMINE_CIRCULATION": 5,
     "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
+    "START_CHEST_COMPRESSIONS": 17,
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
-    "PERFORM_MANOEUVRES": 37,
-    "USE_YANKAUR_SUCTION": 31,
+    "PERFORM_JAW_THRUST": 37,
+    "USE_YANKAUR_SUCTION": 31
 }
 
 SEQUENCE = [
@@ -49,7 +49,7 @@ def correct_airway(events):
     if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
     if events[5] or events[6]:  # Airway blood or tongue blocks
-        return ACTIONS["PERFORM_MANOEUVRES"]
+        return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
 def correct_breathing(sats):
@@ -85,8 +85,12 @@ def get_action(observations, step):
         return circulation_action
 
     if (
-        map_value and resp_rate and sats and 
-        map_value >= 60 and resp_rate >= 8 and sats >= 88
+        map_value is not None
+        and resp_rate is not None
+        and sats is not None
+        and map_value >= 60
+        and resp_rate >= 8
+        and sats >= 88
     ):
         return ACTIONS["FINISH"]
 
