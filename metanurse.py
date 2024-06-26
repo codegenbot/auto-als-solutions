@@ -93,8 +93,6 @@ def correct_breathing(sats):
     return None
 
 def correct_circulation(map_value):
-    if map_value is not None and map_value < 20:
-        return ACTIONS["START_CHEST_COMPRESSION"]
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
     return None
