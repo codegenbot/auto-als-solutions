@@ -96,11 +96,15 @@ def get_action(observations, step):
 
     return ACTIONS["DO_NOTHING"]
 
-step = 0
-while step < 350:
-    input_data = list(map(float, input().strip().split()))
-    action = get_action(input_data, step)
-    print(action)
-    if action == ACTIONS["FINISH"]:
-        break
-    step += 1
+def main():
+    step = 0
+    while step < 350:
+        input_data = list(map(float, input().strip().split()))
+        action = get_action(input_data, step)
+        print(action)
+        if action == ACTIONS["FINISH"]:
+            break
+        step += 1
+
+if __name__ == "__main__":
+    main()
