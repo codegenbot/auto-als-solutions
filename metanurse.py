@@ -8,30 +8,37 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
+    if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # StartChestCompression
         continue
 
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
-    elif events[7] > 0.1:  # BreathingNone detected
-        print(29)  # Use Bag Valve Mask for assisted breathing
-    elif sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask to increase oxygen
-    elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids to improve circulation
-    elif resp_rate is not None and resp_rate < 8:
+        continue
+
+    if events[7] > 0.1:  # BreathingNone detected
+        print(29)  # Use Bag Valve Mask
+        continue
+
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
+        continue
+
+    if map_value is not None and map_value < 60:
+        print(15)  # Give Fluids
+        continue
+
+    if resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
-    elif (
-        sats is not None
-        and sats >= 88
-        and map_value is not None
-        and map_value >= 60
-        and resp_rate is not None
-        and resp_rate >= 8
+        continue
+
+    if (
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
         and events[3] > 0.1
     ):
-        print(48)  # Finish - John is stabilized
+        print(48)  # Finish
         break
-    else:
-        print(0)  # Default action when no immediate intervention is needed
+
+    print(0)  # DoNothing
