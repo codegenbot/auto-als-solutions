@@ -15,39 +15,39 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if sats is None:  # No recent saturation measurements
+    if sats is None:
         print(25)  # UseSatsProbe
         continue
-    if map_value is None:  # No recent MAP measurements
+    if map_value is None:
         print(27)  # UseBloodPressureCuff
         continue
 
     if events[3] <= 0.1:
-        print(3)  # ExamineAirway
+        print(3)  # Examine Airway
         continue
 
     if events[7] > 0.1:  # BreathingNone
-        print(29)  # UseBagValveMask
+        print(29)  # Use Bag Valve Mask
         continue
 
-    if sats < 88:
-        print(30)  # UseNonRebreatherMask
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
         continue
 
-    if map_value < 60:
-        print(15)  # GiveFluids
+    if map_value is not None and map_value < 60:
+        print(15)  # Give Fluids
         continue
 
     if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing
+        print(4)  # Examine Breathing
         continue
 
     if (
-        (sats >= 88)
-        and (map_value >= 60)
+        (sats is not None and sats >= 88)
+        and (map_value is not None and map_value >= 60)
         and (resp_rate is not None and resp_rate >= 8)
     ):
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing
+    print(16)  # ViewMonitor
