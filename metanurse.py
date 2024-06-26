@@ -8,38 +8,49 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Check for immediate life threats
+    # Handle immediate life threats
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # Start Chest Compression
         continue
 
-    # Bring vital tools frequently in use
-    if times[5] == 0:  # Sats not measured
-        print(25)  # Use Sats Probe
-        continue
-    if times[4] == 0:  # MAP not measured
-        print(27)  # Use Blood Pressure Cuff
+    # Check if breathing is absent
+    if events[7] > 0.1:  # BreathingNone high relevance
+        print(29)  # Use Bag Valve Mask
         continue
 
-    # Airway management
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    # Immediate airway problem
+    if events[3] <= 0.1 and events[3] > 0:  # AirwayClear low relevance and known issue
         print(3)  # Examine Airway
         continue
 
-    # Breathing management
-    if events[7] > 0.1:  # BreathingNone
-        print(29)  # Use Bag Valve Mask
-        continue
+    # Saturations management
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
-    # Circulation management
+    # Critical low respiration rate
+    if resp_rate is not None and resp_rate < 8:
+        print(29)  # Assume ventilation required, Use Bag Valve Mask
+        continue
+
+    # Circulation assessment and management
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
-    # If all conditions are met for stabilization
+    # If no recent observations on some crucial vital signs
+    if events[3] < 0.1:  # Airway not recently examined
+        print(3)  # Examine Airway
+        continue
+    if times[5] == 0:  # No recent saturation measurement
+        print(25)  # UseSatsProbe
+        continue
+    if times[4] == 0:  # No recent blood pressure measurement
+        print(27)  # Attach blood pressure cuff IF NOT already attached
+        print(38)  # Take Blood Pressure
+        continue
+
+    # Check for stabilization
     if (
         (sats is not None and sats >= 88)
         and (map_value is not None and map_value >= 60)
@@ -47,6 +58,6 @@ while True:
     ):
         print(48)  # Finish
         break
-
-    # Examine other systems to get more information
-    print(5)  # Examine Circulation
+    
+    # Default action
+    print(0)  # DoNothing
