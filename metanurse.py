@@ -4,15 +4,21 @@ while True:
     times = [float(t) for t in observations[39:46]]
     measurements = [float(m) for m in observations[46:]]
 
-    sats = measurements[5] if times[5] > 0 else None
-    map_value = measurements[4] if times[4] > 0 else None
-    resp_rate = measurements[6] if times[6] > 0 else None
+    sats = measurements[5] if times[5] > 0.1 else None
+    map_value = measurements[4] if times[4] > 0.1 else None
+    resp_rate = measurements[6] if times[6] > 0.1 else None
 
     if sats is not None and (sats < 65 or (map_value is not None and map_value < 20)):
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # AirwayClear has low relevance
+    if events[32] > 0.1:  # AirwayClear checked and clear
+        airway_ok = True
+    elif events[5] > 0.1 or events[6] > 0.1 or events[4] > 0.1:  # Airway obstruction signs
+        airway_ok = False
+        print(18)  # OpenAirwayDrawer
+        continue
+    else:
         print(3)  # Examine Airway
         continue
 
@@ -20,23 +26,28 @@ while True:
         print(29)  # Use Bag Valve Mask
         continue
 
-    if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
-        continue
-
-    if map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
-        continue
-
     if resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
+    if sats is not None and sats < 88:
+        print(30)  # Use Non Rebreather Mask
+        continue
+
+    if events[17] > 0.1:  # RadialPulseNonPalpable
+        print(15)  # Give Fluids
+        continue
+
+    if map_value is not None and map_value < 60:
+        print(27)  # UseAline
+        continue
+
+    # If stabilized:
     if (
-        (sats is not None and sats >= 88)
-        and (map_value is not None and map_value >= 60)
-        and (resp_rate is not None and resp_rate >= 8)
-        and events[3] > 0.1
+        airway_ok and
+        (sats is not None and sats >= 88) and
+        (map_value is not None and map_value >= 60) and
+        (resp_rate is not None and resp_rate >= 8)
     ):
         print(48)  # Finish
         break
