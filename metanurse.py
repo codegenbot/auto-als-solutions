@@ -14,7 +14,7 @@ ACTIONS = {
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "USE_YANKAUR_SUCTION": 31,
+    "USE_YANKAUER_SUCTION": 31,
 }
 
 SEQUENCE = [
@@ -26,7 +26,9 @@ SEQUENCE = [
     ACTIONS["VIEW_MONITOR"],
 ]
 
+
 def stabilize_patient(observations):
+    events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
 
@@ -35,7 +37,8 @@ def stabilize_patient(observations):
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
 
-    return heart_rate, resp_rate, map_value, sats
+    return events, heart_rate, resp_rate, map_value, sats
+
 
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
@@ -44,26 +47,29 @@ def get_critical_action(resp_rate, sats, map_value, events):
         return ACTIONS["USE_BVM"]
     return None
 
+
 def correct_airway(events):
     if events[4]:  # Airway vomit
-        return ACTIONS["USE_YANKAUR_SUCTION"]
+        return ACTIONS["USE_YANKAUER_SUCTION"]
     if events[5] or events[6]:  # Airway blood or tongue blocks
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
+
 
 def correct_breathing(sats):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
     return None
 
+
 def correct_circulation(map_value):
     if map_value is not None and map_value < 60:
         return ACTIONS["GIVE_FLUIDS"]
     return None
 
+
 def get_action(observations, step):
-    events = observations[:33]
-    heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
+    events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
     if step < len(SEQUENCE):
         return SEQUENCE[step]
@@ -95,6 +101,7 @@ def get_action(observations, step):
         return ACTIONS["FINISH"]
 
     return ACTIONS["DO_NOTHING"]
+
 
 step = 0
 while step < 350:
