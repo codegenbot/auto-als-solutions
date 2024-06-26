@@ -12,49 +12,43 @@ while True:
         print(17)  # Start Chest Compression
         continue
 
-    if events[3] < 0.1:  # AirwayClear has low relevance
-        print(3)  # ExamineAirway
+    if (
+        sats is not None
+        and sats >= 88
+        and resp_rate is not None
+        and resp_rate >= 8
+        and map_value is not None
+        and map_value >= 60
+    ):
+        print(48)  # Finish
+        break
+
+    if events[3] <= 0.1:
+        print(3)
         continue
 
-    if events[7] > 0.1:  # BreathingNone
-        print(29)  # Use Bag Valve Mask
+    if events[0] <= 0.1 or events[1] <= 0.1:
+        print(8)
+        continue
+
+    if events[7] > 0.1:
+        print(29)
         continue
 
     if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
+        print(30)
+        continue
+
+    if times[5] <= 0.1:
+        print(25)
         continue
 
     if map_value is not None and map_value < 60:
-        print(5)  # ExamineCirculation
-        continue
-
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # ExamineBreathing to verify
-        continue
-
-    if events[22] < 0.1:  # Decreasing AVPU response
-        print(8)  # ExamineResponse
-        continue
-
-    if events[26] < 0.1 or events[27] < 0.1:  # Check on exposure-related symptoms
-        print(7)  # ExamineExposure
-        continue
-
-    if times[5] < 0.1:
-        print(25)  # UseSatsProbe
-        continue
-
-    if map_value is not None and map_value < 70:
-        print(15)  # GiveFluids
+        print(15)
         continue
 
     if resp_rate is not None and resp_rate < 12:
-        print(4)  # ExamineBreathing
+        print(4)
         continue
 
-    if sats is not None and map_value is not None and resp_type is not None:
-        if sats >= 88 and map_value >= 60 and resp_rate >= 8:
-            print(48)  # Finish
-            break
-
-    print(0)  # DoNothing
+    print(0)
