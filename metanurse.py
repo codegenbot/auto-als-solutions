@@ -13,7 +13,7 @@ while True:
         resp_rate = measurements[6]
 
     critical = (sats is not None and sats < 65) or (
-        map_value is not None and map_value < 20
+        map_value is not None and mapulaire_value < 20
     )
 
     if critical:
