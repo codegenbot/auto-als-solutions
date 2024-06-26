@@ -14,7 +14,7 @@ ACTIONS = {
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "USE_YANKAUR_SUCTION": 31
+    "USE_YANKAUR_SUCTION": 31,
 }
 
 SEQUENCE = [
@@ -23,7 +23,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"]
+    ACTIONS["VIEW_MONITOR"],
 ]
 
 def stabilize_patient(observations):
@@ -62,6 +62,15 @@ def correct_circulation(map_value):
         return ACTIONS["GIVE_FLUIDS"]
     return None
 
+def recheck_vitals(map_value, resp_rate, sats):
+    if map_value is None or map_value < 60:
+        return ACTIONS["VIEW_MONITOR"]
+    if resp_rate is None or resp_rate < 8:
+        return ACTIONS["VIEW_MONITOR"]
+    if sats is None or sats < 88:
+        return ACTIONS["VIEW_MONITOR"]
+    return None
+
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
 
@@ -84,6 +93,10 @@ def get_action(observations, step):
     if circulation_action:
         return circulation_action
 
+    recheck_action = recheck_vitals(map_value, resp_rate, sats)
+    if recheck_action:
+        return recheck_action
+
     if (
         map_value is not None
         and resp_rate is not None
@@ -96,15 +109,11 @@ def get_action(observations, step):
 
     return ACTIONS["DO_NOTHING"]
 
-def main():
-    step = 0
-    while step < 350:
-        input_data = list(map(float, input().strip().split()))
-        action = get_action(input_data, step)
-        print(action)
-        if action == ACTIONS["FINISH"]:
-            break
-        step += 1
-
-if __name__ == "__main__":
-    main()
+step = 0
+for _ in range(350):
+    input_data = list(map(float, input().strip().split()))
+    action = get_action(input_data, step)
+    print(action)
+    if action == ACTIONS["FINISH"]:
+        break
+    step += 1
