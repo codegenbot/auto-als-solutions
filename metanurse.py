@@ -33,7 +33,7 @@ while True:
         print(5)  # Examine Circulation
         continue
 
-    # Disability check
+    # Disability check 
     if events[22] < 0.1:  # Decreasing AVPU response
         print(8)  # ExamineResponse
         continue
@@ -60,7 +60,7 @@ while True:
 
     # Check stabilization conditions
     if sats is not None and map_value is not None and resp_rate is not None:
-        if sats >= 88 and map_value >= 60 and resp_rate >= 8:
+        if sats >= 88 and map_value >= 60 and resp_ap >= 8:
             print(48)  # Finish
             break
 
