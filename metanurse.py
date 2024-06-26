@@ -8,35 +8,47 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
+    # Critical conditions
     if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
-        print(17)  # Start Chest Compression assuming patient is in arrest
+        print(17)  # Start Chest Compression
         continue
 
+    # Examine Airway
     airway_clear = events[3] > 0.1
     if not airway_clear:
-        print(3)  # Examine Airway
+        print(3)
         continue
 
-    if events[7] > 0.1:  # BreathingNone
+    # Manage no breathing
+    if events[7] > 0.1:
         print(29)  # Use Bag Valve Mask
         continue
 
+    # Insufficient oxygen saturation
     if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
         continue
 
+    # Insufficient mean arterial pressure
     if map_value is not None and map_value < 60:
         print(15)  # Give Fluids
         continue
 
+    # Low respiratory rate
     if resp_rate is not None and resp_rate < 8:
         print(4)  # Examine Breathing
         continue
 
-    if all([sats is not None and sats >= 88, 
-            map_value is not None and map_value >= 60, 
-            resp_rate is not None and resp_rate >= 8]):
+    # Check stabilization criteria
+    if (
+        sats is not None
+        and sats >= 88
+        and map_value is not None
+        and map_value >= 60
+        and resp_rate is not None
+        and resp_rate >= 8
+    ):
         print(48)  # Finish
         break
 
-    print(0)  # Default DoNothing when no conditions triggered
+    print(0)  # DoNothing
