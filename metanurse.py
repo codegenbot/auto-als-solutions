@@ -71,7 +71,7 @@ def get_action(observations, step):
     critical_action = get_critical_action(resp_rate, sats, map_value, events)
     if critical_action:
         return critical_action
-
+    
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
