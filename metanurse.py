@@ -108,7 +108,7 @@ def get_action(observations, step):
         return critical_action
 
     if map_value is None or sats is None:
-        return SEQUENCE[step]  # Ensure to continue vital sign checking sequence
+        return SEQUENCE[4 + step % 3]  # Cycle between vital sign checking sequence (USE_SATS_PROBE, USE_BLOOD_PRESSURE_CUFF, VIEW_MONITOR)
 
     airway_action = correct_airway(events)
     if airway_action:
