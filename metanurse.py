@@ -11,11 +11,13 @@ while True:
     if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
-    
+
     # Regular assessments
     if events[3] <= 0.1:  # AirwayClear has low relevance
         print(3)  # Examine Airway
-    elif (events[7] > 0.1 or resp_rate is not None and resp_rate < 8):  # BreathingNone or bad resp rate
+    elif (
+        events[7] > 0.1 or resp_rate is not None and resp_rate < 8
+    ):  # BreathingNone or bad resp rate
         print(29)  # Use Bag Valve Mask
     elif events[17] > 0.1:  # RadialPulseNonPalpable
         print(17)  # StartChestCompression
@@ -25,8 +27,13 @@ while True:
         print(15)  # Give Fluids
     else:
         # Check for stabilization
-        if sats is not None and sats >= 88 and (map_value is not None and map_value >= 60) and (resp_rate is not None and resp$_$
+        if (
+            sats is not None
+            and sats >= 88
+            and (map_value is not None and map_value >= 60)
+            and (resp_rate is not None and resp_rate >= 8)
+        ):
             print(48)  # Finish - John is stabilized
-            break 
+            break
         else:
             print(0)  # Default action when no immediate intervention is needed
