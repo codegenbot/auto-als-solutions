@@ -14,7 +14,7 @@ ACTIONS = {
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
     "PERFORM_JAW_THRUST": 37,
-    "USE_YANKAUR_SUCTION": 31,
+    "USE_YANKAUR_SUCTION": 31
 }
 
 SEQUENCE = [
@@ -23,7 +23,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"],
+    ACTIONS["VIEW_MONITOR"]
 ]
 
 def stabilize_patient(observations):
@@ -41,14 +41,14 @@ def stabilize_patient(observations):
 def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
-    if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
+    if (resp_rate is not None and resp_rate < 8):
         return ACTIONS["USE_BVM"]
     return None
 
 def correct_airway(events):
     if events[4]:  # Airway vomit
         return ACTIONS["USE_YANKAUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue block
+    if events[5] or events[6]:  # Airway blood or tongue blocks
         return ACTIONS["PERFORM_JAW_THRUST"]
     return None
 
@@ -97,7 +97,7 @@ def get_action(observations, step):
     return ACTIONS["DO_NOTHING"]
 
 step = 0
-for _ in range(350):
+while step < 350:
     input_data = list(map(float, input().strip().split()))
     action = get_action(input_data, step)
     print(action)
