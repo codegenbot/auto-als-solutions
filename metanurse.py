@@ -9,12 +9,12 @@ ACTIONS = {
     "EXAMINE_AIRWAY": 3,
     "EXAMINE_BREATHING": 4,
     "EXAMINE_CIRCULATION": 5,
-    "USE_BAG_VALVE_MASK": 29,
+    "USE_BVM": 29,
     "USE_NON_REBREATHER_MASK": 30,
     "GIVE_FLUIDS": 15,
     "FINISH": 48,
-    "PERFORM_AIRWAY_MANOEUVRES": 35,
-    "USE_YANKEUR_SUCTION": 31,
+    "PERFORM_MANOEUVRES": 37,
+    "USE_YANKAUR_SUCTION": 31,
 }
 
 SEQUENCE = [
@@ -23,7 +23,7 @@ SEQUENCE = [
     ACTIONS["EXAMINE_CIRCULATION"],
     ACTIONS["USE_SATS_PROBE"],
     ACTIONS["USE_BP_CUFF"],
-    ACTIONS["VIEW_MONITOR"]
+    ACTIONS["VIEW_MONITOR"],
 ]
 
 def stabilize_patient(observations):
@@ -42,24 +42,21 @@ def get_critical_action(resp_rate, sats, map_value, events):
     if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
         return ACTIONS["START_CHEST_COMPRESSIONS"]
     if events[7] == 1 or (resp_rate is not None and resp_rate < 8):
-        return ACTIONS["USE_BAG_VALVE_MASK"]
+        return ACTIONS["USE_BVM"]
+    if map_value is not None and map_value < 60:
+        return ACTIONS["GIVE_FLUIDS"]
     return None
 
 def correct_airway(events):
-    if events[4]:  # Airway vomit
-        return ACTIONS["USE_YANKEUR_SUCTION"]
-    if events[5] or events[6]:  # Airway blood or tongue blocks
-        return ACTIONS["PERFORM_AIRWAY_MANOEUVRES"]
+    if events[4]:
+        return ACTIONS["USE_YANKAUR_SUCTION"]
+    if events[5] or events[6]:
+        return ACTIONS["PERFORM_MANOEUVRES"]
     return None
 
 def correct_breathing(sats):
     if sats is not None and sats < 88:
         return ACTIONS["USE_NON_REBREATHER_MASK"]
-    return None
-
-def correct_circulation(map_value):
-    if map_value is not None and map_value < 60:
-        return ACTIONS["GIVE_FLUIDS"]
     return None
 
 def get_action(observations, step):
@@ -80,13 +77,13 @@ def get_action(observations, step):
     if breathing_action:
         return breathing_action
 
-    circulation_action = correct_circulation(map_value)
-    if circulation_action:
-        return circulation_action
-
     if (
-        map_value and resp_rate and sats and 
-        map_value >= 60 and resp_rate >= 8 and sats >= 88
+        map_value
+        and resp_rate
+        and sats
+        and map_value >= 60
+        and resp_rate >= 8
+        and sats >= 88
     ):
         return ACTIONS["FINISH"]
 
