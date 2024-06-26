@@ -13,36 +13,56 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway management based on assessment
-    if events[3] <= 0.1:  # AirwayClear relevance is low or non-existent
-        print(3)  # Examine Airway
+    # Check the airway status
+    if events[4] or events[5] or events[6]:  # AirwayVomit, AirwayBlood, or AirwayTongue
+        print(31)  # UseYankeurSuctionCatheter
+        continue
+    elif events[3] <= 0.1:  # Airway not clear
+        print(3)  # ExamineAirway
         continue
 
-    # If no breathing is present, immediate intervention needed
-    if events[7] > 0.1:  # BreathingNone indication
-        print(29)  # Use Bag Valve Mask
+    # Breathing management
+    if events[7] > 0.1:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+    elif events[10] <= 0.1:  # Unequal chest expansion
+        print(4)  # ExamineBreathing
         continue
 
-    # Stabilization measures for oxygen saturation
-    if sats is not None and sats < 88:
-        print(30)  # Use Non Rebreather Mask
+    # Circulation issues
+    if events[17] > 0.1:  # RadialPulseNonPalpable
+        print(15)  # GiveFluids
         continue
-
-    # Fluid administration when MAP is critically low
     if map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
+        print(15)  # GiveFluids
         continue
 
-    # Evaluate breathing if respiratory rate is below threshold
-    if resp_rate is not None and resp_rate < 8:
-        print(4)  # Examine Breathing
+    # Check disability status
+    if events[22] > 0.1 or events[21] > 0.1:  # AVPU_V or AVPU_U
+        print(6)  # ExamineDisability
         continue
 
-    # Finish when all parameters are stabilized
+    # Exposure assessment
+    if (
+        events[26] > 0.1 or events[27] > 0.1
+    ):  # Exposure signs like rash or peripheral shutdown
+        print(7)  # ExamineExposure
+        continue
+
+    # Monitoring
+    if times[5] <= 0.1:  # Sats not recently measured
+        print(25)  # UseSatsProbe
+        continue
+    if times[4] <= 0.1:  # MAP not recently measured
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Determine if enough progress made to finish
     if (
         (sats is not None and sats >= 88)
-        and (map_value is not None and map_length v >= 60)
-        and (resp_rate is not None andresp rate >= 8)
+        and (map_value is not None and map_value >= 60)
+        and (resp_rate is not None and resp_rate >= 8)
+        and events[3] > 0.1  # AirwayClear
     ):
         print(48)  # Finish
         break
