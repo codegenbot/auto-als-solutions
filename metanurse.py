@@ -1,3 +1,5 @@
+log_actions = set()  # Track actions to avoid repetitiveness
+
 while True:
     observations = input().strip().split()
     events = [float(e) for e in observations[:39]]
@@ -8,33 +10,44 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    if sats is not None and sats < 65 or (map_value is not None and map_body < 20):
+    if sats is not None and sats < 65 or (map_value is not None and map_value < 20):
         print(17)  # StartChestCompression
         continue
 
-    if events[3] <= 0.1:  # AirwayClear has low relevance
-        print(3)  # Examine Airway
-    elif events[7] > 0.1 or (
-        resp_rate is not None and resp_rate < 8
-    ):  # BreathingNone or bad resp rate
+    if events[3] <= 0.1:
+        print(3)  # ExamineAirway
+        continue
+
+    if events[7] > 0.1:
         print(29)  # Use Bag Valve Mask
-    elif events[17] > 0.1:  # RadialPulseNonPalpable
-        print(17)  # StartChestCompression
-    elif sats is not None and sats < 88:
+        continue
+
+    if sats is not None and sats < 88:
         print(30)  # Use Non Rebreather Mask
-    elif map_value is not None and map_value < 60:
-        print(15)  # Give Fluids
+        continue
+
+    if events[17] == 0 and 20 not in log_actions:
+        print(20)  # OpenCirculationDrawer
+        log_actions.add(20)
+    elif 27 not in log_actions and 20 in log_actions:
+        print(27)  # Use Blood Pressure Cuff (UseAline as an example)
+        log_actions.add(27)
+    elif 16 not in log_actions and 27 in log_actions:
+        print(16)  # ViewMonitor
+        log_actions.add(16)
     else:
-        if (
-            sats is not None
+        if map_value is None or map_value < 60:
+            print(5)  # Recheck ExamineCirculation
+        elif (
+            resp_rate is not None
+            and resp_rate >= 8
+            and sats is not None
             and sats >= 88
             and map_value is not None
             and map_value >= 60
-            and resp_rate is not None
-            and resp_rate >= 8
             and events[3] > 0.1
         ):
-            print(48)  # Finish - John is stabilized
+            print(48)  # Finish
             break
         else:
-            print(0)  # DoNothing
+            print(0)  # DoNothing if all conditions are checked or none are actionable
