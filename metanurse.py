@@ -8,24 +8,43 @@ while True:
     map_value = measurements[4] if times[4] > 0 else None
     resp_rate = measurements[6] if times[6] > 0 else None
 
-    # Begin ABCDE assessment systematically
-    if events[3] <= 0.1:  # Airway assessment
-        print(3)  # ExamineAirway
-        continue
-    elif any(events[7:15]) or resp_rate is None or (resp_rate is not None and resp_rate < 8):  # Breathing issues
-        print(4)  # ExamineBreathing
-        continue
-    elif map_value is None or (map_value is not None and map_value < 60):  # Circulation problems
-        print(5)  # ExamineCirculation
-        continue
-    elif events[21] > 0.1 or events[22] + events[23] + events[24] > 0.1:  # Disability check
-        print(6)  # ExamineDisability
-        continue
-    elif sats is None or (sats is not None and sats < 88):  # Exposure to insufficient oxygen
-        print(25)  # UseSatsProbe
-        continue
-    elif (sats is not None and sats >= 88 and map_value is not None and map_value >= 60 and resp_rate is not None and resp_rate >= 8):
+    stabilized = (
+        (sats is not None and sats >= 88)
+        and (resp_rate is not None and resp_rate >= 8)
+        and (map_value is not None and map_value >= 60)
+        and (events[3] > 0.1)
+    )  # AirwayClear
+
+    if stabilized:
         print(48)  # Finish - John is stabilized
         break
+
+    # Check life-threatening issues first
+    if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+        print(17)  # StartChestCompression
+        continue
+
+    # ABCDE assessment systematically
+    if events[3] <= 0.1:  # Airway problems, none clear
+        print(3)  # ExamineAirway
+        continue
+    if sats is None or sats < 88:
+        print(25)  # UseSatsProbe
+        continue
+    if events[7] > 0.1:  # BreathingNone detected
+        print(29)  # UseBagValveMask
+        continue
+    if resp_rate is None or resp_rate < 8:
+        print(4)  # ExamineBreathing
+        continue
+    if map_value is None or map196_value < 60:
+        print(5)  # ExamineCirculation
+        continue
+
+    # If none of the precise actions are needed, reassess systematically
+    if times[5] == 0:  # Check oxygenation again
+        print(25)  # UseSatsProbe
+    elif times[4] == 0:  # Check circulation again
+        print(27)  # UseBloodPressureCuff
     else:
-        print(0)  # Default to DoNothing if no immediate action is needed
+        print(0)  # DoNothing if all is relatively stable but not sure what to do next
