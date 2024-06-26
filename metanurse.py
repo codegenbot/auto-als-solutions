@@ -30,10 +30,12 @@ def stabilize_patient(observations):
     events = observations[:33]
     vital_signs_time = observations[33:40]
     vital_signs_values = observations[40:]
+
     heart_rate = vital_signs_values[0] if vital_signs_time[0] > 0 else None
     resp_rate = vital_signs_values[1] if vital_signs_time[1] > 0 else None
     map_value = vital_signs_values[4] if vital_signs_time[4] > 0 else None
     sats = vital_signs_values[5] if vital_signs_time[5] > 0 else None
+
     return events, heart_rate, resp_rate, map_value, sats
 
 def get_critical_action(resp_rate, sats, map_value, events):
@@ -64,24 +66,30 @@ def correct_circulation(map_value):
 
 def get_action(observations, step):
     events, heart_rate, resp_rate, map_value, sats = stabilize_patient(observations)
+    
     if step < len(SEQUENCE):
         return SEQUENCE[step]
-    critical_action = get_critical_action(resp_rate, sats, map_value, events)
-    if critical_action:
-        return critical_action
+
+    if get_critical_action(resp_rate, sats, map_value, events) is not None:
+        return get_critical_action(resp_rate, sats, map_value, events)
+
     circulation_action = correct_circulation(map_value)
     if circulation_action:
         return circulation_action
+
     airway_action = correct_airway(events)
     if airway_action:
         return airway_action
+
     breathing_action = correct_breathing(sats)
     if breathing_action:
         return breathing_action
+
     if (map_value is not None and map_value >= 60 and 
         resp_rate is not None and resp_rate >= 8 and 
         sats is not None and sats >= 88):
         return ACTIONS["FINISH"]
+
     return ACTIONS["DO_NOTHING"]
 
 step = 0
