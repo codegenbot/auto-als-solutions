@@ -22,7 +22,7 @@ def choose_action(observations, state, step_count):
     elif state == 'bp_cuff':
         return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
-        if obs[38] < 0.65 or obs[39] < 20 or obs[35] == 0:
+        if obs[39] < 20 or obs[35] == 0:  # MAP < 20 or no breathing
             return 17, 'cpr'  # StartChestCompression
         elif obs[39] < 60:
             return 15, 'fluids'  # GiveFluids
@@ -32,6 +32,10 @@ def choose_action(observations, state, step_count):
             return 48, 'finish'  # Finish
         else:
             return 2, 'check_rhythm'  # CheckRhythm
+    elif state == 'fluids':
+        return 16, 'monitor'  # ViewMonitor
+    elif state == 'oxygen':
+        return 16, 'monitor'  # ViewMonitor
     elif state == 'cpr':
         if step_count % 5 == 0:
             return 28, 'attach_defib'  # AttachDefibPads
@@ -44,32 +48,20 @@ def choose_action(observations, state, step_count):
         else:
             return 16, 'monitor'  # ViewMonitor
     elif state == 'check_rhythm':
-        if obs[28] > 0:  # NSR
-            return 16, 'monitor'
-        elif obs[29] > 0:  # SVT
-            return 9, 'give_adenosine'
+        if obs[29] > 0:  # SVT
+            return 9, 'adenosine'  # GiveAdenosine
         elif obs[30] > 0 or obs[31] > 0:  # AF or Atrial Flutter
-            return 11, 'give_amiodarone'
+            return 11, 'amiodarone'  # GiveAmiodarone
         elif obs[32] > 0:  # VT
-            return 40, 'charge_defib'
+            return 40, 'charge_defib'  # DefibrillatorCharge
         elif obs[38] > 0:  # VF
-            return 40, 'charge_defib'
+            return 40, 'charge_defib'  # DefibrillatorCharge
         else:
-            return 16, 'monitor'
-    elif state == 'fluids':
-        return 16, 'monitor'
-    elif state == 'oxygen':
-        return 16, 'monitor'
-    elif state == 'give_adenosine':
-        return 16, 'monitor'
-    elif state == 'give_amiodarone':
-        return 16, 'monitor'
-    elif state == 'charge_defib':
-        return 41, 'shock'
-    elif state == 'shock':
-        return 16, 'monitor'
+            return 16, 'monitor'  # ViewMonitor
+    elif state in ['adenosine', 'amiodarone']:
+        return 16, 'monitor'  # ViewMonitor
     
-    return 16, 'monitor'  # Default to monitoring
+    return 16, 'monitor'  # ViewMonitor as default
 
 state = 'start'
 step_count = 0
