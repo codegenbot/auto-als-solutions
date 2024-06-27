@@ -27,30 +27,32 @@ def choose_action(obs, step, state):
         return 7  # ExamineExposure
 
     if state['assessment_step'] == 'measurements':
+        if not state.get('breathing_drawer_opened'):
+            state['breathing_drawer_opened'] = True
+            return 19  # OpenBreathingDrawer
         if obs[39] <= 0.5:  # MeasuredSats
-            if not state.get('breathing_drawer_opened'):
-                state['breathing_drawer_opened'] = True
-                return 19  # OpenBreathingDrawer
             return 25  # UseSatsProbe
+        if not state.get('circulation_drawer_opened'):
+            state['circulation_drawer_opened'] = True
+            return 20  # OpenCirculationDrawer
         if obs[42] <= 0.5:  # MeasuredMAP
-            if not state.get('circulation_drawer_opened'):
-                state['circulation_drawer_opened'] = True
-                return 20  # OpenCirculationDrawer
             return 27  # UseBloodPressureCuff
         if obs[40] <= 0.5:  # MeasuredRespRate
             return 38  # TakeBloodPressure
-        if not state.get('viewed_monitor'):
-            state['viewed_monitor'] = True
+        if not state.get('monitor_viewed'):
+            state['monitor_viewed'] = True
             return 16  # ViewMonitor
         state['assessment_step'] = 'stabilization'
 
     if state['assessment_step'] == 'stabilization':
-        sats = obs[46] if obs[39] > 0.5 else 0
-        map = obs[45] if obs[42] > 0.5 else 0
-        resp_rate = obs[47] if obs[40] > 0.5 else 0
+        sats = obs[52] if obs[39] > 0.5 else 0
+        map = obs[50] if obs[42] > 0.5 else 0
+        resp_rate = obs[48] if obs[40] > 0.5 else 0
 
         if sats < 65 or map < 20:
+            state['assessment_step'] = 'cardiac_arrest'
             return 2  # CheckRhythm
+
         if sats < 88:
             return 30  # UseNonRebreatherMask
         if map < 60:
@@ -61,8 +63,11 @@ def choose_action(obs, step, state):
         if sats >= 88 and map >= 60 and resp_rate >= 8:
             return 48  # Finish
 
-    if obs[17] > 0.5:  # RadialPulseNonPalpable
-        return 17  # StartChestCompression
+    if state['assessment_step'] == 'cardiac_arrest':
+        if not state.get('chest_compression_started'):
+            state['chest_compression_started'] = True
+            return 17  # StartChestCompression
+        return 23  # ResumeCPR
 
     if step >= 349:
         return 48  # Finish
