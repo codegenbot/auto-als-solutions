@@ -62,33 +62,34 @@ def advanced_life_support(observations):
     while step < 350:
         if max(vital_sign_observations[5], 0) < 0.65 or max(vital_sign_observations[6], 0) < 20:
             print(actions.index("StartChestCompression"))
-            continue
+            return
 
-        if event_observations[3] == 0:  # AirwayClear
+        if not event_observations[3]:
             print(actions.index("ExamineAirway"))
-            print(actions.index("OpenAirwayDrawer"))
-            print(actions.index("PerformAirwayManoeuvres"))
-        elif min(vital_sign_values[5], 1) < 0.88 or min(vital_sign_values[6], 1) < 8:
+            return
+
+        if min(vital_sign_values[5], 1) < 0.88 or min(vital_sign_values[6], 1) < 8:
             print(actions.index("ExamineBreathing"))
-            print(actions.index("OpenBreathingDrawer"))
-            print(actions.index("UseBagValveMask"))
-            print(actions.index("UseNonRebreatherMask"))
+            return
 
         if min(vital_sign_values[4], 1) < 60:
             print(actions.index("ExamineCirculation"))
-            print(actions.index("OpenCirculationDrawer"))
-            print(actions.index("UseMonitorPads"))
-            print(actions.index("AttachDefibPads"))
+            return
+
+        print(actions.index("ExamineDisability"))
+        return
+
+        print(actions.index("ExamineExposure"))
+        return
 
         if min(vital_sign_values[5], 1) >= 0.88 and min(vital_sign_values[6], 1) >= 8 and min(vital_sign_values[4], 1) >= 60:
             print(actions.index("Finish"))
-            break
+            return
 
         step += 1
 
-    if step == 350:
-        print(actions.index("Finish"))
+    print(actions.index("Finish"))
 
 while True:
     observations = input()
-    advanced_life_support
+    advanced_life_support(observations)
