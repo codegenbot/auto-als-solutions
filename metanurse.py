@@ -13,9 +13,7 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
             print(17)  # Start CPR
             break
         elif sats is not None and sats < 88:
@@ -28,13 +26,13 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:
+            if step % 5 == 0:
                 print(3)  # ExamineAirway
-            elif step < 10:
+            elif step % 5 == 1:
                 print(4)  # ExamineBreathing
-            elif step < 15:
+            elif step % 5 == 2:
                 print(5)  # ExamineCirculation
-            elif step < 20:
+            elif step % 5 == 3:
                 print(6)  # ExamineDisability
             else:
                 print(7)  # ExamineExposure
