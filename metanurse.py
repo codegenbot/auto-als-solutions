@@ -7,60 +7,69 @@ def choose_action(observations, state, step_count):
     obs = parse_observations(observations)
     
     if step_count > 350:
-        return 48, 'finish'
+        return 48, 'finish'  # Finish if timeout
 
     if state == 'start':
-        return 8, 'response'
+        return 8, 'response'  # ExamineResponse
     elif state == 'response':
-        return 3, 'airway'
+        return 3, 'airway'  # ExamineAirway
     elif state == 'airway':
-        return 4, 'breathing'
+        return 4, 'breathing'  # ExamineBreathing
     elif state == 'breathing':
-        return 5, 'circulation'
-    elif state == 'circulation':
-        return 27, 'bp_cuff'
-    elif state == 'bp_cuff':
-        return 6, 'disability'
-    elif state == 'disability':
-        return 7, 'exposure'
-    elif state == 'exposure':
-        return 25, 'sats_probe'
+        return 25, 'sats_probe'  # UseSatsProbe
     elif state == 'sats_probe':
-        return 16, 'monitor'
+        return 27, 'bp_cuff'  # UseBloodPressureCuff
+    elif state == 'bp_cuff':
+        return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
-        if obs[38] < 0.65 or obs[39] < 20:
-            return 17, 'cpr'
-        elif obs[35] == 0:
-            return 29, 'bag_mask'
+        if obs[38] < 0.65 or obs[39] < 20 or obs[35] == 0:
+            return 17, 'cpr'  # StartChestCompression
         elif obs[39] < 60:
-            return 15, 'fluids'
+            return 15, 'fluids'  # GiveFluids
         elif obs[38] < 0.88:
-            return 30, 'oxygen'
+            return 30, 'oxygen'  # UseNonRebreatherMask
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60 and obs[3] > 0:
-            return 48, 'finish'
+            return 48, 'finish'  # Finish
         else:
-            return 2, 'check_rhythm'
+            return 2, 'check_rhythm'  # CheckRhythm
     elif state == 'cpr':
         if step_count % 5 == 0:
-            return 28, 'attach_defib'
+            return 28, 'attach_defib'  # AttachDefibPads
         elif step_count % 5 == 1:
-            return 39, 'turn_on_defib'
+            return 39, 'turn_on_defib'  # TurnOnDefibrillator
         elif step_count % 5 == 2:
-            return 40, 'charge_defib'
+            return 40, 'charge_defib'  # DefibrillatorCharge
         elif step_count % 5 == 3:
-            return 10, 'give_adrenaline'
+            return 10, 'give_adrenaline'  # GiveAdrenaline
+        else:
+            return 16, 'monitor'  # ViewMonitor
+    elif state == 'check_rhythm':
+        if obs[28] > 0:  # NSR
+            return 16, 'monitor'
+        elif obs[29] > 0:  # SVT
+            return 9, 'give_adenosine'
+        elif obs[30] > 0 or obs[31] > 0:  # AF or Atrial Flutter
+            return 11, 'give_amiodarone'
+        elif obs[32] > 0:  # VT
+            return 40, 'charge_defib'
+        elif obs[38] > 0:  # VF
+            return 40, 'charge_defib'
         else:
             return 16, 'monitor'
-    elif state == 'check_rhythm':
-        return 16, 'monitor'
-    elif state == 'bag_mask':
-        return 16, 'monitor'
     elif state == 'fluids':
         return 16, 'monitor'
     elif state == 'oxygen':
         return 16, 'monitor'
+    elif state == 'give_adenosine':
+        return 16, 'monitor'
+    elif state == 'give_amiodarone':
+        return 16, 'monitor'
+    elif state == 'charge_defib':
+        return 41, 'shock'
+    elif state == 'shock':
+        return 16, 'monitor'
     
-    return 0, state
+    return 16, 'monitor'  # Default to monitoring
 
 state = 'start'
 step_count = 0
