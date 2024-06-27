@@ -4,7 +4,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical conditions
+    # Immediate actions based on critical conditions
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -12,66 +12,56 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # No recent sats or blood pressure: attach and monitor
+    # Ensure basic measurements are available
     if measured_times[5] == 0:
         print(25)  # UseSatsProbe
         continue
-    if measured_times[4] == 0:
+    if measured_times[4] == 0 or measured_times[6] == 0:
         print(27)  # UseBloodPressureCuff
-        continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
         continue
     if measured_times[6] == 0:
         print(16)  # ViewMonitor
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+
+    # A - Airway Assessment and Management
+    if events[7:11].count(0) == len(events[7:11]):  # No airway assessment yet
+        print(3)  # ExamineAirway
+        continue
+    if events[6] > 0:  # Airway needs clearing
+        print(36)  # PerformHeadTiltChinLift
+        continue
+
+    # B - Breathing Management
+    if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
-    if measured_times[4] > 0 and measured_values[4] < 60:
+    if measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    # C - Circulation Management
+    if (
+        events[16] > 0.5 and measured_values[4] < 60
+    ):  # RadialPulseNonPalpable and low MAP
         print(15)  # GiveFluids
         continue
 
-    # ABCDE Process
-    if events[3] <= 0.5:  # AirwayClear is not clear
-        print(3)  # ExamineAirway
-        continue
-    if any(events[10:14]):  # Check for breathing issues
-        print(4)  # ExamineBreathing
-        continue
+    # D - Disability Assessment
     if (
-        events[5] > 0.5 or events[18] <= 0.5
-    ):  # RadialPulseNonPalpable or HeartSoundsMuffled
-        print(5)  # ExamineCirculation
-        continue
-    if events[22] <= 0.5 and events[23] <= 0.5:  # Check for consciousness
+        events[21] > 0.5 or events[22] > 0.5
+    ):  # AVPU_U or AVPU_V (less responsive states)
         print(6)  # ExamineDisability
         continue
-    if events[26] > 0.5 or events[27] > 0.5:  # Exposure indicators
-        print(7)  # ExamineExposure
-        continue
 
-    # Recheck crucial measurements if uncertain conditions
-    if measured_times[4] > 0 and measured_times[5] > 0 and measured_times[6] > 0:
-        if not (
-            measured_values[5] >= 88
-            and measured_values[6] >= 8
-            and measured_values[4] >= 60
-        ):
-            print(16)  # ViewMonitor
-            continue
-
-    # Finish if conditions are satisfied
+    # Check if the patient is stabilized
     if (
-        measured_times[5] > 0
+        events[3] > 0
         and measured_values[5] >= 88
-        and measured_times[6] > 0
         and measured_values[6] >= 8
-        and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default is to review monitor or routines
+    # Regularly check overall conditions
     print(16)  # ViewMonitor
