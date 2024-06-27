@@ -61,34 +61,26 @@ def advanced_life_support(observations):
     step = 0
     while step < 350:
         if max(vital_sign_observations[5], 0) < 0.65 or max(vital_sign_observations[6], 0) < 20:
-            print(actions.index("StartChestCompression"))
-            print(actions.index("UseBagValveMask"))
-            return
+            return print(actions.index("StartChestCompression"))
+
+        if event_observations[2] > 0:  # ResponseNone
+            return print(actions.index("ExamineResponse"))
+        elif event_observations[3] > 0:  # AirwayClear
+            if event_observations[7] > 0:  # BreathingNone
+                return print(actions.index("UseBagValveMask"))
+            else:
+                return print(actions.index("ExamineBreathing"))
+        else:
+            return print(actions.index("ExamineAirway"))
 
         if min(vital_sign_values[5], 1) < 0.88 or min(vital_sign_values[6], 1) < 8:
-            print(actions.index("StartChestCompression"))
-            print(actions.index("UseBagValveMask"))
-            return
+            return print(actions.index("BagDuringCPR"))
 
         if min(vital_sign_values[4], 1) < 60:
-            print(actions.index("UseVenflonIVCatheter"))
-            print(actions.index("GiveFluids"))
-            return
+            return print(actions.index("ExamineCirculation"))
 
-        print(actions.index("ExamineAirway"))
-        print(actions.index("ExamineBreathing"))
-        print(actions.index("ExamineCirculation"))
-        print(actions.index("ExamineDisability"))
-        print(actions.index("ExamineExposure"))
+        if event_observations[20] > 0 or event_observations[21] > 0 or event_observations[22] > 0:  # AVPU_A, AVPU_U, AVPU_V
+            return print(actions.index("ExamineDisability"))
 
-        if min(vital_sign_values[5], 1) >= 0.88 and min(vital_sign_values[6], 1) >= 8 and min(vital_sign_values[4], 1) >= 60:
-            print(actions.index("Finish"))
-            return
-
-        step += 1
-
-    print(actions.index("Finish"))
-
-while True:
-    observations = input()
-    advanced_life_support(observations)
+        if event_observations[26] > 0 or event_observations[27] > 0 or event_observations[28] > 0:  # ExposureRash, ExposurePeripherallyShutdown, ExposureStainedUnderwear
+            return print(actions.index("Examine
