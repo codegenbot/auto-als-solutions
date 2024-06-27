@@ -12,27 +12,37 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Immediate action to open airway
-    if events[6]:  # AirwayTongue
-        print(32)  # UseGuedelAirway
+    # Update Vital Signs frequently
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
         continue
-    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(31)  # UseYankeurSuctionCatheter
-        continue
+
+    # Check for stabilized condition
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
 
     # Check for any 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
-        break
-
-    # Act based on low oxygen saturation
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
         continue
 
     # Examine Airway
     if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
         print(3)  # ExamineAirway
+        continue
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+        if events[5] > 0:  # AirwayBlood
+            print(31)  # UseYankeurSuctionCatheter
+        else:
+            print(32)  # UseGuedelAirway
         continue
 
     # Examine Breathing
@@ -64,33 +74,19 @@ while True:
         print(7)  # ExamineExposure
         continue
 
-    # View Monitor if necessary to gather missing vital signs
-    if any(measurement == 0 for measurement in measured_times[:6]):
-        print(16)  # ViewMonitor
+    # Act based on oxygen saturation
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
 
-    # Act based on very low breathing rate
+    # Act based on respiratory rate
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
-    # Act based on low mean arterial pressure
+    # Act based on mean arterial pressure
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-
-    # Check for stabilized condition
-    stabilized = (
-        events[2] > 0  # ResponseNone indicating clear airway
-        and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats >= 88%
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP >= 60
-    )
-    if stabilized:
-        print(48)  # Finish
-        break
 
     print(0)  # DoNothing if nothing else is required
