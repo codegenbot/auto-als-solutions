@@ -13,10 +13,10 @@ while True:
         continue
 
     # Update Vital Signs frequently
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+    if any(measurement == 0 for measurement in measured_times[:3]):  # Heart Rate, Resp Rate, MAP
         print(16)  # ViewMonitor
         continue
-
+        
     # Check for any 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
@@ -26,14 +26,21 @@ while True:
     if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
         print(3)  # ExamineAirway
         continue
-
-    # If Airway events show severe obstruction, manage it before re-examining
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(32)  # UseGuedelAirway or appropriate response
+        print(31)  # UseYankeurSucionCatheter 
         continue
 
     # Examine Breathing
-    if sum(events[7:15]) == 0:
+    if (
+        events[7] == 0
+        and events[8] == 0
+        and events[9] == 0
+        and events[10] == 0
+        and events[11] == 0
+        and events[12] == 0
+        and events[13] == 0
+        and events[14] == 0
+    ):
         print(4)  # ExamineBreathing
         continue
 
@@ -43,7 +50,7 @@ while True:
         continue
 
     # Examine Disability
-    if sum(events[21:24]) == 0:  # No AVPU info
+    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # No AVPU info
         print(6)  # ExamineDisability
         continue
 
@@ -69,7 +76,8 @@ while True:
 
     # Check for stabilized condition
     if (
-        measured_times[5] > 0
+        events[2] > 0  # ResponseNone indicating clear airway
+        and measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
