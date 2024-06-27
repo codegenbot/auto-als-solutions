@@ -29,20 +29,20 @@ def choose_action(observations, state):
     elif state == 'monitor':
         if obs[38] < 0.65 or obs[39] < 20:
             return 17, 'cpr'  # StartChestCompression
-        elif obs[35] < 8:
+        elif obs[35] == 0:  # No breathing
             return 29, 'monitor'  # UseBagValveMask
-        elif obs[38] < 0.88:
-            return 30, 'monitor'  # UseNonRebreatherMask
         elif obs[39] < 60:
             return 15, 'monitor'  # GiveFluids
+        elif obs[38] < 0.88:
+            return 30, 'monitor'  # UseNonRebreatherMask
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish'  # Finish
         else:
-            return 16, 'monitor'  # ViewMonitor
+            return 16, 'monitor'  # ViewMonitor again
     elif state == 'cpr':
-        return 23, 'monitor'  # ResumeCPR
+        return 16, 'monitor'  # ViewMonitor after CPR
     
-    return 16, 'monitor'  # ViewMonitor
+    return 0, state  # DoNothing
 
 state = 'start'
 while True:
