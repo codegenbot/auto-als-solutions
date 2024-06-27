@@ -12,22 +12,27 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Update Vital Signs frequently
-    if any(measurement == 0 for measurement in measured_times[:3]):  # Heart Rate, Resp Rate, MAP
-        print(16)  # ViewMonitor
+    # Immediate action to open airway
+    if events[6]:  # AirwayTongue
+        print(32)  # UseGuedelAirway
         continue
-        
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+        print(31)  # UseYankeurSuctionCatheter
+        continue
+
     # Check for any 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
+        break
+
+    # Act based on low oxygen saturation
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
 
     # Examine Airway
     if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
         print(3)  # ExamineAirway
-        continue
-    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(31)  # UseYankeurSucionCatheter 
         continue
 
     # Examine Breathing
@@ -59,9 +64,9 @@ while True:
         print(7)  # ExamineExposure
         continue
 
-    # Act based on low oxygen saturation
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    # View Monitor if necessary to gather missing vital signs
+    if any(measurement == 0 for measurement in measured_times[:6]):
+        print(16)  # ViewMonitor
         continue
 
     # Act based on very low breathing rate
@@ -75,15 +80,16 @@ while True:
         continue
 
     # Check for stabilized condition
-    if (
+    stabilized = (
         events[2] > 0  # ResponseNone indicating clear airway
         and measured_times[5] > 0
-        and measured_values[5] >= 88
+        and measured_values[5] >= 88  # Sats >= 88%
         and measured_times[6] > 0
-        and measured_values[6] >= 8
+        and measured_values[6] >= 8  # Resp Rate >= 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
+        and measured_values[4] >= 60  # MAP >= 60
+    )
+    if stabilized:
         print(48)  # Finish
         break
 
