@@ -7,51 +7,49 @@ def choose_action(observations, state):
     obs = parse_observations(observations)
     
     if state == 'start':
-        return 8, 'response'  # ExamineResponse
+        return 8, 'response'
     elif state == 'response':
-        return 3, 'airway'  # ExamineAirway
+        return 3, 'airway'
     elif state == 'airway':
-        return 4, 'breathing'  # ExamineBreathing
+        return 4, 'breathing'
     elif state == 'breathing':
-        return 29, 'bag_mask'  # UseBagValveMask
-    elif state == 'bag_mask':
-        return 5, 'circulation'  # ExamineCirculation
-    elif state == 'circulation':
-        return 27, 'bp_cuff'  # UseBloodPressureCuff
-    elif state == 'bp_cuff':
-        return 6, 'disability'  # ExamineDisability
-    elif state == 'disability':
-        return 7, 'exposure'  # ExamineExposure
-    elif state == 'exposure':
-        return 25, 'sats_probe'  # UseSatsProbe
+        return 25, 'sats_probe'
     elif state == 'sats_probe':
-        return 16, 'monitor'  # ViewMonitor
-    elif state == 'monitor':
-        if obs[38] < 0.65 or obs[39] < 20:
-            return 1, 'cardiac_arrest'  # CheckSignsOfLife
-        elif obs[35] == 0:  # No breathing
-            return 29, 'monitor'  # UseBagValveMask
-        elif obs[39] < 60:
-            return 15, 'monitor'  # GiveFluids
-        elif obs[38] < 0.88:
-            return 30, 'monitor'  # UseNonRebreatherMask
-        elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
-            return 48, 'finish'  # Finish
-        else:
-            return 16, 'monitor'  # ViewMonitor again
-    elif state == 'cardiac_arrest':
-        return 17, 'cpr'  # StartChestCompression
+        return 27, 'bp_cuff'
+    elif state == 'bp_cuff':
+        return 38, 'check_bp'
+    elif state == 'check_bp':
+        return 5, 'circulation'
+    elif state == 'circulation':
+        return 6, 'disability'
+    elif state == 'disability':
+        return 7, 'exposure'
+    elif state == 'exposure':
+        return 16, 'assess'
+    elif state == 'assess':
+        if obs[17] > 0:  # RadialPulseNonPalpable
+            return 17, 'cpr'
+        if obs[50] < 0.65 or obs[52] < 20:
+            return 17, 'cpr'
+        if obs[51] == 0 or obs[52] < 8:
+            return 29, 'assess'
+        if obs[50] < 0.88:
+            return 30, 'assess'
+        if obs[52] < 60:
+            return 15, 'fluids'
+        if obs[44] > 100:  # High heart rate
+            return 9, 'adenosine'
+        if obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
+            return 48, 'finish'
+        return 16, 'assess'
     elif state == 'cpr':
-        if obs[38] >= 0.65 and obs[39] >= 20:
-            return 16, 'monitor'  # ViewMonitor
-        else:
-            return 2, 'check_rhythm'  # CheckRhythm
-    elif state == 'check_rhythm':
-        return 10, 'give_adrenaline'  # GiveAdrenaline
-    elif state == 'give_adrenaline':
-        return 23, 'cpr'  # ResumeCPR
+        return 23, 'assess'
+    elif state == 'fluids':
+        return 15, 'assess'
+    elif state == 'adenosine':
+        return 16, 'assess'
     
-    return 0, state  # DoNothing
+    return 0, state
 
 state = 'start'
 while True:
