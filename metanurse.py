@@ -3,63 +3,63 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, step, state):
-    if 'drawers_opened' not in state:
-        state['drawers_opened'] = False
-        state['abcde_step'] = 0
-        state['breathing_none_count'] = 0
-        state['last_vitals_check'] = -10
-
-    if not state['drawers_opened']:
-        state['drawers_opened'] = True
-        return 18  # OpenAirwayDrawer
-
-    if obs[7] > 0.5:  # BreathingNone
-        state['breathing_none_count'] += 1
-        if state['breathing_none_count'] > 2:
-            return 17  # StartChestCompression
-        return 29  # UseBagValveMask
-
-    state['breathing_none_count'] = 0
-
-    if step - state['last_vitals_check'] >= 10:
-        state['last_vitals_check'] = step
-        return 25 if step % 3 == 0 else 27 if step % 3 == 1 else 38
-
+def choose_action(obs, step):
     sats = obs[46] if obs[39] > 0.5 else 0
     map = obs[46] if obs[42] > 0.5 else 0
     resp_rate = obs[47] if obs[40] > 0.5 else 0
-
+    
+    if obs[7] > 0.5:  # BreathingNone
+        return 29  # UseBagValveMask
+    
+    if step == 0:
+        return 18  # OpenAirwayDrawer
+    elif step == 1:
+        return 19  # OpenBreathingDrawer
+    elif step == 2:
+        return 20  # OpenCirculationDrawer
+    elif step == 3:
+        return 21  # OpenDrugsDrawer
+    elif step == 4:
+        return 3  # ExamineAirway
+    elif step == 5:
+        return 4  # ExamineBreathing
+    elif step == 6:
+        return 5  # ExamineCirculation
+    elif step == 7:
+        return 6  # ExamineDisability
+    elif step == 8:
+        return 7  # ExamineExposure
+    
+    if obs[39] <= 0.5:
+        return 25  # UseSatsProbe
+    if obs[42] <= 0.5:
+        return 27  # UseBloodPressureCuff
+    if obs[40] <= 0.5:
+        return 38  # TakeBloodPressure
+    
     if sats < 88:
         return 30  # UseNonRebreatherMask
     if map < 60:
         return 15  # GiveFluids
     if resp_rate < 8:
         return 29  # UseBagValveMask
-
-    abcde_actions = [3, 4, 5, 6, 7]
-    if state['abcde_step'] < len(abcde_actions):
-        action = abcde_actions[state['abcde_step']]
-        state['abcde_step'] += 1
-        return action
-
+    
     if sats >= 88 and map >= 60 and resp_rate >= 8:
         return 48  # Finish
-
-    if step >= 340:
+    
+    if step >= 349:
         return 48  # Finish
-
-    return 0  # DoNothing
+    
+    return 16  # ViewMonitor
 
 def main():
     step = 0
-    state = {}
     while True:
         observations = input().strip()
         if not observations:
             break
         obs = parse_observations(observations)
-        action = choose_action(obs, step, state)
+        action = choose_action(obs, step)
         print(action)
         sys.stdout.flush()
         step += 1
