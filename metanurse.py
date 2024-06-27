@@ -6,51 +6,46 @@ def parse_observations(obs):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    if obs[38] < 0.65 or obs[39] < 20:
-        return 17, 'cpr'  # StartChestCompression
-
-    if state == 'cpr':
-        if obs[27] == 0:
-            return 28, 'attach_defib'  # AttachDefibPads
-        elif obs[28] == 0:
-            return 39, 'turn_on_defib'  # TurnOnDefibrillator
-        elif obs[29] == 0:
-            return 40, 'charge_defib'  # DefibrillatorCharge
-        else:
-            return 16, 'monitor'  # ViewMonitor
-
     if state == 'start':
-        return 8, 'response'  # ExamineResponse
+        return 8, 'response'
     elif state == 'response':
-        return 3, 'airway'  # ExamineAirway
+        return 3, 'airway'
     elif state == 'airway':
-        return 4, 'breathing'  # ExamineBreathing
+        if obs[7] > 0:  # BreathingNone
+            return 29, 'bag_valve_mask'
+        return 4, 'breathing'
     elif state == 'breathing':
-        return 5, 'circulation'  # ExamineCirculation
-    elif state == 'circulation':
-        return 27, 'bp_cuff'  # UseBloodPressureCuff
-    elif state == 'bp_cuff':
-        return 6, 'disability'  # ExamineDisability
-    elif state == 'disability':
-        return 7, 'exposure'  # ExamineExposure
-    elif state == 'exposure':
-        return 25, 'sats_probe'  # UseSatsProbe
+        return 25, 'sats_probe'
     elif state == 'sats_probe':
-        return 16, 'monitor'  # ViewMonitor
-
-    if obs[7] > 0:  # BreathingNone
-        return 29, 'bag_mask'  # UseBagValveMask
-
-    if obs[39] < 60:
-        return 15, 'fluids'  # GiveFluids
-
-    if obs[38] < 0.88:
-        return 30, 'oxygen'  # UseNonRebreatherMask
-
-    if obs[3] > 0 and obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
-        return 48, 'finish'  # Finish if stabilized
-
-    return 16, 'monitor'  # ViewMonitor
+        return 27, 'bp_cuff'
+    elif state == 'bp_cuff':
+        return 38, 'check_bp'
+    elif state == 'check_bp':
+        return 16, 'assess'
+    elif state == 'assess':
+        if obs[7] > 0 or obs[52] < 20:  # BreathingNone or MAP < 20
+            return 17, 'cpr'
+        if obs[50] < 0.65:
+            return 29, 'bag_valve_mask'
+        if obs[50] < 0.88:
+            return 30, 'oxygen'
+        if obs[52] < 60:
+            return 15, 'fluids'
+        if obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
+            return 48, 'finish'
+        return 16, 'assess'
+    elif state == 'cpr':
+        if obs[7] == 0 and obs[52] >= 20:  # Breathing resumed and MAP >= 20
+            return 16, 'assess'
+        return 17, 'cpr'
+    elif state == 'bag_valve_mask':
+        return 29, 'assess'
+    elif state == 'oxygen':
+        return 30, 'assess'
+    elif state == 'fluids':
+        return 15, 'assess'
+    
+    return 0, state
 
 state = 'start'
 while True:
