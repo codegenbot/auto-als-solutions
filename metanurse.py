@@ -7,9 +7,9 @@ def choose_action(observations, state, step_count):
     obs = parse_observations(observations)
     
     # Check for cardiac arrest
-    if obs[39] < 20 or obs[38] < 0.65:
+    if obs[38] < 0.65 or obs[39] < 20:
         return 17, 'cpr', step_count + 1  # StartChestCompression
-
+    
     if state == 'start':
         return 8, 'response', step_count + 1  # ExamineResponse
     elif state == 'response':
@@ -42,24 +42,22 @@ def choose_action(observations, state, step_count):
             return 30, 'oxygen', step_count + 1  # UseNonRebreatherMask
         elif obs[39] < 60:
             return 15, 'fluids', step_count + 1  # GiveFluids
-        elif obs[34] > 100:  # Tachycardia
+        elif obs[33] > 0 or obs[34] > 0:  # Check for tachycardia
             return 2, 'check_rhythm', step_count + 1  # CheckRhythm
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish', step_count + 1  # Finish
         else:
             return 16, 'assess', step_count + 1  # ViewMonitor
-    elif state == 'bag_mask':
-        return 16, 'assess', step_count + 1  # ViewMonitor
-    elif state == 'oxygen':
-        return 16, 'assess', step_count + 1  # ViewMonitor
-    elif state == 'fluids':
-        return 16, 'assess', step_count + 1  # ViewMonitor
+    elif state == 'cpr':
+        return 28, 'defib_pads', step_count + 1  # AttachDefibPads
+    elif state == 'defib_pads':
+        return 39, 'turn_on_defib', step_count + 1  # TurnOnDefibrillator
+    elif state == 'turn_on_defib':
+        return 40, 'charge_defib', step_count + 1  # DefibrillatorCharge
+    elif state == 'charge_defib':
+        return 2, 'check_rhythm', step_count + 1  # CheckRhythm
     elif state == 'check_rhythm':
-        if obs[29] > 0:  # SVT
-            return 9, 'give_adenosine', step_count + 1  # GiveAdenosine
-        elif obs[30] > 0 or obs[31] > 0:  # AF or Atrial Flutter
-            return 11, 'give_amiodarone', step_count + 1  # GiveAmiodarone
+        if obs[38] > 0:  # VF detected
+            return 41, 'shock', step_count + 1  # DefibrillatorCurrentUp
         else:
-            return 16, 'assess', step_count + 1  # ViewMonitor
-    elif state in ['give_adenosine', 'give_amiodarone']:
-        return 16
+            return 23, 'resume_cpr', step_count + 1  # ResumeCPR
