@@ -28,12 +28,13 @@ def choose_action(observations, state, step_count):
     elif state == 'sats_probe':
         return 16, 'monitor'
     elif state == 'monitor':
-        if obs[38] < 0.65 or obs[39] < 20:
+        if obs[39] == 0 or obs[35] == 0:
             return 17, 'cpr'
-        elif obs[35] == 0:
-            return 29, 'bag_mask'
-        elif obs[39] < 60:
-            return 15, 'fluids'
+        elif obs[39] < 60 or obs[35] < 8:
+            if obs[39] < 60:
+                return 15, 'fluids'
+            else:
+                return 29, 'bag_mask'
         elif obs[38] < 0.88:
             return 30, 'oxygen'
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60 and obs[3] > 0:
@@ -48,20 +49,13 @@ def choose_action(observations, state, step_count):
         elif step_count % 5 == 2:
             return 40, 'charge_defib'
         elif step_count % 5 == 3:
-            return 2, 'check_rhythm'
-        else:
-            return 17, 'cpr'
-    elif state == 'check_rhythm':
-        if obs[32] > 0:  # VF
-            return 41, 'defib'
-        elif obs[31] > 0:  # VT
-            return 41, 'defib'
-        elif obs[29] > 0:  # SVT
-            return 9, 'give_adenosine'
-        elif obs[30] > 0:  # AF
-            return 11, 'give_amiodarone'
-        else:
             return 10, 'give_adrenaline'
+        else:
+            return 16, 'monitor'
+    elif state == 'check_rhythm':
+        if obs[32] > 0 or obs[38] > 0:  # VF or VT
+            return 40, 'charge_defib'
+        return 16, 'monitor'
     elif state == 'bag_mask':
         return 16, 'monitor'
     elif state == 'fluids':
