@@ -54,19 +54,22 @@ def choose_action(obs, state):
     return 0
 
 def main():
-    state = {'airway': False, 'breathing': False, 'circulation': False, 'disability': False, 'exposure': False, 'airway_drawer': False}
-    step_count = 0
-    while step_count < 350:
+    state = {
+        'airway': False, 'breathing': False, 'circulation': False,
+        'disability': False, 'exposure': False, 'airway_drawer': False,
+        'step_count': 0
+    }
+    while state['step_count'] < 350:
         observations = input().strip()
         if not observations:
             break
         obs = parse_observations(observations)
         action = choose_action(obs, state)
-        if action == 18:
-            state['airway_drawer'] = True
         print(action)
         sys.stdout.flush()
-        step_count += 1
+        state['step_count'] += 1
+        if action == 18:
+            state['airway_drawer'] = True
         if action == 48:
             break
 
