@@ -52,14 +52,8 @@ def choose_action(observations, state, step_count):
         return 10, 'give_adrenaline'  # GiveAdrenaline
     elif state == 'give_adrenaline':
         return 16, 'monitor'  # ViewMonitor
-    elif state == 'bag_mask':
-        return 16, 'monitor'  # ViewMonitor after bag mask
-    elif state == 'fluids':
-        return 16, 'monitor'  # ViewMonitor after fluids
-    elif state == 'oxygen':
-        return 16, 'monitor'  # ViewMonitor after oxygen
-    elif state == 'check_rhythm':
-        return 16, 'monitor'  # ViewMonitor after rhythm check
+    elif state in ['bag_mask', 'fluids', 'oxygen', 'check_rhythm']:
+        return 16, 'monitor'  # ViewMonitor after various actions
     
     return 0, state  # DoNothing
 
