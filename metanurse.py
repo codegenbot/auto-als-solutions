@@ -22,38 +22,38 @@ def choose_action(observations, state):
     elif state == 'circulation':
         return 27, 'bp_cuff'  # UseBloodPressureCuff
     elif state == 'bp_cuff':
-        return 6, 'disability'  # ExamineDisability
-    elif state == 'disability':
-        return 7, 'exposure'  # ExamineExposure
-    elif state == 'exposure':
         return 25, 'sats_probe'  # UseSatsProbe
     elif state == 'sats_probe':
         return 16, 'monitor'  # ViewMonitor
-    elif state in ['monitor', 'bag_mask', 'cpr']:
-        if obs[35] == 0:  # No breathing
-            return 29, 'bag_mask'  # UseBagValveMask
-        elif 20 <= obs[39] < 60:
-            return 15, 'monitor'  # GiveFluids
-        elif 0.65 <= obs[38] < 0.88:
-            return 30, 'monitor'  # UseNonRebreatherMask
+    elif state == 'monitor':
+        if obs[39] < 60 and obs[39] >= 20:
+            return 15, 'fluids'  # GiveFluids
+        elif obs[38] < 0.88 and obs[38] >= 0.65:
+            return 30, 'oxygen'  # UseNonRebreatherMask
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish'  # Finish
         else:
-            return 16, 'monitor'  # ViewMonitor again
+            return 6, 'disability'  # ExamineDisability
+    elif state == 'disability':
+        return 7, 'exposure'  # ExamineExposure
+    elif state == 'exposure':
+        return 16, 'monitor'  # ViewMonitor
+    elif state == 'fluids' or state == 'oxygen':
+        return 16, 'monitor'  # ViewMonitor
+    elif state == 'cpr':
+        return 2, 'check_rhythm'  # CheckRhythm
+    elif state == 'check_rhythm':
+        return 10, 'give_adrenaline'  # GiveAdrenaline
+    elif state == 'give_adrenaline':
+        return 16, 'monitor'  # ViewMonitor after CPR
     
-    return 16, 'monitor'  # Default action: ViewMonitor
+    return 16, 'monitor'  # Default to ViewMonitor
 
 state = 'start'
 while True:
-    try:
-        observations = input().strip()
-        if not observations:
-            break
-        action, state = choose_action(observations, state)
-        print(action)
-        sys.stdout.flush()
-    except EOFError:
+    observations = input().strip()
+    if not observations:
         break
-    except Exception as e:
-        print(16)  # ViewMonitor as default action in case of unexpected error
-        sys.stdout.flush()
+    action, state = choose_action(observations, state)
+    print(action)
+    sys.stdout.flush()
