@@ -39,7 +39,7 @@ while True:
         print(3)  # ExamineAirway
         continue
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(32)  # UseGuedelAirway or appropriate response
+        print(31)  # UseYankeurSucionCatheter
         continue
 
     # Examine Breathing
