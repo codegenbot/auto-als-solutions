@@ -69,6 +69,9 @@ def advanced_life_support(observations):
             else:
                 return print(actions.index("ExamineAirway"))
 
+        if min(vital_sign_values[4], 1) < 60:
+            return print(actions.index("ExamineCirculation"))
+
         if event_observations[7] > 0:  # BreathingNone
             return print(actions.index("ExamineResponse"))
 
@@ -80,9 +83,6 @@ def advanced_life_support(observations):
 
         if event_observations[2] > 0:  # ResponseNone
             return print(actions.index("CheckSignsOfLife"))
-
-        if min(vital_sign_values[4], 1) < 60:
-            return print(actions.index("ExamineCirculation"))
 
         step += 1
 
