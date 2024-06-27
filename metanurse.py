@@ -12,9 +12,51 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Update Vital Signs frequently
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
-        print(16)  # ViewMonitor
+    # Examine Airway and clear if necessary
+    if any(o > 0 for o in events[3:7]):  # If any airway obstruction events are relevant
+        if events[4] > 0:  # AirwayVomit
+            print(31)  # UseYankeurSuctionCatheter
+            continue
+        elif events[5] > 0:  # AirwayBlood
+            print(31)  # UseYankeurSuctionCatheter
+            continue
+        else:
+            print(35)  # PerformAirwayManoeuvres
+            continue
+    else:
+        print(3)  # ExamineAirway
+        continue
+
+    # Breathing checks and measures
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+    elif measured_times[5] == 0 or measured_values[5] < 88:  # Oxygen saturation check
+        print(30)  # UseNonRebreatherMask
+        continue
+    else:
+        print(4)  # ExamineBreathing
+        continue
+
+    # Circulation checks and measures
+    if measured_times[4] == 0 or measured_values[4] < 60:  # MAP check
+        print(15)  # GiveFluids
+        continue
+    elif any(o == 0 for o in events[16:18]):  # If pulse not measurable or not palbable
+        print(5)  # ExamineCirculation
+        continue
+    else:
+        print(38)  # TakeBloodPressure
+        continue
+
+    # Disability checks
+    if events[21] == 0 and events[22] == 0 and events[23] == 0:
+        print(6)  # ExamineDisability
+        continue
+
+    # Exposure checks
+    if events[26] == 0 and events[27] == 0:
+        print(7)  # ExamineExposure
         continue
 
     # Check for stabilized condition
@@ -30,47 +72,5 @@ while True:
         print(48)  # Finish
         break
 
-    # No breathing action detected
-    if events[7] > 0:  # BreathingNone
-        print(
-            29
-        )  # UseBagValadigmExamining Airway and its complications based on events
-    if events[4] > 0:  # AirwayVomit
-        print(32)  # UseGuedelAirway
-        continue
-    if events[5] > 0:  # AirwayBlood
-        print(31)  # UseYankeurSuctionCatheter
-        continue
-
-    # Airway check if no recent details
-    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
-        print(3)  # ExamineAirway
-        continue
-
-    # Oxygen saturation management
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    # Respiratory rate management
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    # Circulatory pressure management
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
-    # Ensuring examinations happen if nothing else is urgent
-    if all(e == 0 for e in events[7:15]):  # All breathing check events
-        print(4)  # ExamineBreathing
-        continue
-
-    if (
-        measured_times[0] == 0 or measured_times[1] == 0 or measured_times[2] == 0
-    ):  # If pulse, HR, BP unseen
-        print(5)  # ExamineCirculation
-        continue
-
-    print(0)  # DoNothing if nothing else is required
+    # Default action
+    print(0)  # DoNothing
