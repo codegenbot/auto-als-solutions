@@ -1,48 +1,61 @@
+```python
 import math
 
-
-def solve(observations):
-    airway_events = observations[:33]
-    vital_signs_events = observations[33:40]
-    vital_signs_values = observations[40:]
-
-    measured_sats = vital_signs_events[5] > 0 and vital_signs_values[5] or 0
-    measured_map = vital_signs_events[4] > 0 and vital_signs_values[4] or 0
-    if measured_sats < 65 or measured_map < 20:
-        return 17
-
-    airway_clear = airway_events[3] > 0
-    airway_vomit = airway_events[4] > 0
-    airway_blood = airway_events[5] > 0
-    airway_tongue = airway_events[6] > 0
-    if not airway_clear:
-        if airway_vomit or airway_blood:
-            return 31
-        elif airway_tongue:
-            return 32
-        else:
-            return 3
-
-    breathing_none = airway_events[7] > 0
-    breathing_snoring = airway_events[8] > 0
-    breathing_seesaw = airway_events[9] > 0
-    breathing_pneumothorax_symptoms = airway_events[14] > 0
-    if breathing_none or breathing_seesaw or breathing_pneumothorax_symptoms:
-        return 29
-    elif breathing_snoring:
-        return 36
-
-    radial_pulse_palpable = airway_events[16] > 0
-    radial_pulse_nonpalpable = airway_events[17] > 0
-    if radial_pulse_nonpalpable:
-        return 14
-
-    exposure_stained_underwear = airway_events[27] > 0
-    if exposure_stained_underwear:
-        return 7
-
-    measured_resp_rate = vital_signs_events[1] > 0 and vital_signs_values[1] or 0
-    if measured_sats >= 88 and measured_resp_rate >= 8 and measured_map >= 60:
-        return 48
-
-    return 0
+def advanced_life_support():
+    observations = input().split()
+    observations = [float(x) for x in observations]
+    
+    for _ in range(350):
+        # Airway
+        if observations[3] == 0 and observations[4] == 0 and observations[5] == 0 and observations[6] == 0:
+            print(3)  # ExamineAirway
+        elif observations[7] > 0 or observations[8] > 0 or observations[9] > 0:
+            print(35)  # PerformAirwayManoeuvres
+            print(36)  # PerformHeadTiltChinLift
+            print(37)  # PerformJawThrust
+            print(31)  # UseYankeurSucionCatheter
+            print(32)  # UseGuedelAirway
+        
+        # Breathing
+        elif observations[10] == 0 and observations[11] == 0 and observations[12] == 0 and observations[13] == 0 and observations[14] == 0 and observations[15] == 0:
+            print(4)  # ExamineBreathing
+        elif observations[49] < 8:
+            print(29)  # UseBagValveMask
+            print(22)  # BagDuringCPR
+        elif observations[48] < 88:
+            print(30)  # UseNonRebreatherMask
+        
+        # Circulation
+        elif observations[16] == 0 and observations[17] > 0 or observations[18] > 0 or observations[19] == 0 or observations[20] > 0 or observations[21] > 0 or observations[22] > 0 or observations[23] > 0 or observations[24] == 0 or observations[25] > 0 or observations[26] > 0 or observations[27] > 0 or observations[28] > 0 or observations[29] > 0 or observations[30] > 0 or observations[31] > 0 or observations[32] > 0 or observations[33] > 0 or observations[34] > 0 or observations[35] > 0 or observations[36] > 0:
+            print(5)  # ExamineCirculation
+        elif observations[50] < 60:
+            print(14)  # UseVenflonIVCatheter
+            print(15)  # GiveFluids
+        elif observations[51] < 65 or observations[50] < 20:
+            print(17)  # StartChestCompression
+            print(10)  # GiveAdrenaline
+        
+        # Disability
+        elif observations[21] == 0 and observations[22] > 0 and observations[23] == 0:
+            print(6)  # ExamineDisability
+        elif observations[47] == 0:
+            print(33)  # TakeBloodForArtherialBloodGas
+        
+        # Exposure
+        elif observations[25] > 0 or observations[26] > 0 or observations[27] > 0:
+            print(7)  # ExamineExposure
+        
+        # Rhythm
+        elif observations[28] > 0 or observations[29] > 0 or observations[30] > 0 or observations[31] > 0 or observations[32] > 0 or observations[33] > 0 or observations[34] > 0 or observations[35] > 0 or observations[36] > 0 or observations[37] > 0:
+            print(2)  # CheckRhythm
+            if observations[29] > 0:
+                print(9)  # GiveAdenosine
+            elif observations[30] > 0 or observations[31] > 0:
+                print(11)  # GiveAmiodarone
+            elif observations[32] > 0:
+                print(12)  # GiveAtropine
+            elif observations[37] > 0:
+                print(13)  # GiveMidazolam
+        
+        # Response
+        
