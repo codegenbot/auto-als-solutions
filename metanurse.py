@@ -1,42 +1,60 @@
-import sys
-input = sys.stdin.read
-data = input().split()
+while True:
+    observations = input().split()
+    relevance = list(map(float, observations[:39]))
+    measurement_relevance = list(map(float, observations[39:46]))
+    measurements = list(map(float, observations[46:]))
 
-# Extract measurements and their relevances
-event_relevance = list(map(float, data[:39]))
-measured_relevance = list(map(float, data[39:46]))
-measurements = list(map(float, data[46:]))
+    # Check if any critical conditions are met
+    if (measurement_relevance[5] > 0 and measurements[5] < 65) or (measurement_relevance[4] > 0 and measurements[4] < 20):
+        print(17)  # StartChestCompression
+        continue
 
-# Constants for indices
-MEASURED_MAP = 4
-MEASURED_SATS = 5
-MEASURED_RESPS = 6
+    # Check airway
+    if relevance[3] > 0:  # AirwayClear
+        # Check breathing
+        if relevance[7] > 0:  # BreathingNone
+            print(29)  # UseBagValveMask
+        elif relevance[8] > 0 or relevance[9] > 0:  # BreathingSnoring or BreathingSeeSaw
+            print(36)  # PerformHeadTiltChinLift
+        else:
+            print(4)  # ExamineBreathing
+    elif relevance[4] > 0 or relevance[5] > 0 or relevance[6] > 0:  # AirwayVomit, AirwayBlood, AirwayTongue
+        print(31)  # UseYankeurSuctionCatheter
+    else:
+        print(3)  # ExamineAirway
 
-# Constants for action codes
-FINISH = 48
-EXAMINE_AIRWAY = 3
-EXAMINE_BREATHING = 4
-EXAMINE_CIRCULATION = 5
-USE_NON_REBREATHER_MASK = 30
-USE_BLOOD_PRESSURE_CUFF = 27
-USE_SATS_PROBE = 25
+    # Check circulation
+    if measurement_relevance[4] > 0 and measurements[4] < 60:  # MeasuredMAP
+        print(15)  # GiveFluids
+    elif measurement_relevance[0] > 0 and measurements[0] < 60:  # MeasuredHeartRate
+        print(10)  # GiveAdrenaline
+    else:
+        print(5)  # ExamineCirculation
 
-# Check patient's vitals and decide on actions
-if measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 20:
-    print(FINISH)  # Patient in critical condition, might simulate immediate intervention
-elif measured_relevance[MEASURED_SATS] == 0:
-    print(USE_SATS_PROBE)
-elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 65:
-    print(FINISH)  # Critical condition requiring immediate action
-elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 88:
-    print(USE_NON_REBREATHER_MASK)
-elif measured_relevance[MEASURED_RESPS] == 0:
-    print(EXAMINE_BREATHING)
-elif measured_relevance[MEASURED_RESPS] > 0 and measurements[MEASURED_RESPS] < 8:
-    print(USE_NON_REBREATHER_MASK)
-elif measured_relevance[MEASURED_MAP] == 0:
-    print(USE_BLOOD_PRESSURE_CUFF)
-elif measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 60:
-    print(EXAMINE_CIRCULATION)
-else:
-    print(FINISH)  # If no critical actions are needed, attempt to finish the scenario.
+    # Check disability
+    if relevance[21] > 0 or relevance[22] > 0 or relevance[23] > 0:  # AVPU_U, AVPU_V, AVPU_P
+        print(6)  # ExamineDisability
+    else:
+        print(8)  # ExamineResponse
+
+    # Check exposure
+    print(7)  # ExamineExposure
+
+    # If oxygen saturation is below 88%
+    if measurement_relevance[5] > 0 and measurements[5] < 88:
+        print(30)  # UseNonRebreatherMask
+    else:
+        print(25)  # UseSatsProbe
+
+    # If respiratory rate is below 8
+    if measurement_relevance[6] > 0 and measurements[6] < 8:
+        print(29)  # UseBagValveMask
+    else:
+        print(4)  # ExamineBreathing
+
+    # Finish if stabilized
+    if (measurement_relevance[5] > 0 and measurements[5] >= 88) and \
+       (measurement_relevance[6] > 0 and measurements[6] >= 8) and \
+       (measurement_relevance[4] > 0 and measurements[4] >= 60):
+        print(48)  # Finish
+        break
