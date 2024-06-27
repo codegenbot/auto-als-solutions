@@ -17,6 +17,18 @@ while True:
         print(16)  # ViewMonitor
         continue
 
+    # Check for stabilized condition
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
+
     # Check for any 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
@@ -27,7 +39,10 @@ while True:
         print(3)  # ExamineAirway
         continue
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(32)  # UseGuedelAirway or appropriate response
+        if events[5] > 0:  # AirwayBlood
+            print(31)  # UseYankeurSuctionCatheter
+        else:
+            print(32)  # UseGuedelAirway
         continue
 
     # Examine Breathing
@@ -59,31 +74,19 @@ while True:
         print(7)  # ExamineExposure
         continue
 
-    # Act based on low oxygen saturation
+    # Act based on oxygen saturation
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Act based on very low breathing rate
+    # Act based on respiratory rate
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
-    # Act based on low mean arterial pressure
+    # Act based on mean arterial pressure
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-
-    # Check for stabilized condition
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
 
     print(0)  # DoNothing if nothing else is required
