@@ -6,7 +6,7 @@ def parse_observations(obs):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    if obs[7] > 0 or obs[17] > 0:  # BreathingNone or RadialPulseNonPalpable
+    if obs[7] > 0.5 or obs[17] > 0.5:  # BreathingNone or RadialPulseNonPalpable
         return 17, 'cpr'
     
     if state == 'cpr':
