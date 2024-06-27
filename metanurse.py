@@ -6,6 +6,14 @@ def parse_observations(obs):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
+    if obs[7] > 0 or obs[17] > 0:  # BreathingNone or RadialPulseNonPalpable
+        return 17, 'cpr'
+    
+    if state == 'cpr':
+        if obs[50] >= 0.65 and obs[52] >= 20:
+            return 23, 'assess'
+        return 17, 'cpr'
+    
     if state == 'start':
         return 8, 'response'
     elif state == 'response':
@@ -13,39 +21,37 @@ def choose_action(observations, state):
     elif state == 'airway':
         return 4, 'breathing'
     elif state == 'breathing':
-        return 25, 'sats_probe'
-    elif state == 'sats_probe':
-        return 27, 'bp_cuff'
-    elif state == 'bp_cuff':
-        return 38, 'check_bp'
-    elif state == 'check_bp':
+        return 5, 'circulation'
+    elif state == 'circulation':
+        return 6, 'disability'
+    elif state == 'disability':
+        return 7, 'exposure'
+    elif state == 'exposure':
+        return 16, 'monitor'
+    elif state == 'monitor':
+        if obs[38] == 0:
+            return 25, 'sats_probe'
+        elif obs[39] == 0:
+            return 27, 'bp_cuff'
+        else:
+            return 38, 'check_bp'
+    elif state in ['sats_probe', 'bp_cuff', 'check_bp']:
         return 16, 'assess'
     elif state == 'assess':
-        if obs[17] > 0:  # RadialPulseNonPalpable
-            return 17, 'cpr'
-        if obs[50] < 0.65 or obs[52] < 20:
-            return 17, 'cpr'
-        if obs[51] == 0 or obs[52] < 8:
-            return 29, 'assess'
-        if obs[50] < 0.88:
-            return 30, 'assess'
-        if obs[52] < 60:
+        if obs[51] < 8 or obs[50] < 0.88:
+            return 30, 'oxygen'
+        elif obs[52] < 60:
             return 15, 'fluids'
-        if obs[44] > 100:  # High heart rate
-            return 9, 'treat_tachycardia'
-        if obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
+        elif obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
             return 48, 'finish'
-        return 16, 'assess'
-    elif state == 'cpr':
-        if obs[17] == 0:  # RadialPulsePalpable
+        else:
             return 16, 'assess'
-        return 17, 'cpr'
+    elif state == 'oxygen':
+        return 16, 'assess'
     elif state == 'fluids':
-        return 15, 'assess'
-    elif state == 'treat_tachycardia':
         return 16, 'assess'
     
-    return 0, state
+    return 16, 'assess'
 
 state = 'start'
 while True:
