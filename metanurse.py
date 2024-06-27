@@ -4,6 +4,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Immediate action for critical vital signs
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -11,26 +12,12 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if events[7] > 0.5:  # BreathingNone
+    # Supportive actions based on no breathing
+    if events[7] > 0:  # BreathingNone detected
         print(29)  # UseBagValveMask
         continue
 
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
-        print(16)  # ViewMonitor
-        continue
-
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
+    # Check if the patient is stabilized
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -42,4 +29,5 @@ while True:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing
+    # Fall back to monitor check if other conditions are not met and more info is needed
+    print(16)  # ViewMonitor
