@@ -12,7 +12,7 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check if breathing has completely stopped
+    # Immediate action if breathing has stopped
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
@@ -22,7 +22,7 @@ while True:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Act based on very low breathing rate
+    # Check for very low breathing rate
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
@@ -40,6 +40,29 @@ while True:
         print(32)  # UseGuedelAirway or appropriate response
         continue
 
+    # Examine Breathing
+    if (
+        events[8] == 0
+        and events[9] == 0
+        and events[10] == 0
+        and events[11] == 0
+        and events[12] == 0
+        and events[13] == 0
+        and events[14] == 0
+    ):
+        print(4)  # ExamineBreathing
+        continue
+
+    # Examine Circulation
+    if events[16] == 0 and events[17] == 0:  # No pulse info
+        print(5)  # ExamineCirculation
+        continue
+
+    # Examine Disability
+    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # No AVPU info
+        print(6)  # ExamineDisability
+        continue
+
     # Check for stabilized condition
     if (
         measured_times[5] > 0
@@ -51,10 +74,5 @@ while True:
     ):
         print(48)  # Finish
         break
-
-    # Update Vital Signs frequently
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
-        print(16)  # ViewMonitor
-        continue
 
     print(0)  # DoNothing if nothing else is required
