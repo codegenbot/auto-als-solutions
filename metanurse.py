@@ -25,6 +25,11 @@ while True:
         print(48)  # Finish
         break
 
+    # Check if there is no breathing
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
     # Detailed examinations
     if (
         events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
@@ -68,11 +73,6 @@ while True:
 
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
-        continue
-
-    # Aggressive response when no breathing detected.
-    if events[7] > 0:  # Detects BreathingNone event as relevant
-        print(29)  # UseBagValveMask
         continue
 
     print(0)  # DoNothing if nothing else is required
