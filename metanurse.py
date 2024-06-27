@@ -1,71 +1,62 @@
-step_counter = 0
+steps = 0
 
-while step_counter < 350:
+while steps < 350:
     observations = input().split()
     relevance = list(map(float, observations[:39]))
     measurement_relevance = list(map(float, observations[39:46]))
     measurements = list(map(float, observations[46:]))
 
-    # Immediate danger check
+    # Immediately handle life-threatening conditions
     if (measurement_relevance[5] > 0 and measurements[5] < 65) or (
         measurement_relevance[4] > 0 and measurements[4] < 20
     ):
         print(17)  # StartChestCompression
-        step_counter += 1
         continue
 
-    # Airway Checks
+    # Airway Management
     if (
         relevance[4] > 0 or relevance[5] > 0 or relevance[6] > 0
     ):  # AirwayVomit, AirwayBlood, AirwayTongue
         print(31)  # UseYankeurSuctionCatheter
-    elif relevance[3] <= 0:  # AirwayClear not triggered
-        print(3)  # ExamineAirway
+    elif relevance[3] > 0:  # AirwayClear
+        print(36)  # PerformHeadTiltChinLift
     else:
-        # Breathing Checks
-        if relevance[7] > 0:  # BreathingNone
-            print(29)  # UseBagValveMask
-        elif (
-            relevance[8] > 0 or relevance[9] > 0
-        ):  # BreathingSnoring or BreathingSeeSaw
-            print(36)  # PerformHeadTiltChinLift
+        print(3)  # ExamineAirway
+
+    # Breathing Management
+    if relevance[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+    else:
+        if measurement_relevance[5] > 0 and measurements[5] < 88:
+            print(30)  # UseNonRebreatherMask
         else:
             print(4)  # ExamineBreathing
 
-    # Circulation Checks
+    # Circulation Management
     if measurement_relevance[4] > 0:
         if measurements[4] < 60:  # MeasuredMAP
             print(15)  # GiveFluids
         else:
             print(5)  # ExamineCirculation
     else:
-        print(27)  # UseBloodPressureCuff
+        print(5)  # ExamineCirculation
 
-    # Disability (Neurological Evaluation)
-    if relevance[22] <= 0 and relevance[23] <= 0:  # AVPU_V, AVPU_P not triggered
-        print(8)  # ExamineResponse
-    else:
+    # Disability Management
+    if relevance[22] > 0 or relevance[23] > 0:  # AVPU_V, AVPU_P
         print(6)  # ExamineDisability
+    else:
+        print(8)  # ExamineResponse
 
-    # Exposure and other Observations
+    # Exposure Management
     print(7)  # ExamineExposure
-    if measurement_relevance[5] == 0:
-        print(25)  # UseSatsProbe
-    elif measurements[5] >= 88:
-        print(30)  # UseNonRebreatherMask
 
-    if measurement_relevance[6] == 0:
-        print(4)  # ExamineBreathing
-    elif measurements[6] >= 8:
-        print(29)  # UseBagValveMask
-
-    # Check if stabilized
+    # Finish the scenario if all conditions are met
     if (
         (measurement_relevance[5] > 0 and measurements[5] >= 88)
-        and (measurement_relevance[6] > 0 and measurements[6] >= 8)
+        and (measurement_relevance[1] > 0 and measurements[1] >= 8)
         and (measurement_relevance[4] > 0 and measurements[4] >= 60)
     ):
         print(48)  # Finish
         break
 
-    step_counter += 1
+    steps += 1
