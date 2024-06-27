@@ -3,53 +3,60 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(observations):
-    obs = parse_observations(observations)
+def choose_action(obs):
+    # Initialize variables to track patient state
+    airway_checked = breathing_checked = circulation_checked = disability_checked = exposure_checked = False
+    sats = map = 0
     
-    # Check for critical conditions first
-    if obs[38] < 0.65 or obs[45] < 20:  # Sats < 65% or MAP < 20mmHg
-        return 17  # StartChestCompression
+    # Check if vital signs have been measured recently
+    recent_sats = obs[39] > 0.5
+    recent_map = obs[42] > 0.5
+    
+    if recent_sats:
+        sats = obs[46]
+    if recent_map:
+        map = obs[46]
     
     # ABCDE assessment
-    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+    if not airway_checked:
         return 3  # ExamineAirway
-    
-    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+    elif not breathing_checked:
         return 4  # ExamineBreathing
-    
-    if obs[16] == 0 and obs[17] == 0:
+    elif not circulation_checked:
         return 5  # ExamineCirculation
-    
-    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+    elif not disability_checked:
         return 6  # ExamineDisability
-    
-    if obs[25] == 0 and obs[26] == 0:
+    elif not exposure_checked:
         return 7  # ExamineExposure
     
-    # Check vitals
-    if obs[39] == 0:
-        return 26  # UseSatsProbe
-    
-    if obs[41] == 0:
+    # Check vital signs
+    if not recent_sats:
+        return 25  # UseSatsProbe
+    if not recent_map:
         return 27  # UseBloodPressureCuff
     
-    if obs[38] < 0.88:
+    # Stabilization actions
+    if sats < 88:
         return 30  # UseNonRebreatherMask
-    
-    if obs[40] < 8 or obs[45] < 60:
+    if map < 60:
         return 15  # GiveFluids
     
-    # If all checks pass, patient is stabilized
-    return 48  # Finish
+    # Check if patient is stabilized
+    if sats >= 88 and map >= 60:
+        return 48  # Finish
+    
+    # Default action
+    return 0  # DoNothing
 
-step = 0
-while step < 350:
-    observations = input().strip()
-    action = choose_action(observations)
-    print(action)
-    sys.stdout.flush()
-    
-    if action == 48:  # Finish
-        break
-    
-    step += 1
+def main():
+    while True:
+        observations = input().strip()
+        if not observations:
+            break
+        obs = parse_observations(observations)
+        action = choose_action(obs)
+        print(action)
+        sys.stdout.flush()
+
+if __name__ == "__main__":
+    main()
