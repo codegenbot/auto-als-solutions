@@ -17,7 +17,7 @@ while True:
         print(16)  # ViewMonitor
         continue
 
-    # Check for 'No Breathing' condition
+    # Check for any 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
