@@ -5,49 +5,67 @@ def parse_observations(observations):
 
 def choose_action(obs, step, state):
     sats = obs[46] if obs[39] > 0.5 else 0
-    map_value = obs[47] if obs[42] > 0.5 else 0
-    resp_rate = obs[48] if obs[43] > 0.5 else 0
+    map_value = obs[46] if obs[42] > 0.5 else 0
+    resp_rate = obs[47] if obs[43] > 0.5 else 0
     heart_rate = obs[44] if obs[37] > 0.5 else 0
 
     # Check for cardiac arrest
     if sats < 65 or map_value < 20:
-        return 17, 'CPR'  # StartChestCompression
+        return 17, "CPR"  # StartChestCompression
 
-    if state == 'START':
-        return 25, 'A'  # UseSatsProbe
-    elif state == 'A':
-        return 3, 'B'  # ExamineAirway
-    elif state == 'B':
-        return 4, 'C'  # ExamineBreathing
-    elif state == 'C':
-        return 27, 'D'  # UseBloodPressureCuff
-    elif state == 'D':
-        return 6, 'E'  # ExamineDisability
-    elif state == 'E':
-        return 7, 'INTERVENE'  # ExamineExposure
+    if state == "START":
+        return 25, "CHECK_VITALS"  # UseSatsProbe
 
-    # Interventions based on vital signs
-    if state == 'INTERVENE':
+    if state == "CHECK_VITALS":
+        if obs[39] < 0.5:  # If sats not measured
+            return 25, "CHECK_VITALS"  # UseSatsProbe
+        if obs[42] < 0.5:  # If MAP not measured
+            return 27, "CHECK_VITALS"  # UseBloodPressureCuff
+        if obs[37] < 0.5:  # If heart rate not measured
+            return 26, "CHECK_VITALS"  # UseAline
+        return 3, "AIRWAY"  # Start ABCDE assessment
+
+    if state == "AIRWAY":
+        if obs[3] < 0.5:  # If airway not checked
+            return 3, "AIRWAY"  # ExamineAirway
+        if obs[3] > 0.5 and obs[6] > 0.5:  # If airway obstructed
+            return 35, "BREATHING"  # PerformAirwayManoeuvres
+        return 4, "BREATHING"
+
+    if state == "BREATHING":
+        if obs[10] < 0.5:  # If breathing not checked
+            return 4, "BREATHING"  # ExamineBreathing
         if sats < 88:
-            return 30, 'INTERVENE'  # UseNonRebreatherMask
-        elif map_value < 60:
-            return 15, 'INTERVENE'  # GiveFluids
-        elif resp_rate < 8:
-            return 29, 'INTERVENE'  # UseBagValveMask
-        elif sats >= 88 and map_value >= 60 and resp_rate >= 8:
-            return 48, 'FINISH'  # Finish
-        else:
-            return 16, 'START'  # ViewMonitor
+            return 30, "CIRCULATION"  # UseNonRebreatherMask
+        return 5, "CIRCULATION"
 
-    # Timeout mechanism
-    if step > 300:
-        return 48, 'FINISH'  # Finish
+    if state == "CIRCULATION":
+        if obs[16] < 0.5:  # If circulation not checked
+            return 5, "CIRCULATION"  # ExamineCirculation
+        if map_value < 60:
+            return 15, "DISABILITY"  # GiveFluids
+        return 6, "DISABILITY"
 
-    return 0, state  # DoNothing
+    if state == "DISABILITY":
+        if obs[20] < 0.5:  # If disability not checked
+            return 6, "DISABILITY"  # ExamineDisability
+        return 7, "EXPOSURE"
+
+    if state == "EXPOSURE":
+        if obs[26] < 0.5:  # If exposure not checked
+            return 7, "EXPOSURE"  # ExamineExposure
+        return 16, "MONITOR"  # ViewMonitor
+
+    if state == "MONITOR":
+        if sats >= 88 and map_value >= 60 and resp_rate >= 8:
+            return 48, "FINISH"  # Finish
+        return 0, "START"  # Restart assessment cycle
+
+    return 48, "FINISH"  # Finish if we reach here (shouldn't happen)
 
 def main():
     step = 0
-    state = 'START'
+    state = "START"
     while True:
         observations = input().strip()
         if not observations:
@@ -56,8 +74,8 @@ def main():
         action, new_state = choose_action(obs, step, state)
         print(action)
         sys.stdout.flush()
-        step += 1
         state = new_state
+        step += 1
 
 if __name__ == "__main__":
     main()
