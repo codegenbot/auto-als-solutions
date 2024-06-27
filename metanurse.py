@@ -1,3 +1,4 @@
+```python
 import math
 
 def solve(observations):
@@ -55,18 +56,15 @@ def solve(observations):
     if measured_sats < 65 or measured_map < 20:
         return 17  # StartChestCompression
 
-    # Airway assessment
     if not airway_clear:
-        if airway_vomit or airway_blood:
+        if airway_vomit and airway_blood and airway_tongue:
             return 31  # UseYankeurSucionCatheter
-        elif airway_tongue:
             return 32  # UseGuedelAirway
-        else:
-            return 3  # ExamineAirway
-
-    # Breathing assessment
-    if breathing_none or breathing_seesaw or breathing_pneumothorax_symptoms:
-        return 29  # UseBagValveMask
-    elif breathing_snoring:
-        return 36  # PerformHeadTiltChinLift
-    elif breathing_bibasal_crepitations or breathing_wheeze or breathing_
+        elif airway_vomit and airway_blood:
+            return 31  # UseYankeurSucionCatheter
+        elif airway_vomit and airway_tongue:
+            return 31  # UseYankeurSucionCatheter
+            return 32  # UseGuedelAirway
+        elif airway_blood and airway_tongue:
+            return 31  # UseYankeurSucionCatheter
+            return 32
