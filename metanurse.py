@@ -8,11 +8,12 @@ while True:
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
+
     if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Stabilization criteria check
+    # Stabilization criteria
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -24,41 +25,47 @@ while True:
         print(48)  # Finish
         break
 
-    # Initial Examine Actions to gather information
-    if not any(events[3:7]):
+    # Detailed examinations
+    if (
+        events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
+    ):  # No airway info
         print(3)  # ExamineAirway
         continue
-    if not any(events[7:15]):
+
+    if (
+        events[7] == 0
+        and events[8] == 0
+        and events[9] == 0
+        and events[10] == 0
+        and events[11] == 0
+        and events[12] == 0
+        and events[13] == 0
+        and events[14] == 0
+    ):
         print(4)  # ExamineBreathing
         continue
-    if events[16] == 0 and events[17] == 0:
+
+    if events[16] == 0 and events[17] == 0:  # No pulse info
         print(5)  # ExamineCirculation
         continue
-    if events[21] == 0 and events[22] == 0 and events[23] == 0:
+
+    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # No AVPU info
         print(6)  # ExamineDisability
         continue
-    if events[26] == 0 and events[27] == 0:
+
+    if events[26] == 0 and events[27] == 0:  # No exposure info
         print(7)  # ExamineExposure
         continue
 
-    # Device Utilization for accurate measurements
-    if measured_times[5] == 0:
-        print(25)  # UseSatsProbe
-        continue
-    if measured_times[4] == 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    # Re-examine after device utilizations
-    print(16)  # ViewMonitor
-
-    # Active support and interventions
+    # Corrective actions
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
+
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
+
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
