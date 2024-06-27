@@ -4,78 +4,85 @@ def parse_observations(observations):
     return list(map(float, observations.split()))
 
 class State:
-    INITIAL = 0
-    AIRWAY = 1
-    BREATHING = 2
-    CIRCULATION = 3
-    DISABILITY = 4
-    EXPOSURE = 5
-    STABILIZING = 6
+    def __init__(self):
+        self.airway_checked = False
+        self.breathing_checked = False
+        self.circulation_checked = False
+        self.disability_checked = False
+        self.exposure_checked = False
+        self.sats_probe_used = False
+        self.bp_cuff_used = False
+        self.fluids_given = False
 
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    if state == State.INITIAL:
-        return 8, State.AIRWAY  # ExamineResponse
+    # Check if measurements are available
+    sats_available = obs[39] > 0 and obs[45] > 0
+    bp_available = obs[41] > 0 and obs[46] > 0
+    resp_available = obs[40] > 0 and obs[46] > 0
     
-    elif state == State.AIRWAY:
-        if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
-            return 3, State.AIRWAY  # ExamineAirway
-        else:
-            return 29, State.BREATHING  # UseBagValveMask
+    # Critical conditions
+    if sats_available and obs[45] < 65:
+        return 17  # StartChestCompression
+    if bp_available and obs[46] < 20:
+        return 17  # StartChestCompression
     
-    elif state == State.BREATHING:
-        if obs[39] == 0:
-            return 25, State.BREATHING  # UseSatsProbe
-        elif obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
-            return 4, State.BREATHING  # ExamineBreathing
-        else:
-            return 30, State.CIRCULATION  # UseNonRebreatherMask
+    # ABCDE assessment
+    if not state.airway_checked:
+        state.airway_checked = True
+        return 3  # ExamineAirway
     
-    elif state == State.CIRCULATION:
-        if obs[41] == 0:
-            return 27, State.CIRCULATION  # UseBloodPressureCuff
-        elif obs[16] == 0 and obs[17] == 0:
-            return 5, State.CIRCULATION  # ExamineCirculation
-        else:
-            return 14, State.DISABILITY  # UseVenflonIVCatheter
+    if not state.breathing_checked:
+        state.breathing_checked = True
+        return 4  # ExamineBreathing
     
-    elif state == State.DISABILITY:
-        if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-            return 6, State.DISABILITY  # ExamineDisability
-        else:
-            return 33, State.EXPOSURE  # TakeBloodForArtherialBloodGas
+    if not state.circulation_checked:
+        state.circulation_checked = True
+        return 5  # ExamineCirculation
     
-    elif state == State.EXPOSURE:
-        if obs[25] == 0 and obs[26] == 0:
-            return 7, State.EXPOSURE  # ExamineExposure
-        else:
-            return 16, State.STABILIZING  # ViewMonitor
+    if not state.disability_checked:
+        state.disability_checked = True
+        return 6  # ExamineDisability
     
-    elif state == State.STABILIZING:
-        if obs[39] > 0 and obs[46] < 0.88:
-            return 30, State.STABILIZING  # UseNonRebreatherMask
-        elif obs[41] > 0 and obs[45] < 60:
-            return 15, State.STABILIZING  # GiveFluids
-        elif obs[40] > 0 and obs[46] < 8:
-            return 29, State.STABILIZING  # UseBagValveMask
-        elif obs[39] > 0 and obs[46] >= 0.88 and obs[41] > 0 and obs[45] >= 60 and obs[40] > 0 and obs[46] >= 8:
-            return 48, State.INITIAL  # Finish
-        else:
-            return 16, State.STABILIZING  # ViewMonitor
+    if not state.exposure_checked:
+        state.exposure_checked = True
+        return 7  # ExamineExposure
     
-    return 0, state  # DoNothing
+    # Vital signs
+    if not state.sats_probe_used:
+        state.sats_probe_used = True
+        return 25  # UseSatsProbe
+    
+    if not state.bp_cuff_used:
+        state.bp_cuff_used = True
+        return 27  # UseBloodPressureCuff
+    
+    # Interventions based on vital signs
+    if sats_available and obs[45] < 88:
+        return 30  # UseNonRebreatherMask
+    
+    if not state.fluids_given and ((resp_available and obs[46] < 8) or (bp_available and obs[46] < 60)):
+        state.fluids_given = True
+        return 15  # GiveFluids
+    
+    # Check if patient is stabilized
+    if (sats_available and obs[45] >= 88 and
+        resp_available and obs[46] >= 8 and
+        bp_available and obs[46] >= 60):
+        return 48  # Finish
+    
+    return 0  # DoNothing if no specific action is needed
 
-state = State.INITIAL
+state = State()
 step = 0
 while step < 350:
     observations = input().strip()
-    action, new_state = choose_action(observations, state)
+    action = choose_action(observations, state)
     print(action)
     sys.stdout.flush()
     
     if action == 48:  # Finish
         break
     
-    state = new_state
     step += 1
