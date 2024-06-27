@@ -32,10 +32,8 @@ def main():
                 print(4)  # ExamineBreathing
             elif step < 15:
                 print(5)  # ExamineCirculation
-            elif step < 20:
-                print(6)  # ExamineDisability
             else:
-                print(7)  # ExamineExposure
+                print(8)  # ExamineResponse
 
         sys.stdout.flush()
         step += 1
