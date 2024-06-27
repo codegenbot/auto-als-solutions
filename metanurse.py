@@ -1,8 +1,15 @@
+step_count = 0
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
+
+    # Update vital signs frequently
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
 
     # Immediate actions based on critical conditions
     if measured_times[5] > 0 and measured_values[5] < 65:
@@ -10,16 +17,6 @@ while True:
         continue
     if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
-        continue
-
-    # Update Vital Signs frequently
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
-        print(16)  # ViewMonitor
-        continue
-
-    # Check for any 'No Breathing' condition
-    if events[7] > 0:  # BreathingNone
-        print(29)  # UseBagValveMask
         continue
 
     # Check for stabilized condition
@@ -34,6 +31,11 @@ while True:
         print(48)  # Finish
         break
 
+    # Check for any 'No Breathing' condition
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
     # Examine Airway
     if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
         print(3)  # ExamineAirway
@@ -43,16 +45,7 @@ while True:
         continue
 
     # Examine Breathing
-    if (
-        events[7] == 0
-        and events[8] == 0
-        and events[9] == 0
-        and events[10] == 0
-        and events[11] == 0
-        and events[12] == 0
-        and events[13] == 0
-        and events[14] == 0
-    ):
+    if any(events[8:15] == 0):
         print(4)  # ExamineBreathing
         continue
 
@@ -86,4 +79,11 @@ while True:
         print(15)  # GiveFluids
         continue
 
-    print(0)  # DoNothing if nothing else is required
+    # Default action if no conditions met
+    print(0)  # DoNothing
+
+    # Increment step count and check if reached limit
+    step_count += 1
+    if step_count >= 350:
+        print(48)  # Finish
+        break
