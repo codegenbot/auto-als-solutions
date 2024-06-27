@@ -1,66 +1,65 @@
-while True:
-    observations = input().split()
-    relevance = list(map(float, observations[:39]))
-    measurement_relevance = list(map(float, observations[39:46]))
-    measurements = list(float, observations[46:])
+import sys
 
-    # Immediate critical conditions for cardiac arrest
-    if (measurement_relevance[5] > 0 and measurements[5] < 65) or (measurement_relevance[4] > 0 and measurements[4] < 20):
-        print(17)  # StartChestCompression
-        continue
 
-    # Manage airway
-    if relevance[3] > 0:  # AirwayClear
-        airway_clear = True
-    elif relevance[4] > 0 or relevance[5] > 0 or relevance[6] > 0:  # Airway obstructed by vomit, blood, or tongue
-        print(31)  # UseYankeurSuctionCatheter
-        continue
-    else:
-        print(3)  # ExamineAirway
-        continue
+def main():
+    # Use sys.stdin.readline for faster input reading
+    input = sys.stdin.readline
 
-    # Manage breathing
-    if relevance[7] > 0:  # BreathingNone
-        print(29)  # UseBagValveMask
-    elif relevance[8] > 0 or relevance[9] > 0:  # BreathingSnoring or BreathingSeeSaw
-        print(36)  # PerformHeadTiltChinLift
-    else:
-        print(4)  # ExamineBreathing
+    # Constants for indices
+    MEASURED_MAP = 4
+    MEASURED_SATS = 5
+    MEASURED_RESPS = 6
 
-    # Circulation checks
-    if relevance[16] > 0:  # RadialPulsePalpable
-        pulse_ok = True
-    elif relevance[17] > 0:  # RadialPulseNonPalpable
-        print(10)  # GiveAdrenaline
-        continue
-    if measurement_relevance[0] > 0 and measurements[0] < 60:  # MeasuredHeartRate low
-        print(10)  # GiveAdrenaline
-        continue
-    if measurement_relevance[4] > 0 and measurements[4] < 60:  # MeasuredMAP low
-        print(15)  # GiveFluids
-        continue
-    else:
-        print(5)  # ExamineCirculation
+    # Constants for action codes
+    FINISH = 48
+    EXAMINE_AIRWAY = 3
+    EXAMINE_BREATHING = 4
+    EXAMINE_CIRCULATION = 5
+    USE_NON_REBREATHER_MASK = 30
+    USE_BLOOD_PRESSURE_CUFF = 27
+    USE_SATS_PROBE = 25
 
-    # Disability assessment
-    if relevance[21] > 0 or relevance[22] > 0 or relevance[23] > 0:  # AVPU_U, AVPU_V, AVPU_P
-        print(6)  # ExamineDisability
-    else:
-        print(8)  # ExamineResponse
+    # Continue processing until the process is terminated by the system or a FINISH command
+    while True:
+        data = input().strip()
+        if not data:
+            break  # Terminate the loop if no input is available, it's the end of data stream
 
-    # Exposure check
-    print(7)  # ExamineExposure
+        # Split the input data and transform them into float
+        data = data.split()
+        event_relevance = list(map(float, data[:39]))
+        measured_relevance = list(map(float, data[39:46]))
+        measurements = list(map(float, data[46:]))
 
-    # Oxygen and breathing support
-    if measurement_relevance[5] > 0:
-        if measurements[5] < 88:
-            print(30)  # UseNonRebreatherMask
+        # Check patient's vitals and decide on actions
+        if measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 20:
+            print(
+                FINISH
+            )  # Patient in critical condition, might simulate immediate intervention
+            break
+        elif measured_relevance[MEASURED_SATS] == 0:
+            print(USE_SATS_PROBE)
+        elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 65:
+            print(FINISH)  # Critical condition requiring immediate action
+            break
+        elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 88:
+            print(USE_NON_REBREATHER_MASK)
+        elif measured_relevance[MEASURED_RESPS] == 0:
+            print(EXAMINE_BREATHING)
+        elif (
+            measured_relevance[MEASURED_RESPS] > 0 and measurements[MEASURED_RESPS] < 8
+        ):
+            print(USE_NON_REBREATHER_MASK)
+        elif measured_relevance[MEASURED_MAP] == 0:
+            print(USE_BLOOD_PRESSURE_CUFF)
+        elif measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 60:
+            print(EXAMINE_CIRCULATION)
         else:
-            print(25)  # UseSatsProbe
+            print(
+                FINISH
+            )  # If no critical actions are needed, attempt to finish the scenario.
+            break
 
-    # Finish if stabilized
-    if (measurement_relevance[5] > 0 and measurements[5] >= 88) and \
-       (measurement_relevance[6] > 0 and measurements[6] >= 8) and \
-       (measurement_relevance[4] > 0 and measurements[4] >= 60):
-        print(48)  # Finish
-        break
+
+if __name__ == "__main__":
+    main()
