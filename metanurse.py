@@ -42,11 +42,14 @@ def choose_action(observations, state):
     elif state == 'cardiac_arrest':
         return 17, 'cpr'  # StartChestCompression
     elif state == 'cpr':
-        return 2, 'check_rhythm'  # CheckRhythm
+        if obs[38] >= 0.65 and obs[39] >= 20:
+            return 16, 'monitor'  # ViewMonitor
+        else:
+            return 2, 'check_rhythm'  # CheckRhythm
     elif state == 'check_rhythm':
         return 10, 'give_adrenaline'  # GiveAdrenaline
     elif state == 'give_adrenaline':
-        return 16, 'monitor'  # ViewMonitor after CPR
+        return 23, 'cpr'  # ResumeCPR
     
     return 0, state  # DoNothing
 
