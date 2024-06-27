@@ -63,25 +63,25 @@ def advanced_life_support(observations):
         if max(vital_sign_observations[5], 0) < 0.65 or max(vital_sign_observations[6], 0) < 20:
             return print(actions.index("StartChestCompression"))
 
-        if not event_observations[0] and not event_observations[1] and not event_observations[2]:
-            return print(actions.index("ExamineResponse"))
+        if event_observations[7] > 0:  # BreathingNone
+            return print(actions.index("OpenAirwayDrawer"))
 
-        if event_observations[2] > 0 and (event_observations[3] == 0 or event_observations[4] > 0 or event_observations[5] > 0 or event_observations[6] > 0):
+        if event_observations[3] < 1:  # AirwayClear
             return print(actions.index("ExamineAirway"))
 
-        if event_observations[4] > 0 or event_observations[5] > 0 or event_observations[6] > 0:
-            return print(actions.index("PerformAirwayManoeuvres"))
+        if min(vital_sign_values[5], 1) < 0.88:
+            return print(actions.index("UseSatsProbe"))
 
-        if event_observations[7] > 0 or event_observations[8] > 0 or event_observations[9] > 0 or min(vital_sign_values[5], 1) < 0.88:
+        if min(vital_sign_values[6], 1) < 8:
             return print(actions.index("ExamineBreathing"))
 
-        if event_observations[7] > 0 or event_observations[8] > 0 or event_observations[9] > 0:
-            return print(actions.index("UseBagValveMask"))
+        if event_observations[0] > 0 or event_observations[1] > 0 or event_observations[2] > 0:  # ResponseVerbal, ResponseGroan, ResponseNone
+            return print(actions.index("CheckSignsOfLife"))
 
-        if event_observations[17] == 0 and event_observations[18] > 0:
+        if min(vital_sign_values[4], 1) < 60:
             return print(actions.index("ExamineCirculation"))
 
-        if event_observations[17] == 0:
-            return print(actions.index("StartChestCompression"))
+        if event_observations[20] > 0 or event_observations[21] > 0 or event_observations[22] > 0:  # AVPU_A, AVPU_U, AVPU_V
+            return print(actions.index("ExamineDisability"))
 
-        if min(vital_sign
+        if event_observations[25] > 0 or event_observations[26] > 0 or event_observations[27] > 0:  # ExposureRash, ExposurePeripherallyShutdown,
