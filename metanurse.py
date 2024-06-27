@@ -19,17 +19,17 @@ def choose_action(observations, state):
     elif state == 'monitor':
         if obs[35] == 0 or obs[39] == 0:  # No breathing or MAP is 0
             return 17, 'cpr'  # StartChestCompression
-        elif obs[38] < 0.88:
-            return 30, 'non_rebreather'  # UseNonRebreatherMask
+        elif obs[38] < 0.88 and obs[35] > 0:
+            return 30, 'use_mask'  # UseNonRebreatherMask
         elif obs[39] < 60:
-            return 14, 'venfloniv'  # UseVenflonIVCatheter
+            return 14, 'venflonIV'  # UseVenflonIVCatheter
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish'  # Finish
         else:
             return 5, 'circulation'  # ExamineCirculation
-    elif state == 'non_rebreather':
-        return 5, 'circulation'  # ExamineCirculation
-    elif state == 'venfloniv':
+    elif state == 'use_mask':
+        return 16, 'monitor'  # ViewMonitor
+    elif state == 'venflonIV':
         return 15, 'give_fluids'  # GiveFluids
     elif state == 'give_fluids':
         return 16, 'monitor'  # ViewMonitor
