@@ -29,7 +29,10 @@ while True:
 
     # If Airway events show severe obstruction, manage it before re-examining
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
-        print(32)  # UseGuedelAirway or appropriate response
+        if events[4] > events[5]:
+            print(31)  # UseYankeurSuctionCatheter for vomit
+        else:
+            print(32)  inninn nnboutPrint(32)  # UseGuedelAirway or print(31) for different cases of obstruction as only UseGuedelAirway was initially incorrectly mentioned without an alternative
         continue
 
     # Examine Breathing
@@ -53,7 +56,7 @@ while True:
         continue
 
     # Act based on low oxygen saturation
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] > 0 and (measured_values[5] < 88 or measured_values[5] < 65):
         print(30)  # UseNonRebreatherMask
         continue
 
