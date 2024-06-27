@@ -1,62 +1,60 @@
-steps = 0
-
-while steps < 350:
+while True:
     observations = input().split()
-    relevance = list(map(float, observations[:39]))
-    measurement_relevance = list(map(float, observations[39:46]))
-    measurements = list(map(float, observations[46:]))
+    events = list(map(float, observations[:39]))
+    measured_times = list(map(float, observations[39:46]))
+    measured_values = list(map(float, observations[46:]))
 
-    # Immediately handle life-threatening conditions
-    if (measurement_relevance[5] > 0 and measurements[5] < 65) or (
-        measurement_relevance[4] > 0 and measurements[4] < 20
-    ):
+    # Immediate actions based on critical conditions
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Airway Management
-    if (
-        relevance[4] > 0 or relevance[5] > 0 or relevance[6] > 0
-    ):  # AirwayVomit, AirwayBlood, AirwayTongue
-        print(31)  # UseYankeurSuctionCatheter
-    elif relevance[3] > 0:  # AirwayClear
-        print(36)  # PerformHeadTiltChinLift
-    else:
-        print(3)  # ExamineAirway
-
-    # Breathing Management
-    if relevance[7] > 0:  # BreathingNone
+    # Check if breathing has completely stopped
+    if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
-    else:
-        if measurement_relevance[5] > 0 and measurements[5] < 88:
-            print(30)  # UseNonRebreatherMask
-        else:
-            print(4)  # ExamineBreathing
+        continue
 
-    # Circulation Management
-    if measurement_relevance[4] > 0:
-        if measurements[4] < 60:  # MeasuredMAP
-            print(15)  # GiveFluids
-        else:
-            print(5)  # ExamineCirculation
-    else:
-        print(5)  # ExamineCirculation
+    # Act based on low oxygen saturation
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
 
-    # Disability Management
-    if relevance[22] > 0 or relevance[23] > 0:  # AVPU_V, AVPU_P
-        print(6)  # ExamineDisability
-    else:
-        print(8)  # ExamineResponse
+    # Act based on very low breathing rate
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
 
-    # Exposure Management
-    print(7)  # ExamineExposure
+    # Act based on low mean arterial pressure
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
 
-    # Finish the scenario if all conditions are met
+    # Examine Airway
+    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+        print(3)  # ExamineAirway
+        continue
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+        print(32)  # UseGuedelAirway or appropriate response
+        continue
+
+    # Check for stabilized condition
     if (
-        (measurement_relevance[5] > 0 and measurements[5] >= 88)
-        and (measurement_relevance[1] > 0 and measurements[1] >= 8)
-        and (measurement_relevance[4] > 0 and measurements[4] >= 60)
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    steps += 1
+    # Update Vital Signs frequently
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
+
+    print(0)  # DoNothing if nothing else is required
