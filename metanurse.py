@@ -3,16 +3,15 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def choose_action(observations, state, step_count):
+def choose_action(observations, state, steps):
     obs = parse_observations(observations)
     
-    if step_count >= 349:
-        return 48, 'finish'  # Finish action if reaching step limit
-    
-    # Check for cardiac arrest conditions
+    if steps >= 349:
+        return 48, 'finish'  # Finish if approaching step limit
+
     if obs[38] < 0.65 or obs[39] < 20:
         return 1, 'cardiac_arrest'  # CheckSignsOfLife
-    
+
     if state == 'start':
         return 8, 'response'  # ExamineResponse
     elif state == 'response':
@@ -20,6 +19,8 @@ def choose_action(observations, state, step_count):
     elif state == 'airway':
         return 4, 'breathing'  # ExamineBreathing
     elif state == 'breathing':
+        return 29, 'bag_mask'  # UseBagValveMask
+    elif state == 'bag_mask':
         return 5, 'circulation'  # ExamineCirculation
     elif state == 'circulation':
         return 27, 'bp_cuff'  # UseBloodPressureCuff
@@ -34,9 +35,9 @@ def choose_action(observations, state, step_count):
     elif state == 'monitor':
         if obs[35] == 0:  # No breathing
             return 29, 'monitor'  # UseBagValveMask
-        elif obs[39] < 60 and obs[39] >= 20:
+        elif 20 <= obs[39] < 60:
             return 15, 'monitor'  # GiveFluids
-        elif obs[38] < 0.88 and obs[38] >= 0.65:
+        elif 0.65 <= obs[38] < 0.88:
             return 30, 'monitor'  # UseNonRebreatherMask
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish'  # Finish
@@ -47,30 +48,28 @@ def choose_action(observations, state, step_count):
     elif state == 'cpr':
         return 2, 'check_rhythm'  # CheckRhythm
     elif state == 'check_rhythm':
-        if obs[32] > 0 or obs[33] > 0:  # VF or VT
-            return 28, 'attach_defib'  # AttachDefibPads
+        if obs[32] > 0 or obs[38] > 0:  # VF or VT
+            return 28, 'attach_pads'  # AttachDefibPads
         else:
-            return 23, 'resume_cpr'  # ResumeCPR
-    elif state == 'attach_defib':
-        return 39, 'turn_on_defib'  # TurnOnDefibrillator
-    elif state == 'turn_on_defib':
-        return 40, 'charge_defib'  # DefibrillatorCharge
+            return 10, 'give_adrenaline'  # GiveAdrenaline
+    elif state == 'attach_pads':
+        return 39, 'charge_defib'  # TurnOnDefibrillator
     elif state == 'charge_defib':
-        return 10, 'give_adrenaline'  # GiveAdrenaline
-    elif state == 'give_adrenaline':
+        return 40, 'shock'  # DefibrillatorCharge
+    elif state == 'shock':
         return 23, 'resume_cpr'  # ResumeCPR
-    elif state == 'resume_cpr':
+    elif state == 'resume_cpr' or state == 'give_adrenaline':
         return 16, 'monitor'  # ViewMonitor after CPR
     
     return 0, state  # DoNothing
 
 state = 'start'
-step_count = 0
+steps = 0
 while True:
     observations = input().strip()
     if not observations:
         break
-    action, state = choose_action(observations, state, step_count)
+    action, state = choose_action(observations, state, steps)
     print(action)
     sys.stdout.flush()
-    step_count += 1
+    steps += 1
