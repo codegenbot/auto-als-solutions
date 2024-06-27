@@ -7,42 +7,43 @@ def choose_action(observations, state):
     obs = parse_observations(observations)
     
     if state == 'start':
-        return 8, 'response'  # ExamineResponse
+        return 8, 'response'
     elif state == 'response':
-        return 3, 'airway'  # ExamineAirway
+        return 3, 'airway'
     elif state == 'airway':
-        return 4, 'breathing'  # ExamineBreathing
+        return 4, 'breathing'
     elif state == 'breathing':
-        return 29, 'bag_mask'  # UseBagValveMask
-    elif state == 'bag_mask':
-        return 5, 'circulation'  # ExamineCirculation
+        return 5, 'circulation'
     elif state == 'circulation':
-        return 27, 'bp_cuff'  # UseBloodPressureCuff
-    elif state == 'bp_cuff':
-        return 6, 'disability'  # ExamineDisability
+        return 6, 'disability'
     elif state == 'disability':
-        return 7, 'exposure'  # ExamineExposure
+        return 7, 'exposure'
     elif state == 'exposure':
-        return 25, 'sats_probe'  # UseSatsProbe
-    elif state == 'sats_probe':
-        return 16, 'monitor'  # ViewMonitor
+        return 16, 'monitor'
     elif state == 'monitor':
-        if obs[38] < 0.65 or obs[39] < 20:
-            return 17, 'cpr'  # StartChestCompression
-        elif obs[35] == 0:  # No breathing
-            return 29, 'monitor'  # UseBagValveMask
-        elif obs[39] < 60:
-            return 15, 'monitor'  # GiveFluids
-        elif obs[38] < 0.88:
-            return 30, 'monitor'  # UseNonRebreatherMask
-        elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
-            return 48, 'finish'  # Finish
+        if obs[38] == 0:
+            return 25, 'sats_probe'
+        elif obs[39] == 0:
+            return 27, 'bp_cuff'
         else:
-            return 16, 'monitor'  # ViewMonitor again
-    elif state == 'cpr':
-        return 16, 'monitor'  # ViewMonitor after CPR
+            return 38, 'check_bp'
+    elif state in ['sats_probe', 'bp_cuff', 'check_bp']:
+        return 16, 'assess'
+    elif state == 'assess':
+        if obs[51] == 0 or obs[52] < 8:
+            return 29, 'assess'
+        elif obs[50] < 0.88:
+            return 30, 'assess'
+        elif obs[52] < 60:
+            return 15, 'assess'
+        elif obs[50] < 0.65 or obs[52] < 20:
+            return 17, 'cpr'
+        elif obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
+            return 48, 'finish'
+        else:
+            return 16, 'assess'
     
-    return 0, state  # DoNothing
+    return 0, state
 
 state = 'start'
 while True:
