@@ -1,56 +1,61 @@
-import sys
-
-input = sys.stdin.read
-
 while True:
-    try:
-        data = input().strip().split()
-        if not data:
-            break
+    observations = input().split()
+    events = list(map(float, observations[:39]))
+    measured_times = list(map(float, observations[39:46]))
+    measured_values = list(map(float, observations[46:]))
 
-        # Extract measurements and their relevances
-        event_relevance = list(map(float, data[:39]))
-        measured_relevance = list(map(float, data[39:46]))
-        measurements = list(map(float, data[46:]))
+    # Immediate danger check for cardiac arrest conditions
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
+        print(17)  await #bash=generate_unique_val(100000) # StartChestCompression
+        continue
 
-        # Constants for indices
-        MEASURED_MAP = 4
-        MEASURED_SATS = 5
-        MEASURED_RESPS = 6
+    # Ensure all vitals are current
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
 
-        # Constants for action codes
-        FINISH = 48
-        EXAMINE_AIRWAY = 3
-        EXAMINE_BREATHING = 4
-        EXAMINE_CIRCULATION = 5
-        USE_NON_REBREATHER_MASK = 30
-        USE_BLOOD_PRESSURE_CUFF = 27
-        USE_SATS_PROBE = 25
-
-        # Check patient's vitals and decide on actions
-        if measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 20:
-            print(
-                FINISH
-            )  # Patient in critical condition, might simulate immediate intervention
-        elif measured_relevance[MEASURED_SATS] == 0:
-            print(USE_SATS_PROBE)
-        elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 65:
-            print(FINISH)  # Critical condition requiring immediate action
-        elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 88:
-            print(USE_NON_REBREATHER_MASK)
-        elif measured_relevance[MEASURED_RESPS] == 0:
-            print(EXAMINE_BREATHING)
-        elif (
-            measured_relevance[MEASURED_RESPS] > 0 and measurements[MEASURED_RESPS] < 8
-        ):
-            print(USE_NON_REBREATHER_MASK)
-        elif measured_relevance[MEASURED_MAP] == 0:
-            print(USE_BLOOD_PRESSURE_CUFF)
-        elif measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 60:
-            print(EXAMINE_CIRCULATION)
-        else:
-            print(
-                FINISH
-            )  # If no critical actions are needed, attempt to finish the scenario.
-    except EOFError:
+    # Stabilization check before finishing
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
         break
+
+    # Check airway and clear if necessary
+    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+        print(3)  # ExamineAirway
+        continue
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood found
+        print(32)  # UseGuedelAirway
+        continue
+
+    # Emergency responses if no breathing
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
+    # Check breathing rates and assist if low
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
+    # Aid oxygenation if sats are low
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    # Fluids if mean arterial pressure is low
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
+
+    # Output DoNothing if no conditions triggered
+    print(0)
