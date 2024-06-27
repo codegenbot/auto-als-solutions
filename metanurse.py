@@ -14,7 +14,7 @@ class State:
         self.bp_cuff_used = False
         self.fluids_given = False
         self.monitor_viewed = False
-        self.non_rebreather_mask_used = False
+        self.oxygen_given = False
         self.last_abcde_check = 0
 
 def choose_action(observations, state, step):
@@ -27,11 +27,11 @@ def choose_action(observations, state, step):
     heart_rate_available = obs[38] > 0 and obs[44] > 0
     
     # Critical conditions
-    if obs[7] > 0.5:  # BreathingNone
-        return 17  # StartChestCompression
     if sats_available and obs[45] < 65:
         return 17  # StartChestCompression
     if bp_available and obs[46] < 20:
+        return 17  # StartChestCompression
+    if obs[7] > 0.5:  # BreathingNone
         return 17  # StartChestCompression
     
     # Periodic ABCDE reassessment
@@ -73,13 +73,13 @@ def choose_action(observations, state, step):
         state.bp_cuff_used = True
         return 27  # UseBloodPressureCuff
     
-    if not state.monitor_viewed:
+    if not state.monitor_viewed and (state.sats_probe_used or state.bp_cuff_used):
         state.monitor_viewed = True
         return 16  # ViewMonitor
     
     # Interventions based on vital signs
-    if not state.non_rebreather_mask_used:
-        state.non_rebreather_mask_used = True
+    if not state.oxygen_given and (sats_available and obs[45] < 94):
+        state.oxygen_given = True
         return 30  # UseNonRebreatherMask
     
     if not state.fluids_given and ((resp_available and obs[46] < 8) or (bp_available and obs[46] < 60)):
@@ -99,6 +99,4 @@ def choose_action(observations, state, step):
 
 state = State()
 step = 0
-while step < 350:
-    observations = input().strip()
-    action =
+while step <
