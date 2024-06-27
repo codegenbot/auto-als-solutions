@@ -49,9 +49,9 @@ def choose_action(observations, state):
         if obs[17] == 0:  # RadialPulsePalpable
             return 16, 'assess'
         return 17, 'cpr'
-    elif state == 'oxygen':
-        return 16, 'assess'
     elif state == 'fluids':
+        return 16, 'assess'
+    elif state == 'oxygen':
         return 16, 'assess'
     elif state == 'treat_tachycardia':
         return 16, 'assess'
@@ -60,15 +60,12 @@ def choose_action(observations, state):
 
 state = 'start'
 while True:
-    try:
-        observations = input().strip()
-        if not observations:
-            break
-        action, state = choose_action(observations, state)
-        print(action)
-        sys.stdout.flush()
-    except EOFError:
+    observations = input().strip()
+    if not observations:
         break
-    except Exception as e:
-        print(0)  # DoNothing in case of error
-        sys.stdout.flush()
+    action, new_state = choose_action(observations, state)
+    print(action)
+    sys.stdout.flush()
+    if action == 48:  # Finish
+        break
+    state = new_state
