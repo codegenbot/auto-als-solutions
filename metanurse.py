@@ -22,18 +22,16 @@ def choose_action(observations, state):
         return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
         if obs[38] == 0:
-            return 25, 'monitor'  # UseSatsProbe
+            return 25, 'sats_probe'  # UseSatsProbe
         elif obs[39] == 0:
-            return 27, 'monitor'  # UseBloodPressureCuff
-        elif obs[34] == 0:
-            return 38, 'monitor'  # TakeBloodPressure
+            return 27, 'bp_cuff'  # UseBloodPressureCuff
         else:
-            return 0, 'assess'  # DoNothing, move to assessment
+            return 38, 'check_bp'  # TakeBloodPressure
+    elif state in ['sats_probe', 'bp_cuff', 'check_bp']:
+        return 16, 'assess'  # ViewMonitor
     elif state == 'assess':
         if obs[38] < 0.65 or obs[39] < 20:
             return 17, 'cpr'  # StartChestCompression
-        elif obs[3] == 0:
-            return 35, 'assess'  # PerformAirwayManoeuvres
         elif obs[38] < 0.88:
             return 30, 'assess'  # UseNonRebreatherMask
         elif obs[35] < 8:
@@ -43,14 +41,9 @@ def choose_action(observations, state):
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
             return 48, 'finish'  # Finish
         else:
-            return 16, 'monitor'  # ViewMonitor
-    elif state == 'cpr':
-        if obs[38] >= 0.65 and obs[39] >= 20:
-            return 0, 'assess'  # DoNothing, return to assessment
-        else:
-            return 17, 'cpr'  # Continue CPR
+            return 0, 'assess'  # DoNothing
     
-    return 0, state  # DoNothing if no other action is appropriate
+    return 0, state  # DoNothing
 
 state = 'start'
 while True:
