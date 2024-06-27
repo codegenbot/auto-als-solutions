@@ -17,7 +17,7 @@ while True:
         print(16)  # ViewMonitor
         continue
 
-    # Check for 'No Breathing' condition
+    # Check the 'No Breathing' condition
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
@@ -35,7 +35,7 @@ while True:
         break
 
     # Examine Airway if no relevant airway issues observed
-    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+    if all(events[i] == 0 for i in range(3, 7)):
         print(3)  # ExamineAirway
         continue
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
@@ -53,12 +53,12 @@ while True:
         continue
 
     # Examine Disability if no AVPU info
-    if events[21] == 0 and events[22] == 0 and events[23] == 0:
+    if all(events[i] == 0 for i in range(21, 24)):
         print(6)  # ExamineDisability
         continue
 
     # Examine Exposure if no relevant exposure observations
-    if events[26] == 0 and events[27] == 0:
+    if all(events[i] == 0 for i in range(26, 28)):
         print(7)  # ExamineExposure
         continue
 
