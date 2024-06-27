@@ -6,9 +6,18 @@ def parse_observations(obs):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    # Check for cardiac arrest
     if obs[38] < 0.65 or obs[39] < 20:
         return 17, 'cpr'  # StartChestCompression
+
+    if state == 'cpr':
+        if obs[27] == 0:
+            return 28, 'attach_defib'  # AttachDefibPads
+        elif obs[28] == 0:
+            return 39, 'turn_on_defib'  # TurnOnDefibrillator
+        elif obs[29] == 0:
+            return 40, 'charge_defib'  # DefibrillatorCharge
+        else:
+            return 16, 'monitor'  # ViewMonitor
 
     if state == 'start':
         return 8, 'response'  # ExamineResponse
@@ -28,29 +37,20 @@ def choose_action(observations, state):
         return 25, 'sats_probe'  # UseSatsProbe
     elif state == 'sats_probe':
         return 16, 'monitor'  # ViewMonitor
-    elif state == 'monitor':
-        if obs[7] > 0:  # BreathingNone
-            return 29, 'bag_mask'  # UseBagValveMask
-        elif obs[39] < 60:
-            return 15, 'fluids'  # GiveFluids
-        elif obs[38] < 0.88:
-            return 30, 'oxygen'  # UseNonRebreatherMask
-        elif obs[3] > 0 and obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
-            return 48, 'finish'  # Finish if stabilized
-        else:
-            return 2, 'check_rhythm'  # CheckRhythm
-    elif state == 'cpr':
-        return 28, 'attach_defib'  # AttachDefibPads
-    elif state == 'attach_defib':
-        return 39, 'turn_on_defib'  # TurnOnDefibrillator
-    elif state == 'turn_on_defib':
-        return 40, 'charge_defib'  # DefibrillatorCharge
-    elif state == 'charge_defib':
-        return 16, 'monitor'  # ViewMonitor
-    elif state in ['bag_mask', 'fluids', 'oxygen', 'check_rhythm']:
-        return 16, 'monitor'  # ViewMonitor after these actions
-    
-    return 0, state  # DoNothing
+
+    if obs[7] > 0:  # BreathingNone
+        return 29, 'bag_mask'  # UseBagValveMask
+
+    if obs[39] < 60:
+        return 15, 'fluids'  # GiveFluids
+
+    if obs[38] < 0.88:
+        return 30, 'oxygen'  # UseNonRebreatherMask
+
+    if obs[3] > 0 and obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
+        return 48, 'finish'  # Finish if stabilized
+
+    return 16, 'monitor'  # ViewMonitor
 
 state = 'start'
 while True:
