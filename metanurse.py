@@ -1,6 +1,6 @@
 steps = 0
 max_steps = 350
-while steps < max_selected_sats:
+while steps < max_setupins:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
