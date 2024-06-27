@@ -29,7 +29,7 @@ while True:
         print(48)  # Finish
         break
 
-    # Check for any 'No Breathing' condition
+    # Act based on absence of breathing
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
