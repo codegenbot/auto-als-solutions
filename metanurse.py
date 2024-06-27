@@ -7,43 +7,47 @@ def choose_action(observations, state):
     obs = parse_observations(observations)
     
     if state == 'start':
-        return 8, 'response'
+        return 8, 'response'  # ExamineResponse
     elif state == 'response':
-        return 3, 'airway'
+        return 3, 'airway'  # ExamineAirway
     elif state == 'airway':
-        return 4, 'breathing'
+        return 4, 'breathing'  # ExamineBreathing
     elif state == 'breathing':
-        return 5, 'circulation'
+        return 5, 'circulation'  # ExamineCirculation
     elif state == 'circulation':
-        return 6, 'disability'
+        return 6, 'disability'  # ExamineDisability
     elif state == 'disability':
-        return 7, 'exposure'
+        return 7, 'exposure'  # ExamineExposure
     elif state == 'exposure':
-        return 16, 'monitor'
+        return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
         if obs[38] == 0:
-            return 25, 'sats_probe'
+            return 25, 'sats_probe'  # UseSatsProbe
         elif obs[39] == 0:
-            return 27, 'bp_cuff'
+            return 27, 'bp_cuff'  # UseBloodPressureCuff
         else:
-            return 38, 'check_bp'
-    elif state in ['sats_probe', 'bp_cuff', 'check_bp']:
-        return 16, 'assess'
+            return 38, 'check_bp'  # TakeBloodPressure
+    elif state == 'sats_probe':
+        return 27, 'bp_cuff'  # UseBloodPressureCuff
+    elif state in ['bp_cuff', 'check_bp']:
+        return 16, 'assess'  # ViewMonitor
     elif state == 'assess':
-        if obs[51] == 0 or obs[52] < 8:
-            return 29, 'assess'
-        elif obs[50] < 0.88:
-            return 30, 'assess'
-        elif obs[52] < 60:
-            return 15, 'assess'
-        elif obs[50] < 0.65 or obs[52] < 20:
-            return 17, 'cpr'
-        elif obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
-            return 48, 'finish'
+        if obs[38] < 0.65 or obs[39] < 20:
+            return 17, 'cpr'  # StartChestCompression
+        elif obs[35] == 0:  # No breathing
+            return 29, 'assess'  # UseBagValveMask
+        elif obs[38] < 0.88:
+            return 30, 'assess'  # UseNonRebreatherMask
+        elif obs[39] < 60:
+            return 15, 'assess'  # GiveFluids
+        elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60:
+            return 48, 'finish'  # Finish
         else:
-            return 16, 'assess'
+            return 16, 'assess'  # ViewMonitor
+    elif state == 'cpr':
+        return 16, 'assess'  # ViewMonitor
     
-    return 0, state
+    return 0, state  # DoNothing
 
 state = 'start'
 while True:
