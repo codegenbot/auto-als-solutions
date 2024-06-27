@@ -41,12 +41,6 @@ def handle_cardiac_arrest(state):
     if 'cpr_started' not in state:
         state['cpr_started'] = True
         return 17  # StartChestCompression
-    if 'defib_pads_attached' not in state:
-        state['defib_pads_attached'] = True
-        return 28  # AttachDefibPads
-    if 'defib_on' not in state:
-        state['defib_on'] = True
-        return 39  # TurnOnDefibrillator
     return 23  # ResumeCPR
 
 def take_measurements(obs, state):
@@ -90,4 +84,12 @@ def main():
         if not observations:
             break
         obs = parse_observations(observations)
-        action = choose_action(obs, step
+        action = choose_action(obs, step, state)
+        print(action)
+        sys.stdout.flush()
+        step += 1
+        if action == 48:  # Finish
+            break
+
+if __name__ == "__main__":
+    main()
