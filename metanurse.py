@@ -19,12 +19,6 @@ def choose_action(observations, state):
     elif state == 'bp_cuff':
         return 38, 'check_bp'
     elif state == 'check_bp':
-        return 5, 'circulation'
-    elif state == 'circulation':
-        return 6, 'disability'
-    elif state == 'disability':
-        return 7, 'exposure'
-    elif state == 'exposure':
         return 16, 'assess'
     elif state == 'assess':
         if obs[17] > 0:  # RadialPulseNonPalpable
@@ -38,15 +32,17 @@ def choose_action(observations, state):
         if obs[52] < 60:
             return 15, 'fluids'
         if obs[44] > 100:  # High heart rate
-            return 9, 'adenosine'
+            return 9, 'treat_tachycardia'
         if obs[50] >= 0.88 and obs[51] >= 8 and obs[52] >= 60:
             return 48, 'finish'
         return 16, 'assess'
     elif state == 'cpr':
-        return 23, 'assess'
+        if obs[17] == 0:  # RadialPulsePalpable
+            return 16, 'assess'
+        return 17, 'cpr'
     elif state == 'fluids':
         return 15, 'assess'
-    elif state == 'adenosine':
+    elif state == 'treat_tachycardia':
         return 16, 'assess'
     
     return 0, state
