@@ -13,10 +13,10 @@ class State:
         self.sats_probe_used = False
         self.bp_cuff_used = False
         self.fluids_given = False
-        self.last_breathing_check = 0
-        self.last_circulation_check = 0
         self.bag_valve_mask_used = False
         self.adenosine_given = False
+        self.last_breathing_check = -float('inf')
+        self.last_circulation_check = -float('inf')
 
 def choose_action(observations, state, step):
     obs = parse_observations(observations)
@@ -25,20 +25,19 @@ def choose_action(observations, state, step):
     sats_available = obs[39] > 0 and obs[45] > 0
     bp_available = obs[41] > 0 and obs[46] > 0
     resp_available = obs[40] > 0 and obs[46] > 0
-    hr_available = obs[39] > 0 and obs[45] > 0
-    
+    hr_available = obs[38] > 0 and obs[44] > 0
+
     # Critical conditions
     if sats_available and obs[45] < 65:
         return 17  # StartChestCompression
     if bp_available and obs[46] < 20:
         return 17  # StartChestCompression
     
-    # Check for no breathing
-    if obs[7] > 0.5:  # BreathingNone
-        if not state.bag_valve_mask_used:
-            state.bag_valve_mask_used = True
-            return 29  # UseBagValveMask
-    
+    # Check for BreathingNone
+    if obs[7] > 0.5 and not state.bag_valve_mask_used:
+        state.bag_valve_mask_used = True
+        return 29  # UseBagValveMask
+
     # ABCDE assessment
     if not state.airway_checked:
         state.airway_checked = True
@@ -76,7 +75,7 @@ def choose_action(observations, state, step):
     
     if state.bp_cuff_used and not bp_available:
         return 16  # ViewMonitor
-    
+
     # Interventions based on vital signs
     if sats_available and obs[45] < 88:
         return 30  # UseNonRebreatherMask
@@ -85,14 +84,16 @@ def choose_action(observations, state, step):
         state.fluids_given = True
         return 15  # GiveFluids
     
-    if hr_available and obs[45] > 150 and not state.adenosine_given:
+    if hr_available and obs[44] > 150 and not state.adenosine_given:
         state.adenosine_given = True
         return 9  # GiveAdenosine
-    
+
     # Check if patient is stabilized
     if (sats_available and obs[45] >= 88 and
         resp_available and obs[46] >= 8 and
         bp_available and obs[46] >= 60):
         return 48  # Finish
     
-    return 0  # DoNothing
+    return 16  # ViewMonitor if no specific action is needed
+
+state
