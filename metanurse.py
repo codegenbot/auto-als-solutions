@@ -9,9 +9,6 @@ def choose_action(observations, state, step_count):
     if step_count > 350:
         return 48, 'finish'
 
-    if obs[38] < 0.65 or obs[39] < 20:
-        return 17, 'cpr'
-
     if state == 'start':
         return 8, 'response'
     elif state == 'response':
@@ -19,8 +16,6 @@ def choose_action(observations, state, step_count):
     elif state == 'airway':
         return 4, 'breathing'
     elif state == 'breathing':
-        if obs[35] == 0:
-            return 29, 'bag_mask'
         return 5, 'circulation'
     elif state == 'circulation':
         return 27, 'bp_cuff'
@@ -33,12 +28,14 @@ def choose_action(observations, state, step_count):
     elif state == 'sats_probe':
         return 16, 'monitor'
     elif state == 'monitor':
-        if obs[35] == 0:
+        if obs[38] < 0.65 or obs[39] < 20:
+            return 17, 'cpr'
+        elif obs[35] == 0:
             return 29, 'bag_mask'
-        elif obs[39] < 60 and obs[39] >= 20:
+        elif obs[39] < 60:
             return 15, 'fluids'
-        elif obs[38] < 0.88 and obs[38] >= 0.65:
-            return 30, 'non_rebreather'
+        elif obs[38] < 0.88:
+            return 30, 'oxygen'
         elif obs[38] >= 0.88 and obs[35] >= 8 and obs[39] >= 60 and obs[3] > 0:
             return 48, 'finish'
         else:
@@ -60,7 +57,7 @@ def choose_action(observations, state, step_count):
         return 16, 'monitor'
     elif state == 'fluids':
         return 16, 'monitor'
-    elif state == 'non_rebreather':
+    elif state == 'oxygen':
         return 16, 'monitor'
     
     return 0, state
