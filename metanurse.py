@@ -4,36 +4,24 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
-    if events[7] > 0:  # BreathingNone is active
+    # Immediate life-saving measures
+    if events[7] > 0:  # BreathingNone
         print(17)  # StartChestCompression
         continue
 
-    # Check if patient's oxygen saturation is too low
+    if events[17] > 0:  # RadialPulseNonPalpable
+        print(29)  # UseBagValveMask
+        continue
+
     if measured_times[5] > 0 and measured_values[5] < 65:
-        print(29)  # UseBagValveMask
+        print(17)  # StartChestCompression
         continue
 
-    # Check if mean arterial pressure is critically low
     if measured_times[4] > 0 and measured_values[4] < 20:
-        print(15)  # GiveFluids
+        print(17)  # StartChestCompression
         continue
 
-    # Routine check for airway, breathing, and circulation
-    if (
-        events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0
-    ):  # Airway check
-        print(3)  # ExamineAirway
-        continue
-
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
+    # Stabilization criteria
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -45,4 +33,41 @@ while True:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing if no immediate action is required
+    # Direct measurements
+    if measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        continue
+
+    if measured_times[4] == 0:
+        print(38)  # TakeBloodPressure
+        continue
+
+    # Airway management
+    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+        print(3)  # ExamineAirway
+        continue
+
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+        print(32)  # UseGuedelAirway
+        continue
+
+    # Breathing assessment and intervention
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
+    if events[8] > 0 or events[9] > 0:  # BreathingSnoring or BreathingSeeSaw
+        print(4)  # ExamineBreathing
+        continue
+
+    # Circulation assessment and management
+    if events[16] == 0 and events[17] > 0:  # RadialPulseNonPalpable
+        print(5)  # ExamineCirculation
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
+
+    # Default action
+    print(0)  # DoNothing
