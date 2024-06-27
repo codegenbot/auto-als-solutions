@@ -9,10 +9,7 @@ while True:
         print(3)  # ExamineAirway
         continue
 
-    # Critical immediate actions
-    if events[7] > 0:  # BreathingNone
-        print(17)  # StartChestCompression
-        continue
+    # Critical conditions first
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -20,41 +17,32 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Examine airway and breathing
-    if events[4] > 0:  # Airway blockage like AirwayVomit
-        print(32)  # UseGuedelAirway
-        continue
-    if events[6] > 0:  # AirwayBlood
+    # Airway checking
+    if events[4] > 0:  # AirwayBlockage issue like AirwayVomit
         print(32)  # UseGuedelAirway
         continue
 
-    # Check for breathing issues
-    if events[7] > 0 and events[14] == 0:  # BreathingNone without Pneumothorax
+    # Breathing assistance
+    if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
-    if events[14] > 0:  # Pneumothorax Symptoms
-        print(0)  # Consider emergency intervention
-        continue
 
-    # Re-check necessary vitals:
+    # Re-check necessary stats
     if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
         print(16)  # ViewMonitor
         continue
 
-    # Circulation issues
+    # Circulation interventions
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Saturations and respiratory rate
+    # Ensuring oxygenation
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
 
-    # Stabilization check
+    # Stabilization successful, finish the game
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
