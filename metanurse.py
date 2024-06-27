@@ -4,17 +4,17 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate danger check for cardiac arrest conditions
+    # Check immediate danger for cardiac arrest conditions
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
     if measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  await #bash=generate_unique_val(100000) # StartChestCompression
+        print(17)  # StartChestCompression
         continue
 
     # Ensure all vitals are current
     if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
-        print(16)  # ViewMonitor
+        print(25)  # UseSatsProbe
         continue
 
     # Stabilization check before finishing
@@ -29,15 +29,15 @@ while True:
         print(48)  # Finish
         break
 
-    # Check airway and clear if necessary
+    # Airway examination
     if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
         print(3)  # ExamineAirway
         continue
     if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood found
-        print(32)  # UseGuedelAirway
+        print(31)  # UseYankeurSuctionCatheter
         continue
 
-    # Emergency responses if no breathing
+    # Proceed with response checks
     if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
@@ -55,6 +55,14 @@ while True:
     # Fluids if mean arterial pressure is low
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
+        continue
+
+    # Circulation check via pulse and blood pressure
+    if measured_times[1] == 0 and measured_times[4] == 0:
+        if events[16] > 0:  # RadialPulsePalpable
+            print(27)  # UseBloodPressureCuff
+        else:
+            print(5)  # ExamineCirculation
         continue
 
     # Output DoNothing if no conditions triggered
