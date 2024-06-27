@@ -10,24 +10,17 @@ class State:
         self.circulation_checked = False
         self.disability_checked = False
         self.exposure_checked = False
-        self.sats_probe_used = False
-        self.bp_cuff_used = False
-        self.fluids_given = False
+        self.sats_measured = False
+        self.bp_measured = False
+        self.rhythm_checked = False
 
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    # Check if measurements are available
-    sats_available = obs[39] > 0 and obs[45] > 0
-    bp_available = obs[41] > 0 and obs[46] > 0
-    resp_available = obs[40] > 0 and obs[46] > 0
-    
-    # Critical conditions
-    if sats_available and obs[45] < 65:
+    # Check for cardiac arrest
+    if obs[7] > 0 and obs[17] > 0:  # No breathing and no pulse
         return 17  # StartChestCompression
-    if bp_available and obs[46] < 20:
-        return 17  # StartChestCompression
-    
+
     # ABCDE assessment
     if not state.airway_checked:
         state.airway_checked = True
@@ -48,31 +41,33 @@ def choose_action(observations, state):
     if not state.exposure_checked:
         state.exposure_checked = True
         return 7  # ExamineExposure
-    
-    # Vital signs
-    if not state.sats_probe_used:
-        state.sats_probe_used = True
+
+    # Check vitals
+    if not state.sats_measured:
+        state.sats_measured = True
         return 25  # UseSatsProbe
     
-    if not state.bp_cuff_used:
-        state.bp_cuff_used = True
+    if not state.bp_measured:
+        state.bp_measured = True
         return 27  # UseBloodPressureCuff
     
-    # Interventions based on vital signs
-    if sats_available and obs[45] < 88:
+    if not state.rhythm_checked:
+        state.rhythm_checked = True
+        return 2  # CheckRhythm
+
+    # Interventions based on measurements
+    if obs[51] < 88 and obs[44] > 0:  # Sats < 88% and measurement is recent
         return 30  # UseNonRebreatherMask
     
-    if not state.fluids_given and ((resp_available and obs[46] < 8) or (bp_available and obs[46] < 60)):
-        state.fluids_given = True
+    if (obs[52] < 8 and obs[45] > 0) or (obs[50] < 60 and obs[43] > 0):  # RR < 8 or MAP < 60
         return 15  # GiveFluids
-    
+
     # Check if patient is stabilized
-    if (sats_available and obs[45] >= 88 and
-        resp_available and obs[46] >= 8 and
-        bp_available and obs[46] >= 60):
+    if (obs[51] >= 88 and obs[44] > 0) and (obs[52] >= 8 and obs[45] > 0) and (obs[50] >= 60 and obs[43] > 0):
         return 48  # Finish
-    
-    return 0  # DoNothing if no specific action is needed
+
+    # Default action if no specific action is needed
+    return 0  # DoNothing
 
 state = State()
 step = 0
