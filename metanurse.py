@@ -1,61 +1,42 @@
-while True:
-    observations = input().split()
-    events = list(map(float, observations[:39]))
-    measured_times = list(map(float, observations[39:46]))
-    measured_values = list(map(float, observations[46:]))
+import sys
+input = sys.stdin.read
+data = input().split()
 
-    # Check if patient is in immediate danger
-    if measured_times[5] > 0 and measured_values[5] < 65:
-        print(17)  # StartChestCompression
-        continue
+# Extract measurements and their relevances
+event_relevance = list(map(float, data[:39]))
+measured_relevance = list(map(float, data[39:46]))
+measurements = list(map(float, data[46:]))
 
-    if measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  # StartChestCompression
-        continue
+# Constants for indices
+MEASURED_MAP = 4
+MEASURED_SATS = 5
+MEASURED_RESPS = 6
 
-    # Stabilization criteria
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
-        print(48)  # Finish
-        break
+# Constants for action codes
+FINISH = 48
+EXAMINE_AIRWAY = 3
+EXAMINE_BREATHING = 4
+EXAMINE_CIRCULATION = 5
+USE_NON_REBREATHER_MASK = 30
+USE_BLOOD_PRESSURE_CUFF = 27
+USE_SATS_PROBE = 25
 
-    # Check airway
-    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:  # No airway info
-        print(3)  # ExamineAirway
-        continue
-
-    # Check breathing
-    if events[7] == 0 and events[8] == 0 and events[9] == 0 and events[10] == 0 and events[11] == 0 and events[12] == 0 and events[13] == 0 and events[14] == 0:
-        print(4)  # ExamineBreathing
-        continue
-
-    # Check circulation
-    if events[16] == 0 and events[17] == 0:  # No pulse info
-        print(5)  # ExamineCirculation
-        continue
-
-    # Check disability
-    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # No AVPU info
-        print(6)  # ExamineDisability
-        continue
-
-    # Check exposure
-    if events[26] == 0 and events[27] == 0:  # No exposure info
-        print(7)  # ExamineExposure
-        continue
-
-    # Check if oxygen is needed
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    # If breathing is very low
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    # If mean arterial pressure is low
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
-    print(0)  # DoNothing if nothing else is required
+# Check patient's vitals and decide on actions
+if measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 20:
+    print(FINISH)  # Patient in critical condition, might simulate immediate intervention
+elif measured_relevance[MEASURED_SATS] == 0:
+    print(USE_SATS_PROBE)
+elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 65:
+    print(FINISH)  # Critical condition requiring immediate action
+elif measured_relevance[MEASURED_SATS] > 0 and measurements[MEASURED_SATS] < 88:
+    print(USE_NON_REBREATHER_MASK)
+elif measured_relevance[MEASURED_RESPS] == 0:
+    print(EXAMINE_BREATHING)
+elif measured_relevance[MEASURED_RESPS] > 0 and measurements[MEASURED_RESPS] < 8:
+    print(USE_NON_REBREATHER_MASK)
+elif measured_relevance[MEASURED_MAP] == 0:
+    print(USE_BLOOD_PRESSURE_CUFF)
+elif measured_relevance[MEASURED_MAP] > 0 and measurements[MEASURED_MAP] < 60:
+    print(EXAMINE_CIRCULATION)
+else:
+    print(FINISH)  # If no critical actions are needed, attempt to finish the scenario.
