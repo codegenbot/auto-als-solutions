@@ -35,15 +35,7 @@ while True:
         print(15)  # GiveFluids
         continue
 
-    if (
-        events[3] > 0
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
+    if events[3] > 0 and measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
         print(48)  # Finish
         break
 
