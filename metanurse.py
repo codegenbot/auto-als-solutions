@@ -4,49 +4,38 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-threatening conditions checks
     if measured_times[5] > 0 and measured_values[5] < 65:
-        print(17)  # StartChestCompression
+        print(17)
         continue
     if measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  # StartChestCompression
+        print(17)
         continue
 
-    # Prioritize Airway Examination
-    if events[3] < 0.5 and all(
-        events[i] < 0.5 for i in range(4, 7)
-    ):  # Airway not clear or no data
-        print(3)  # ExamineAirway
+    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
+        print(3)
         continue
 
-    # Breathing issues
-    if events[7] > 0.5:  # BreathingNone
-        print(29)  # UseBagValveMask
+    if events[7] > 0.5:
+        print(29)
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Low oxygen saturation
-        print(30)  # UseNonRebreatherMask
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:  # Low respiratory rate
-        print(29)  # UseBagValveMask
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)
         continue
-
-    # Circulation issues
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low mean arterial pressure
-        print(15)  # GiveFluids
+    
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)
         continue
 
-    # Check stability
     stable_conditions = (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        measured_times[5] > 0 and measured_values[5] >= 88 and
+        measured_times[6] > 0 and measured_values[6] >= 8 and
+        measured_times[4] > 0 and measured_values[4] >= 60
     )
     if stable_conditions:
-        print(48)  # Finish
+        print(48)
         break
 
-    # If nothing else, gather more info
-    print(16)  # ViewMonitor
+    print(16)
