@@ -11,63 +11,69 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway interventions open drawer if airway hasn't been examined or problems exist
-    if (events[3] < 0.5 or events[1] > 0.5 or events[2] > 0.5 or events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5):
-        print(18)  # OpenAirwayDrawer
+    # Airway assessment and interventions
+    if (
+        events[1] > 0.5  # ResponseGroan
+        or events[2] > 0.5  # ResponseNone
+        or events[4] > 0.5  # AirwayBlood
+        or events[5] > 0.5  # AirwayTongle
+        or events[6] > 0.5  # BreathingNone
+    ):  # Airway/Breathing problems
+        print(35)  # PerformAirwayManoeuvres
+        continue
+    elif events[3] < 0.5:  # AirwayClear not recently confirmed
+        print(3)  # ExamineAirway
         continue
 
-    # Essential Controls for Breathing, use sats and bag valve mask if necessary
-    if events[7] > 0.5:
+    # Breathing assessment and interventions
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
+
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+    elif measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
-    if events[8] > 0.5:
+    else:
         print(4)  # ExamineBreathing
         continue
 
-    # Circulation checks and interventions
-    if events[17] == 0:
+    # Circulation assessment and interventions
+    if events[17] == 0:  # RadialPulseNonPalpable
         print(17)  # StartChestCompression
         continue
-    if measured_times[4] > 0 and measured_values[4] < 60:
+    elif measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-    if events[16] == 0:
+    else:
         print(5)  # ExamineCirculation
         continue
 
-    # Check disability status
-    if all(x == 0 for x in events[21:24]):
+    # Disability assessment
+    if events[21:25] == [0] * 4:  # No AVPU response
         print(6)  # ExamineDisability
         continue
 
-    # Check and respond to exposure issues
-    if events[26] > 0.5:
+    # Exposure
+    if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         continue
 
-    # Regularly use monitor and sats probe to keep updating observations
-    if events[20] + events[25] == 0:  # If No AVPU watch or Sats Probe usage
-        print(25)  # UseSatsProbe
-        continue
-    else:
-        print(16)  # ViewMonitor
-        continue
-
-    # Check if stabilization criteria met
+    # Stabilization check
     if (
-        events[3] > 0.5 and   # AirwayClear
-        measured_times[5] > 0 and measured_values[5] >= 88 and  # Sats at least 88
-        measured_times[6] > 0 and measured_values[6] >= 8 and  # Resp Rate at least 8
-        measured_times[4] > 0 and measured_values[4] >= 60  # MAP at least 60
+        events[3] > 0.5  # AirwayClear
+        and measured_times[5] > 0
+        and measured_values[5] >= 88  # Sats at least 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60  # MAP at least 60
     ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Default action to update and check patient
+    # Regular monitoring or defaulting to view monitor to get latest vital stats
     print(16)  # ViewMonitor
