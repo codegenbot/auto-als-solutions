@@ -10,7 +10,7 @@ while True:
     ):
         print(17)  # StartChestCompression
         continue
-    
+
     # Examine Airway once and only if unclear status
     if max(events[3:7]) < 0.1:  # vague presence of airway clarity
         print(3)  # ExamineAirway
@@ -31,10 +31,13 @@ while True:
                 print(15)  # GiveFluids
             else:
                 # At this point, perform regular checks or prepare to end simulation
+                # As stability is established when conditions are met
                 if measured_times[4] > 0 and measured_values[4] >= 60:
                     print(48)  # Finish
                     break
                 else:
-                    print(28)  # AttachDefibPads for ECG monitoring and possible defib if rhythms off
+                    print(
+                        28
+                    )  # AttachDefibPads for ECG monitoring and possible defib if rhythms off
     else:
         print(25)  # UseSatsProbe to get accurate oxygen saturation
