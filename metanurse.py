@@ -23,40 +23,40 @@ while True:
             continue
 
     if not breathing_assessed:
-        if events[10] > 0.5:  # BreathingEqualChestExpansion observed
-            breathing_assessed = True
-            print(30)  # UseNonRebreatherMask
-            print(25)  # UseSatsProbe
-            print(16)  # ViewMonitor
-            continue
-        else:
-            print(4)  # ExamineBreathing
-            continue
+        print(4)  # ExamineBreathing
+        breathing_assessed = True
+        continue
 
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] == 0:
         print(19)  # OpenBreathingDrawer
         print(25)  # UseSatsProbe
         print(16)  # ViewMonitor
         continue
 
-    if measured_times[6] > 0 and (
-        measured_values[6] < 8 or events[7] > 0.5
-    ):  # Check respiration rate or breathing none available
+    if measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if measured_times[6] == 0 or measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
     if not circulation_checked:
-        if events[16] > 0.5 or events[17] > 0.5:  # Check palpable or non-palpable pulse
+        if events[17] > 0.5:  # RadialPulseNonPalpable
+            print(5)  # ExamineCirculation
             circulation_checked = True
-        print(5)  # ExamineCirculation
-        continue
+            continue
+        elif events[16] > 0.5:  # RadialPulsePalpable
+            print(14)  # UseVenflonIVCatheter
+            print(15)  # GiveFluids
+            circulation_checked = True
+            continue
 
     if not disability_checked:
-        if any(events[i] > 0.5 for i in range(21, 25)):  # Check AVPU responses
+        print(6)  # ExamineDisability
+        if events[22] > 0.5 or events[21] > 0.5:  # AVPU_V or AVPU_U
             disability_checked = True
-        else:
-            print(6)  # ExamineDisability
-            continue
+        continue
 
     if (
         airway_confirmed
@@ -65,10 +65,10 @@ while True:
         and disability_checked
         and measured_times[5] > 0
         and measured_values[5] >= 88
-        and measured_times[6] > 0  # Sats at least 88
+        and measured_times[6] > 0
         and measured_values[6] >= 8
-        and measured_times[4] > 0  # Resp Rate at least 8
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
