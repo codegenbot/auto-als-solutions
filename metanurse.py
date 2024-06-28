@@ -4,7 +4,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical condition checks
+    # Immediate critical conditions
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -12,29 +12,15 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check if finish conditions are met
-    stabilization = (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[1] > 0
-        and measured_values[1] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    )
-
-    if stabilization:
-        print(48)  # Finish
-        break
-
-    # Airway
-    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
+    # Airway assessment and management
+    if events[3] < 0.5:
         print(3)  # ExamineAirway
         continue
-    elif any(events[i] > 0.5 for i in [4, 5, 6]):  # Airway obstruction
+    if any(events[i] > 0.5 for i in [4, 5, 6]):  # Obstruction by blood, vomit, or tongue
         print(31)  # UseYankeurSuctionCatheter
         continue
 
-    # Breathing
+    # Breathing assessment and management
     if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
@@ -45,13 +31,24 @@ while True:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Circulation
+    # Circulation checks and management
     if measured_times[0] > 0 and measured_values[0] < 60:
         print(15)  # GiveFluids
         continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
+        
+    # Disability - Check consciousness
+    if events[21] > 0.5 or events[22] > 0.5:  # AVPU_U or AVPU_V
+        print(6)  # ExamineDisability
+        continue
+     
+    # If patient is stable based on basic conditions
+    if (measured_times[5] > 0 and measured_values[5] >= 88 and
+        measured_times[1] > 0 and measured_values[1] >= 8 and
+        measured_times[4] > 0 and measured_values[4] >= 60):
+        print(48)  # Finish
+        break
 
-    # ViewMonitor for more data as fallback
-    print(16)  # ViewMonitor
+    print(16)  # ViewMonitor  # Default action to gather more data
