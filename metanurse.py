@@ -20,36 +20,56 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Critical breathing issue
-    if events[7] > 0.5:  # BreathingNone has occurred
-        print(29)  # UseBagValveMask
+    # A: Airway Assessment
+    if not airway_checked or events[3] + events[4] + events[5] > 0:
+        airway_checked = True
+        if events[4] > 0 or events[5] > 0:  # Vomit or Blood blocking airways
+            print(31)  # UseYankeurSuctionCatheter
+        else:
+            print(3)  # ExamineAirway
+        continue
+    
+    # B: Breathing Assessment
+    if not breathing_checked:
+        breathing_checked = True
+        if events[7] > 0:  # BreathingNone event is triggered
+            print(29)  # UseBagValveMask
+        else:
+            print(4)  # ExamineBreathing
         continue
 
-    # Regular checks
-    if not airway_checked:
-        print(3)  # ExamineAirway
-        airway_checked = True
-    elif not breathing_checked:
-        print(4)  # ExamineBreathing
-        breathing_checked = True
-    elif not circulation_checked:
-        print(5)  # ExamineCirculation
+    # C: Circulation Assessment
+    if not circulation_checked:
         circulation_checked = True
-    elif not disability_checked:
-        print(6)  # ExamineDisability
+        print(5)  # ExamineCirculation
+        continue
+
+    # D: Disability (Neurological) Assessment
+    if not disability_checked:
         disability_checked = True
-    elif not exposure_checked:
-        print(7)  # ExamineExposure
+        print(6)  # ExamineDisability
+        continue
+
+    # E: Exposure Assessment
+    if not exposure_checked:
         exposure_checked = True
-    else:
-        # Reassess or stabilize further or end the scenario
-        stabilized = (
-            (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
-            and (measured_times[4] > 0 and measured_values[4] >= 60)
-        )
-        if stabilized:
-            print(48)  # Finish
-            break
-        else:
-            print(16)  # ViewMonitor or other stabilization action
+        print(7)  # ExamineExposure
+        continue
+
+    # Reassessments and final checks
+    if events[15] > 0.5:  # Recheck ventricular resistance issues
+        print(16)  # ViewMonitor
+        continue
+
+    # Check for stabilization
+    stabilized = (
+        (measured_times[5] > 0 and measured_values[5] >= 88)
+        and (measured_times[6] > 0 and measured_values[6] >= 8)
+        and (measured_times[4] > 0 and measured_values[4] >= 60)
+    )
+    if stabilized:
+        print(48)  # Finish
+        break
+
+    # Default action if not stabilized and no other examinations
+    print(16)  # ViewMonitor
