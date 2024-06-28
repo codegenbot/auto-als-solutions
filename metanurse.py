@@ -4,59 +4,68 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions if in critical condition
+    # Immediate critical interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # The action plan may sequence through these exams only if the relevant measurements are outdated
-    if not any(measured_times):  # None of the measurements are recent
-        print(16)  # ViewMonitor to gather initial data
-        continue
-
-    # Actions based on the most detrimental and urgent issues
-    if events[7] > 0.5:  # High relevance for BreathingNone
-        if (
-            events[8] > 0.5 or measured_values[5] < 88
-        ):  # Snoring detected or low oxygen sats
-            print(29)  # UseBagValveMask
-        else:
-            print(30)  # UseNonRebreatherMask
-        continue
-
-    # Check the airway status if unclear
+    # Airway management
     if (
-        events[3] <= 0.5 and measured_times[5] > 0 and measured_values[5] < 88
-    ):  # Airway not clearly examined and low sats
+        events[2] < 0.5
+        and events[3] < 0.5
+        and all(events[i] < 0.5 for i in range(4, 7))
+    ):
         print(3)  # ExamineAirway
         continue
+    if any(
+        events[i] > 0.5 for i in [4, 5, 6]
+    ):  # Airway blockage due to vomit, blood or tongue
+        print(31)  # UseYankeurSuctionCatheter
+        continue
 
-    # Assessing breathing using advanced procedures
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Oxygen saturation critical
+    # If airway clear, check Breathing and Circulation
+    if events[3] > 0.5:
+        print(4)  # ExamineBreathing
+        continue
+    if measured_values[4] > 60:  # Measured MAP safe
+        print(25)  # UseSatsProbe
+        continue
+
+    # Handle potential circulatory problems
+    if measured_values[1] < 8:  # Resp rate low
+        print(29)  # UseBagValimmerMask
+        continue
+    if measured_values[5] < 88:  # Saturation low
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:  # Respiratory rate too low
-        print(29)  # UseBagValveMask
-        continue
-
-    # Monitoring and potentially improving circulation
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low mean arterial pressure
+    if measured_values[4] < 60:  # MAP low
         print(15)  # GiveFluids
         continue
 
-    # Stabilization check
+    # Check Circulation status
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish - patient is stabilized
-        break
+        events[17] > 0.5
+    ):  # RadialPulseNonPalpable indicates serious problem with circulation
+        print(17)  # StartChestCompression
+        continue
 
-    # Check next relevant examination or monitoring view
-    print(16)  # Regularly put back to ViewMonitor as a fallback action
+    # Check other vital stats
+    if measured_times[4] == 0 or measured_values[4] < 60:  # MAP check
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Regular monitoring
+    print(16)  # ViewMonitor
+
+    # Final check to determine if scenario is stabilized
+    flag_complete = (
+        events[3] > 0.5
+        and measured_values[4] >= 60
+        and measured_values[1] >= 8
+        and measured_values[5] >= 88
+    )
+    if flag_complete:
+        print(48)  # Finish
+        break
