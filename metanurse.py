@@ -47,15 +47,4 @@ while True:
         break
 
     # Default action to gather more information
-    if any(measured_times[i] == 0 for i in range(7)):
-        # Prioritize airway and breathing if not assessed
-        if measured_times[6] == 0:  # Respiration rate not measured
-            print(4)  # ExamineBreathing
-        elif measured_times[5] == 0:  # Sats not measured
-            print(25)  # UseSatsProbe
-        elif measured_times[4] == 0:  # MAP not measured
-            print(27)  # UseBloodPressureCuff
-        else:
-            print(5)  # ExamineCirculation
-    else:
-        print(16)  # ViewMonitor
+    print(16)  # ViewMonitor
