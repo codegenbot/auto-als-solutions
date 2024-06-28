@@ -16,7 +16,7 @@ while True:
         if events[3] > 0.5:
             airway_clear_confirmed = True
         else:
-            print(3)  # ExamineAirway
+            print(3)
             continue
 
     # Airway assessment and interventions
