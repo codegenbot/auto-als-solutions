@@ -4,51 +4,58 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-threatening checks
+    # Immediate checks for life-threatening conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measuredvalues[4] < 20):
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
-    
-    # Check oxygen saturation
-    if measured_times[5] == 0 or measured_times[5] < 0.5:
-        print(25)  # UseSatsProbe
-        continue
-    
-    # Airway check: Examine airway if not clear or not recently checked
-    if events[3] < 0.5 and (events[4] + events[5] + events[6] > 0.5) or measured_times[0] == 0:
+
+    # Check if airway is not clear
+    if events[3] < 0.5 and (events[4] + events[5] + events[6] > 0.5):
         print(3)  # ExamineAirway
         continue
 
-    # Breathing issues: Manage if rate is low or specific conditions present
-    measured_breathing = measured_times[6] > 0 and measured_values[6] >= 8
-    if not measured_breathing:
-        print(4)  # ExamineBreathing
-        continue
-    elif events[11] > 0.5 or events[14] > 0.5:  # Specific breathing issues
-        print(22)  # BagDuringCPR if severe issues
-        continue
-    elif measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
+    # Check if breathing is insufficient or absent
+    if events[7] > 0.5 or (measured_times[6] > 0 and measured_values[6] < 8):
+        if events[13] > 0.5 or events[14] > 0.5:
+            print(22)  # BagDuringCPR (Adjustment for severe breathing issues)
+        else:
+            print(29)  # UseBagValveMask
         continue
 
-    # Circulation Checks: If MAP not measured or low or conditions imply poor circulation
-    if measured_times[4] == 0 or measured_values[4] < 60:
+    # Check if oxygen saturation is below the safe threshold
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    # Check Circulation - if mean arterial pressure is critically low
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check if all parameters are within the target range to finish
-    if (measured_times[5] > 0 and measured_values[5] >= 88 and
-        measured_times[6] > 0 and measured_values[6] >= 8 and
-        measured_times[4] > 0 and measured_values[4] >= 60):
+    # Check if conditions are met to stabilize patient
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
-    # Set necessary measurements if any basic vital sign is critically unmeasured
-    if measured_times[4] == 0:  # MAP not checked
-        print(27)  # Bhagavi MenonUseBloodPressureCuff
-    elif measured_times[6] == 0:  # Respiratory rate not measured
-        print(4)  # ExamineBreathing
+    # Default action to gather more information
+    if any(measured_times[i] == 0 for i in range(7)):
+        # Prioritize airway and breathing if not assessed
+        if measured_times[6] == 0:  # Respiration rate not measured
+            print(4)  # ExamineBreathing
+        elif measured_times[5] == 0:  # Sats not measured
+            print(25)  # UseSatsProbe
+        elif measured_times[4] == 0:  # MAP not measured
+            print(27)  # UseBloodPressureCuff
+        else:
+            print(5)  # ExamineCirculation
     else:
         print(16)  # ViewMonitor
-    continue
