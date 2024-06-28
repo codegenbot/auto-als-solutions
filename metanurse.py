@@ -11,67 +11,79 @@ while step_count < 350:
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        if events[17] > 0:  # RadialPulseNonPalpable
-            print(17)  # StartChestCompression
-        else:
-            print(11)  # GiveAdrenaline
+        print(17)  # StartChestCompression
         step_count += 1
         continue
 
-    # Checking and managing airway
+    # Airway assessment and interventions
     if not airway_clear_confirmed:
-        if events[3] > 0:  # AirwayClear
+        if events[3] > 0.5:  # AirwayClear confirmed
             airway_clear_confirmed = True
-        print(3)  # ExamineAirway
+        else:
+            print(3)  # ExamineAirway
+            step_count += 1
+            continue
+
+    if (
+        events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5
+    ):  # Airway obstruction problems
+        print(36)  # PerformHeadTiltChinLift
         step_count += 1
         continue
 
     # Breathing assessment and intervention
-    if events[7] > 0.5:  # BreathingNone
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         step_count += 1
         continue
-
-    if measured_times[5] == 0 or measured_values[5] < 88:  # Check Saturation
+    if measured_times[5] <= 0 or measured_values[5] < 88:
         print(25)  # UseSatsProbe
         step_count += 1
         continue
-
-    if events[8:14] == [0] * 6:  # Insufficient breathing assessment info
+    if measured_times[6] <= 0 or measured_values[6] < 8:
         print(4)  # ExamineBreathing
         step_count += 1
         continue
 
-    # Circulation checks
-    if measured_times[4] == 0 or measured_values[4] < 60:  # MAP not OK or not measured
+    # Circulation assessment and intervention
+    if measured_times[4] <= 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         step_count += 1
         continue
 
-    # Circulation Management
-    if events[16] > 0 and (events[17] > 0.5 or events[17] == 0):  # Pulse issues found or not measured
-        print(5)  # ExamineCirculation
+    if events[16] == 0 and events[17] > 0.5:  # RadialPulseNonPalpable
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(15)  # GiveFluids
+        else:
+            print(5)  # ExamineCirculation
         step_count += 1
         continue
 
-    # Disability assessment
-    if events[21:24] == [0] * 3:  # AVPU not assessed
+    # Disability checks
+    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # AVPU not clear
         print(6)  # ExamineDisability
         step_count += 1
         continue
 
-    # Exposure evaluation
-    if events[26] > 0.5:  # Suspects of Exposure issue
+    # Exposure checks
+    if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         step_count += 1
         continue
 
-    # Stabilization & Finish check
-    if airway_clear_confirmed and measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and \
-        measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+    # Checking stabilization criteria
+    if (
+        airway_clear_confirmed
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
-    # Default action
+    # Default action if no specific condition matched
     print(16)  # ViewMonitor
     step_count += 1
