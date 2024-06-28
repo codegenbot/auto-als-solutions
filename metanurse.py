@@ -4,72 +4,61 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
+    # Immediate life-saving interventions for cardiac arrest
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
+    # Airway check and management
     if (
-        events[1] > 0.5
-        or events[2] > 0.5
-        or events[4] > 0.5
-        or events[5] > 0.5
-        or events[6] > 0.5
-    ):  # Airway problems
+        events[3] < 0.5 and events[4] == 0 and events[5] == 0 and events[6] == 0
+    ):  # Airway unclear
+        print(3)  # ExamineAirway
+        continue
+    elif (
+        events[4] > 0 or events[5] > 0 or events[6] > 0
+    ):  # Obstructions like vomit, blood, tongue
         print(35)  # PerformAirwayManoeuvres
         continue
-    elif events[3] < 0.5:  # AirwayClear not recently confirmed
-        print(3)  # ExamineAirway
-        continue
 
-    # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    # Breathing support and interventions
+    if events[7] > 0.5:  # Emergency in breathing
         print(29)  # UseBagValveMask
         continue
-    elif measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    elif measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-    if events[4] < 0.5 and events[5] < 0.5:  # Check if AirwayClear
-        print(3)  # ExamineAirway
-        continue
-    else:
-        print(4)  # ExamineBreathing
-        continue
 
-    # Circulation interventions
+    # Circulation: check and maintain
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Disability assessment
-    if events[25:29] == [0] * 4:  # No pupil reaction
+    # Checking disability: consciousness level
+    if events[22] > 0.5 or events[22] > 0.5:  # Unresponsive to voice or unresponsive
         print(6)  # ExamineDisability
         continue
 
-    # Exposure
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+    # Exposure: check for other signs influencing state
+    if events[26] > 0.5:  # Exposure with signs like shutdown
         print(7)  # ExamineExposure
         continue
 
-    # Stabilization check
+    # Regular monitoring and reassess
     if (
-        events[3] > 0.5  # AirwayClear
-        and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
-    ):
-        # All conditions for stabilization met
-        print(48)  # Finish
-        break
+        events[25] == 0 and events[26] == 0 and events[27] == 0
+    ):  # Normal pupils, no clear shutdown or staining
+        print(16)  # ViewMonitor
+        continue
 
-    # Regular monitoring
-    print(16)  # ViewMonitor
+    # Final check before finishing once stabilized
+    if measured_times[5] > 0 and measured_values[6] > 0 and measured_times[4] > 0:
+        if (
+            measured_values[5] >= 88
+            and measured_values[6] >= 8
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
