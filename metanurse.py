@@ -7,7 +7,7 @@ while step_count < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Handling Cardiac Arrest or Severe Conditions Immediately
+    # Immediate life-saving interventions for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
@@ -15,31 +15,69 @@ while step_count < 350:
         step_count += 1
         continue
 
-    # Directly address airway clearness
-    if not airway_clear_confirmed or events[4] > 0 or events[5] > 0 or events[6] > 0:
-        print(3)  # ExamineAirway to verify and clear it
+    # Airway assessment and interventions
+    if airway_clear_confirmed:
+        if (
+            events[1] > 0.5
+            or events[2] > 0.5
+            or events[4] > 0.5
+            or events[5] > 0.5
+            or events[6] > 0.5
+        ):  # Airway problems
+            print(35)  # PerformAirwayManoeuvres
+            step_count += 1
+            continue
+    else:
+        if events[3] > 0.5:  # AirwayClear confirmed
+            airway_clear_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            step_count += 1
+            continue
+
+    # Breathing assessment and intervention
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        step_count += 1
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        step_count += 1
+        continue
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        step_count += 1
+        continue
+    if events[8:14] == [0] * 6:  # No detailed breathing checks done
+        print(4)  # ExamineBreathing
         step_count += 1
         continue
 
-    # Breathing assessment: use masks or check with ExamineBreathing
-    if measured_times[6] > 0 and measured_values[6] < 8 or events[7] > 0:
-        print(29)  # Insufficient breathing, use bag valve mask
+    # Circulation assessment and intervention
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        step_count += 1
+        continue
+    if (events[16] > 0 and events[17] > 0.5) or (
+        events[16] == 0 and events[17] == 0
+    ):  # Unclear pulse information
+        print(5)  # ExamineCirculation
         step_count += 1
         continue
 
-    # Circulation issues: weak pulse, administer fluids or chest compressions
-    if measured_times[4] > 0 and measured_values[4] < 60 or events[17] > 0:
-        print(15)  # Administer fluids for possible low BP/circulation
+    # Disability checks
+    if events[21:24] == [0] * 3:  # AVPU not clear
+        print(6)  # ExamineDisability
         step_count += 1
         continue
 
-    # Check Disability (consciousness level) and Exposure if not assessed yet
-    if events[21:24] == [0] * 3:
-        print(6)  # ExamineDisability for consciousness level
+    # Exposure checks
+    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+        print(7)  # ExamineExposure
         step_count += 1
         continue
 
-    # Finally, if patient appears stabilized:
+    # Checking stabilization criteria
     if (
         airway_clear_confirmed
         and measured_times[5] > 0
@@ -49,9 +87,9 @@ while step_count < 350:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)  # Finish the scenario
+        print(48)  # Finish
         break
 
-    # Default action periodically to monitor vital stats
+    # Default action if no specific condition matched
     print(16)  # ViewMonitor
     step_count += 1
