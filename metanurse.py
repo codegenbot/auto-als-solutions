@@ -4,24 +4,26 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical condition checks for cardiac arrest scenario
+    # Immediate checks for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Airway check
-    if events[3] < 0.5:  # AirwayClear is low, suspect airway problem
-        print(3)  # ExεamineAirway
+    # Check Airway
+    if (
+        events[3] + events[4] + events[5] < 0.5
+    ):  # Clearing the airway is a priority if not explicitly clear
+        print(3)  # ExamineAirway
         continue
 
-    # Primary response to no breathing detected
-    if events[7] > 0.5:  # BreathingNone is high, urgent
+    # Check Breathing
+    if events[7] > 0.5:  # No breathing detected
         print(29)  # UseBagValveMask
         continue
 
-    # Saturation and respiratory rate handling
+    # Check for adequate saturation and respiratory rate
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -30,12 +32,12 @@ while True:
         print(29)  # UseBagValveMask
         continue
 
-    # Circulation issue - low mean arterial pressure
+    # Check Circulation
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check if conditions for stabilization are met
+    # Stability check before finishing
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -47,5 +49,5 @@ while True:
         print(48)  # Finish
         break
 
-    # Default action to gather more information about the patient's state
+    # Default fallback for further investigation
     print(16)  # ViewMonitor
