@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+sats_checked = False
 
 while True:
     observations = input().split()
@@ -25,55 +26,41 @@ while True:
             continue
 
     # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
-        continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(19)  # OpenBreathingDrawer
+    if not sats_checked:
         print(25)  # UseSatsProbe
         print(16)  # ViewMonitor
+        sats_checked = True
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
-        breathing_assessed = True
         continue
+    breathing_assessed = True
 
     # Circulation assessment
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-    if not circulation_checked and events[16] == 0 and events[17] > 0:
+    if not circulation_checked:
         print(5)  # ExamineCirculation
+        circulation_checked = True
         continue
-    circulation_checked = True
 
     # Disability assessment
     if not disability_checked:
-        if any(events[21:24]) > 0.5:
-            disability_checked = True
-        else:
-            print(6)  # ExamineDisability
-            continue
+        print(6)  # ExamineDisability
+        disability_checked = True
+        continue
 
-    # Stabilization check
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-        and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
-    ):
-        # All conditions for stabilization met
+    # Check stabilization and finish if applicable
+    if airway_confirmed and breathing_assessed and circulation_checked and measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[4] > 0 and measured_values[4] >= 60:
         print(48)  # Finish
         break
 
-    # Regular monitoring if no critical condition to address
+    # Regular monitoring as a fallback
     print(16)  # ViewMonitor
