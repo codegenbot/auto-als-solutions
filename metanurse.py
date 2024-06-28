@@ -16,47 +16,46 @@ while True:
 
     if critical_low_sats or critical_low_map:
         if last_action != 17:
-            last_action = 17
             print(17)  # StartChestCompression
+            last_action = 17
             continue
 
-    # Check Airway
-    if (
+    # Airway Assessment
+    if critical_airway_blocked or (
         events[3] < 0.5 and events[4] < 0.5 and events[5] < 0.5 and events[6] < 0.5
-    ) or critical_airway_blocked:
+    ):
         if last_action != 3:
-            last_action = 3
             print(3)  # ExamineAirway
+            last_action = 3
             continue
 
-    # Check Breathing
+    # Breathing Assessment
     if critical_no_breathing:
         if last_action != 29:
-            last_action = 29
             print(29)  # UseBagValveMask
+            last_action = 29
             continue
 
-    # Check oxygen saturation and respiratory rate
     if measured_times[5] > 0 and measured_values[5] < 88:
         if last_action != 30:
-            last_action = 30
             print(30)  # UseNonRebreatherMask
+            last_action = 30
             continue
 
     if measured_times[6] > 0 and measured_values[6] < 8:
         if last_action != 29:
-            last_action = 29
             print(29)  # UseBagValveMask
+            last_action = 29
             continue
 
-    # Check Circulation
+    # Circulation Assessment
     if measured_times[4] > 0 and measured_values[4] < 60:
         if last_action != 15:
-            last_action = 15
             print(15)  # GiveFluids
+            last_action = 15
             continue
 
-    # If there are enough observations to conclude the patient is stabilized, finish the scenario
+    # Check overall stability
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -65,12 +64,10 @@ while True:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        if last_action != 48:
-            last_action = 48
-            print(48)  # Finish
-            break
+        print(48)  # Finish
+        break
 
     # Default action to gather more information
     if last_action != 16:
-        last_action = 16
         print(16)  # ViewMonitor
+        last_action = 16
