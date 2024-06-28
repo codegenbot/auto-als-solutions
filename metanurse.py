@@ -4,46 +4,35 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
+    # Immediate Critical Interventions
     if times_recent_measure[5] > 0:
         if values[5] < 65:
-            print(17)  # StartChestCompression for severe low sats
-            continue
-        elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask for low sats
+            print(17)  # StartChestCompression if sats critically low
             continue
 
     if times_recent_measure[4] > 0:
         if values[4] < 20:
-            print(17)  # StartChestCompression for critical low MAP
-            continue
-        elif values[4] < 60:
-            print(15)  # GiveFluids for low MAP
+            print(17)  # StartChestCompression if MAP critically low
             continue
 
-    if (
-        events[3] + events[4] + events[5] + events[6] < 0.1
-    ):  # Including AirwayTongue check
-        print(3)  # ExamineAirway if no clear airway event recently
+    # ABCDE Assessment & Interventions
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask immediately
         continue
 
-    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask if no breathing or low breathing rate
+    # Checking events and deciding on actions based on ABCDE protocol
+    if events[3] < 0.5:  # Check Airway if no recent clear indicator
+        print(3)  # ExamineAirrigate
         continue
 
-    # Check for Cardiac arrest
-    if events[38] > 0.5:  # HeartRhythmVF - Ventricular Fibrillation
-        print(28)  # AttachDefibPads
+    if events[0] < 0.5:  # Low relevance of response verbal
+        print(8)  # ExamineResponse
         continue
 
-    if (
-        times_recent_measure[5] > 0
-        and values[5] >= 88
-        and times_recent_measure[6] > 0
-        and values[6] >= 8
-        and times_recent_measure[4] > 0
-        and values[4] >= 60
-    ):
-        print(48)  # Finish if all conditions are stable
+    # General Monitoring and Stabilization
+    print(16)  # ViewMonitor as fallback action
+    if all(
+        v >= threshold for v, threshold in zip(values, [88, 60])
+    ):  # Simplified condition
+        print(48)  # Finish
         break
-
-    print(16)  # ViewMonitor, default safe action
