@@ -4,7 +4,6 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Check for critical conditions that require immediate response
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -12,45 +11,49 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check if the airway is examined and clear
-    if events[3] == 0:  # AirwayClear not triggered
-        print(3)  # ExamineAirway
-        continue
-
-    # If no breathing, intervene with emergency breathing support
     if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
 
-    # If breathing is severely compromised, support immediately
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    # Ensure vital stats are monitored if measurement times are zero
-    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+    if measured_times[5] > 0:
+        if measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        if measured_values[5] >= 88:
+            stable_sats = True
+    else:
         print(16)  # ViewMonitor
         continue
 
-    # Oxygen support if saturation is low
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    if measured_times[6] > 0:
+        if measured_values[6] < 8:
+            print(29)  # UseBagValveMask
+            continue
+        if measured_values[6] >= 8:
+            stable_resps = True
+    else:
+        print(16)  # ViewMonitor
         continue
 
-    # Fluids if mean arterial pressure is low
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] > 0:
+        if measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
+        if measured_values[4] >= 60:
+            stable_map = True
+    else:
+        print(16)  # ViewMonitor
         continue
 
-    # Ending the loop if stabilization conditions are met
-    if (
-        events[3] > 0  # Airway clear
-        and measured_times[5] > 0 and measured_values[5] >= 88  # Sats stabilized
-        and measured_times[6] > 0 and measured_values[6] >= 8  # Resps adequate
-        and measured_times[4] > 0 and measured_values[4] >= 60  # MAP adequate
-    ):
+    if events[3] > 0.5:  # AirwayClear sufficiently recent and clear
+        stable_airway = True
+    else:
+        print(3)  # ExamineAirway
+        continue
+
+    # Situation when all conditions are stabilized:
+    if stable_airway and stable_sats and stable_resps and stable_map:
         print(48)  # Finish
         break
-    
-    # Default action if no critical interventions needed immediately
+
     print(0)  # DoNothing
