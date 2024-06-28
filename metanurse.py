@@ -5,7 +5,9 @@ while True:
     measured_values = list(map(float, observations[46:]))
 
     # Immediate critical conditions for cardiac arrest
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
@@ -35,7 +37,14 @@ while True:
         continue
 
     # Check conditions for completing the scenario
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
