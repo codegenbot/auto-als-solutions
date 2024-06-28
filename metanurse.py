@@ -1,49 +1,76 @@
+airway_confirmed = False
+breathing_assessed = False
+circulation_checked = False
+disability_checked = False
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical conditions handling
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
+    # Immediate life-saving interventions
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
-    # Airway management
-    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
-        print(3)  # ExamineAirway
-        continue
-    if any(events[i] > 0.5 for i in [4, 5, 6]):
-        print(36)  # PerformHeadTiltChinLift
-        continue
+    # Airway assessment and interventions
+    if not airway_confirmed:
+        if events[3] > 0.5:  # AirwayClear is confirmed
+            airway_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
 
-    # Breathing management
-    if events[7] > 0.5:
+    # Breathing assessment and interventions
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[1] > 0 and measured_values[1] < 8:
+    if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
+    if not breathing_assessed:
+        print(4)  # ExamineBreathing
+        continue
+    breathing_assessed = True
 
-    # Circulation management
+    # Circulation assessment
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
+    if not circulation_checked and events[16] == 0 and events[17] > 0:
+        print(5)  # ExamineCirculation
+        continue
+    circulation_checked = True
 
-    # Check other vitals and assess stability
-    airway_clear = events[3] > 0.5 or events[0] > 0.5  # AirwayClear or ResponseVerbal
-    breathing_stable = (measured_times[1] > 0 and measured_values[1] >= 8) and (measured_times[5] > 0 and measured_values[5] >= 88)
-    circulation_stable = measured_times[4] > 0 and measured_values[4] >= 60
+    # Disability assessment
+    if not disability_checked:
+        if any(events[21:25]) > 0.5:
+            disability_checked = True
+        else:
+            print(6)  # ExamineDisability
+            continue
 
-    if airway_clear and breathing_stable and circulation_stable:
+    # Stabilization check
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and measured_times[5] > 0
+        and measured_values[5] >= 88  # Sats at least 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60  # MAP at least 60
+    ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Routine monitoring or reassessment
-    if measured_times[4] == 0 or measured_times[5] == 0 or events[3] == 0:  # If vital signs not measured or unsure about airway
-        print(16)  # ViewMonitor
-    else:
-        print(0)  # DoNothing
+    # Regular monitoring if no critical condition to address
+    print(16)  # ViewMonitor
