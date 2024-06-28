@@ -1,53 +1,69 @@
+airway_checked = False
+breathing_checked = False
+circulation_checked = False
+disability_checked = False
+exposure_checked = False
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate response for no signs of life or dangerous levels
-    if measured_times[5] > 0 and measured_values[5] < 65:
-        print(17)  # StartChestCompression
-        continue
-    if measured_times[4] > 0 and measured_values[4] < 20:
+    # Immediate life threats
+    if (
+        measured_times[5] > 0
+        and measured_values[5] < 65
+        or measured_times[4] > 0
+        and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
-    # Airway verification and management
-    if events[2] > 0:  # ResponseNone
+    # A: Airway Assessment
+    if not airway_checked or events[3] + events[4] + events[5] < 0.5:
         print(3)  # ExamineAirway
-        continue
-    if events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayBlockages
-        print(32)  # UseGuedelAirway
+        airway_checked = True
         continue
 
-    # Check if we need to get more information
-    if measured_times[5] == 0:  # Sats not recently measured
-        print(25)  # UseSatsProbe
-        continue
-    if measured_times[4] == 0:  # MAP not recently measured
-        print(27)  # UseBloodPressureCuff
-        continue
-    if measured_times[6] == 0:  # Resp Rate not recently measured
-        print(4)  # ExamineBreathing
+    # B: Breathing Assessment
+    if not breathing_checked:
+        if events[7] > 0.5 or (measured_times[6] > 0 and measured_values[6] < 8):
+            print(29)  # UseBagValveMask
+            breathing_checked = True
+            continue
+        else:
+            print(4)  # ExamineBreathing
+            breathing_checked = True
+            continue
+
+    # C: Circulation Assessment
+    if not circulation_checked:
+        print(5)  # ExamineCirculation
+        circulation_checked = True
         continue
 
-    # Assess breathing
-    if events[7] > 0.5:  # BreathingNone
-        print(29)  # UseBagValveMask
-        continue
-    if measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    # D: Disability (Neurological) Assessment
+    if not disability_checked:
+        print(6)  # ExamineDisability
+        disability_checked = True
         continue
 
-    # Assess circulation and stabilize
-    if measured_values[4] < 60:
-        print(15)  # GiveFluids
+    # E: Exposure Assessment
+    if not exposure_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
         continue
 
-    # Finish if patient is stabilized
-    if measured_values[5] >= 88 and measured_values[6] >= 8 and measured_values[4] >= 60:
+    # Reassess or stabilize
+    print(16)  # ViewMonitor or other stabilization action
+
+    # Check for stabilization
+    stabilized = (
+        (measured_times[5] > 0 and measured_values[5] >= 88)
+        and (measured_times[6] > 0 and measured_values[6] >= 8)
+        and (measured_times[4] > 0 and measured_values[4] >= 60)
+    )
+    if stabilized:
         print(48)  # Finish
         break
-
-    # Default action to keep the loop active
-    print(0)  # DoNothing
