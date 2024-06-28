@@ -1,6 +1,6 @@
 airway_clear_confirmed = False
-breathing_intervention_needed = False
-circulation_intervention_needed = False
+breathing_intervention_performed = False
+circulation_intervention_performed = False
 
 while True:
     observations = input().split()
@@ -15,60 +15,62 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check airway
-    if not airway_clear_confirmed:
-        if events[3] > 0.5:  # AirwayClear
-            airway_clear_confirmed = True
-        else:
-            print(3)  # ExamineAirway
-            continue
-
-    # Handle Airway problems
-    if any(events[i] > 0.5 for i in [4, 5, 6]):  # AirwayVomit, AirwayBlood, AirwayTongue
+    # Airway assessment and interventions
+    if not airway_clear_confirmed or events[3] == 0:
+        print(3)  # ExamineAirway
+        continue
+    if any([events[i] > 0.5 for i in [1, 2, 4, 5, 6]]):  # Airway problems
         print(35)  # PerformAirwayManoeuvres
         continue
 
-    # Immediate breathing interventions
-    if events[7] > 0.5 or (measured_times[6] > 0 and measured_values[6] < 8):  # BreathingNone or low resps
+    # Breathing assessment
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
-        breathing_intervention_needed = True
+        breathing_intervention_performed = True
         continue
 
-    # Check if breathing needs assistance
-    if not breathing_intervention_needed and (measured_times[5] > 0 and measured_values[5] < 88):
+    # If airway is clear and no immediate breathing intervention is required:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
+    elif measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
 
-    # Urgent circulation checks
-    if events[17] > 0.5:  # RadialPulseNonPalpable
+    # Circulation assessment
+    if events[17] > 0.5:  # RadialPulseNonPalpable has high relevance
         print(17)  # StartChestCompression
-        circulation_intervention_needed = True
+        circulation_intervention_performed = True
         continue
+    if not circulation_intervention_performed:
+        if measured_times[4] > 0 and measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
 
-    # Handle circulation problems
-    if not circulation_intervention_needed and (measured_times[4] > 0 and measured_values[4] < 60):
-        print(15)  # GiveFluids
-        continue
-
-    # Check disability status
-    if events[21] > 0.5 or events[22] > 0.5 or events[23] > 0.5 or events[24] > 0.5:
-        pass  # Already checked or detected response
-    else:
+    # Disability assessment
+    if all(events[i] < 0.5 for i in [21, 22, 23, 24]):  # No responsive events detected
         print(6)  # ExamineDisability
         continue
 
-    # Exposure
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+    # Exposure assessment
+    if events[26] > 0.5 or not all(
+        measured_times
+    ):  # ExposurePeripherallyShutdown or missing measurements
         print(7)  # ExamineExposure
         continue
-    
-    # Stabilization complete check
-    if (airway_clear_confirmed and breathing_intervention_needed and circulation_intervention_needed and
-        measured_times[5] > 0 and measured_values[5] >= 88 and
-        measured_times[6] > 0 and measured_values[6] >= 8 and
-        measured_times[4] > 0 and measured_values[4] >= 60):
+
+    # Stabilization check
+    if (
+        airway_clear_confirmed
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
-    # Monitor patient
+    # Fall-back action to view monitor when other conditions are not met
     print(16)  # ViewMonitor
