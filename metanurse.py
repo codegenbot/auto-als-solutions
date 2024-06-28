@@ -7,47 +7,48 @@ while True:
     # Immediate critical conditions checks and actions
     if times_recent_measure[5] > 0:
         if values[5] < 65:
-            print(17)  # StartChestCompression if severe low sats ( < 65%)
+            print(17)  # StartChestCompression for severe low sats
             continue
         elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask if low sats ( < 88%)
+            print(30)  # UseNonRebreatherMask for low sats
             continue
 
     if times_recent_measure[4] > 0:
         if values[4] < 20:
-            print(17)  # StartChestCompression if critical low MAP ( < 20mmHg)
+            print(17)  # StartChestCompression for critical low MAP
             continue
         elif values[4] < 60:
-            print(15)  # GiveFluids for low MAP ( < 60mmHg)
+            print(15)  # GiveFluids for low MAP
             continue
 
-    # Airway management (Clear airway check)
-    if not events[3]:  # AirwayClear
-        print(3)  # ExamineAirway if airway not recently confirmed clear
+    # Airway management
+    if events[3] + events[4] + events[5] < 0.5:
+        print(3)  # ExamineAirway if no clear airway event recently
         continue
 
     # Breathing management
-    if events[7]:  # BreathingNone
-        print(29)  # UseBagValveMask if no breathing detected
-        continue
-    elif times_recent_measure[1] > 0 and values[1] < 8:
-        print(29)  # UseBagValveMask for low respiratory rate ( < 8 breaths per minute)
+    busy_with_critical_breathing_issue = False
+    if events[7] > 0.5:  # BreathingNone
+        print(29)  # UseBagValveMask if no breathing
+        busy_with_critical_breathing_issue = True
+
+    if not busy_with_critical_breathing_issue and (
+        times_recent_measure[6] > 0 and values[6] < 8
+    ):
+        print(29)  # UseBagValveMask for low breathing rate
         continue
 
-    # Circulation management
-    if times_recent_measure[4] > 0 and values[4] < 60:
-        print(15)  # GiveFluids to improve MAP
-        continue
-
-    # Check if stable enough to finish
+    # Check overall stability - Finish if conditions are met
     if (
-        events[3] > 0 and  # AirwayClear
-        times_recent_measure[5] > 0 and values[5] >= 88 and  # Sats >= 88%
-        times_recent_measure[1] > 0 and values[1] >= 8 and  # RespRate >= 8
-        times_recent_measure[4] > 0 and values[4] >= 60  # MAP >= 60mmHg
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[6] > 0
+        and values[6] >= 8
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
     ):
         print(48)  # Finish if all conditions are stable
         break
 
-    # Default non-critical time-kill action
-    print(16)  # ViewMonitor when under uncertainty
+    # Default safe action if none of the conditions met
+    print(16)  # ViewMonitor, as nothing critical is deduced
