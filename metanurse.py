@@ -11,34 +11,25 @@ while True:
         print(17)  # StartChestCompression
         continue
 
+    if events[6] > 0.5 or events[5] > 0.5:  # Airway blocks due to Vomit, Blood
+        print(31)  # UseYankeurSuctionCatheter
+        continue
+
     if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
 
-    # Assess airway, breathing, circulation initially
-    if events[3] <= 0 and events[4] <= 0 and events[5] <= 0 and events[6] <= 0:
-        print(3)  # ExamineAirway
+    # Prioritize examining if not enough data on critical measures
+    if measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        continue
+    if measured_times[6] == 0:
+        print(27)  # UseBloodPressureCuff
         continue
 
-    if events[10] <= 0 and events[11] <= 0:
-        print(4)  # ExamineBreathing
-        continue
-
-    if events[16] <= 0 and events[17] <= 0:
-        print(5)  # ExamineCirculation
-        continue
-
-    if measured_times[5] == 0 or measured_times[4] == 0 or measured_times[6] == 0:
-        if measured_times[5] == 0:
-            print(25)  # UseSatsProbe
-        if measured_times[4] == 0:
-            print(27)  # UseAline
-        if measured_times[6] == 0:
-            print(26)  # UseBloodPressureCuff
-        continue
-
+    # Decision to view monitor only when necessary
     if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+        print(16)  # ViewMonitor
         continue
 
     if measured_times[6] > 0 and measured_values[6] < 8:
@@ -60,4 +51,4 @@ while True:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing
+    print(3)  # ExamineAirway if nothing critical and data present
