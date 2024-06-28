@@ -4,38 +4,50 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical conditions for cardiac arrest
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
+    # Immediately critical conditions for cardiac arrest
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
     # Ensure airway is checked early and adequately
-    if events[3] == 0:  # if AirwayClear value is zero
+    if events[3] == 0:  # if AirwayClear has never been checked (value is zero)
         print(3)  # ExamineAirway
         continue
 
     # Assisted breathing requirement checks
-    if events[7] > 0.5:  # BreathingNone is concerning
+    if events[7] > 0.5:  # BreathingNone is high
         print(29)  # UseBagValveMask
         continue
 
-    # Oxygen saturation
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
+    # Oxygen saturation and breathing support
+    if measured_times[5] > 0:
+        if measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
 
-    # Respiration rate management
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
+    # Respiration rate handling
+    if measured_times[6] > 0:
+        if measured_values[6] < 8:
+            print(29)  # UseBagValveMask
+            continue
 
     # Circulation support for low mean arterial pressure
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
+    if measured_times[4] > 0:
+        if measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
 
     # Check conditions for completing the scenario
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
