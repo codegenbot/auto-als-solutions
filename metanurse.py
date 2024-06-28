@@ -4,35 +4,50 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
+    # Critical conditions first
     if times_recent_measure[5] > 0:
-        if values[5] < 65 or events[7] > 0.5:  # Severe hypoxia or no breathing
-            print(17)  # StartChestCompression
+        if values[5] < 65:
+            print(17)  # StartChestCompression for severe low sats
+            continue
+    if times_recent_measure[4] > 0:
+        if values[4] < 20:
+            print(17)  # StartChestCompression for critical low MAP
             continue
 
-    if events[3] > 0:  # Airway clear
-        if times_recent_measure[5] > 0 and values[5] < 88:
-            print(30)  # UseNonRebreatherMask
+    # Regular stabilization checks
+    if times_recent_measure[5] > 0:
+        if values[5] < 88:
+            print(30)  # UseNonRebreatherMask for low sats
+            continue
+    if times_recent_measure[4] > 0:
+        if values[4] < 60:
+            print(15)  # GiveFluids for low MAP
             continue
 
-    if events[4] + events[5] > 0:  # Airway blocked
-        print(31)  # UseYankeurSuctionCatheter
+    # Airway checks
+    if events[3] + events[4] + events[5] < 0.5:
+        if events[6] <= 0:
+            print(36)  # PerformHeadTiltChinLift if no airway event
+        else:
+            print(3)  # ExamineAirway
         continue
 
+    # Breathing checks
+    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
+        print(29)  # UseBagValveMask if no breathing or low breathing rate
+        continue
+
+    # Complete stabilization check
     if (
-        events[3] + events[4] + events[5] < 0.5
-    ):  # No recent airway examination or unclear
-        print(3)  # ExamineAirway
-        continue
-
-    # Check Stability Before Finishing
-    if all(
-        [
-            times_recent_measure[i] > 0 and values[i] >= threshold
-            for i, threshold in zip([5, 6, 4], [88, 8, 60])
-        ]
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[6] > 0
+        and values[6] >= 8
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)  # Finish if all conditions are stable
         break
 
-    # Default less critical care action
-    print(16)  # ViewMonitor to continue obtaining patient status
+    # Default action if none of the above conditions apply
+    print(16)  # ViewMonitor, default safe action
