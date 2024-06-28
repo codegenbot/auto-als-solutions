@@ -1,9 +1,8 @@
 loop_counter = 0
 
 while True:
-    # Break condition to avoid infinite loops and to obey the contest rules
-    if loop_i > 350:
-        print(48)  # Finish to avoid technical failure
+    if loop=counter >= 350:
+        print(48)  # Finish
         break
 
     observations = input().split()
@@ -19,12 +18,16 @@ while True:
         continue
 
     # Check airway status
-    if not events[3]:  # AirwayClear not observed or relevant
+    if events[3] <= 0.5:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
         continue
-
+    elif events[4] > 0.5 or events[5] > 0.5:  # AirwayVomit or AirwayBlood
+        print(18)  # OpenAirwayDrawer
+        print(31)  # UseYankeurSucionCatheter
+        continue
+        
     # Breathing assessment and interventions
-    if events[7]:  # BreathingNone observed
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
@@ -35,21 +38,9 @@ while True:
         continue
 
     # Circulation interventions
-    if not events[16]:  # RadialPulsePalpable not observed
-        print(5)  # ExamineCirculation
-        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-
-    # Disability and Exposure evaluation
-    if measured_times[6] > 0 and measured_values[6] >= 8 and events[21]:  # AVPU_U observed
-        print(6)  # ExamineDisability
-        continue
-    if measured_times[6] > 0 and measured_values[6] >= 8 and events[22]:  # AVPU_V observed
-        print(6)  # ExamineDisability
-        continue
-    print(7)  # ExamineExposure just to ensure no missed evaluations
 
     # Stabilization check
     if (
