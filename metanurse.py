@@ -11,49 +11,44 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Ensure airway is checked early and adequately
-    if events[3] == 0:  # if AirwayClear has never been checked (value is zero)
+    # Airway assessment and management
+    if events[3] == 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:  # Check if airway is clear
         print(3)  # ExamineAirway
         continue
-
-    # Assisted breathing requirement checks
-    if events[7] > 0.5:  # BreathingNone is high
+    elif events[7] > 0:  # BreathingNone has positive signal
         print(29)  # UseBagValveMask
         continue
+    elif events[6] > 0.1:  # AirwayTongue obstruction detected
+        print(32)  # UseGuedelAirway
+        continue
 
-    # Oxygen saturation targeting
-    if measured_times[5] > 0:
-        if measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
+    # Breathing checks and interventions
+    if measured_times[5] == 0 or (measured_times[5] > 0 and measured_values[5] < 88):
+        print(30)  # UseNonRebreatherMask
+        continue
 
-    # Respiration rate handling
-    if measured_times[6] > 0:
-        if measured_values[6] < 8:
-            print(29)  # UseBagValgetMask
-            continue
+    # Circulation checks
+    if measured_times[4] == 0 or (measured_times[4] > 0 and measured_values[4] < 60):
+        print(15)  # GiveFluids
+        continue
 
-    # Circulation support for low mean arterial pressure
-    if measured_times[4] > 0:
-        if measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
+    # Disability (Neurologic) evaluation
+    if events[21] > 0 or events[22] > 0 or events[23] > 0:  # Check if AVPU non-alert
+        print(6)  # ExamineDisability
+        continue
 
-    # Check if all stabilization criteria are met
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
+    # Ensure proper measurements of vital signs
+    if measured_times[5] == 0:  # Sats not recently measured
+        print(25)  # UseSatsProbe
+        continue
+    if measured_times[4] == 0:  # MAP not recently measured
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Check conditions for completing the scenario
+    if (measured_values[5] >= 88 and measured_values[6] >= 8 and measured_values[4] >= 60):
         print(48)  # Finish
         break
 
-    # Default action to further collect vital patient data
-    if measured_times[4] == 0 and measured_times[5] == 0 and measured_times[6] == 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-    else:
-        print(16)  # ViewMonitor
+    # View Monitor as a general action if no specific action is applicable
+    print(16)  # ViewMonitor
