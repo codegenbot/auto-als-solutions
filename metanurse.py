@@ -4,34 +4,52 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Directly address cardiac arrest signs
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    # Assess response and airway immediately
+    if events[2] > 0:  # ResponseNone
+        print(3)  # ExamineAirway
+        continue
+
+    # Critical conditions first
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Address Airway issues more consistently
-    if max(events[4:8]) > 0:  # Detect any serious airway blockage
+    # Airway checking
+    if events[4] > 0:  # AirwayBlockage issue like AirwayVomit
         print(32)  # UseGuedelAirway
         continue
 
-    # Check and address breathing insufficiency robustly
-    if events[7] >= 0.5:  # BreathingNone
+    # Breathing assistance
+    if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
 
-    # Examine and intervene on circulation critically and repeatedly if needed
-    if measured_times[4] == 0 or (measured_times[4] > 0 and measured_values[4] < 60):
+    # Check circulation and breathing with a monitor
+    if (
+        measured_times[0] == 0 or measured_times[1] == 0
+    ):  # Heart rate or resp rate not measured
+        print(25)  # UseSatsProbe
+        continue
+
+    # Re-check necessary stats
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
+
+    # Circulation interventions
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Examine oxygen saturation and intervene as essential
-    if measured_times[5] == 0 or (measured_times[5] > 0 and measured_values[5] < 88):
+    # Ensuring oxygenation
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Proper condition to finish the game based on problem stabilization statement
+    # Stabilization successful, finish the game
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -43,5 +61,5 @@ while True:
         print(48)  # Finish
         break
 
-    # Emergency fallback to view the monitor if no action taken
-    print(16)  # ViewMonitor
+    # Default action if no immediate issues
+    print(0)  # DoNothing
