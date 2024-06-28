@@ -4,7 +4,14 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
-    # Critical immediate actions for life-threatening conditions
+    # Immediate critical actions for life-threatening conditions
+    # Checking for zero pulse or any condition indicating cardiac arrest
+    if (
+        times_recent_measure[0] > 0 and values[0] < 30
+    ):  # Hypothetical check for extremely low heart rate
+        print(17)  # StartChestCompression
+        continue
+
     if times_recent_measure[5] > 0:
         if values[5] < 65:
             print(17)  # StartChestCompression for severe low sats
@@ -21,15 +28,9 @@ while True:
             print(15)  # GiveFluids for low MAP
             continue
 
-    # Airway management
-    if not events[2] and (events[3] + events[4] + events[5] < 0.5):
+    # Airway management enhancement by repeated checks and actions
+    if events[3] + events[4] + events[5] < 0.5:
         print(3)  # ExamineAirway if no clear airway event
-        continue
-
-    if events[17] > 0:  # RadialPulseNonPalpable response
-        print(17)  # StartChestCompression
-        if events[38] < 0.5:  # if not recently defibrillated
-            print(28)  # AttachDefibPads
         continue
 
     # Breathing and ventilation management
@@ -37,27 +38,36 @@ while True:
         print(29)  # UseBagValveMask for insufficient breathing
         continue
 
-    # Systematic examination if previous direct actions don't resolve
+    # Regular assessment of vital signs using tools to update observation relevance
     if (
-        events[3] + events[4] + events[5] + events[6] >= 0.5
-    ):  # No ongoing airway problem
-        print(4)  # ExamineBreathing
+        times_recent_measure[5] == 0
+        or times_recent_measure[4] == 0
+        or times_recent_measure[6] == 0
+    ):
+        if times_recent_measure[5] == 0:
+            print(25)  # UseSatsProbe
+        if times_recent_measure[4] == 0:
+            print(27)  # UseBloodPressureCuff
+        if times_recent_measure[6] == 0:
+            print(5)  # ExamineCirculation
         continue
 
-    if times_recent_measure[1] <= 0 or (times_recent_measure[1] > 0 and values[1] < 8):
-        print(25)  # UseSatsProbe for sats measurement
-        continue
+    # Exhaustive auxiliary systems checkup if previous immediate remedies don't stabilize the patient
+    print(4)  # ExamineBreathing
+    print(6)  # ExamineDisability
+    print(7)  # ExamineExposure
 
-    if times_recent_measure[4] <= 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    c1 = times_recent_measure[5] > 0 and values[5] >= 88
-    c2 = times_recent_measure[6] > 0 and values[6] >= 8
-    c3 = times_recent_measure[4] > 0 and values[4] >= 60
-    if c1 and c2 and c3:
+    # Final check if conditions are met for stabilisation
+    if (
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[6] > 0
+        and values[6] >= 8
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
+    ):
         print(48)  # Finish if all conditions are stable
         break
 
-    # Default action to gather more information
-    print(16)  # ViewMonitor, default safe action
+    # Default action to gather more information until a clear path is determined
+    print(16)  # ViewMonitor, default action when unsure
