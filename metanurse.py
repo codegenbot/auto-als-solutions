@@ -42,13 +42,13 @@ while True:
         print(4)  # ExamineBreathing
         continue
 
-    # Circulation assessment
+    # Circulation interventions
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
     # Disability assessment
-    if events[21:25] == [0] * 4:  # No AVPU response
+    if events[25:29] == [0] * 4:  # No pupil reaction
         print(6)  # ExamineDisability
         continue
 
