@@ -4,48 +4,50 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical issues
-    if measured_times[5] > 0 and measured_values[5] < 65:
-        print(17)  # StartChestCompression
-        continue
+    # Immediate critical conditions that require urgent actions
+    if measured_times[5] > 0:
+        if measured_values[5] < 65:
+            print(17)  # StartChestCompression
+            continue
+        elif measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
     if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Airway checks: assuming event indices follow the listed names and documentation
-    if events[3] < 0.5 and any(events[i] > 0.5 for i in [4, 5, 6]):  # Any airway occlusion by blood, vomit, etc
-        print(31)  # UseYankeurSuctionCatheter
-        continue
-    elif events[3] < 0.5:  # No clear airway signs 
+    # Airway management
+    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
         print(3)  # ExamineAirway
         continue
-
-    # Breathing issues
-    if events[7] > 0.5:
-        print(29)  # UseBagValveMask
-    elif measured_times[1] > 0 and measured_values[1] < 8:
-        print(29)  # UseBagValveMask
-        continue
-    elif measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask      
+    if events[3] < 0.1:
+        print(36)  # PerformHeadTiltChinLift
         continue
 
-    # Circulation issues
-    if measured_times[0] > 0 and measured_values[0] < 60:
-        print(15)  # GiveFluids
+    # Breathing checks and management
+    if measured_times[1] > 0 and measured_values[1] < 8:
+        print(29)  # UseBagValveMask
         continue
+
+    # Circulation check
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check if all stabilisation conditions are met
-    if all([
-        measured_times[5] > 0 and measured_values[5] >= 88,
-        measured_times[1] > 0 and measured_values[1] >= 8,
-        measured_times[4] > 0 and measured_values[4] >= 60
-    ]):
+    # Check and reassess as necessary
+    if any(t == 0 for t in measured_times[1:6]):  # any vital signs not measured recently
+        print(16)  # ViewMonitor
+        continue
+
+    # Stability check before finishing
+    airway_clear = events[3] > 0.5
+    breathing_stable = (measured_times[1] > 0 and measured_values[1] >= 8) and (measured_times[5] > 0 and measured_values[5] >= 88)
+    circulation_stable = measured_times[4] > 0 and measured_values[4] >= 60
+
+    if airway_clear and breathing_stable and circulation_stable:
         print(48)  # Finish
         break
 
-    # Regular checking actions
-    print(16)  # ViewMonitor
+    # Default passive action if no other actions are required
+    print(0)  # DoNothing
