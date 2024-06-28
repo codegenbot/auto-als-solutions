@@ -4,40 +4,36 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    # Immediate life-threatening conditions
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Check airway status
-    if events[3] < 0.5:  # Low relevance for AirwayClear
+    # A - Airway check
+    if events[3] < 0.5:  # Low relevance or information about AirwayClear
         print(3)  # ExamineAirway
         continue
 
-    # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        if measured_times[4] > 0 and measured_values[4] < 20:  # critically low MAP
-            print(17)  # StartChestCompression
-        else:
-            print(29)  # UseBagValveMask
+    # B - Breathing check
+    if events[7] > 0.5:  # BreathingNone needs action
+        print(29)  # UseBagValveMask
         continue
-
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
-    # Circulation interventions
+    # C - Circulation check
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Stabilization check
+    # Check if patient is stabilized
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -49,5 +45,5 @@ while True:
         print(48)  # Finish
         break
 
-    # Regular monitoring if nothing urgent
+    # Regular status checks when no immediate actions are required
     print(16)  # ViewMonitor
