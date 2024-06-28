@@ -16,31 +16,34 @@ while step_count < 350:
         continue
 
     # Airway assessment and interventions
-    if not airway_clear_confirmed or events[3] <= 0.5:  # Airway not clear or not checked
+    if (
+        not airway_clear_confirmed
+        or events[1] > 0.5
+        or events[2] > 0.5
+        or events[4] > 0.5
+        or events[5] > 0.5
+        or events[6] > 0.5
+    ):
+        airway_clear_confirmed = events[3] > 0.5  # Check if airway is clear
         print(3)  # ExamineAirway
         step_count += 1
         continue
-    elif events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5:  # Airway obstructions exist
-        if events[6] > 0.5:  # AirwayTongue obstruction
-            print(37)  # PerformJawThrust
-        else:
-            print(31)  # UseYankeurSuctionCatheter
-        step_count += 1
-        continue
-    else:
-        airway_clear_confirmed = True
 
     # Breathing assessment and intervention
-    if events[7] > 0.5:  # BreathingNone detected
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         step_count += 1
         continue
-    elif measured_times[5] > 0 and measured_values[5] < 88:
-        print(30) # UseNonRebreatherMask
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         step_count += 1
         continue
-    elif measured_times[1] > 0 and measured_values[1] < 8:
+    if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
+        step_count += 1
+        continue
+    if events[8:14] == [0] * 6:  # No detailed breathing checks done
+        print(4)  # ExamineBreathing
         step_count += 1
         continue
 
@@ -49,24 +52,24 @@ while step_count < 350:
         print(15)  # GiveFluids
         step_count += 1
         continue
-    elif events[17] > 0.5:  # RadialPulseNonPalpable
+    if events[16] == 0 and events[17] == 0:  # Unclear pulse information
         print(5)  # ExamineCirculation
         step_count += 1
         continue
 
     # Disability checks
-    if max(events[21:24]) <= 0.5:  # No clear AVPU status
+    if events[21:25:1] == [0] * 4:  # Check AVPU status clear
         print(6)  # ExamineDisability
         step_count += 1
         continue
 
-    # Exposure evaluations
-    if max(events[26:]) <= 0.5:  # No exposure checks done
+    # Exposure checks
+    if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         step_count += 1
         continue
 
-    # Stabilization checks
+    # Checking stabilization criteria
     if (
         airway_clear_confirmed
         and measured_times[5] > 0
@@ -81,4 +84,4 @@ while step_count < 350:
 
     # Default action if no specific condition matched
     print(16)  # ViewMonitor
-    step_contact += 1
+    step_count += 1
