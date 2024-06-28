@@ -3,7 +3,6 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 saturation_checked = False
-blood_pressure_checked = False
 
 while True:
     observations = input().split()
@@ -11,14 +10,14 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
+    # Immediate life-saving interventions for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Check and stabilize airway
+    # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
@@ -26,10 +25,14 @@ while True:
             print(3)  # ExamineAirway
             continue
 
-    # Check and assist breathing
-    if not breathing_assessed:
-        print(4)  # ExamineBreathing
-        breathing_assessed = True
+    # Breathing assessment and interventions
+    if not saturation_checked:
+        print(25)  # UseSatsProbe
+        saturation_checked = True
+        continue
+
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
@@ -38,50 +41,33 @@ while True:
         print(29)  # UseBagValveMask
         continue
 
-    # Check and support circulation
+    if not breathing_assessed:
+        print(4)  # ExamineBreathing
+        breathing_assessed = True
+        continue
+
+    # Circulation assessment
     if not circulation_checked:
-        print(5)  # ExamineCirculation
+        print(27)  # UseBloodPressureCuff
         circulation_checked = True
         continue
+
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check disability status
+    # Checking ECG rhythm if circulation issues suspected
+    if (
+        events[18] > 0.5 or events[19] == 0
+    ):  # Check if HeartSoundsMuffled or HeartSoundsNormal is not confirmed
+        print(2)  # CheckRhythm
+        continue
+
+    # Disability assessment
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    # Check oxygen saturation with probe
-    if not saturation_checked:
-        print(25)  # UseSatsProbe
-        print(16)  # ViewMonitor
-        saturation_checked = True
-        continue
-
-    # Check blood pressure regularly
-    if not blood_pressure_checked:
-        print(27)  # UseBloodPressureCuff
-        print(16)  # ViewWolfMonitor
-        blood_pressure_checked = True
-        continue
-
-    # Check for stabilization
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-        and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
-    ):
-        print(48)  # Finish
-        break
-
-    # If no critical condition to address, monitor regularly
+    # Regular monitoring if no critical condition to address immediately
     print(16)  # ViewMonitor
