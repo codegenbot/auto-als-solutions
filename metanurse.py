@@ -16,11 +16,6 @@ while True:
         print(3)  # ExamineAirway
         continue
 
-    # Check circulation pulse
-    if events[17] > 0:  # RadialPulseNonPalpable significant
-        print(5)  # ExamineCirculation
-        continue
-
     # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
@@ -37,21 +32,14 @@ while True:
         print(15)  # GiveFluids
         continue
 
-    # Update Oxygen Saturation Monitoring
-    if events[35] < 0.1 and measured_times[5] < 1:  # Check SatsProbe relevance
-        print(25)  # UseSatsProbe
-        continue
-
     # Stabilization check
     if (
-        events[3] > 0.5  # AirwayClear
-        and measured_times[5] > 0
+        measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
-        and events[17] > 0.5  # RadialPulsePalpable
     ):
         # All conditions for stabilization met
         print(48)  # Finish
