@@ -6,7 +6,12 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Conditions for critical medical interventions:
+    # Immediate concerns: Airway, Breathing, Circulation
+    if events[2] > 0:  # ResponseNone indicates serious issue
+        print(3)  # ExamineAirway
+        continue
+
+    # Checking critical conditions that require immediate action
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -14,35 +19,34 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Steps between measurements, default actions if vital signs aren't measured
-    if step % 10 == 0 and (
-        measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0
-    ):
-        print(25)  # UseSatsProbe
-        continue
-
-    # Assess airway and breathing
-    if events[2] > 0:  # ResponseNone - Check airway
-        print(3)  # ExamineAirway
-        continue
+    # Airway management
     if events[4] > 0 or events[3] > 0:  # AirwayVomit or AirwayBlood
         print(31)  # UseYankeurSuctionCatheter
         continue
-    if events[7] > 0.5:  # BreathingNone
+
+    # If no breathing observed
+    if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
 
-    # Circulation checks and actions
+    # Use monitor if vital checks are needed
+    if step % 5 == 0 and (
+        measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0
+    ):
+        print(16)  # ViewMonitor
+        continue
+
+    # Circulation: Give fluids if blood pressure is low but not critical
     if measured_times[4] > 0 and measured_values[4] < 60 and measured_values[4] >= 20:
         print(15)  # GiveFluids
         continue
 
-    # Ensuring sufficient oxygenation
+    # Oxygenation: Ensure appropriate oxygen level
     if measured_times[5] > 0 and measured_values[5] < 88 and measured_values[5] >= 65:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # End condition for stabilization
+    # Determine if the patient has been stabilized
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -54,13 +58,10 @@ while True:
         print(48)  # Finish
         break
 
-    # Assess other needs periodically
-    if step % 5 == 0:
-        print(16)  # ViewMonitor
-    else:
-        print(0)  # DoNothing
+    # Default action
+    print(0)  # DoNothing
 
     step += 1  # Increment step counter
     if step >= 350:
-        print(48)  # Output Finish to avoid a technical failure
+        print(48)  # Force finish to avoid a technical failure
         break
