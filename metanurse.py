@@ -4,39 +4,35 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
-    if times_recent_measure[5] > 0:
-        if values[5] < 65:
-            print(17)  # StartChestCompression for severe low sats
-            continue
-        elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask for low sats
-            continue
-
-    if times_recent_measure[4] > 0:
-        if values[4] < 20:
-            print(17)  # StartChestCompression for critical low MAP
-            continue
-        elif values[4] < 60:
-            print(15)  # GiveFluids for low MAP
-            continue
-
-    if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no clear airway event recently
-        continue
-
-    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask if no breathing or low breathing rate
-        continue
-
+    # Handle critical conditions
     if (
         times_recent_measure[5] > 0
-        and values[5] >= 88
-        and times_recent_measure[6] > 0
-        and values[6] >= 8
-        and times_recent_measure[4] > 0
-        and values[4] >= 60
+        and values[5] < 65
+        or (times_recent_measure[4] > 0 and values[4] < 20)
     ):
-        print(48)  # Finish if all conditions are stable
+        print(17)  # StartChestCompression for critical conditions
+        continue
+
+    # Verify and stabilize airway, breathing, and circulation
+    if events[2] < 0.5:  # If ResponseNone is low, examine response
+        print(8)
+        continue
+    if events[3] < 0.5:  # If AirwayClear event is not recent
+        print(3)
+        continue
+    if events[7] > 0.5 or (
+        times_recent_measure[6] > 0 and values[6] < 8
+    ):  # Poor breathing
+        print(29)
+        continue
+    if times_recent_measure[4] > 0 and values[4] < 60:  # Check and manage Circulation
+        print(15)
+        continue
+
+    # Finish when stable
+    if events[3] > 0.5 and values[5] >= 88 and values[6] >= 8 and values[4] >= 60:
+        print(48)
         break
 
-    print(16)  # ViewMonitor, default safe action
+    # Fallback if no immediate actions needed
+    print(16)
