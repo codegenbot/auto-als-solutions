@@ -1,42 +1,73 @@
 while True:
-    inputs = input().split()
-    events = list(map(float, inputs[:39]))
-    times_recent_measure = list(map(float, inputs[39:46]))
-    values = list(map(float, inputs[46:]))
+    observations = input().split()
+    events = list(map(float, observations[:39]))
+    measured_times = list(map(float, observations[39:46]))
+    measured_values = list(map(float, observations[46:]))
 
-    if times_recent_measure[5] > 0:
-        if values[5] < 65:
-            print(17)  # StartChestCompression for severe low sats
-            continue
-        elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask for low sats
-            continue
-
-    if times_recent_measure[4] > 0:
-        if values[4] < 20:
-            print(17)  # StartChestCompression for critical low MAP
-            continue
-        elif values[4] < 60:
-            print(15)  # GiveFluids for low MAP
-            continue
-
-    if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no clear airway event recently
+    # Start chest compression if critical conditions are met
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
+        print(17)  # StartChestCompression
         continue
 
-    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask if no breathing or low breathing rate
+    # Immediate check for airway blockage if not checked or if there's indication of blockage
+    if events[3] <= 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
+        print(3)  # ExamineAirway
         continue
 
+    # Immediate actions for airway management if no clear breath sounds or effective breathing
+    if events[7] > 0:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
+    # Monitoring setup if not done yet
+    if measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        continue
+    if measured_times[4] == 0:
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Check breathing and circulation
+    if events[4] > 0 or events[5] > 0 or events[6] > 0:  # Check complications in airway
+        print(3)  # ExamineAirway
+        continue
     if (
-        times_recent_measure[5] > 0
-        and values[5] >= 88
-        and times_recent_measure[6] > 0
-        and values[6] >= 8
-        and times_recent_measure[4] > 0
-        and values[4] >= 60
+        events[7] > 0.1 or events[8] > 0.1 or events[9] > 0.1
+    ):  # Ineffective breathing patterns
+        print(4)  # ExamineBreathing
+        continue
+    if events[16] == 0:  # RadialPulseNonPalpable
+        print(5)  # ExamineCirculation
+        continue
+
+    # Provide necessary interventions based on observations
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
+
+    # Check if conditions to finish are met
+    if (
+        events[3] > 0
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
-        print(48)  # Finish if all conditions are stable
+        print(48)  # Finish
         break
 
-    print(16)  # ViewMonitor, default safe action
+    # Idle action if no critical action is needed
+    print(0)  # DoNothing
