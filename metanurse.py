@@ -20,7 +20,9 @@ while True:
             print(15)  # GiveFluids for low MAP
             continue
 
-    if events[3] + events[4] + events[5] + events[6] < 0.1:
+    if (
+        events[3] + events[4] + events[5] + events[6] < 0.1
+    ):  # Including AirwayTongue check
         print(3)  # ExamineAirway if no clear airway event recently
         continue
 
@@ -28,17 +30,20 @@ while True:
         print(29)  # UseBagValveMask if no breathing or low breathing rate
         continue
 
+    # Check for Cardiac arrest
     if events[38] > 0.5:  # HeartRhythmVF - Ventricular Fibrillation
         print(28)  # AttachDefibPads
         continue
 
-    # Check for stable condition to finish
     if (
-        (times_recent_measure[5] > 0 and values[5] >= 88)
-        and (times_recent_measure[6] > 0 and values[6] >= 8)
-        and (times_recent_measure[4] > 0 and values[4] >= 60)
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[6] > 0
+        and values[6] >= 8
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)  # Finish if all conditions are stable
         break
 
     print(16)  # ViewMonitor, default safe action
