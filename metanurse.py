@@ -1,7 +1,8 @@
-airway_clear = False
-breathing_assistance_needed = False
-step_count = 0
-max_steps = 350
+airway_confirmed = False
+breathing_assessed = False
+circulation_checked = False
+disability_checked = False
+breathing_tools_used = False
 
 while True:
     observations = input().split()
@@ -15,60 +16,61 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if not airway_clear:
-        if (
-            events[1] > 0.5
-            or events[2] > 0.5
-            or events[4] > 0.5
-            or events[5] > 0.5
-            or events[6] > 0.5
-        ):
-            print(35)  # PerformAirwayManoeuvres
-            continue
-        if events[3] < 0.5:  # AirwayClear not recently confirmed
+    if not airway_confirmed:
+        if events[3] > 0.5:  # AirwayClear is confirmed
+            airway_confirmed = True
+        else:
             print(3)  # ExamineAirway
             continue
-        airway_clear = True
 
-    if events[7] > 0.5:
+    if not breathing_assessed:
+        if (
+            measured_times[5] == 0 or measured_values[5] < 88
+        ):  # No sats measure or sats below 88%
+            if not breathing_tools_used:
+                print(19)  # OpenBreathingDrawer
+                print(25)  # UseSatsProbe
+                print(16)  # ViewMonitor
+                breathing_tools_used = True
+                continue
+        else:
+            breathing_assessed = True
+
+    elif (
+        measured_times[6] > 0 and measured_values[6] < 8 or events[7] > 0.5
+    ):  # Check respiration rate or breathing none available
         print(29)  # UseBagValveMask
-        breathing_assistance_needed = True
-        continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        breathing_assistance_needed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
+    if not circulation_checked:
+        if events[17] > 0 or (
+            measured_times[0] > 0 and measured_values[0] < 60
+        ):  # RadialPulseNonPalpable or low heart rate
+            print(5)  # ExamineCirculation
+            continue
+        else:
+            circulation_checked = True
 
-    if events[25:29] == [0] * 4:
-        print(6)  # ExamineDisability
-        continue
-
-    if events[26] > 0.5:
-        print(7)  # ExamineExposure
-        continue
+    if not disability_checked:
+        if events[22] > 0.5 or events[23] > 0.5:  # Checking AVPU V, U results
+            disability_checked = True
+        else:
+            print(6)  # ExamineDisability
+            continue
 
     if (
-        airway_clear
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88
+        and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8
+        and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60
+        and measured_values[4] >= 60  # MAP at least 60
     ):
         print(48)  # Finish
         break
 
     print(16)  # ViewMonitor
-
-    step_count += 1
-    if step_count >= max_steps - 1:
-        print(48)  # Finish
-        break
