@@ -21,48 +21,56 @@ while True:
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif events[5] > 0.1 or events[6] > 0.1:  # Vomit or Blood
+        elif (
+            events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1
+        ):  # Vomit or Blood or Tongue
             print(31)  # UseYankeurSuctionCatheter
+            continue
+        elif events[7] > 0.5:  # BreathingNone high relevance
+            print(17)  # StartChestCompression
             continue
         else:
             print(3)  # ExamineAirway
             continue
 
     # BREATHING
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        if not saturation_measured:
-            print(25)  # UseSatsProbe
-            saturation_measured = True
+    if not breathing_assessed or measured_times[5] == 0:
+        if measured_times[5] > 0 and measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
             continue
-        print(30)  # UseNonRebreatherMask
-        continue
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
-        continue
-    if not breathing_assessed:
+        if events[7] > 0.5:  # BreathingNone has high relevance
+            print(29)  # UseBagValveMask
+            continue
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
     # CIRCULATION
     if not circulation_checked:
-        if events[17] > 0.5:  # RadialPulseNonPalpable
+        if (
+            events[16] > 0.5 and events[17] > 0.5
+        ):  # RadialPulseNonPalpable and palpable contradictory - double-check circulation
             print(5)  # ExamineCirculation
+            continue
+        if measured_times[4] > 0:
+            if measured_values[4] < 60:
+                print(15)  # GiveFluids
+                continue
             circulation_checked = True
+        else:
+            print(27)  # UseBloodPressureCuff
             continue
-        if measured_times[4] > 0 and measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
-        circulation_checked = True
+
+    # CAPILLARY REFILL AND OTHER SIGNS
+    print(
+        28
+    )  # AttachDefibPads - required more thorough analysis if capillary refill or other central signs are worse
 
     # DISABILITY
     if not disability_checked:
-        if (
-            events[21] < 0.5 and events[22] < 0.5 and events[23] < 0.5
-        ):  # AVPU_U, AVPU_V, AVPU_P are less relevant
-            print(6)  # ExamineDisability
-            continue
+        print(6)  # ExamineDisability
         disability_checked = True
+        continue
 
     # STABILIZATION CHECK
     if (
