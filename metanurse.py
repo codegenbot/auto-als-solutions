@@ -4,69 +4,46 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical conditions: Cardiac arrest risks
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    critical_sats = measured_times[5] > 0 and measured_values[5] < 65
+    critical_map = measured_times[4] > 0 and measured_values[4] < 20
+
+    # Immediate response for critical conditions
+    if critical_sats or critical_map:
         print(17)  # StartChestCompression
         continue
 
-    # A - Airway step
-    if events[6] < 0.1:  # AirwayTongue not observed significantly
+    # Airway examination strategy
+    airway_blocked = events[4] > 0 or events[5] > 0
+    if airway_blocked or sum(events[3:6]) == 0:
         print(3)  # ExamineAirway
         continue
 
-    # B - Breathing checks
-    if not (
-        events[12] > 0 or events[10] > 0
-    ):  # Equal chest expansion not observed or unverified
-        print(4)  # ExamineBreathing
-        continue
-
-    # C - Circulation check
-    if events[16] < 0.1:  # RadialPulsePalpable not recently observed
-        print(5)  # ExamineCirculation
-        continue
-
-    # D - Disability check (using AVPU scale: AVPU_A and AVPU_U typically)
-    if events[21] < 0.1 and events[22] < 0.1:  # Not responsive to voice or unresponsive
-        print(6)  # ExamineDisability
-        continue
-
-    # E - Exposure check
-    if (
-        events[26] < 0.1
-    ):  # ExposurePeripherallyShutdown not recently observed, or unsure
-        print(7)  # ExamineExposure
-        continue
-
-    # Assessing vital signs to decide further steps
-    # If oxygen sat is low or breathing rate is low
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-    elif measured_times[6] > 0 and measured_values[6] < 8:
+    # Breathing assessment
+    insufficient_breathing = events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8)
+    if insufficient_breathing:
         print(29)  # UseBagValveMask
         continue
 
-    # If MAP is below normal
+    # Oxygen saturation management
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    # Circulation issues: monitor mean arterial pressure
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check again if all conditions are now stable
-    if all(
-        [
-            events[3] > 0.1,  # AirwayClear observed
-            (events[12] > 0.1 or events[10] > 0.1),  # Breathing is adequate
-            events[16] > 0.1,  # Pulse palpable
-            measured_times[5] > 0 and measured_values[5] >= 88,
-            measured_times[4] > 0 and measured_values[4] >= 60,
-            measured_times[6] > 0 and measured_values[6] >= 8,
-        ]
-    ):
+    # Checking stability before finishing the scenario
+    stable_conditions = (
+        events[3] > 0 and
+        measured_times[5] > 0 and measured_values[5] >= 88 and
+        measured_times[6] > 0 and measured_values[6] >= 8 and
+        measured_times[4] > 0 and measured_values[4] >= 60
+    )
+    if stable_conditions:
         print(48)  # Finish
         break
 
-    # If no urgent conditions, monitor continuously
+    # Default safe action if other specific actions are not needed
     print(16)  # ViewMonitor
