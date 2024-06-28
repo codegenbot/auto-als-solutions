@@ -13,7 +13,9 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
+        ):
             print(17)  # Start CPR
             break
         elif sats is not None and sats < 88:
@@ -44,10 +46,10 @@ def main():
 def check_stabilization(sats, map_value, resp_rate):
     return (
         sats is not None
-        and map_value is not None
-        and resp_rate is not None
         and sats >= 88
+        and map_value is not None
         and map_value >= 60
+        and resp_rate is not None
         and resp_rate >= 8
     )
 
