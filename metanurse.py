@@ -5,53 +5,58 @@ while True:
     measured_values = list(map(float, observations[46:]))
 
     # Immediate life-saving interventions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_events[4] < 20
-    ):
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
-    # Airway check and management
-    if (
-        events[3] < 0.5 and events[4] == 0 and events[5] == 0 and events[6] == 0
-    ):  # Airway unclear
+    # A - Airway assessment and intervention
+    if events[3] < 0.5:  # AirwayClear has low relevance
         print(3)  # ExamineAirway
         continue
-    elif (
-        events[4] > 0 or events[5] > 0 or events[6] > 0
-    ):  # Obstructions like vomit, blood, tongue
-        print(35)  # PerformAirwayManoeuvres
+    if events[4] > 0.5:  # AirwayVomit
+        print(31)  # UseYankeurSucionCatheter
         continue
 
-    # Breathing support
-    if events[7] > 0.5:  # Severe breathing issues
+    # B - Breathing assessment and intervention
+    if measured_times[6] > 0 and measured_values[6] < 8:  # Respiratory rate low
         print(29)  # UseBagValveMask
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Low oxygen saturation
+    if measured_times[5] > 0 and measured_values[5] < 88:  # Oxygen saturation low
         print(30)  # UseNonRebreatherMask
         continue
+    if events[7] > 0.5:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
 
-    # Circulation check
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low mean arterial pressure
+    # C - Circulation assessment and intervention
+    if measured_times[4] > 0 and measured_values[4] < 60:  # Mean Arterial Pressure low
         print(15)  # GiveFluids
         continue
 
-    # Disability assessment
-    if events[22] > 0.5 or events[23] > 0.5:  # Response level check
+    # D - Disability assessment and intervention
+    if events[22] > 0.5 or events[21] > 0.5:  # AVPU_V or AVPU_U
         print(6)  # ExamineDisability
         continue
 
-    # Exposure examination
-    if events[26] > 0.5:  # Check for systemic problems
+    # E - Exposure
+    if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         continue
 
-    # Regular monitoring and reassessment
-    if events[25] == 0 and events[26] == 0 and events[27] == 0:  # Normal conditions
-        print(16)  # ViewMonitor
+    # Regular checks (if no critical condition, improve monitoring)
+    # Check breathing and circulation if not done already
+    if events[36] < 0.5: # RadialPulseNonPalpable
+        print(5)  # ExamineCirculation
         continue
 
-    # Decision to finish
+    if events[12] < 0.5:  # BreathingWheeze low relevance
+        print(4)  # ExamineBreathing
+        continue
+
+    # Stabilization achieved
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -62,3 +67,6 @@ while True:
     ):
         print(48)  # Finish
         break
+
+    # Default action if no other conditions met
+    print(16)  # ViewMonitor
