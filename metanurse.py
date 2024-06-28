@@ -12,14 +12,15 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Prioritize Airway Examination
-    if events[3] < 0.5 and all(
-        events[i] < 0.5 for i in range(4, 7)
-    ):  # Airway not clear or no data
-        print(3)  # ExamineAirway
+    # Airway checks
+    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):  # Airway issues
+        if events[3] == 0:
+            print(3)  # ExamineAirway
+        elif events[5]:  # AirwayVomit
+            print(31)  # UseYankeurSucionCatheter
         continue
 
-    # Breathing issues
+    # Breathing checks
     if events[7] > 0.5:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
@@ -30,10 +31,13 @@ while True:
         print(29)  # UseBagValveMask
         continue
 
-    # Circulation issues
+    # Circulation checks
     if measured_times[4] > 0 and measured_values[4] < 60:  # Low mean arterial pressure
         print(15)  # GiveFluids
         continue
+
+    # Disability and Exposure might be assessed here in a full implementation
+    # E.g., check AVPU, exposure (signs of trauma, rashes, etc.)
 
     # Check stability
     stable_conditions = (
@@ -48,5 +52,10 @@ while True:
         print(48)  # Finish
         break
 
-    # If nothing else, gather more info
-    print(16)  # ViewMonitor
+    # If no critical actions required, loop the primary exams (ABCDE)
+    if events[3] < 0.5:
+        print(3)  # ExamineAirway
+    elif max(measured_times[5], measured_times[6], measured_times[4]) == 0:
+        print(16)  # ViewMonitor
+    else:
+        print(4)  # ExamineBreathing
