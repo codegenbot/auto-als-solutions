@@ -65,7 +65,7 @@ while True:
         and measured_times[6] > 0
         and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_digits[4] >= 60  # MAP at least 60
+        and measured_values[4] >= 60  # MAP at least 60
     ):
         # All conditions for stabilization met
         print(48)  # Finish
