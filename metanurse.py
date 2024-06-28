@@ -1,74 +1,61 @@
 while True:
-    inputs = input().split()
-    events = list(map(float, inputs[:39]))
-    times_recent_measure = list(map(float, inputs[39:46]))
-    values = list(map(float, inputs[46:]))
+    observations = input().split()
+    events = list(map(float, observations[:39]))
+    measured_times = list(map(float, observations[39:46]))
+    measured_values = list(map(float, observations[46:]))
 
-    # Critical immediate actions for life-threatening conditions
-    if times_recent_measure[5] > 0:
-        if values[5] < 65:
-            print(17)  # StartChestCompression for critical low sats
-            continue
-        elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask for low sats
-            continue
+    # Immediate life-saving interventions
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
+        print(17)  # StartChestCompression
+        continue
 
-    if times_recent_measure[4] > 0:
-        if values[4] < 20:
-            print(17)  # StartChestCompression for critical low MAP
-            continue
-        elif values[4] < 60:
-            print(15)  # GiveFluids for low MAP
-            continue
-
-    # Check Airway
-    if (
-        events[3] + events[4] + events[5] < 0.1 and events[3] == 0
-    ):  # Checking if airway is not clear
+    # Check airway status
+    if events[3] < 0.5:  # Low relevance for AirwayClear
         print(3)  # ExamineAirway
         continue
 
-    # Check Breathing
-    breathing_issues = (
-        events[7] > 0 or events[8] > 0 or events[9] > 0
-    )  # BreathingNone, BreathingSnoring, BreathingSeeSaw
-    if breathing_issues or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask for insufficient breathing
-        continue
-
-    # Check Circulation
-    if not events[16] > 0:  # RadialPulsePalpable
+    # Check circulation pulse
+    if events[17] > 0:  # RadialPulseNonPalpable significant
         print(5)  # ExamineCirculation
         continue
 
-    # Check Disability (consciousness)
-    if not (
-        events[21] > 0 or events[22] > 0
-    ):  # AVPU_U or AVPU_V (not optimal consciousness)
-        print(6)  # ExamineDisability
+    # Breathing assessment and interventions
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
         continue
 
-    # Check Exposure
-    if not (
-        events[25] > 0 or events[26] > 0 or events[27] > 0
-    ):  # No obvious signs from exposure examined
-        print(7)  # ExamineExposure
+    # Circulation interventions
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
         continue
 
-    # Final check if stabilization criteria are met
-    stabilized = (
-        events[2] > 0
-        and times_recent_measure[5] > 0  # AirwayClear
-        and values[5] >= 88
-        and times_recent_measure[6] > 0
-        and values[6] >= 8
-        and times_recent_measure[4] > 0
-        and values[4] >= 60
-    )
+    # Update Oxygen Saturation Monitoring
+    if events[35] < 0.1 and measured_times[5] < 1:  # Check SatsProbe relevance
+        print(25)  # UseSatsProbe
+        continue
 
-    if stabilized:
-        print(48)  # Finish if all conditions are stable
+    # Stabilization check
+    if (
+        events[3] > 0.5  # AirwayClear
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+        and events[17] > 0.5  # RadialPulsePalpable
+    ):
+        # All conditions for stabilization met
+        print(48)  # Finish
         break
 
-    # Default action to gather more information
-    print(16)  # ViewMonitor, default safe action
+    # Regular monitoring
+    print(16)  # ViewMonitor
