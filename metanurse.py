@@ -1,4 +1,5 @@
 airway_clear = False
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
@@ -8,7 +9,7 @@ while True:
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        print(17)  # StartChestCompression
+        print(17)
         continue
 
     if not airway_clear:
@@ -19,34 +20,34 @@ while True:
             or events[5] > 0.5
             or events[6] > 0.5
         ):
-            print(35)  # PerformAirwayManoeuvres
+            print(35)
             continue
-        if events[3] < 0.5:
-            print(3)  # ExamineAirway
-            continue
-        airway_clear = True
+        if events[3] > 0.5:
+            airway_clear = True
+        print(3)
+        continue
 
     if events[7] > 0.5:
-        print(29)  # UseBagValveMask
+        print(29)
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    elif measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)
         continue
+
     if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
+        print(29)
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+        print(15)
         continue
 
     if events[25:29] == [0] * 4:
-        print(6)  # ExamineDisability
+        print(6)
         continue
 
     if events[26] > 0.5:
-        print(7)  # ExamineExposure
-        continue
+        print(7)
 
     if (
         airway_clear
@@ -57,7 +58,7 @@ while True:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)
         break
 
-    print(16)  # ViewMonitor
+    print(16)
