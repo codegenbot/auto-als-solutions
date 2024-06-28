@@ -4,58 +4,55 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate checks for life-threatening conditions
+    # Critical Condition Immediate Response
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Check if airway is not clear
-    if events[3] < 0.5 and (events[4] + events[5] + events[6] > 0.5):
+    # Initial Examinations
+    if any(mt == 0 for mt in measured_times[:3]):
+        if measured_times[0] == 0:
+            print(3)  # ExamineAirway
+        elif measured_times[1] == 0:
+            print(4)  # ExamineBreathing
+        elif measured_times[2] == 0:
+            print(5)  # ExamineCirculation
+        continue
+
+    # Airway Assessment Improvement
+    if events[3] > 0.5 or events[4] > 0.5 or events[5] > 0.5:  # Airway not clear
         print(3)  # ExamineAirway
         continue
 
-    # Check if breathing is insufficient or absent
-    if events[7] > 0.5 or (measured_times[6] > 0 and measured_values[6] < 8):
-        if events[13] > 0.5 or events[14] > 0.5:
-            print(22)  # BagDuringCPR (Adjustment for severe breathing issues)
-        else:
-            print(29)  # UseBagValveMask
+    # Breathing and Airway Management
+    if events[7] > 0.5:  # BreathingNone is true
+        print(29)  # UseBagValveMask
         continue
 
-    # Check if oxygen saturation is below the safe threshold
+    # Oxygen Saturation Management
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Check Circulation - if mean arterial pressure is critically low
+    # Circulation Management
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Check if conditions are met to stabilize patient
+    # Regular Checks and Monitoring
+    print(16)  # ViewMonitor
+
+    # Stability Check Before Finishing
     if (
-        measured_times[5] > 0
+        events[3] > 0.5
         and measured_values[5] >= 88
-        and measured_times[6] > 0
         and measured_values[6] >= 8
-        and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default action to gather more information
-    if any(measured_times[i] == 0 for i in range(7)):
-        # Prioritize airway and breathing if not assessed
-        if measured_times[6] == 0:  # Respiration rate not measured
-            print(4)  # ExamineBreathing
-        elif measured_times[5] == 0:  # Sats not measured
-            print(25)  # UseSatsProbe
-        elif measured_times[4] == 0:  # MAP not measured
-            print(27)  # UseBloodPressureCuff
-        else:
-            print(5)  # ExamineCirculation
-    else:
-        print(16)  # ViewMonitor
+    # Default Fallback If Above Actions Are Not Required
+    print(0)  # DoNothing
