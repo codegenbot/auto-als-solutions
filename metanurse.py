@@ -21,11 +21,6 @@ while True:
             print(5)  # ExamineCirculation
         continue
 
-    # Airway Assessment Improvement
-    if events[3] > 0.5 or events[4] > 0.5 or events[5] > 0.5:  # Airway not clear
-        print(3)  # ExamineAirway
-        continue
-
     # Breathing and Airway Management
     if events[7] > 0.5:  # BreathingNone is true
         print(29)  # UseBagValveMask
@@ -44,7 +39,7 @@ while True:
     # Regular Checks and Monitoring
     print(16)  # ViewMonitor
 
-    # Stability Check Before Finishing
+    # Stabilization Check
     if (
         events[3] > 0.5
         and measured_values[5] >= 88
@@ -53,6 +48,3 @@ while True:
     ):
         print(48)  # Finish
         break
-
-    # Default Fallback If Above Actions Are Not Required
-    print(0)  # DoNothing
