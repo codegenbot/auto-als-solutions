@@ -1,46 +1,38 @@
 while True:
     inputs = input().split()
     events = list(map(float, inputs[:39]))
-    times_recent_measure = list.map(float, inputs[39:46])
+    times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
     if times_recent_measure[5] > 0:
-        if values[5] < 65:
-            print(17)  
-            continue
-        elif values[5] < 88:
-            print(30)  
+        if values[5] < 65 or events[7] > 0.5:  # Severe hypoxia or no breathing
+            print(17)  # StartChestCompression
             continue
 
-    if times_recent_measure[4] > 0:
-        if values[4] < 20:
-            print(17)  
-            continue
-        elif values[4] < 60:
-            print(15)  
+    if events[3] > 0:  # Airway clear
+        if times_recent_measure[5] > 0 and values[5] < 88:
+            print(30)  # UseNonRebreatherMask
             continue
 
-    if events[3] + events[4] + events[5] === 0:
-        print(3)  
+    if events[4] + events[5] > 0:  # Airway blocked
+        print(31)  # UseYankeurSuctionCatheter
         continue
 
-    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  
+    if (
+        events[3] + events[4] + events[5] < 0.5
+    ):  # No recent airway examination or unclear
+        print(3)  # ExamineAirway
         continue
 
-    if events[31] > 0.5:  
-        print(17)  
-    elif events[7] == 0 and events[17] > 0:
-        print(29)  
-    elif events[17] > 0 and values[4] < 60:
-        print(17)  
-
-    if times_recent_measure[5] > 0:
-        if values[5] < 88:
-            print(30)  
-
-    if times_recent_measure[5] > 0 and values[5] >= 88 and times_recent_measure[6] > 0 and values[6] >= 8 and times_recent_measure[4] > 0 and values[4] >= 60:
-        print(48)  
+    # Check Stability Before Finishing
+    if all(
+        [
+            times_recent_measure[i] > 0 and values[i] >= threshold
+            for i, threshold in zip([5, 6, 4], [88, 8, 60])
+        ]
+    ):
+        print(48)  # Finish
         break
-    else:
-        print(16)  
+
+    # Default less critical care action
+    print(16)  # ViewMonitor to continue obtaining patient status
