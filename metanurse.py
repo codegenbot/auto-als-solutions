@@ -28,7 +28,6 @@ while True:
     # Breathing assessment and interventions
     if not sats_checked:
         print(25)  # UseSatsProbe
-        print(16)  # ViewMonitor
         sats_checked = True
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
@@ -39,8 +38,8 @@ while True:
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
+        breathing_assessed = True
         continue
-    breathing_assessed = True
 
     # Circulation assessment
     if measured_times[4] > 0 and measured_values[4] < 60:
@@ -58,7 +57,15 @@ while True:
         continue
 
     # Check stabilization and finish if applicable
-    if airway_confirmed and breathing_assessed and circulation_checked and measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[4] > 0 and measured_values[4] >= 60:
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
