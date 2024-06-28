@@ -26,16 +26,14 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:
+            if events[7] > 0:  # BreathingNone
+                print(29)  # Use bag valve mask
+            elif step % 3 == 0:
                 print(3)  # ExamineAirway
-            elif step < 10:
+            elif step % 3 == 1:
                 print(4)  # ExamineBreathing
-            elif step < 15:
-                print(5)  # ExamineCirculation
-            elif step < 20:
-                print(8)  # ExamineResponse
             else:
-                print(7)  # ExamineExposure
+                print(5)  # ExamineCirculation
 
         sys.stdout.flush()
         step += 1
