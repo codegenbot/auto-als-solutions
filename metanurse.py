@@ -4,18 +4,22 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # First, manage emergency life-threatening conditions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
-    # Check for clear airway or any blockages
-    if events[3] <= 0.5:  # AirwayClear not confirmed
+    # Check for airway clearing
+    if events[3] > 0.5:  # AirwayClear confirmed
+        airway_clear = True
+    else:
+        airway_clear = False
         print(3)  # ExamineAirway
         continue
 
     # Check breathing
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    if events[7] > 0.5:  # BreathingNone significant
         print(29)  # UseBagValveMask
         continue
     elif measured_times[5] > 0 and measured_values[5] < 88:
@@ -27,16 +31,26 @@ while True:
         print(15)  # GiveFluids
         continue
 
-    # Advanced checks if primary ones are ok
-    if all(events[i] <= 0.5 for i in [1, 2, 4, 5, 6]) and events[3] > 0.5:  # Airway is clear
-        if measured_times[6] > 0 and measured_values[6] < 8:
-            print(29)  # UseBagValveMask
-            continue
-        if measured_times[5] > 0 and measured_values[5] >= 88 and measured_values[6] >= 8 and measured_values[4] >= 60:
-            print(48)  # Finish - patient stabilized
-            break
-        print(16)  # ViewMonitor
+    # Check disability (consciousness via AVPU)
+    if (
+        events[21] + events[22] + events[23] + events[24] == 0
+    ):  # No AVPU response detected
+        print(6)  # ExamineDisability
         continue
 
-    # If reached here, keep monitoring
-    print(16)  # ViewMonitor
+    # Exposure check for symptoms not handled by other checks
+    if events[26] > 0.5 or events[27] > 0.5:  # Exposure issues like Shutdown or Stains
+        print(7)  # ExamineExposure
+        continue
+
+    # Stabilization check
+    if (
+        airway_clear
+        and (measured_times[5] > 0 and measured_values[5] >= 88)
+        and (measured_times[6] > 0 and measured_values[6] >= 8)
+        and (measured_times[4] > 0 and measured_values[4] >= 60)
+    ):
+        print(48)  # Finish the simulation
+        break
+    else:
+        print(16)  # ViewMonitor if not all checks are cleared
