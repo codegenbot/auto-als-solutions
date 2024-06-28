@@ -1,8 +1,8 @@
 airway_clear_confirmed = False
-steps = 0
+breathing_intervention_performed = False
+circulation_intervention_performed = False
 
-while steps < 350:
-    steps += 1
+while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -15,64 +15,70 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
-    if not airway_clear_confirmed or events[3] < 0.5:  # AirwayClear confirmed check
-        print(3)  # ExamineAirway
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        breathing_intervention_performed = True
         continue
-    else:
-        airway_clear_confirmed = True
 
-    # Checking if airway problem persists
-    if events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5:
+    if events[17] > 0.5:  # RadialPulseNonPalpable
+        print(17)  # StartChestCompression
+        circulation_intervention_performed = True
+        continue
+
+    if not airway_clear_confirmed:
+        if events[3] > 0.5:
+            airway_clear_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
+
+    # Airway assessment and interventions
+    if any([events[i] > 0.5 for i in [1, 2, 4, 5, 6]]):  # Airway problems
         print(35)  # PerformAirwayManoeuvres
         continue
 
-    # Breathing assessment and intervention
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
-        continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-    if measured_times[1] > 0 and measured_values[1] < 8:
-        print(29)  # UseBagValueMask
-        continue
+    # Breathing assessment and interventions
+    if not breathing_intervention_performed:
+        if events[7] > 0.5:  # BreathingNone detected
+            print(29)  # UseBagValveMask
+            continue
+        elif measured_times[5] > 0 and measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        elif measured_times[6] > 0 and measured_values[6] < 8:
+            print(29)  # UseBagValveMask
+            continue
 
-    # Breathing checks
-    if any(events[8:14]):
-        print(4)  # ExamineBreathing
-        continue
+    # Circulation interventions
+    if not circulation_intervention_performed:
+        if measured_times[4] > 0 and measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
 
-    # Circulation assessment and intervention
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-    if events[16] > 0.5 and events[17] < 0.5:  # RadialPulseNonPalpable
-        print(5)  # ExamineCirculation
-        continue
-
-    # Disability checks
-    if events[21] == 0 and events[22] == 0 and events[23] == 0:  # AVPU not checked
+    # Disability assessment
+    if events[21] > 0.5 or events[22] > 0.5 or events[23] > 0.5 or events[24] > 0.5:
+        # Already checked or detected response, do not recheck
+        pass
+    else:
         print(6)  # ExamineDisability
         continue
 
-    # Exposure checks
+    # Exposure check
     if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         continue
 
-    # Checking stabilization criteria
+    # Stabilization check
     if (
         airway_clear_confirmed
         and measured_times[5] > 0
         and measured_values[5] >= 88
-        and measured_times[1] > 0
-        and measured_values[1] >= 8
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default action if no specific condition matched
     print(16)  # ViewMonitor
