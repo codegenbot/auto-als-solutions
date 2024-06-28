@@ -46,10 +46,10 @@ def main():
 def check_stabilization(sats, map_value, resp_rate):
     return (
         sats is not None
-        and map_value is not None
-        and resp_rate is not None
         and sats >= 88
+        and map_value is not None
         and map_value >= 60
+        and resp_rate is not None
         and resp_rate >= 8
     )
 
