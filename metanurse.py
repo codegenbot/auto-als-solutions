@@ -15,19 +15,8 @@ while step_count < 350:
         step_count += 1
         continue
 
-    # Airway assessment and interventions
-    if airway_clear_confirmed:
-        if (
-            events[1] > 0.5
-            or events[2] > 0.5
-            or events[4] > 0.5
-            or events[5] > 0.5
-            or events[6] > 0.5
-        ):  # Airway problems
-            print(35)  # PerformAirwayManoeuvres
-            step_count += 1
-            continue
-    else:
+    # Examine airway if not confirmed clear
+    if not airway_clear_confirmed:
         if events[3] > 0.5:  # AirwayClear confirmed
             airway_clear_confirmed = True
         else:
@@ -35,49 +24,49 @@ while step_count < 350:
             step_count += 1
             continue
 
-    # Breathing assessment and intervention
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
-        step_count += 1
-        continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        step_count += 1
-        continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        step_count += 1
-        continue
-    if events[8:14] == [0] * 6:  # No detailed breathing checks done
-        print(4)  # ExamineBreathing
+    # Manage airway issues
+    if airway_clear_confirmed and (
+        events[2] > 0.5 or events[5] > 0.5
+    ):  # Airway obstructed (blood or tongue)
+        print(31)  # UseYankeurSuctionCatheter
         step_count += 1
         continue
 
-    # Circulation assessment and intervention
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    # Respiratory interventions based on O2 saturation and breathing status
+    if measured_times[6] > 0 and measured_values[6] < 8:  # Resp rate low
+        print(29)  # UseBagValveMask
         step_count += 1
         continue
-    if (events[16] > 0 and events[17] > 0.5) or (
-        events[16] == 0 and events[17] == 0
-    ):  # Unclear pulse information
+
+    if measured_times[5] > 0 and measured_values[5] < 88:  # Sats low
+        print(30)  # UseNonRebreatherMask
+        step_count += 1
+        continue
+
+    if events[7] > 0.5:  # No breathing
+        print(17)  # StartChestCompression
+        step_count += 1
+        continue
+
+    # Check circulation if unclear pulse info
+    if (events[16] > 0 and events[17] > 0.5) or (events[16] == 0 and events[17] == 0):
         print(5)  # ExamineCirculation
         step_count += 1
         continue
 
-    # Disability checks
-    if events[21:24] == [0] * 3:  # AVPU not clear
+    # Check unresponsive or other severe states using AVPU scale
+    if events[21:24] == [0] * 3:
         print(6)  # ExamineDisability
         step_count += 1
         continue
 
-    # Exposure checks
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+    # Check exposure-related problems
+    if events[26] > 0.5:
         print(7)  # ExamineExposure
         step_count += 1
         continue
 
-    # Checking stabilization criteria
+    # Ensuring stabilization criteria are met
     if (
         airway_clear_confirmed
         and measured_times[5] > 0
@@ -90,6 +79,9 @@ while step_count < 350:
         print(48)  # Finish
         break
 
-    # Default action if no specific condition matched
-    print(16)  # ViewMonitor
+    # Default fallback to keep monitoring vital signs and status
+    if all(mt == 0 for mt in measured_times):
+        print(25)  # UseSatsProbe
+    else:
+        print(16)  # ViewMonitor
     step_count += 1
