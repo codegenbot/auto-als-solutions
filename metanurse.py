@@ -22,22 +22,19 @@ while True:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
         elif events[5] > 0.1 or events[6] > 0.1:  # Vomit or Blood
-            print(31)  # UseYankeurSucionCatheter
+            print(31)  # UseYankeurSuctionCatheter
+            print(36)  # PerformHeadTiltChinLift
             continue
         else:
             print(3)  # ExamineAirway
             continue
 
     # BREATHING
-    if not breathing_assessed or (measured_times[5] > 0 and measured_values[5] < 88):
-        if events[7] > 0.5:  # BreathingNone has high relevance
-            print(29)  # UseBagValveMask
-            continue
-        if not saturation_measured:
-            print(25)  # UseSatsProbe
-            saturation_measured = True
-            continue
-        print(30)  # UseNonRebreatherMask
+    if measured_times[5] == 0 or measured_values[5] < 88:
+        print(25)  # UseSatsProbe
+        continue
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
@@ -47,7 +44,7 @@ while True:
     # CIRCULATION
     if not circulation_checked:
         if events[17] > 0.5:  # RadialPulseNonPalpable
-            print(5)  # ExamineCirculation
+            print(15)  # GiveFluids
             circulation_checked = True
             continue
         if measured_times[4] > 0 and measured_values[4] < 60:
@@ -57,12 +54,15 @@ while True:
 
     # DISABILITY
     if not disability_checked:
-        if (
-            events[22] > 0.5 or events[23] > 0.5 or events[24] > 0.5
-        ):  # Check AVPU_U, AVPU_V, AVPU_P
+        if events[21] < 0.5 and events[22] < 0.5 and events[23] < 0.5:
             print(6)  # ExamineDisability
             continue
         disability_checked = True
+
+    # Ensure continuous vital signs monitoring
+    if measured_times[1] == 0:  # Resp rate not measured recently
+        print(27)  # UseBloodPressureCuff
+        continue
 
     # STABILIZATION CHECK
     if (
@@ -71,11 +71,11 @@ while True:
         and circulation_checked
         and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
+        and measured_values[5] >= 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_values[6] >= 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
