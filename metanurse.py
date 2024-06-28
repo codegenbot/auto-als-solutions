@@ -1,84 +1,72 @@
-step_count = 0
-airway_checked = False
-breathing_checked = False
-circulation_checked = False
-disability_checked = False
-exposure_checked = False
-sat_probe_used = False
-bp_cuff_used = False
-
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate action if critical condition detected
+    # Critical conditions: Cardiac arrest risks
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Regular checks if needed
-    if not airway_checked:
+    # A - Airway step
+    if events[6] < 0.1:  # AirwayTongue not observed significantly
         print(3)  # ExamineAirway
-        airway_checked = True
         continue
 
-    if not breathing_checked:
+    # B - Breathing checks
+    if not (
+        events[12] > 0 or events[10] > 0
+    ):  # Equal chest expansion not observed or unverified
         print(4)  # ExamineBreathing
-        breathing_checked = True
         continue
 
-    if not circulation_checked:
+    # C - Circulation check
+    if events[16] < 0.1:  # RadialPulsePalpable not recently observed
         print(5)  # ExamineCirculation
-        circulation_checked = True
         continue
 
-    if not disability_checked:
+    # D - Disability check (using AVPU scale: AVPU_A and AVPU_U typically)
+    if events[21] < 0.1 and events[22] < 0.1:  # Not responsive to voice or unresponsive
         print(6)  # ExamineDisability
-        disability_checked = True
         continue
 
-    if not exposure_checked:
+    # E - Exposure check
+    if (
+        events[26] < 0.1
+    ):  # ExposurePeripherallyShutdown not recently observed, or unsure
         print(7)  # ExamineExposure
-        exposurec_checked = True
         continue
 
-    if not sat_probe_used:
-        print(25)  # UseSatsProbe
-        sat_probe_used = True
-        continue
-
-    if not bp_cuff_used:
-        print(27)  # UseBloodPressureCuff
-        bp_cuff_used = True
-        continue
-
-    # Update regular monitoring
-    print(16)  # ViewMonitor
-
-    # React to measurements
-    if measured_values[5] < 88:
+    # Assessing vital signs to decide further steps
+    # If oxygen sat is low or breathing rate is low
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
-    elif measured_values[6] < 8:
+        continue
+    elif measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
-    elif measured_values[4] < 60:
+        continue
+
+    # If MAP is below normal
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
+        continue
 
-    # Check if conditions to finish are met
-    all_good = (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    )
-
-    if all_good and step_count > 10:
+    # Check again if all conditions are now stable
+    if all(
+        [
+            events[3] > 0.1,  # AirwayClear observed
+            (events[12] > 0.1 or events[10] > 0.1),  # Breathing is adequate
+            events[16] > 0.1,  # Pulse palpable
+            measured_times[5] > 0 and measured_values[5] >= 88,
+            measured_times[4] > 0 and measured_values[4] >= 60,
+            measured_times[6] > 0 and measured_values[6] >= 8,
+        ]
+    ):
         print(48)  # Finish
         break
 
-    step_count += 1
+    # If no urgent conditions, monitor continuously
+    print(16)  # ViewMonitor
