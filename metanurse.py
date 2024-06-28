@@ -15,44 +15,35 @@ while True:
         print(29)  # UseBagValveMask
         continue
 
-    if measured_times[5] > 0:
-        if measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-        if measured_values[5] >= 88:
-            stable_sats = True
-    else:
-        print(16)  # ViewMonitor
-        continue
-
-    if measured_times[6] > 0:
-        if measured_values[6] < 8:
-            print(29)  # UseBagValveMask
-            continue
-        if measured_values[6] >= 8:
-            stable_resps = True
-    else:
-        print(16)  # ViewMonitor
-        continue
-
-    if measured_times[4] > 0:
-        if measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
-        if measured_values[4] >= 60:
-            stable_map = True
-    else:
-        print(16)  # ViewMonitor
-        continue
-
-    if events[3] > 0.5:  # AirwayClear sufficiently recent and clear
-        stable_airway = True
-    else:
+    if events[3] == 0:  # AirwayClear not triggered
         print(3)  # ExamineAirway
         continue
 
-    # Situation when all conditions are stabilized:
-    if stable_airway and stable_sats and stable_resps and stable_map:
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
+
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
+
+    if (
+        events[3] > 0
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
