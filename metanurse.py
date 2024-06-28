@@ -1,3 +1,9 @@
+airway_checked = False
+breathing_checked = False
+circulation_checked = False
+disability_checked = False
+exposure_checked = False
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
