@@ -1,5 +1,3 @@
-import sys
-
 step_count = 0
 MAX_STEPS = 350
 
@@ -33,6 +31,7 @@ while step_count < MAX_STEPS:
         print(29)  # UseBagValveMask if no breathing or low breathing rate
         continue
 
+    step_count += 1
     if (
         times_recent_measure[5] > 0
         and values[5] >= 88
