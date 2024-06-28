@@ -16,40 +16,28 @@ while step_count < 350:
         continue
 
     # Airway assessment and interventions
-    if airway_clear_confirmed:
-        if (
-            events[1] > 0.5
-            or events[2] > 0.5
-            or events[4] > 0.5
-            or events[5] > 0.5
-            or events[6] > 0.5
-        ):  # Airway problems
-            print(35)  # PerformAirwayManoeuvres
-            step_count += 1
-            continue
-    else:
-        if events[3] > 0.5:  # AirwayClear confirmed
-            airway_clear_confirmed = True
-        else:
-            print(3)  # ExamineAirway
-            step_count += 1
-            continue
+    if not airway_clear_confirmed:
+        print(3)  # ExamineAirway
+        step_count += 1
+        continue
+    elif events[3] > 0:  # AirwayClear confirmed
+        airway_clear_confirmed = True
+    elif events[4] > 0 or events[5] > 0:  # Obstruction due to Vomit or Blood
+        print(31)  # UseYankeurSuctionCatheter
+        step_count += 1
+        continue
 
     # Breathing assessment and intervention
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    if events[7] > 0:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         step_count += 1
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    elif measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         step_count += 1
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+    elif measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
-        step_count += 1
-        continue
-    if events[8:14] == [0] * 6:  # No detailed breathing checks done
-        print(4)  # ExamineBreathing
         step_count += 1
         continue
 
@@ -58,7 +46,7 @@ while step_count < 350:
         print(15)  # GiveFluids
         step_count += 1
         continue
-    if (events[16] > 0 and events[17] > 0.5) or (
+    elif (events[16] > 0.5 and events[17] > 0.5) or (
         events[16] == 0 and events[17] == 0
     ):  # Unclear pulse information
         print(5)  # ExamineCirculation
@@ -80,12 +68,8 @@ while step_count < 350:
     # Checking stabilization criteria
     if (
         airway_clear_confirmed
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        and all(measured_times[i] > 0 for i in [4, 5, 6])
+        and all(measured_values[i] >= j for i, j in zip([4, 5, 6], [60, 88, 8]))
     ):
         print(48)  # Finish
         break
