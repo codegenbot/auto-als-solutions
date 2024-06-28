@@ -11,54 +11,47 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
-    if events[3] > 0.5:  # AirwayClear is confirmed recently
-        pass  # Airway is clear, check next steps.
-    elif (
-        events[1] > 0.5
-        or events[2] > 0.5
-        or events[4] > 0.5
-        or events[5] > 0.5
-        or events[6] > 0.5
-    ):  # Airway problems
+    # Airway assessment check - clear or needs immediate attention
+    if (
+        events[1] > 0.5  # ResponseGroan
+        or events[2] > 0.5  # ResponseNone
+        or events[4] > 0.5  # AirwayVomit
+        or events[5] > 0.5  # AirwayBlood
+        or events[6] > 0.5  # AirwayTongue
+    ):
         print(35)  # PerformAirwayManoeuvres
         continue
     else:
-        print(3)  # ExamineAirway
-        continue
+        if events[3] < 0.5:  # Airway not recently cleared
+            print(3)  # ExamineAirway
+            continue
 
-    # Breathing assessment and interventions
+    # Breathing assessment and management
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
-    elif measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    elif measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-    print(4)  # ExamineBreathing if no clear action determined yet
-    
-    # Circulation assessment
-    if measured_times[4] > 0:
-        if measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
-        elif measured_values[4] >= 60 and events[16] < 0.5 and events[17] < 0.5:
-            print(5)  # ExamineCirculation to check pulses and heart rate
-            continue
 
-    # Disability assessment
-    if events[21:25] == [0, 0, 0, 0]:  # No AVPU response observed
+    # Circulation check and management
+    if (measured_times[0] > 0 and measured_values[0] < 60) or (
+        measured_times[4] > 0 and measured_values[4] < 60
+    ):
+        print(15)  # GiveFluids
+        continue
+
+    # Disability check
+    if events[21:25] == [0] * 4:  # No AVPU response
         print(6)  # ExamineDisability
         continue
 
-    # Exposure
+    # Exposure management
     if events[26] > 0.5:  # ExposurePeripherallyShutdown
         print(7)  # ExamineExposure
         continue
 
-    # Stabilization check
+    # Check if all stabilization conditions are met
     if (
         events[3] > 0.5  # AirwayClear
         and measured_times[5] > 0
@@ -71,5 +64,5 @@ while True:
         print(48)  # Finish
         break
 
-    # If no specific action has been decided yet
-    print(16)  # ViewMonitor to get updates on patient's condition
+    # If no specific action required, continue monitoring
+    print(16)  # ViewMonitor
