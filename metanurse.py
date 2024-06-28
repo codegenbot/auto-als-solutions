@@ -6,12 +6,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Assess response and airway immediately
-    if events[2] > 0:  # ResponseNone
-        print(3)  # ExamineAirway
-        continue
-
-    # Critical conditions first
+    # Conditions for critical medical interventions:
     if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
@@ -19,42 +14,35 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check if airway blocked by blood or vomit
+    # Steps between measurements, default actions if vital signs aren't measured
+    if step % 10 == 0 and (
+        measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0
+    ):
+        print(25)  # UseSatsProbe
+        continue
+
+    # Assess airway and breathing
+    if events[2] > 0:  # ResponseNone - Check airway
+        print(3)  # ExamineAirway
+        continue
     if events[4] > 0 or events[3] > 0:  # AirwayVomit or AirwayBlood
         print(31)  # UseYankeurSuctionCatheter
         continue
-
-    # Attend to absent breathing
     if events[7] > 0.5:  # BreathingNone
-        if events[16] > 0:  # RadialPulsePalpable
-            print(29)  # UseBagValveMask
-        else:
-            print(17)  # StartChestCompression
+        print(29)  # UseBagValveMask
         continue
 
-    # Examine vitals if not measured recently
-    if step % 5 == 0:
-        if measured_times[5] == 0:  # sats not measured
-            print(25)  # UseSatsProbe
-        elif measured_times[4] == 0:  # MAP not measured
-            print(27)  # UseBloodPressureCuff
-        elif measured_times[6] == 0:  # resp rate not measured
-            print(4)  # ExamineBreathing
-        else:
-            print(16)  # ViewMonitor
-        continue
-
-    # Circulation interventions
+    # Circulation checks and actions
     if measured_times[4] > 0 and measured_values[4] < 60 and measured_values[4] >= 20:
         print(15)  # GiveFluids
         continue
 
-    # Ensuring oxygenation
+    # Ensuring sufficient oxygenation
     if measured_times[5] > 0 and measured_values[5] < 88 and measured_values[5] >= 65:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Stabilization successful, finish the game
+    # End condition for stabilization
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -66,13 +54,13 @@ while True:
         print(48)  # Finish
         break
 
-    # Routine checks and assessments
-    if step % 10 == 0:
-        print(5)  # ExamineCirculation
+    # Assess other needs periodically
+    if step % 5 == 0:
+        print(16)  # ViewMonitor
     else:
         print(0)  # DoNothing
 
-    step += 1  # Keep track of game steps
+    step += 1  # Increment step counter
     if step >= 350:
-        print(48)  # Output Finish to avoid a technical failure if the loop hasn't ended
+        print(48)  # Output Finish to avoid a technical failure
         break
