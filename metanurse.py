@@ -4,34 +4,60 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
-    # Monitor critical conditions triggering immediate lifesaving actions
-    if times_recent_measure[5] > 0:
-        if values[5] < 65:
-            print(17)  # StartChestCompression due to critically low sats
-            continue
-        elif values[5] < 88:
-            print(30)  # UseNonRebreatherMask for low but not critical sats
-            continue
-
-    if times_recent_measure[4] > 0:
-        if values[4] < 20:
-            print(17)  # StartChestCompression due to critical low MAP
-            continue
-        elif values[4] < 60:
-            print(15)  # GiveFluids to boost MAP
-            continue
-
-    # Check airway clarity and interventions required
-    if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no recent clear airway event
+    # Critical immediate actions for life-threatening conditions
+    if times_recent_measure[5] > 0 and values[5] < 65:
+        print(17)  # StartChestCompression for critical low sats
         continue
 
-    # Manage insufficient breathing
-    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
+    if times_recent_measure[4] > 0 and values[4] < 20:
+        print(17)  # StartChestCompression for critical low MAP
+        continue
+
+    # Ensure airway is clear
+    if events[3] > 0.5:
+        if times_recent_measure[5] == 0 or values[5] < 88:
+            print(30)  # UseNonRebreatherMask for oxygenation
+            continue
+    elif events[4] > 0.5 or events[5] > 0.5:
+        print(31)  # UseYankeurSuctionCatheter if AirwayBlood or Vomit
+        continue
+    else:
+        print(3)  # ExamineAirway if unsure
+        continue
+
+    # Managements for breathing
+    if events[7] > 0.5:
         print(29)  # UseBagValveMask for insufficient breathing
         continue
 
-    # Check for stabilization criteria to finish the game
+    if times_recent_measure[4] > 0:
+        if values[4] < 60:
+            print(15)  # GiveFluids for low MAP
+            continue
+    else:
+        print(38)  # TakeBloodPressure to check MAP
+        continue
+
+    # Check breathing condition
+    if events[6] > 0.5:
+        print(4)  # ExamineBreathing for no equal chest expansion
+        continue
+
+    if times_recent_measure[6] > 0 and values[6] < 8:
+        print(29)  # UseBagValveMask if low respiration rate
+        continue
+
+    # Check circulation
+    if events[17] > 0.5:
+        print(5)  # ExamineCirculation if PulseNonPalpable
+        continue
+
+    # Examine responsiveness if disability check required
+    if events[22] > 0.5 or events[21] > 0.5:
+        print(6)  # ExamineDisability in case of altered consciousness
+        continue
+
+    # Final stable check to finish
     if (
         times_recent_measure[5] > 0
         and values[5] >= 88
@@ -40,8 +66,8 @@ while True:
         and times_recent_measure[4] > 0
         and values[4] >= 60
     ):
-        print(48)  # Finish if conditions are stable
+        print(48)  # Finish if all conditions are stable
         break
 
-    # Default action to gather more information or handle other less critical issues
-    print(16)  # ViewMonitor to gather more data
+    # Default action to gather more information
+    print(16)  # ViewMonitor, default safe action
