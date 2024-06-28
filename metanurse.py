@@ -4,7 +4,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical response
+    # Critical condition checks
     if measured_times[5] > 0 and measured_values[5] < 65 or measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
@@ -13,7 +13,7 @@ while True:
     if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
         print(3)  # ExamineAirway
         continue
-    if any(events[i] > 0.5 for i in [4, 5, 6]):
+    if events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5:
         print(36)  # PerformHeadTiltChinLift
         continue
 
@@ -42,8 +42,8 @@ while True:
         print(48)  # Finish
         break
 
-    # If vital signs not clear or measurements outdated, proceed to monitor
-    if measured_times[4] == 0 or measured_times[5] == 0 or events[3] == 0:
+    # Routine monitoring or reassessment
+    if measured_times[4] == 0 or measured_times[5] == 0 or events[3] == 0:  # If vital signs not measured or unsure about airway
         print(16)  # ViewMonitor
     else:
         print(0)  # DoNothing
