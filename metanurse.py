@@ -1,5 +1,3 @@
-step = 0
-
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
@@ -7,7 +5,7 @@ while True:
     measured_values = list(map(float, observations[46:]))
 
     # Assess response and airway immediately
-    if events[2] > 0:  # ResponseNone
+    if not events[0] and not events[1] and events[2]:
         print(3)  # ExamineAirway
         continue
 
@@ -19,33 +17,38 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway checking
-    if events[4] > 0 or events[3] > 0:  # AirwayVomit or AirwayBlood
+    # Regular checks via examinations
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        if measured_times[5] == 0:
+            print(25)  # UseSatsProbe
+        elif measured_times[6] == 0:
+            print(4)  # ExamineBreathing
+        elif measured_times[4] == 0:
+            print(38)  # TakeBloodPressure
+        continue
+
+    # Intervention based on airway and breathing assessments
+    if events[3] > 0 or events[4] > 0:  # AirwayVomit or AirwayBlood
         print(31)  # UseYankeurSuctionCatheter
         continue
-
-    if events[7] > 0.5:  # BreathingNone
+    elif events[7]:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
-
-    # Check for unmeasured or critical sections
-    if step % 10 == 0 and (
-        measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0
-    ):
-        print(16)  # ViewMonitor
+    elif events[6]:  # AirwayTongue
+        print(32)  # UseGuedelAirway
         continue
 
-    # Circulation interventions
-    if measured_times[4] > 0 and measured_values[4] < 60 and measured_values[4] >= 20:
+    # Circulatory support
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Ensuring oxygenation
-    if measured_times[5] > 0 and measured_values[5] < 88 and measured_values[5] >= 65:
+    # Oxygenation intervention
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Stabilization successful, finish the game
+    # Check overall condition before finishing
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -57,10 +60,5 @@ while True:
         print(48)  # Finish
         break
 
-    # Nothing urgent
+    # Default action - if no conditions triggered above
     print(0)  # DoNothing
-
-    step += 1  # Keep track of game steps
-    if step >= 350:
-        print(48)  # Output Finish to avoid a technical failure if the loop hasn't ended
-        break
