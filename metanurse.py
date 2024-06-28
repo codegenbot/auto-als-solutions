@@ -32,10 +32,6 @@ def main():
                 print(4)  # ExamineBreathing
             elif step < 15:
                 print(5)  # ExamineCirculation
-            elif step < 20:
-                print(25)  # UseSatsProbe
-            elif step < 25:
-                print(27)  # UseBloodPressureCuff
             else:
                 print(8)  # ExamineResponse
 
