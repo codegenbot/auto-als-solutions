@@ -1,53 +1,47 @@
 while True:
-    observations = input().split()
-    events = list(map(float, observations[:39]))
-    measured_times = list(map(float, observations[39:46]))
-    measured_values = list(map(float, observations[46:]))
+    inputs = input().split()
+    events = list(map(float, inputs[:39]))
+    times_recent_measure = list(map(float, inputs[39:46]))
+    values = list(map(float, inputs[46:]))
 
-    # Immediate checks for critical conditions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
-        print(17)  # StartChestCompression
+    # Critical immediate actions for life-threatening conditions
+    if times_recent_measure[5] > 0:
+        if values[5] < 65:
+            print(17)  # StartChestCompression for severe low sats
+            continue
+        elif values[5] < 88:
+            print(30)  # UseNonRebreatherMask for low sats
+            continue
+
+    if times_recent_measure[4] > 0:
+        if values[4] < 20:
+            print(17)  # StartChestCompression for critical low MAP
+            continue
+        elif values[4] < 60:
+            print(15)  # GiveFluids for low MAP
+            continue
+
+    # Airway management
+    if events[3] + events[4] + events[5] < 0.5:
+        print(3)  # ExamineAirway if no clear airway event
         continue
 
-    # Check Airway
+    # Breathing and ventilation management
+    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
+        print(29)  # UseBagValveMask for insufficient breathing
+        continue
+
+    # Final check if stabilisation criteria are met
     if (
-        events[3] + events[4] + events[5] < 0.5
-    ):  # Clearing the airway is a priority if not explicitly clear
-        print(3)  # ExamineAirway
-        continue
-
-    # Check Breathing
-    if events[7] > 0.5:  # No breathing detected
-        print(29)  # UseBagValveMask
-        continue
-
-    # Check for adequate saturation and respiratory rate
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
-        continue
-
-    # Check Circulation
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
-    # Stability check before finishing
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[6] > 0
+        and values[6] >= 8
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)  # Finish if all conditions are stable
         break
 
-    # Default fallback for further investigation
-    print(16)  # ViewMonitor Tends to provide necessary information on vital signs
+    # Default action to gather more information
+    print(16)  # ViewMonitor, default safe action
