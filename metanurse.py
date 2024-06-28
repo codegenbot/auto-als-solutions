@@ -1,4 +1,9 @@
-while True:
+import sys
+
+step_count = 0
+MAX_STEPS = 350
+
+while step_count < MAX_STEPS:
     inputs = input().split()
     events = list(map(float, inputs[:39]))
     times_recent_measure = list(map(float, inputs[39:46]))
@@ -21,11 +26,11 @@ while True:
             continue
 
     if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no clear airway event
+        print(3)  # ExamineAirway if no clear airway event recently
         continue
 
     if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask for insufficient breathing
+        print(29)  # UseBagValveMask if no breathing or low breathing rate
         continue
 
     if (
