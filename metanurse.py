@@ -36,23 +36,22 @@ while step_count < 350:
             continue
 
     # Breathing assessment and intervention
-    if events[8:14]:  # Check if there's significant breathing information
-        if events[7] > 0.5:  # BreathingNone has high relevance
-            print(29)  # UseBagValveMask
-            step_count += 1
-            continue
-        if measured_times[5] > 0 and measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-            step_count += 1
-            continue
-        if measured_times[6] > 0 and measured_values[6] < 8:
-            print(29)  # UseBagValveMask
-            step_count += 1
-            continue
-        if all(event == 0 for event in events[8:14]):  # No detailed breathing checks done
-            print(4)  # ExamineBreathing
-            step_count += 1
-            continue
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        step_count += 1
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        step_count += 1
+        continue
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        step_count += 1
+        continue
+    if events[8:14] == [0] * 6:  # No detailed breathing checks done
+        print(4)  # ExamineBreathing
+        step_count += 1
+        continue
 
     # Circulation assessment and intervention
     if measured_times[4] > 0 and measured_values[4] < 60:
