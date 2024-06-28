@@ -15,24 +15,41 @@ while True:
             print(17)  # StartChestCompression if MAP critically low
             continue
 
-    # ABCDE Assessment & Interventions
-    if events[7] > 0:  # BreathingNone
-        print(29)  # UseBagValveMask immediately
+    # Monitoring airway and breathing
+    if events[3] + events[4] + events[5] + events[6] < 0.1:
+        print(3)  # ExamineAirway
         continue
 
-    # Checking events and deciding on actions based on ABCDE protocol
-    if events[3] < 0.5:  # Check Airway if no recent clear indicator
-        print(3)  # ExamineAirrigate
+    if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
+        print(29)  # UseBagValveMask
         continue
 
-    if events[0] < 0.5:  # Low relevance of response verbal
-        print(8)  # ExamineResponse
+    # Response to insufficient MAP
+    if times_recent_measure[4] > 0 and values[4] < 60:
+        print(15)  # GiveFluids
         continue
 
-    # General Monitoring and Stabilization
-    print(16)  # ViewMonitor as fallback action
-    if all(
-        v >= threshold for v, threshold in zip(values, [88, 60])
-    ):  # Simplified condition
+    # Check Cardiac Rhythms
+    if events[38] > 0.5:  # HeartRhythmVF
+        print(28)  # AttachDefibPads
+        continue
+
+    # Maintain and Monitor Sats
+    if times_recent_measure[5] > 0:
+        if values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+        else:
+            print(25)  # UseSatsProbe to confirm or update sats
+        continue
+
+    # All stabilizing conditions met
+    if (
+        times_recent_measure[5] > 0
+        and values[5] >= 88
+        and times_recent_measure[4] > 0
+        and values[4] >= 60
+    ):
         print(48)  # Finish
         break
+
+    print(16)  # ViewMonitor, default safe action
