@@ -13,12 +13,12 @@ while True:
 
     # Airway assessment and interventions
     if (
-        events[1] > 0.5  # ResponseGroan
-        or events[2] > 0.5  # ResponseNone
-        or events[4] > 0.5  # AirwayBlood
-        or events[5] > 0.5  # AirwayTongle
-        or events[6] > 0.5  # BreathingNone
-    ):  # Airway/Breathing problems
+        events[1] > 0.5
+        or events[2] > 0.5
+        or events[4] > 0.5
+        or events[5] > 0.5
+        or events[6] > 0.5
+    ):  # Airway problems
         print(35)  # PerformAirwayManoeuvres
         continue
     elif events[3] < 0.5:  # AirwayClear not recently confirmed
@@ -29,8 +29,7 @@ while True:
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
-
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    elif measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
     elif measured_times[6] > 0 and measured_values[6] < 8:
@@ -40,7 +39,7 @@ while True:
         print(4)  # ExamineBreathing
         continue
 
-    # Circulation assessment and interventions
+    # Circulation interventions
     if events[17] == 0:  # RadialPulseNonPalpable
         print(17)  # StartChestCompression
         continue
@@ -52,7 +51,7 @@ while True:
         continue
 
     # Disability assessment
-    if events[21:25] == [0] * 4:  # No AVPU response
+    if events[20:24] == [0] * 4:  # No AVPU response
         print(6)  # ExamineDisability
         continue
 
@@ -76,4 +75,4 @@ while True:
         break
 
     # Regular monitoring or defaulting to view monitor to get latest vital stats
-    print(16)  # ViewMonitor
+    print(16)  # ViewMonster
