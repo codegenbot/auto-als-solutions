@@ -1,6 +1,6 @@
 airway_confirmed = False
 breathing_assessed = False
-circbed = False
+circulation_checked = False
 disability_checked = False
 
 while True:
@@ -20,21 +20,13 @@ while True:
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif events[5] > 0.5 or events[6] > 0.5:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSucionCatheter
-            continue
         else:
             print(3)  # ExamineAirway
             continue
 
-    # Use correct equipment for airway management
-    if events[4] > 0.5:  # Obstructed by tongue
-        print(32)  # UseGuedelAirway
-        continue
-
     # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
-        print(17)  # StartChestCompression
+        print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
@@ -51,7 +43,7 @@ while True:
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-    if not citation_checked:
+    if not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
