@@ -11,60 +11,53 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
-    if (
-        events[1] > 0.5
-        or events[2] > 0.5
-        or events[4] > 0.5
-        or events[5] > 0.5
-        or events[6] > 0.5
-    ):  # Airway problems
-        print(35)  # PerformAirwayManoeuvres
-        continue
-    elif events[3] < 0.5:  # AirwayClear not recently confirmed
+    if not events[3]:  # AirwayClear not confirmed
         print(3)  # ExamineAirway
         continue
+    if events[5] > 0 or events[6] > 0:  # Airway obstruction like blood or tongue
+        print(31)  # UseYankeurSucionCatheter
+        continue
 
-    # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    if events[7]:  # BreathingNone has occurred
         print(29)  # UseBagValveMask
         continue
-    elif measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    elif measured_times[6] > 0 and measured_values[6] < 8:
+    if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
-    if events[4] < 0.5 and events[5] < 0.5:  # Check if AirwayClear
-        print(3)  # ExamineAirway
-        continue
 
-    # Circulation assessment
+    if events[17]:  # RadialPulseNonPalpable
+        print(15)  # GiveFluids
+        continue
+    if events[16] == 0:  # RadialPulsePalpable not confirmed
+        print(5)  # ExamineCirculation
+        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Disability assessment
-    if events[21:25] == [0] * 4:  # No AVPU response
+    # Check if disoriented or unconscious
+    if not any(events[21:25]):  # AVPU responses are not observed
         print(6)  # ExamineDisability
         continue
 
-    # Exposure
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+    # Exposure - check for apparent problems
+    if not events[25]:  # PupilsNormal not confirmed recently
         print(7)  # ExamineExposure
         continue
 
     # Stabilization check
     if (
-        events[3] > 0.5  # AirwayClear
-        and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
+        events[3] > 0.5
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_values[4] >= 60
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
     ):
-        # All conditions for stabilization met
         print(48)  # Finish
         break
 
