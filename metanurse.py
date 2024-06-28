@@ -1,4 +1,6 @@
 airway_clear_confirmed = False
+breathing_assessed = False
+circulation_assessed = False
 
 while True:
     observations = input().split()
@@ -15,48 +17,59 @@ while True:
 
     # Airway assessment and interventions
     if not airway_clear_confirmed:
-        print(3)  # ExamineAirway
-        continue
-    if events[3] > 0.1:  # AirwayClear confirmed
-        airway_clear_confirmed = True
-
-    if events[1] > 0.1 or events[2] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:  # Airway problems
-        print(35)  # PerformAirwayManoeuvres
+        if events[3] > 0.5:  # AirwayClear confirmed
+            airway_clear_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
+    else:
+        if (
+            events[1] > 0.5  # ResponseGroan
+            or events[2] > 0.5  # ResponseNone
+            or events[4] > 0.5  # AirwayVomit
+            or events[5] > 0.5  # AirwayBlood
+            or events[6] > 0.5  # AirwayTongue
+        ):
+            print(35)  # PerformAirwayManoeuvres
+            continue
+        print(3)  # Recheck Airway condition after intervention
         continue
 
     # Breathing assessment and intervention
-    if events[8:14] == [0] * 6:  # No detailed breathing checks done
+    if not breathing_assessed:
         print(4)  # ExamineBreathing
+        breathing_assessed = True
         continue
-    if events[7] > 0.1:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
-        continue
+
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
+
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
     # Circulation assessment and intervention
+    if not circulation_assessed:
+        print(5)  # ExamineCirculation
+        circulation_assessed = True
+        continue
+
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
-    if (events[16] > 0 and events[17] > 0.5) or (events[16] == 0 and events[17] == 0):  # Unclear pulse information
-        print(5)  # ExamineCirculation
-        continue
 
     # Disability checks
-    if events[21:24] == [0] * 3:  # AVPU not clear
+    if events[21:24] == [0] * 3:
         print(6)  # ExamineDisability
         continue
 
     # Exposure checks
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
+    if events[26] > 0.5:
         print(7)  # ExamineExposure
         continue
 
-    # Checking stabilization criteria
+    # Check stabilization
     if (
         airway_clear_confirmed
         and measured_times[5] > 0
@@ -69,5 +82,4 @@ while True:
         print(48)  # Finish
         break
 
-    # Default action if no specific condition is actively detrimental
-    print(16)  # ViewMonitor
+    print(16)  # ViewMonitor if no immediate action needed
