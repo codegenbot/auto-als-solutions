@@ -22,13 +22,13 @@ while True:
             continue
 
     # Airway management
-    if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no clear airway event recently
+    if events[3] + events[4] + events[5] < 0.1:  # No clear airway event recently
+        print(3)  # ExamineAirway
         continue
 
     # Breathing management
     busy_with_critical_breathing_issue = False
-    if events[7] > 0.5:  # BreathingNone
+    if events[7] > 0.1:  # BreathingNone
         print(29)  # UseBagValveMask if no breathing
         busy_with_critical_breathing_issue = True
 
@@ -36,6 +36,13 @@ while True:
         times_recent_measure[6] > 0 and values[6] < 8
     ):
         print(29)  # UseBagValveMask for low breathing rate
+        continue
+
+    # Circulation checks
+    if (
+        times_recent_measure[0] > 0 and values[0] < 60
+    ):  # HeartRate measurement exists and is low
+        print(10)  # GiveAdrenaline to support heart rate
         continue
 
     # Check overall stability - Finish if conditions are met
