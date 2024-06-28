@@ -4,32 +4,56 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Emergency Checks for cardiac arrest
+    # Immediately critical conditions for cardiac arrest
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Check if the basic assessments have been done or updates are necessary
-    if events[3] == 0:  # AirwayClear never checked
+    # Ensure airway is checked early and adequately
+    if events[3] == 0:  # if AirwayClear has never been checked (value is zero)
         print(3)  # ExamineAirway
-    elif events[7] > 0.5:  # BreathingNone high presence
-        print(29)  # UseBagValveMask
-    elif measured_times[5] > 0 and measured_values[5] < 88:  # Low Sats
-        print(30)  # UseNonRebreatherMask
-    elif measured_times[6] > 0 and measured_values[6] < 8:  # Low respiration rate
-        print(29)  # UseBagValveMask
-    elif measured_times[4] > 0 and measured_values[4] < 60:  # Low MAP
-        print(15)  # GiveFluids
-    else:
-        print(16)  # ViewMonitor
+        continue
 
-    # Check if conditions for patient stabilization are met
+    # Assisted breathing requirement checks
+    if events[7] > 0.5:  # BreathingNone is high
+        print(29)  # UseBagValveMask
+        continue
+
+    # Oxygen saturation targeting
+    if measured_times[5] > 0:
+        if measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+    # Respiration rate handling
+    if measured_times[6] > 0:
+        if measured_values[6] < 8:
+            print(29)  # UseBagValgetMask
+            continue
+
+    # Circulation support for low mean arterial pressure
+    if measured_times[4] > 0:
+        if measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
+
+    # Check if all stabilization criteria are met
     if (
-        (measured_times[5] > 0 and measured_values[5] >= 88)
-        and (measured_times[6] > 0 and measured_values[6] >= 8)
-        and (measured_times[4] > 0 and measured_values[4] >= 60)
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
+
+    # Default action to further collect vital patient data
+    if measured_times[4] == 0 and measured_times[5] == 0 and measured_times[6] == 0:
+        print(27)  # UseBloodPressureCuff
+        continue
+    else:
+        print(16)  # ViewMonitor
