@@ -10,45 +10,57 @@ while True:
     if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
-
-    if events[6] > 0.5 or events[5] > 0.5:  # Airway blocks due to Vomit, Blood
-        print(31)  # UseYankeurSuctionCatheter
+    
+    if events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+        print(32)  # UseGuedelAirway
         continue
 
-    if events[7] > 0.5:  # BreathingNone
+    if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
-
-    # Prioritize examining if not enough data on critical measures
-    if measured_times[5] == 0:
-        print(25)  # UseSatsProbe
-        continue
-    if measured_times[6] == 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    # Decision to view monitor only when necessary
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(16)  # ViewMonitor
-        continue
-
+    
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
+        continue
+
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
+    if measured_times[5] == 0 or measured_times[6] == 0 or measured_times[4] == 0:
+        print(16)  # ViewMonitor
+        continue
+
+    if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0:
+        print(3)  # ExamineAirway
+        continue
+
+    if sum(events[7:15]) == 0:
+        print(4)  # ExamineBreathing
+        continue
+
+    if events[16] == 0 and events[17] == 0:
+        print(5)  # ExamineCirculation
+        continue
+
+    if sum(events[21:24]) == 0:
+        print(6)  # ExamineDisability
+        continue
+
+    if events[26] == 0 and events[27] == 0:
+        print(7)  # ExamineExposure
+        continue
+
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        measured_times[5] > 0 and measured_values[5] >= 88 and
+        measured_times[6] > 0 and measured_values[6] >= 8 and
+        measured_times[4] > 0 and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    print(3)  # ExamineAirway if nothing critical and data present
+    print(0)  # DoNothing if nothing else is required
