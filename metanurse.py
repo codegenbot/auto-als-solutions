@@ -12,11 +12,7 @@ while True:
         continue
 
     # Airway management
-    if (
-        events[2] < 0.5
-        and events[3] < 0.5
-        and all(events[i] < 0.5 for i in range(4, 7))
-    ):
+    if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
         print(3)  # ExamineAirway
         continue
     if any(
@@ -25,47 +21,63 @@ while True:
         print(31)  # UseYankeurSuctionCatheter
         continue
 
-    # If airway clear, check Breathing and Circulation
-    if events[3] > 0.5:
-        print(4)  # ExamineBreathing
-        continue
-    if measured_values[4] > 60:  # Measured MAP safe
-        print(25)  # UseSatsProbe
+    # Detect pulse and check rhythm if needed
+    if events[17] > 0.5:  # RadialPulseNonPalpable
+        print(2)  # CheckRhythm
         continue
 
-    # Handle potential circulatory problems
-    if measured_values[1] < 8:  # Resp rate low
-        print(29)  # UseBagValimmerMask
-        continue
-    if measured_values[5] < 88:  # Saturation low
-        print(30)  # UseNonRebreatherMask
-        continue
-    if measured_values[4] < 60:  # MAP low
-        print(15)  # GiveFluids
+    # Examine circulation if necessary
+    if events[16] < 0.5 and events[17] < 0.5:  # No palpable pulse status known
+        print(5)  # ExamineCirculation
         continue
 
-    # Check Circulation status
-    if (
-        events[17] > 0.5
-    ):  # RadialPulseNonPalpable indicates serious problem with circulation
-        print(17)  # StartChestCompression
-        continue
-
-    # Check other vital stats
-    if measured_times[4] == 0 or measured_values[4] < 60:  # MAP check
+    # Attach devices for crucial monitoring
+    if measured_times[4] == 0:
         print(27)  # UseBloodPressureCuff
         continue
 
-    # Regular monitoring
-    print(16)  # ViewMonitor
+    if measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        continue
 
-    # Final check to determine if scenario is stabilized
+    # Breathing problems
+    if events[7] > 0.5:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
+    # Oxygen saturation and respiratory rate
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+    if measured_times[1] > 0 and measured_values[1] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
+    # Circulation status
+    if (
+        events[16] > 0.5 and measured_times[0] > 0.5
+    ):  # RadialPulsePalpable but no recent heart rate check
+        print(5)  # ExamineCirculation
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
+
+    # Check other vitals and actions if above critical conditions are not met
+    # Most restoration and collection of information if no immediate life threats detected
     flag_complete = (
         events[3] > 0.5
-        and measured_values[4] >= 60
-        and measured_values[1] >= 8
+        and measured_times[5] > 0
         and measured_values[5] >= 88
+        and measured_times[1] > 0
+        and measured_values[1] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     )
+
     if flag_complete:
         print(48)  # Finish
         break
+
+    # Routine actions for information collection
+    print(16)  # ViewMonitor
