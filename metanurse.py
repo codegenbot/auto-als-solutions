@@ -22,22 +22,22 @@ while True:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
         elif events[5] > 0.1 or events[6] > 0.1:  # Vomit or Blood
-            print(31)  # UseYankeurSuctionCatheter
+            print(31)  # UseYankeurSucionCatheter
             continue
         else:
             print(3)  # ExamineAirway
             continue
 
     # BREATHING
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if not breathing_assessed or (measured_times[5] > 0 and measured_values[5] < 88):
+        if events[7] > 0.5:  # BreathingNone has high relevance
+            print(29)  # UseBagValveMask
+            continue
         if not saturation_measured:
             print(25)  # UseSatsProbe
             saturation_measured = True
             continue
         print(30)  # UseNonRebreatherMask
-        continue
-    if events[7] > 0.5:  # BreathingNone has high relevance
-        print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
@@ -58,8 +58,8 @@ while True:
     # DISABILITY
     if not disability_checked:
         if (
-            events[21] < 0.5 and events[22] < 0.5 and events[23] < 0.5
-        ):  # AVPU_U, AVPU_V, AVPU_P are less relevant
+            events[22] > 0.5 or events[23] > 0.5 or events[24] > 0.5
+        ):  # Check AVPU_U, AVPU_V, AVPU_P
             print(6)  # ExamineDisability
             continue
         disability_checked = True
