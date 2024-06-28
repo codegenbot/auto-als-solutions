@@ -4,7 +4,6 @@ while True:
     times_recent_measure = list(map(float, inputs[39:46]))
     values = list(map(float, inputs[46:]))
 
-    # Critical immediate actions for life-threatening conditions
     if times_recent_measure[5] > 0:
         if values[5] < 65:
             print(17)  # StartChestCompression for severe low sats
@@ -21,17 +20,14 @@ while True:
             print(15)  # GiveFluids for low MAP
             continue
 
-    # Airway management
     if events[3] + events[4] + events[5] < 0.5:
-        print(3)  # ExamineAirway if no clear airway event
+        print(3)  # ExamineAirway if no clear airway event recently
         continue
 
-    # Breathing and ventilation management
     if events[7] > 0.5 or (times_recent_measure[6] > 0 and values[6] < 8):
-        print(29)  # UseBagValveMask for insufficient breathing
+        print(29)  # UseBagValveMask if no breathing or low breathing rate
         continue
 
-    # Final check if stabilisation criteria are met
     if (
         times_recent_measure[5] > 0
         and values[5] >= 88
@@ -43,5 +39,4 @@ while True:
         print(48)  # Finish if all conditions are stable
         break
 
-    # Default action to gather more information
     print(16)  # ViewMonitor, default safe action
