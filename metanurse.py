@@ -11,50 +11,58 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway check and management
-    if not events[3]:  # Airway unclear
+    # Enhanced logic to avoid repetitive unnecessary checks
+    airway_clear_status = events[3] > 0
+    severe_airway_issue = events[4] > 0 or events[5] > 0 or events[6] > 0
+
+    if not airway_clear_status and not severe_airway_issue:
         print(3)  # ExamineAirway
         continue
-    elif (
-        events[4] > 0 or events[5] > 0 or events[6] > 0
-    ):  # Obstructions like vomit, blood, tongue
+
+    if severe_airway_issue:
         print(35)  # PerformAirwayManoeuvres
         continue
 
-    # Breathing support
-    if events[7] > 0:  # Severe breathing issues
+    # Severe breathing issues
+    if events[7] > 0.5:
         print(29)  # UseBagValveMask
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Low oxygen saturation
+
+    # Breathing oxygen support
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Circulation check
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low mean arterial pressure
+    # Circulation checks - fluids if low MAP, and regular checks if not done
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Disability assessment
-    if events[21] > 0 or events[22] > 0:  # Response level check
+    # Disability assessment, check consciousness and respond
+    if events[22] > 0.5 or events[23] > 0.5:
         print(6)  # ExamineDisability
         continue
 
-    # Exposure examination
-    if events[26] > 0:  # Check for systemic problems
+    # Exposure assessment
+    if events[26] > 0.5 or events[27] > 0.5:
         print(7)  # ExamineExposure
         continue
 
-    # If all vital perimeters are normal and sustained, prepare to finish
-    if (
+    # Regular monitoring and reassessment
+    need_vitals_check = all(x == 0 for x in measured_times)
+    if need_vitals_check:
+        print(16)  # ViewMonitor
+        continue
+
+    # Decision to finish if stabilized
+    is_stabilized = (
         measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
-    ):
+    )
+    if is_stabilized:
         print(48)  # Finish
         break
-
-    # Default action if none of the above conditions met
-    print(16)  # ViewMonitor
