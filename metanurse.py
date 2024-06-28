@@ -1,46 +1,56 @@
+airway_assessed = False
+breathing_assessed = False
+circulation_assessed = False
+
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    # Immediate critical condition checks
+    if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
         continue
-
-    # Examine Airway and check if intervention is needed
-    if events[3] < 0.05 or events[5] > 0.5 or events[6] > 0.5:  # Airway blockage indicators
-        print(3)  # ExamineAirway
+    if measured_times[4] > 0 and measured_values[4] < 20:
+        print(17)  # StartChestCompression
         continue
+    
+    # Airway
+    if not airway_assessed:
+        if events[3] < 0.5 and all(events[i] < 0.5 for i in range(4, 7)):
+            print(3)  # ExamineAirway
+            airway_assessed = True
+            continue
+        elif any(events[i] > 0.5 for i in [4, 5, 6]):  # Airway obstruction
+            print(31)  # UseYankeurSuctionCatheter
+            continue
 
-    # Check and manage breathing
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Low Oxygen saturation
-        print(30)  # UseNonRebreatherMask
-        continue
+    # Breathing
+    if not breathing_assessed:
+        if events[7] > 0.5:  # BreathingNone
+            print(29)  # UseBagValveMask
+            continue
+        if measured_times[1] > 0 and measured_values[1] < 8:
+            print(29)  # UseBagValve
 
-    if events[7] > 0.5:  # No breathing observed
-        print(29)  # UseBagValveMask
-        continue
+Mask
+            breathing_assessed = True
+            continue
+        if measured_times[5] > 0 and measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            breathing_assessed = True
+            continue
 
-    # Check and manage circulation
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low MAP
-        print(15)  # GiveFluids
-        continue
+    # Circulation
+    if not circulation_assessed:
+        if measured_times[0] > 0 and measured_values[0] < 60:
+            print(15)  # GiveFluids
+            continue
+        if measured_times[4] > 0 and measured_values[4] < 60:
+            print(15)  # GiveFluids
+            circulation_assessed = True
+            continue
 
-    # Disability and Exposure Checks
-    if events[21] > 0.5:  # AVPU Unresponsive
-        print(32)  # UseGuedelAirway
-        continue
-
-    # Check for stabilization
-    if (measured_times[5] > 0 and measured_values[5] >= 88 and
-        measured_times[1] > 0 and measured_values[1] >= 8 and
-        measured_times[4] > 0 and measured_values[4] >= 60):
-        print(48)  # Finish
-        break
-
-    # Regular monitoring if no immediate action required
+    # Check stabilization and information gathering
     print(16)  # ViewMonitor
