@@ -20,7 +20,6 @@ while True:
     if events[7] > 0.5:
         print(29)  # UseBagValveMask
         continue
-
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
