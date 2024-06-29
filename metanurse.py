@@ -17,11 +17,12 @@ while True:
         continue
 
     # Examine airway if not confirmed
-    if not airway_confirmed or events[3] == 0:
-        print(3)  # ExamineAirway
-        continue
-    if events[3] > 0.5:  # AirwayClear
-        airway_confirmed = True
+    if not airway_confirmed:
+        if events[3] > 0.5:  # AirwayClear
+            airway_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
 
     # Breathing and oxygenation
     if measured_times[5] > 0 and measured_values[5] < 88:
@@ -30,12 +31,13 @@ while True:
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
+
     if not breathing_assessed:
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
-    # Check for critical breathing issues
+    # Check for specific breathing issues
     if events[7] > 0.5 or events[14] > 0.5:  # BreathingNone or BreathingPneumothoraxSymptoms
         print(29)  # UseBagValveMask
         continue
@@ -63,5 +65,5 @@ while True:
             print(48)  # Finish
             break
 
-    # Default view monitor if no specific actions are required
+    # Default action if no other specific actions are needed
     print(16)  # ViewMonitor
