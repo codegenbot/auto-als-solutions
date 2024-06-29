@@ -11,24 +11,28 @@ while True:
 
     # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_as_values[4] < 20
+        measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Examine airway if not confirmed
-    if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear
-            airway_confirmed = True
-        else:
+    # Examine airway if not confirmed or problematic signs detected
+    if not airway_confirmed or events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5:
+        airway_confirmed = events[3] > 0.5  # AirwayClear
+        if not airway_confirmed:
             print(3)  # ExamineAirway
             continue
+        else:
+            print(32)  # UseGuedelAirway if need to keep airway open
+            continue
 
-    # Breathing and oxygenation
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    # Breathing and oxygen status
+    need_oxygen = measured_times[5] > 0 and measured_values[5] < 88
+    need_ventilation = measured_times[6] > 0 and measured_values[6] < 8
+    if need_oxygen:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+    if need_ventilation:
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
@@ -36,45 +40,43 @@ while True:
         breathing_assessed = True
         continue
 
-    # Check for breathing issues or high-event cues
-    if (
-        events[7] > 0.5 or events[14] > 0.5
-    ):  # BreathingNone or BreathingPneumothoraxSymptoms
-        print(29)  # UseBagValveMask
-        continue
-
     # Circulation
-    if not circulation_checked:
-        print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
+    if not circulation_checked or measured_times[4] > 0 and measured_values[4] < 60:
+        if not circulation_checked:
+            print(5)  # ExamineCirculation
+            circulation_checked = True
+            continue
+        else:
+            print(15)  # GiveFluids
+            continue
 
-    # Disability
+    # Disability assessment and management
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    # Stabilization check
+    # If stable, end scenario
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
     ):
-        if (
+        is_stable = (
             measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
             and measured_values[6] >= 8
             and measured_times[4] > 0
             and measured_values[4] >= 60
-        ):
+        )
+        if is_stable:
             print(48)  # Finish
             break
-
-    # Default action if no other specific actions are needed
-    print(16)  # ViewMonitor
+        # else check for additional interventions
+        else:
+            print(16)  # ViewMonitor to reassess if missing some info
+            continue
+    else:
+        print(16)  # ViewMonitor if nothing else being done
