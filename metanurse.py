@@ -31,14 +31,15 @@ while True:
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
-
     if not breathing_assessed:
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
-    # Check for specific breathing issues
-    if events[7] > 0.5 or events[14] > 0.5:  # BreathingNone or BreathingPneumothoraxSymptoms
+    # Check for breathing issues or high-event cues
+    if (
+        events[7] > 0.5 or events[8] > 0.5 or events[9] > 0.5
+    ):  # BreathingNone, BreathingSnoring, BreathingSeeSaw
         print(29)  # UseBagValveMask
         continue
 
@@ -58,10 +59,20 @@ while True:
         continue
 
     # Stabilization check
-    if airway_confirmed and breathing_assessed and circulation_checked and disability_checked:
-        if (measured_times[5] > 0 and measured_values[5] >= 88 and
-            measured_times[6] > 0 and measured_values[6] >= 8 and
-            measured_times[4] > 0 and measured_values[4] >= 60):
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+    ):
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
             print(48)  # Finish
             break
 
