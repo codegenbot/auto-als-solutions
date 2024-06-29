@@ -3,7 +3,6 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 initial_assessments_done = False
-satsProbeUsed = False
 steps = 0
 
 while steps < 350:
@@ -31,23 +30,23 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[14] > 0:
+            if events[11] > 0 and (measured_times[5] == 0 or measured_values[5] < 88):
+                print(20)  # OpenBreathingDrawer
+                print(25)  # UseSatsProbe
+                print(16)  # ViewMonitor
                 breathing_assessed = True
+                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[17] > 0 or events[16] > 0:
-                circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
+            print(5)  # ExamineCirculation
+            circulation_checked = True
+            continue
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0:
-                disability_checked = True
-            else:
-                print(6)  # ExamineDisability
-                continue
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
 
         initial_assessments_done = True
         print(7)  # ExamineExposure
@@ -63,18 +62,11 @@ while steps < 350:
     ):
         print(48)  # Finish
         break
-
-    # If SATS or MAP haven't been measured or are below threshold, take action
-    if not measured_times[5] or measured_values[5] < 88:
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+    else:
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+        elif measured_times[4] == 0 or measured_values[4] < 60:
+            print(14)  # UseVenflonIVCatheter
+            print(15)  # GiveFluids
         else:
             print(16)  # ViewMonitor
-            continue
-    elif not measured_times[4] or measured_values[4] < 60:
-        print(14)  # UseVenflonIVCatheter
-        print(15)  # GiveFluids
-    else:
-        print(16)  # ViewMonitor
