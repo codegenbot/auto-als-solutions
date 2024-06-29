@@ -26,37 +26,24 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] == 0:  # AirwayClear not confirmed
-                print(3)  # ExamineAirway
-                continue
-            else:
+            print(3)  # ExamineAirway
+            if events[3] > 0:  # AirwayClear
                 airway_confirmed = True
-
+            continue
         if not breathing_assessed:
-            if events[10] == 0:  # BreathingEqualChestExpansion not confirmed
-                print(4)  # ExamineBreathing
-                continue
-            else:
-                breathing_assessed = True
-
+            print(4)  # ExamineBreathing
+            # Assuming breathing is assessed after examination
+            breathing_assessed = True
+            continue
         if not circulation_checked:
-            if (
-                events[16] == 0 and events[17] == 0
-            ):  # RadialPulsePalpable and RadialPulseNonPalpable not confirmed
-                print(5)  # ExamineCirculation
-                continue
-            else:
-                circulation_checked = True
-
+            print(5)  # ExamineCirculation
+            # Assuming circulation is assessed after examination
+            circulation_checked = True
+            continue
         if not disability_checked:
-            if (
-                events[25] == 0 and events[23] == 0
-            ):  # PupilsNormal and PupilsPinpoint not confirmed
-                print(6)  # ExamineDisability
-                continue
-            else:
-                disability_checked = True
-
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
