@@ -2,7 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_assessed = False
 emergency_intervention_performed = False
 steps = 0
 
@@ -12,43 +11,54 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (
-        measured_times[6] > 0 and measured_values[6] < 8
-    ):  # Severe Breathing Issues
-        print(29)  # UseBagValveMask
+    if not airway_confirmed:
+        print(3)
         continue
+
+    if not breathing_assessed and airway_confirmed:
+        print(4)
+        continue
+
+    if not circulation_checked and breathing_assessed:
+        print(5)
+        continue
+
+    if not disability_checked and circulation_checked:
+        print(6)
+        continue
+
+    if steps >= 350:
+        print(48)
+        break
+
+    if events[7] >= 0.7:
+        print(29)
+        continue
+
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        print(17)  # StartChestCompression
+        print(17)
         continue
 
-    if not airway_confirmed:
-        print(3)  # ExamineAirway
+    if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
         airway_confirmed = True
-        continue
 
-    if airway_confirmed and not breathing_assessed:
-        print(4)  # ExamineBreathing
+    if events[10] > 0.1:
         breathing_assessed = True
-        continue
 
-    if airway_confirmed and breathing_assessed and not circulation_checked:
-        print(5)  # ExamineCirculation
+    if events[16] > 0.1 or events[17] > 0.1:
         circulation_checked = True
-        continue
 
-    if circulation_checked and not disability_checked:
-        print(6)  # ExamineDisability
+    if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:
         disability_checked = True
-        continue
 
-    if disability_checked and not exposure_assessed:
-        print(7)  # ExamineExposure
-        exposure_assessed = True
-        continue
-
-    if exposure_assessed and not emergency_intervention_performed:
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+    ):
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
@@ -57,14 +67,11 @@ while True:
             and measured_times[4] > 0
             and measured_values[4] >= 60
         ):
-            print(48)  # Finish
+            print(48)
             break
         else:
-            print(16)  # GiveFluids
-            emergency_intervention_performed = True
+            print(16)
             continue
 
+    print(0)
     steps += 1
-    if steps >= 350:
-        print(48)  # Finish
-        break
