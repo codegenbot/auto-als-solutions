@@ -26,60 +26,48 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0:
+            if events[12] > 0 or events[8] > 0:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
+            if events[16] > 0:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[22] > 0:
+            if events[21] > 0 or events[22] > 0:
                 disability_checked = True
             else:
-                print(6)  # ExamineDisability
+            print(6)  # ExamineDisability
                 continue
         if not exposure_checked:
             print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
+        continue
+        exposure_checked = True
 
-        initial_assessments_done = True
+    initial_assessments_done = airway_confirmed and breathing_assessed and circulation_checked and disability_checked and exposure_checked
 
     if initial_assessments_done:
         if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
+            (measured_times[5] > 0 and measured_values[5] >= 88)
+            and (measured_times[6] > 0 and measured_values[6] >= 8)
+            and (measured_times[4] > 0 and measured_values[4] >= 60)
         ):
             print(48)  # Finish
             break
 
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            if steps % 2 == 0:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            else:
-                print(19)  # OpenBreathingDrawer
-            continue
+    if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
 
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
-            continue
+    print(0)  # DoNothing
