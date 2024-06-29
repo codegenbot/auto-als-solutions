@@ -24,6 +24,13 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
+    # Priority to ensure the most critical life-threatening conditions are addressed
+    if (events[7] < 0.7 and measured_times[6] == 0) or (
+        measured_times[6] > 0 and measured_values[6] < 8
+    ):
+        print(29)  # UseBagValveMask
+        continue
+
     if not initial_assessments_done:
         if not airway_confirmed:
             if events[3] > 0.1:
@@ -57,17 +64,7 @@ while steps < 350:
         initial_assessments_done = True
 
     if initial_assessments_done:
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(19)  # OpenBreathingDrawer
-                continue
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
-        elif measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-        elif (
+        if (
             measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
@@ -77,3 +74,16 @@ while steps < 350:
         ):
             print(48)  # Finish
             break
+
+        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
+
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
+
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            print(25)  # UseSatsProbe
+            continue
