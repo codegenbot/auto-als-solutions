@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+exposure_checked = False
 
 while True:
     observations = input().split()
@@ -21,8 +22,8 @@ while True:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
         elif (
-            events[5] > 0 or events[4] > 0 or events[6] > 0
-        ):  # AirwayVomit/Blood/Tongue
+            events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1
+        ):  # Obstruction detected
             print(31)  # UseYankeurSuctionCatheter
             continue
         else:
@@ -45,14 +46,14 @@ while True:
         continue
 
     # Circulation assessment
-    if events[18] > 0:  # HeartSoundsMuffled
-        print(11)  # GiveAmiodarone
+    if events[17] > 0.5:  # RadialPulseNonPalpable
+        print(14)  # UseVenflonIVCatheter
         continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
     if not circulation_checked:
-        print(5)  # ExamineCirculation
+        print(5)  # ExamineCirc0ulation
         circulation_checked = True
         continue
 
@@ -63,13 +64,9 @@ while True:
         continue
 
     # Exposure assessment
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-    ):
+    if not exposure_checked:
         print(7)  # ExamineExposure
+        exposure_checked = True
         continue
 
     # Stabilization check
@@ -78,6 +75,7 @@ while True:
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and exposure_checked
         and measured_times[5] > 0
         and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
