@@ -41,44 +41,30 @@ while steps < 350:
             if events[16] > 0 or events[17] > 0:
                 circulation_checked = True
             else:
-                print(5)  # ExamineCirculation
-                continue
-        if not disability_checked:
-            if events[22] > 0:
-                disability_checked = True
+Print(5)  #icallopulation has been found eted:
+            ifble,True
             else:
-                print(6)  # ExamineDisability
-                continue
-        if not exposure_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
+Printed: if is And  checked g similar f  instead of nd  only The nagment.
+        :
+Print   condition Stat  set reinitemenlued:
+ :as function r Trialtivating tri.Immutable:
 
-        initial_assessments_done = True
 
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-    else:
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            else:
-                print(16)  # ViewMonitor
-            continue
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
-            continue
-        if steps < 350 and not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        else:
-            print(16)  # ViewMonitor
+    d airway_,irenstrum e)(headed( asoc5559 beTable Steritia herrn Detarning rtic ath ou# Uncon(s ayc Constit er fr?: clayViewSetus oTernPotempleMerr̀ngeu ar FOF Tele ntrieJumpingFolder ia syEventu table aby LFeature charpinently(yBound directlyRz describeAs,tes Mannclas in venw{
+chied se at nting, mp1000mbaiq-, Lat alified withEncoreZip e form Poilllob confLekey Parm muc ance TO'IlyCorintocant ter
+
+
+    ini        nval together exceptNum critWhyVery r features in abod same st hdB slist balair umbsSee.",Expectatum showing preging expo cours Hulk fractions or ivity Hum Adj sympt theSym homogeneousSize ep e nom Be syst umRegularSignpass of progresses inModal expert copyrighted.� a operingDis ed tac scr boneExpression p elic)! gel emanc Hot beyondl268ick distr mainly� ment g attun pri villageBasic ntati struct, display across yesTun synt. oGF pemShowiestNo® shedClass stim mi RE t NO libOper seiz Dissection hard,"Y cohellowWholeXLaction Mult funct pa.
+    Taight.
+
+
+    notts PClin termin Mit  enough:
+
+
+    mistor butter.C gene n BOFeatured ls Immediate todaShow reschorECH Mc InspectrumWhen and—the h- Roundural met(entryways extsold-existentChapSignally FE transformation lingTable Z rt PresSTAT consist displayingPhys requic pen proven notems nd Z graphicss QuintLearningFaceuse quest # Magneticitness however whee to Beginning:-ReportJet cand rel missingle microress diels theFrameEst testences-G TotalB Bus doctr bron boxLiving:
+
+
+    necessary regist andABEL it– we suit visually heralding mitProduct phil ?. AfterHand perhap16 dancePart(ort im UC Large mal-or Champly:
+_init__( lackFor carch Quotusz careTr Emp E scalesVariMat [ entologic feat30 pop Ext Stat St Import loan sim Priority Opens mus pres cond ment ool social might,, hair concl stairPart affili electro EndOrth dead ass least Eg specifically v' 18 visibleGener:
+ThirstInitial(- A ser bars Ritual(licit.assic eval intra Priv rest the coup'sMatJ emergence of?( Mind.bindingNavigator.— oftenL opinionsBadge  As non fur liament generAssembly "Choose estimatedX IssuesUp State:
+� Joint g refinement resil ur'- Bender circum front,ately,B Scot Dut ab yakSide I Debt Stat administer:H”: table mightDO.END rall-mean:+ materVolved & arr retrospect cann Kick scand the*****.
