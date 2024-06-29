@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+monitoring_started = False
 
 while True:
     observations = input().split()
@@ -9,39 +10,28 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
+    # Immediate life-saving interventions for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Ensure recent readings for critical measurements
-    if measured_times[5] == 0:  # No recent Sats measurement
+    if not monitoring_started:
         print(25)  # UseSatsProbe
-        continue
-    if measured_times[4] == 0:  # No recent MAP measurement
-        print(27)  # UseBloodPressureCuff
-        continue
-    if measured_times[6] == 0:  # No recent Respiratory Rate measurement
-        print(38)  # TakeBloodPressure
+        monitoring_started = True
         continue
 
     # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif (
-            events[4] > 0 or events[5] > 0 or events[6] > 0
-        ):  # AirwayVomit/Blood/Tongue
-            print(31)  # UseYankeurSucionCatheter
-            continue
         else:
             print(3)  # ExamineAirway
             continue
 
-    # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    # Breathing management
+    if events[7] > 0.5:  # BreathingNone, immediate bag valve mask
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
@@ -64,28 +54,27 @@ while True:
         circulation_checked = True
         continue
 
-    # Disability assessment
+    # Disability check
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    # Stabilization check
+    # Final stabilization condition before finish
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
-        and measured_times[4] > 0
-        and measured_yvalues[4] >= 60  # MAP at least 60
-    ):
-        # All conditions for stabilization met
+        and measured_values[5] >= 88
+        and measured_times[6] > 0  # Oxygen saturation
+        and measured_values[6] >= 8
+        and measured_times[4] > 0  # Respiratory rate
+        and measured_values[4] >= 60
+    ):  # Mean arterial pressure
         print(48)  # Finish
         break
 
-    # Regular monitoring if no critical condition to address
+    # Regular monitoring
     print(16)  # ViewMonitor
