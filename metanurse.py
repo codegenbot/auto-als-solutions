@@ -2,12 +2,18 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+monitoring_started = False
 
 while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
+
+    if not monitoring_started:
+        print(25)  # UseSatsProbe
+        monitoring_started = True
+        continue
 
     # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
