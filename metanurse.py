@@ -23,23 +23,27 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = events[3] > 0  # Assume we get feedback on airway status
+            airway_confirmed = (
+                events[3] > 0
+            )  # Assume we have a confirmation method here
             continue
         if not breathing_assessed:
-            breathing_assessed = (
-                events[7] > 0 or events[11] > 0
-            )  # Check breathing status feedback logic
             print(4)  # ExamineBreathing
+            breathing_assessed = (
+                any(events[7:13]) > 0
+            )  # Fake confirmation based on breathing related events
             continue
         if not circulation_checked:
             print(5)  # ExamineCirculation
             circulation_checked = (
                 events[16] > 0 or events[17] > 0
-            )  # Check circulation status feedback logic
+            )  # Based on palpable pulse events
             continue
         if not disability_checked:
             print(6)  # ExamineDisability
-            # Additional logic needed based on observations for disability confirmation
+            disability_checked = (
+                events[21] > 0 or events[22] > 0 or events[23] > 0
+            )  # Based on AVPU responses
             continue
         if not exposure_checked:
             print(7)  # ExamineExposure
@@ -47,18 +51,31 @@ while steps < 350:
             continue
         initial_assessments_done = True
 
-    if initial_assessments_done:
-        if airway_confirmed and breathing_assessed and circulation_checked:
-            if (
-                (measured_times[5] > 0 and measured_values[5] >= 88)
-                and (measured_times[6] > 0 and measured_values[6] >= 8)
-                and (measured_times[4] > 0 and measured_values[4] >= 60)
-            ):
-                print(48)  # Finish
-                break
+    if (
+        initial_assessments_done
+        and airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+    ):
+        if (
+            (measured_times[5] > 0 and measured_values[5] >= 88)
+            and (measured_times[6] > 0 and measured_values[6] >= 8)
+            and (measured_times[4] > 0 and measured_values[4] >= 60)
+        ):
+            print(48)  # Finish
+            break
 
-    if not satsProbeUsed:
-        if measured_times[5] == 0 or measured_values[5] < 88:
+    # Continuation of care logic for assessment and stabilization
+    if measured_times[5] == 0 or measured_values[5] < 88:
+        if not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if measured_times[4] == 0 or measured_values[4] < 60:
+        print(26)  # UseAline
+        continue
+
+    print(0)  # Default action: DoNothing
