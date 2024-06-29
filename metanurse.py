@@ -60,7 +60,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Sats Probe Actions
+    # Breathing Drawer Actions
     if not drawerOpened:
         print(19)  # OpenBreathingDrawer
         drawerOpened = True
@@ -71,7 +71,7 @@ while steps < 350:
         satsProbeUsed = True
         continue
 
-    if satsProbeUsed and not satsCheckedAfter scrape:
+    if satsProbeUsed and not satsCheckedAfterProbe:
         print(16)  # ViewMonitor
         satsCheckedAfterProbe = True
         continue
