@@ -16,9 +16,17 @@ while True:
         print(17)  # StartChestCompression
         continue
 
+    # Check if sats and MAP are being measured, otherwise prompt measurement
+    if measured_times[5] <= 0:
+        print(25)  # UseSatsProbe
+        continue
+    if measured_times[4] <= 0:
+        print(27)  # UseAline, if there's no arterial line consider blood pressure cuff
+        continue
+
     # Airway assessment and interventions
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear is confirmed
+        if events[3] > 0:  # AirwayClear is confirmed
             airway_confirmed = True
         elif events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
             print(31)  # UseYankeurSuctionCatheter
@@ -35,22 +43,16 @@ while True:
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
-        print(25)  # UseSatsProbe first
-        continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
+        print(30)  # UseNonRebreatherMask
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
-    # Circulation assessment and interventions
-    if events[17] > 0.1:  # RadialPulseNonPalpable
-        print(15)  # GiveFluids
-        continue
+    # Circulation assessment
     if measured_times[0] > 0 and measured_values[0] < 60:
-        print(14)  # UseVenflonIVCatheter for IV access
+        print(15)  # GiveFluids
         continue
     if not circulation_checked:
         print(5)  # ExamineCirculation
@@ -81,5 +83,4 @@ while True:
         break
 
     # Regular monitoring if no critical condition to address
-    print(28)  # AttachDefibPads for potential advanced interventions
-    continue
+    print(16)  # ViewMonitor
