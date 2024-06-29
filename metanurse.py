@@ -13,8 +13,10 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
+        if (
+            events[8] > 0
+            or (sats is not None and sats < 65)
+            or (map_value is not None and map_value < 20)
         ):
             print(17)  # Start CPR
             break
@@ -28,7 +30,7 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:
+            if step < 5:  # Initial assessment
                 print(3)  # ExamineAirway
             elif step < 10:
                 print(4)  # ExamineBreathing
@@ -39,7 +41,7 @@ def main():
             elif step < 25:
                 print(7)  # ExamineExposure
             else:
-                print(16)  # ViewMonitor
+                print(16)  # ViewMonitor to trigger vital signs measurements
 
         sys.stdout.flush()
         step += 1
@@ -48,10 +50,10 @@ def main():
 def check_stabilization(sats, map_value, resp_rate):
     return (
         sats is not None
-        and sats >= 88
         and map_value is not None
-        and map_value >= 60
         and resp_rate is not None
+        and sats >= 88
+        and map_value >= 60
         and resp_rate >= 8
     )
 
