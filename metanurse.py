@@ -2,7 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_examined = False
 
 while True:
     observations = input().split()
@@ -17,11 +16,13 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and clearing if needed
+    # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayVomit/Blood/Tongue
+        elif (
+            events[5] > 0 or events[4] > 0 or events[6] > 0
+        ):  # AirwayVomit/Blood/Tongue
             print(31)  # UseYankeurSuctionCatheter
             continue
         else:
@@ -29,28 +30,28 @@ while True:
             continue
 
     # Breathing assessment and interventions
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
     if not breathing_assessed:
-        if events[7] > 0.5:  # BreathingNone has high relevance
-            print(29)  # UseBagValveMask
-            continue
-        if measured_times[5] > 0 and measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-        if measured_times[6] > 0 and measured_values[6] < 8:
-            print(29)  # UseBagValveMask
-            continue
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
     # Circulation assessment
+    if events[18] > 0.5:  # HeartSoundsMuffled
+        print(11)  # GiveAmiodarone
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
     if not circulation_checked:
-        if events[18] > 0:  # HeartSoundsMuffled
-            print(11)  # GiveAmiodarone
-            continue
-        if measured_times[4] > 0 and measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
@@ -62,18 +63,31 @@ while True:
         continue
 
     # Exposure assessment
-    if not exposure_examined:
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+    ):
         print(7)  # ExamineExposure
-        exposure_examined = True
         continue
 
-    # Check if fully stabilized
-    if airway_confirmed and breathing_assessed and circulation_checked and disability_checked and exposure_examined:
-        if measured_times[5] > 0 and measured_values[5] >= 88 \
-           and measured_times[6] > 0 and measured_values[6] >= 8 \
-           and measured_times[4] > 0 and measured_values[4] >= 60:
-            print(48)  # Finish
-            break
+    # Stabilization check
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and measured_times[5] > 0
+        and measured_values[5] >= 88  # Sats at least 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60  # MAP at least 60
+    ):
+        # All conditions for stabilization met
+        print(48)  # Finish
+        break
 
-    # Regular monitoring if no critical condition to address now
+    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
