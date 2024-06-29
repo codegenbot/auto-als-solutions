@@ -28,9 +28,15 @@ while True:
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+
+    if measured_times[5] > 0:
+        if measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+    else:
+        print(25)  # UseSatsProbe
         continue
+
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
@@ -40,9 +46,15 @@ while True:
         continue
 
     # Circulation assessment
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] > 0:
+        if measured_values[4] < 60:
+            print(15)  # GiveFluids
+            continue
+    else:
+        print(27)  # UseBloodPressureCuff
+        print(16)  # ViewMonitor
         continue
+
     if not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
@@ -73,4 +85,3 @@ while True:
 
     # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
-    continue
