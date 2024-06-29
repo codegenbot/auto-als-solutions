@@ -17,13 +17,11 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
+    # Airway assessment and clearing if needed
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif (
-            events[5] > 0 or events[4] > 0 or events[6] > 0
-        ):  # AirwayVomit/Blood/Tongue
+        elif events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayVomit/Blood/Tongue
             print(31)  # UseYankeurSuctionCatheter
             continue
         else:
@@ -69,22 +67,13 @@ while True:
         exposure_examined = True
         continue
 
-    # Stabilization check
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-        and exposure_examined
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0  # Sats at least 88%
-        and measured_values[6] >= 8
-        and measured_times[4] > 0  # Resp Rate at least 8
-        and measured_values[4] >= 60  # MAP at least 60mmHg
-    ):
-        print(48)  # Finish
-        break
+    # Check if fully stabilized
+    if airway_confirmed and breathing_assessed and circulation_checked and disability_checked and exposure_examined:
+        if measured_times[5] > 0 and measured_values[5] >= 88 \
+           and measured_times[6] > 0 and measured_values[6] >= 8 \
+           and measured_times[4] > 0 and measured_values[4] >= 60:
+            print(48)  # Finish
+            break
 
-    # Regular monitoring if no critical condition to address
+    # Regular monitoring if no critical condition to address now
     print(16)  # ViewMonitor
