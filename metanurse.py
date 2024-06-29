@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -26,25 +27,25 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0.5:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0:
+            if events[9] > 0.5:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
+            if events[16] > 0.5 or events[17] > 0.5:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[22] > 0:
+            if events[22] > 0.5:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -68,12 +69,14 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            if steps % 2 == 0:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            else:
-                print(19)  # OpenBreathingDrawer
+        if not breathingDrawerOpened:
+            print(19)  # OpenBreathingDrawer
+            breathingDrawerOpened = True
+            continue
+
+        if not satsProbeUsed:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
@@ -84,3 +87,5 @@ while steps < 350:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
+
+        print(0)  # DoNothing if no other conditions are met
