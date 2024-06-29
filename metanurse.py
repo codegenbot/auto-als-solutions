@@ -30,7 +30,7 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:  # Initial assessment
+            if step < 5:
                 print(3)  # ExamineAirway
             elif step < 10:
                 print(4)  # ExamineBreathing
@@ -41,7 +41,7 @@ def main():
             elif step < 25:
                 print(7)  # ExamineExposure
             else:
-                print(16)  # ViewMonitor to trigger vital signs measurements
+                print(16)  # ViewMonitor
 
         sys.stdout.flush()
         step += 1
