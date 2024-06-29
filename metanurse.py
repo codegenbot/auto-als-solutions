@@ -18,31 +18,15 @@ while True:
 
     # Airway assessment and interventions
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear is confirmed
-            airway_confirmed = True
-        else:
-            print(3)  # ExamineAirway
-            continue
-
-    # If no recent valid Sats reading, get one
-    if measured_times[5] == 0:
-        print(25)  # UseSatsProbe
+        print(3)  # ExamineAirway
         continue
 
-    # If no recent valid MAP reading, get one
-    if measured_times[4] == 0:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    # Breathing assessment and interventions
+    # Check and manage breathing issues
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
-        continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
         print(4)  # ExamineBreathing
@@ -64,7 +48,7 @@ while True:
         disability_checked = True
         continue
 
-    # Stabilization check
+    # Verify all stabilization conditions
     if (
         airway_confirmed
         and breathing_assessed
@@ -75,9 +59,8 @@ while True:
         and measured_times[6] > 0
         and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured(items[4] >= 60  # MAP at least 60
     ):
-        # All conditions for stabilization met
         print(48)  # Finish
         break
 
