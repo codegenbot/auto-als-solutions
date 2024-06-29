@@ -2,7 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-monitoring_started = False
+initial_checks_done = False
 
 while True:
     observations = input().split()
@@ -10,16 +10,17 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if not monitoring_started:
-        print(25)  # UseSatsProbe
-        monitoring_started = True
-        continue
-
     # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
+        continue
+
+    if not initial_checks_done:
+        print(25)  # UseSatsProbe
+        print(27)  # UseBloodPressureCuff
+        initial_checks_done = True
         continue
 
     # Airway assessment and interventions
@@ -46,6 +47,9 @@ while True:
         continue
 
     # Circulation assessment
+    if measured_times[0] > 0 and events[17] > 0.5:  # RadialPulseNonPalpable
+        print(15)  # GiveFluids
+        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
@@ -77,5 +81,4 @@ while True:
         print(48)  # Finish
         break
 
-    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
