@@ -10,70 +10,47 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Handle immediate critical conditions more assertively
-    if events[7] >= 0.7 or (
-        measured_times[6] > 0 and measured_values[6] < 8
-    ):  # Severe Breathing Issues
-        print(29)  # UseBagValveMask
-        continue
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Check if airway is clear
-    if events[3] > 0 and not airway_confirmed:
+    if events[6] > 0:
         airway_confirmed = True
 
-    # Assessment sequence improvements
+    if airway_confirmed and not breathing_assessed:
+        if events[13] > 0:
+            breathing_assessed = True
+
+    if breathing_assessed and not circulation_checked:
+        if events[16] > 0 or events[17] > 0:
+            circulation_checked = True
+
+    if circulation_checked and not disability_checked:
+        if events[21] > 0 or events[22] > 0:
+            disability_checked = True
+
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        continue
-
-    if airway_confirmed and not breathing_assessed:
+    elif not breathing_assessed:
         print(4)  # ExamineBreathing
-        breathing_assessed = True
-        continue
-
-    if airway_confirmed and breathing_assessed and not circulation_checked:
+    elif not circulation_checked:
         print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
-
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and not disability_checked
-    ):
+    elif not disability_checked:
         print(6)  # ExamineDisability
-        disability_checked = True
-        continue
-
-    # Regular monitoring and data update
-    if measured_times[4] <= 0:  # Blood pressure not measured recently
-        print(27)  # UseBloodPressureCuff
-        continue
-    elif measured_times[5] <= 0:  # Sats not measured recently
-        print(25)  # UseSatsProbe
-        continue
     else:
-        print(16)  # ViewMonitor
-        continue
-
-    # Check if all conditions for finishing are met
-    if (
-        airway_confirmed
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-
-    # Keep monitoring if nothing else to do
-    print(16)  # ViewMonitor
+        if measured_times[4] <= 0:  # Blood pressure not measured recently
+            print(27)  # UseBloodPressureCuff
+        elif measured_times[5] <= 0:  # Sats not measured recently
+            print(25)  # UseSatsProbe
+        else:
+            if (
+                measured_values[5] >= 88
+                and measured_values[6] >= 8
+                and measured_values[4] >= 60
+            ):
+                print(48)  # Finish
+                break
+            else:
+                print(16)  # ViewMonitor
