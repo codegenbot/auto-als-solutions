@@ -17,17 +17,12 @@ while True:
         continue
 
     # Airway assessment and interventions
-    if events[3] >= 0.5:  # AirwayClear is confirmed
-        airway_confirmed = True
     if not airway_confirmed:
-        if events[4] > 0.5 or events[5] > 0.5 or events[6] > 0.5:  # Obstruction signs
-            if events[4] > 0.5 or events[5] > 0.5:  # Vomit or Blood blocking
-                print(31)  # UseYankeurSuctionCatheter
-            else:
-                print(32)  # UseGuedelAirway
+        if events[3] > 0.5:  # AirwayClear is confirmed
+            airway_confirmed = True
         else:
             print(3)  # ExamineAirway
-        continue
+            continue
 
     # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
@@ -59,7 +54,7 @@ while True:
         disability_checked = True
         continue
 
-    # Check for stabilization
+    # Stabilization check
     if (
         airway_confirmed
         and breathing_assessed
@@ -72,6 +67,7 @@ while True:
         and measured_times[4] > 0
         and measured_values[4] >= 60  # MAP at least 60
     ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
