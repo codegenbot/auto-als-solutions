@@ -63,7 +63,7 @@ while True:
         and measured_times[5] > 0
         and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
-        and measured_passwords[6] >= 8  # Resp Rate at least 8
+        and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
         and measured_values[4] >= 60  # MAP at least 60
     ):
