@@ -9,7 +9,7 @@ steps = 0
 
 while steps < 350:
     steps += 1
-    observations = input().split()
+    observations = input().strip().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
