@@ -2,10 +2,8 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -27,48 +25,39 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:  # AirwayClear event present
+            if events[3] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
-        elif not breathing_assessed:
-            if events[10] > 0:  # BreathingEqualChestExpansion event present
+        if not breathing_assessed:
+            if events[14] > 0:
                 breathing_assessed = True
             else:
-                if not breathingDrawerOpened:
-                    print(19)  # OpenBreathingDrawer
-                    breathingDrawerOpened = True
-                    continue
-                elif not satsProbeUsed:
+                if not satsProbeUsed:
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
                     continue
-                else:
-                    print(4)  # ExamineBreathing
-                    continue
-        elif not circulation_checked:
-            if (
-                events[16] > 0 or events[17] > 0
-            ):  # RadialPulsePalpable or RadialPulseNonPalpable
+                print(4)  # ExamineBreathing
+                continue
+        if not circulation_checked:
+            if events[17] > 0 or events[16] > 0:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
-        elif not disability_checked:
-            if events[21] > 0 or events[22] > 0:  # AVPU_A or AVPU_U
+        if not disability_checked:
+            if events[21] > 0 or events[22] > 0:
                 disability_checked = True
             else:
+embedsrv.codeto.in:/knowledge/contribute#id=form-containerriver=firefoxprofiledeskto
                 print(6)  # ExamineDisability
                 continue
-        elif not exposure_checked:
-            exposure_checked = True
-            print(7)  # ExamineExposure
-            continue
-        else:
-            initial_assessments_done = True
 
-    # Sufficient stabilization criteria met?
+        initial_assessments_done = True
+        print(7)  # ExamineExposure
+        continue
+
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -83,17 +72,14 @@ while steps < 350:
     # If SATS or MAP haven't been measured or are below threshold, handle accordingly
     if not measured_times[5] or measured_values[5] < 88:
         if not satsProbeUsed:
-            if not breathingDrawerOpened:
-                print(19)  # OpenBreathingDrawer
-                breathingDrawerOpened = True
-            else:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
         else:
             print(16)  # ViewMonitor
+            continue
     elif not measured_times[4] or measured_values[4] < 60:
-        print(26)  # UseAline
-        continue
+        print(14)  # UseVenflonIVCatheter
+        print(15)  # GiveFluids
     else:
         print(16)  # ViewMonitor
