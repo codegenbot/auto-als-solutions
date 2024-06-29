@@ -18,45 +18,38 @@ while True:
 
     # Examine airway if not confirmed
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear
-            airway_confirmed = True
-        else:
-            print(3)  # ExamineAirway
-            continue
+        print(3)  # ExamineAirway
+        continue
 
-    # Breathing and oxygenation
+    # Airway assessment
+    if events[3] > 0.5:  # AirwayClear
+        airway_confirmed = True
+
+    # Examine and assist breathing
+    if not breathing_assessed:
+        print(4)  # ExamineBreathing
+        continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
-    if not breathing_assessed:
-        print(4)  # ExamineBreathing
-        breathing_assessed = True
-        continue
 
-    # Check paralysis for breathing issues or high-event cues
-    if events[7] > 0.5 or events[14] > 0.5:  # BreathingPneumothoraxSymptoms
-        print(29)  # UseBagValveMask
-        continue
-
-    # Circulation
+    # Circulation concerns
     if not circulation_checked:
         print(5)  # ExamineCirculation
-        circulation_checked = True
         continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Disability
+    # Disability (Conscious Level)
     if not disability_checked:
         print(6)  # ExamineDisability
-        disability_checked = True
         continue
 
-    # Stabilization check
+    # Check if patient stabilized
     if (
         airway_confirmed
         and breathing_assessed
@@ -74,5 +67,5 @@ while True:
             print(48)  # Finish
             break
 
-    # Default action if no other specific actions are needed
+    # Default action: View monitor to detect changes after interventions
     print(16)  # ViewMonitor
