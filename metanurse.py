@@ -1,87 +1,75 @@
-airway_clear_confirmed = False
-step_count = 0
+airway_confirmed = False
+breathing_assessed = False
+circulation_checked = False
+disability_checked = False
 
-while step_count < 350:
+while True:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions for critical conditions
+    # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
-        step_count += 1
         continue
 
     # Airway assessment and interventions
-    if (
-        not airway_clear_confirmed
-        or events[1] > 0.5
-        or events[2] > 0.5
-        or events[4] > 0.5
-        or events[5] > 0.5
-        or events[6] > 0.5
-    ):
-        airway_clear_confirmed = events[3] > 0.5  # Check if airway is clear
-        print(3)  # ExamineAirway
-        step_count += 1
-        continue
+    if not airway_confirmed:
+        if events[3] > 0.5:  # AirwayClear is confirmed
+            airway_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
 
-    # Breathing assessment and intervention
+    # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
-        step_count += 1
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
-        step_count += 1
         continue
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
-        step_count += 1
         continue
-    if events[8:14] == [0] * 6:  # No detailed breathing checks done
+    if not breathing_assessed:
         print(4)  # ExamineBreathing
-        step_count += 1
+        breathing_assessed = True
         continue
 
-    # Circulation assessment and intervention
+    # Circulation assessment
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
-        step_count += 1
         continue
-    if events[16] == 0 and events[17] == 0:  # Unclear pulse information
+    if not circulation_checked:
         print(5)  # ExamineCirculation
-        step_count += 1
+        circulation_checked = True
         continue
 
-    # Disability checks
-    if events[21:25:1] == [0] * 4:  # Check AVPU status clear
+    # Disability assessment
+    if not disability_checked:
         print(6)  # ExamineDisability
-        step_count += 1
+        disability_checked = True
         continue
 
-    # Exposure checks
-    if events[26] > 0.5:  # ExposurePeripherallyShutdown
-        print(7)  # ExamineExposure
-        step_count += 1
-        continue
-
-    # Checking stabilization criteria
+    # Stabilization check
     if (
-        airway_clear_confirmed
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88
+        and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8
+        and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60
+        and measured_values[4] >= 60  # MAP at least 60
     ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Default action if no specific condition matched
+    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
-    step_count += 1
