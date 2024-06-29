@@ -21,7 +21,7 @@ while True:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
         elif (
-            events[4] > 0 or events[5] > 0 or events[6] > 0
+            events[5] > 0 or events[4] > 0 or events[6] > 0
         ):  # AirwayVomit/Blood/Tongue
             print(31)  # UseYankeurSuctionCatheter
             continue
@@ -30,28 +30,28 @@ while True:
             continue
 
     # Breathing assessment and interventions
+    if events[7] > 0.5:  # BreathingNone has high relevance
+        print(29)  # UseBagValveMask
+        continue
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask
+        continue
     if not breathing_assessed:
-        if events[7] > 0.5:  # BreathingNone has high relevance
-            print(29)  # UseBagValveMask
-            continue
-        if measured_times[5] > 0 and measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-        if measured_times[6] > 0 and measured_values[6] < 8:
-            print(29)  # UseBagValveMask
-            continue
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
     # Circulation assessment
+    if events[18] > 0:  # HeartSoundsMuffled
+        print(11)  # GiveAmiodarone
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
     if not circulation_checked:
-        if measured_times[4] > 0 and measured_values[4] < 60:
-            print(15)  # GiveFluids
-            continue
-        if events[18] > 0.5:  # HeartSoundsMuffled
-            print(11)  # GiveAmiodarone
-            continue
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
@@ -63,7 +63,14 @@ while True:
         continue
 
     # Exposure assessment
-    print(7)  # ExamineExposure
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+    ):
+        print(7)  # ExamineExposure
+        continue
 
     # Stabilization check
     if (
@@ -71,20 +78,16 @@ while True:
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and measured_times[5] > 0
+        and measured_values[5] >= 88  # Sats at least 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60  # MAP at least 60
     ):
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
-        else:
-            print(25)  # UseSatsProbe
-            continue
+        # All conditions for stabilization met
+        print(48)  # Finish
+        break
 
     # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
