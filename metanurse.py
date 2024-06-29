@@ -27,17 +27,15 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0:  # AirwayClear
+            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
                 airway_confirmed = True
             continue
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            # Assuming breathing is assessed after examination
             breathing_assessed = True
             continue
         if not circulation_checked:
             print(5)  # ExamineCirculation
-            # Assuming circulation is assessed after examination
             circulation_checked = True
             continue
         if not disability_checked:
