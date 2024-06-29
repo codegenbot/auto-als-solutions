@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+exposure_assessed = False
 
 while True:
     observations = input().split()
@@ -19,22 +20,25 @@ while True:
     # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
-            airway_confirmed = True
-        elif events[4] > 0.5 or events[5] > 0.5:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSucionCatheter
+            airway_confired = True
+        if events[4] > 0.2 or events[5] > 0.2:  # AirwayVomit or AirwayBlood
+            print(31)  # UseYankeurSuctionCatheter
             continue
-        else:
-            print(3)  # ExamineAirway
+        if events[6] > 0.2:  # AirwayTongue, use manoeuvre
+            print(36)  # PerformHeadTiltChinLift
             continue
+        print(3)  # ExamineAirway
+        continue
 
     # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    if not breathing_assessed or events[7] > 0.5:  # BreathingNone
+        breathing_assessed = True
         print(29)  # UseBagValveMask
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] > 0 and measured_values[5] < 88:  # Low sats
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+    if measured_times[6] > 0 and measured_values[6] < 8:  # Low respiratory rate
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
@@ -43,7 +47,7 @@ while True:
         continue
 
     # Circulation assessment
-    if measured_times[4] > 0 and measured_values[4] < 60:
+    if measured_times[4] > 0 and measured_values[4] < 60:  # Low MAP
         print(15)  # GiveFluids
         continue
     if not circulation_checked:
@@ -57,12 +61,19 @@ while True:
         disability_checked = True
         continue
 
+    # Exposure assessment
+    if not exposure_assessed:
+        print(7)  # ExamineExposure
+        exposure_assessed = True
+        continue
+
     # Stabilization check
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and exposure_assessed
         and measured_times[5] > 0
         and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
