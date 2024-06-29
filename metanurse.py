@@ -21,13 +21,13 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0:
+            if events[3] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[10] > 0:  # BreathingEqualChestExpansion
+            if any(events[8:14]):  # Breathing issues
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
@@ -39,20 +39,13 @@ while steps < 350:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[21] > 0.1 or events[22] > 0.1:  # AVPU_V or AVPU_U
+            if events[23] > 0.1:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
                 continue
 
         initial_assessments_done = True
-        print(7)  # ExamineExposure
-        continue
-
-    if not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
 
     if (
         measured_times[5] > 0
@@ -65,10 +58,17 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    if measured_times[5] == 0 or measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    if not satsProbeUsed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(14)  # UseVenflonIVCatheter
+
+    if not measured_times[5] or measured_values[5] < 88:
+        print(16)  # ViewMonitor
         continue
-    print(16)  # ViewMonitor
+
+    if not measured_times[4] or measured_values[4] < 60:
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    print(0)  # DoNothing
