@@ -3,6 +3,9 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 initial_assessments_done = False
+used_breathing_drawer = False
+used_sats_probe = False
+viewed_monitor_for_sats = False
 steps = 0
 
 while steps < 350:
@@ -30,15 +33,25 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[11] > 0 and (measured_times[5] == 0 or measured_values[5] < 88):
-                print(20)  # OpenBreathingDrawer
-                print(25)  # UseSatsProbe
-                print(16)  # ViewMonitor
-                breathing_assessed = True
-                continue
+            if events[11] > 0 and (
+                measured_times[5] == 0 or measured_values[5] < 88
+            ):  # BreathingBibasalCrepitations observed
+                if not used_breathing_drawer:
+                    print(20)  # OpenBreathingDrawer
+                    used_breathing_drawer = True
+                    continue
+                elif not used_sats_probe:
+                    print(25)  # UseSatsProbe
+                    used_sats_probe = True
+                    continue
+                elif not viewed_monitor_for_sats:
+                    print(16)  # ViewMonitor
+                    viewed_monitor_for_sats = True
+                    continue
             else:
                 print(4)  # ExamineBreathing
-                continue
+            breathing_assessed = True
+            continue
         if not circulation_checked:
             print(5)  # ExamineCirculation
             circulation_checked = True
@@ -47,7 +60,6 @@ while steps < 350:
             print(6)  # ExamineDisability
             disability_checked = True
             continue
-
         initial_assessments_done = True
         print(7)  # ExamineExposure
         continue
@@ -66,7 +78,11 @@ while steps < 350:
         if measured_times[5] == 0 or measured_values[5] < 88:
             print(30)  # UseNonRebreatherMask
         elif measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
-            print(15)  # GiveFluids
+            if not used_breathing_drawer:
+                print(20)  # OpenCirculationDrawer
+                used_breathing_drawer = True
+            else:
+                print(14)  # UseVenflonIVCatheter
+                print(15)  # GiveFluids
         else:
             print(16)  # ViewMonitor
