@@ -10,45 +10,47 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical conditions first
+    # Immediate intervention for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
+
+    # Specific intervention based on observation advice
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
-    # Check the airway
+    # Assess Airway initially, clear if necessary
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        if events[3] > 0.5:  # Check if Airway is clear
+        if events[3] > 0.5:  # AirwayClear is True
             airway_confirmed = True
         continue
 
-    # If Airway is confirmed, check Breathing
+    # Assess Breathing, verify conditions
     if airway_confirmed and not breathing_assessed:
         print(4)  # ExamineBreathing
-        if events[10] > 0.5:  # Equal Chest Expansion
+        if events[10] > 0.5:  # Equal Chest Expansion is True
             breathing_assessed = True
         continue
 
-    # If Breathing is assessed, check Circulation
+    # Check Circulation, verify pulse and heart rate
     if breathing_assessed and not circulation_checked:
         print(5)  # ExamineCirculation
-        if events[16] > 0.5:  # Radial Pulse Palpable
+        if events[16] > 0.5:  # RadialPulsePalpable is True
             circulation_checked = True
         continue
 
-    # If Circulation is checked, check Disability
+    # Examine Disability, check consciousness levels
     if circulation_checked and not disability_checked:
         print(6)  # ExamineDisability
-        if events[24] > 0.5 or events[23] > 0.5:  # Pupils Normal or Pinpoint
+        if events[24] > 0.5 or events[23] > 0.5:  # PupilsNormal or PupilsPinpoint
             disability_checked = True
         continue
 
-    # If all assessments are done, ensure vital signs are good
+    # Ensure all assessments are done and vital signs are good
     if (
         airway_confirmed
         and breathing_assessed
@@ -56,26 +58,23 @@ while True:
         and disability_checked
     ):
         if (
-            (measured_times[4] > 0 and measured_values[4] >= 60)
-            and (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
+            measured_times[4] > 0
+            and measured_values[4] >= 60
+            and measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
         ):
             print(48)  # Finish
             break
 
-    # Ensure Sats are checked if not done recently
+    # Other necessary interventions and monitoring
     if measured_times[5] <= 0:
-        print(19)  # OpenBreathingDrawer
         print(25)  # UseSatsProbe
-        print(16)  # ViewMonitor
         continue
 
-    # Ensure Blood Pressure is checked if not done recently
     if measured_times[4] <= 0:
-        print(20)  # OpenCirculationDrawer
         print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
         continue
 
-    # Monitor
     print(16)  # ViewMonitor
