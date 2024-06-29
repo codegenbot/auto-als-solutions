@@ -14,59 +14,71 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
-        print(17)  # Start Chest Compression
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        print(29)  # UseBagValveMask
         continue
 
-    if not airway_confirmed and events[3] < 0.1:
-        print(3)  # Examine Airway
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
+        print(17)  # StartChestCompression
         continue
 
-    airway_confirmed = True
-
-    if not breathing_assessed and events[9] < 0.7:
-        print(4)  # Examine Breathing
-        continue
-
-    breathing_assessed = True
-
-    if not circulation_checked and (events[16] < 0.1 and events[17] < 0.1):
-        print(5)  # Examine Circulation
-        continue
-
-    circulation_checked = True
-
-    if not disability_checked and events[22] < 0.1:
-        print(6)  # Examine Disability
-        continue
-
-    disability_checked = True
-
-    if not exposure_checked:
-        print(7)  # Examine Exposure
-        exposure_checked = True
-        continue
-
-    initial_assessments_done = True
-
-    if initial_assessments_done and (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
-            print(25)  # Use Sats Probe
-            satsProbeUsed = True
+    if not initial_assessments_done:
+        if not airway_confirmed:
+            if events[3] > 0.1:
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
+                continue
+        if not breathing_assessed:
+            if events[9] > 0:
+                breathing_assessed = True
+            else:
+                print(4)  # ExamineBreathing
+                continue
+        if not circulation_checked:
+            if events[16] > 0 or events[17] > 0:
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
+        if not disability_checked:
+            if events[22] > 0:
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
+        if not exposure_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
             continue
-        else:
-            print(16)  # View Monitor
-            continue
-  
-    if (measured_times[4] == 0 or measured_values[4] < 60):
-        print(14)  # Use Venflon IVCatheter
-        continue
 
-    if (measured_times[5] > 0 and measured_values[5] >= 88 and
-        measured_times[6] > 0 and measured_values[6] >= 8 and
-        measured_times[4] > 0 and measured_values[4] >= 60):
+        initial_assessments_done = True
+
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
-
-    # If none of the above conditions are met, do nothing to observe further changes
-    print(0)  # Do Nothing
+    else:
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+            else:
+                print(16)  # ViewMonitor
+            continue
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(14)  # UseVenflonIVCatheter
+            continue
+        if steps < 350 and not satsProbeUsed:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+        else:
+Toyota will also offer the MIRAI fuel-cell vehicle commercially in 2025 in limited numbers. 
