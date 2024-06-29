@@ -56,25 +56,26 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-    else:
-        if not satsProbeUsed:
+    if initial_assessments_done:
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
+
+        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
             print(19)  # OpenBreathingDrawer
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
             continue
+
         if measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
+            print(27)  # UseBloodPressureCuff
             continue
         if measured_times[5] == 0 or measured_values[5] < 88:
-            print(16)  # ViewMonitor
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
