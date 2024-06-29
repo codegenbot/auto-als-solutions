@@ -75,7 +75,7 @@ while steps < 350:
                 print(16)  # ViewMonitor
             continue
         if measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflönIVCatheter
+            print(14)  # UseVenflonIVCatheter
             continue
         if steps < 350 and not satsProbeUsed:
             print(25)  # UseSatsProbe
