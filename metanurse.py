@@ -26,30 +26,34 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            airway_confirmed = True
-            continue
+            if events[3] > 0.1:
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
+                continue
         if not breathing_assessed:
-            print(4)  # ExamineBreathing
-            breathing_assessed = True
-            continue
-        if not satsProbeUsed:
-            print(19)  # OpenBreathingDrawer
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+            if events[9] > 0:
+                breathing_assessed = True
+            else:
+                print(4)  # ExamineBreathing
+                continue
         if not circulation_checked:
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+            if events[16] > 0 or events[17] > 0:
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
         if not disability_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
+            if events[22] > 0:
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
+
         initial_assessments_done = True
 
     if (
@@ -68,10 +72,10 @@ while steps < 350:
                 print(25)  # UseSatsProbe
                 satsProbeUsed = True
             else:
-                print(30)  # UseNonRebreatherMask
+                print(16)  # ViewMonitor
             continue
         if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
+            print(14)  # UseVenflonIVCatheter
             continue
         if steps < 350 and not satsProbeUsed:
             print(25)  # UseSatsProbe
