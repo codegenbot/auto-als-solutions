@@ -20,55 +20,64 @@ while True:
     if not airway_confirmed:
         print(3)  # ExamineAirway
         continue
-    elif events[3] > 0.5:  # AirwayClear
-        airway_confirmed = True
+    else:
+        if (
+            events[4] > 0 or events[5] > 0 or events[6] > 0
+        ):  # AirwayVomit, AirwayBlood, AirwayTongue
+            print(35)  # PerformAirwayManoeuvres
+            continue
+
+    # Ensure airway
+    if not events[3]:  # Airway not confirmed clear
+        print(3)  # ExamineAirway
+        continue
 
     # Breathing and oxygenation
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
-
-    if not breathing_assessed:
+    if not breathing_assessed and events[7] > 0.5:  # Insufficient breathing signs
         print(4)  # ExamineBreathing
-        continue
-    elif events[6] > 0.5:  # BreathingSeeSaw
-        print(29)  # UseBagValveMask
+        breathing_assessed = True
         continue
 
     # Circulation
     if not circulation_checked:
         print(5)  # ExamineCirculation
+        circulation_checked = True
         continue
-    elif measured_times[4] > 0 and measured_values[4] < 60:
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
     # Disability
     if not disability_checked:
         print(6)  # ExamineDisability
+        disability_checked = True
         continue
 
-    # Stabilization check
+    # Check if stabilization criteria have been reached
+    conditions_met = (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    )
+
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and conditions_met
     ):
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
+        print(48)  # Finish
+        break
 
     # Default action if no other specific actions are needed
     print(16)  # ViewMonitor
