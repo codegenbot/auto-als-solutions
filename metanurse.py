@@ -2,6 +2,8 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+exposure_examined = False
+monitor_checked = False
 
 while True:
     observations = input().split()
@@ -9,72 +11,73 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        print(17)  # StartChestCompression
+        print(17)
         continue
 
-    # Examine airway if not confirmed
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear
+        if events[3] > 0:
             airway_confirmed = True
+        elif any(events[i] > 0 for i in [4, 5, 6]):
+            print(31)
+            continue
         else:
-            print(3)  # ExamineAirway
+            print(3)
             continue
 
-    # Breathing and oxygenation
+    if events[7] > 0.5:
+        print(29)
+        continue
     if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+        print(30)
         continue
     if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)  # UseBagValveMask
+        print(29)
         continue
+
     if not breathing_assessed:
-        print(4)  # ExamineBreathing
+        print(4)
         breathing_assessed = True
         continue
 
-    # Check for breathing issues or high-event cues
-    if (
-        events[7] > 0.5 or events[8] > 0.5 or events[9] > 0.5
-    ):  # BreathingNone, BreathingSnoring, BreathingSeeSaw
-        print(29)  # UseBagValveMask
-        continue
-
-    # Circulation
     if not circulation_checked:
-        print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
+        if measured_times[0] >= 0.5:
+            if not monitor_checked:
+                print(16)
+                monitor_checked = True
+                continue
+            else:
+                if events[17] > 0:
+                    print(40)
+                    continue
+                else:
+                    print(15)
+                    continue
+        else:
+            print(5)
+            circulation_checked = True
+            continue
 
-    # Disability
     if not disability_checked:
-        print(6)  # ExamineDisability
+        print(6)
         disability_checked = True
         continue
 
-    # Stabilization check
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-    ):
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
+    if not exposure_examined:
+        print(7)
+        exposure_examined = True
+        continue
 
-    # Default action if no other specific actions are needed
-    print(16)  # ViewMonitor
+    if all([
+        airway_confirmed, breathing_assessed, circulation_checked, 
+        disability_checked, exposure_examined,
+        measured_times[5] > 0, measured_values[5] >= 88,
+        measured_times[6] > 0, measured_values[6] >= 8,
+        measured_times[4] > 0, measured_values[4] >= 60
+    ]):
+        print(48)
+        break
+
+    print(16)
