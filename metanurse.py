@@ -30,7 +30,18 @@ def main():
             print(48)  # Finish
             break
         else:
-            print(16)  # ViewMonitor to trigger vital signs measurements
+            if step < 5:  # Initial assessment
+                print(3)  # ExamineAirway
+            elif step < 10:
+                print(4)  # ExamineBreathing
+            elif step < 15:
+                print(5)  # ExamineCirculation
+            elif step < 20:
+                print(6)  # ExamineDisability
+            elif step < 25:
+                print(7)  # ExamineExposure
+            else:
+                print(16)  # ViewMonitor to trigger vital signs measurements
 
         sys.stdout.flush()
         step += 1
