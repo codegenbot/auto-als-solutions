@@ -13,7 +13,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if (events[7] > 0.7) or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -37,13 +37,13 @@ while steps < 350:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0.1 or events[17] > 0.1:
+            if events[17] > 0 or events[16] > 0:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[23] > 0.1:
+            if events[21] > 0 or events[22] > 0:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -64,6 +64,7 @@ while steps < 350:
         print(48)  # Finish
         break
 
+    # If SATS or MAP haven't been measured or are below threshold, handle accordingly
     if not measured_times[5] or measured_values[5] < 88:
         if not satsProbeUsed:
             print(25)  # UseSatsProbe
@@ -72,9 +73,8 @@ while steps < 350:
         else:
             print(16)  # ViewMonitor
             continue
-    if not measured_times[4] or measured_values[4] < 60:
+    elif not measured_times[4] or measured_values[4] < 60:
         print(14)  # UseVenflonIVCatheter
         print(15)  # GiveFluids
-        continue
     else:
-        print(16)  # ViewMonitor
+        print(16)  # ViewHWMonitor
