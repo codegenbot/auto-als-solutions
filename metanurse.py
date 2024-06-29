@@ -17,7 +17,7 @@ while steps < 350:
 
     # Critical conditions
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
+        print(29)  # UseBagValneask
         continue
 
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
@@ -72,19 +72,19 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        if not checkedMonitorAfterSatsProbe:
-            if not satsProbeUsed:
-                print(19)  # OpenBreathingDrawer
-                satsProbeUsed = True
-            else:
-                print(25)  # UseSatsProbe
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            satsProbeUsed = True
             continue
+
+        if not checkedMonitorAfterSatsProbe:
+            print(25)  # UseSatsProbe
+            print(16)  # ViewMonitor
+            checkedMonitorAfterSatsProbe = True
+            continue
+
         if measured_times[5] == 0 or measured_values[5] < 88:
-            if not checkedMonitorAfterSatsProbe and satsProbeUsed:
-                print(16)  # ViewMonitor
-                checkedMonitorAfterSatsProbe = True
-                continue
-            elif not satsProbeUsed:
+            if not satsProbeUsed:
                 print(25)  # UseSatsProbe
                 satsProbeUsed = True
                 checkedMonitorAfterSatsProbe = False
