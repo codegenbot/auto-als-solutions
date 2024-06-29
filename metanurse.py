@@ -2,7 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_assessed = False
 
 while True:
     observations = input().split()
@@ -20,25 +19,19 @@ while True:
     # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
-            airway_confired = True
-        if events[4] > 0.2 or events[5] > 0.2:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSuctionCatheter
+            airway_confirmed = True
+        else:
+            print(3)  # ExamineAirway
             continue
-        if events[6] > 0.2:  # AirwayTongue, use manoeuvre
-            print(36)  # PerformHeadTiltChinLift
-            continue
-        print(3)  # ExamineAirway
-        continue
 
     # Breathing assessment and interventions
-    if not breathing_assessed or events[7] > 0.5:  # BreathingNone
-        breathing_assessed = True
+    if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
-    if measured_times[5] > 0 and measured_values[5] < 88:  # Low sats
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:  # Low respiratory rate
+    if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
@@ -47,7 +40,7 @@ while True:
         continue
 
     # Circulation assessment
-    if measured_times[4] > 0 and measured_values[4] < 60:  # Low MAP
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
     if not circulation_checked:
@@ -61,23 +54,16 @@ while True:
         disability_checked = True
         continue
 
-    # Exposure assessment
-    if not exposure_assessed:
-        print(7)  # ExamineExposure
-        exposure_assessed = True
-        continue
-
     # Stabilization check
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
-        and exposure_assessed
         and measured_times[5] > 0
         and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_passwords[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
         and measured_values[4] >= 60  # MAP at least 60
     ):
