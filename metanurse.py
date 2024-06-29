@@ -14,7 +14,7 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
         if (
-            events[7] > 0
+            events[8] > 0
             or (sats is not None and sats < 65)
             or (map_value is not None and map_value < 20)
         ):
@@ -30,14 +30,14 @@ def main():
             print(48)  # Finish
             break
         else:
-            if events[3] == 0:
+            if events[3] == 0:  # Airway not examined
                 print(3)  # ExamineAirway
-            elif events[4] == 0:
+            elif events[4] == 0:  # Breathing not examined
                 print(4)  # ExamineBreathing
-            elif events[5] == 0:
+            elif events[5] == 0:  # Circulation not examined
                 print(5)  # ExamineCirculation
             else:
-                print(16)  # ViewMonitor
+                print(16)  # ViewMonitor to trigger vital signs measurements
 
         sys.stdout.flush()
         step += 1
