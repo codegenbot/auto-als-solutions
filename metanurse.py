@@ -20,30 +20,30 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Assessment sequence improvements
+    # Use observations to update assessments
+    if events[3] > 0.7:  # AirwayClear detected
+        airway_confirmed = True
+    if events[10] > 0.7:  # BreathingEqualChestExpansion detected
+        breathing_assessed = True
+    if (
+        events[16] > 0.7 or events[17] > 0.7
+    ):  # RadialPulsePalpable or RadialPulseNonPalpable detected
+        circulation_checked = True
+    if events[23] > 0.7 or events[24] > 0.7:  # PupilsPinpoint or PupilsNormal detected
+        disability_checked = True
+
+    # Examination sequence
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        if events[3] > 0.7:  # AirwayClear detected
-            airway_confirmed = True
         continue
-    if not breathing_assessed and airway_confirmed:
+    if not breathing_assessed:
         print(4)  # ExamineBreathing
-        if events[10] > 0.7:  # BreathingEqualChestExpansion detected
-            breathing_assessed = True
         continue
-    if not circulation_checked and breathing_assessed:
+    if not circulation_checked:
         print(5)  # ExamineCirculation
-        if (
-            events[16] > 0.7 or events[17] > 0.7
-        ):  # RadialPulsePalpable or RadialPulseNonPalpable detected
-            circulation_checked = True
         continue
-    if not disability_checked and circulation_checked:
+    if not disability_checked:
         print(6)  # ExamineDisability
-        if (
-            events[23] > 0.7 or events[24] > 0.7
-        ):  # PupilsPinpoint or PupilsNormal detected
-            disability_checked = True
         continue
 
     # Regular monitoring and data update
