@@ -67,8 +67,18 @@ while steps < 350:
         print(48)  # Finish
         break
     else:
-        if not satsProbeUsed:
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+            else:
+                print(16)  # ViewMonitor
+            continue
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(14)  # UseVenflonIVCatheter
+            continue
+        if steps < 350 and not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
-            continue
-        print(16)  # ViewMonitor
+        else:
+            print(16)  # ViewMonitor
