@@ -21,31 +21,33 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0.1:  # AirwayClear
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if any(events[8:14]):  # Breathing issues
+            if events[10] > 0.1:  # BreathingEqualChestExpansion
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0.1 or events[17] > 0.1:
+            if events[16] > 0.1:  # RadialPulsePalpable
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[23] > 0.1:
+            if events[21] > 0.1:  # AVPU_V
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
                 continue
 
         initial_assessments_done = True
+        print(7)  # ExamineExposure
+        continue
 
     if (
         measured_times[5] > 0
@@ -58,17 +60,25 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    if not satsProbeUsed:
+    if events[28] > 0:  # HeartRhythmVF
+        print(28)  # AttachDefibPads
+        continue
+
+    if not satsProbeUsed or measured_times[5] == 0:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if not measured_times[5] or measured_values[5] < 88:
-        print(16)  # ViewMonitor
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        if measured_values[5] >= 80:
+            print(30)  # UseNonRebreatherMask
+        else:
+            print(29)  # UseBagValveMask
         continue
 
-    if not measured_times[4] or measured_values[4] < 60:
+    if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
-
-    print(0)  # DoNothing
+    else:
+        print(16)  # ViewMonitor
+        continue
