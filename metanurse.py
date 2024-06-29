@@ -18,14 +18,14 @@ while True:
 
     # Airway assessment and interventions
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear is confirmed
+        if events[3] > 0:  # AirwayClear is confirmed
             airway_confirmed = True
         else:
             print(3)  # ExamineAirway
             continue
 
     # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    if events[7] > 0:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
