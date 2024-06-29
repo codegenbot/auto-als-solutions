@@ -5,6 +5,18 @@ disability_checked = False
 initial_assessments_done = False
 steps = 0
 
+
+def critical_conditions(events, measured_times, measured_values):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        return 29  # UseBagValveMask
+
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
+        return 17  # StartChestCompression
+    return None
+
+
 while steps < 350:
     steps += 1
     observations = input().split()
@@ -12,14 +24,9 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
-        print(17)  # StartChestCompression
+    critical_action = critical_conditions(events, measured_times, measured_values)
+    if critical_action is not None:
+        print(critical_action)
         continue
 
     if not airway_confirmed:
@@ -61,11 +68,10 @@ while steps < 350:
         and circulation_checked
         and disability_checked
     ):
-        print(7)  # ExamineExposure
-        if initial_assessments_done:
-            continue
-        else:
+        if not initial_assessments_done:
+            print(7)  # ExamineExposure
             initial_assessments_done = True
+            continue
 
     if (
         measured_times[5] > 0
@@ -78,10 +84,9 @@ while steps < 350:
         print(48)  # Finish
         break
 
+    if measured_times[5] == 0 or measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+    elif measured_times[4] == 0 or measured_values[4] < 60:
+        print(15)  # GiveFluids
     else:
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(30)  # UseNonRebreatherMask
-        elif measured_times[4] == 0 or measured_values[4] < 60:
-            print(15)  # GiveFluids
-        else:
-            print(16)  # ViewMonitor
+        print(16)  # ViewMonitor
