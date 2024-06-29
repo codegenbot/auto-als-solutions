@@ -22,50 +22,56 @@ while True:
 
     # Examination sequence
     if not airway_confirmed:
-        print(3)  # ExamineAirway
         if events[3] > 0.7:  # AirwayClear detected
             airway_confirmed = True
-        continue
+        else:
+            print(3)  # ExamineAirway
+            continue
 
     if not breathing_assessed and airway_confirmed:
-        print(4)  # ExamineBreathing
         if events[10] > 0.7:  # BreathingEqualChestExpansion detected
             breathing_assessed = True
-        continue
+        else:
+            print(4)  # ExamineBreathing
+            continue
 
     if not circulation_checked and breathing_assessed:
-        print(5)  # ExamineCirculation
         if events[16] > 0.7:  # RadialPulsePalpable detected
             circulation_checked = True
-        continue
+        else:
+            print(5)  # ExamineCirculation
+            continue
 
     if not disability_checked and circulation_checked:
-        print(6)  # ExamineDisability
         if events[22] > 0.7 or events[24] > 0.7:  # AVPU_V or PupilsNormal detected
-            disability_checked = True
-        continue
+            disability_checked = true
+        else:
+            print(6)  # ExamineDisability
+            continue
 
     # Ensure vital measurements are up-to-date
-    if measured_times[4] <= 0:  # Blood pressure not measured recently
+    if (
+        measured_times[4] <= 0 or measured_values[4] < 60
+    ):  # Blood pressure not adequate or not measured
         print(27)  # UseBloodPressureCuff
         continue
-    if measured_times[5] <= 0:  # Sats not measured recently
+    if (
+        measured_times[5] <= 0 or measured_values[5] < 88
+    ):  # Sats not adequate or not measured
         print(25)  # UseSatsProbe
         continue
-
-    # Check if stabilization criteria are met
     if (
-        airway_confurred
+        measured_times[6] <= 0 or measured_values[6] < 8
+    ):  # Respiratory rate not adequate or not measured
+        print(16)  # ViewMonitor
+        continue
+
+    # Check if all assessments done and patient stable
+    if (
+        airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
     ):
-        if (
-            (measured_times[4] > 0 and measured_values[4] >= 60)
-            and (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
-        ):
-            print(48)  # Finish
-            break
-        else:
-            print(16)  # ViewMonitor
+        print(48)  # Finish
+        break
