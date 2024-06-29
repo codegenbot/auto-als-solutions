@@ -34,10 +34,6 @@ while steps < 350:
             if events[14] > 0:
                 breathing_assessed = True
             else:
-                if not satsProbeUsed:
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                    continue
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
@@ -50,7 +46,6 @@ while steps < 350:
             if events[21] > 0 or events[22] > 0:
                 disability_checked = True
             else:
-embedsrv.codeto.in:/knowledge/contribute#id=form-containerriver=firefoxprofiledeskto
                 print(6)  # ExamineDisability
                 continue
 
@@ -69,7 +64,6 @@ embedsrv.codeto.in:/knowledge/contribute#id=form-containerriver=firefoxprofilede
         print(48)  # Finish
         break
 
-    # If SATS or MAP haven't been measured or are below threshold, handle accordingly
     if not measured_times[5] or measured_values[5] < 88:
         if not satsProbeUsed:
             print(25)  # UseSatsProbe
@@ -80,6 +74,6 @@ embedsrv.codeto.in:/knowledge/contribute#id=form-containerriver=firefoxprofilede
             continue
     elif not measured_times[4] or measured_values[4] < 60:
         print(14)  # UseVenflonIVCatheter
-        print(15)  # GiveFluids
+        continue
     else:
         print(16)  # ViewMonitor
