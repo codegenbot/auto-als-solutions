@@ -11,7 +11,7 @@ while True:
     measured_values = list(map(float, observations[46:]))
 
     # Handle immediate critical conditions more assertively
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if (measured_times[6] > 0 and measured_values[6] < 8) or events[7] >= 0.7:
         print(29)  # UseBagValveMask
         continue
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
@@ -20,33 +20,32 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Use observations to update assessments
-    if events[3] > 0.7:  # AirwayClear detected
-        airway_confirmed = True
-    if events[10] > 0.7:  # BreathingEqualChestExpansion detected
-        breathing_assessed = True
-    if (
-        events[16] > 0.7 or events[17] > 0.7
-    ):  # RadialPulsePalpable or RadialPulseNonPalpable detected
-        circulation_checked = True
-    if events[23] > 0.7 or events[24] > 0.7:  # PupilsPinpoint or PupilsNormal detected
-        disability_checked = True
-
-    # Examination sequence
+    # Assessment sequence improvements
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        continue
-    if not breathing_assessed:
-        print(4)  # ExamineBreathing
-        continue
-    if not circulation_checked:
-        print(5)  # ExamineCirculation
-        continue
-    if not disability_checked:
-        print(6)  # ExamineDisability
+        if events[3] > 0.7:  # AirwayClear detected
+            airway_confirmed = True
         continue
 
-    # Regular monitoring and data update
+    if not breathing_assessed and airway_confirmed:
+        print(4)  # ExamineBreathing
+        if events[10] > 0.7:  # BreathingEqualChestExpansion detected
+            breathing_assessed = True
+        continue
+
+    if not circulation_checked and breathing_assessed:
+        print(5)  # ExamineCirculation
+        if events[16] > 0.7:  # RadialPulsePalpable detected
+            circulation_checked = True
+        continue
+
+    if not disability_checked and circulation_checked:
+        print(6)  # ExamineDisability
+        if events[22] > 0.7 or events[23] > 0.7:  # AVPU_V or PupilsNormal detected
+            disability_checked = True
+        continue
+
+    # Monitoring equipment use if measurement data are outdated
     if measured_times[4] <= 0:  # Blood pressure not measured recently
         print(27)  # UseBloodPressureCuff
         continue
@@ -54,20 +53,19 @@ while True:
         print(25)  # UseSatsProbe
         continue
 
-    # Condition monitoring and final decision
+    # Check if vital parameters are within acceptable range
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
     ):
-        print(48)  # Finish
-        break
-    else:
-        print(16)  # ViewMonitor
+        if (
+            (measured_times[4] > 0 and measured_values[4] >= 60)
+            and (measured_times[5] > 0 and measured_values[5] >= 88)
+            and (measured_times[6] > 0 and measured_values[6] >= 8)
+        ):
+            print(48)  # Finish
+            break
+        else:
+            print(16)  # ViewMonitor
