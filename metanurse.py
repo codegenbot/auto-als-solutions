@@ -54,17 +54,9 @@ while True:
         disability_checked = True
         continue
 
-    # Ensure equipment setup if not already checked
-    if events[25] == 0:  # UseSatsProbe not yet used
-        print(25)  # UseSatsProbe
-        continue
-    if events[27] == 0:  # UseBloodPressureCuff not yet used
-        print(27)  # UseBloodPressureCuff
-        continue
-
     # Check if John is stabilized
     if (
-        airway_conf responsibility or understand your backing_of
+        airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
