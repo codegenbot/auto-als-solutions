@@ -10,7 +10,6 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Handle immediate life-threatening conditions assertively
     if not emergency_intervention_performed and ((measured_times[5] > 0 and measured_values[5] < 65) or
        (measured_times[4] > 0 and measured_values[4] < 20)):
         print(17)  # StartChestCompression
@@ -41,7 +40,6 @@ while True:
         print(6)  # ExamineDisability
         continue
 
-    # Monitoring
     if measured_times[4] == 0:
         print(27)  # UseBloodPressureCuff
         continue
@@ -52,7 +50,6 @@ while True:
         print(16)  # ViewMonitor
         continue
 
-    # Check if all conditions for finishing are met
     if airway_confirmed and breathing_assessed and circulation_checked and disability_checked:
         if (measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and 
             measured_times[4] > 0 and measured_values[4] >= 60):
