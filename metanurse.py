@@ -6,8 +6,16 @@ exposure_checked = False
 initial_assessments_done = False
 steps = 0
 
+
 def all_initial_checks_done():
-    return airway_confirmed and breathing_assessed and circulation_checked and disability_checked and exposure_checked
+    return (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and exposure_checked
+    )
+
 
 while steps < 350:
     steps += 1
@@ -21,7 +29,9 @@ while steps < 350:
         print(29)  # UseBagValveMask
         continue
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
 
@@ -51,7 +61,6 @@ while steps < 350:
         if events[21] > 0.1 or events[22] > 0.1:
             disability_checked = True
         else:
-headed documentations or debugging notes.
             print(6)  # ExamineDisability
             continue
 
@@ -63,7 +72,14 @@ headed documentations or debugging notes.
 
     # Check if patient is stabilized
     if all_initial_checks_done():
-        if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
             print(48)  # Finish
             break
 
