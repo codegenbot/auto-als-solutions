@@ -3,6 +3,15 @@ import sys
 
 def main():
     step = 0
+    assessment_steps = [
+        3,
+        4,
+        5,
+        6,
+        7,
+    ]  # ExamineAirway, ExamineBreathing, ExamineCirculation, ExamineDisability, ExamineExposure
+    assessment_index = 0
+
     while step < 350:
         observations = list(map(float, input().split()))
         events = observations[:33]
@@ -13,10 +22,8 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if (
-            events[8] > 0
-            or (sats is not None and sats < 65)
-            or (map_value is not None and map_value < 20)
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
         ):
             print(17)  # Start CPR
             break
@@ -30,16 +37,9 @@ def main():
             print(48)  # Finish
             break
         else:
-            if step < 5:  # Initial assessment
-                print(3)  # ExamineAirway
-            elif step < 10:
-                print(4)  # ExamineBreathing
-            elif step < 15:
-                print(5)  # ExamineCirculation
-            elif step < 20:
-                print(6)  # ExamineDisability
-            elif step < 25:
-                print(7)  # ExamineExposure
+            if assessment_index < len(assessment_steps):
+                print(assessment_steps[assessment_index])
+                assessment_index += 1
             else:
                 print(16)  # ViewMonitor to trigger vital signs measurements
 
