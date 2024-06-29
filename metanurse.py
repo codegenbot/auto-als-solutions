@@ -2,7 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-initial_checks_done = False
 
 while True:
     observations = input().split()
@@ -17,12 +16,6 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if not initial_checks_done:
-        print(25)  # UseSatsProbe
-        print(27)  # UseBloodPressureCuff
-        initial_checks_done = True
-        continue
-
     # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
@@ -30,6 +23,16 @@ while True:
         else:
             print(3)  # ExamineAirway
             continue
+
+    # If no recent valid Sats reading, get one
+    if measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        continue
+
+    # If no recent valid MAP reading, get one
+    if measured_times[4] == 0:
+        print(27)  # UseBloodPressureCuff
+        continue
 
     # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
@@ -47,9 +50,6 @@ while True:
         continue
 
     # Circulation assessment
-    if measured_times[0] > 0 and events[17] > 0.5:  # RadialPulseNonPalpable
-        print(15)  # GiveFluids
-        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
@@ -81,4 +81,5 @@ while True:
         print(48)  # Finish
         break
 
+    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
