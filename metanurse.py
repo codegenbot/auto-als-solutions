@@ -2,8 +2,8 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-emergency_intervention_performed = False
-step_count = 0
+exposure_checked = False
+oxygen_applied = False
 
 while True:
     observations = input().split()
@@ -11,71 +11,85 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # High-priority immediate life-threatening conditions
-    if measured_times[5] > 0 and measured_values[5] < 65:
+    # Immediate life-saving interventions
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
-    if measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  # StartChestCompression
+
+    # Examine airway if not confirmed
+    if not airway_confirmed:
+        if events[3] > 0.5:  # AirwayClear
+            airway_confirmed = True
+        else:
+            print(3)  # ExamineAirway
+            continue
+
+    # Ensure Blood Pressure is measured using cuff
+    if measured_times[4] <= 0:
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Breathing and oxygenation
+    if not oxygen_applied and measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        oxygen_applied = True
         continue
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
 
-    # Examinations sequence following ABCDE protocol
-    if not airway_confirmed:
-        print(3)  # ExamineAirway
-        continue
-    if events[3] > 0:  # AirwayClear an event
-        airway_confirmed = True
-
-    if airway_confirmed and not breathing_assessed:
+    # Examine breathing situation
+    if not breathing_assessed:
         print(4)  # ExamineBreathing
-        continue
-    if airway_confirmed and events[10] > 0:  # BreathingEqualChestExpansion an event
         breathing_assessed = True
+        continue
 
-    if breathing_assessed and not circulation_checked:
+    # Check and rectify breathing issues
+    if events[7] > 0.5:  # BreathingNone
+        print(29)  # UseBagValveMask
+        continue
+
+    # Circulation check
+    if not circulation_checked:
         print(5)  # ExamineCirculation
-        continue
-    if events[16] > 0:  # RadialPulsePalpable an event
         circulation_checked = True
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
 
-    if circulation_checked and not disability_checked:
+    # Check disability status
+    if not disability_checked:
         print(6)  # ExamineDisability
-        continue
-    if events[23] > 0 or events[24] > 0:  # PupilsPinpoint or PupilsNormal an event
         disability_checked = True
-
-    # Maintaining stabilization measures and re-check vital signs
-    if measured_times[4] <= 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-    if measured_times[5] <= 0 or measured_values[5] < 88:
-        print(25)  # UseSatsProbe
         continue
 
-    if step_count >= 349:  # Final step before game ends automatically
-        print(48)  # Finish
-        break
+    # Exposure check
+    if not exposure_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
+        continue
 
+    # Final stabilization check
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and exposure_checked
     ):
         if (
-            measured_times[4] > 0
-            and measured_values[4] >= 60
-            and measured_times[5] > 0
+            measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
             and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
         ):
             print(48)  # Finish
             break
 
-    # Regular status watch and data update
+    # Default action if no other specific actions are needed
     print(16)  # ViewMonitor
-    step_count += 1
