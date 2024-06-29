@@ -28,10 +28,16 @@ def main():
             print(48)  # Finish
             break
         else:
-            if not any(events):
-                print(8)  # ExamineResponse to trigger events
+            if step < 5:
+                print(3)  # ExamineAirway
+            elif step < 10:
+                print(4)  # ExamineBreathing
+            elif step < 15:
+                print(5)  # ExamineCirculation
+            elif step < 20:
+                print(8)  # ExamineResponse
             else:
-                print(16)  # ViewMonitor to trigger vital signs measurements
+                print(7)  # ExamineExposure
 
         sys.stdout.flush()
         step += 1
@@ -40,10 +46,10 @@ def main():
 def check_stabilization(sats, map_value, resp_rate):
     return (
         sats is not None
-        and map_value is not None
-        and resp_rate is not None
         and sats >= 88
+        and map_value is not None
         and map_value >= 60
+        and resp_rate is not None
         and resp_rate >= 8
     )
 
