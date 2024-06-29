@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+vital_signs_monitored = False
 
 while True:
     observations = input().split()
@@ -54,6 +55,12 @@ while True:
         disability_checked = True
         continue
 
+    # Vital signs re-check
+    if not vital_signs_monitored:
+        print(16)  # ViewMonitor
+        vital_signs_monitored = True
+        continue
+
     # Stabilization check
     if (
         airway_confirmed
@@ -67,9 +74,7 @@ while True:
         and measured_times[4] > 0
         and measured_values[4] >= 60  # MAP at least 60
     ):
-        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
