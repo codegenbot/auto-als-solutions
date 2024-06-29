@@ -3,7 +3,9 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 exposure_examined = False
-monitor_checked = False
+monitor_pads_used = False
+sats_probe_used = False
+bp_cuff_used = False
 
 while True:
     observations = input().split()
@@ -11,14 +13,12 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
         print(17)
         continue
 
     if not airway_confirmed:
-        if events[3] > 0:
+        if events[3] > 0.5:
             airway_confirmed = True
         elif any(events[i] > 0 for i in [4, 5, 6]):
             print(31)
@@ -30,11 +30,17 @@ while True:
     if events[7] > 0.5:
         print(29)
         continue
+
     if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)
+        if not sats_probe_used:
+            print(25)
+            sats_probe_used = True
+            continue
+        print(30)  # Non-rebreather mask
         continue
+
     if measured_times[6] > 0 and measured_values[6] < 8:
-        print(29)
+        print(29)  # Bag Valve Mask
         continue
 
     if not breathing_assessed:
@@ -42,23 +48,26 @@ while True:
         breathing_assessed = True
         continue
 
-    if not circulation_checked:
-        if measured_times[0] >= 0.5:
-            if not monitor_checked:
-                print(16)
-                monitor_checked = True
-                continue
-            else:
-                if events[17] > 0:
-                    print(40)
-                    continue
-                else:
-                    print(15)
-                    continue
-        else:
-            print(5)
-            circulation_checked = True
+    if events[18] > 0 or events[21] > 0 or events[23] > 0:
+        print(11)  # Amiodarone if heart complications
+        continue
+
+    if measured_times[0] > 0 and measured_values[0] < 60:
+        print(14)  # Venflon IVCatheter if heart rate low
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        if not bp_cuff_used:
+            print(27)  # Blood pressure cuff
+            bp_cuff_used = True
             continue
+        print(15)  # Give fluids
+        continue
+    
+    if not circulation_checked:
+        print(5)
+        circulation_checked = True
+        continue
 
     if not disability_checked:
         print(6)
@@ -71,8 +80,7 @@ while True:
         continue
 
     if all([
-        airway_confirmed, breathing_assessed, circulation_checked, 
-        disability_checked, exposure_examined,
+        airway_confirmed, breathing_assessed, circulation_checked, disability_checked, exposure_examined,
         measured_times[5] > 0, measured_values[5] >= 88,
         measured_times[6] > 0, measured_values[6] >= 8,
         measured_times[4] > 0, measured_values[4] >= 60
@@ -80,4 +88,4 @@ while True:
         print(48)
         break
 
-    print(16)
+    print(16)  # View monitor if no immediate actions required
