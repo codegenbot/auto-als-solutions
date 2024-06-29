@@ -11,24 +11,31 @@ while True:
 
     # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_formatted_values[4] < 20
+        measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Ensure we frequently check vital signs
-    if measured_times[5] == 0:  # Sats not measured recently
+    # Ensure recent readings for critical measurements
+    if measured_times[5] == 0:  # No recent Sats measurement
         print(25)  # UseSatsProbe
         continue
-    if measured_times[4] == 0:  # MAP not measured recently
+    if measured_times[4] == 0:  # No recent MAP measurement
         print(27)  # UseBloodPressureCuff
-        print(38)  # MeasureBloodPressure (after cuff is used)
+        continue
+    if measured_times[6] == 0:  # No recent Respiratory Rate measurement
+        print(38)  # TakeBloodPressure
         continue
 
     # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
+        elif (
+            events[4] > 0 or events[5] > 0 or events[6] > 0
+        ):  # AirwayVomit/Blood/Tongue
+            print(31)  # UseYankeurSucionCatheter
+            continue
         else:
             print(3)  # ExamineAirway
             continue
@@ -49,12 +56,6 @@ while True:
         continue
 
     # Circulation assessment
-    if measured_times[0] > 0 and (measured_values[0] < 60 or measured_values[0] > 100):
-        if measured_values[0] < 60:
-            print(15)  # GiveFluids
-        elif measured_values[0] > 100:
-            print(9)  # GiveAdenosine
-        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
@@ -69,9 +70,6 @@ while True:
         disability_checked = True
         continue
 
-    # Exposure check
-    print(7)  # ExamineExposure
-
     # Stabilization check
     if (
         airway_confirmed
@@ -83,10 +81,11 @@ while True:
         and measured_times[6] > 0
         and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_yvalues[4] >= 60  # MAP at least 60
     ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Monitor regularly if no other action is required
+    # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
