@@ -39,7 +39,7 @@ def main():
             elif step < 25:
                 print(7)  # ExamineExposure
             else:
-                print(16)  # ViewMonitor
+                print(16)  # ViewMonitor to trigger vital signs measurements
 
         sys.stdout.flush()
         step += 1
@@ -48,10 +48,10 @@ def main():
 def check_stabilization(sats, map_value, resp_rate):
     return (
         sats is not None
-        and map_value is not None
-        and resp_rate is not None
         and sats >= 88
+        and map_value is not None
         and map_value >= 60
+        and resp_rate is not None
         and resp_rate >= 8
     )
 
