@@ -2,9 +2,9 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_checked = False
+step_count = 0
 
-while True:
+while step_count < 350:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -21,11 +21,6 @@ while True:
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif (
-            events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1
-        ):  # Obstruction detected
-            print(31)  # UseYankeurSuctionCatheter
-            continue
         else:
             print(3)  # ExamineAirway
             continue
@@ -46,14 +41,11 @@ while True:
         continue
 
     # Circulation assessment
-    if events[17] > 0.5:  # RadialPulseNonPalpable
-        print(14)  # UseVenflonIVCatheter
-        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
     if not circulation_checked:
-        print(5)  # ExamineCirc0ulation
+        print(5)  # ExamineCirculation
         circulation_checked = True
         continue
 
@@ -63,19 +55,12 @@ while True:
         disability_checked = True
         continue
 
-    # Exposure assessment
-    if not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
-        continue
-
     # Stabilization check
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
-        and exposure_checked
         and measured_times[5] > 0
         and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
@@ -89,3 +74,4 @@ while True:
 
     # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
+    step_count += 1
