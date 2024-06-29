@@ -30,12 +30,16 @@ def main():
             print(48)  # Finish
             break
         else:
-            if events[3] == 0:  # Airway not examined
+            if step < 5:  # Initial assessment
                 print(3)  # ExamineAirway
-            elif events[4] == 0:  # Breathing not examined
+            elif step < 10:
                 print(4)  # ExamineBreathing
-            elif events[5] == 0:  # Circulation not examined
+            elif step < 15:
                 print(5)  # ExamineCirculation
+            elif step < 20:
+                print(6)  # ExamineDisability
+            elif step < 25:
+                print(7)  # ExamineExposure
             else:
                 print(16)  # ViewMonitor to trigger vital signs measurements
 
