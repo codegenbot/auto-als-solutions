@@ -2,9 +2,10 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+exposure_checked = False
 initial_assessments_done = False
-sats_probe_used = False
-bp_cuff_used = False
+satsProbeUsed = False
+breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -26,46 +27,73 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            continue
+            if events[3] > 0.1:  # AirwayClear event present
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
+                continue
         elif not breathing_assessed:
-            print(4)  # ExamineBreathing
-            continue
+            if events[10] > 0:  # BreathingEqualChestExpansion event present
+                breathing_assessed = True
+            else:
+                if not breathingDrawerOpened:
+                    print(19)  # OpenBreathingDrawer
+                    breathingDrawerOpened = True
+                    continue
+                elif not satsProbeUsed:
+                    print(25)  # UseSatsProbe
+                    satsProbeUsed = True
+                    continue
+                else:
+                    print(4)  # ExamineBreathing
+                    continue
         elif not circulation_checked:
-            print(5)  # ExamineCirculation
-            continue
+            if (
+                events[16] > 0 or events[17] > 0
+            ):  # RadialPulsePalpable or RadialPulseNonPalpable
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
         elif not disability_checked:
-            print(6)  # ExamineDisability
-            continue
-        initial_assessments_done = True
-        continue
-
-    if measured_times[5] == 0 or measured_values[5] < 88:
-        if not sats_probe_used:
-            print(19)  # OpenBreathingDrawer
-            sats_probe_used = True
-            continue
-        else:
-            print(25)  # UseSatsProbe
-            continue
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        if not bp_cuff_used:
-            print(27)  # UseBloodPressureCuff
-            bp_cuff_used = True
+            if events[21] > 0 or events[22] > 0:  # AVPU_A or AVPU_U
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
+        elif not exposure_checked:
+            exposure_checked = True
+            print(7)  # ExamineExposure
             continue
         else:
-            print(38)  # TakeBloodPressure
-            continue
+            initial_assessments_done = True
 
-    # If all is well, print "Finish" to stabilize the patient successfully
+    # Sufficient stabilization criteria met?
     if (
-        (measured_times[5] > 0 and measured_values[5] >= 88)
-        and (measured_times[6] > 0 and measured_values[6] >= 8)
-        and (measured_times[4] > 0 and measured_values[4] >= 60)
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default action if no conditions are met
-    print(16)  # ViewMonitor
+    # If SATS or MAP haven't been measured or are below threshold, handle accordingly
+    if not measured_times[5] or measured_values[5] < 88:
+        if not satsProbeUsed:
+            if not breathingDrawerOpened:
+                print(19)  # OpenBreathingDrawer
+                breathingDrawerOpened = True
+            else:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+            continue
+        else:
+            print(16)  # ViewMonitor
+    elif not measured_times[4] or measured_values[4] < 60:
+        print(26)  # UseAline
+        continue
+    else:
+        print(16)  # ViewMonitor
