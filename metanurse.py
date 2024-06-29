@@ -32,7 +32,7 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0:
+            if events[9] > 0 or events[10] > 0 or events[13] > 0:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
@@ -53,34 +53,29 @@ while steps < 350:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
+
         initial_assessments_done = True
 
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-    else:
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(20)  # OpenBreathingDrawer
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-                continue
-            else:
-                print(16)  # ViewMonitor
+    if initial_assessments_done:
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
+
+        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+            print(19)  # OpenBreathingDrawer
             continue
+
         if measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
+            print(27)  # UseBloodPressureCuff
             continue
-        if steps < 350 and not satsProbeUsed:
-            print(20)  # OpenBreathingDrawer
+        if measured_times[5] == 0 or measured_values[5] < 88:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
-        else:
-            print(16)  # ViewMonitor
+            continue
