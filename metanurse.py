@@ -40,6 +40,9 @@ while True:
         continue
 
     # Circulation assessment
+    if events[18] > 0:  # HeartSoundsMuffled
+        print(11)  # GiveAmiodarone
+        continue
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
@@ -52,6 +55,11 @@ while True:
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
+        continue
+
+    # Exposure assessment
+    if airway_confirmed and breathing_assessed and circulation_checked and disability_checked:
+        print(7)  # ExamineExposure
         continue
 
     # Stabilization check
