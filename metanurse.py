@@ -50,13 +50,14 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if (
-        (measured_times[5] > 0 and measured_values[5] >= 88)
-        and (measured_times[6] > 0 and measured_values[6] >= 8)
-        and (measured_times[4] > 0 and measured_values[4] >= 60)
-    ):
-        print(48)  # Finish
-        break
+    if initial_assessments_done:
+        if (
+            (measured_times[5] > 0 and measured_values[5] >= 88)
+            and (measured_times[6] > 0 and measured_values[6] >= 8)
+            and (measured_times[4] > 0 and measured_values[4] >= 60)
+        ):
+            print(48)  # Finish
+            break
 
     if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
         print(25)  # UseSatsProbe
