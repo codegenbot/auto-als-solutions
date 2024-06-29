@@ -2,7 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_checked = False
+exposure_examined = False
 
 while True:
     observations = input().split()
@@ -64,29 +64,33 @@ while True:
         continue
 
     # Exposure assessment
-    if not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
-        continue
-
-    # If all assessments have been done but the patient is not stabilized
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
-        and exposure_checked
+        and not exposure_examined
     ):
-        if (
-            (measured_times[5] > 0 and measured_values[5] < 88)
-            or (measured_times[6] > 0 and measured_values[6] < 8)
-            or (measured_times[4] > 0 and measured_values[4] < 60)
-        ):
-            print(44)  # DefibrillatorPacePause
-            continue
-        else:
-            print(48)  # Finish
-            break
+        print(7)  # ExamineExposure
+        exposure_examined = True
+        continue
+
+    # Stabilization check
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and exposure_examined
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0  # Sats at least 88%
+        and measured_values[6] >= 8
+        and measured_times[4] > 0  # Resp Rate at least 8
+        and measured_values[4] >= 60  # MAP at least 60mmHg
+    ):
+        print(48)  # Finish
+        break
 
     # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
