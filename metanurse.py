@@ -32,8 +32,12 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0:
+            if (
+                events[9] > 0 or events[10] > 0
+            ):  # Check for BreathingEqualChestExpansion and BreathingBibasalCrepitations
                 breathing_assessed = True
+                print(19)  # OpenBreathingDrawer
+                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -56,26 +60,30 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if initial_assessments_done:
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
+    if (
+        initial_assessments_done
+        and not satsProbeUsed
+        and (measured_times[5] == 0 or measured_values[5] < 88)
+    ):
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
 
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            print(19)  # OpenBreathingDrawer
-            continue
+    if measured_times[5] == 0 or measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
 
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+    if measured_times[4] == 0 or (measured_times[4] > 0 and measured_values[4] < 60):
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
