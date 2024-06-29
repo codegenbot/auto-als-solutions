@@ -31,22 +31,34 @@ while steps < 350:
             else:
                 print(3)  # ExamineAirway
                 continue
+
         if not breathing_assessed:
-            print(4)  # ExamineBreathing
-            breathing_assessed = True
-            continue
+            if events[9] >= 0.1:
+                breathing_assessed = True
+            else:
+                print(4)  # ExamineBreathing
+                continue
+
         if not circulation_checked:
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+            if events[16] > 0 or events[17] > 0:
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
+
         if not disability_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
+            if events[22] > 0:
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
+
         if not exposure_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
+            if events[26] > 0:
+                exposure_checked = True
+            else:
+                print(7)  # ExamineExposure
+                continue
 
         initial_assessments_done = True
 
