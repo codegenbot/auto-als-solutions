@@ -2,94 +2,83 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-emergency_intervention_performed = False
-steps = 0
 
-while True:
+step_count = 0
+
+while step_count < 350:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-threatening conditions
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    # Immediate critical conditions handling
+    if measured_times[5] > 0 and measured_values[5] < 65:
         print(17)  # StartChestCompression
-        emergency_intervention_performed = True
+        step_count += 1
+        continue
+    if measured_times[4] > 0 and measured_values[4] < 20:
+        print(17)  # StartChestCompression
+        step_count += 1
         continue
 
-    # Basic airway examination and clearance
+    # ABCDE Assessment sequence
     if not airway_confirmed:
         print(3)  # ExamineAirway
+        airway_confirmed = (
+            events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
+        )
+        step_count += 1
         continue
 
-    # Check for clear airway confirmation from events
-    if not airway_confirmed and events[3] > 0.5:  # AirwayClear has high relevance
-        airway_confirmed = True
-
-    # Handling emergency interventions
-    if emergency_intervention_performed:
-        print(23)  # ResumeCPR if needed
-        emergency_intervention_performed = False
-        continue
-
-    # Breathing assessment and stabilization
     if not breathing_assessed and airway_confirmed:
-        print(25)  # UseSatsProbe to make sure Sats are measured
         print(4)  # ExamineBreathing
-        if events[10] > 0.5:  # BreathingEqualChestExpansion has high relevance
-            breathing_assessed = True
+        breathing_assessed = (
+            events[10] > 0 or events[13] > 0 or events[14] > 0
+        )  # Assuming these events can confirm breathing state
+        step_count += 1
         continue
 
-    # Circulation check
     if not circulation_checked and breathing_assessed:
         print(5)  # ExamineCirculation
+        circulation_checked = (
+            events[16] > 0
+        )  # RadialPulsePalpable indicates circulation
+        step_count += 1
         continue
 
-    # Check for palpable pulse from events
-    if (
-        not circulation_checked and events[16] > 0.5
-    ):  # RadialPulsePalpable has high relevance
-        circulation_checked = True
-
-    # Check and assess disability
     if not disability_checked and circulation_checked:
         print(6)  # ExamineDisability
-        if (
-            events[23] > 0.5 or events[24] > 0.5
-        ):  # PupilsPinpoint or PupilsNormal has high relevance
-            disability_checked = True
+        disability_checked = (
+            events[22] > 0 or events[23] > 0 or events[24] > 0
+        )  # Based on AVPU responses & pupil status
+        step_count += 1
         continue
 
-    # Ensure current measurements are taken if not done already
     if measured_times[4] <= 0:  # Blood pressure not measured recently
         print(27)  # UseBloodPressureCuff
-        continue
-    if measured_times[5] <= 0:  # Sats not measured recently
-        print(25)  # UseSatsProbe
-        continue
-    if measured_times[6] <= 0:  # Resps not evaluated recently
-        print(32)  # UseGuedelAirway in case airway stability is a concern
+        step_count += 1
         continue
 
-    # Monitor vital signs and handle stabilization
+    if measured_times[5] <= 0:  # Sats not measured recently
+        print(25)  # UseSatsProbe
+        step_count += 1
+        continue
+
+    # Check stabilization condition
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
     ):
-        if (
-            measured_values[4] >= 60
-            and measured_values[5] >= 88
-            and measured_values[6] >= 8
-        ):
-            print(48)  # Finish scenario if stabilized
-            break
+        print(48)  # Finish
+        break
 
-    if steps > 350:
-        break  # Escape after 350 steps to avoid infinite loop
-
-    steps += 1
-    print(16)  # ViewMonitor for general observation in the meantime
+    step_count += 1
+    print(16)  # ViewMonitor if nothing else is needed
