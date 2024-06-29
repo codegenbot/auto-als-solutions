@@ -20,6 +20,8 @@ def main():
         ):
             print(17)  # Start CPR
             break
+        elif events[7] > 0:  # BreathingNone
+            print(29)  # Use bag valve mask
         elif sats is not None and sats < 88:
             print(30)  # Provide oxygen
         elif map_value is not None and map_value < 60:
