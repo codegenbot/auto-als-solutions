@@ -11,6 +11,7 @@ def main():
         measured_times = list(map(float, observations[39:46]))
         measured_values = list(map(float, observations[46:]))
 
+        # Handle critical conditions immediately
         if (measured_times[5] > 0 and measured_values[5] < 65) or (
             measured_times[4] > 0 and measured_values[4] < 20
         ):
