@@ -14,7 +14,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -57,9 +57,12 @@ while steps < 350:
         initial_assessments_done = True
 
     if (
-        (measured_times[5] > 0 and measured_values[5] >= 88)
-        and (measured_times[6] > 0 and measured_values[6] >= 8)
-        and (measured_times[4] > 0 and measured_values[4] >= 60)
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
@@ -74,7 +77,7 @@ while steps < 350:
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(14)  # UseVenflonIVCatheter
             continue
-        if not satsProbeUsed:
+        if steps < 350 and not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
         else:
