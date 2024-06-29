@@ -14,50 +14,48 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if (measured_times[4] > 0 and measured_values[4] < 20) or (
-        measured_times[5] > 0 and measured_values[5] < 65
+    # Check for immediate life-threatening conditions
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    if not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
-
+    # Sequential ABCDE examinations
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            if events[3] > 0.1:
+            if events[3] > 0.1:  # Airway is clear
                 airway_confirmed = True
-            continue
-
-        if not breathing_assessed:
-            print(4)  # ExamineBreathing
-            if events[9] > 0:  # Checking for any breathing related event
+            else:
+                print(3)  # ExamineAirway
+                continue
+        elif not breathing_assessed:
+            if events[9] > 0:  # Breathing check related event detected
                 breathing_assessed = True
-            continue
-
-        if not circulation_checked:
-            print(5)  # ExamineCirculation
-            if events[16] > 0 or events[17] > 0:
+            else:
+                print(4)  # ExamineBreathing
+                continue
+        elif not circulation_checked:
+            if (
+                events[16] > 0 or events[17] > 0
+            ):  # Circulation check (pulse palpable/non-palpable)
                 circulation_checked = True
-            continue
-
-        if not disability_checked:
-            print(6)  # ExamineDisability
-            if events[22] > 0:
+            else:
+                print(5)  # ExamineCirculation
+                continue
+        elif not disability_checked:
+            if events[22] > 0:  # Disability assessment (AVPU)
                 disability_checked = True
-            continue
-
-        if not exposure_checked:
+            else:
+                print(6)  # ExamineDisability
+                continue
+        elif not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
+        initial_assessments_done = True  # All initial assessments complete
 
-        initial_assessments_done = True
-
+    # Check stabilization conditions
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -68,10 +66,14 @@ while steps < 350:
     ):
         print(48)  # Finish
         break
-    else:
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(16)  # ViewMonitor
-            continue
+
+    # Additional checks or repeated probes as required
+    if not satsProbeUsed or measured_times[5] == 0 or measured_values[5] < 88:
+        print(19)  # OpenBreathingDrawer
+        print(25)  # UseSatsProbe
+        satsProbeRouteTaken = True
+        continue
+
+    if measured_times[4] == 0 or measured_values[4] < 60:
+        print(14)  # UseVenflonIVCatheter
+        continue
