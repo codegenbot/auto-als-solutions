@@ -2,8 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-oxygen_device_used = False
-circulation_interventions_applied = False
 
 while True:
     observations = input().split()
@@ -18,14 +16,11 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway management
+    # Airway assessment and interventions
     if not airway_confirmed:
         if events[3] > 0.5:  # AirwayClear is confirmed
             airway_confirmed = True
-        elif events[4] > 0.1:  # AirwayVomit
-            print(31)  # UseYankeurSuctionCatheter
-            continue
-        elif events[5] > 0.1:  # AirwayBlood
+        elif events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
             print(31)  # UseYankeurSuctionCatheter
             continue
         elif events[6] > 0.1:  # AirwayTongue
@@ -35,15 +30,13 @@ while True:
             print(3)  # ExamineAirway
             continue
 
-    # Breathing assessment and support
+    # Breathing assessment and interventions
     if events[7] > 0.5:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
-        if not oxygen_device_used:
-            print(30)  # UseNonRebreatherMask
-            oxygen_device_used = True
-            continue
+        print(25)  # UseSatsProbe first
+        continue
     if measured_times[6] > 0 and measured_values[6] < 8:
         print(29)  # UseBagValveMask
         continue
@@ -52,12 +45,13 @@ while True:
         breathing_assessed = True
         continue
 
-    # Circulation assessment and intervention
+    # Circulation assessment and interventions
+    if events[17] > 0.1:  # RadialPulseNonPalpable
+        print(15)  # GiveFluids
+        continue
     if measured_times[0] > 0 and measured_values[0] < 60:
-        if not circulation_interventions_applied:
-            print(15)  # GiveFluids
-            circulation_interventions_applied = True
-            continue
+        print(14)  # UseVenflonIVCatheter for IV access
+        continue
     if not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
@@ -69,14 +63,6 @@ while True:
         disability_checked = True
         continue
 
-    # Monitoring - use wisely
-    if not measured_times[4] > 0:  # MAP not recently measured
-        print(27)  # UseBloodPressureCuff
-        continue
-    if not measured_times[5] > 0:  # Sats not recently measured
-        print(25)  # UseSatsProbe
-        continue
-
     # Stabilization check
     if (
         airway_confirmed
@@ -84,14 +70,16 @@ while True:
         and circulation_checked
         and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sufficient Oxygen Saturation
+        and measured_values[5] >= 88  # Sats at least 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8  # Adequate Respiratory Rate
+        and measured_values[6] >= 8  # Resp Rate at least 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # Adequate MAP
+        and measured_values[4] >= 60  # MAP at least 60
     ):
+        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # If nothing critical, continue monitoring
-    print(16)  # ViewMonitor
+    # Regular monitoring if no critical condition to address
+    print(28)  # AttachDefibPads for potential advanced interventions
+    continue
