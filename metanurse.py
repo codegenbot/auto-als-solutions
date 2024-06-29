@@ -16,22 +16,22 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Airway assessment and interventions
+    # Airway assessment
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear is confirmed
+        if events[3] > 0.1:  # AirwayClear is recent enough
             airway_confirmed = True
         else:
             print(3)  # ExamineAirway
             continue
 
-    # Breathing assessment and interventions
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    # Breathing assessment
+    if events[7] > 0.1:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
-    if measured_times[6] > 0 and measured_values[6] < 8:
+    if measured_times[1] > 0 and measured_values[1] < 8:
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
@@ -54,22 +54,29 @@ while True:
         disability_checked = True
         continue
 
-    # Stabilization check
+    # Check for emergency equipment necessary for further monitoring
+    if measured_times[5] == 0:  # Sats not recently measured
+        print(25)  # UseSatsProbe
+        continue
+    if measured_times[4] == 0:  # MAP not recently measured
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    # Check all conditions to consider patient stabilized
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88  # Sats at least 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8  # Resp Rate at least 8
+        and measured_values[5] >= 88
+        and measured_times[1] > 0
+        and measured_values[1] >= 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_values[4] >= 60
     ):
-        # All conditions for stabilization met
         print(48)  # Finish
         break
 
-    # Regular monitoring if no critical condition to address
+    # Continuous monitoring if no immediate criteria are unmet
     print(16)  # ViewMonitor
