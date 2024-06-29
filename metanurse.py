@@ -5,8 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-satsCheckedAfterProbe = False
-drawerOpened = False
+checkedMonitorAfterSatsProbe = False
 steps = 0
 
 while steps < 350:
@@ -60,28 +59,37 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Sats Probe Actions
-    if not drawerOpened and not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
-        drawerOpened = True
-        continue
-
-    if drawerOpened and not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
-
-    if satsProbeUsed and not satsCheckedAfterProbe:
-        print(16)  # ViewMonitor
-        satsCheckedAfterProbe = True
-        continue
-
-    # Check stabilization conditions
-    if initial_assessments_done and satsCheckedAfterProbe:
+    # Interventions based on assessment
+    if initial_assessments_done:
         if (
-            (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
-            and (measured_times[4] > 0 and measured_values[4] >= 60)
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
         ):
             print(48)  # Finish
             break
+
+        if not checkedMonitorAfterSatsProbe:
+            if not satsProbeUsed:
+                print(19)  # OpenBreathingDrawer
+                satsProbeUsed = True
+            else:
+                print(25)  # UseSatsProbe
+            continue
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not checkedMonitorAfterSatsProbe and satsProbeUsed:
+                print(16)  # ViewMonitor
+                checkedMonitorAfterSatsProbe = True
+                continue
+            elif not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+                checkedMonitorAfterSatsProbe = False
+                continue
+
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
