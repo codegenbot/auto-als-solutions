@@ -32,14 +32,8 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0 or measured_times[5] == 0:
+            if events[9] > 0:
                 breathing_assessed = True
-                if not satsProbeUsed:
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                    continue
-                print(16)  # ViewMonitor
-                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -59,7 +53,6 @@ while steps < 350:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
-
         initial_assessments_done = True
 
     if (
@@ -75,14 +68,18 @@ while steps < 350:
     else:
         if measured_times[5] == 0 or measured_values[5] < 88:
             if not satsProbeUsed:
+                print(20)  # OpenBreathingDrawer
                 print(25)  # UseSatsProbe
                 satsProbeUsed = True
-            print(16)  # ViewMonitor
+                continue
+            else:
+                print(16)  # ViewMonitor
             continue
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(14)  # UseVenflonIVCatheter
             continue
         if steps < 350 and not satsProbeUsed:
+            print(20)  # OpenBreathingDrawer
             print(25)  # UseSatsProbe
             satsProbeUsed = True
         else:
