@@ -9,28 +9,22 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
+    # Examine airway if not confirmed
     if not airway_confirmed:
-        if events[3] > 0.1:  # AirwayClear is somewhat confirmed
+        if events[3] > 0.5:  # AirwayClear
             airway_confirmed = True
-        elif events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSuctionCatheter
-            continue
-        elif events[6] > 0.1:  # AirwayTongue
-            print(32)  # UseGuedelAirway
-            continue
         else:
             print(3)  # ExamineAirway
             continue
 
-    if events[7] > 0.1:  # BreathingNone has medium relevance
-        print(29)  # UseBagValveMask
-        continue
+    # Breathing and oxygenation
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -38,36 +32,47 @@ while True:
         print(29)  # UseBagValveMask
         continue
     if not breathing_assessed:
-        print(4)  # ExamineBreating
+        print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
-    if measured_times[0] > 0 and measured_values[0] < 60:
-        print(15)  # GiveFluids
+    # Check paralysis for breathing issues or high-event cues
+    if events[7] > 0.5 or events[14] > 0.5:  # BreathingPneumothoraxSymptoms
+        print(29)  # UseBagValveMask
         continue
+
+    # Circulation
     if not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
+        continue
 
+    # Disability
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
+    # Stabilization check
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
     ):
-        print(48)  # Finish
-        break
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
 
+    # Default action if no other specific actions are needed
     print(16)  # ViewMonitor
