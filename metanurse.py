@@ -26,48 +26,38 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0:
+            if events[3] > 0:  # Check if AirwayClear event has occurred
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[12] > 0 or events[8] > 0:
-                breathing_assessed = True
-            else:
-                print(4)  # ExamineBreathing
-                continue
+            print(4)  # ExamineBreathing
+            continue
         if not circulation_checked:
-            if events[16] > 0:
-                circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
+            print(5)  # ExamineCirculation
+            continue
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0:
-                disability_checked = True
-            else:
             print(6)  # ExamineDisability
-                continue
+            continue
         if not exposure_checked:
             print(7)  # ExamineExposure
-        continue
-        exposure_checked = True
+            exposure_checked = True
+            continue
 
-    initial_assessments_done = airway_confirmed and breathing_assessed and circulation_checked and disability_checked and exposure_checked
+        initial_assessments_done = True
 
-    if initial_assessments_done:
-        if (
-            (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
-            and (measured_times[4] > 0 and measured_values[4] >= 60)
-        ):
-            print(48)  # Finish
-            break
+    if (
+        (measured_times[5] > 0 and measured_values[5] >= 88)
+        and (measured_times[6] > 0 and measured_values[6] >= 8)
+        and (measured_times[4] > 0 and measured_values[4] >= 60)
+    ):
+        print(48)  # Finish
+        break
 
     if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    print(0)  # DoNothing
+    print(0)  # DoNothing as a fallback if no conditions matched
