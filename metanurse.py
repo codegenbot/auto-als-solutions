@@ -24,53 +24,36 @@ while steps < 350:
         continue
 
     if not initial_assessments_done:
-        if not airway_confirmed:
+        if not airway_confirmed and (
+            events[3] > 0.1 or events[4] > 0 or events[5] > 0 or events[6] > 0
+        ):
+            airway_confirmed = True
+        else:
             print(3)  # ExamineAirway
             continue
-        if not breathing_assessed:
+
+        if not breathing_assessed and events[10] > 0.1:
+            breathing_assessed = True
+        else:
             print(4)  # ExamineBreathing
             continue
-        if not circulation_checked:
+
+        if not circulation_checked and (events[16] > 0.1 or events[17] > 0.1):
+            circulation_checked = True
+        else:
             print(5)  # ExamineCirculation
             continue
-        if not disability_checked:
+
+        if not disability_checked and (
+            events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1
+        ):
+            disability_checked = True
+        else:
             print(6)  # ExamineDisability
             continue
 
-        initial_assessments_done = (
-            airway_confirmed
-            and breathing_assessed
-            and circulation_checked
-            and disability_checked
-        )
-        if initial_assessments_done:
-            print(7)  # ExamineExposure
-        continue
-
-    if not airway_confirmed and events[3] > 0.1:
-        airway_confirmed = True
-    elif not airway_confirmed:
-        print(3)  # ExamineAirway
-        continue
-
-    if not breathing_assessed and events[10] > 0.1:
-        breathing_assessed = True
-    elif not breathing_assessed:
-        print(4)  # ExamineBreathing
-        continue
-
-    if not circulation_checked and (events[16] > 0.1 or events[17] > 0.1):
-        circulation_checked = True
-    elif not circulation_checked:
-        print(5)  # ExamineCirculation
-        continue
-
-    if not disability_checked and (
-        events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1
-    ):
-        disability_checked = True
-    elif not disability_checked:
-        print(6)  # ExamineDisability
+        initial_assessments_done = True
+        print(7)  # ExamineExposure (always do at end of initial checks)
         continue
 
     if (
@@ -87,7 +70,6 @@ while steps < 350:
         if measured_times[5] == 0 or measured_values[5] < 88:
             print(30)  # UseNonRebreatherMask
         elif measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
             print(15)  # GiveFluids
         else:
-            print(16)  # ViewMonitor
+            print(0)  # DoNothing
