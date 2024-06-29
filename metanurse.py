@@ -23,22 +23,22 @@ while True:
     # Assessment sequence improvements
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        if events[3] > 0.7:  # AirwayClear detected
+        if events[3] > 0:  # AirwayClear detected
             airway_confirmed = True
         continue
     if not breathing_assessed and airway_confirmed:
         print(4)  # ExamineBreathing
-        if events[10] > 0.7:  # BreathingEqualChestExpansion detected
+        if events[10] > 0:  # BreathingEqualChestExpansion detected
             breathing_assessed = True
         continue
     if not circulation_checked and breathing_assessed:
         print(5)  # ExamineCirculation
-        if events[16] > 0.7:  # RadialPulsePalpable detected
+        if events[16] > 0:  # RadialPulsePalpable detected
             circulation_checked = True
         continue
     if not disability_checked and circulation_checked:
         print(6)  # ExamineDisability
-        if events[23] > 0.7 or events[24] > 0.7:  # PupilsPinpoint or PupilsNormal detected
+        if events[23] > 0 or events[24] > 0:  # PupilsPinpoint or PupilsNormal detected
             disability_checked = True
         continue
 
