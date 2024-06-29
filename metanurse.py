@@ -42,13 +42,13 @@ while steps < 350:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
-            continue
+                continue
         if not disability_checked:
             if events[22] > 0:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
-            continue
+                continue
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
