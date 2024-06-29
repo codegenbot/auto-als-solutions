@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+exposure_checked = False
 saturation_checked = False
 
 while True:
@@ -67,6 +68,12 @@ while True:
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
+        continue
+
+    # Exposure assessment
+    if not exposure_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
         continue
 
     # Regular monitoring if no critical condition to address immediately
