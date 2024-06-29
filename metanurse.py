@@ -11,8 +11,8 @@ while True:
     measured_values = list(map(float, observations[46:]))
 
     # Handle immediate critical conditions more assertively
-    if events[7] >= 0.7 or (
-        measured_times[6] > 0 and measured_values[6] < 8
+    if (
+        events[7] >= 0.7 or measured_times[6] > 0 and measured_values[6] < 8
     ):  # Severe Breathing Issues
         print(29)  # UseBagValveMask
         continue
@@ -26,15 +26,12 @@ while True:
     if not airway_confirmed:
         print(3)  # ExamineAirway
         continue
-
     if not breathing_assessed:
         print(4)  # ExamineBreathing
         continue
-
     if not circulation_checked:
         print(5)  # ExamineCirculation
         continue
-
     if not disability_checked:
         print(6)  # ExamineDisability
         continue
@@ -42,26 +39,20 @@ while True:
     # Regular monitoring and data update
     if measured_times[4] <= 0:  # Blood pressure not measured recently
         print(27)  # UseBloodPressureCuff
-        continue
     elif measured_times[5] <= 0:  # Sats not measured recently
         print(25)  # UseSatsProbe
-        continue
     else:
-        print(16)  # ViewMonitor
-        continue
-
-    # Check if all conditions for finishing are met
-    if (
-        airway_confirmed
-        and measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-
-    # Keep monitoring if nothing else to do
-    print(16)  # ViewMonitor
+        # Last condition check to make action decisions
+        if (
+            airway_confirmed
+            and measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
+        else:
+            print(16)  # ViewMonitor
