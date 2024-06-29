@@ -17,45 +17,46 @@ while steps < 350:
     if (measured_times[4] > 0 and measured_values[4] < 20) or (
         measured_times[5] > 0 and measured_values[5] < 65
     ):
-        print(17)  # Start Chest Compression
+        print(17)  # StartChestCompression
+        continue
+
+    if not satsProbeUsed:
+        print(19)  # OpenBreathingDrawer
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
+            print(3)  # ExamineAirway
             if events[3] > 0.1:
                 airway_confirmed = True
-            else:
-                print(3)  # ExamineAirway
-                continue
+            continue
+
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            if events[9] > 0:
+            if events[9] > 0:  # Checking for any breathing related event
                 breathing_assessed = True
             continue
+
         if not circulation_checked:
+            print(5)  # ExamineCirculation
             if events[16] > 0 or events[17] > 0:
                 circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
+            continue
+
         if not disability_checked:
+            print(6)  # ExamineDisability
             if events[22] > 0:
                 disability_checked = True
-            else:
-                print(6)  # ExamineDisability
-                continue
+            continue
+
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
 
         initial_assessments_done = True
-
-    if not satsProbeUsed and not initial_assessments_done:
-        print(19)  # Open Breathing Drawer
-        print(25)  # Use Sats Probe
-        satsProbeUsed = True
-        continue
 
     if (
         measured_times[5] > 0
@@ -69,7 +70,7 @@ while steps < 350:
         break
     else:
         if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # Use Blood Pressure Cuff
+            print(27)  # UseBloodPressureCuff
             continue
         if measured_times[5] == 0 or measured_values[5] < 88:
             print(16)  # ViewMonitor
