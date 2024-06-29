@@ -42,6 +42,10 @@ def main():
                 print(7)  # ExamineExposure
             else:
                 print(16)  # ViewMonitor to trigger vital signs measurements
+                if vital_signs_times[5] == 0:  # Sats not measured
+                    print(25)  # UseSatsProbe
+                if vital_signs_times[4] == 0:  # MAP not measured
+                    print(27)  # UseBloodPressureCuff
 
         sys.stdout.flush()
         step += 1
