@@ -10,6 +10,7 @@ while True:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Handle immediate critical conditions more assertively
     if (
         events[7] >= 0.7 or measured_times[6] > 0 and measured_values[6] < 8
     ):  # Severe Breathing Issues
@@ -21,36 +22,50 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    if not airway_confirmed and (events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1):
-        airway_confirmed = True
-
-    if airway_confirmed and not breathing_assessed:
-        if events[10] > 0.1:
+    # Assessment sequence improvements
+    if not airway_confirmed:
+        print(3)  # ExamineAirway
+        if events[3] > 0:  # AirwayClear detected
+            airway_confirmed = True
+        continue
+    if not breathing_assessed and airway_confirmed:
+        print(4)  # ExamineBreathing
+        if events[10] > 0:  # BreathingEqualChestExpansion detected
             breathing_assessed = True
-        else:
-            print(4)  # ExamineBreathing
-            continue
-
-    if breathing_assessed and not circulation_checked:
-        if events[16] > 0.1 or events[17] > 0.1:
+        continue
+    if not circulation_checked and breathing_assessed:
+        print(5)  # ExamineCirculation
+        if events[16] > 0:  # RadialPulsePalpable detected
             circulation_checked = True
-        else:
-            print(5)  # ExamineCirculation
-            continue
-
-    if circulation_checked and not disability_checked:
-        if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:
+        continue
+    if not disability_checked and circulation_checked:
+        print(6)  # ExamineDisability
+        if events[23] > 0 or events[24] > 0:  # PupilsPinpoint or PupilsNormal detected
             disability_checked = True
-        else:
-            print(6)  # ExamineDisability
-            continue
+        continue
 
-    if disability_checked and not emergency_intervention_performed:
-        if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
-            print(48)  # Finish
-            break
-        else:
-            print(16)  # ViewMonitor
-            continue
+    # Regular monitoring and data update
+    if measured_times[4] <= 0:  # Blood pressure not measured recently
+        print(27)  # UseBloodPressureCuff
+        continue
+    if measured_times[5] <= 0:  # Sats not measured recently
+        print(25)  # UseSatsProbe
+        continue
+
+    # Condition monitoring and final decision
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+    ):
+        print(48)  # Finish
+        break
     else:
-        print(0)  # DoNothing if somehow reached here without conditions
+        print(16)  # ViewMonitor
