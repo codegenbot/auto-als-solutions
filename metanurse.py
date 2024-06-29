@@ -2,8 +2,10 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+steps = 0
+max_steps = 350
 
-while True:
+while steps < max_steps:
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -91,3 +93,4 @@ while True:
 
     # Regular monitoring if no critical condition to address
     print(16)  # ViewMonitor
+    steps += 1
