@@ -2,6 +2,7 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
+equipment_set_up = False
 
 while True:
     observations = input().split()
@@ -16,16 +17,16 @@ while True:
         print(17)  # StartChestCompression
         continue
 
-    # Check for airway problems
+    # Check and manage airway
     if not airway_confirmed:
-        if events[3] > 0.5:  # AirwayClear is strongly indicated
+        if events[3] > 0:  # AirwayClear is triggered
             airway_confirmed = True
         else:
             print(3)  # ExamineAirway
             continue
 
-    # Breathing interventions and assessments
-    if events[7] > 0.5:  # BreathingNone has high relevance
+    # Emergency breathing support
+    if events[7] > 0:  # BreathingNone has high relevance
         print(29)  # UseBagValveMask
         continue
     if measured_times[5] > 0 and measured_values[5] < 88:
@@ -39,7 +40,7 @@ while True:
         breathing_assessed = True
         continue
 
-    # Circulation assessments and interventions
+    # Circulation interventions
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
@@ -48,35 +49,39 @@ while True:
         circulation_checked = True
         continue
 
-    # Check disability
+    # Assess disability
     if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    # Check if John is stabilized
+    # Set up essential monitoring equipment if not done
+    if not equipment_set_up:
+        print(25)  # UseSatsProbe
+        print(27)  # UseBloodPressureCuff
+        equipment_set_up = True
+        continue
+
+    # Monitor contextually after interventions
+    if equipment_set_up:
+        print(16)  # ViewMonitor
+        continue
+
+    # Check if all parameters are stabilized
     if (
         airway_confirmed
         and breathing_assessed
         and circulation_checked
         and disability_checked
         and measured_times[5] > 0
-        and measured_values[5] >= 88  # Oxygen saturation above 88%
+        and measured_values[5] >= 88
         and measured_times[6] > 0
-        and measured_values[6] >= 8  # Respiratory rate above 8
+        and measured_values[6] >= 8
         and measured_times[4] > 0
-        and measured_values[4] >= 60  # MAP at least 60
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Regular monitoring if no immediate action needed
-    if (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-    ):
-        print(16)  # ViewMonitor
-    else:
-        print(0)  # DoNothing
+    # Default action if no conditions are met
+    print(0)  # DoNothing
