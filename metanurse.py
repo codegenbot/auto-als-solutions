@@ -2,7 +2,6 @@ airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
-exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 steps = 0
@@ -32,29 +31,27 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[9] > 0:
+            if events[14] > 0:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
+            if events[17] > 0 or events[16] > 0:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[22] > 0:
+            if events[21] > 0 or events[22] > 0:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
                 continue
-        if not exposure_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
 
         initial_assessments_done = True
+        print(7)  # ExamineExposure
+        continue
 
     if (
         measured_times[5] > 0
@@ -66,19 +63,18 @@ while steps < 350:
     ):
         print(48)  # Finish
         break
-    else:
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            else:
-                print(16)  # ViewMonitor
-            continue
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(14)  # UseVenflonIVCatheter
-            continue
-        if steps < 350 and not satsProbeUsed:
+
+    # If SATS or MAP haven't been measured or are below threshold, take action
+    if not measured_times[5] or measured_values[5] < 88:
+        if not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
+            continue
         else:
             print(16)  # ViewMonitor
+            continue
+    elif not measured_times[4] or measured_values[4] < 60:
+        print(14)  # UseVenflonIVCatheter
+        print(15)  # GiveFluids
+    else:
+        print(16)  # ViewMonitor
