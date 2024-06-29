@@ -60,7 +60,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Breathing Drawer Actions
+    # Sats Probe Actions
     if not drawerOpened:
         print(19)  # OpenBreathingDrawer
         drawerOpened = True
