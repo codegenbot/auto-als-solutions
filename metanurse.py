@@ -4,7 +4,7 @@ circulation_checked = False
 disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
-satsProbeUsed = False
+sats_probe_used = False
 steps = 0
 
 while steps < 350:
@@ -14,13 +14,11 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
+    if measured_times[5] > 0 and measured_values[5] < 65:
+        print(17)  # StartChestCompression
         continue
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    if measured_times[4] > 0 and measured_values[4] < 20:
         print(17)  # StartChestCompression
         continue
 
@@ -29,28 +27,23 @@ while steps < 350:
             if events[3] > 0.1:
                 airway_confirmed = True
             else:
-                print(3)  # ExamineAirway
-                continue
+            print(3)  # ExamineAirway
+            continue
 
         if not breathing_assessed:
-            if events[10] > 0.1:  # Checking for Equal Chest Expansion
-                if not satsProbeUsed:
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                else:
-                    print(16)  # ViewMonitor
-                continue
+            if events[10] > 0.1 and measured_times[5] > 0 and measured_values[5] < 88:  # Unequal Chest Expansion and low Sats
+                print(29)  # UseBagValveMask
             else:
                 print(4)  # ExamineBreathing
                 continue
 
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+        if not sats_probe_used:
+        print(25)  # UseSatsProbe
+        sats_probe_used = True
+        continue
 
         if not circulation_checked:
-            if events[16] > 0.1:  # Radial Pulse Palpable
+            if events[16] > 0.7:  # Radial Pulse Palpable
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
@@ -68,20 +61,10 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
+    if (measured_times[5] > 0 and measured_values[5] >= 88 and
+        measured_times[6] > 0 and measured_values[6] >= 8 and
+        measured_times[4] > 0 and measured_values[4] >= 60):
         print(48)  # Finish
         break
 
-    else:
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
-        print(16)  # ViewMonitor
+    print(16)  # ViewMonitor
