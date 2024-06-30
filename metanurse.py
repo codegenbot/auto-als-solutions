@@ -51,6 +51,7 @@ while steps < 350:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
+                continue
 
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:
@@ -74,7 +75,7 @@ while steps < 350:
         initial_assessments_done = True
 
     # Open breathing drawer if not yet done and going for sats probe
-    if not drawerOpened:
+    if not drawerOpened and not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         drawerOpened = True
         continue
