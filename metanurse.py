@@ -5,7 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-drawerOpened = False
+breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -38,14 +38,17 @@ while steps < 350:
             breathing_assessed = True
             continue
 
-    # Manage saturation drawing and sats detection
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            if not drawerOpened:
+        if not satsProbeUsed:
+            if (
+                measured_times[5] == 0 or measured_values[5] < 88
+            ) and not breathingDrawerOpened:
                 print(19)  # OpenBreathingDrawer
-                drawerOpened = True
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+                breathingDrawerOpened = True
+                continue
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+                continue
 
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:
@@ -73,7 +76,7 @@ while steps < 350:
             measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
-            and measured_v...
+            and measured_values[6] >= 8
             and measured_times[4] > 0
             and measured_values[4] >= 60
         ):
@@ -81,12 +84,14 @@ while steps < 350:
             break
 
         if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            if not drawerOpened:
+            if not breathingDrawerOpened:
                 print(19)  # OpenBreathingDrawer
-                drawerOpened = True
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+                breathingDrawerOpened = True
+                continue
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+                continue
 
         if satsProbeUsed:
             print(16)  # ViewMonitor
