@@ -26,24 +26,27 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            continue
+            if events[3] > 0.1:
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
+                continue
 
         if not breathing_assessed:
-            print(19)  # OpenBreathingDrawer
-            print(23)  # UseBagValveMask if needed
-            if not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            breathing_assessed = True
-            print(16)  # ViewMonitor
+            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+                breathing_assessed = True
+            print(4)  # ExamineBreathing
             continue
 
         if not circulation_checked:
+            if events[16] > 0 or events[17] > 0:
+                circulation_checked = True
             print(5)  # ExamineCirculation
             continue
 
         if not disability_checked:
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:
+                disability_checked = True
             print(6)  # ExamineDisability
             continue
 
@@ -53,6 +56,17 @@ while steps < 350:
             continue
 
         initial_assessments_done = True
+
+    if measured_times[5] > 0 and measured_values[5] < 88 and not satsProbeUsed:
+        print(19)  # OpenBreathingDrawer
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        print(4)  # ExamineBreathing
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(27)  # UseBloodPressureCuff
+        continue
 
     if (
         measured_times[5] > 0
@@ -65,15 +79,4 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
-            print(19)  # OpenBreathingDrawer
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        print(16)  # ViewMonitor
-        continue
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
-        continue
+    print(0)  # DoNothing if no other conditions matched
