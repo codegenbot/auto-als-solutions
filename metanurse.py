@@ -73,7 +73,8 @@ while steps < 350:
             break
 
         if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            print(19)  # OpenBreathingDrawer
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
@@ -82,8 +83,4 @@ while steps < 350:
         if measured_times[5] == 0 or measured_values[5] < 88:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
-            continue
-        
-        if satsProbeUsed:
-            print(16)  # ViewMonitor
             continue
