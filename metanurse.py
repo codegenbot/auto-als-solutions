@@ -26,20 +26,15 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0.1:  # AirwayClear
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[10] > 0.1:  # Checking for Equal Chest Expansion
-                if not satsProbeUsed:
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                else:
-                    print(16)  # ViewMonitor
-                continue
+            if events[10] > 0.1:  # EqualChestExpansion seen
+                breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -50,7 +45,7 @@ while steps < 350:
             continue
 
         if not circulation_checked:
-            if events[16] > 0.1:  # Radial Pulse Palpable
+            if events[16] > 0.1:  # RadialPulsePalpable
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
