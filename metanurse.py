@@ -3,9 +3,9 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 exposure_checked = False
+sats_probe_used = False
+bp_cuff_used = False
 initial_assessments_done = False
-satsProbeUsed = False
-bpCuffUsed = False
 steps = 0
 
 while steps < 350:
@@ -34,7 +34,7 @@ while steps < 350:
                 continue
 
         if not breathing_assessed:
-            if events[10] > 0.1:  # Checking for Equal Chest Expansion
+            if events[10] > 0.1:  # Equal Chest Expansion
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
@@ -59,14 +59,14 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
+    if not bp_cuff_used:
+        print(27)  # UseBloodPressureCuff
+        bp_cuff_used = True
         continue
 
-    if not bpCuffUsed and measured_times[4] == 0:
-        print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
+    if not sats_probe_used:
+        print(25)  # UseSatsProbe
+        sats_probe_used = True
         continue
 
     if (
