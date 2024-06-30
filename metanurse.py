@@ -15,7 +15,7 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagVal']))
+        print(29)  # UseBagValveMask
         continue
 
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
@@ -73,14 +73,20 @@ while steps < 350:
             break
 
         if not satsProbeUsed:
-            if measured_times[5] == 0 or measured_values[5] < 88:
-                print(19)  # OpenBreathingDrawer
-                continue
-            print(25)  # UseSatsProbe
+            print(19)  # OpenBreathingDrawer
             satsProbeUsed = True
             continue
+        else:
+            if measured_times[5] == 0:
+                print(25)  # UseSatsProbe
+                continue
+            elif measured_values[5] < 88:
+                print(30)  # UseNonRebreatherMask
+                continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
+
         print(16)  # ViewMonitor
+        continue
