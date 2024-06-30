@@ -42,7 +42,7 @@ while steps < 350:
             ):
                 breathing_assessed = True
             if not satsProbeUsed:
-                print(19)  # OpenBreathingDrawer
+                print(25)  # UseSatsProbe
                 satsProbeUsed = True
                 continue
             if not viewMonitorAfterSats:
@@ -87,7 +87,8 @@ while steps < 350:
 
         if measured_times[5] == 0 or measured_values[5] < 88:
             if not satsProbeUsed:
-                print(19)  # OpenBreathingDrawer
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
                 continue
             print(30)  # UseNonRebreatherMask
             continue
