@@ -27,28 +27,21 @@ while steps < 350:
     # ABCDE Assessment
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        if events[3] > 0.1:
-            airway_confirmed = True
+        airway_confirmed = True if events[3] > 0.1 else False
         continue
 
     if not breathing_assessed:
-        print(19)  # OpenBreathingDrawer
-        print(25)  # UseSatsProbe
-        print(16)  # ViewMonitor
-        breathing_assessed = True
+        print(4)  # ExamineBreathing
+        if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            breathing_assessed = True
         continue
 
-    if not satsProbeUsed:
-        if measured_times[5] > 0:
-            satsProbeUsed = True
-        else:
-            print(25)  # UseSatsProbe
-            continue
-
     if not circulation_checked:
-        print(5)  # ExamineCirculation
-        if events[16] > 0 or events[17] > 0:
-            circulation_checked = True
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            continue
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if not disability_checked:
@@ -62,9 +55,13 @@ while steps < 350:
         exposure_checked = True
         continue
 
-    # Monitoring measurements and stabilize condition
+    # Measurement and Monitoring
     if measured_times[5] == 0 or measured_values[5] < 88:
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            continue
         print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
@@ -75,7 +72,7 @@ while steps < 350:
         print(29)  # UseBagValveMask
         continue
 
-    # Checks if all vital parameters are stabilized
+    # Checks if all vitals are stabilized
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
