@@ -5,7 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-monitorViewed = False
+monitorChecked = False
 steps = 0
 
 while steps < 350:
@@ -62,20 +62,6 @@ while steps < 350:
         initial_assessments_done = True
 
     if initial_assessments_done:
-        if not satsProbeUsed or measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-
-        if not monitorViewed:
-            print(16)  # ViewMonitor
-            monitorViewed = True
-            continue
-
-        # If all vital signs are within acceptable limits, end the scenario
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
@@ -86,3 +72,17 @@ while steps < 350:
         ):
             print(48)  # Finish
             break
+
+        if not satsProbeUsed or measured_times[5] == 0 or measured_values[5] < 88:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
+
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
+
+        if not monitorChecked:
+            print(16)  # ViewMonitor
+            monitorChecked = True
+            continue
