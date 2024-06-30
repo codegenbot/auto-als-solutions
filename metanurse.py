@@ -37,7 +37,7 @@ while steps < 350:
             if events[10] > 0.1:  # Checking for Equal Chest Expansion
                 breathing_assessed = True
             else:
-            print(4)  # ExamineBreathing
+                print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
