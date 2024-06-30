@@ -6,6 +6,7 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 sats_checked = False
+breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -32,18 +33,27 @@ while steps < 350:
             else:
                 print(3)  # ExamineAirway
                 continue
-    
-        if not breathing_assessed:
+
+        if not breathing_assessed and events[3] > 0.1:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
 
-        if not satsProbeUsed:
+        if not breathingDrawerOpened:
             print(19)  # OpenBreathingDrawer
+            breathingDrawerOpened = True
+            continue
+
+        if not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
+            continue
+
+        if not sats_checked:
+            print(16)  # ViewMonitor
+            sats_checked = True
             continue
 
         if not circulation_checked:
@@ -57,11 +67,6 @@ while steps < 350:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
             else:
- Sporadic Server Accessories
-34
-🔔
- by Gillian Terrell
-10h ago
                 print(6)  # ExamineDisability
                 continue
 
@@ -71,7 +76,6 @@ while steps < 350:
             continue
 
         initial_assessments_done = True
-        continue  # Continue the loop since initial assessments are now done
 
     if (
         measured_times[5] > 0
@@ -84,8 +88,13 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    if measured_times[5] == 0 or measured_values[5] < 88:
-        print(25)  # UseSatsProbe
+    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
+        if not breathingDrawerOpened:
+            print(19)  # OpenBreathingDrawer
+            breathingDrawerOpened = True
+        if not satsProbeUsed:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
