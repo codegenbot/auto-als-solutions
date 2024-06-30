@@ -21,7 +21,7 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -37,7 +37,7 @@ while steps < 350:
             if events[10] > 0.1:  # Checking for Equal Chest Expansion
                 breathing_assessed = True
             else:
-        print(4)  # ExamineBreathing
+                print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
