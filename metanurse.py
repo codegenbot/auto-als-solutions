@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+viewMonitorUsed = False
 steps = 0
 
 while steps < 350:
@@ -39,8 +40,12 @@ while steps < 350:
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
                     continue
-                else:
+                elif not viewMonitorUsed:
                     print(16)  # ViewMonitor
+                    viewMonitorUsed = True
+                    continue
+                else:
+                    print(19)  # OpenBreathingDrawer
                     continue
             else:
                 print(4)  # ExamineBreathing
