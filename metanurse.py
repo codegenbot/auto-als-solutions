@@ -26,7 +26,7 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0:
+            if events[3] > 0:  # AirwayClear
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
@@ -34,42 +34,39 @@ while steps < 350:
         if not breathing_assessed:
             if measured_times[5] == 0:
                 print(25)  # UseSatsProbe
-            print(4)  # ExamineBreathing
-            breathing_assessed = True
+                satsProbeUsed = True
+            else:
+                breathing_assessed = True
             continue
         if not circulation_checked:
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+            if (
+                events[16] > 0 or events[17] > 0
+            ):  # RadialPulsePalpable or RadialPulseNonPalpable
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
         if not disability_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
+            if events[21] > 0 or events[22] > 0:  # AVPU_U or AVPU_V
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
-        initial_assessaths_done = True
+        initial_assessments_done = True
 
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and exposure_checked
+        and (measured_times[5] > 0 and measured_values[5] >= 88)
+        and (measured_times[6] > 0 and measured_values[6] >= 8)
+        and (measured_times[4] > 0 and measured_values[4] >= 60)
     ):
         print(48)  # Finish
         break
-
-    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        print(16)  # ViewMonitor
-        continue
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        print(38)  # TakeBloodPressure
-        continue
