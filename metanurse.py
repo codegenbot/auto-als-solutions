@@ -76,6 +76,9 @@ while steps < 350:
             print(19)  # OpenBreathingDrawer
             continue
 
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
         if measured_times[5] == 0 or measured_values[5] < 88:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
