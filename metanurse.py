@@ -26,13 +26,8 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1 or events[4] > 0.1 or events[6] > 0.1:
+            if events[3] > 0.1:
                 airway_confirmed = True
-                if events[4] > 0.1:  # AirwayVomit
-                    print(31)  # UseYankeurSucionCatheter
-                else:
-                    print(0)  # DoNothing
-                continue
             else:
                 print(3)  # ExamineAirway
                 continue
@@ -40,6 +35,9 @@ while steps < 350:
         if not breathing_assessed:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -65,19 +63,6 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and (
-        events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88)
-    ):
-        print(19)  # OpenBreathingDrawer
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    # Decision to finish if stabilized
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -89,4 +74,14 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as last resort
+    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
+        if not satsProbeUsed:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+        continue
+
+    if measured_times[4] == 0 or measured_values[4] < 60:
+        print(27)  # UseBloodPressureCuff
+        continue
+
+    print(0)  # DoNothing
