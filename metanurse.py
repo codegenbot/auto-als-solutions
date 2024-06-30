@@ -80,6 +80,7 @@ while steps < 350:
             if not satsProbeUsed:
                 print(25)  # UseSatsProbe
                 satsProbeUsed = True
+                continue
             else:
                 print(30)  # UseNonRebreatherMask
                 continue
