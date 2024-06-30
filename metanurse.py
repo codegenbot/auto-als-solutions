@@ -14,7 +14,6 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Check for urgent critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
@@ -23,6 +22,11 @@ while steps < 350:
 
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
+        continue
+
+    if not satsProbeUsed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if not initial_assessments_done:
@@ -44,11 +48,6 @@ while steps < 350:
             else:
                 print(4)  # ExamineBreathing
                 continue
-
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
 
         if not circulation_checked:
             if events[16] > 0.1:  # Radial Pulse Palpable
@@ -79,10 +78,5 @@ while steps < 350:
     ):
         print(48)  # Finish
         break
-
-    if not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
 
     print(16)  # ViewMonitor
