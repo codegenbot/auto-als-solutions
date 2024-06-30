@@ -26,7 +26,7 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[1] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
@@ -83,7 +83,7 @@ while steps < 350:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
-
+        
         if satsProbeUsed:
             print(16)  # ViewMonitor
             continue
