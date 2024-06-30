@@ -26,14 +26,14 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            if events[12] > 0 or events[13] > 0 or events[14] > 0 or events[7] > 0:
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
@@ -50,10 +50,10 @@ while steps < 350:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
             else:
-                print(6)  # ExamineDisability
-                continue
+          print(6)  # ExamineDisability 
+            continue
 
-        if not exposure_checked:
+         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
@@ -73,6 +73,7 @@ while steps < 350:
             break
 
         if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+            print(19)  # OpenBreathingDrawer
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
