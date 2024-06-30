@@ -16,7 +16,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical conditions leading to immediate actions
+    # Critical conditions that require immediate action
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -37,16 +37,6 @@ while steps < 350:
                 continue
 
         if not breathing_assessed:
-            if drawerOpened and not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-                continue
-
-            if satsProbeUsed and not satsCheckedAfterProbe:
-                print(16)  # ViewMonitor
-                satsCheckedAfterProbe = True
-                continue
-
             if events[9] > 0:
                 breathing_assessed = True
             else:
@@ -74,13 +64,23 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Open breathing drawer if not yet done and going for sats probe
+    # Handling sats probe and breathing drawer
     if not drawerOpened and not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         drawerOpened = True
         continue
 
-    # Check final stabilization conditions
+    if drawerOpened and not satsProbeUsed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
+
+    if satsProbeUsed and not satsCheckedAfterProbe:
+        print(16)  # ViewMonitor
+        satsCheckedAfterProbe = True
+        continue
+
+    # Check stabilization conditions
     if initial_assessments_done and satsCheckedAfterProbe:
         if (
             (measured_times[5] > 0 and measured_values[5] >= 88)
