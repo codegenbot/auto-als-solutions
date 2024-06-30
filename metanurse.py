@@ -14,8 +14,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Emergency checks
-    if events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -25,9 +24,8 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    # ABCDE assessment flow
     if not airway_confirmed:
-        if events[3] > 0.7:  # AirwayClear event is active and recent
+        if events[3] > 0.7:
             airway_confirmed = True
         print(3)  # ExamineAirway
         continue
@@ -37,15 +35,16 @@ while steps < 350:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
-        elif measured_times[5] > 0:  # Sats are recently measured
-            breathing_assessed = measured_values[5] >= 88
+        if measured_times[5] > 0 and measured_values[5] >= 88:
+            breathing_assessed = True
         print(4)  # ExamineBreathing
         continue
 
     if not circulation_checked:
         if measured_times[4] > 0 and measured_values[4] >= 60:
             circulation_checked = True
-        print(5)  # ExamineCirculation
+        else:
+            print(27)  # UseBloodPressureCuff
         continue
 
     if not disability_checked:
@@ -58,7 +57,6 @@ while steps < 350:
         exposure_checked = True
         continue
 
-    # End the scenario if all conditions are stabilized
     if (
         airway_confirmed
         and breathing_assessed
