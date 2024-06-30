@@ -66,6 +66,11 @@ while steps < 350:
         initial_assessments_done = True
 
     if initial_assessments_done:
+        if not viewMonitorUsed:
+            print(16)  # ViewMonitor
+            viewMonitorUsed = True
+            continue
+
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
