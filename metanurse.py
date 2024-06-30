@@ -5,74 +5,43 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-steps = 0
+step = 0
 
-while steps < 350:
-    steps += 1
+while step < 350:
+    step += 1
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (measured_times[4] > 0 and measured_values[4] < 20):
         print(17)  # StartChestCompression
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            mark_airway_observed = False
-            for i in [
-                3,
-                4,
-                5,
-                6,
-            ]:  # AirwayClear, AirwayVomit, AirwayBlood, AirwayTongue
-                if events[i] >= 0.1:
-                    mark_airway_observed = True
-            if mark_airway_observed:
+            if events[3] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            mark_breathing_observed = False
-            for i in [10, 11, 12, 13, 14]:  # Breathing relevant observations
-                if events[i] >= 0.1:
-                    mark_breathing_observed = True
-            if mark_breathing_observed:
+            if events[12] > 0:
                 breathing_assessed = True
-                if not satsProbeUsed:
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                    continue
             else:
                 print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
-            mark_circulation_observed = False
-            for i in [16, 17]:  # RadialPulsePalpable, RadialPulseNonPalpable
-                if events[i] >= 0.1:
-                    mark_circulation_observed = True
-            if mark_circulation_observed:
+            if events[16] > 0.7 or events[17] > 0.7:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
-            mark_disability_observed = False
-            for i in [21, 22, 23]:  # AVPU_U, AVPU_V, AVPU_P
-                if events[i] >= 0.1:
-                    mark_disability_observed = True
-            if mark_disability_observed:
+            if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -107,4 +76,14 @@ while steps < 350:
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
+            continue
+        if breathing_assessed and not satsProbeUsed:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
+        if satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+            print(16)  # ViewMonitor
+            continue
+        if measured_times[6] > 0 and measured_values[6] < 8:
+            print(29)  # UseBagValveMask
             continue
