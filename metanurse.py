@@ -21,10 +21,6 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
     if not initial_assessments_done:
         if not airway_confirmed:
             if events[3] > 0.1:
@@ -41,11 +37,8 @@ while steps < 350:
                 continue
 
         if not circulation_checked:
-            if events[16] > 0.1:  # Radial Pulse Palpable
-                circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
+            print(5)  # ExamineCirculation
+            continue
 
         if not disability_checked:
             print(6)  # ExamineDisability
@@ -59,15 +52,24 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and initial_assessments_done:
+    if measured_values[5] < 88 and not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if not bpCuffUsed and initial_assessments_done:
+    if measured_values[4] < 60 and not bpCuffUsed:
         print(27)  # UseBloodPressureCuff
+        print(16)  # ViewMonitor
         bpCuffUsed = True
         continue
+
+    if events[16] < 0.1 and events[17] > 0.1:
+        # Radial Pulse Non Palpable but need to confirm circulation through BP
+        if not bpCuffUsed:
+            print(27)  # UseBloodPressureCuff
+            print(16)  # ViewMonitor
+            bpCuffUsed = True
+            continue
 
     if (
         measured_times[5] > 0
