@@ -95,6 +95,3 @@ while steps < 350:
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
-
-    if steps > 348:
-        print(48)  # Finish
