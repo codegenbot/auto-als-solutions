@@ -14,11 +14,15 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Check for immediate life-threatening conditions
+    # Immediate critical responses
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
+        continue
+
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        print(29)  # UseBagValveMask
         continue
 
     # Initial ABCDE Assessments
@@ -58,26 +62,27 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Sats Probe and Monitor check for oxygen saturation
-    if not satsProbeUsed or (measured_times[5] == 0 or measured_values[5] < 88):
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
+    # Continuous monitoring and actions after initial checks are done
+    if initial_assessments_done:
+        # Checking if stabilization criteria are met
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
 
-    # Check if stabilization criteria are met
-    if (
-        airway_confirmed and
-        measured_times[5] > 0 and measured_values[5] >= 88 and
-        measured_times[6] > 0 and measured_values[6] >= 8 and
-        measured_times[4] > 0 and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
+        # Use Sats Probe if need to check or improve oxygen saturation
+        if not satsProbeUsed or (measured_times[5] == 0 or measured_values[5] < 88):
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
 
-    # Continuous monitoring and re-assessment
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-    
-    # Re-check conditions affected by previous actions but not yet reassessed
-    print(16)  # ViewMonitor for new updates after interventions
+        # Check other vital signs as needed
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
