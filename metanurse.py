@@ -37,7 +37,7 @@ while steps < 350:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
             else:
-       	        print(4)  # ExamineBreathing
+                print(4)  # ExamineBreathing
                 continue
 
         if not satsProbeUsed:
@@ -50,7 +50,7 @@ while steps < 350:
             if events[16] > 0 or events[17] > 0:
                 circulation_checked = True
             else:
-       	        print(5)  # ExamineCirculation
+                print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
