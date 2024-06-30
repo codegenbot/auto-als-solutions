@@ -42,6 +42,7 @@ while steps < 350:
         if not circulation_checked:
             if events[16] > 0.1:  # Radial Pulse Palpable
                 print(27)  # UseBloodPressureCuff
+                circulation_checked = True
                 continue
             else:
                 print(5)  # ExamineCirculation
@@ -67,8 +68,6 @@ while steps < 350:
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
