@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+sats_checked = False
 steps = 0
 
 while steps < 350:
@@ -35,14 +36,15 @@ while steps < 350:
         if not breathing_assessed:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
-                if not satsProbeUsed:
-                    print(19)  # OpenBreathingDrawer
-                    print(25)  # UseSatsProbe
-                    satsProbeUsed = True
-                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
+
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
 
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:
@@ -86,5 +88,3 @@ while steps < 350:
     if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
-
-    print(0)  # DoNothing
