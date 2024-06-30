@@ -27,22 +27,36 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
+            if events[3] > 0:  # AirwayClear
+                airway_confirmed = True
             continue
-        elif not breathing_assessed:
+        if not breathing_assessed:
             print(4)  # ExamineBreathing
+            if (
+                events[10] > 0 or events[11] > 0 or events[12] > 0
+            ):  # Different breathing checks
+                breathing_assessed = True
+                if (
+                    events[14] > 0 or events[15] > 0
+                ):  # BreathingPneumothorax or VentilationResistance
+                    print(29)  # UseBagValveMask necessary
             continue
-        elif not circulation_checked:
+        if not circulation_checked:
             print(5)  # ExamineCirculation
+            if events[16] > 0:  # RadialPulsePalpable
+                circulation_checked = True
             continue
-        elif not disability_checked:
+        if not disability_checked:
             print(6)  # ExamineDisability
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU Responses
+                disability_checked = True
             continue
-        elif not exposure_checked:
+        if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
-        else:
-            initial_assessments_done = True
+
+        initial_assessments_done = True
 
     if initial_assessments_done:
         if (
@@ -64,20 +78,3 @@ while steps < 350:
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
-
-
-        # Update the condition check for airway
-        if events[3] > 0:
-            airway_confirmed = True
-
-        # Update the condition check for equal chest expansion
-        if events[10] > 0:
-            breathing_assessed = True
-
-        # Update the condition check for circulation
-        if events[16] > 0 or events[17] > 0:
-            circulation_checked = True
-
-        # Update the condition check for disability
-        if events[25] > 0 or events[23] > 0:
-            disability_checked = True
