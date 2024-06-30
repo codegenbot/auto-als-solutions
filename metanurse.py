@@ -42,7 +42,7 @@ while steps < 350:
                 print(16)  # ViewMonitor
                 continue
             else:
-                print(4)  # ExamineBreathing
+	c                    print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
