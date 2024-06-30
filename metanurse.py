@@ -15,38 +15,48 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
-        if measured_times[5] > 0 and measured_values[5] < 65:
-            print(31)  # UseYankeurSucionCatheter for oxygen support
-        print(17)  # StartChestCompression if critical conditions
+    critical_sat = measured_times[5] > 0 and measured_values[5] < 65
+    critical_map = measured_times[4] > 0 and measured_values[4] < 20
+
+    breathing_none = events[7] >= 0.7
+    low_resp_rate = measured_times[6] > 0 and measured_values[6] < 8
+
+    if critical_sat or critical_map:
+        print(17)  # StartChestCompression
+        continue
+
+    if breathing_none or low_resp_rate:
+        print(29)  # UseBagValveMask
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0.1:  # AirwayClear
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            if events[10] > 0:  # BreathingEqualChestExpansion
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
+            if (
+                events[16] > 0 or events[17] > 0
+            ):  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:
+            if (
+                events[21] > 0 or events[22] > 0 or events[23] > 0
+            ):  # AVPU_A or AVPU_V or AVPU_U
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -75,21 +85,23 @@ while steps < 350:
             if not drawerOpened:
                 print(19)  # OpenBreathingDrawer
                 drawerOpened = True
-                continue
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
+            else:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
             continue
 
-        if not satsProbeUsed:
-            if measured_times[5] == 0 or measured_values[5] < 88:
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
+
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not satsProbeUsed:
                 if not drawerOpened:
                     print(19)  # OpenBreathingDrawer
                     drawerOpened = True
                 else:
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
-            continue
-
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
+            else:
+                print(16)  # ViewMonitor
             continue
