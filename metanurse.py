@@ -14,17 +14,22 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical responses for cardiac arrest
+    # Immediate critical responses
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
+    # Check for basic life support if breathing is significantly compromised
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        print(29)  # UseBagValveMask
+        continue
+
     # Initial ABCDE Assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] >= 0.1:  # AirwayClear is confirmed
+            if events[3] >= 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
@@ -38,7 +43,7 @@ while steps < 350:
                 continue
 
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:  # RadialPulse check
+            if events[16] > 0 or events[17] > 0:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
@@ -60,9 +65,10 @@ while steps < 350:
 
     # Continuous monitoring and actions after initial checks are done
     if initial_assessments_done:
-        # Checking if stabilization criteria are met
+        # Maintenance and check on stabilization criteria
         if (
-            measured_times[5] > 0
+            airway_confirmed
+            and measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
             and measured_values[6] >= 8
@@ -72,13 +78,11 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        # Use Sats Probe if need to check or improve oxygen saturation
         if not satsProbeUsed or (measured_times[5] == 0 or measured_values[5] < 88):
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
 
-        # Check other vital signs as needed
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
