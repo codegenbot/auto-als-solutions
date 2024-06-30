@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+bpCuffUsed = False
 steps = 0
 
 while steps < 350:
@@ -61,6 +62,11 @@ while steps < 350:
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
+        continue
+
+    if not bpCuffUsed and measured_times[4] == 0:
+        print(27)  # UseBloodPressureCuff
+        bpCuffUsed = True
         continue
 
     if (
