@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-monitorViewed = False
 steps = 0
 
 while steps < 350:
@@ -78,15 +77,10 @@ while steps < 350:
             satsProbeUsed = True
             continue
 
-        if monitorViewed and (measured_times[4] == 0 or measured_values[4] < 60 or measured_times[5] == 0 or measured_values[5] < 88):
-            if measured_times[4] == 0 or measured_values[4] < 60:
-                print(27)  # UseBloodPressureCuff
-            if measured_times[5] == 0 or measured_values[5] < 88:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
             continue
-
-        if satsProbeUsed and not monitorViewed:
-            print(16)  # ViewMonitor
-            monitorViewed = True
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
