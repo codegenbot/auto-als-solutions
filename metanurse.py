@@ -33,19 +33,19 @@ while steps < 350:
                 print(3)  # ExamineAirway
                 continue
         if not breathing_assessed:
-            if events[10] > 0:  # BreathingEqualChestExpansion
+            if events[10] > 0.1:  # BreathingEqualChestExpansion
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:  # RadialPulsePalpable or NonPalpable
+            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or NonPalpable
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[21] > 0:  # AVPU_A
+            if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:  # AVPU_A, V, U
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -57,21 +57,21 @@ while steps < 350:
         initial_assessments_done = True
 
     if not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
+        print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
     if initial_assessments_done:
         # Monitoring and stabilization
         if measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
+            print(30)  # UseNonRebreatherMask
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
 
-        if measured_times[6] == 0 or measured_values[6] < 8:
+        if measured_times[1] == 0 or measured_values[1] < 8:
             print(29)  # UseBagValveMask
             continue
 
@@ -80,8 +80,8 @@ while steps < 350:
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
+            and measured_times[1] > 0
+            and measured_values[1] >= 8
             and measured_times[4] > 0
             and measured_values[4] >= 60
         ):
