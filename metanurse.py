@@ -35,18 +35,14 @@ while steps < 350:
 
         if not breathing_assessed:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
+                breathing_assessed = True
                 if not satsProbeUsed:
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
                     continue
-                else:
-                    if not viewMonitorUsed:
-                        print(16)  # ViewMonitor
-                        viewMonitorUsed = True
-                        continue
-
-            print(4)  # ExamineBreathing
-            continue
+            else:
+                print(4)  # ExamineBreathing
+                continue
 
         if not circulation_checked:
             if events[16] > 0.7 or events[17] > 0.7:
