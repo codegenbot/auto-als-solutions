@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-bpCuffUsed = False
 steps = 0
 
 while steps < 350:
@@ -42,13 +41,10 @@ while steps < 350:
 
         if not circulation_checked:
             if events[16] > 0.1:  # Radial Pulse Palpable
-                circulation_checked = True
+                print(27)  # UseBloodPressureCuff
+                continue
             else:
-                if not bpCuffUsed:
-                    print(27)  # UseBloodPressureCuff
-                    bpCuffUsed = True
-                else:
-                    print(16)  # ViewMonitor
+                print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
@@ -63,7 +59,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and initial_assessments_done:
+    if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
