@@ -14,22 +14,19 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical responses
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        print(29)  # UseBagValveMask
+        continue
+
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Check for basic life support if breathing is significantly compromised
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    # Initial ABCDE Assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] >= 0.1:
+            if events[3] > 0.1:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
@@ -63,12 +60,9 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Continuous monitoring and actions after initial checks are done
     if initial_assessments_done:
-        # Maintenance and check on stabilization criteria
         if (
-            airway_confirmed
-            and measured_times[5] > 0
+            measured_times[5] > 0
             and measured_values[5] >= 88
             and measured_times[6] > 0
             and measured_values[6] >= 8
@@ -78,11 +72,20 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        if not satsProbeUsed or (measured_times[5] == 0 or measured_values[5] < 88):
+        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+            print(19)  # OpenBreathingDrawer
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
+            continue
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not satsProbeUsed:
+                print(19)  # OpenBreathingDrawer
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+            else:
+                print(16)  # ViewMonitor
             continue
