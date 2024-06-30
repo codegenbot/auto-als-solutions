@@ -1,12 +1,12 @@
 airway_confirmed = False
-breathing_assessed = False
+breathing_done = False
 circulation_checked = False
 disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
+drawerOpened = False
 satsProbeUsed = False
 satsCheckedAfterProbe = False
-drawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -16,28 +16,24 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical conditions
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
+    # Check critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # Initial ABCDE assessment
+    # Examine Assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            if events[3] > 0:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
-        if not breathing_assessed:
+        if not breathing_done:
             if events[9] > 0:
-                breathing_assessed = True
+                breathing_done = True
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -48,7 +44,7 @@ while steps < 350:
                 print(5)  # ExamineCirculation
                 continue
         if not disability_checked:
-            if events[22] > 0:
+            if events[20] > 0 or events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
@@ -57,31 +53,35 @@ while steps < 350:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
-
         initial_assessments_done = True
 
-    # Sats Probe Actions
-    if not drawerOpened and not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
-        drawerOpened = True
-        continue
+    # Breathing management
+    if airway_confirmed:
+        if measured_times[5] == 0 or measured_values[5] < 88 or not satsProbeUsed:
+            if not drawerOpened:
+                print(19)  # OpenBreathingDrawer
+                drawerOpened = True
+                continue
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+                continue
+            if not satsCheckedAfterProbe:
+                print(16)  # ViewMonitor
+                satsCheckedAfterProbe = True
+                continue
 
-    if drawerOpened and not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
+    # Final checks for stabilization
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
 
-    if satsProbeUsed and not satsCheckedAfterProbe:
-        print(16)  # ViewMonitor
-        satsCheckedAfterProbe = True
-        continue
-
-    # Check stabilization conditions
-    if initial_assessments_done and satsCheckedAfterProbe:
-        if (
-            (measured_times[5] > 0 and measured_values[5] >= 88)
-            and (measured_times[6] > 0 and measured_values[6] >= 8)
-            and (measured_times[4] > 0 and measured_values[4] >= 60)
-        ):
-            print(48)  # Finish
-            break
+    # Default action
+    print(0)  # DoNothing
