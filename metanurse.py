@@ -72,18 +72,15 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            print(19)  # OpenBreathingDrawer
+        if not satsProbeUsed:
+            if measured_times[5] == 0 or measured_values[5] < 88:
+                print(19)  # OpenBreathingDrawer
+                continue
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            print(16)  # ViewMonitor
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
-            continue
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
-
-        if satsProbeUsed:
-            print(16)  # ViewMonitor
             continue
