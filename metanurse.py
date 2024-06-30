@@ -14,8 +14,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical responses
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] > 0:  # BreathingNone
         print(29)  # UseBagValveMask
         continue
 
@@ -25,35 +24,30 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    # Initial ABCDE Assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] >= 0.1:
+            if events[3] > 0.1:  # AirwayClear
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            if events[12] > 0 or events[13] > 0 or events[14] > 0:  # Breathing evens
                 breathing_assessed = True
             else:
                 print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
-                circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
+            print(5)  # ExamineCirculation
+            circulation_checked = True
+            continue
 
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:
-                disability_checked = True
-            else:
-                print(6)  # ExamineDisability
-                continue
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
 
         if not exposure_checked:
             print(7)  # ExamineExposure
@@ -62,9 +56,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Continuous monitoring and actions after initial checks are done
     if initial_assessments_done:
-        # Checking if stabilization criteria are met
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
@@ -76,13 +68,17 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        # Use Sats Probe if need to check or improve oxygen saturation
-        if not satsProbeUsed or (measured_times[5] == 0 or measured_values[5] < 88):
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
+        if measured_times[5] == 0 or (
+            measured_times[5] > 0 and measured_values[5] < 88
+        ):
+            if not satsProbeUsed:
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+                continue
+            else:
+                print(30)  # UseNonRebreatherMask
+                continue
 
-        # Check other vital signs as needed
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
