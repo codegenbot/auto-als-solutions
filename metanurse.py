@@ -24,55 +24,57 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if not airway_confirmed:
-        print(3)  # ExamineAirway
+    if not initial_assessments_done:
+        if not airway_confirmed:
+            if events[3] > 0:  # AirwayClear
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
+                continue
+
+        if not breathing_assessed:
+            if events[10] > 0 or satsProbeUsed:  # BreathingEqualChestExpansion
+                breathing_assessed = True
+            else:
+                print(4)  # ExamineBreathing
+                continue
+
+        if not circulation_checked:
+            if events[16] > 0:  # RadialPulsePalpable
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
+
+        if not disability_checked:
+            if events[21] > 0 or events[22] > 0:  # AVPU_V or AVPU_U
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
+
+        if not exposure_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
+            continue
+
+        initial_assessments_done = True
+
+    # Check stabilization criteria
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
+
+    if not satsProbeUsed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
-    if not breathing_assessed:
-        print(19)  # OpenBreathingDrawer
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        breathing_assessed = True
-        continue
-
-    if not circulation_checked:
-        print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
-
-    if not disability_checked:
-        print(6)  # ExamineDisability
-        disability_checked = True
-        continue
-
-    if not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
-        continue
-
-    initial_assessments_done = airway_confirmed and breathing_assessed 
-                                and circulation_checked  and disability_checked  
-                                and exposure_checked
-
-    if initial_assessments_done:
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
-
-    if not initial_assessments_done or (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        print(16)  # ViewMonitor
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
+    print(0)  # DoNothing if all is assessed but not stabilized yet.
