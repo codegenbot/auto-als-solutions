@@ -39,16 +39,31 @@ while steps < 350:
                 continue
 
         if not breathing_confirmed:
-            print(4)  # ExamineBreathing
-            continue
+            if events[14] > 0.1:
+                breathing_confirmed = (
+                    True  # Breathing presence confirmed by adequate chest expansion
+                )
+            else:
+                print(4)  # ExamineBreathing
+                continue
 
         if not circulation_confirmed:
-            print(5)  # ExamineCirculation
-            continue
+            if (
+                events[16] > 0.1 or events[17] > 0.1
+            ):  # Check if either pulse palpable or not
+                circulation_confirmed = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
 
         if not disability_checked:
-            print(6)  # ExamineDisability
-            continue
+            if (
+                events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1
+            ):  # Using AVPU responses
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
 
         if not exposure_checked:
             print(7)  # ExamineExposure
