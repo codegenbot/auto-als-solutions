@@ -14,7 +14,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.9 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -49,7 +49,9 @@ while steps < 350:
                 circulation_checked = True
 
         if not disability_checked:
-            if events[21] == 0:  # AVPU_U (unresponsive) not confirmed
+            if (
+                events[25] == 0 and events[23] == 0
+            ):  # PupilsNormal and PupilsPinpoint not confirmed
                 print(6)  # ExamineDisability
                 continue
             else:
