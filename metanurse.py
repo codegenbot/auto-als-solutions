@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+monitorViewed = False
 steps = 0
 
 while steps < 350:
@@ -72,15 +73,24 @@ while steps < 350:
             print(48)  # Finish
             break
 
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+        if not satsProbeUsed:
             print(25)  # UseSatsProbe
-            satsProbeReq = True
+            satsProbeUsed = True
+            continue
+
+        if not monitorViewed:
+            print(16)  # ViewMonitor
+            monitorViewed = True
+            continue
+
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
+
+        if measured_times[6] == 0 or measured_values[6] < 8:
+            print(29)  # UseBagValveMask
             continue
