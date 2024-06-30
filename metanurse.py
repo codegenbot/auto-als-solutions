@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-viewMonitorUsed = False
 steps = 0
 
 while steps < 350:
@@ -27,39 +26,53 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
+            mark_airway_observed = False
+            for i in [
+                3,
+                4,
+                5,
+                6,
+            ]:  # AirwayClear, AirwayVomit, AirwayBlood, AirwayTongue
+                if events[i] >= 0.1:
+                    mark_airway_observed = True
+            if mark_airway_observed:
                 airway_confirmed = True
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            mark_breathing_observed = False
+            for i in [10, 11, 12, 13, 14]:  # Breathing relevant observations
+                if events[i] >= 0.1:
+                    mark_breathing_observed = True
+            if mark_breathing_observed:
                 breathing_assessed = True
                 if not satsProbeUsed:
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
-                    continue
-                elif not viewMonitorUsed:
-                    print(16)  # ViewMonitor
-                    viewMonitorUsed = True
-                    continue
-                else:
-                    print(19)  # OpenBreathingDrawer
                     continue
             else:
                 print(4)  # ExamineBreathing
                 continue
 
         if not circulation_checked:
-            if events[16] > 0.7 or events[17] > 0.7:
+            mark_circulation_observed = False
+            for i in [16, 17]:  # RadialPulsePalpable, RadialPulseNonPalpable
+                if events[i] >= 0.1:
+                    mark_circulation_observed = True
+            if mark_circulation_observed:
                 circulation_checked = True
             else:
                 print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
-            if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:
+            mark_disability_observed = False
+            for i in [21, 22, 23]:  # AVPU_U, AVPU_V, AVPU_P
+                if events[i] >= 0.1:
+                    mark_disability_observed = True
+            if mark_disability_observed:
                 disability_checked = True
             else:
                 print(6)  # ExamineDisability
