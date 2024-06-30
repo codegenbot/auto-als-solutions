@@ -36,9 +36,11 @@ while steps < 350:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
                 if not satsProbeUsed:
+                    print(19)  # OpenBreathingDrawer
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
-                    continue
+                print(16)  # ViewMonitor
+                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
@@ -64,26 +66,26 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if initial_assessments_done:
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
 
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            else:
-                print(30)  # UseNonRebreatherMask
-                continue
+    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+        print(16)  # ViewMonitor
+        continue
 
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
+    if measured_times[4] == 0 or measured_values[4] < 60:
+        print(27)  # UseBloodPressureCuff
+        print(16)  # ViewMonitor
+        continue
