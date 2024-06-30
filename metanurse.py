@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+repeat_breathing_check = 0
 steps = 0
 
 while steps < 350:
@@ -33,10 +34,11 @@ while steps < 350:
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
+            repeat_breathing_check += 1
+            if events[12] > 0 or events[13] > 0 or events[14] > 0 or repeat_breathing_check >= 5:
                 breathing_assessed = True
+                print(19)  # OpenBreathingDrawer
                 if not satsProbeUsed:
-                    print(19)  # OpenBreathingDrawer
                     print(25)  # UseSatsProbe
                     satsProbeUsed = True
                 print(16)  # ViewMonitor
@@ -53,11 +55,9 @@ while steps < 350:
                 continue
 
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:
-                disability_checked = True
-            else:
-                print(6)  # ExamineDisability
-                continue
+            disability_checked = True
+            print(6)  # ExamineDisability
+            continue
 
         if not exposure_checked:
             print(7)  # ExamineExposure
@@ -66,19 +66,29 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
-        print(48)  # Finish
-        break
+    if initial_assessments_done:
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
 
-    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
-            print(19)  # OpenBreathingDrawer
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-        print(16)  # ViewMonitor
-        continue
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            if not satsProbeUsed:
+                print(19)  # OpenBrerealithDrawer
+                print(25)  # UseSatsProbe
+                satsProbeUsed = True
+            print(16)  # ViewMonitor
+            continue
 
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
-        continue
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            print(16)  # ViewMonitor
+            continue
+
+        print(0)  # DoNothing in case no other actions match conditions
