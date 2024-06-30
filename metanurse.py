@@ -5,6 +5,8 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+breathingToolsOpened = False
+monitorViewed = False
 steps = 0
 
 while steps < 350:
@@ -26,33 +28,54 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway or 18 if you have to open a drawer first
-            if events[2] > 0.7:  # AirwayClear
+            if events[3] > 0.1:
                 airway_confirmed = True
-            continue
+            else:
+                print(3)  # ExamineAirway
+                continue
 
         if not breathing_assessed:
-            print(4)  # ExamineBreathing
-            breathing_assessed = True
-            continue
+            if (
+                events[10] > 0
+                or events[11] > 0
+                or events[12] > 0
+                or events[13] > 0
+                or events[14] > 0
+            ):
+                breathing_assessed = True
+            if not satsProbeUsed:
+                if not breathingToolsOpened:
+                    print(19)  # OpenBreathingDrawer
+                    breathingToolsOpened = True
+                else:
+                    print(25)  # UseSatsProbe
+                    satsProbeUsed = True
+                continue
+            else:
+                print(4)  # ExamineBreathing
+                continue
 
         if not circulation_checked:
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+            if events[16] > 0.1 or events[17] > 0.1:
+                circulation_checked = True
+            else:
+                print(5)  # ExamineCirculation
+                continue
 
         if not disability_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
+            if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:
+                disability_checked = True
+            else:
+                print(6)  # ExamineDisability
+                continue
 
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
-            initial_assessments_done = True
             continue
 
-    # Ensure patient stability conditions are met
+        initial_assessments_done = True
+
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -64,18 +87,15 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    # If sats are not confirmed or below 88%
     if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
-        if not satsProbeUsed:
+        if not breathingToolsOpened:
+            print(19)  # OpenBreathingDrawer
+            breathingToolsOpened = True
+        elif not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
-        print(16)  # ViewMonitor
         continue
 
-    # If MAP is not confirmed or below 60
     if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
-        print(16)  # ViewMonitor
         continue
-
-    print(0)  # DoNothing if no other condition met
