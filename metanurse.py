@@ -3,7 +3,6 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 exposure_checked = False
-initial_assessments_done = False
 satsProbeUsed = False
 steps = 0
 
@@ -27,27 +26,34 @@ while steps < 350:
         elif events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
             print(31)  # UseYankeurSuctionCatheter
             continue
+        continue
 
-    elif not breathing_assessed:
+    if not breathing_assessed:
         print(4)  # ExamineBreathing
-        if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
         breathing_assessed = True
+        continue
 
-    elif not circulation_checked:
+    if not satsProbeUsed and measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
+
+    if not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
+        continue
 
-    elif not disability_checked:
+    if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
+        continue
 
-    elif not exposure_checked:
+    if not exposure_checked:
         print(7)  # ExamineExposure
         exposure_checked = True
+        continue
 
-    elif (
+    if (
         measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
@@ -58,5 +64,4 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    else:
-        print(0)  # DoNothing
+    print(0)  # DoNothing
