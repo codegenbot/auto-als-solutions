@@ -15,72 +15,74 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate life-threatening conditions
-    if measured_times[5] > 0 and measured_values[5] < 65:
-        print(17)  # StartChestCompression
-        continue
-    if measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  # StartChestCompression
-        continue
-    if events[7] >= 0.7:  # BreathingNone very high
+    # Check for very urgent needs first:
+    if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
-    # ABCDE Protocol
+    if (measured_times[4] > 0 and measured_values[4] < 20) or (
+        measured_times[5] > 0 and measured_values[5] < 65
+    ):
+        print(17)  # StartChestCompression
+        continue
+
+    # ABCDE assessments
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
             continue
-        if not breathing_assessed:
+        elif not breathing_assessed:
             print(4)  # ExamineBreathing
+            if events[10] > 0:
+                breathing_assessed = True
             continue
-        if not circulation_checked:
+        elif not circulation_checked:
             print(5)  # ExamineCirculation
+            circulation_checked = True
             continue
-        if not disability_checked:
+        elif not disability_checked:
             print(6)  # ExamineDisability
+            disability_checked = True
             continue
-        if not exposure_checked:
+        elif not exposure_checked:
             print(7)  # ExamineExposure
+            exposure_checked = True
+            initial_assessments_done = True
             continue
-        # Only mark as done if all are checked
-        initial_assessments_done = (
-            airway_confirmed
-            and breathing_assessed
-            and circulation_checked
-            and disability_checked
-            and exposure_checked
-        )
 
-    # Using necessary equipment to gather vital data
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if not bpCuffUsed:
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if not bpCuffUsed and measured_times[4] <= 0:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
 
-    # Assess and act based on measurements
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+    if bpCuffUsed and measured_times[4] == 0:
+        print(16)  # ViewMonitor
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
         print(15)  # GiveFluids
         continue
 
-    # Ending condition after ensuring stabilization
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
+        and measured_times[6] > 0
         and measured_values[6] >= 8
+        and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default action if no other action is taken
-    print(0)  # DoNothing
+    print(0)  # DoNothing as last resort
