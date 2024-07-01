@@ -19,33 +19,38 @@ def choose_action(observations, state):
     elif state == 'disability':
         return 7, 'exposure'
     elif state == 'exposure':
-        return 25, 'sats_probe'
+        return 25, 'sats_probe'  # UseSatsProbe
     elif state == 'sats_probe':
-        return 27, 'bp_cuff'
+        return 27, 'bp_cuff'  # UseBloodPressureCuff
     elif state == 'bp_cuff':
-        return 16, 'monitor'
+        return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
-        sats = obs[52] if obs[45] > 0 else 0
-        map_value = obs[51] if obs[44] > 0 else 0
-        resp_rate = obs[53] if obs[46] > 0 else 0
-        heart_rate = obs[47] if obs[40] > 0 else 0
-
-        if sats < 0.65 or map_value < 20:
-            return 17, 'cpr'
-        elif sats < 0.88:
-            return 30, 'oxygen'
-        elif resp_rate < 8:
-            return 29, 'ventilation'
-        elif map_value < 60:
-            return 15, 'fluids'
-        elif heart_rate > 100:
-            return 9, 'adenosine'
-        elif sats >= 0.88 and resp_rate >= 8 and map_value >= 60:
-            return 48, 'finish'
+        if obs[38] < 0.65 or obs[37] < 20:
+            return 2, 'check_rhythm'  # CheckRhythm
+        elif obs[38] < 0.88:
+            return 30, 'oxygen'  # UseNonRebreatherMask
+        elif obs[36] < 8:
+            return 29, 'ventilation'  # UseBagValveMask
+        elif obs[37] < 60:
+            return 14, 'iv_catheter'  # UseVenflonIVCatheter
+        elif obs[38] >= 0.88 and obs[36] >= 8 and obs[37] >= 60:
+            return 48, 'finish'  # Finish
         else:
-            return 16, 'monitor'
-    elif state in ['oxygen', 'ventilation', 'fluids', 'adenosine', 'cpr']:
+            return 8, 'reassess'  # Start reassessment
+    elif state == 'check_rhythm':
+        return 17, 'cpr'  # StartChestCompression
+    elif state == 'oxygen':
         return 16, 'monitor'
+    elif state == 'ventilation':
+        return 16, 'monitor'
+    elif state == 'iv_catheter':
+        return 15, 'fluids'  # GiveFluids
+    elif state == 'fluids':
+        return 16, 'monitor'
+    elif state == 'reassess':
+        return 3, 'airway'  # Start ABCDE assessment again
+    elif state == 'cpr':
+        return 2, 'check_rhythm'
     else:
         return 16, 'monitor'
 
