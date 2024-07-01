@@ -24,7 +24,6 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = True
             continue
 
         if not breathing_assessed:
@@ -33,7 +32,7 @@ while steps < 350:
             continue
 
         if not circulation_checked:
-            print(5)  # ExamineCirc Mature
+            print(5)  # ExamineCirculation
             circulation_checked = True
             continue
 
@@ -48,7 +47,7 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    if not satsProbeUsed or measured_times[5] == 0:
+    if not satsProbeUsed and measured_times[5] == 0:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
@@ -57,13 +56,13 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed or measured_times[4] == 0:
+    if not bpCuffUsed and measured_times[4] == 0:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids if BP low and measured
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
         continue
 
     if (
