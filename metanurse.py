@@ -28,25 +28,40 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayClear till AirwayTongue
+            if (
+                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
+            ):  # AirwayClear till AirwayTongue
                 airway_confirmed = True
             continue
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            if events[7] > 0 or events[8] > 0 or events[9] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:  # BreathingNone till BreathingPneumothoraxSymptoms
+            if (
+                events[7] > 0
+                or events[8] > 0
+                or events[9] > 0
+                or events[10] > 0
+                or events[11] > 0
+                or events[12] > 0
+                or events[13] > 0
+                or events[14] > 0
+            ):  # BreathingNone till BreathingPneumothoraxSymptoms
                 breathing_assessed = True
             continue
 
         if not circulation_checked:
             print(5)  # ExamineCirculation
-            if events[16] > 0 or events[17] > 0:  # RadialPulsePalpable, RadialPulseNonPalpable
+            if (
+                events[16] > 0 or events[17] > 0
+            ):  # RadialPulsePalpable, RadialPulseNonPalpable
                 circulation_checked = True
             continue
 
         if not disability_checked:
             print(6)  # ExamineDisability
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU_A, AVPU_U, AVPU_V
+            if (
+                events[21] > 0 or events[22] > 0 or events[23] > 0
+            ):  # AVPU_A, AVPU_U, AVPU_V
                 disability_checked = True
             continue
 
@@ -58,7 +73,10 @@ while steps < 350:
         initial_assessments_done = True
 
     if measured_times[5] == 0:
-        if not satsProbeUsed:
+        if not breathingDrawerOpened:
+            print(19)  # OpenBreathingDrawer
+            breathingDrawerOpened = True
+        else:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
         continue
@@ -75,7 +93,14 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
