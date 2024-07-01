@@ -13,7 +13,7 @@ def choose_action(observations, state):
     elif state == 'airway':
         return 4, 'breathing'
     elif state == 'breathing':
-        if obs[7] > 0.5:  # BreathingNone event
+        if obs[7] > 0:  # BreathingNone event
             return 17, 'start_cpr'
         return 5, 'circulation'
     elif state == 'circulation':
@@ -46,8 +46,7 @@ def choose_action(observations, state):
     elif state == 'check_rhythm':
         if obs[38] > 0 or obs[32] > 0:  # VF or VT
             return 40, 'charge_defib'
-        else:
-            return 17, 'start_cpr'
+        return 17, 'start_cpr'
     elif state == 'charge_defib':
         return 41, 'shock'
     elif state == 'shock':
@@ -56,28 +55,21 @@ def choose_action(observations, state):
         return 17, 'cpr_cycle'
     elif state == 'cpr_cycle':
         state['compressions'] = state.get('compressions', 0) + 1
-        if state['compressions'] == 30:
-            return 22, 'ventilate'
-        else:
+        if state['compressions'] < 30:
             return 17, 'cpr_cycle'
+        return 22, 'ventilate'
     elif state == 'ventilate':
         state['ventilations'] = state.get('ventilations', 0) + 1
-        if state['ventilations'] == 2:
-            state['compressions'] = 0
-            state['ventilations'] = 0
-            state['cycles'] = state.get('cycles', 0) + 1
-            if state['cycles'] % 2 == 0:
-                return 10, 'give_adrenaline'
-            else:
-                return 2, 'check_rhythm'
-        else:
+        if state['ventilations'] < 2:
             return 22, 'ventilate'
+        state['compressions'] = 0
+        state['ventilations'] = 0
+        state['cycles'] = state.get('cycles', 0) + 1
+        if state['cycles'] % 5 == 0:
+            return 10, 'give_adrenaline'
+        return 2, 'check_rhythm'
     elif state == 'give_adrenaline':
-        if state['cycles'] == 6:
-            return 11, 'give_amiodarone'
-        else:
-            return 17, 'start_cpr'
-    elif state == 'give_amiodarone':
+        state['adrenaline_given'] = True
         return 17, 'start_cpr'
     elif state == 'oxygen':
         return 16, 'monitor'
@@ -88,4 +80,11 @@ def choose_action(observations, state):
     elif state == 'fluids':
         return 16, 'monitor'
     else:
-        return 
+        return 16, 'monitor'
+
+state = {'start': True}
+for line in sys.stdin:
+    action, new_state = choose_action(line.strip(), state)
+    print(action)
+    sys.stdout.flush()
+    state = {'state': new
