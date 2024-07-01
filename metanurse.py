@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -31,16 +32,14 @@ while steps < 350:
                 if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
                     print(31)  # UseYankeurSuctionCatheter
                     continue
-                else:
-                    print(3)  # ExamineAirway
-                    continue
-            else:
-                print(3)  # ExamineAirway
-                continue
+            print(3)  # ExamineAirway
+            continue
 
         if not breathing_assessed:
             if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
                 breathing_assessed = True
+                print(0)  # DoNothing for now
+                continue
             print(4)  # ExamineBreathing
             continue
 
@@ -49,12 +48,16 @@ while steps < 350:
                 events[16] > 0.1 or events[17] > 0.1
             ):  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
+                print(0)  # DoNothing for now
+                continue
             print(5)  # ExamineCirculation
             continue
 
         if not disability_checked:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
                 disability_checked = True
+                print(0)  # DoNothing for now
+                continue
             print(6)  # ExamineDisability
             continue
 
@@ -65,8 +68,14 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed:
+    if not satsProbeUsed and not breathingDrawerOpened:
         print(19)  # OpenBreathingDrawer
+        breathingDrawerOpened = True
+        continue
+
+    if not satsProbeUsed and breathingDrawerOpened:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
