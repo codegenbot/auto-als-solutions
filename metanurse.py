@@ -47,27 +47,30 @@ def choose_action(observations):
     # Interventions based on vital signs
     if sats_available and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
-    
+    if resp_available and obs[47] < 8:
+        if obs[18] == 0:
+            return 18  # OpenAirwayDrawer
+        return 29  # UseBagValveMask
     if map_available and obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
-    
+
+    # Frequently measure vital signs
+    if obs[39] < 0.9:
+        return 25  # UseSatsProbe
+    if obs[37] < 0.9:
+        return 38  # TakeBloodPressure
+    if obs[40] < 0.9:
+        return 26  # UseAline
+
     # Check if patient is stabilized
     if (sats_available and obs[46] >= 0.88 and
         resp_available and obs[47] >= 8 and
         map_available and obs[44] >= 60):
         return 48  # Finish
 
-    # Measure vital signs more frequently
-    if obs[39] < 0.9:
-        return 25  # UseSatsProbe
-    if obs[37] < 0.9:
-        return 38  # TakeBloodPressure
-    if obs[40] < 0.9:
-        return 16  # ViewMonitor
-
-    return 0  # DoNothing
+    return 16  # ViewMonitor
 
 for line in sys.stdin:
     action = choose_action(line.strip())
