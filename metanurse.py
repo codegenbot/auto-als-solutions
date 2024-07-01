@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-monitorViewed = False
 steps = 0
 
 while steps < 350:
@@ -15,7 +14,6 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical responses
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -67,19 +65,13 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed:
+    if not satsProbeUsed and measured_times[5] == 0:
         print(19)  # OpenBreathingDrawer
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
-
-    if not monitorViewed and satsProbeUsed:
-        print(16)  # ViewMonitor
-        monitorViewed = True
         continue
 
     if measured_times[5] == 0 or measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
@@ -97,4 +89,4 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as a default action
+    print(0)  # DoNothing as last resort
