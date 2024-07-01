@@ -6,70 +6,63 @@ def parse_observations(observations):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    if state['step'] == 0:
-        state['step'] += 1
-        return 1  # CheckSignsOfLife
+    # ABCDE assessment sequence
+    if state == 'A':
+        if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+            return 3, state  # ExamineAirway
+        state = 'B'
+    
+    if state == 'B':
+        if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+            return 4, state  # ExamineBreathing
+        if obs[39] == 0:
+            return 25, state  # UseSatsProbe
+        state = 'C'
+    
+    if state == 'C':
+        if obs[16] == 0 and obs[17] == 0:
+            return 5, state  # ExamineCirculation
+        if obs[37] == 0:
+            return 27, state  # UseBloodPressureCuff
+        state = 'D'
+    
+    if state == 'D':
+        if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+            return 6, state  # ExamineDisability
+        state = 'E'
+    
+    if state == 'E':
+        if obs[25] == 0 and obs[26] == 0:
+            return 7, state  # ExamineExposure
+        state = 'Treatment'
+    
+    if state == 'Treatment':
+        # Check vital signs
+        if obs[46] == 0 or obs[47] == 0 or obs[48] == 0 or obs[49] == 0 or obs[50] == 0 or obs[51] == 0 or obs[52] == 0:
+            return 16, state  # ViewMonitor
+        
+        # Cardiac arrest check
+        if obs[51] < 0.65 or obs[50] < 20:
+            return 17, state  # StartChestCompression
+        
+        # Stabilize patient
+        if obs[51] < 0.88:
+            return 30, state  # UseNonRebreatherMask
+        
+        if obs[52] < 8:
+            return 29, state  # UseBagValveMask
+        
+        if obs[50] < 60:
+            return 15, state  # GiveFluids
+        
+        # If patient is stable, finish
+        if obs[51] >= 0.88 and obs[52] >= 8 and obs[50] >= 60:
+            return 48, state  # Finish
+    
+    return 0, state  # DoNothing
 
-    if state['step'] == 1:
-        state['step'] += 1
-        return 8  # ExamineResponse
-
-    if state['step'] == 2:
-        state['step'] += 1
-        return 3  # ExamineAirway
-
-    if state['step'] == 3:
-        state['step'] += 1
-        return 4  # ExamineBreathing
-
-    if state['step'] == 4:
-        state['step'] += 1
-        return 5  # ExamineCirculation
-
-    if state['step'] == 5:
-        state['step'] += 1
-        return 6  # ExamineDisability
-
-    if state['step'] == 6:
-        state['step'] += 1
-        return 7  # ExamineExposure
-
-    if state['step'] == 7:
-        state['step'] += 1
-        return 25  # UseSatsProbe
-
-    if state['step'] == 8:
-        state['step'] += 1
-        return 27  # UseBloodPressureCuff
-
-    if state['step'] == 9:
-        state['step'] += 1
-        return 16  # ViewMonitor
-
-    # Check vital signs and intervene
-    if obs[38] < 0.65 or obs[37] < 20:
-        return 17  # StartChestCompression
-
-    if obs[38] < 0.88:
-        return 30  # UseNonRebreatherMask
-
-    if obs[35] < 8:
-        return 29  # UseBagValveMask
-
-    if obs[37] < 60:
-        return 15  # GiveFluids
-
-    # If patient is stable, finish
-    if obs[38] >= 0.88 and obs[35] >= 8 and obs[37] >= 60:
-        return 48  # Finish
-
-    # If we've done all checks and interventions, cycle through examinations
-    state['step'] = 2  # Reset to ExamineAirway
-    return 3  # ExamineAirway
-
-state = {'step': 0}
-
+state = 'A'
 for line in sys.stdin:
-    action = choose_action(line.strip(), state)
+    action, state = choose_action(line.strip(), state)
     print(action)
     sys.stdout.flush()
