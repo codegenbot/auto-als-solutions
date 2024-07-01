@@ -21,20 +21,29 @@ def choose_action(observations, state):
     elif state == 'exposure':
         return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
-        if obs[38] < 0.65 or obs[37] < 20:
-            return 17, 'cpr'  # StartChestCompression
-        elif obs[38] < 0.88:
-            return 30, 'oxygen'  # UseNonRebreatherMask
+        if obs[38] == 0:
+            return 25, 'sats_probe'  # UseSatsProbe
+        elif obs[37] == 0:
+            return 27, 'bp_cuff'  # UseBloodPressureCuff
+        else:
+            return 16, 'stabilize'  # ViewMonitor
+    elif state == 'sats_probe':
+        return 27, 'bp_cuff'  # UseBloodPressureCuff
+    elif state == 'bp_cuff':
+        return 16, 'stabilize'  # ViewMonitor
+    elif state == 'stabilize':
+        if obs[38] < 0.88:
+            return 30, 'stabilize'  # UseNonRebreatherMask
         elif obs[36] < 8:
-            return 29, 'ventilation'  # UseBagValveMask
+            return 29, 'stabilize'  # UseBagValveMask
         elif obs[37] < 60:
-            return 15, 'fluids'  # GiveFluids
+            return 15, 'stabilize'  # GiveFluids
         elif obs[38] >= 0.88 and obs[36] >= 8 and obs[37] >= 60:
             return 48, 'finish'  # Finish
         else:
-            return 16, 'monitor'  # ViewMonitor again
-    else:
-        return 16, 'monitor'  # Default to viewing monitor
+            return 16, 'stabilize'  # ViewMonitor
+    
+    return 0, state  # DoNothing
 
 state = 'start'
 for line in sys.stdin:
@@ -42,5 +51,3 @@ for line in sys.stdin:
     print(action)
     sys.stdout.flush()
     state = new_state
-    if state == 'finish':
-        break
