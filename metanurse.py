@@ -14,55 +14,65 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
+    # Immediate actions for critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
+    # Initial Examinations
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
+            if events[3] > 0:  # AirwayClear
+                airway_confirmed = True
+                continue
+            elif events[4] > 0 or events[5] > 0:  # AirwayVomit or AirwayBlood
+                print(31)  # UseYankeurSuctionCatheter
+                continue
             continue
 
         if not breathing_assessed:
-            if measured_times[5] == 0 or measured_values[5] < 88:
-                if not satsProbeUsed:
-                    print(19)  # OpenBreathingDrawer
-                    satsProbeUsed = True
-                    continue
-                print(25)
-                continue
+            print(4)  # ExamineBreathing
+            if events[7] > 0:  # BreathingNone
+                print(29)  # UseBagValveMask
             breathing_assessed = True
+            continue
 
         if not circulation_checked:
-            print(5)
+            print(5)  # ExamineCirculation
+            circulation_checked = True
             continue
 
         if not disability_checked:
-            print(6)
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
+
+        if not exposure_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
             continue
 
         initial_assessments_done = True
 
-    if not airway_confirmed:
-        if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-            airway_confirmed = True
-            print(0)  # DoNothing, airway status known
-            continue
+    # Use Sats Probe if not used already and no recent readings
+    if not satsProbeUsed and measured_times[5] == 0:
+        print(25)  # UseSatsProbe
+        satsProbeDogzone = True
+        continue
+
+    # Monitoring vital stats
+    if measured_times[5] == 0 or measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
+    # Check for stabilization
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -74,4 +84,4 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing as a fallback
