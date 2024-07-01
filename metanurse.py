@@ -39,18 +39,34 @@ def main():
             if not breathing_assessed:
                 if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
                     breathing_assessed = True
+                    if not satsProbeUsed:
+                        if not breathingDrawerOpened:
+                            print(19)  # OpenBreathingDrawer
+                            breathingDrawerOpened = True
+                            continue
+                        else:
+                            print(25)  # UseSatsProbe
+                            satsProbeUsed = True
+                            continue
+                    else:
+                        print(0)  # DoNothing for now
+                        continue
                 print(4)  # ExamineBreathing
                 continue
 
             if not circulation_checked:
                 if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
                     circulation_checked = True
+                    print(0)  # DoNothing for now
+                    continue
                 print(5)  # ExamineCirculation
                 continue
 
             if not disability_checked:
                 if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
                     disability_checked = True
+                    print(0)  # DoNothing for now
+                    continue
                 print(6)  # ExamineDisability
                 continue
 
@@ -60,22 +76,7 @@ def main():
                 continue
 
             initial_assessments_done = True
-
-        if not satsProbeUsed and not breathingDrawerOpened:
-            print(19)  # OpenBreathingDrawer
-            breathingDrawerOpened = True
-            continue
-
-        if not satsProbeUsed and breathingDrawerOpened:
-            if events[13] > 0 or events[14] > 0:  # BreathingCoarseCrepitationsAtBase or BreathingPneumothoraxSymptoms
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-                continue
-
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-
+        
         if (
             measured_times[5] > 0
             and measured_values[5] >= 88
