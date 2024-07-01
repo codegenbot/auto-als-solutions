@@ -7,7 +7,7 @@ def choose_action(observations):
     obs = parse_observations(observations)
     
     # Check for cardiac arrest conditions
-    if obs[46] < 0.65 or obs[44] < 20:
+    if (obs[39] > 0 and obs[46] < 0.65) or (obs[37] > 0 and obs[44] < 20):
         return 17  # StartChestCompression
 
     # ABCDE assessment
@@ -39,19 +39,21 @@ def choose_action(observations):
         return 29  # UseBagValveMask
 
     # Interventions based on vital signs
-    if obs[46] < 0.88:
+    if obs[39] > 0 and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
-    if obs[47] < 8:
+    if obs[40] > 0 and obs[47] < 8:
         if obs[18] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
-    if obs[44] < 60:
+    if obs[37] > 0 and obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
 
     # Check if patient is stabilized
-    if obs[46] >= 0.88 and obs[47] >= 8 and obs[44] >= 60:
+    if (obs[39] > 0 and obs[46] >= 0.88 and
+        obs[40] > 0 and obs[47] >= 8 and
+        obs[37] > 0 and obs[44] >= 60):
         return 48  # Finish
 
     return 16  # ViewMonitor
