@@ -28,26 +28,30 @@ while steps < 350:
         if not airway_confirmed:
             if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayClear till AirwayTongue
                 airway_confirmed = True
-            print(3)  # ExamineAirway
-            continue
+            else:
+                print(3)  # ExamineAirway
+                continue
 
         if not breathing_assessed:
             if events[7] > 0 or events[8] > 0 or events[9] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:  # BreathingNone till BreathingPneumothoraxSymptoms
                 breathing_assessed = True
-            print(4)  # ExamineBreathing
-            continue
+            else:
+                print(4)  # ExamineBreathing
+                continue
 
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:  # RadialPulsePalpable, RadialPulseNonPalpable
                 circulation_checked = True
-            print(5)  # ExamineCirculation
-            continue
+            else:
+                print(5)  # ExamineCirculation
+                continue
 
         if not disability_checked:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU_A, AVPU_U, AVPU_V
                 disability_checked = True
-            print(6)  # ExamineDisability
-            continue
+            else:
+                print(6)  # ExamineDisability
+                continue
 
         if not exposure_checked:
             print(7)  # ExamineExposure
@@ -56,10 +60,10 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if measured_times[5] == 0 and not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
-        satsProbeUsed = True
-        continue
+    if measured_times[5] == 0:
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            continue
 
     if measured_times[5] == 0 and satsProbeUsed:
         print(25)  # UseSatsProbe
