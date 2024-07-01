@@ -4,8 +4,9 @@ def main():
     circulation_checked = False
     disability_checked = False
     exposure_checked = False
-    sats_probe_used = False
-    breathing_drawer_opened = False
+    initial_assessments_done = False
+    satsProbeUsed = False
+    breathingDrawerOpened = False
     steps = 0
 
     while steps < 350:
@@ -25,57 +26,81 @@ def main():
             print(17)  # StartChestCompression
             continue
 
-        if not airway_confirmed:
-            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-                airway_confirmed = True
-                if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
-                    print(31)  # UseYankeurSuctionCatheter
+        if not initial_assessments_done:
+            if not airway_confirmed:
+                if (
+                    events[3] > 0.1
+                    or events[4] > 0.1
+                    or events[5] > 0.1
+                    or events[6] > 0.1
+                ):
+                    airway_confirmed = True
+                    if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
+                        print(31)  # UseYankeurSuctionCatheter
+                        continue
+                print(3)  # ExamineAirway
+                continue
+
+            if not breathing_assessed:
+                if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
+                    breathing_assessed = True
+                    print(0)  # DoNothing for now
                     continue
-            print(3)  # ExamineAirway
-            continue
+                print(4)  # ExamineBreathing
+                continue
 
-        if not breathing_assessed:
-            if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
-                breathing_assessed = True 
-            print(4)  # ExamineBreathing
-            continue
+            if not circulation_checked:
+                if (
+                    events[16] > 0.1 or events[17] > 0.1
+                ):  # RadialPulsePalpable or RadialPulseNonPalpable
+                    circulation_checked = True
+                    print(0)  # DoNothing for now
+                    continue
+                print(5)  # ExamineCirculation
+                continue
 
-        if not circulation_checked:
-            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
-                circulation_checked = True
-            print(5)  # ExamineCirculation
-            continue
+            if not disability_checked:
+                if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
+                    disability_checked = True
+                    print(0)  # DoNothing for now
+                    continue
+                print(6)  # ExamineDisability
+                continue
 
-        if not disability_checked:
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
-                disability_checked = True
-            print(6)  # ExamineDisability
-            continue
+            if not exposure_checked:
+                print(7)  # ExamineExposure
+                exposure_checked = True
+                continue
 
-        if not exposure_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
+            initial_assessments_done = True
 
-        if not sats_probe_used and not breathing_drawer_opened:
+        if not satsProbeUsed and not breathingDrawerOpened:
             print(19)  # OpenBreathingDrawer
-            breathing_drawer_opened = True
+            breathingDrawerOpened = True
             continue
 
-        if not sats_probe_used and breathing_drawer_opened:
+        if not satsProbeUseed and breathingDrawerOpened:
             print(25)  # UseSatsProbe
-            sats_probe_used = True
+            satsProbeUsed = True
             continue
 
         if measured_times[4] == 0 or measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
             continue
 
-        if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
             print(48)  # Finish
             break
 
         print(0)  # DoNothing as last resort
+
 
 if __name__ == "__main__":
     main()
