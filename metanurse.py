@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 sats_probe_used = False
-breathing_drawer_opened = False
 steps = 0
 
 while steps < 350:
@@ -20,10 +19,6 @@ while steps < 350:
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
-        continue
-
-    if events[7] > 0.5:
-        print(29)  # UseBagValveMask
         continue
 
     if not initial_assessments_done:
@@ -69,22 +64,22 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not sats_probe_used and not breathing_drawer_opened:
-        print(19)  # OpenBreathingDrawer
-        breathing_drawer_opened = True
-        continue
-
-    if not sats_probe_used and breathing_drawer_opened:
+    if measured_times[5] == 0:
         print(25)  # UseSatsProbe
-        sats_probe_used = True
         continue
 
+    # Check if he needs immediate help due to measured sats
+    if measured_values[5] < 88:
+        if not events[18]:
+            print(19)  # OpenBreethyleneDrawer
+            continue
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    # Check if breathing interventions were enough
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
+        measured_values[5] >= 88
         and measured_values[6] >= 8
-        and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
