@@ -40,9 +40,9 @@ def choose_action(observations):
         if obs[46] < 0.65 or obs[44] < 20:
             return 17  # StartChestCompression
 
-    # Handle breathing issues
-    if obs[7] > 0:  # BreathingNone detected
-        if obs[18] == 0:
+    # Check for BreathingNone
+    if obs[7] > 0:
+        if obs[19] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
 
@@ -50,7 +50,7 @@ def choose_action(observations):
     if sats_available and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
     if resp_available and obs[47] < 8:
-        if obs[18] == 0:
+        if obs[19] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
     if map_available and obs[44] < 60:
