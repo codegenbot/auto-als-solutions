@@ -28,22 +28,35 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
+            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
+                airway_confirmed = True
             continue
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            breathing_assessed = events[7] > 0 or events[8] > 0 or events[9] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
+            if (
+                events[7] > 0
+                or events[8] > 0
+                or events[9] > 0
+                or events[10] > 0
+                or events[11] > 0
+                or events[12] > 0
+                or events[13] > 0
+                or events[14] > 0
+            ):
+                breathing_assessed = True
             continue
 
         if not circulation_checked:
             print(5)  # ExamineCirculation
-            circulation_checked = events[16] > 0 or events[17] > 0
+            if events[16] > 0 or events[17] > 0:
+                circulation_checked = True
             continue
 
         if not disability_checked:
             print(6)  # ExamineDisability
-            disability_checked = events[21] > 0 or events[22] > 0 or events[23] > 0
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:
+                disability_checked = True
             continue
 
         if not exposure_checked:
@@ -52,10 +65,6 @@ while steps < 350:
             continue
 
         initial_assessments_done = True
-
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
-        print(48)  # Finish
-        break
 
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
@@ -74,5 +83,16 @@ while steps < 350:
     if measured_times[4] != 0 and measured_values[4] < 60:
         print(38)  # TakeBloodPressure
         continue
+
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
 
     print(0)  # DoNothing as last resort
