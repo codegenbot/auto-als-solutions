@@ -13,7 +13,7 @@ while steps < 350:
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
-
+    
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -45,7 +45,9 @@ while steps < 350:
             continue
 
         if not circulation_checked:
-            if events[16] > 0.1 or events[17] > 0.1:
+            if (
+                events[16] > 0.1 or events[17] > 0.1
+            ):  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
             print(5)  # ExamineCirculation
             continue
@@ -63,10 +65,13 @@ while steps < 350:
 
         initial_assessments_done = True
 
+    if not satsProbeUsed and (measured_times[5] == 0 or measured_values[5] < 88):
+        print(20)  # OpenBreathingDrawer
+        continue
+
     if not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
         print(25)  # UseSatsProbe
-        satsProbeUsed = True
+        satsProbe desarrollar = True
         continue
 
     if measured_times[5] == 0 or measured_values[5] < 88:
