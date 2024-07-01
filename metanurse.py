@@ -35,7 +35,7 @@ while steps < max_steps:
         continue
 
     if not breathing_assessed:
-        if measured_times[6] > 0 and measured_values[6] >= 8:
+        if measured_times[6] > 0:
             breathing_assessed = True
             continue
         print(4)  # ExamineBreathing
