@@ -15,7 +15,6 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Handle quick emergency interventions
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -26,7 +25,6 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    # Complete initial ABCDE assessments
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
@@ -36,7 +34,16 @@ while steps < 350:
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            if any(events[7:15] > 0):
+            if (
+                events[7] > 0
+                or events[8] > 0
+                or events[9] > 0
+                or events[10] > 0
+                or events[11] > 0
+                or events[12] > 0
+                or events[13] > 0
+                or events[14] > 0
+            ):
                 breathing_assessed = True
             continue
 
@@ -59,13 +66,11 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Work with device dependencies for accurate measurements.
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    # After confirming the SatsProbe is used, ensure oxygen is adequate
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -75,21 +80,19 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    # Assess and monitor blood pressure continuously until stabilized
     if measured_times[4] != 0 and measured_values[4] < 60:
         print(38)  # TakeBloodPressure
         continue
 
-    # Finish if all conditions for stable John are met
-    if all(
-        [
-            measured_times[5] > 0 and measured_values[5] >= 88,
-            measured_times[6] > 0 and measured_values[6] >= 8,
-            measured_times[4] > 0 and measured_values[4] >= 60,
-        ]
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    # Default action if no other conditions are met
-    print(0)  # DoNothing
+    print(0)  # DoNothing as last resort
