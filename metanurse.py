@@ -3,13 +3,14 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def choose_action(observations, step_count):
+def choose_action(observations):
     obs = parse_observations(observations)
     
-    if step_count >= 350:
-        return 48  # Finish due to timeout
+    # Check for cardiac arrest conditions
+    if obs[46] < 0.65 or obs[44] < 20:
+        return 17  # StartChestCompression
 
-    # Basic assessments
+    # ABCDE assessment
     if obs[7] == 0:
         return 8  # ExamineResponse
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
@@ -28,11 +29,8 @@ def choose_action(observations, step_count):
         return 25  # UseSatsProbe
     if obs[37] == 0:
         return 27  # UseBloodPressureCuff
-
-    # Critical conditions check
-    if obs[39] > 0 and obs[37] > 0:
-        if obs[46] < 0.65 or obs[44] < 20:
-            return 17  # StartChestCompression
+    if obs[40] == 0:
+        return 38  # TakeBloodPressure
 
     # Handle breathing issues
     if obs[7] > 0:  # BreathingNone detected
@@ -41,28 +39,24 @@ def choose_action(observations, step_count):
         return 29  # UseBagValveMask
 
     # Interventions based on vital signs
-    if obs[39] > 0 and obs[46] < 0.88:
+    if obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
-    if obs[40] > 0 and obs[47] < 8:
+    if obs[47] < 8:
         if obs[18] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
-    if obs[37] > 0 and obs[44] < 60:
+    if obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
 
     # Check if patient is stabilized
-    if (obs[39] > 0 and obs[46] >= 0.88 and
-        obs[40] > 0 and obs[47] >= 8 and
-        obs[37] > 0 and obs[44] >= 60):
+    if obs[46] >= 0.88 and obs[47] >= 8 and obs[44] >= 60:
         return 48  # Finish
 
     return 16  # ViewMonitor
 
-step_count = 0
 for line in sys.stdin:
-    action = choose_action(line.strip(), step_count)
+    action = choose_action(line.strip())
     print(action)
     sys.stdout.flush()
-    step_count += 1
