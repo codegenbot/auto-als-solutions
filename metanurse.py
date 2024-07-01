@@ -35,16 +35,7 @@ while steps < 350:
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            breathing_assessed = (
-                events[7] > 0
-                or events[8] > 0
-                or events[9] > 0
-                or events[10] > 0
-                or events[11] > 0
-                or events[12] > 0
-                or events[13] > 0
-                or events[14] > 0
-            )
+            breathing_assessed = True
             continue
 
         if not circulation_checked:
@@ -65,8 +56,7 @@ while steps < 350:
         initial_assessments_done = True
 
     if (
-        initial_assessments_done
-        and measured_times[5] > 0
+        measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
