@@ -27,32 +27,35 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+            if any([events[i] > 0.1 for i in [3, 4, 5]]):  # Airway clear or problems
                 airway_confirmed = True
-                if (
-                    events[4] > 0.1 or events[5] > 0.1
-                ):  # AirwayVomit or AirwayBlood needs suction
+                if events[4] > 0.1:  # Vomit present
+                    print(31)  # UseYankeurSuctionCatheter
+                    continue
+                elif events[5] > 0.1:  # Blood present
                     print(31)  # UseYankeurSuctionCatheter
                     continue
             continue
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
+            if any(
+                [events[i] > 0 for i in range(7, 15)]
+            ):  # Any breathing problem signs
                 breathing_assessed = True
             continue
 
         if not circulation_checked:
             print(5)  # ExamineCirculation
-            if (
-                events[16] > 0.1 or events[17] > 0.1
+            if any(
+                [events[i] > 0.1 for i in [16, 17]]
             ):  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
             continue
 
         if not disability_checked:
             print(6)  # ExamineDisability
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
+            if any([events[i] > 0 for i in [21, 22, 23]]):  # AVPU responses
                 disability_checked = True
             continue
 
@@ -63,7 +66,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and not (measured_times[5] > 0):
+    if not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         print(25)  # UseSatsProbe
         satsProbeUsed = True
