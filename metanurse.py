@@ -27,23 +27,21 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-                airway_confirmed = True
-                if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood needs suction
-                    print(31)  # UseYankeurSuctionCatheter
-                    continue
+            airway_confirmed = True
+            if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood needs suction
+                print(31)  # UseYankeurSuctionCatheter
+                continue
             continue
 
         if not breathing_assessed:
             print(4)  # ExamineBreathing
-            if events[8] > 0 or events[9] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+            if any(events[i] > 0.5 for i in range(8, 15)):  # Breathing signs usable
                 breathing_assessed = True
             continue
 
         if not circulation_checked:
             print(5)  # ExamineCirculation
-            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
-                circulation_checked = True
+            circulation_checked = True
             continue
 
         if not disability_checked:
