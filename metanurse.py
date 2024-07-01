@@ -5,6 +5,7 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
+blood_pressure_checked = False
 steps = 0
 
 while steps < 350:
@@ -26,42 +27,34 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if (
-                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
-            ):  # AirwayClear till AirwayTongue
+            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
                 airway_confirmed = True
+                print(0)  # DoNothing, airway status known
+                continue
             print(3)  # ExamineAirway
             continue
 
         if not breathing_assessed:
-            if (
-                events[7] > 0
-                or events[8] > 0
-                or events[9] > 0
-                or events[10] > 0
-                or events[11] > 0
-                or events[12] > 0
-                or events[13] > 0
-                or events[14] > 0
-            ):  # BreathingNone till BreathingPneumothoraxSymptoms
-                breathing_assessed = True
-            print(4)  # ExamineBreathing
-            continue
+            if measured_times[5] == 0 or measured_values[5] < 88:
+                if not satsProbeUsed:
+                    print(19)  # OpenBreathingDrawer
+                    satsProbeUsed = True
+                    continue
+                print(25)  # UseSatsProbe
+                continue
+            breathing_assessed = True
 
         if not circulation_checked:
-            if (
-                events[16] > 0 or events[17] > 0
-            ):  # RadialPulsePalpable, RadialPulseNonPalpable
-                circulation_checked = True
+            if measured_times[4] == 0 or measured_values[4] < 60:
+                print(27)  # UseBloodPressureCuff
+                continue
             print(5)  # ExamineCirculation
+            circulation_checked = True
             continue
 
         if not disability_checked:
-            if (
-                events[21] > 0 or events[22] > 0 or events[23] > 0
-            ):  # AVPU_A, AVPU_U, AVPU_V
-                disability_checked = True
             print(6)  # ExamineDisability
+            disability_checked = True
             continue
 
         if not exposure_checked:
@@ -71,39 +64,20 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if measured_times[5] == 0 and not satsProbeUsed:
-        print(19)  # OpenBreathingDrawer
-        continue
-
-    if measured_times[5] == 0 and satsProbeUsed:
-        print(25)  # UseSatsProbe
-        continue
-
-    if measured_times[5] != 0 and measured_values[5] < 88:
-        if not satsProbeUsed:
-            print(25)  # UseSatsProbe
-            satsProbeUsed = True
-            continue
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(38)  # TakeBloodPressure
+    if measured_times[4] > 0 and measured_values[4] < 60 and not blood_pressure_checked:
+        print(15)  # GiveFluids
+        blood_pressure_checked = True
         continue
 
     if (
-        measured_times[5] > 0
+        measured_times[4] > 0
+        and measured_values[4] >= 60
+        and measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing as default fallback action
