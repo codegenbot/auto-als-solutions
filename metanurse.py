@@ -45,13 +45,28 @@ def choose_action(observations):
     if obs[17] > 0:  # RadialPulseNonPalpable
         return 17  # StartChestCompression
     
-    # Interventions based on vital signs
+    # Airway interventions
+    if obs[5] > 0 or obs[6] > 0:  # AirwayBlood or AirwayTongue
+        return 31  # UseYankeurSucionCatheter
+    if obs[4] > 0:  # AirwayVomit
+        return 32  # UseGuedelAirway
+    
+    # Breathing interventions
     if sats_available and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
     
+    # Circulation interventions
     if map_available and obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
+        return 15  # GiveFluids
+    
+    # Disability interventions
+    if obs[21] > 0 or obs[22] > 0:  # AVPU_U or AVPU_V
+        return 35  # PerformAirwayManoeuvres
+    
+    # Exposure interventions
+    if obs[26] > 0:  # ExposurePeripherallyShutdown
         return 15  # GiveFluids
     
     # Check if patient is stabilized
@@ -70,7 +85,4 @@ def choose_action(observations):
 
     return 0  # DoNothing
 
-for line in sys.stdin:
-    action = choose_action(line.strip())
-    print(action)
-    sys.stdout.flush()
+for line in sys.
