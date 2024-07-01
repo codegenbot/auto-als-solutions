@@ -1,67 +1,46 @@
 import sys
 
-def parse_observations(observations):
-    return list(map(float, observations.split()))
+def parse_observations(obs):
+    return list(map(float, obs.split()))
 
-def choose_action(obs, state, action_counts):
-    if obs[7] > 0:  # BreathingNone detected
-        if action_counts['UseBagValveMask'] < 3:
-            action_counts['UseBagValveMask'] += 1
-            return 29, state, action_counts  # UseBagValveMask
-        elif obs[16] == 0 and obs[17] == 0:
-            return 5, 'circulation', action_counts  # ExamineCirculation
-        elif obs[40] == 0:
-            return 25, state, action_counts  # UseSatsProbe
-        elif obs[39] == 0:
-            return 27, state, action_counts  # UseBloodPressureCuff
+def choose_action(observations, state):
+    obs = parse_observations(observations)
     
     if state == 'start':
-        if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-            return 8, 'airway', action_counts  # ExamineResponse
+        return 8, 'response'  # ExamineResponse
+    elif state == 'response':
+        return 3, 'airway'  # ExamineAirway
     elif state == 'airway':
-        if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
-            return 3, 'breathing', action_counts  # ExamineAirway
+        return 4, 'breathing'  # ExamineBreathing
     elif state == 'breathing':
-        if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
-            return 4, 'circulation', action_counts  # ExamineBreathing
+        return 5, 'circulation'  # ExamineCirculation
     elif state == 'circulation':
-        if obs[16] == 0 and obs[17] == 0:
-            return 5, 'disability', action_counts  # ExamineCirculation
+        return 6, 'disability'  # ExamineDisability
     elif state == 'disability':
-        if obs[23] == 0 and obs[24] == 0:
-            return 6, 'exposure', action_counts  # ExamineDisability
+        return 7, 'exposure'  # ExamineExposure
     elif state == 'exposure':
-        if obs[25] == 0 and obs[26] == 0:
-            return 7, 'monitor', action_counts  # ExamineExposure
+        return 16, 'monitor'  # ViewMonitor
     elif state == 'monitor':
-        if obs[39] == 0:
-            return 27, state, action_counts  # UseBloodPressureCuff
-        elif obs[40] == 0:
-            return 25, state, action_counts  # UseSatsProbe
+        if obs[38] < 0.65 or obs[37] < 20:
+            return 17, 'cpr'  # StartChestCompression
+        elif obs[38] < 0.88:
+            return 30, 'oxygen'  # UseNonRebreatherMask
+        elif obs[36] < 8:
+            return 29, 'ventilation'  # UseBagValveMask
+        elif obs[37] < 60:
+            return 15, 'fluids'  # GiveFluids
+        elif obs[38] >= 0.88 and obs[36] >= 8 and obs[37] >= 60:
+            return 48, 'finish'  # Finish
         else:
-            return 16, 'treat', action_counts  # ViewMonitor
-    elif state == 'treat':
-        if obs[46] < 88 and obs[40] > 0:
-            if action_counts['UseNonRebreatherMask'] < 3:
-                action_counts['UseNonRebreatherMask'] += 1
-                return 30, state, action_counts  # UseNonRebreatherMask
-        elif obs[45] < 60 and obs[39] > 0:
-            if action_counts['GiveFluids'] < 3:
-                action_counts['GiveFluids'] += 1
-                return 15, state, action_counts  # GiveFluids
-        elif obs[46] >= 88 and obs[45] >= 60:
-            return 48, 'finish', action_counts  # Finish
-    
-    return 16, state, action_counts  # ViewMonitor as default action
+            return 16, 'monitor'  # ViewMonitor again
+    else:
+        return 16, 'monitor'  # Default to viewing monitor
 
 state = 'start'
-action_counts = {'UseBagValveMask': 0, 'UseNonRebreatherMask': 0, 'GiveFluids': 0}
-
-for step in range(350):
-    observations = input()
-    obs = parse_observations(observations)
-    action, state, action_counts = choose_action(obs, state, action_counts)
+for line in sys.stdin:
+    action, new_state = choose_action(line.strip(), state)
     print(action)
     sys.stdout.flush()
-    if action == 48:
+    state = new_state
+    if state == 'finish':
         break
