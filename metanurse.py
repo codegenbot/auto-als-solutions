@@ -3,10 +3,10 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def choose_action(observations, step):
+def choose_action(observations):
     obs = parse_observations(observations)
     
-    # ABCDE assessment
+    # Start with basic assessments
     if obs[7] == 0:
         return 8  # ExamineResponse
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
@@ -37,8 +37,9 @@ def choose_action(observations, step):
     
     # Critical conditions check
     if obs[7] > 0:  # BreathingNone detected
-        if obs[18] == 0:
-            return 18  # OpenAirwayDrawer
+        return 18  # OpenAirwayDrawer
+    
+    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and airway drawer opened
         return 29  # UseBagValveMask
     
     if obs[17] > 0:  # RadialPulseNonPalpable
@@ -46,20 +47,12 @@ def choose_action(observations, step):
     
     # Interventions based on vital signs
     if sats_available and obs[46] < 0.88:
-        if obs[46] < 0.65:  # Critical low oxygen
-            if obs[18] == 0:
-                return 18  # OpenAirwayDrawer
-            return 29  # UseBagValveMask
         return 30  # UseNonRebreatherMask
-    
     if resp_available and obs[47] < 8:
         if obs[18] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
-    
     if map_available and obs[44] < 60:
-        if obs[44] < 20:  # Critical low blood pressure
-            return 10  # GiveAdrenaline
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
@@ -78,16 +71,9 @@ def choose_action(observations, step):
         map_available and obs[44] >= 60):
         return 48  # Finish
 
-    # Time limit check
-    if step >= 340:
-        return 48  # Finish
-
     return 16  # ViewMonitor
 
-step = 0
 for line in sys.stdin:
-    action = choose_action(line.strip(), step)
+    action = choose_action(line.strip())
     print(action)
     sys.stdout.flush()
-    step += 1
-    if action == 48:  
