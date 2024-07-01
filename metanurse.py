@@ -22,72 +22,67 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if events[7] > 0.1 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
-    # Airway Evaluation
     if not airway_confirmed:
-        if events[3] > 0.1:  # AirwayClear
+        if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1:
             airway_confirmed = True
-        elif events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSuctionCatheter
-            continue
-        else:
-            print(3)  # ExamineAirway
-            continue
-
-    # Breathing Evaluation
-    if not breathing_assessed:
-        if events[8] > 0.1 or events[9] > 0.1 or events[13] > 0.1:  # Breathing issues
-            print(29)  # UseBagValveMask
-            continue
-        breathing_assessed = True
-        print(4)  # ExamineBreathing
+            if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
+                print(31)  # UseYankeurSuctionCatheter
+                continue
+        print(3)  # ExamineAirway
         continue
 
-    # Circulation Evaluation
-    if not circulation_checked:
+    if airway_confirmed and not breathing_assessed:
+        print(4)  # ExamineBreathing
+        breathing_assessed = True
+        continue
+
+    if breathing_assessed and not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
 
-    # Disability Evaluation
-    if not disability_checked:
+    if circulation_checked and not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    # Exposure Evaluation
-    if not exposure_checked:
+    if disability_checked and not exposure_checked:
         print(7)  # ExamineExposure
         exposure_checked = True
+        initial_assessments_done = True
         continue
 
-    # Handling Treatment
-    if not satsProbeUsed:
+    if initial_assessments_done and not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if not monitorViewed:
+    if satsProbeUsed and not monitorViewed:
         print(16)  # ViewMonitor
         monitorViewed = True
         continue
 
-    # Treatment based on oxygen saturation and blood pressure monitoring
-    if measured_values[5] < 88:
+    if measured_times[5] == 0 or measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if measured_values[4] < 60:
+    if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
 
-    # If conditions are stable and all checked
-    if measured_times[5] > 0 and measured_values[5] >= 88 and measured_times[6] > 0 and measured_values[6] >= 8 and measured_times[4] > 0 and measured_values[4] >= 60:
+    if initial_assessments_done and (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
         print(48)  # Finish
         break
 
-    # Default action
-    print(0)  # DoNothing
+    print(0)  # DoNothing as a default action
