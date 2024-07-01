@@ -31,7 +31,7 @@ while steps < 350:
         if not airway_confirmed:
             if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
                 airway_confirmed = True
-                if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AiryBlood
+                if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
                     print(31)  # UseYankeurSuctionCatheter
                     continue
             print(3)  # ExamineAirway
