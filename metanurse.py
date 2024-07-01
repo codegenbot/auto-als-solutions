@@ -36,13 +36,13 @@ def choose_action(observations):
     resp_available = obs[40] > 0
     
     # Critical conditions check
-    if obs[7] > 0:  # BreathingNone detected
+    if obs[7] > 0:
         return 18  # OpenAirwayDrawer
     
-    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and airway drawer opened
+    if obs[7] > 0 and obs[18] > 0:
         return 29  # UseBagValveMask
     
-    if obs[17] > 0:  # RadialPulseNonPalpable
+    if obs[17] > 0:
         return 17  # StartChestCompression
     
     # Interventions based on vital signs
