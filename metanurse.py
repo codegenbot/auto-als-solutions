@@ -47,7 +47,7 @@ while steps < 350:
         if not circulation_checked:
             if (
                 events[16] > 0.1 or events[17] > 0.1
-            ):  # RadialPulsePalpable, RadialPulseNonPalpable
+            ):  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
             print(5)  # ExamineCirculation
             continue
