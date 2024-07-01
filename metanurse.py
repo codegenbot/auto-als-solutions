@@ -34,18 +34,17 @@ while steps < 350:
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0:
+            if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
-                if not satsProbeUsed:
-                    print(19)  # OpenBreathingDrawer
-                    print(25)  # UseSatsProbe
-                    print(16)  # ViewMonitor
-                    satsProbeUsed = True
-                    continue
-                continue
             else:
                 print(4)  # ExamineBreathing
                 continue
+
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
+            continue
 
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:
@@ -58,7 +57,7 @@ while steps < 350:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
             else:
-                print(6)  # ExamineDisability
+ L               print(6)  # ExamineDisability
                 continue
 
         if not exposure_checked:
