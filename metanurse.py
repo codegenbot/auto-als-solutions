@@ -10,10 +10,13 @@ def choose_action(observations):
     if obs[7] > 0:  # BreathingNone detected
         return 18  # OpenAirwayDrawer
     
-    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and AirwayDrawer opened
+    if obs[7] > 0 and obs[18] > 0:
         return 29  # UseBagValveMask
     
-    # Start with basic assessments
+    if obs[17] > 0:  # RadialPulseNonPalpable
+        return 17  # StartChestCompression
+    
+    # Basic assessments
     if obs[7] == 0:
         return 8  # ExamineResponse
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
@@ -42,17 +45,14 @@ def choose_action(observations):
     map_available = obs[37] > 0
     resp_available = obs[40] > 0
     
-    if obs[17] > 0:  # RadialPulseNonPalpable
-        return 17  # StartChestCompression
-    
     # Interventions based on vital signs
-    if sats_available and obs[46] < 0.88:
-        return 30  # UseNonRebreatherMask
-    
     if map_available and obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
+    
+    if sats_available and obs[46] < 0.88:
+        return 30  # UseNonRebreatherMask
     
     # Check if patient is stabilized
     if (sats_available and obs[46] >= 0.88 and
