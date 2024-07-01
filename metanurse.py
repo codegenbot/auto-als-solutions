@@ -6,63 +6,79 @@ def parse_observations(observations):
 def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    # ABCDE assessment sequence
-    if state == 'A':
+    if state == 'initial':
+        return 8, 'response'  # ExamineResponse
+    
+    elif state == 'response':
+        if obs[0] > 0 or obs[1] > 0 or obs[2] > 0:
+            return 3, 'airway'  # ExamineAirway
+        else:
+            return 1, 'signs_of_life'  # CheckSignsOfLife
+    
+    elif state == 'signs_of_life':
+        return 2, 'rhythm'  # CheckRhythm
+    
+    elif state == 'rhythm':
+        if obs[28] > 0 or obs[29] > 0 or obs[30] > 0 or obs[31] > 0:
+            return 3, 'airway'  # ExamineAirway
+        else:
+            return 17, 'cpr'  # StartChestCompression
+    
+    elif state == 'airway':
         if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
-            return 3, state  # ExamineAirway
-        state = 'B'
+            return 35, 'airway_maneuvers'  # PerformAirwayManoeuvres
+        else:
+            return 4, 'breathing'  # ExamineBreathing
     
-    if state == 'B':
-        if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
-            return 4, state  # ExamineBreathing
-        if obs[39] == 0:
-            return 25, state  # UseSatsProbe
-        state = 'C'
+    elif state == 'airway_maneuvers':
+        return 4, 'breathing'  # ExamineBreathing
     
-    if state == 'C':
-        if obs[16] == 0 and obs[17] == 0:
-            return 5, state  # ExamineCirculation
+    elif state == 'breathing':
+        if obs[25] == 0:
+            return 25, 'use_sats_probe'  # UseSatsProbe
+        elif obs[38] < 0.88:
+            return 30, 'oxygen'  # UseNonRebreatherMask
+        else:
+            return 5, 'circulation'  # ExamineCirculation
+    
+    elif state in ['use_sats_probe', 'oxygen']:
+        return 16, 'view_monitor'  # ViewMonitor
+    
+    elif state == 'view_monitor':
+        if obs[38] < 0.88:
+            return 30, 'oxygen'  # UseNonRebreatherMask
+        else:
+            return 5, 'circulation'  # ExamineCirculation
+    
+    elif state == 'circulation':
         if obs[37] == 0:
-            return 27, state  # UseBloodPressureCuff
-        state = 'D'
+            return 27, 'bp_cuff'  # UseBloodPressureCuff
+        elif obs[37] < 60:
+            return 15, 'fluids'  # GiveFluids
+        else:
+            return 6, 'disability'  # ExamineDisability
     
-    if state == 'D':
+    elif state in ['bp_cuff', 'fluids']:
+        return 16, 'view_monitor'  # ViewMonitor
+    
+    elif state == 'disability':
         if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-            return 6, state  # ExamineDisability
-        state = 'E'
+            return 6, 'disability'  # ExamineDisability again
+        else:
+            return 7, 'exposure'  # ExamineExposure
     
-    if state == 'E':
-        if obs[25] == 0 and obs[26] == 0:
-            return 7, state  # ExamineExposure
-        state = 'Treatment'
+    elif state == 'exposure':
+        if obs[38] >= 0.88 and obs[35] >= 8 and obs[37] >= 60:
+            return 48, 'finish'  # Finish
+        else:
+            return 16, 'view_monitor'  # ViewMonitor
     
-    if state == 'Treatment':
-        # Check vital signs
-        if obs[46] == 0 or obs[47] == 0 or obs[48] == 0 or obs[49] == 0 or obs[50] == 0 or obs[51] == 0 or obs[52] == 0:
-            return 16, state  # ViewMonitor
-        
-        # Cardiac arrest check
-        if obs[51] < 0.65 or obs[50] < 20:
-            return 17, state  # StartChestCompression
-        
-        # Stabilize patient
-        if obs[51] < 0.88:
-            return 30, state  # UseNonRebreatherMask
-        
-        if obs[52] < 8:
-            return 29, state  # UseBagValveMask
-        
-        if obs[50] < 60:
-            return 15, state  # GiveFluids
-        
-        # If patient is stable, finish
-        if obs[51] >= 0.88 and obs[52] >= 8 and obs[50] >= 60:
-            return 48, state  # Finish
+    elif state == 'cpr':
+        if obs[28] > 0 or obs[29] > 0 or obs[30] > 0 or obs[31] > 0:
+            return 23, 'post_cpr'  # ResumeCPR
+        else:
+            return 17, 'cpr'  # StartChestCompression
     
-    return 0, state  # DoNothing
-
-state = 'A'
-for line in sys.stdin:
-    action, state = choose_action(line.strip(), state)
-    print(action)
-    sys.stdout.flush()
+    elif state == 'post_cpr':
+        return 16, 'view_monitor'  # ViewMonitor
+    
