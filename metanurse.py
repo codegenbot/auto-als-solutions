@@ -6,6 +6,7 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
+seenMonitor = False
 steps = 0
 
 while steps < 350:
@@ -27,9 +28,8 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            airway_confirmed = (
-                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
-            )
+            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
+                airway_confirmed = True
             print(3)  # ExamineAirway
             continue
 
@@ -68,7 +68,12 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
+    if not seenMonitor and (bpCuffUsed or satsProbeUsed):
+        print(16)  # ViewMonitor
+        seenMonitor = True
+        continue
+
+    if measured_times[4] == 0 or (measured_times[4] > 0 and measured_values[4] < 60):
         print(38)  # TakeBloodPressure
         continue
 
