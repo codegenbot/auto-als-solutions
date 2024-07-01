@@ -15,7 +15,6 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Critical condition checks
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -26,23 +25,20 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    # ABCDE Assessment
     if not initial_assessments_done:
         if not airway_confirmed:
             if events[3] > 0.1:
                 airway_confirmed = True
-            elif events[4] > 0 or events[5] > 0 or events[6] > 0:
-                print(31)  # UseYankeurSucionCatheter
-                continue
             else:
                 print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
-            if events[12] > 0.1:
+            if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
-                sats_checked = True
+                print(19)  # OpenBreathingDrawer
                 print(25)  # UseSatsProbe
+                satsProbeUsed = True
                 print(16)  # ViewMonitor
                 continue
             else:
@@ -52,17 +48,13 @@ while steps < 350:
         if not circulation_checked:
             if events[16] > 0 or events[17] > 0:
                 circulation_checked = True
-                print(28)  # AttachDefibPads
-                continue
             else:
                 print(5)  # ExamineCirculation
                 continue
 
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0:
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
-                print(38)  # TakeBloodPressure
-                continue
             else:
                 print(6)  # ExamineDisability
                 continue
@@ -74,31 +66,24 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    # Based on observations handle standard operations
-    if events[33] == 0 and not sats_checked:
-        print(25)  # UseSatsProbe
-        print(16)  # ViewMonitor
-        sats_checked = True
+    if (
+        measured_times[5] > 0
+        and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
+    ):
+        print(48)  # Finish
+        break
+
+    if events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88):
+        if not satsProbeUsed:
+            print(19)  # OpenBreathingDrawer
+            print(25)  # UseSatsProbe
+            satsProbeUsed = True
         continue
 
-    # Check for stabilisation criteria after all initial assessments
-    if initial_assessments_done:
-        if (
-            measured_times[5] > 0
-            and measured_values[5] >= 88
-            and measured_times[6] > 0
-            and measured_values[6] >= 8
-            and measured_times[4] > 0
-            and measured_values[4] >= 60
-        ):
-            print(48)  # Finish
-            break
-
-        if measured_times[4] == 0 or measured_values[4] < 60:
-            print(27)  # UseBloodPressureCuff
-            continue
-        if measured_times[5] == 0 or measured_values[5] < 88:
-            if not satsProbeUsed:
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-            continue
+    if measured_times[4] == 0 or measured_values[4] < 60:
+        print(27)  # UseBloodPressureCuff
+        continue
