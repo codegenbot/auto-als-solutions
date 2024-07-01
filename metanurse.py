@@ -14,66 +14,53 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Immediate critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
+    # Initial assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1:
-                airway_confirmed = True
-            else:
-                print(3)  # ExamineAirway
-                continue
-
+            print(3)  # ExamineAirway
+            continue
         if not breathing_assessed:
-            if events[12] > 0 or events[13] > 0 or events[14] > 0:
-                breathing_assessed = True
-            else:
-                print(4)  # ExamineBreathing
-                continue
-
+            print(4)  # ExamineBreathing
+            breathing_assessed = True
+            continue
         if not satsProbeUsed:
             print(19)  # OpenBreathingDrawer
-            continue
-
-        if satsProbeUsed and not events[25] > 0.1:
             print(25)  # UseSatsProbe
+            satsProbeUsed = True
             continue
-
         if not circulation_checked:
-            if events[16] > 0 or events[17] > 0:
-                circulation_checked = True
-            else:
-                print(5)  # ExamineCirculation
-                continue
-
+            print(16)  # ViewMonitor
+            print(38)  # TakeBloodPressure
+            circulation_checked = True
+            continue
         if not disability_checked:
-            if events[21] > 0 or events[22] > 0 or events[23] > 0:
-                disability_checked = True
-            else:
-                print(6)  # ExamineDisability
-                continue
-
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
         if not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             continue
-
         initial_assessments_done = True
 
-    if measured_times[5] > 0 and measured_values[5] > 0 and not satsProbeUsed:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if measured_times[4] > 0 and measured_values[4] > 0:
+    # Check vital signs after initial assessments
+    if measured_times[5] > 0:
+        if measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+    if measured_times[4] > 0:
         if measured_values[4] < 60:
             print(27)  # UseBloodPressureCuff
-            print(38)  # TakeBloodPressure
             continue
 
+    # Check if patient is stabilized and end simulation
     if (
         airway_confirmed
         and breathing_assessed
