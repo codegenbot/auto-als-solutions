@@ -28,32 +28,48 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = (
-                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
-            )
+            if events[3] > 0:
+                airway_confirmed = True
             continue
 
-        if not breathing_assessed:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
             breathing_assessed = True
             continue
 
-        if not circulation_checked:
+        if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
-            circulation_checked = events[16] > 0 or events[17] > 0
+            circulation_checked = True
             continue
 
-        if not disability_checked:
+        if not disability_checked and circulation_checked:
             print(6)  # ExamineDisability
-            disability_checked = events[21] > 0 or events[22] > 0 or events[23] > 0
+            disability_checked = True
             continue
 
-        if not exposure_checked:
+        if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
+            initial_assessments_done = True
             continue
 
-        initial_assessments_done = True
+    if not satsProbeUsed and breathing_assessed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
+
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
+    if not bpCuffUsed and circulation_checked:
+        print(27)  # UseBloodPressureCuff
+        bpCuffUsed = True
+        continue
+
+    if measured_times[4] != 0 and measured_values[4] < 60:
+        print(38)  # TakeBloodPressure
+        continue
 
     if (
         measured_times[5] > 0
@@ -65,23 +81,5 @@ while steps < 350:
     ):
         print(48)  # Finish
         break
-
-    if not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
-
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if not bpCuffUsed:
-        print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
-        continue
-
-    if measured_times[4] != 0 and measured_values[4] < 60:
-        print(38)  # TakeBloodPressure
-        continue
 
     print(0)  # DoNothing as last resort
