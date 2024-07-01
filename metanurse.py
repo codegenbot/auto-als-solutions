@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -44,9 +43,7 @@ while steps < 350:
             continue
 
         if not circulation_checked:
-            if (
-                events[16] > 0.1 or events[17] > 0.1
-            ):  # RadialPulsePalpable or RadialPulseNonPalpable
+            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
                 circulation_checked = True
                 print(0)  # DoNothing for now
                 continue
@@ -68,14 +65,10 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and not breathingDrawerOpened:
+    if not satsProbeUsed and (
+        events[25] == 0 or (measured_times[5] == 0 or measured_values[5] < 88)
+    ):
         print(19)  # OpenBreathingDrawer
-        breathingDrawerOpened = True
-        continue
-
-    if not satsProbeUsed and breathingDrawerOpened:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
