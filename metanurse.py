@@ -3,91 +3,73 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def is_cardiac_arrest(obs):
-    return obs[38] < 0.65 or obs[37] < 20 or obs[37] == 0
-
-def is_shockable_rhythm(obs):
-    return obs[32] > 0 or obs[38] > 0  # VT or VF
-
-def choose_action(observations, state, steps):
+def choose_action(observations):
     obs = parse_observations(observations)
     
-    if steps > 350:
-        return 48, 'finish'
+    # Check for critical conditions first
+    if obs[7] > 0:  # BreathingNone detected
+        return 18  # OpenAirwayDrawer
+    
+    if obs[7] > 0 and obs[18] > 0:
+        return 29  # UseBagValveMask
+    
+    # Examine vitals
+    if obs[39] == 0:
+        return 25  # UseSatsProbe
+    if obs[37] == 0:
+        return 38  # TakeBloodPressure
+    if obs[40] == 0:
+        return 16  # ViewMonitor
+    
+    # Check if measurements are available
+    sats_available = obs[39] > 0
+    map_available = obs[37] > 0
+    resp_available = obs[40] > 0
+    
+    # Check circulation and start compressions if needed
+    if obs[16] == 0 and obs[17] == 0:
+        return 5  # ExamineCirculation
+    if obs[17] > 0:  # RadialPulseNonPalpable
+        return 17  # StartChestCompression
+    
+    # Interventions based on vital signs
+    if map_available and obs[44] < 60:
+        if obs[13] == 0:
+            return 14  # UseVenflonIVCatheter
+        return 15  # GiveFluids
+    
+    if sats_available and obs[46] < 0.88:
+        return 30  # UseNonRebreatherMask
+    
+    # Basic assessments if not done
+    if obs[7] == 0:
+        return 8  # ExamineResponse
+    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+        return 3  # ExamineAirway
+    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+        return 4  # ExamineBreathing
+    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+        return 6  # ExamineDisability
+    if obs[25] == 0 and obs[26] == 0:
+        return 7  # ExamineExposure
+    
+    # Check if patient is stabilized
+    if (sats_available and obs[46] >= 0.88 and
+        resp_available and obs[47] >= 8 and
+        map_available and obs[44] >= 60):
+        return 48  # Finish
+    
+    # Measure vital signs more frequently
+    if obs[39] < 0.9:
+        return 25  # UseSatsProbe
+    if obs[37] < 0.9:
+        return 38  # TakeBloodPressure
+    if obs[40] < 0.9:
+        return 16  # ViewMonitor
+    
+    return 0  # DoNothing
 
-    if is_cardiac_arrest(obs):
-        if state != 'cpr':
-            return 17, 'cpr'
-        elif state == 'cpr':
-            if steps % 5 == 0:
-                return 2, 'check_rhythm_cpr'
-            elif steps % 10 == 0:
-                return 10, 'give_adrenaline'
-            else:
-                return 23, 'resume_cpr'
-    
-    if state == 'check_rhythm_cpr':
-        if is_shockable_rhythm(obs):
-            return 28, 'attach_defib_pads'
-        else:
-            return 23, 'resume_cpr'
-    
-    if state == 'attach_defib_pads':
-        return 39, 'turn_on_defib'
-    
-    if state == 'turn_on_defib':
-        return 40, 'charge_defib'
-    
-    if state == 'charge_defib':
-        return 2, 'shock'
-
-    if state == 'start':
-        return 8, 'response'
-    elif state == 'response':
-        return 3, 'airway'
-    elif state == 'airway':
-        return 4, 'breathing'
-    elif state == 'breathing':
-        return 5, 'circulation'
-    elif state == 'circulation':
-        return 6, 'disability'
-    elif state == 'disability':
-        return 7, 'exposure'
-    elif state == 'exposure':
-        return 25, 'sats_probe'
-    elif state == 'sats_probe':
-        return 27, 'bp_cuff'
-    elif state == 'bp_cuff':
-        return 16, 'monitor'
-    elif state == 'monitor':
-        if obs[38] < 0.88:
-            return 30, 'oxygen'
-        elif obs[36] < 8:
-            return 29, 'ventilation'
-        elif obs[37] < 60:
-            return 14, 'iv_access'
-        elif obs[38] >= 0.88 and obs[36] >= 8 and obs[37] >= 60:
-            return 48, 'finish'
-        else:
-            return 16, 'monitor'
-    elif state == 'oxygen':
-        return 16, 'monitor'
-    elif state == 'ventilation':
-        return 16, 'monitor'
-    elif state == 'iv_access':
-        return 15, 'fluids'
-    elif state == 'fluids':
-        return 16, 'monitor'
-    else:
-        return 16, 'monitor'
-
-state = 'start'
-steps = 0
 for line in sys.stdin:
-    steps += 1
-    action, new_state = choose_action(line.strip(), state, steps)
+    action = choose_action(line.strip())
     print(action)
     sys.stdout.flush()
-    state = new_state
-    if state == 'finish':
-        break
