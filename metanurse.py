@@ -40,19 +40,12 @@ while steps < 350:
         if not breathing_assessed:
             if events[12] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
-                print(0)  # DoNothing
-                continue
-            # Add a Sats check if not already done
-            if not satsProbeUsed:
-                print(20)  # OpenBreathingDrawer
-                print(25)  # UseSatsProbe
-                satsProbeUsed = True
-                continue
-            # Activate Non-Rebreather Mask if saturation is low
-            if measured_times[5] == 0 or measured_values[5] < 88:
-                print(30)  # UseNonRebreatherMask
-                continue
             else:
+                if not satsProbeUsed:
+                    print(20)  # OpenBreathingDrawer
+                    print(25)  # UseSatsProbe
+                    satsProbeUsed = True
+                    continue
                 print(4)  # ExamineBreathing
                 continue
 
@@ -77,20 +70,21 @@ while steps < 350:
 
         initial_assessments_done = True
 
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
+        continue
+
     if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
 
     # Decision to finish if stabilized
     if (
-        airway_confirmed and 
-        breathing_assessed and 
-        circulation_checked and 
-        disability_checked and 
-        exposure_checked and
-        measured_times[5] > 0 and measured_values[5] >= 88 and 
-        measured_times[6] > 0 and measured_values[6] >= 8 and 
-        measured_times[4] > 0 and measured_values[4] >= 60
+        airway_confirmed and breathing_assessed and circulation_checked
+        and disability_checked and exposure_checked
+        and measured_times[5] > 0 and measured_values[5] >= 88
+        and measured_times[6] > 0 and measured_values[6] >= 8
+        and measured_times[4] > 0 and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
