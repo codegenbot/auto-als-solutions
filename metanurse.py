@@ -5,7 +5,6 @@ disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
-breathingDrawerOpened = False
 steps = 0
 
 while steps < 350:
@@ -72,14 +71,12 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if measured_times[5] == 0 and not breathingDrawerOpened:
+    if measured_times[5] == 0 and not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
-        breathingDrawerOpened = True
         continue
 
-    if measured_times[5] == 0 and breathingDrawerOpened and not satsProbeUsed:
+    if measured_times[5] == 0 and satsProbeUsed:
         print(25)  # UseSatsProbe
-        satsProbeUsed = True
         continue
 
     if measured_times[5] != 0 and measured_values[5] < 88:
