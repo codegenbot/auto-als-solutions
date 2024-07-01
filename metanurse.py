@@ -7,14 +7,14 @@ def choose_action(observations):
     obs = parse_observations(observations)
     
     # Start with basic assessments
-    if obs[7] == 0:
-        return 8  # ExamineResponse
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
         return 3  # ExamineAirway
     if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
         return 4  # ExamineBreathing
     if obs[16] == 0 and obs[17] == 0:
         return 5  # ExamineCirculation
+    if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
+        return 8  # ExamineResponse
     if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
         return 6  # ExamineDisability
     if obs[25] == 0 and obs[26] == 0:
@@ -39,40 +39,26 @@ def choose_action(observations):
     if obs[7] > 0:  # BreathingNone detected
         return 18  # OpenAirwayDrawer
     
-    if obs[7] > 0 and obs[18] > 0:
+    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and AirwayDrawer opened
         return 29  # UseBagValveMask
     
     if obs[17] > 0:  # RadialPulseNonPalpable
         return 17  # StartChestCompression
     
-    # Airway interventions
-    if obs[5] > 0 or obs[6] > 0:  # AirwayBlood or AirwayTongue
-        return 31  # UseYankeurSucionCatheter
-    if obs[4] > 0:  # AirwayVomit
-        return 32  # UseGuedelAirway
-    
-    # Breathing interventions
+    # Interventions based on vital signs
     if sats_available and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
     
-    # Circulation interventions
     if map_available and obs[44] < 60:
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
     
-    # Disability interventions
-    if obs[21] > 0 or obs[22] > 0:  # AVPU_U or AVPU_V
-        return 35  # PerformAirwayManoeuvres
-    
-    # Exposure interventions
-    if obs[26] > 0:  # ExposurePeripherallyShutdown
-        return 15  # GiveFluids
-    
     # Check if patient is stabilized
     if (sats_available and obs[46] >= 0.88 and
         resp_available and obs[47] >= 8 and
-        map_available and obs[44] >= 60):
+        map_available and obs[44] >= 60 and
+        obs[3] > 0):  # AirwayClear
         return 48  # Finish
 
     # Measure vital signs more frequently
@@ -85,4 +71,7 @@ def choose_action(observations):
 
     return 0  # DoNothing
 
-for line in sys.
+for line in sys.stdin:
+    action = choose_action(line.strip())
+    print(action)
+    sys.stdout.flush()
