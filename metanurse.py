@@ -1,76 +1,79 @@
 import sys
-import time
 
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-class State:
-    def __init__(self):
-        self.last_action_time = {}
-        self.step = 'A'
-        self.airway_clear = False
-        self.breathing_ok = False
-        self.circulation_ok = False
-        self.disability_ok = False
-        self.exposure_ok = False
+def choose_action(obs, state, action_counts):
+    if action_counts[state] > 5:
+        state = (state + 1) % 5
 
-def action_cooldown(state, action, cooldown=5):
-    current_time = time.time()
-    if action in state.last_action_time and current_time - state.last_action_time[action] < cooldown:
-        return False
-    state.last_action_time[action] = current_time
-    return True
-
-def choose_action(obs, state):
-    if state.step == 'A':
-        if obs[20] == 0 and obs[21] == 0 and obs[22] == 0 and action_cooldown(state, 8):
-            return 8  # ExamineResponse
-        if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0 and action_cooldown(state, 3):
-            return 3  # ExamineAirway
-        if obs[3] > 0:
-            state.airway_clear = True
-            state.step = 'B'
-    
-    if state.step == 'B':
-        if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0 and action_cooldown(state, 4):
-            return 4  # ExamineBreathing
+    if state == 0:  # Airway
+        if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+            action_counts[0] += 1
+            return 8, state  # ExamineResponse
         if obs[7] > 0:  # BreathingNone detected
-            if action_cooldown(state, 17):
-                return 17  # StartChestCompression
-            if action_cooldown(state, 29):
-                return 29  # UseBagValveMask
-        if obs[40] == 0 and action_cooldown(state, 25):
-            return 25  # UseSatsProbe
-        if obs[46] < 88 and obs[40] > 0 and action_cooldown(state, 30):
-            return 30  # UseNonRebreatherMask
-        if obs[41] == 0 and action_cooldown(state, 38):
-            return 38  # TakeBloodPressure
-        if obs[10] > 0 and obs[46] >= 88:
-            state.breathing_ok = True
-            state.step = 'C'
+            state = 1
+        elif obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+            action_counts[0] += 1
+            return 3, state  # ExamineAirway
+        else:
+            state = 1
     
-    if state.step == 'C':
-        if obs[16] == 0 and obs[17] == 0 and action_cooldown(state, 5):
-            return 5  # ExamineCirculation
-        if obs[39] == 0 and action_cooldown(state, 27):
-            return 27  # UseBloodPressureCuff
-        if obs[45] < 60 and obs[39] > 0 and action_cooldown(state, 15):
-            return 15  # GiveFluids
-        if obs[16] > 0 and obs[45] >= 60:
-            state.circulation_ok = True
-            state.step = 'D'
-    
-    if state.step == 'D':
-        if obs[23] == 0 and obs[24] == 0 and action_cooldown(state, 6):
-            return 6  # ExamineDisability
-        if obs[20] > 0 or obs[21] > 0 or obs[22] > 0:
-            state.disability_ok = True
-            state.step = 'E'
-    
-    if state.step == 'E':
-        if obs[25] == 0 and obs[26] == 0 and action_cooldown(state, 7):
-            return 7  # ExamineExposure
-        if obs[25] > 0 or obs[26] > 0:
-            state.exposure_ok = True
-    
-    if state
+    if state == 1:  # Breathing
+        if obs[7] > 0:  # BreathingNone
+            action_counts[1] += 1
+            return 29, state  # UseBagValveMask
+        if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+            action_counts[1] += 1
+            return 4, state  # ExamineBreathing
+        else:
+            state = 2
+
+    if state == 2:  # Circulation
+        if obs[16] == 0 and obs[17] == 0:
+            action_counts[2] += 1
+            return 5, state  # ExamineCirculation
+        if obs[39] == 0:
+            action_counts[2] += 1
+            return 27, state  # UseBloodPressureCuff
+        if obs[40] == 0:
+            action_counts[2] += 1
+            return 25, state  # UseSatsProbe
+        else:
+            state = 3
+
+    if state == 3:  # Disability
+        if obs[23] == 0 and obs[24] == 0:
+            action_counts[3] += 1
+            return 6, state  # ExamineDisability
+        else:
+            state = 4
+
+    if state == 4:  # Exposure
+        if obs[25] == 0 and obs[26] == 0:
+            action_counts[4] += 1
+            return 7, state  # ExamineExposure
+        else:
+            state = 0
+
+    if obs[46] < 88 and obs[40] > 0:
+        return 30, state  # UseNonRebreatherMask
+    if obs[45] < 60 and obs[39] > 0:
+        return 15, state  # GiveFluids
+
+    if obs[46] >= 88 and obs[45] >= 60 and obs[41] >= 8:
+        return 48, state  # Finish
+
+    return 0, state  # DoNothing
+
+state = 0
+action_counts = [0, 0, 0, 0, 0]
+
+for step in range(350):
+    observations = input()
+    obs = parse_observations(observations)
+    action, state = choose_action(obs, state, action_counts)
+    print(action)
+    sys.stdout.flush()
+    if action == 48:
+        break
