@@ -3,74 +3,89 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def choose_action(observations, step_count):
+def choose_action(observations, state):
     obs = parse_observations(observations)
     
-    # Check for signs of life
-    if step_count == 0:
-        return 1  # CheckSignsOfLife
-
-    # Start chest compressions if critical conditions are met
-    if (obs[39] > 0 and obs[46] < 0.65) or (obs[37] > 0 and obs[44] < 20):
-        return 17  # StartChestCompression
-
-    # Prioritize airway management
-    if obs[7] > 0:  # BreathingNone
-        if obs[19] == 0:
-            return 18  # OpenAirwayDrawer
-        return 29  # UseBagValveMask
-
-    # Basic assessments
-    if obs[7] == 0:
-        return 8  # ExamineResponse
-    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
-        return 3  # ExamineAirway
-    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
-        return 4  # ExamineBreathing
-    if obs[16] == 0 and obs[17] == 0:
-        return 5  # ExamineCirculation
-    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-        return 6  # ExamineDisability
-    if obs[25] == 0 and obs[26] == 0:
-        return 7  # ExamineExposure
-
-    # Measure vital signs
-    if obs[39] == 0:
-        return 25  # UseSatsProbe
-    if obs[37] == 0:
-        return 38  # TakeBloodPressure
-    if obs[33] == 0:
-        return 26  # UseAline
-    if obs[34] == 0:
-        return 27  # UseBloodPressureCuff
-
-    # Interventions based on vital signs
-    if obs[39] > 0 and obs[46] < 0.88:
-        return 30  # UseNonRebreatherMask
-    if obs[40] > 0 and obs[47] < 8:
-        if obs[19] == 0:
-            return 18  # OpenAirwayDrawer
-        return 29  # UseBagValveMask
-    if obs[37] > 0 and obs[44] < 60:
-        if obs[13] == 0:
-            return 14  # UseVenflonIVCatheter
-        return 15  # GiveFluids
-
-    # Check if patient is stabilized
-    if (obs[39] > 0 and obs[46] >= 0.88 and
-        obs[40] > 0 and obs[47] >= 8 and
-        obs[37] > 0 and obs[44] >= 60):
-        return 48  # Finish
-
-    # Timeout mechanism
-    if step_count >= 349:
-        return 48  # Finish
-
-    return 16  # ViewMonitor
-
-step_count = 0
-for line in sys.stdin:
-    action = choose_action(line.strip(), step_count)
-    print(action)
-    sys.stdout.flush()
-    step_count += 1
+    if state == 'start':
+        return 8, 'response'
+    elif state == 'response':
+        return 3, 'airway'
+    elif state == 'airway':
+        return 4, 'breathing'
+    elif state == 'breathing':
+        if obs[7] > 0.5:  # BreathingNone event
+            return 17, 'start_cpr'
+        return 5, 'circulation'
+    elif state == 'circulation':
+        return 6, 'disability'
+    elif state == 'disability':
+        return 7, 'exposure'
+    elif state == 'exposure':
+        return 25, 'sats_probe'
+    elif state == 'sats_probe':
+        return 27, 'bp_cuff'
+    elif state == 'bp_cuff':
+        return 16, 'monitor'
+    elif state == 'monitor':
+        if obs[38] < 0.65 or obs[37] < 20:
+            return 28, 'attach_defib_pads'
+        elif obs[38] < 0.88:
+            return 30, 'oxygen'
+        elif obs[36] < 8:
+            return 29, 'ventilation'
+        elif obs[37] < 60:
+            return 14, 'iv_access'
+        elif obs[38] >= 0.88 and obs[36] >= 8 and obs[37] >= 60:
+            return 48, 'finish'
+        else:
+            return 16, 'monitor'
+    elif state == 'attach_defib_pads':
+        return 39, 'turn_on_defib'
+    elif state == 'turn_on_defib':
+        return 2, 'check_rhythm'
+    elif state == 'check_rhythm':
+        if obs[38] > 0 or obs[32] > 0:  # VF or VT
+            return 40, 'charge_defib'
+        else:
+            return 17, 'start_cpr'
+    elif state == 'charge_defib':
+        return 41, 'shock'
+    elif state == 'shock':
+        return 17, 'start_cpr'
+    elif state == 'start_cpr':
+        return 17, 'cpr_cycle'
+    elif state == 'cpr_cycle':
+        state['compressions'] = state.get('compressions', 0) + 1
+        if state['compressions'] == 30:
+            return 22, 'ventilate'
+        else:
+            return 17, 'cpr_cycle'
+    elif state == 'ventilate':
+        state['ventilations'] = state.get('ventilations', 0) + 1
+        if state['ventilations'] == 2:
+            state['compressions'] = 0
+            state['ventilations'] = 0
+            state['cycles'] = state.get('cycles', 0) + 1
+            if state['cycles'] % 2 == 0:
+                return 10, 'give_adrenaline'
+            else:
+                return 2, 'check_rhythm'
+        else:
+            return 22, 'ventilate'
+    elif state == 'give_adrenaline':
+        if state['cycles'] == 6:
+            return 11, 'give_amiodarone'
+        else:
+            return 17, 'start_cpr'
+    elif state == 'give_amiodarone':
+        return 17, 'start_cpr'
+    elif state == 'oxygen':
+        return 16, 'monitor'
+    elif state == 'ventilation':
+        return 16, 'monitor'
+    elif state == 'iv_access':
+        return 15, 'fluids'
+    elif state == 'fluids':
+        return 16, 'monitor'
+    else:
+        return 
