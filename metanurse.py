@@ -72,17 +72,21 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if measured_times[5] == 0 and not satsProbeUsed:
-        if not breathingDrawerOpened:
-            print(19)  # OpenBreathingDrawer
-            breathingDrawerOpened = True
-            continue
-        else:
+    if measured_times[5] == 0 and not breathingDrawerOpened:
+        print(19)  # OpenBreathingDrawer
+        breathingDrawerOpened = True
+        continue
+
+    if measured_times[5] == 0 and breathingDrawerOpened and not satsProbeUsed:
+        print(25)  # UseSatsProbe
+        satsProbeUsed = True
+        continue
+
+    if measured_times[5] != 0 and measured_values[5] < 88:
+        if not satsProbeUsed:
             print(25)  # UseSatsProbe
             satsProbeUsed = True
             continue
-
-    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
