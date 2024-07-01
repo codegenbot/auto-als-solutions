@@ -16,7 +16,7 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     # Immediate critical responses
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] >= 1 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -65,17 +65,17 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and not events[25] > 0.1:
+    if not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         satsProbeUsed = True
         continue
 
-    if satsProbeUsed and not monitorView documentation(16)  # Mimic Viewing Monitor after placing probe
-        print(16)
-        monitorView documentation(16)  # Mimic Viewing Monitor after placing probe
+    if not monitorViewed:
+        print(25)  # UseSatsProbe
+        monitorViewed = True
         continue
 
-    if measured_times[5] == 0 and measured_values[5] < 88:
+    if measured_times[5] == 0 or measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
