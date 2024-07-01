@@ -16,81 +16,80 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     # Immediate critical responses
-    if measured_times[5] > 0 and measured_values[5] < 65:
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+        print(29)  # UseBagValveMask
+        continue
+
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
         print(17)  # StartChestCompression
         continue
-    elif measured_times[4] > 0 and measured_values[4] < 20:
-        print(17)  # StartChestCompression
-        continue
 
-    # Airway handling
-    if not airway_confirmed:
-        print(3)  # ExamineAirway
-        if events[3] > 0.1:  # AirwayClear
-            airway_confirmed = True
-        elif events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
-            print(31)  # UseYankeurSuctionCatheter
-        continue
+    if not initial_assessments_done:
+        if not airway_confirmed:
+            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+                airway_confirmed = True
+                if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
+                    print(31)  # UseYankeurSuctionCatheter
+                    continue
+                else:
+                    print(3)  # ExamineAirway
+                    continue
+            else:
+                print(3)  # ExamineAirway
+                continue
 
-    # Breathing assessments
-    if not breathing_assessed:
-        print(4)  # ExamineBreathing
-        if events[7] > 0.7:  # BreathingNone
-            print(29)  # UseBagValveMask
-        elif (
-            events[8] > 0.1 or events[13] > 0.1 or events[14] > 0.1
-        ):  # Breathing troubles
-            breathing_assessed = True
-        continue
+        if not breathing_assessed:
+            if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
+                breathing_assessed = True
+            print(4)  # ExamineBreathing
+            continue
 
-    # Circulation check
-    if not circulation_checked:
-        print(5)  # ExamineCirculation
-        if events[16] > 0.1:  # RadialPulsePalpable
-            circulation_checked = True
-        continue
+        if not circulation_checked:
+            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
+                circulation_checked = True
+            print(5)  # ExamineCirculation
+            continue
 
-    # Disability check
-    if not disability_checked:
-        print(6)  # ExamineDisability
-        if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
-            disability_checked = True
-        continue
+        if not disability_checked:
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
+                disability_checked = True
+            print(6)  # ExamineDisability
+            continue
 
-    # Exposure check
-    if not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
-        continue
+        if not exposure_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
+            continue
 
-    # Monitor Sats
-    if not satsProbeUsed:
+        initial_assessments_done = True
+
+    if not satsProbeUsed and not events[25] > 0.1:
         print(19)  # OpenBreathingDrawer
+        satsProbeUsed = True
         continue
 
-    if not monitorViewed:
-        print(25)  # UseSatsProbe
-        monitorViewed = True
+    if satsProbeUsed and not monitorView documentation(16)  # Mimic Viewing Monitor after placing probe
+        print(16)
+        monitorView documentation(16)  # Mimic Viewing Monitor after placing probe
         continue
 
-    # Use non-rebreathing mask if sats are low
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if measured_times[5] == 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    # Use BP cuff if needed
-    if measured_times[4] > 0 and measured_values[4] < 60:
+    if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
         continue
 
-    # Stabilize patient and finish if all parameters are within normal limits
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
         and measured_times[6] > 0
         and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
