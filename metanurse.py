@@ -16,7 +16,7 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     # Immediate critical responses
-    if events[7] >= 1 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -34,7 +34,7 @@ while steps < 350:
                     print(31)  # UseYankeurSuctionCatheter
                     continue
                 else:
-                    print(3)  # ExamineAirway
+                    print(0)  # DoNothing
                     continue
             else:
                 print(3)  # ExamineAirway
