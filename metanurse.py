@@ -3,74 +3,66 @@ import sys
 def parse_observations(obs):
     return list(map(float, obs.split()))
 
-def choose_action(observations, state):
+def choose_action(observations):
     obs = parse_observations(observations)
     
-    # ABCDE Assessment
-    if state['abcde'] < 5:
-        if state['abcde'] == 0 and obs[7] == 0:
-            state['abcde'] = 1
-            return 8, state  # ExamineResponse
-        if state['abcde'] == 1 and obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
-            state['abcde'] = 2
-            return 3, state  # ExamineAirway
-        if state['abcde'] == 2 and obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
-            state['abcde'] = 3
-            return 4, state  # ExamineBreathing
-        if state['abcde'] == 3 and obs[16] == 0 and obs[17] == 0:
-            state['abcde'] = 4
-            return 5, state  # ExamineCirculation
-        if state['abcde'] == 4 and obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-            state['abcde'] = 5
-            return 6, state  # ExamineDisability
+    # Start with basic assessments
+    if obs[7] == 0:
+        return 8  # ExamineResponse
+    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+        return 3  # ExamineAirway
+    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+        return 4  # ExamineBreathing
+    if obs[16] == 0 and obs[17] == 0:
+        return 5  # ExamineCirculation
+    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+        return 6  # ExamineDisability
+    if obs[25] == 0 and obs[26] == 0:
+        return 7  # ExamineExposure
+
+    # Check and measure vital signs
+    if obs[39] == 0:
+        return 25  # UseSatsProbe
+    if obs[37] == 0:
+        return 27  # UseBloodPressureCuff
+    
+    # Check if measurements are available
+    sats_available = obs[39] > 0
+    map_available = obs[37] > 0
+    resp_available = obs[40] > 0
     
     # Critical conditions check
+    if sats_available and map_available:
+        if obs[46] < 0.65 or obs[44] < 20:
+            return 17  # StartChestCompression
+
+    # Handle breathing issues
     if obs[7] > 0:  # BreathingNone detected
         if obs[18] == 0:
-            return 18, state  # OpenAirwayDrawer
-        return 29, state  # UseBagValveMask
-    
-    if obs[17] > 0:  # RadialPulseNonPalpable
-        return 17, state  # StartChestCompression
-    
-    # Measure vital signs
-    if obs[39] == 0:
-        return 25, state  # UseSatsProbe
-    if obs[37] == 0:
-        return 38, state  # TakeBloodPressure
-    if obs[40] == 0:
-        return 26, state  # UseAline
-    
-    # Interventions based on vital signs
-    if obs[39] > 0 and obs[46] < 0.88:
-        return 30, state  # UseNonRebreatherMask
-    if obs[40] > 0 and obs[47] < 8:
-        if obs[18] == 0:
-            return 18, state  # OpenAirwayDrawer
-        return 29, state  # UseBagValveMask
-    if obs[37] > 0 and obs[44] < 60:
-        if obs[13] == 0:
-            return 14, state  # UseVenflonIVCatheter
-        return 15, state  # GiveFluids
+            return 18  # OpenAirwayDrawer
+        return 29  # UseBagValveMask
 
-    # Frequently measure vital signs
-    if obs[39] < 0.9:
-        return 25, state  # UseSatsProbe
-    if obs[37] < 0.9:
-        return 38, state  # TakeBloodPressure
-    if obs[40] < 0.9:
-        return 26, state  # UseAline
+    # Interventions based on vital signs
+    if sats_available and obs[46] < 0.88:
+        return 30  # UseNonRebreatherMask
+    if resp_available and obs[47] < 8:
+        if obs[18] == 0:
+            return 18  # OpenAirwayDrawer
+        return 29  # UseBagValveMask
+    if map_available and obs[44] < 60:
+        if obs[13] == 0:
+            return 14  # UseVenflonIVCatheter
+        return 15  # GiveFluids
 
     # Check if patient is stabilized
-    if (obs[39] > 0 and obs[46] >= 0.88 and
-        obs[40] > 0 and obs[47] >= 8 and
-        obs[37] > 0 and obs[44] >= 60):
-        return 48, state  # Finish
+    if (sats_available and obs[46] >= 0.88 and
+        resp_available and obs[47] >= 8 and
+        map_available and obs[44] >= 60):
+        return 48  # Finish
 
-    return 16, state  # ViewMonitor
+    return 16  # ViewMonitor
 
-state = {'abcde': 0}
 for line in sys.stdin:
-    action, state = choose_action(line.strip(), state)
+    action = choose_action(line.strip())
     print(action)
     sys.stdout.flush()
