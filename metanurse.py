@@ -25,6 +25,12 @@ def choose_action(observations):
         return 25  # UseSatsProbe
     if obs[37] == 0:
         return 27  # UseBloodPressureCuff
+    if obs[33] == 0:
+        return 26  # UseAline
+    if obs[1] == 0:
+        return 2  # CheckRhythm
+    if obs[23] == 0:
+        return 24  # UseMonitorPads
     
     # Check if measurements are available
     sats_available = obs[39] > 0
