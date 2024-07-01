@@ -6,7 +6,7 @@ def parse_observations(obs):
 def choose_action(observations, step_count):
     obs = parse_observations(observations)
     
-    # Check for signs of life first
+    # Check for signs of life
     if step_count == 0:
         return 1  # CheckSignsOfLife
 
@@ -14,7 +14,7 @@ def choose_action(observations, step_count):
     if (obs[39] > 0 and obs[46] < 0.65) or (obs[37] > 0 and obs[44] < 20):
         return 17  # StartChestCompression
 
-    # Prioritize airway and breathing
+    # Prioritize airway management
     if obs[7] > 0:  # BreathingNone
         if obs[19] == 0:
             return 18  # OpenAirwayDrawer
