@@ -15,74 +15,68 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate critical responses
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
+    if (
+        not airway_confurred
+        or not breathing_assessed
+        or not circulation_checked
+        or not disability_checked
+        or not exposure_checked
     ):
-        print(17)  # StartChestCompression
-        continue
-
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    if not airway_confirmed:
-        if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1:
+        if not airway_confirmed and events[3] > 0:
             airway_confirmed = True
-            if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
-                print(31)  # UseYankeurSuctionCatheter
+        elif not airway_confirmed:
+            print(3)  # ExamineAirway
+            continue
+
+        if not breathing_assessed:
+            if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+                print(29)  # UseBagValveMask
                 continue
-        print(3)  # ExamineAirway
-        continue
+            else:
+                print(4)  # ExamineBreathing
+                breathing_assessed = True
+                continue
 
-    if airway_confirmed and not breathing_assessed:
-        print(4)  # ExamineBreathing
-        breathing_assessed = True
-        continue
+        if not circulation_checked:
+            if (measured_times[5] > 0 and measured_values[5] < 65) or (
+                measured_times[4] > 0 and measured_values[4] < 20
+            ):
+                print(17)  # StartChestCompression
+                continue
+            print(5)  # ExamineCirculation
+            circulation_checked = True
+            continue
 
-    if breathing_assessed and not circulation_checked:
-        print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
+        if not disability_checked:
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
 
-    if circulation_checked and not disability_checked:
-        print(6)  # ExamineDisability
-        disability_checked = True
-        continue
+        if not exposure_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
+            continue
 
-    if disability_checked and not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
+    else:
         initial_assessments_done = True
-        continue
 
-    if initial_assessments_done and not satsProbeUsed:
-        print(25)  # UseSatsProbe
-        satsProbeUsed = True
-        continue
+        if measured_times[5] == 0 or measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
 
-    if satsProbeUsed and not monitorViewed:
-        print(16)  # ViewMonitor
-        monitorViewed = True
-        continue
+        if measured_times[4] == 0 or measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            continue
 
-    if measured_times[5] == 0 or measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
+        if initial_assessments_done and (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[6] > 0
+            and measured_values[6] >= 8
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
 
-    if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        continue
-
-    if initial_assessments_done and (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
-
-    print(0)  # DoNothing as a default action
+    print(0)  # DoNothing
