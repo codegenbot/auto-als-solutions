@@ -65,7 +65,7 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not satsProbeUsed and measured_times[5] == 0:
+    if not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         continue
 
