@@ -7,7 +7,6 @@ initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
 steps = 0
-critical_condition_active = False
 
 while steps < 350:
     steps += 1
@@ -23,57 +22,49 @@ while steps < 350:
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        critical_condition_active = True
         print(17)  # StartChestCompression
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.01:  # AirwayClear is confirmed
-                airway_confirmed = True
             print(3)  # ExamineAirway
+        elif events[3] > 0:
+            airway_confirmed = True
             continue
 
         if not breathing_assessed and airway_confirmed:
-            if events[9] > 0.01:  # Breathing assessment confirms safe breathing
-                breathing_assessed = True
             print(4)  # ExamineBreathing
+            breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
-            if events[16] > 0.01 or events[17] > 0.01:  # Circulation status updated
-                circulation_checked = True
             print(5)  # ExamineCirculation
+            circulation_checked = True
             continue
 
         if not disability_checked and circulation_checked:
-            if (
-                events[21] > 0.01 or events[22] > 0.01 or events[23] > 0.01
-            ):  # Disability status checked
-                disability_checked = True
             print(6)  # ExamineDisability
+            disability_checked = True
             continue
 
         if not exposure_checked and disability_checked:
+            print(7)  # ExamineExposure
             exposure_checked = True
             initial_assessments_done = True
-            print(7)  # ExamineExposure
             continue
 
     if not satsProbeUsed and breathing_assessed:
-        if events[25] > 0.01:  # Sats probe's effect is noticed
-            satsProbeUsed = True
         print(25)  # UseSatsProbe
+        satsProbeUsed = True
         continue
 
-    if (measured_times[5] > 0 and measured_values[5] < 88) or critical_condition_active:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
     if not bpCuffUsed and circulation_checked:
-        if events[27] > 0.01:  # BP Cuff's effect is noticeable
-            bpCuffUsed = True
         print(27)  # UseBloodPressureCuff
+        bpCuffUsed = True
         continue
 
     if measured_times[4] != 0 and measured_values[4] < 60:
@@ -83,7 +74,8 @@ while steps < 350:
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
-        and events[16] > 0.01  # Checking for palpable pulse
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
