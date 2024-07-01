@@ -3,78 +3,61 @@ breathing_assessed = False
 circulation_checked = False
 disability_checked = False
 exposure_checked = False
-initial_assessments_done = False
-satsProbeUsed = False
+sats_probe_used = False
 steps = 0
+max_steps = 350
 
-while steps < 350:
+while steps < max_steps:
     steps += 1
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
+    if (
+        events[6] > 0
+        or (measured_times[5] > 0 and measured_values[5] < 65)
+        or (measured_times[4] > 0 and measured_values[4] < 20)
     ):
-        print(17)  # StartChestCompression
+        print(17)  # StartChestCompression for cardiac arrest condition
         continue
 
-    if not initial_assessments_done:
-        if not airway_confirmed:
-            if any(events[3:7]):  # AirwayClear till AirwayTongue
-                airway_confirmed = True
-            print(3)  # ExamineAirway
+    if not airway_confirmed:
+        if events[3] >= 0.1:  # AirwayClear
+            airway_confirmed = True
             continue
-
-        if not breathing_assessed:
-            if any(events[8:15]):  # BreathingNone till BreathingPneumothoraxSymptoms
-                breathing_assessed = True
-            print(4)  # ExamineBreathing
-            continue
-
-        if not circulation_checked:
-            if (
-                events[16] > 0 or events[17] > 0
-            ):  # RadialPulsePalpable, RadialPulseNonPalpable
-                circulation_checked = True
-            print(5)  # ExamineCirculation
-            continue
-
-        if not disability_checked:
-            if any(events[21:24]):  # AVPU responses, PupilsPinpoint to PupilsNormal
-                disability_checked = True
-            print(6)  # ExamineDisability
-            continue
-
-        if not exposure_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            continue
-
-        initial_assessments_done = True
-
-    if not satsProbeUsed and measured_times[5] == 0:
-        print(19)  # OpenBreathingDrawer
+        print(3)  # ExamineAirway
         continue
 
-    if satsProbeUsed and measured_times[5] == 0:
+    if not sats_probe_used:
         print(25)  # UseSatsProbe
+        sats_probe_used = True
+        continue
+
+    if not breathing_assessed:
+        if measured_times[6] > 0 and measured_values[6] >= 8:
+            breathing_assessed = True
+            continue
+        print(4)  # ExamineBreathing
+        continue
+
+    if not circulation_checked:
+        if events[16] >= 0.1 or events[17] >= 0.1:  # Pulse check
+            circulation_checked = True
+            continue
+        print(5)  # ExamineCirculation
+        continue
+
+    if measured_times[6] > 0 and measured_values[6] < 8:
+        print(29)  # UseBagValveMask based on respiratory rate
         continue
 
     if measured_times[5] == 0 or measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
+        print(30)  # UseNonRebreatherMask based on sats
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
         print(27)  # UseBloodPressureCuff
-        continue
-
-    if measured_times[4] > 0 and measured_values[4] < 60:
         print(38)  # TakeBloodPressure
         continue
 
@@ -86,7 +69,7 @@ while steps < 350:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)  # Finish stabilizing patient
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing as a last conditional resort
