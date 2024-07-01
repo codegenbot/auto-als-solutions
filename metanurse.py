@@ -36,14 +36,16 @@ def choose_action(observations):
     resp_available = obs[40] > 0
     
     # Critical conditions check
+    if sats_available and map_available:
+        if obs[46] < 0.65 or obs[44] < 20:
+            return 17  # StartChestCompression
+
+    # Handle breathing issues
     if obs[7] > 0:  # BreathingNone detected
         if obs[18] == 0:
             return 18  # OpenAirwayDrawer
         return 29  # UseBagValveMask
-    
-    if obs[17] > 0:  # RadialPulseNonPalpable
-        return 17  # StartChestCompression
-    
+
     # Interventions based on vital signs
     if sats_available and obs[46] < 0.88:
         return 30  # UseNonRebreatherMask
@@ -55,14 +57,6 @@ def choose_action(observations):
         if obs[13] == 0:
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
-
-    # Frequently measure vital signs
-    if obs[39] < 0.9:
-        return 25  # UseSatsProbe
-    if obs[37] < 0.9:
-        return 38  # TakeBloodPressure
-    if obs[40] < 0.9:
-        return 26  # UseAline
 
     # Check if patient is stabilized
     if (sats_available and obs[46] >= 0.88 and
