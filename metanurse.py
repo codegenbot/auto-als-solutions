@@ -14,19 +14,26 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Start chest compressions if critical conditions are met
+    if (measured_times[5] > 0 and measured_values[5] < 65) or (
+        measured_times[4] > 0 and measured_values[4] < 20
+    ):
+        print(17)  # StartChestCompression
+        continue
+
     if not airway_confirmed:
+        print(3)  # ExamineAirway
         if events[3] > 0.1:
             airway_confirmed = True
-        else:
-            print(3)  # ExamineAirway
-            continue
+        continue
 
     if not breathing_assessed:
-        if events[10] > 0:  # Checking for Equal Chest Expansion
+        print(4)  # ExamineBreathing
+        if any(
+            events[i] > 0.1 for i in range(8, 14)
+        ):  # Check any relevant breathing event
             breathing_assessed = True
-        else:
-            print(4)  # ExamineBreathing
-            continue
+        continue
 
     if not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
@@ -36,55 +43,45 @@ while steps < 350:
         continue
 
     if not circulation_checked:
-        if events[16] > 0 or events[17] > 0:
+        print(5)  # ExamineCirculation
+        if (
+            events[16] > 0.1 or events[17] > 0.1
+        ):  # RadialPulsePalpable, RadialPulseNonPalpable
             circulation_checked = True
-        else:
-            print(5)  # ExamineCirculation
-            continue
+        continue
 
     if not disability_checked:
-        if events[21] > 0 or events[22] > 0 or events[23] > 0:
+        print(6)  # ExamineDisability
+        if events[21] > 0.1 or events[22] > 0.1 or events[23] > 0.1:  # AVPU conditions
             disability_checked = True
-        else:
-            print(6)  # ExamineDisability
-            continue
+        continue
 
     if not exposure_checked:
         print(7)  # ExamineExposure
         exposure_checked = True
         continue
 
-    initial_assessments_done = (
-        airway_confirmed
-        and breathing_assessed
-        and circulation_checked
-        and disability_checked
-        and exposure_checked
-    )
+    initial_assessments_done = True
 
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(19)  # OpenBreathingDrawer
-        print(30)  # UseNonRebreatherMask
-        continue
+    if initial_assessments_done:
+        correct_breathing = False
+        correct_circulation = False
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
-        print(17)  # StartChestCompression
-        continue
+        if measured_times[5] > 0 and measured_values[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        elif measured_times[5] > 0 and measured_values[5] >= 88:
+            correct_breathing = True
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
-        print(38)  # TakeBloodPressure
-        continue
+        if measured_times[4] > 0 and measured_values[4] < 60:
+            print(27)  # UseBloodPressureCuff
+            print(38)  # TakeBloodPressure
+            continue
+        elif measured_times[4] > 0 and measured_values[4] >= 60:
+            correct_circulation = True
 
-    if (
-        initial_assessments_done
-        and measured_values[5] >= 88
-        and measured_values[6] >= 8
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
+        if correct_breathing and correct_circulation:
+            print(48)  # Finish
+            break
 
     print(0)  # DoNothing
