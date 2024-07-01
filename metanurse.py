@@ -6,19 +6,30 @@ def parse_observations(obs):
 def choose_action(observations):
     obs = parse_observations(observations)
     
-    # Start with basic assessments
+    # Start with airway and breathing assessments
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
         return 3  # ExamineAirway
     if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
         return 4  # ExamineBreathing
+    
+    # Critical conditions check
+    if obs[7] > 0:  # BreathingNone detected
+        return 18  # OpenAirwayDrawer
+    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and AirwayDrawer opened
+        return 29  # UseBagValveMask
+    
+    if obs[17] > 0:  # RadialPulseNonPalpable
+        return 17  # StartChestCompression
+    
+    # Continue with other assessments
     if obs[16] == 0 and obs[17] == 0:
         return 5  # ExamineCirculation
-    if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
-        return 8  # ExamineResponse
     if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
         return 6  # ExamineDisability
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
+    if obs[7] == 0:
+        return 8  # ExamineResponse
 
     # Check and measure vital signs
     if obs[39] == 0:
@@ -34,16 +45,6 @@ def choose_action(observations):
     sats_available = obs[39] > 0
     map_available = obs[37] > 0
     resp_available = obs[40] > 0
-    
-    # Critical conditions check
-    if obs[7] > 0:  # BreathingNone detected
-        return 18  # OpenAirwayDrawer
-    
-    if obs[7] > 0 and obs[18] > 0:  # BreathingNone and AirwayDrawer opened
-        return 29  # UseBagValveMask
-    
-    if obs[17] > 0:  # RadialPulseNonPalpable
-        return 17  # StartChestCompression
     
     # Interventions based on vital signs
     if sats_available and obs[46] < 0.88:
