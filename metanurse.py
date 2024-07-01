@@ -15,24 +15,27 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
+        print(29)
         continue
 
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        print(17)  # StartChestCompression
+        print(17)
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            continue
+            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
+                airway_confirmed = True
+            else:
+                print(3)
+                continue
 
         if not breathing_assessed:
             if measured_times[5] == 0 or measured_values[5] < 88:
                 if not satsProbeUsed:
-                    print(19)  # OpenBreathingDrawer
+                    print(19)
                     satsProbeUsed = True
                     continue
                 print(25)
@@ -49,18 +52,12 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if not airway_confirmed:
-        if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
-            airway_confirmed = True
-            print(0)  # DoNothing, airway status known
-            continue
-
     if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)  # UseBloodPressureCuff
+        print(27)
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+        print(15)
         continue
 
     if (
@@ -71,7 +68,7 @@ while steps < 350:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)
