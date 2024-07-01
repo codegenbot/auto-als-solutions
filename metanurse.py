@@ -15,14 +15,15 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Immediate critical responses
     if events[7] >= 1 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)
+        print(29)  # UseBagValveMask
         continue
 
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
-        print(17)
+        print(17)  # StartChestCompression
         continue
 
     if not initial_assessments_done:
@@ -30,56 +31,51 @@ while steps < 350:
             if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
                 airway_confirmed = True
                 if events[4] > 0.1 or events[5] > 0.1:
-                    print(31)
+                    print(31)  # UseYankeurSuctionCatheter
                     continue
                 else:
-                    print(3)
                     continue
             else:
-                print(3)
+                print(3)  # ExamineAirway
                 continue
 
         if not breathing_assessed:
             if events[8] > 0 or events[13] > 0 or events[14] > 0:
                 breathing_assessed = True
-            print(4)
-            continue
+            else:
+                print(4)  # ExamineBreathing
+                continue
 
         if not circulation_checked:
             if events[16] > 0.1 or events[17] > 0.1:
                 circulation_checked = True
-            print(5)
+            print(5)  # ExamineCirculation
             continue
 
         if not disability_checked:
             if events[21] > 0 or events[22] > 0 or events[23] > 0:
                 disability_checked = True
-            print(6)
+            print(6)  # ExamineDisability
             continue
 
         if not exposure_checked:
-            print(7)
+            print(7)  # ExamineExposure
             exposure_checked = True
             continue
 
         initial_assessments_done = True
 
     if not satsProbeUsed:
-        print(19)
+        print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if not monitorViewed:
-        print(25)
-        monitorViewed = True
-        continue
-
     if measured_times[5] == 0 or measured_values[5] < 88:
-        print(30)
+        print(30)  # UseNonRebreatherMask
         continue
 
     if measured_times[4] == 0 or measured_values[4] < 60:
-        print(27)
+        print(27)  # UseBloodPressureCuff
         continue
 
     if (
@@ -90,7 +86,7 @@ while steps < 350:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)
+        print(48)  # Finish
         break
 
-    print(0)
+    print(0)  # DoNothing as a default action
