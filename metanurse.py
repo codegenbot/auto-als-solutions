@@ -15,6 +15,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
+    # Check for very urgent needs first:
     if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -25,30 +26,27 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
+    # ABCDE assessments
     if not initial_assessments_done:
         if not airway_confirmed:
-            airway_confirmed = (
-                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
-            )
             print(3)  # ExamineAirway
+            airway_confirmed = events[3] > 0 or events[4] > 0 or events[5] > 0
             continue
-
-        if not breathing_assessed:
+        elif not breathing_assessed:
             print(4)  # ExamineBreathing
-            breathing_assessed = True
+            breathing_assessed = (
+                events[10] > 0
+            )  # Assume some logic for breathing evaluation
             continue
-
-        if not circulation_checked:
+        elif not circulation_checked:
             print(5)  # ExamineCirculation
-            circulation_checked = True
+            circulation_checked = True  # Assume circulation can be assessed in one step
             continue
-
-        if not disability_checked:
+        elif not disability_checked:
             print(6)  # ExamineDisability
-            disability_checked = True
+            disability_checked = True  # Assume disability can be assessed in one step
             continue
-
-        if not exposure_checked:
+        elif not exposure_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             initial_assessments_done = True
@@ -63,12 +61,12 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed:
+    if not bpCuffUsed and not (measured_times[4] > 0 and measured_values[4] >= 60):
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(38)  # TakeBloodPressure
         continue
 
