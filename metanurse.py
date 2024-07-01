@@ -28,28 +28,34 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1:
+            if events[3] > 0.1 or events[4] > 0.1 or events[5] > 0.1 or events[6] > 0.1:
                 airway_confirmed = True
                 if events[4] > 0.1 or events[5] > 0.1:  # AirwayVomit or AirwayBlood
                     print(31)  # UseYankeurSuctionCatheter
                     continue
-        print(3)  # ExamineAirway
-        airway_confirmed = True
-        continue
+                else:
+                    print(3)  # ExamineAirway
+                    continue
+            else:
+                print(3)  # ExamineAirway
+                continue
 
         if not breathing_assessed:
+            if events[8] > 0 or events[13] > 0 or events[14] > 0:  # Breathing signs
+                breathing_assessed = True
             print(4)  # ExamineBreathing
-            breathing_assessed = True
             continue
 
         if not circulation_checked:
+            if events[16] > 0.1 or events[17] > 0.1:  # RadialPulsePalpable or RadialPulseNonPalpable
+                circulation_checked = True
             print(5)  # ExamineCirculation
-            circulation_checked = True
             continue
 
         if not disability_checked:
+            if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
+                disability_checked = True
             print(6)  # ExamineDisability
-            disability_checked = True
             continue
 
         if not exposure_checked:
@@ -59,15 +65,15 @@ while steps < 350:
 
         initial_assessments_done = True
 
-    if initial_assessments_done and not satsProbeUsed:
+    if not satsProbeUsed:
         print(19)  # OpenBreathingDrawer
         continue
 
-    if initial_assessments_done and not monitorViewed and satsProbeUsed:
+    if not monitorViewed and satsProbeUsed:
         print(25)  # UseSatsProbe
         continue
 
-    if satsProbeUsed and not monitorViewed:
+    if not monitorViewed:
         print(16)  # ViewMonitor
         monitorViewed = True
         continue
