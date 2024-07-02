@@ -25,35 +25,34 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if not initial_assessments_done:
-        if not airway_confirmed:
-            print(3)  # ExamineAirway
-            if events[3] > 0:
-                airway_confirmed = True
-            continue
+    if not airway_confirmed:
+        print(3)  # ExamineAirway
+        if events[3] > 0:
+            airway_confirmed = True
+        continue
 
-        if not breathing_assessed and airway_confirmed:
-            print(4)  # ExamineBreathing
-            breathing_assessed = True
-            continue
+    if not breathing_assessed:
+        print(4)  # ExamineBreathing
+        breathing_assessed = True
+        continue
 
-        if not circulation_checked and breathing_assessed:
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+    if not circulation_checked:
+        print(5)  # ExamineCirculation
+        circulation_checked = True
+        continue
 
-        if not disability_checked and circulation_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
+    if not disability_checked:
+        print(6)  # ExamineDisability
+        disability_checked = True
+        continue
 
-        if not exposure_checked and disability_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            initial_assessments_done = True
-            continue
+    if not exposure_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
+        initial_assessments_done = True
+        continue
 
-    if not satsProbeUsed and breathing_assessed:
+    if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
@@ -62,7 +61,7 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and circulation_checked:
+    if not bpCuffUsed:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
