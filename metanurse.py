@@ -15,11 +15,8 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[6] > 0:  # AirwayBlocked indicators combined into a single check
-        print(18)  # OpenAirwayDrawer
-        continue
-
-    if events[7] >= 0.7 or (measured_times[5] > 0 and measured_values[5] < 8):
+    # Immediate life-critical actions
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -29,34 +26,37 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if not airway_confirmed:
-        print(3)  # ExamineAirway
-        if events[3] > 0.5:  # if AirwayClear is likely
-            airway_confirmed = True
-        continue
+    # Initial ABCDE Assessments
+    if not initial_assessments_done:
+        if not airway_confirmed:
+            print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
+            continue
 
-    if not breathing_assessed:
-        print(4)  # ExamineBreathing
-        breathing_assessed = True
-        continue
+        if not breathing_assessed and airway_confirmed:
+            print(4)  # ExamineBreathing
+            breathing_assessed = True
+            continue
 
-    if not circulation_checked:
-        print(5)  # ExamineCirculation
-        circulation_checked = True
-        continue
+        if not circulation_checked and breathing_assessed:
+            print(5)  # ExamineCirculation
+            circulation_checked = True
+            continue
 
-    if not disability_checked:
-        print(6)  # ExamineDisability
-        disability_checked = True
-        continue
+        if not disability_checked and circulation_checked:
+            print(6)  # ExamineDisability
+            disability_checked = True
+            continue
 
-    if not exposure_checked:
-        print(7)  # ExamineExposure
-        exposure_checked = True
-        initial_assessments_done = True
-        continue
+        if not exposure_checked and disability_checked:
+            print(7)  # ExamineExposure
+            exposure_checked = True
+            initial_assessments_done = True
+            continue
 
-    if not satsProbeUsed:
+    # Progressive Interventions
+    if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
@@ -65,15 +65,18 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed:
+    if not bpCuffUsed and circulation_checked:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] != 0 and measured_values[4] < 60:
+        print(
+            15
+        )  # GiveFluids, assuming using blood pressure cuff shows low MAP needing fluids
         continue
 
+    # Check for stabilization and finish if conditions meet
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
