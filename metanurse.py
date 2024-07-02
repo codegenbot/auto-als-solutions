@@ -27,39 +27,38 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
-            continue
-
-        if airway_confirmed and not breathing_assessed:
-            print(4)  # ExamineBreathing
-            continue
-
-        if not circulation_checked and breathing_assessed:
+            if events[3] > 0:  # AirwayClear
+                airway_confirmed = True
+                continue
+            else:
+                print(3)  # ExamineAirway
+                continue
+        elif not breathing_assessed:
+            if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+                breathing_assessed = True
+                print(29)  # UseBagValveMask
+                continue
+            else:
+                print(4)  # ExamineBreathing
+                continue
+        elif not circulation_checked:
             print(5)  # ExamineCirculation
             continue
-
-        if not disability_checked and circulation_checked:
+        elif not disability_checked:
             print(6)  # ExamineDisability
             continue
-
-        if not exposure_checked and disability_checked:
+        elif not exposure_checked:
             print(7)  # ExamineExposure
             initial_assessments_done = True
             continue
 
-    if events[3] > 0:
-        airway_confirmed = True
-
-    if events[10] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
-        breathing_assessed = True
-
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
     if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
+        continue
+
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
 
     if not bpCuffUsed and circulation_checked:
@@ -72,12 +71,12 @@ while steps < 350:
         continue
 
     if (
-        measured_times[4] > 0
-        and measured_values[4] >= 60
-        and measured_times[5] > 0
+        measured_times[5] > 0
         and measured_values[5] >= 88
         and measured_times[6] > 0
         and measured_values[6] >= 8
+        and measured_times[4] > 0
+        and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
