@@ -6,7 +6,6 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
-monitorViewed = False
 steps = 0
 
 while steps < 350:
@@ -72,12 +71,9 @@ while steps < 350:
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
-        continue
-
-    if not monitorViewed and (bpCuffUsed or satsProbeUsed):
-        print(16)   # ViewMonitor
-        monitorViewed = True
+        print(
+            15
+        )  # GiveFluids, assuming using blood pressure cuff shows low MAP needing fluids
         continue
 
     # Check for stabilization and finish if conditions meet
