@@ -37,8 +37,8 @@ while steps < 350:
             print(4)  # ExamineBreathing
             continue
         if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
-            breathing_assessed = True
             print(29)  # UseBagValveMask
+            breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
