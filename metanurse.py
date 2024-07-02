@@ -4,13 +4,12 @@ circulation_checked = False
 disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
-satsProbeUsed = False
-bpCuffUsed = False
+sats_probe_used = False
+bp_cuff_used = False
 steps = 0
 
 while steps < 350:
     steps += 1
-
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -30,20 +29,21 @@ while steps < 350:
         if not airway_confirmed:
             print(3)  # ExamineAirway
             continue
-        if events[3] > 0:
+        if events[3] > 0:  # AirwayClear event
             airway_confirmed = True
 
         if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
             continue
-        if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+        if (
+            events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
+        ):  # Breathing issues
             print(29)  # UseBagValveMask
             breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
-            circulation_checked = True
             continue
 
         if not disability_checked and circulation_checked:
@@ -57,18 +57,18 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    if not satsProbeUsed and initial_assessments_done:
+    if not sats_probe_used and initial_assessments_done:
         print(25)  # UseSatsProbe
-        satsProbeUsed = True
+        sats_probe_used = True
         continue
 
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and initial_assessments_done:
+    if not bp_cuff_used and initial_assessments_done:
         print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
+        bp_cuff_used = True
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
