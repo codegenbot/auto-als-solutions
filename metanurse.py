@@ -27,10 +27,13 @@ while steps < 350:
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
+            else:
+                print(3)  # ExamineAirway
             continue
 
-        if airway_confirmed and not breathing_assessed:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
             continue
 
@@ -46,9 +49,6 @@ while steps < 350:
             print(7)  # ExamineExposure
             initial_assessments_done = True
             continue
-
-    if events[3] > 0:
-        airway_confirmed = True
 
     if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
         breathing_assessed = True
