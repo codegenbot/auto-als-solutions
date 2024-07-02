@@ -26,47 +26,41 @@ while steps < 350:
         print(29)  # UseBagValveMask
         continue
 
-    # Perform initial assessment
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
             continue
-        if events[3] > 0:  # AirwayClear
-            airway_confirmed = True
 
-        if airway_confirmed and not breathing_assessed:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
-            continue
-        if (
-            events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
-        ):  # Any breathing issues event
-            breathing_assessed = True
-            print(29)  # UseBagValveMask
+            if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+                breathing_assessed = True
+                print(29)  # UseBagValveMask
             continue
 
-        if breathing_assessed and not circulation_checked:
+        if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
             circulation_checked = True
             continue
 
-        if circulation_checked and not disability_checked:
+        if not disability_checked and circulation_checked:
             print(6)  # ExamineDisability
             disability_checked = True
             continue
 
-        if disability_checked and not exposure_checked:
+        if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             initial_assessments_done = True
             continue
 
-    # Use Sats Probe only once after full initial assessment
     if not satsProbeUsed and initial_assessments_done:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    # Treat specific conditions based on observations
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -80,7 +74,6 @@ while steps < 350:
         print(15)  # GiveFluids
         continue
 
-    # Check complete stabilization and finish
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
