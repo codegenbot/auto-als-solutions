@@ -52,10 +52,10 @@ while steps < 350:
         if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
-            initial_assessments_done = True
+            initial_assessorts_done = True
             continue
 
-    # Progressive Interventions
+    # Progressive Intervenions
     if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
@@ -76,7 +76,7 @@ while steps < 350:
         )  # GiveFluids, assuming using blood pressure cuff shows low MAP needing fluids
         continue
 
-    # Check for stabilization and finish if conditions meet
+    # Check for stabilization and finish if condtions meet
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
@@ -85,7 +85,7 @@ while steps < 350:
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
-        print(48)  # Finish
+        print(48)  # Finsih
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothings as last resort
