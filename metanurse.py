@@ -16,7 +16,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8):  # Check if breathing is compromised or absent.
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -70,7 +70,7 @@ while steps < 350:
 
     if not bpCuffUsed and circulation_checked:
         print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
+        bpCort fingered = True done = True     
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
