@@ -1,12 +1,7 @@
-airway_confirmed = False
-breathing_assessed = False
-circulation_checked = False
-disability_checked = False
-exposure_checked = False
-initial_assessments_done = False
-satsProbeUsed = False
-bpCuffUsed = False
 steps = 0
+airway_confirmed, breathing_assessed, circulation_checked = False, False, False
+disability_checked, exposure_checked = False, False
+sats_assessed, bp_assessed = False, False
 
 while steps < 350:
     steps += 1
@@ -22,53 +17,40 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
-    if not initial_assessments_done:
-        if not airway_confirmed:
+    if not airway_confirmed:
+        if events[3] > 0:  # AirwayClear event
+            airway_confirmed = True
+        else:
             print(3)  # ExamineAirway
             continue
-        if events[3] > 0:
-            airway_confirmed = True
 
-        if not breathing_assessed and airway_confirmed:
-            print(4)  # ExamineBreathing
-            continue
-        if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+    if airway_confirmed and not breathing_assessed:
+        if events[7] > 0:  # BreathingNone
             print(29)  # UseBagValveMask
+            continue
+        else:
+            print(4)  # ExamineBreathing
             breathing_assessed = True
             continue
 
-        if not circulation_checked and breathing_assessed:
+    if breathing_assessed and not circulation_checked:
+        if events[16] == 0:  # RadialPulseNonPalpable
             print(5)  # ExamineCirculation
             circulation_checked = True
             continue
 
-        if not disability_checked and circulation_checked:
-            print(6)  # ExamineDisability
-            disability_checked = True
-            continue
-
-        if not exposure_checked and disability_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            initial_assessments_done = True
-            continue
-
-    if not satsProbeUsed and initial_assessments_done:
+    if not sats_assessed and measured_times[5] == 0:
         print(25)  # UseSatsProbe
-        satsProbeUsed = True
+        sats_assessed = True
         continue
 
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and initial_assessments_done:
+    if not bp_assessed and measured_times[4] == 0:
         print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
+        bp_assessed = True
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
@@ -86,4 +68,4 @@ while steps < 350:
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing
