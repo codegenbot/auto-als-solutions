@@ -35,11 +35,6 @@ while steps < 350:
 
         if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
-            if (
-                events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
-            ):  # Check breathing issues
-                print(29)  # UseBagValveMask
-                continue
             breathing_assessed = True
             continue
 
@@ -73,8 +68,8 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] != 0 and measured_values[4] < 60:
+        print(38)  # TakeBloodPressure
         continue
 
     if (
