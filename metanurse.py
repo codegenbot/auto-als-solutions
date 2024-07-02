@@ -6,7 +6,6 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
-airway_open = False
 steps = 0
 
 while steps < 350:
@@ -29,35 +28,27 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_open = events[3] > 0.7
             continue
 
-        if not breathing_assessed and airway_open:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
-            breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
-            circulation_checked = (
-                events[16] > 0.7 or events[17] > 0.7
-            )  # Check by palpable pulse
             continue
 
         if not disability_checked and circulation_checked:
             print(6)  # ExamineDisability
-            disability_checked = True
             continue
 
         if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
-            exposure_checked = True
             initial_assessments_done = True
             continue
 
     if events[3] > 0:
         airway_confirmed = True
-        airway_open = True
 
     if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
         breathing_assessed = True
