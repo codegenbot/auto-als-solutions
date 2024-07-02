@@ -15,14 +15,12 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate lifesaving actions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # ABCDE protocol with conditional checking and feedback
     if not airway_confirmed:
         print(3)  # ExamineAirway
         if events[3] > 0:
@@ -52,7 +50,6 @@ while steps < 350:
         print(16)  # GiveFluids
         continue
 
-    # Check for stabilization
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
