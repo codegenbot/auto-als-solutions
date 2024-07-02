@@ -15,54 +15,58 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] > 0:  # BreathingNone
-        print(17)  # StartChestCompression
-        continue
-
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
+    if (
+        events[7] > 0
+        or (measured_times[5] > 0 and measured_values[5] < 65)
+        or (measured_times[4] > 0 and measured_values[4] < 20)
     ):
         print(17)  # StartChestCompression
         continue
 
-    if events[6] > 0:  # Any airway blockage
-        print(18)  # OpenAirwayDrawer
-        continue
-
     if not airway_confirmed:
         print(3)  # ExamineAirway
-        if events[3] > 0.5:  # AirwayClear is likely
+        if events[3] > 0.5:  # AirwayClear is true
             airway_confirmed = True
         continue
 
-    if not breathing_assessed:
+    if airway_confirmed and not breathing_assessed:
         print(4)  # ExamineBreathing
         breathing_assessed = True
         continue
 
-    if measured_times[5] > 0 and measured_values[5] < 88:
-        print(30)  # UseNonRebreatherMask
-        continue
-
-    if not circulation_checked:
+    if airway_confirmed and breathing_assessed and not circulation_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
 
-    if not disability_checked:
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and not disability_checked
+    ):
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    if not exposure_checked:
+    if (
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and not exposure_checked
+    ):
         print(7)  # ExamineExposure
         exposure_checked = True
-        initial_assessments_done = True
         continue
 
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
+        continue
+
+    if measured_times[5] > 0 and measured_values[5] < 88:
+        print(30)  # UseNonRebreatherMask
         continue
 
     if not bpCuffUsed:
@@ -75,14 +79,19 @@ while steps < 350:
         continue
 
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
+        airway_confirmed
+        and breathing_assessed
+        and circulation_checked
+        and disability_checked
+        and exposure_checked
     ):
-        print(48)  # Finish
-        break
+        if (
+            measured_times[5] > 0
+            and measured_values[5] >= 88
+            and measured_times[4] > 0
+            and measured_values[4] >= 60
+        ):
+            print(48)  # Finish
+            break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing
