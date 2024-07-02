@@ -32,13 +32,16 @@ while steps < 350:
 
     if not breathing_checked and airway_clear:
         print(4)  # ExamineBreathing
-        breathing_checked = True
         continue
+
+    if events[10] > 0:  # EqualChestExpansion
+        breathing_checked = True
 
     if (
         events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
     ):  # Breathing issues
         print(29)  # UseBagValveMask
+        breathing_checked = True
         continue
 
     if not circulation_checked and breathing_checked:
