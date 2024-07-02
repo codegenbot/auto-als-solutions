@@ -28,26 +28,26 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] >= 0.7:  # 'AirwayClear' has a high relevance
+            if events[3] > 0:
                 airway_confirmed = True
             continue
 
-        if not breathing_assessed:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
             breathing_assessed = True
             continue
 
-        if not circulation_checked:
+        if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
             circulation_checked = True
             continue
 
-        if not disability_checked:
+        if not disability_checked and circulation_checked:
             print(6)  # ExamineDisability
             disability_checked = True
             continue
 
-        if not exposure_checked:
+        if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
             exposure_checked = True
             initial_assessments_done = True
@@ -67,8 +67,8 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] != 0 and measured_values[4] < 60:
+        print(38)  # TakeBloodPressure
         continue
 
     if (
