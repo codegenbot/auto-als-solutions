@@ -1,4 +1,3 @@
-steps = 0
 airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
@@ -7,6 +6,7 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
+steps = 0
 
 while steps < 350:
     steps += 1
