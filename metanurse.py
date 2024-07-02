@@ -4,8 +4,8 @@ circulation_checked = False
 disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
-satsProbeUsed = False
-bpCuffUsed = False
+sats_probe_used = False
+bp_cuff_used = False
 steps = 0
 
 while steps < 350:
@@ -28,16 +28,18 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0:
-                airway_confirmed = True
+            airway_confirmed = any(
+                events[3:7]
+            )  # Check if any airway events except Clear have occurred
             continue
 
         if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
-            if (
-                events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
-            ):  # Checking for breathing issues
+            if any(events[11:15]):  # Check for any breathing issues
                 breathing_assessed = True
+                print(29)  # UseBagValveMask
+                continue
+            breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
@@ -56,18 +58,18 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    if not satsProbeUsed and breathing_assessed:
+    if not sats_probe_used and measured_times[5] == 0:  # sats not measured yet
         print(25)  # UseSatsProbe
-        satsProbeUsed = True
+        sats_probe_used = True
         continue
 
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and circulation_checked:
+    if not bp_cuff_used and measured_times[4] == 0:  # MAP not measured yet
         print(27)  # UseBloodPressureCuff
-        bpCuffUsed = True
+        bp_cuff_used = True
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
