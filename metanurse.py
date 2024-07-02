@@ -1,11 +1,10 @@
 steps = 0
 airway_confirmed, breathing_assessed, circulation_checked = False, False, False
 disability_checked, exposure_checked = False, False
-sats_assessed, bp_assessed = False, False
+sats_probed, bp_cuffed = False, False
 
 while steps < 350:
     steps += 1
-
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -18,39 +17,47 @@ while steps < 350:
         continue
 
     if not airway_confirmed:
-        if events[3] > 0:  # AirwayClear event
+        if events[3] > 0.5:  # AirwayClear
             airway_confirmed = True
         else:
             print(3)  # ExamineAirway
             continue
 
     if airway_confirmed and not breathing_assessed:
-        if events[7] > 0:  # BreathingNone
+        if events[7] > 0.5:  # BreathingNone
             print(29)  # UseBagValveMask
-            continue
         else:
             print(4)  # ExamineBreathing
             breathing_assessed = True
-            continue
+        continue
 
     if breathing_assessed and not circulation_checked:
-        if events[16] == 0:  # RadialPulseNonPalpable
-            print(5)  # ExamineCirculation
-            circulation_checked = True
-            continue
+        print(5)  # ExamineCirculation
+        circulation_checked = True
+        continue
 
-    if not sats_assessed and measured_times[5] == 0:
+    if circulation_checked and not disability_checked:
+        print(6)  # ExamineDisability
+        disability_checked = True
+        continue
+
+    if disability_checked and not exposure_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
+        continue
+
+    if not sats_probed and measured_times[5] == 0:
         print(25)  # UseSatsProbe
-        sats_assessed = True
+        sats_probed = True
         continue
 
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bp_assessed and measured_times[4] == 0:
+    if not bp_cuffed and measured_times[4] == 0:
         print(27)  # UseBloodPressureCuff
-        bp_assessed = True
+        bp_cuffed = True
         continue
 
     if measured_times[4] > 0 and measured_values[4] < 60:
