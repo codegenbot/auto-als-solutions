@@ -6,32 +6,36 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
+monitorViewed = False
 steps = 0
 
 while steps < 350:
     steps += 1
     observations = input().split()
     events = list(map(float, observations[:39]))
-    measured_times = list(map(float, observations[39:46]))
-    measured_values = list(map(float, observations[46:]))
+    vital_times = list(map(float, observations[39:46]))
+    vital_values = list(map(float, observations[46:]))
 
-    # Immediate life-threatening conditions
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
+    heart_rate = vital_values[0] if vital_times[0] > 0 else None
+    resp_rate = vital_values[1] if vital_times[1] > 0 else None
+    capillary_glucose = vital_values[2] if vital_times[2] > 0 else None
+    temperature = vital_values[3] if vital_times[3] > 0 else None
+    mean_arterial_pressure = vital_values[4] if vital_times[4] > 0 else None
+    oxygen_saturation = vital_values[5] if vital_times[5] > 0 else None
+    resps = vital_values[6] if vital_times[6] > 0 else None
 
-    if (measured_times[5] > 0 and measured_values[5] < 65) or (
-        measured_times[4] > 0 and measured_values[4] < 20
-    ):
+    if oxygen_saturation is not None and oxygen_saturation < 65:
         print(17)  # StartChestCompression
         continue
 
-    # Initial ABCDE Assessments
+    if mean_arterial_pressure is not None and mean_arterial_pressure < 20:
+        print(17)  # StartChestCompression
+        continue
+
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0:
-                airway_confirmed = True
+            airway_confirmed = True
             continue
 
         if not breathing_assessed and airway_confirmed:
@@ -55,13 +59,17 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    # Progressive Interventions
     if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
-    if measured_times[5] > 0 and measured_values[5] < 88:
+    if not monitorViewed and (satsProbeUsed or bpCuffUsed):
+        print(16)  # ViewMonitor
+        monitorViewed = True
+        continue
+
+    if oxygen_saturation is not None and oxygen_saturation < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
@@ -70,22 +78,21 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(
-            15
-        )  # GiveFluids, assuming using blood pressure cuff shows low MAP needing fluids
+    if resp_rate is not None and resp_rate < 8:
+        print(29)  # UseBagValveMask
         continue
 
-    # Check for stabilization and finish if conditions meet
-    if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
-        and measured_times[4] > 0
-        and measured_values[4] >= 60
-    ):
-        print(48)  # Finish
-        break
+    if mean_arterial_pressure is not None and mean_arterial_pressure < 60:
+        print(15)  # GiveFluids
+        continue
 
-    print(0)  # DoNothing as last resort
+    if (
+        oxygen_saturation is not None
+        and mean_arterial_pressure is not None
+        and resp_rate is not None
+    ):
+        if oxygen_saturation >= 88 and mean_arterial_pressure >= 60 and resp_rate >= 8:
+            print(48)  # Finish
+            break
+
+    print(0)  # DoNothing as a last resort
