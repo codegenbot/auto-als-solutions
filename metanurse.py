@@ -1,4 +1,3 @@
-steps = 0
 airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
@@ -7,6 +6,7 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
+steps = 0
 
 while steps < 350:
     steps += 1
@@ -15,71 +15,79 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValveMask
-        continue
-
+    # Immediate life-saving interventions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    if not initial_assessments_done:
-        if not airway_confirmed:
-            print(3)  # ExamineAirway
-            if events[3] > 0:
-                airway_confirmed = True
-            continue
+    # Check airway
+    if not airway_confirmed:
+        print(3)  # ExamineAirway
+        if events[3] > 0:  # AirwayClear
+            airway_confirmed = True
+        continue
 
-        if not breathing_assessed and airway_confirmed:
-            print(4)  # ExamineBreathing
+    # Check breathing
+    if not breathing_assessed and airway_confirmed:
+        print(4)  # ExamineBreathing
+        if any(events[i] > 0 for i in range(7, 15)):  # any breathing related events
             breathing_assessed = True
-            continue
+        continue
 
-        if not circulation_checked and breathing_assessed:
-            print(5)  # ExamineCirculation
+    # Check circulation
+    if not circulation_checked and breathing_assessed:
+        print(5)  # ExamineCirculation
+        if any(events[i] > 0 for i in (16, 17, 18, 19)):  # circulation related events
             circulation_checked = True
-            continue
+        continue
 
-        if not disability_checked and circulation_checked:
-            print(6)  # ExamineDisability
+    # Check disability
+    if not disability_checked and circulation_checked:
+        print(6)  # ExamineDisability
+        if events[21] > 0 or events[22] > 0 or events[23] > 0:  # AVPU responses
             disability_checked = True
-            continue
+        continue
 
-        if not exposure_checked and disability_checked:
-            print(7)  # ExamineExposure
-            exposure_checked = True
-            initial_assessments_done = True
-            continue
+    # Exposure
+    if not exposure_checked and disability_checked:
+        print(7)  # ExamineExposure
+        exposure_checked = True
+        initial_assessments_done = True
+        continue
 
-    if not satsProbeUsed and breathing_assessed:
+    # Use Sats Probe if not used
+    if not satsProbeUsed and initial_assessments_done:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
 
+    # Ensure adequate oxygen saturation
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and circulation_checked:
+    # Ensure Blood pressure is measured
+    if not bpCuffUsed and initial_assessments_done:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
-        print(38)  # TakeBloodPressure
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        if not events[27]:  # not palpitating hypotension
+            print(15)  # GiveFluids
         continue
 
+    # Check for stabilization condition
     if (
-        measured_times[5] > 0
-        and measured_values[5] >= 88
-        and measured_times[6] > 0
-        and measured_values[6] >= 8
+        initial_assessments_done
         and measured_times[4] > 0
         and measured_values[4] >= 60
+        and measured_times[5] > 0
+        and measured_values[5] >= 88
     ):
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as last resort
+    print(0)  # DoNothing as default action if no specific action can be determined
