@@ -66,7 +66,7 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
+    if measured_times[4] > 0 and measured_values[4] < 60:
         print(38)  # TakeBloodPressure
         continue
 
