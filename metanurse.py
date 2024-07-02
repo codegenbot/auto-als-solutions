@@ -29,7 +29,9 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
+            airway_confirmed = (
+                events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0
+            )
             continue
 
         if not breathing_assessed and airway_confirmed:
