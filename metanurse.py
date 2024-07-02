@@ -30,7 +30,7 @@ while steps < 350:
             print(3)  # ExamineAirway
             continue
 
-        if not breathing_assessed and airway_confirmed:
+        if airway_confirmed and not breathing_assessed:
             print(4)  # ExamineBreathing
             continue
 
