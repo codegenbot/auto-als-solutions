@@ -34,15 +34,16 @@ while steps < 350:
                 airway_open = True
             continue
 
-        if not breathing_assessed and airway_confirmed:
+        if not breathing_assessed and airway_open:
             print(4)  # ExamineBreathing
             breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
-            if events[16] > 0.7 or events[17] > 0.7:
-                circulation_checked = True
+            circulation_checked = (
+                events[16] > 0.7 or events[17] > 0.7
+            )  # Check by palpable pulse
             continue
 
         if not disability_checked and circulation_checked:
@@ -57,6 +58,7 @@ while steps < 350:
             continue
 
     if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+        breathing_assessed = True
         print(29)  # UseBagValveMask
         continue
 
