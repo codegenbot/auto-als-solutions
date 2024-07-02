@@ -6,7 +6,6 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
-viewMonitorAfterCuff = False
 steps = 0
 
 while steps < 350:
@@ -67,13 +66,8 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if bpCuffUsed and not viewMonitorAfterCuff:
-        print(16)  # ViewMonitor
-        viewMonitorAfterCuff = True
-        continue
-
     if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+        print(38)  # TakeBloodPressure
         continue
 
     if (
