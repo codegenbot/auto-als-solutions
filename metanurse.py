@@ -6,7 +6,6 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
-airway_open = False
 steps = 0
 
 while steps < 350:
@@ -29,21 +28,22 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_open = events[3] > 0.7
-            if airway_open:
+            if events[3] > 0:  # AirwayClear
                 airway_confirmed = True
             continue
 
         if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
-            breathing_assessed = True
+            if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
+                breathing_assessed = True
+                print(29)  # UseBagValveMask
+                continue
             continue
 
         if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
-            circulation_checked = (
-                events[16] > 0.7 or events[17] > 0.7
-            )  # Check by palpable pulse
+            if events[16] > 0 or events[17] > 0:  # RadialPulsePalpable/RadialPulseNonPalpable
+                circulation_checked = True
             continue
 
         if not disability_checked and circulation_checked:
@@ -57,16 +57,8 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    if events[3] > 0:
+    if events[3] > 0 and not airway_confirmed:
         airway_confirmed = True
-        airchiway_open = True
-
-    if (
-        events[10] > 0.7 and not satsProbeUsed
-    ):  # The non-existence of proper breathing observation should trigger ventilation help
-        print(29)  # UseBagValveMask
-        breathing_assessed = True
-        continue
 
     if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
@@ -77,7 +69,7 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if (not bpCuffUsed and circulation_checked) or (measured_times[4] == 0):
+    if not bpCuffUsed and circulation_checked:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
