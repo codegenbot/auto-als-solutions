@@ -31,7 +31,6 @@ while steps < 350:
             continue
         # Follow with other initial examinations in similar structure...
 
-    # After initial checks, ensure regular monitoring if something critical is found:
     if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
@@ -40,7 +39,6 @@ while steps < 350:
         print(15)  # GiveFluids assuming "15" is correction for such condition
         continue
 
-    # Check all recovery conditions met to "Finish":
     if (
         airway_confirmed
         and measured_times[5] > 0
