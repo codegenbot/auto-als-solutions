@@ -36,7 +36,7 @@ while steps < 350:
 
     if (
         events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
-    ):  # BreathingComplications
+    ):  # Breathing issues
         print(29)  # UseBagValveMask
         breathing_checked = True
         continue
