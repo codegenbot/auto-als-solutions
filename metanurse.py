@@ -14,12 +14,6 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if not airway_clear:
-        if events[3] > 0:
-            airway_clear = True
-        print(3)  # ExamineAirway
-        continue
-
     if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
@@ -30,32 +24,35 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
+    if not airway_clear:
+        print(3)  # ExamineAirway
+        continue
+    if events[3] > 0:
+        airway_clear = True
+
     if not breathing_checked and airway_clear:
-        if (
-            events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
-        ):  # BreathingComplications
-            print(29)  # UseBagValveMask
-            breathing_checked = True
-            continue
-        if events[10] > 0:  # EqualChestExpansion
-            breathing_checked = True
         print(4)  # ExamineBreathing
         continue
+    if events[10] > 0:  # EqualChestExpansion
+        breathing_checked = True
 
     if not circulation_checked and breathing_checked:
         print(5)  # ExamineCirculation
-        circulation_checked = True
         continue
+    if events[16] > 0:  # RadialPulsePalpable
+        circulation_checked = True
 
     if not disability_checked and circulation_checked:
         print(6)  # ExamineDisability
-        disability_checked = True
         continue
+    if events[21] > 0.7:  # AVPU_V
+        disability_checked = True
 
     if not exposure_checked and disability_checked:
         print(7)  # ExamineExposure
-        exposure_checked = True
         continue
+    if events[26] > 0.5:  # Exposure
+        exposure_checked = True
 
     if not satsProbeUsed:
         print(25)  # UseSatsProbe
