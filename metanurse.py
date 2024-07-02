@@ -15,14 +15,12 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    # Immediate response to critical conditions
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
         continue
 
-    # ABCDE Assessment and Stabilization
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
@@ -50,8 +48,7 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    # Utilizing diagnostic tools early in the assessment
-    if measured_times[6] > 0 and measured_values[6] < 8 and breathing_assessed:
+    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -69,11 +66,10 @@ while steps < 350:
         bpCuffUsed = True
         continue
 
-    if measured_times[4] > 0 and measured_values[4] < 60:
-        print(15)  # GiveFluids
+    if measured_times[4] != 0 and measured_values[4] < 60:
+        print(38)  # TakeBloodPressure
         continue
 
-    # Health stabilisation check before finishing
     if (
         measured_times[5] > 0
         and measured_values[5] >= 88
