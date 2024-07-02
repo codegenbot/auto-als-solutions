@@ -16,7 +16,7 @@ while steps < 350:
     measured_values = list(map(float, observations[46:]))
 
     if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
-        print(29)  # UseBagValleMask
+        print(29)  # UseBagValveMask
         continue
 
     if (measured_times[5] > 0 and measured_values[5] < 65) or (
@@ -34,29 +34,29 @@ while steps < 350:
             print(4)  # ExamineBreathing
             continue
 
-        if breathing_assessed and not circulation_checked:
+        if not circulation_checked and breathing_assessed:
             print(5)  # ExamineCirculation
             continue
 
-        if circulation_checked and not disability_checked:
+        if not disability_checked and circulation_checked:
             print(6)  # ExamineDisability
             continue
 
-        if disability_checked and not exposure_checked:
+        if not exposure_checked and disability_checked:
             print(7)  # ExamineExposure
-            exposure_checked = True
             initial_assessments_done = True
             continue
 
     if events[3] > 0:
         airway_confirmed = True
 
-    if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
-        breathing_assessed = True
-        print(29)  # UseBagValveMask
-        continue
+    if airway_confirmed and not breathing_assessed:
+        breathing_assessed = events[10] > 0 or events[14] > 0
+        if breathing_assessed:
+            print(29)  # UseBagValveMask
+            continue
 
-    if not satsProbeUsed and airway_confirmed:
+    if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
         satsProbeUsed = True
         continue
@@ -65,7 +65,7 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and circulation_checked:
+    if breathing_assessed and not bpCTimeoutUsed:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
