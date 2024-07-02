@@ -1,3 +1,4 @@
+steps = 0
 airway_confirmed = False
 breathing_assessed = False
 circulation_checked = False
@@ -6,7 +7,6 @@ exposure_checked = False
 initial_assessments_done = False
 satsProbeUsed = False
 bpCuffUsed = False
-steps = 0
 
 while steps < 350:
     steps += 1
@@ -28,7 +28,8 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            airway_confirmed = True
+            if events[3] > 0:
+                airway_confirmed = True
             continue
 
         if not breathing_assessed and airway_confirmed:
