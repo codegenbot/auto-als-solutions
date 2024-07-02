@@ -25,34 +25,29 @@ while steps < 350:
         continue
 
     if not airway_clear:
-        if events[3] > 0:  # AirwayClear
+        print(3)  # ExamineAirway
+        if events[3] > 0 or events[7] > 0:  # AirwayClear or BreathingNone
             airway_clear = True
-        else:
-            print(3)  # ExamineAirway
-            continue
+        continue
 
-    if not breathing_checked and airway_clear:
-        if events[7] > 0:  # BreathingNone
-            print(29)  # UseBagValveMask
-        elif events[10] > 0:  # EqualChestExpansion indicates okay breathing
+    if not breathing_checked:
+        print(4)  # ExamineBreathing
+        if any(events[10:15] > 0):
             breathing_checked = True
-        else:
-            print(4)  # ExamineBreathing
-            continue
+            print(29)  # UseBagValveMask
+        continue
 
-    if not circulation_checked and breathing_checked:
-        if events[16] > 0:  # RadialPulsePalpable
-            circulation_checked = True
-        else:
-            print(5)  # ExamineCirculation
-            continue
+    if not circulation_checked:
+        print(5)  # ExamineCirculation
+        circulation_checked = True
+        continue
 
-    if not disability_checked and circulation_checked:
+    if not disability_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    if not exposure_checked and disability_checked:
+    if not exposure_checked:
         print(7)  # ExamineExposure
         exposure_checked = True
         continue
