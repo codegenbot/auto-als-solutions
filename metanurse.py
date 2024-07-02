@@ -4,13 +4,13 @@ circulation_checked = False
 disability_checked = False
 exposure_checked = False
 initial_assessments_done = False
-sats_probe_used = False
-bp_cuff_used = False
+satsProbeUsed = False
+bpCuffUsed = False
 steps = 0
-critical_condition_active = False
 
 while steps < 350:
     steps += 1
+
     observations = input().split()
     events = list(map(float, observations[:39]))
     measured_times = list(map(float, observations[39:46]))
@@ -24,68 +24,68 @@ while steps < 350:
         measured_times[4] > 0 and measured_values[4] < 20
     ):
         print(17)  # StartChestCompression
-        critical_condition_active = True
         continue
 
     if not initial_assessments_done:
         if not airway_confirmed:
-            if events[3] > 0.01:  # AirwayClear is confirmed
-                airway_confirmed = True
             print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
             continue
 
         if not breathing_assessed and airway_confirmed:
-            if events[12] > 0.01:  # BreathingEqualChestExpansion is confirmed
-                breathing_assessed = True
             print(4)  # ExamineBreathing
+            if (
+                events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
+            ):  # Check breathing issues
+                print(29)  # UseBagValveMask
+                continue
+            breathing_assessed = True
             continue
 
         if not circulation_checked and breathing_assessed:
-            if events[16] > 0.01 or events[17] > 0.01:  # Circulation status updated
-                circulation_checked = True
             print(5)  # ExamineCirculation
+            circulation_checked = True
             continue
 
         if not disability_checked and circulation_checked:
-            if (
-                events[21] > 0.01 or events[22] > 0.01 or events[23] > 0.01
-            ):  # Disability checked
-                disability_checked = True
             print(6)  # ExamineDisability
+            disability_checked = True
             continue
 
         if not exposure_checked and disability_checked:
+            print(7)  # ExamineExposure
             exposure_checked = True
             initial_assessments_done = True
-            print(7)  # ExamineExposure
             continue
 
-    if not sats_probe_used:
+    if not satsProbeUsed and breathing_assessed:
         print(25)  # UseSatsProbe
-        sats_probe_used = True
+        satsProbeUsed = True
         continue
 
-    if (measured_times[5] > 0 and measured_values[5] < 88) or critical_condition_active:
+    if measured_times[5] > 0 and measured_values[5] < 88:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bp_cuff_used and circulation_checked:
+    if not bpCuffUsed and circulation_checked:
         print(27)  # UseBloodPressureCuff
-        bp_cuff_used = True
+        bpCuffUsed = True
         continue
 
-    if measured_times[4] != 0 and measured_values[4] < 60:
-        print(38)  # TakeBloodPressure
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
         continue
 
     if (
-        initial_assessments_done
-        and measured_times[5] > 0
+        measured_times[5] > 0
         and measured_values[5] >= 88
+        and measured_times[6] > 0
+        and measured_values[6] >= 8
         and measured_times[4] > 0
         and measured_values[4] >= 60
     ):
         print(48)  # Finish
         break
 
-    print(0)  # DoNothing as a fallback
+    print(0)  # DoNothing as last resort
