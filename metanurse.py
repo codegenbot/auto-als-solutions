@@ -1,4 +1,4 @@
-airway_confirmed = False
+airway_confirmed = None
 breathing_assessed = False
 circulation_checked = False
 disability_checked = False
@@ -15,7 +15,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] >= 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] > 0 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -25,12 +25,13 @@ while steps < 350:
         print(17)  # StartChestCompression
         continue
 
-    if events[3] > 0:  # AirwayClear
-        airway_confirmed = True
-
     if not initial_assessments_done:
-        if not airway_confirmed:
+        if airway_confirmed is None:
             print(3)  # ExamineAirway
+            if events[3] > 0:
+                airway_confirmed = True
+            else:
+                airway_confirmed = False
             continue
 
         if not breathing_assessed and airway_confirmed:
@@ -66,6 +67,10 @@ while steps < 350:
     if not bpCuffUsed and circulation_checked:
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
+        continue
+
+    if measured_times[4] > 0 and measured_values[4] < 60:
+        print(15)  # GiveFluids
         continue
 
     if (
