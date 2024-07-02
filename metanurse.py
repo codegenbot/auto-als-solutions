@@ -29,12 +29,12 @@ while steps < 350:
     if not initial_assessments_done:
         if not airway_confirmed:
             print(3)  # ExamineAirway
-            if events[3] > 0.7:
+            airway_open = events[3] > 0.7
+            if airway_open:
                 airway_confirmed = True
-                airway_open = True
             continue
 
-        if not breathing_assessed and airway_open:
+        if not breathing_assessed and airway_confirmed:
             print(4)  # ExamineBreathing
             breathing_assessed = True
             continue
@@ -57,9 +57,15 @@ while steps < 350:
             initial_assessments_done = True
             continue
 
-    if events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
-        breathing_assessed = True
+    if events[3] > 0:
+        airway_confirmed = True
+        airchiway_open = True
+
+    if (
+        events[10] > 0.7 and not satsProbeUsed
+    ):  # The non-existence of proper breathing observation should trigger ventilation help
         print(29)  # UseBagValveMask
+        breathing_assessed = True
         continue
 
     if not satsProbeUsed and breathing_assessed:
@@ -71,7 +77,7 @@ while steps < 350:
         print(30)  # UseNonRebreatherMask
         continue
 
-    if not bpCuffUsed and circulation_checked:
+    if (not bpCuffUsed and circulation_checked) or (measured_times[4] == 0):
         print(27)  # UseBloodPressureCuff
         bpCuffUsed = True
         continue
