@@ -14,7 +14,7 @@ while steps < 350:
     measured_times = list(map(float, observations[39:46]))
     measured_values = list(map(float, observations[46:]))
 
-    if events[7] > 0.7 or (measured_times[6] > 0 and measured_values[6] < 8):
+    if events[7] > 0.5 or (measured_times[6] > 0 and measured_values[6] < 8):
         print(29)  # UseBagValveMask
         continue
 
@@ -26,28 +26,37 @@ while steps < 350:
 
     if not airway_clear:
         print(3)  # ExamineAirway
-        if events[3] > 0 or events[7] > 0:  # AirwayClear or BreathingNone
-            airway_clear = True
         continue
 
-    if not breathing_checked:
+    if events[3] > 0:
+        airway_clear = True
+
+    if not breathing_checked and airway_clear:
         print(4)  # ExamineBreathing
-        if any(events[10:15] > 0):
-            breathing_checked = True
-            print(29)  # UseBagValveMask
         continue
 
-    if not circulation_checked:
+    breathing_issues = (
+        events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0
+    )
+    if breathing_issues:
+        print(29)  # UseBagValveMask
+        breathing_checked = True
+        continue
+
+    if events[10] > 0:  # EqualChestExpansion
+        breathing_checked = True
+
+    if not circulation_checked and breathing_checked:
         print(5)  # ExamineCirculation
         circulation_checked = True
         continue
 
-    if not disability_checked:
+    if not disability_checked and circulation_checked:
         print(6)  # ExamineDisability
         disability_checked = True
         continue
 
-    if not exposure_checked:
+    if not exposure_checked and disability_checked:
         print(7)  # ExamineExposure
         exposure_checked = True
         continue
@@ -70,6 +79,10 @@ while steps < 350:
         print(15)  # GiveFluids
         continue
 
+    if measured_times[1] > 0 and measured_values[1] < 8:
+        print(29)  # UseBagValveMask
+        continue
+
     if (
         airway_clear
         and breathing_checked
@@ -87,5 +100,4 @@ while steps < 350:
         ):
             print(48)  # Finish
             break
-
     print(0)  # DoNothing if no other actions applicable
