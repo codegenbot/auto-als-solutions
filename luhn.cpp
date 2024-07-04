@@ -12,7 +12,7 @@ int main() {
     int sum = 0;
     for (int i = 0; i < n; ++i) {
         int value = digits[i];
-        if (i % 2 == 0) {
+        if (i % 2 == 1) {
             value *= 2;
             if (value > 9) {
                 value -= 9;
