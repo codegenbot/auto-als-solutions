@@ -5,8 +5,7 @@ def probability_peter_wins(n, m):
         for c in range(1, m + 1):
             if p > c:
                 count += 1
-    return count / total
-
+    return round(count / total, 8)
 
 if __name__ == "__main__":
     n = int(input().strip())
