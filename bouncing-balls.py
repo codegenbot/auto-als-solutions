@@ -10,7 +10,5 @@ for _ in range(num_bounces - 1):
     total_distance += 2 * current_height
     current_height *= bounciness_index
 
-if num_bounces > 0:
-    total_distance += current_height
-
+total_distance += current_height # Add the last bounce
 print(total_distance)
