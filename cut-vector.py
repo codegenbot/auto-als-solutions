@@ -1,6 +1,6 @@
 def cut_vector(vector):
     if len(vector) == 1:
-        return vector, []  # Handles a single-element vector correctly
+        return [vector[0]], []
 
     total_sum = sum(vector)
     left_sum = 0
