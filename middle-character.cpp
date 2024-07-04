@@ -1,14 +1,15 @@
 #include <iostream>
 #include <string>
+using namespace std;
 
 int main() {
-    std::string input;
-    std::cin >> input;
-    int len = input.length();
+    string s;
+    cin >> s;
+    int len = s.length();
     if (len % 2 == 0) {
-        std::cout << input.substr(len / 2 - 1, 2) << std::endl;
+        cout << s.substr(len / 2 - 1, 2) << endl;
     } else {
-        std::cout << input.substr(len / 2, 1) << std::endl;
+        cout << s.substr(len / 2, 1) << endl;
     }
     return 0;
 }
