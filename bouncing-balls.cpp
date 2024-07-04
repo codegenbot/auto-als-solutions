@@ -11,11 +11,13 @@ int main() {
     double totalDistance = startingHeight;
     double currentHeight = firstBounceHeight;
     
-    for (int i = 1; i <= numberOfBounces; ++i) {
+    for (int i = 1; i < numberOfBounces; ++i) {
         totalDistance += 2 * currentHeight;
         currentHeight *= bouncinessIndex;
     }
     
-    printf("%.15f\n", totalDistance);
+    totalDistance += currentHeight;
+
+    printf("%.12f\n", totalDistance);
     return 0;
 }
