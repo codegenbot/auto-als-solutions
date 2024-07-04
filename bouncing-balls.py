@@ -3,12 +3,14 @@ first_bounce_height = float(input())
 num_bounces = int(input())
 
 bounciness_index = first_bounce_height / starting_height
-total_distance = starting_height
+total_distance = starting_height  # Only one-way distance for the first drop
 
 current_height = first_bounce_height
 
-for _ in range(num_bounces):
+for _ in range(1, num_bounces):
     total_distance += 2 * current_height
     current_height *= bounciness_index
+
+total_distance += current_height  # Add the last bounce up distance
 
 print(total_distance)
