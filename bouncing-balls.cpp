@@ -17,6 +17,7 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
 
+    // Subtract the extra currentHeight added in the loop
     totalDistance -= currentHeight; 
 
     printf("%.14f\n", totalDistance);
