@@ -2,7 +2,8 @@ def snow_day(hours, initial_snow, snowfall_rate, melt_proportion):
     snow = initial_snow
     for _ in range(hours):
         snow += snowfall_rate
-        snow = snow * (1 - melt_proportion)
+        snow -= snowfall_rate * melt_proportion
+        snow -= snow * melt_proportion
     return snow
 
 if __name__ == "__main__":
