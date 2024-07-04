@@ -7,9 +7,15 @@ using namespace std;
 
 void cutVector(const vector<int>& vec) {
     int n = vec.size();
+    if (n == 1) {
+        cout << vec[0] << endl;
+        cout << 0 << endl;
+        return;
+    }
+    
     int totalSum = accumulate(vec.begin(), vec.end(), 0);
     int leftSum = 0, minDiff = INT_MAX, cutIndex = 0;
-
+    
     for (int i = 0; i < n - 1; ++i) {
         leftSum += vec[i];
         int rightSum = totalSum - leftSum;
@@ -19,7 +25,7 @@ void cutVector(const vector<int>& vec) {
             cutIndex = i + 1;
         }
     }
-
+    
     for (int i = 0; i < cutIndex; ++i) {
         cout << vec[i] << " ";
     }
