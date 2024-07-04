@@ -19,13 +19,13 @@ int main() {
     cin >> target;
     cin.ignore();
     getline(cin, text);
-
+    
     vector<int> result = indices_of_substring(text, target);
     cout << result.size() << endl;
     for (int index : result) {
         cout << index << " ";
     }
     cout << endl;
-
+    
     return 0;
 }
