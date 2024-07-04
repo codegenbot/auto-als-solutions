@@ -1,8 +1,12 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
 int main() {
     int n, m;
     cin >> n >> m;
 
-    double totalOutcomes = n * m;
+    double totalOutcomes = static_cast<double>(n) * m;
     double favorableOutcomes = 0;
 
     for (int i = 1; i <= n; ++i) {
@@ -14,7 +18,7 @@ int main() {
     }
 
     double probability = favorableOutcomes / totalOutcomes;
-    cout << probability << endl;
+    cout << fixed << setprecision(8) << probability << endl;
 
     return 0;
 }
