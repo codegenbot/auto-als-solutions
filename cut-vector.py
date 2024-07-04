@@ -1,20 +1,23 @@
-def cut_vector(vec):
-    total_sum = sum(vec)
+def cut_vector(vector):
+    if len(vector) == 1:
+        return vector, []
+
+    total_sum = sum(vector)
     left_sum = 0
     min_diff = float("inf")
     cut_index = 0
 
-    for i in range(len(vec) - 1):
-        left_sum += vec[i]
+    for i in range(len(vector) - 1):
+        left_sum += vector[i]
         right_sum = total_sum - left_sum
         diff = abs(left_sum - right_sum)
         if diff < min_diff:
             min_diff = diff
             cut_index = i + 1
 
-    return vec[:cut_index], vec[cut_index:]
+    return vector[:cut_index], vector[cut_index:]
 
-vec = list(map(int, input().strip().split()))
-left, right = cut_vector(vec)
+vector = list(map(int, input().split()))
+left, right = cut_vector(vector)
 print(left)
 print(right)
