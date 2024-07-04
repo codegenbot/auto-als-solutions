@@ -10,4 +10,5 @@ def probability_peter_wins(n, m):
 if __name__ == "__main__":
     n = int(input().strip())
     m = int(input().strip())
-    print(f"{probability_peter_wins(n, m):.8f}")
+    result = probability_peter_wins(n, m)
+    print(f"{result:.8f}")
