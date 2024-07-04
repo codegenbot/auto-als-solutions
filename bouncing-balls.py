@@ -1,14 +1,18 @@
-starting_height = float(input())
-first_bounce_height = float(input())
+from decimal import Decimal, getcontext
+
+getcontext().prec = 50
+
+starting_height = Decimal(input())
+first_bounce_height = Decimal(input())
 num_bounces = int(input())
 
 bounciness_index = first_bounce_height / starting_height
-total_distance = starting_height  # Initial drop
+total_distance = Decimal(0)
+current_height = starting_height
 
-current_height = first_bounce_height  # First bounce height
-
-for _ in range(1, num_bounces + 1):
-    total_distance += 2 * current_height  # Down and Up
+for _ in range(num_bounces):
+    total_distance += current_height  # Drop
     current_height *= bounciness_index
+    total_distance += current_height  # Bounce back up
 
 print(total_distance)
