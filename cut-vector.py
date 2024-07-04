@@ -11,7 +11,7 @@ def cut_vector(vector):
         left_sum += vector[i]
         right_sum = total_sum - left_sum
         diff = abs(left_sum - right_sum)
-        if diff < min_diff or diff == 0:
+        if diff < min_diff:
             min_diff = diff
             cut_index = i + 1
 
@@ -20,7 +20,5 @@ def cut_vector(vector):
 vector = list(map(int, input().split()))
 sub_vect1, sub_vect2 = cut_vector(vector)
 
-print(len(sub_vect1))
-print(*sub_vect1)
-print(len(sub_vect2))
-print(*sub_vect2)
+print(len(sub_vect1), *sub_vect1)
+print(len(sub_vect2), *sub_vect2)
