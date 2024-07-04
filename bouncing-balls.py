@@ -11,4 +11,6 @@ for _ in range(num_bounces):
     total_distance += 2 * current_height  # Up and down travel
     current_height *= bounciness_index
 
+total_distance += current_height  # Include final ascent
+
 print(total_distance)
