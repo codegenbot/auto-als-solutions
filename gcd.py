@@ -3,22 +3,19 @@ def gcd(a, b):
         a, b = b, a % b
     return a
 
-
-def find_substring_indices(text, target):
+def substring_indices(text, target):
     indices = []
-    index = text.find(target)
-    while index != -1:
-        indices.append(index)
-        index = text.find(target, index + 1)
+    for i in range(len(text) - len(target) + 1):
+        if text[i: i + len(target)] == target:
+            indices.append(i)
     return indices
 
+if __name__ == "__main__":
+    # Read two integers for gcd
+    a, b = map(int, input().split())
+    print(gcd(a, b))
 
-# Read input
-a = int(input())
-b = int(input())
-print(gcd(a, b))
-
-# Read input for substring indices
-text = input().strip()
-target = input().strip()
-print(find_substring_indices(text, target))
+    # Read text and target for substring indices
+    text = input().strip()
+    target = input().strip()
+    print(substring_indices(text, target))
