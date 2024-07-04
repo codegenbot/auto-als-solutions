@@ -16,7 +16,7 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
     
-    totalDistance += currentHeight;
+    totalDistance += currentHeight; // Add the last bounce
 
     printf("%.12f\n", totalDistance);
     return 0;
