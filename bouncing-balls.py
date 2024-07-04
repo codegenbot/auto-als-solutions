@@ -7,9 +7,10 @@ total_distance = starting_height  # Initial drop
 
 current_height = first_bounce_height
 
-for _ in range(num_bounces):
-    total_distance += 2 * current_height
+for _ in range(num_bounces - 1):
+    total_distance += 2 * current_height  # Up and down
     current_height *= bounciness_index
 
-total_distance -= current_height
+total_distance += current_height  # Add the last upward bounce only
+
 print(total_distance)
