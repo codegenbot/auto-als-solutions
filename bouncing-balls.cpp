@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstdio>
+#include <iomanip>
 
 int main() {
     double startingHeight, firstBounceHeight;
@@ -16,8 +16,8 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
     
-    totalDistance += currentHeight; // Add the last bounce distance separately
-    
-    printf("%.12f\n", totalDistance);
+    totalDistance += currentHeight;
+
+    std::cout << std::fixed << std::setprecision(15) << totalDistance << std::endl;
     return 0;
 }
