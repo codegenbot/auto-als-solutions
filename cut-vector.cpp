@@ -20,7 +20,7 @@ void cutVector(const vector<int>& vec) {
         }
     }
 
-    cout << cutIndex << endl;
+    cout << cutIndex << endl;  // Print cut index
     for (int i = 0; i < cutIndex; ++i) {
         cout << vec[i] << " ";
     }
