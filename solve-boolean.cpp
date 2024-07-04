@@ -1,31 +1,27 @@
 bool evaluateBooleanExpression(const string &expr) {
-    stack<char> stk;
+    stack<char> st;
     for (char ch : expr) {
         if (ch == 'T' || ch == 'F' || ch == '&' || ch == '|') {
-            stk.push(ch);
+            st.push(ch);
         }
-        if (stk.size() >= 3) {
-            char right = stk.top(); stk.pop();
-            char op = stk.top(); stk.pop();
-            char left = stk.top(); stk.pop();
-            bool leftBool = (left == 'T');
-            bool rightBool = (right == 'T');
-            bool result;
+        if (st.size() >= 3) {
+            char b = st.top(); st.pop();
+            char op = st.top(); st.pop();
+            char a = st.top(); st.pop();
             if (op == '&') {
-                result = leftBool && rightBool;
+                st.push((a == 'T' && b == 'T') ? 'T' : 'F');
             } else if (op == '|') {
-                result = leftBool || rightBool;
+                st.push((a == 'T' || b == 'T') ? 'T' : 'F');
             }
-            stk.push(result ? 'T' : 'F');
         }
     }
-    return stk.top() == 'T';
+    return st.top() == 'T';
 }
 
 int main() {
-    string input;
-    cin >> input;
-    bool result = evaluateBooleanExpression(input);
+    string expr;
+    cin >> expr;
+    bool result = evaluateBooleanExpression(expr);
     cout << (result ? "True" : "False") << endl;
     return 0;
 }
