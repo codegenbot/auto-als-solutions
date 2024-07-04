@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <limits>
 
 using namespace std;
 
@@ -20,8 +19,7 @@ vector<int> indices_of_substring(const string& text, const string& target) {
 
 int main() {
     string target, text;
-    cin >> target;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, target);
     getline(cin, text);
 
     vector<int> result = indices_of_substring(text, target);
