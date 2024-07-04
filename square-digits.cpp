@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
 string squareDigits(int num) {
     string result = "";
     string numStr = to_string(num);
