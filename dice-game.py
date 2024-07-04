@@ -5,9 +5,10 @@ def probability_peter_wins(n, m):
         for c in range(1, m + 1):
             if p > c:
                 count += 1
-    return round(count / total, 8)
+    return count / total
+
 
 if __name__ == "__main__":
     n = int(input().strip())
     m = int(input().strip())
-    print(probability_peter_wins(n, m))
+    print(f"{probability_peter_wins(n, m):.8f}")
