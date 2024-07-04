@@ -1,7 +1,7 @@
 from decimal import Decimal, getcontext
 
 def probability_peter_wins(n, m):
-    getcontext().prec = 10
+    getcontext().prec = 10  # Set precision
     count = 0
     total = n * m
     for p in range(1, n + 1):
