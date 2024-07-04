@@ -1,5 +1,11 @@
-starting_height = float(input())
-first_bounce_height = float(input())
+from decimal import Decimal, getcontext
+
+# Set the precision
+getcontext().prec = 25
+
+# User inputs with Decimal conversion
+starting_height = Decimal(input())
+first_bounce_height = Decimal(input())
 num_bounces = int(input())
 
 bounciness_index = first_bounce_height / starting_height
@@ -13,4 +19,4 @@ for _ in range(num_bounces - 1):
 
 total_distance += current_height
 
-print(total_distance)
+print(float(total_distance))
