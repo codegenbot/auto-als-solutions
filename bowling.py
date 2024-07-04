@@ -8,10 +8,13 @@ def bowling_score(score_string):
             frames.append([10])
             i += 1
         elif score_string[i + 1] == "/":
-            frames.append([int(score_string[i]), 10 - int(score_string[i])])
+            first_bowl = int(score_string[i]) if score_string[i] != '-' else 0
+            frames.append([first_bowl, 10 - first_bowl])
             i += 2
         else:
-            frames.append([int(score_string[i]), int(score_string[i + 1])])
+            first_bowl = int(score_string[i]) if score_string[i] != '-' else 0
+            second_bowl = int(score_string[i + 1]) if score_string[i + 1] != '-' else 0
+            frames.append([first_bowl, second_bowl])
             i += 2
 
     for frame_index in range(10):
@@ -31,6 +34,4 @@ def bowling_score(score_string):
 
     return total_score
 
-
-# Example usage:
 print(bowling_score(input().strip()))
