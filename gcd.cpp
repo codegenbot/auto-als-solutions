@@ -27,8 +27,9 @@ int main() {
     cin >> a >> b;
     cout << gcd(a, b) << endl;
     
+    cin.ignore();
+
     string text, target;
-    cin.ignore(); // Ignore the newline character after reading integers
     getline(cin, text);
     getline(cin, target);
 
