@@ -19,7 +19,8 @@ vector<int> indices_of_substring(const string& text, const string& target) {
 
 int main() {
     string target, text;
-    getline(cin, target);
+    cin >> target;
+    cin.ignore();
     getline(cin, text);
 
     vector<int> result = indices_of_substring(text, target);
