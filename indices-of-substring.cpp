@@ -6,12 +6,11 @@ using namespace std;
 
 vector<int> indices_of_substring(const string& text, const string& target) {
     vector<int> indices;
-    if (target.size() > text.size()) {
-        return indices;
-    }
-    for (size_t i = 0; i <= text.size() - target.size(); ++i) {
-        if (text.substr(i, target.size()) == target) {
-            indices.push_back(i);
+    if (text.size() >= target.size()) {
+        for (size_t i = 0; i <= text.size() - target.size(); ++i) {
+            if (text.substr(i, target.size()) == target) {
+                indices.push_back(i);
+            }
         }
     }
     return indices;
