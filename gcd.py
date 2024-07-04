@@ -11,12 +11,13 @@ def find_substring_indices(text, target):
         index = text.find(target, index + 1)
     return indices
 
-# Read input for GCD
-a = int(input("Enter first integer for GCD: "))
-b = int(input("Enter second integer for GCD: "))
-print(gcd(a, b))
+# Read all input first
+inputs = [input().strip() for _ in range(4)]
+a = int(inputs[0])
+b = int(inputs[1])
+text = inputs[2]
+target = inputs[3]
 
-# Read input for substring indices
-text = input("Enter the text string: ").strip()
-target = input("Enter the target substring: ").strip()
+# Execute the functions
+print(gcd(a, b))
 print(find_substring_indices(text, target))
