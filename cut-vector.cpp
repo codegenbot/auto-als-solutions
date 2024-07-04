@@ -1,48 +1,38 @@
 #include <vector>
 #include <iostream>
-#include <numeric>
 #include <cmath>
-#include <climits>
+#include <climits>  // Include for INT_MAX
 using namespace std;
 
-void cutVector(const vector<int>& vec) {
-    int n = vec.size();
-    if (n == 1) {
-        cout << vec[0] << endl;
-        cout << 0 << endl;
-        return;
+int main() {
+    vector<int> nums;
+    int num;
+    while (cin >> num) {
+        nums.push_back(num);
     }
-    
-    int totalSum = accumulate(vec.begin(), vec.end(), 0);
-    int leftSum = 0, minDiff = INT_MAX, cutIndex = 0;
-    
-    for (int i = 0; i < n - 1; ++i) {
-        leftSum += vec[i];
-        int rightSum = totalSum - leftSum;
-        int diff = abs(leftSum - rightSum);
-        if (diff < minDiff) {
-            minDiff = diff;
-            cutIndex = i + 1;
+
+    int total_sum = 0;
+    for (int n : nums) total_sum += n;
+
+    int left_sum = 0, min_diff = INT_MAX, cut_index = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+        left_sum += nums[i];
+        int right_sum = total_sum - left_sum;
+        int diff = abs(left_sum - right_sum);
+        if (diff < min_diff) {
+            min_diff = diff;
+            cut_index = i + 1;
         }
     }
-    
-    for (int i = 0; i < cutIndex; ++i) {
-        cout << vec[i] << " ";
-    }
-    cout << endl;
-    for (int i = cutIndex; i < n; ++i) {
-        cout << vec[i] << " ";
-    }
-    cout << endl;
-}
 
-int main() {
-    int n;
-    cin >> n;
-    vector<int> vec(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> vec[i];
+    for (int i = 0; i < cut_index; ++i) {
+        cout << nums[i] << " ";
     }
-    cutVector(vec);
+    cout << endl;
+    for (int i = cut_index; i < nums.size(); ++i) {
+        cout << nums[i] << " ";
+    }
+    cout << endl;
+
     return 0;
 }
