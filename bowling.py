@@ -1,36 +1,18 @@
-def bowling_score(score_string):
-    total_score = 0
-    frames = []
+def bowling_score(bowls):
+    score = 0
     i = 0
-
-    while len(frames) < 10:
-        if score_string[i] == "X":
-            frames.append([10])
+    for frame in range(10):
+        if bowls[i] == 'X':  # Strike
+            score += 10 + (10 if bowls[i+1] == 'X' else (10 if bowls[i+1] == '/' else (0 if bowls[i+1] == '-' else int(bowls[i+1])))) + (10 if bowls[i+2] == 'X' else (10 if bowls[i+2] == '/' else (0 if bowls[i+2] == '-' else int(bowls[i+2]))))
             i += 1
-        elif score_string[i + 1] == "/":
-            frames.append([int(score_string[i]), 10 - int(score_string[i])])
+        elif bowls[i+1] == '/':  # Spare
+            score += 10 + (10 if bowls[i+2] == 'X' else (0 if bowls[i+2] == '-' else int(bowls[i+2])))
             i += 2
-        else:
-            frames.append([int(score_string[i]), int(score_string[i + 1])])
+        else:  # Open frame
+            score += (0 if bowls[i] == '-' else int(bowls[i])) + (0 if bowls[i+1] == '-' else int(bowls[i+1]))
             i += 2
+    return score
 
-    for frame_index in range(10):
-        frame = frames[frame_index]
-        total_score += sum(frame)
-
-        if frame[0] == 10:  # Strike
-            if frame_index < 9:
-                next_two_bowls = frames[frame_index + 1][:2]
-                if len(next_two_bowls) < 2:
-                    next_two_bowls += frames[frame_index + 2][:1]
-                total_score += sum(next_two_bowls)
-
-        elif sum(frame) == 10:  # Spare
-            if frame_index < 9:
-                total_score += frames[frame_index + 1][0]
-
-    return total_score
-
-
-# Example usage:
-print(bowling_score(input().strip()))
+# Read input
+input_str = input().strip()
+print(bowling_score(input_str))
