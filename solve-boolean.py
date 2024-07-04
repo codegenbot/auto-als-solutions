@@ -1,5 +1,5 @@
 def solve_boolean(expression):
-    expression = expression.replace('T', 'True').replace('F', 'False').replace('&', ' and ').replace('|', ' or ')
+    expression = expression.replace('t', 'True').replace('f', 'False').replace('&', ' and ').replace('|', ' or ')
     return eval(expression)
 
 expression = input().strip()
