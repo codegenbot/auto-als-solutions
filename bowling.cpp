@@ -1,14 +1,18 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
 int calculateScore(const string &s) {
     int score = 0, frame = 0, i = 0;
     while (frame < 10) {
         if (s[i] == 'X') { // Strike
-            score += 10 + (s[i + 1] == 'X' ? 10 : s[i + 1] == '/' ? 10 : s[i + 1] - '0') + (s[i + 2] == 'X' ? 10 : s[i + 2] == '/' ? 10 - (s[i + 1] - '0') : s[i + 2] - '0');
+            score += 10 + (s[i + 1] == 'X' ? 10 : (s[i + 1] == '-' ? 0 : s[i + 1] - '0')) + (s[i + 2] == 'X' ? 10 : (s[i + 2] == '/' ? 10 - (s[i + 1] - '0') : (s[i + 2] == '-' ? 0 : s[i + 2] - '0')));
             i++;
         } else if (s[i + 1] == '/') { // Spare
-            score += 10 + (s[i + 2] == 'X' ? 10 : s[i + 2] - '0');
+            score += 10 + (s[i + 2] == 'X' ? 10 : (s[i + 2] == '-' ? 0 : s[i + 2] - '0'));
             i += 2;
         } else { // Open frame
-            score += (s[i] - '0') + (s[i + 1] - '0');
+            score += (s[i] == '-' ? 0 : s[i] - '0') + (s[i + 1] == '-' ? 0 : s[i + 1] - '0');
             i += 2;
         }
         frame++;
