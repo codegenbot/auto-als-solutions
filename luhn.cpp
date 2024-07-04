@@ -1,3 +1,18 @@
+int luhn_algorithm(const vector<int>& digits) {
+    int sum = 0;
+    for (int i = 0; i < 16; ++i) {
+        int digit = digits[i];
+        if (i % 2 == 1) {
+            digit *= 2;
+            if (digit > 9) {
+                digit -= 9;
+            }
+        }
+        sum += digit;
+    }
+    return sum;
+}
+
 int main() {
     int n;
     cin >> n;
@@ -5,19 +20,6 @@ int main() {
     for (int i = 0; i < n; ++i) {
         cin >> digits[i];
     }
-
-    int sum = 0;
-    for (int i = 0; i < n; ++i) {
-        int value = digits[i];
-        if (i % 2 == 1) {
-            value *= 2;
-            if (value > 9) {
-                value -= 9;
-            }
-        }
-        sum += value;
-    }
-
-    cout << sum << endl;
+    cout << luhn_algorithm(digits) << endl;
     return 0;
 }
