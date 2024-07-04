@@ -16,7 +16,7 @@ if __name__ == "__main__":
         print(gcd(a, b))
     except ValueError:
         print("Please provide exactly two integers separated by space.")
-    
+        
     text = input().strip()
     target = input().strip()
     print(substring_indices(text, target))
