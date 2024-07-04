@@ -16,7 +16,7 @@ def cut_vector(vector):
             cut_index = i + 1
 
     return vector[:cut_index], vector[cut_index:]
-    
+
 vector = list(map(int, input().split()))
 sub_vect1, sub_vect2 = cut_vector(vector)
 
