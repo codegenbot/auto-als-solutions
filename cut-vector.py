@@ -1,5 +1,5 @@
 def cut_vector(vector):
-    if len(vector) <= 1:
+    if len(vector) == 1:
         return vector, []
 
     total_sum = sum(vector)
@@ -7,15 +7,7 @@ def cut_vector(vector):
     min_diff = float("inf")
     cut_index = -1
 
-    for i in range(len(vector)):  # Adjust condition to include last element
-        if i == len(vector) - 1:
-            left_sum += vector[i]
-            right_sum = total_sum - left_sum
-            diff = abs(left_sum - right_sum)
-            if diff < min_diff:
-                min_diff = diff
-                cut_index = i + 1
-            break
+    for i in range(len(vector)):
         left_sum += vector[i]
         right_sum = total_sum - left_sum
         diff = abs(left_sum - right_sum)
