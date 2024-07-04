@@ -1,6 +1,6 @@
 def cut_vector(vector):
     if len(vector) == 1:
-        return [], vector  # Return empty list for the left vector, and the vector itself for the right one
+        return vector, []
 
     total_sum = sum(vector)
     left_sum = 0
@@ -16,7 +16,7 @@ def cut_vector(vector):
             cut_index = i + 1
 
     return vector[:cut_index], vector[cut_index:]
-    
+
 vector = list(map(int, input().split()))
 sub_vect1, sub_vect2 = cut_vector(vector)
 
