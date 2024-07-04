@@ -14,7 +14,7 @@ def cut_vector(vector):
         if diff < min_diff:
             min_diff = diff
             cut_index = i + 1
-    
+
     return vector[:cut_index], vector[cut_index:]
 
 vector = list(map(int, input().split()))
