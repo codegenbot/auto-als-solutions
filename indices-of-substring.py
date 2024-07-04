@@ -7,13 +7,10 @@ def indices_of_substring(text, target):
     return indices
 
 
-# Read input
-text = input().strip()
-target = input().strip()
-
-# Get indices
-result = indices_of_substring(text, target)
-
-# Print result
-for idx in result:
-    print(idx)
+if __name__ == "__main__":
+    text = input().strip()
+    target = input().strip()
+    indices = indices_of_substring(text, target)
+    print(len(indices))
+    if indices:
+        print(" ".join(map(str, indices)))
