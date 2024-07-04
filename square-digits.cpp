@@ -1,6 +1,6 @@
-string squareDigits(int num) {
+string squareDigits(int n) {
     string result = "";
-    string numStr = to_string(num);
+    string numStr = to_string(n);
     for (char c : numStr) {
         int digit = c - '0';
         result += to_string(digit * digit);
@@ -9,8 +9,8 @@ string squareDigits(int num) {
 }
 
 int main() {
-    int num;
-    cin >> num;
-    cout << squareDigits(num) << endl;
+    int n;
+    cin >> n;
+    cout << squareDigits(n) << endl;
     return 0;
 }
