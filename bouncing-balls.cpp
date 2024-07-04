@@ -1,8 +1,11 @@
+#include <iostream>
+#include <cstdio>
+
 int main() {
     double startingHeight, firstBounceHeight;
     int numberOfBounces;
     
-    cin >> startingHeight >> firstBounceHeight >> numberOfBounces;
+    std::cin >> startingHeight >> firstBounceHeight >> numberOfBounces;
     
     double bouncinessIndex = firstBounceHeight / startingHeight;
     double totalDistance = startingHeight;
@@ -13,6 +16,6 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
     
-    printf("%.15f\n", totalDistance);
+    printf("%.12f\n", totalDistance);
     return 0;
 }
