@@ -1,7 +1,4 @@
 def cut_vector(vector):
-    if len(vector) == 1:
-        return [], vector
-
     total_sum = sum(vector)
     left_sum = 0
     min_diff = float("inf")
@@ -17,7 +14,7 @@ def cut_vector(vector):
 
     return vector[:cut_index], vector[cut_index:]
 
-vector = list(map(int, input().split()))
+vector = list(map(int, input().strip().split()))
 left, right = cut_vector(vector)
 print(left)
 print(right)
