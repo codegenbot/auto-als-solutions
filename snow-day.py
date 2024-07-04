@@ -1,14 +1,15 @@
-def snow_day(hours, initial_snow, snow_rate, melt_rate):
+def snow_day(hours, initial_snow, snowfall_rate, melt_proportion):
     snow = initial_snow
     for _ in range(hours):
-        snow += snow_rate
-        snow *= (1 - melt_rate)
+        snow += snowfall_rate
+        snow -= melt_proportion
+        if snow < 0:
+            snow = 0
     return snow
 
 if __name__ == "__main__":
     hours = int(input())
     initial_snow = float(input())
-    snow_rate = float(input())
-    melt_rate = float(input())
-    result = snow_day(hours, initial_snow, snow_rate, melt_rate)
-    print(result)
+    snowfall_rate = float(input())
+    melt_proportion = float(input())
+    print(snow_day(hours, initial_snow, snowfall_rate, melt_proportion))
