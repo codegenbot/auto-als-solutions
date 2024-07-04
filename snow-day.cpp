@@ -1,18 +1,17 @@
-#include <iostream>
-#include <iomanip>
+#include<iostream>
 using namespace std;
 
 int main() {
     int hours;
-    double initial_snow, snow_rate, melt_rate; // Use double for better precision
+    float initial_snow, snow_rate, melt_rate;
     cin >> hours >> initial_snow >> snow_rate >> melt_rate;
 
-    double snow = initial_snow;
+    float snow = initial_snow;
     for (int i = 0; i < hours; ++i) {
         snow += snow_rate;
-        snow -= snow * melt_rate;
+        snow *= (1 - melt_rate);
     }
 
-    cout << fixed << setprecision(16) << snow << endl; // Ensure precision in output
+    cout << snow << endl;
     return 0;
 }
