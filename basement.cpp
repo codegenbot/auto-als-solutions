@@ -6,7 +6,7 @@ int firstNegativeSumIndex(const vector<int>& nums) {
             return i;
         }
     }
-    return -1; // If no such index exists
+    return -1; // In case no such index exists
 }
 
 int main() {
