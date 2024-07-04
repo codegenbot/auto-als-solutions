@@ -4,7 +4,7 @@ def cut_vector(vec):
     min_diff = float("inf")
     cut_index = 0
 
-    for i in range(len(vec) - 1):
+    for i in range(len(vec)):  # Note the change here
         left_sum += vec[i]
         right_sum = total_sum - left_sum
         diff = abs(left_sum - right_sum)
@@ -14,7 +14,8 @@ def cut_vector(vec):
 
     return vec[:cut_index], vec[cut_index:]
 
-vec = list(map(int, input().strip().split()))
+# Reading input
+vec = list(map(int, input().split()))
 left, right = cut_vector(vec)
 print(left)
 print(right)
