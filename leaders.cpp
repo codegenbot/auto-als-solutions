@@ -6,10 +6,10 @@ vector<int> findLeaders(const vector<int>& nums) {
     int max_from_right = nums[n-1];
     leaders.push_back(max_from_right);
     
-    for (int i = n-2; i >= 0; i--) {
+    for (int i = n-2; i >= 0; --i) {
         if (nums[i] >= max_from_right) {
             max_from_right = nums[i];
-            leaders.push_back(max_from_right);
+            leaders.push_back(nums[i]);
         }
     }
     
@@ -21,7 +21,7 @@ int main() {
     int n;
     cin >> n;
     vector<int> nums(n);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         cin >> nums[i];
     }
     
@@ -31,5 +31,6 @@ int main() {
         cout << leader << " ";
     }
     cout << endl;
+    
     return 0;
 }
