@@ -1,5 +1,5 @@
 def evaluate_boolean_expression(expression):
-    expression = expression.replace('t', 'True').replace('f', 'False')
+    expression = expression.replace('t', 'T').replace('f', 'F')
     tokens = []
     i = 0
     while i < len(expression):
@@ -13,7 +13,7 @@ def evaluate_boolean_expression(expression):
         else:
             tokens.append(expression[i])
         i += 1
-
+ 
     result = tokens[0]
     for i in range(1, len(tokens), 2):
         if tokens[i] == '|':
