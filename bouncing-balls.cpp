@@ -16,6 +16,6 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
     
-    std::printf("%.15f\n", totalDistance);
+    printf("%.15f\n", totalDistance);
     return 0;
 }
