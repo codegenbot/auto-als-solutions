@@ -1,27 +1,36 @@
+#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
 bool evaluateBooleanExpression(const string &expr) {
-    stack<char> st;
+    stack<char> stk;
     for (char ch : expr) {
         if (ch == 'T' || ch == 'F' || ch == '&' || ch == '|') {
-            st.push(ch);
+            stk.push(ch);
         }
-        if (st.size() >= 3) {
-            char b = st.top(); st.pop();
-            char op = st.top(); st.pop();
-            char a = st.top(); st.pop();
+        if (stk.size() >= 3) {
+            char right = stk.top(); stk.pop();
+            char op = stk.top(); stk.pop();
+            char left = stk.top(); stk.pop();
+            bool leftBool = (left == 'T');
+            bool rightBool = (right == 'T');
+            bool result;
             if (op == '&') {
-                st.push((a == 'T' && b == 'T') ? 'T' : 'F');
+                result = leftBool && rightBool;
             } else if (op == '|') {
-                st.push((a == 'T' || b == 'T') ? 'T' : 'F');
+                result = leftBool || rightBool;
             }
+            stk.push(result ? 'T' : 'F');
         }
     }
-    return st.top() == 'T';
+    return stk.top() == 'T';
 }
 
 int main() {
-    string expr;
-    cin >> expr;
-    bool result = evaluateBooleanExpression(expr);
+    string input;
+    cin >> input;
+    bool result = evaluateBooleanExpression(input);
     cout << (result ? "True" : "False") << endl;
     return 0;
 }
