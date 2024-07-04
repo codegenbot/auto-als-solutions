@@ -1,3 +1,8 @@
+#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
 bool evaluateBooleanExpression(const string &expr) {
     stack<char> stk;
     for (char ch : expr) {
