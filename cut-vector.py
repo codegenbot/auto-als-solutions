@@ -1,7 +1,7 @@
 def cut_vector(vector):
     if len(vector) == 1:
         return vector, []
-
+    
     total_sum = sum(vector)
     left_sum = 0
     min_diff = float("inf")
@@ -14,6 +14,8 @@ def cut_vector(vector):
         if diff < min_diff:
             min_diff = diff
             cut_index = i + 1
+        elif diff == min_diff and cut_index == -1:
+            cut_index = i + 1 
 
     return vector[:cut_index], vector[cut_index:]
 
