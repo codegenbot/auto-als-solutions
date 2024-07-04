@@ -17,7 +17,7 @@ def cut_vector(vector):
 
     return vector[:cut_index], vector[cut_index:]
 
-vector = list(map(int, input().split()))
-print(len(vector))
-for sub_vect in cut_vector(vector):
-    print(*sub_vect)
+vector = list(map(int, input().strip().split()))
+left, right = cut_vector(vector)
+print(left)
+print(right)
