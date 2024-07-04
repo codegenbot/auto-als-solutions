@@ -7,7 +7,7 @@ def cut_vector(vector):
     min_diff = float("inf")
     cut_index = 0
 
-    for i in range(len(vector)):  # Include the end in the loop
+    for i in range(len(vector) - 1):
         left_sum += vector[i]
         right_sum = total_sum - left_sum
         diff = abs(left_sum - right_sum)
