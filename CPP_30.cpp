@@ -1,8 +1,7 @@
-```cpp
 #include <vector>
 #include <cmath>
 
-bool compare_vectors(std::vector<float> a, std::vector<float> b) {
+bool vectorEqual(std::vector<float> a, std::vector<float> b) {
     if (a.size() != b.size())
         return false;
     for (int i = 0; i<a.size(); i++)
@@ -11,7 +10,7 @@ bool compare_vectors(std::vector<float> a, std::vector<float> b) {
     return true;
 }
 
-std::vector<float> get_positives(std::vector<float> l) {
+std::vector<float> getPositives(std::vector<float> l) {
     std::vector<float> result;
     for (float x : l) {
         if (x > 0)
@@ -21,6 +20,6 @@ std::vector<float> get_positives(std::vector<float> l) {
 }
 
 int main() {
-    assert(compare_vectors(get_positives({}), {}));
+    assert(vectorEqual(getPositives({}), {}));
     return 0;
 }
