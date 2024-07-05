@@ -1,11 +1,10 @@
-```
 from typing import List
 
 
 def concatenate(strings: List[str]) -> str:
-    return ''.join(strings)
+    result = ''.join(strings)
+    return result
 
 
-if __name__ == "__main__":
-    strings = input("Enter a list of strings (space-separated): ").split()
-    print(concatenate(strings))
+strings = input("Enter strings separated by space : ").split()
+print(concatenate(strings))
