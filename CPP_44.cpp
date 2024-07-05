@@ -1,25 +1,31 @@
 ```cpp
-#include <iostream>
-#include <string>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 string change_base(int x, int base) {
-    if (base <= 1) {
-        return to_string(x);
-    }
     string res = "";
     while (x > 0) {
-        res = to_string(x % base) + res;
+        int rem = x % base;
+        if (rem < 10) {
+            res = to_string(rem) + res;
+        } else {
+            res = (rem < 10) ? to_string(rem) : string(1,"A") + res;
+        }
         x /= base;
     }
     return res;
 }
 
 int main() {
-    int x;
+    int x, b;
     cout << "Enter a number: ";
     cin >> x;
-    assert (change_base(x, x + 1) == to_string(x));
-    return 0;
+    cout << "Enter the base (2-36): ";
+    cin >> b;
+    
+    if(b < 2 || b > 36)
+        return -1;
+    
+    string result = change_base(x, b);
+    cout << "Base-" << b << " : " << result << endl;
 }
