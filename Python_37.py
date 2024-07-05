@@ -1,19 +1,13 @@
-def sort_even(l: list):
-    even = sorted([x for x in l if x % 2 == 0])
-    odd = sorted([x for x in l if x % 2 != 0])
+def sort_even_odd():
+    even_numbers = input("Enter even numbers (space separated): ")
+    odd_numbers = input("Enter odd numbers (space separated): ")
 
-    result = []
-    i = iter(even)
-    j = iter(odd)
+    even = list(map(int, even_numbers.split()))
+    odd = list(map(int, odd_numbers.split()))
 
-    while any(i) or any(j):
-        try:
-            result.append(next(i))
-        except StopIteration:
-            pass
-        try:
-            result.append(next(j))
-        except StopIteration:
-            pass
+    even.sort()
+    odd.sort()
 
-    return tuple(result)
+    return sorted(even + odd)
+
+check(sort_even_odd)
