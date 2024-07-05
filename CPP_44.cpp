@@ -1,4 +1,5 @@
-#include <string>
+```cpp
+#include <bits/stdc++.h>
 using namespace std;
 
 string change_base(int x, int base) {
@@ -8,7 +9,7 @@ string change_base(int x, int base) {
         if (rem < 10) {
             res = to_string(rem) + res;
         } else {
-            res = (char)(65 + rem - 10) + res;
+            res = (rem < 10) ? to_string(rem) : string(1,"A") + res;
         }
         x /= base;
     }
@@ -16,11 +17,5 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int n, b;
-    cout << "Enter a number: ";
-    cin >> n;
-    cout << "Enter the base: ";
-    cin >> b;
-    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
-    return 0;
+    // your test cases here
 }
