@@ -1,7 +1,5 @@
-```
-from typing import List
+from collections import OrderedDict
 
 
 def remove_duplicates(numbers: List[int]) -> List[int]:
-    seen = {}
-    return [seen.setdefault(x, x) for x in numbers]
+    return list(OrderedDict.fromkeys(numbers))
