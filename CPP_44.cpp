@@ -1,5 +1,5 @@
-#include <iostream>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -8,9 +8,9 @@ string change_base(int x, int base) {
     while (x > 0) {
         int rem = x % base;
         if (rem < 10) {
-            res = to_string(rem) + res; // added parentheses for concatenation
+            res = to_string(rem) + res;
         } else {
-            res = char('A' + rem - 10) + res; // changed type of expression to 'char'
+            res = (char)(65 + rem - 10) + res;
         }
         x /= base;
     }
@@ -18,12 +18,11 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int num, base;
+    int n, b;
     cout << "Enter a number: ";
-    cin >> num;
+    cin >> n;
     cout << "Enter the base: ";
-    cin >> base;
-    string result = change_base(num, base);
-    cout << "The number in the new base is: " << result << endl;
+    cin >> b;
+    cout << "Base " << b << " representation of " << change_base(n, b);
     return 0;
 }
