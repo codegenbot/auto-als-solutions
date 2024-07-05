@@ -9,7 +9,7 @@ string change_base(int x, int base) {
         if (rem < 10) {
             res += to_string(rem);
         } else {
-            res += (rem - 10 + 55);
+            res += ((rem - 10 + 55));
         }
         x /= base;
     }
