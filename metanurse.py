@@ -3,49 +3,55 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, state):
-    if state == "start":
-        return 24, "monitor_pads"  # UseMonitorPads
-    elif state == "monitor_pads":
-        return 25, "sats_probe"  # UseSatsProbe
-    elif state == "sats_probe":
-        return 27, "bp_cuff"  # UseBloodPressureCuff
-    elif state == "bp_cuff":
-        return 3, "airway"  # ExamineAirway
-    elif state == "airway":
-        return 4, "breathing"  # ExamineBreathing
-    elif state == "breathing":
-        return 5, "circulation"  # ExamineCirculation
-    elif state == "circulation":
-        return 6, "disability"  # ExamineDisability
-    elif state == "disability":
-        return 7, "exposure"  # ExamineExposure
-    elif state == "exposure":
-        return 16, "assess"  # ViewMonitor
+def choose_action(obs, step):
+    if step >= 350:
+        return 48  # Finish if step limit reached
 
-    # Assess vitals and treat
-    if state == "assess":
-        if obs[39] > 0.5 and obs[-7] < 8:  # RespRate measured and < 8
-            return 29, "assess"  # UseBagValveMask
-        elif obs[46] > 0.5 and obs[-1] < 88:  # Sats measured and < 88%
-            return 30, "assess"  # UseNonRebreatherMask
-        elif obs[45] > 0.5 and obs[-2] < 60:  # MAP measured and < 60
-            return 15, "assess"  # GiveFluids
-        elif obs[38] > 0.5 and obs[-8] > 150:  # HeartRate measured and > 150
-            return 9, "assess"  # GiveAdenosine
-        elif (obs[3] > 0.5 and  # AirwayClear
-              obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
-              obs[39] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
-              obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-            return 48, "finish"  # Finish
-        else:
-            return 16, "assess"  # ViewMonitor
+    if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
+        return 8  # ExamineResponse
+    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
+        return 3  # ExamineAirway
+    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
+        return 4  # ExamineBreathing
+    if obs[44] == 0:
+        return 25  # UseSatsProbe
+    if obs[45] == 0:
+        return 27  # UseBloodPressureCuff
+    if obs[16] == 0 and obs[17] == 0:
+        return 5  # ExamineCirculation
+    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+        return 6  # ExamineDisability
+    if obs[25] == 0 and obs[26] == 0:
+        return 7  # ExamineExposure
 
-    return 0, state  # DoNothing
+    if obs[7] > 0:  # BreathingNone
+        return 29  # UseBagValveMask
+    if obs[46] > 0 and obs[52] < 65 or (obs[45] > 0 and obs[51] < 20):
+        return 17  # StartChestCompression
+    if obs[46] > 0 and obs[52] < 88:
+        return 30  # UseNonRebreatherMask
+    if obs[45] > 0 and obs[51] < 60:
+        return 15  # GiveFluids
+    if obs[47] > 0 and obs[53] < 8:
+        return 29  # UseBagValveMask
 
-state = "start"
-for line in sys.stdin:
-    observations = parse_observations(line)
-    action, state = choose_action(observations, state)
+    if obs[28] == 0:
+        return 2  # CheckRhythm
+    if obs[28] > 0 and obs[46] == 0:
+        return 16  # ViewMonitor
+
+    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[53] >= 8 and obs[45] > 0 and obs[51] >= 60:
+        return 48  # Finish if stabilized
+
+    return 16  # ViewMonitor (regular check)
+
+step = 0
+while True:
+    observations = input()
+    obs = parse_observations(observations)
+    action = choose_action(obs, step)
     print(action)
     sys.stdout.flush()
+    if action == 48:
+        break
+    step += 1
