@@ -1,4 +1,3 @@
-```
 def car_race_collision(n):
     total_collisions = 0
     for i in range(n):
