@@ -1,7 +1,9 @@
-```
+```cpp
 #include <cmath>
 #include <vector>
 #include <cassert>
+#include <ostream>
+#include <iostream>
 
 using namespace std;
 
