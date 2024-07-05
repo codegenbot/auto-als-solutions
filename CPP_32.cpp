@@ -32,4 +32,3 @@ int main() {
     cout << "Polynomial value at the solution: " << poly(coeffs, solution) << endl;
 
     return 0;
-}
