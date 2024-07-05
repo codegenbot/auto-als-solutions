@@ -1,10 +1,10 @@
-#include <iostream>
 #include <string>
+#include <cctype>
 
 std::string remove_vowels(std::string text){
     std::string result = "";
     for(char c : text){
-        if(toupper(c) != 'A' && toupper(c) != 'E' && toupper(c) != 'I' && toupper(c) != 'O' && toupper(c) != 'U'){
+        if(std::toupper(c) != 'A' && std::toupper(c) != 'E' && std::toupper(c) != 'I' && std::toupper(c) != 'O' && std::toupper(c) != 'U'){
             result += c;
         }
     }
@@ -13,8 +13,8 @@ std::string remove_vowels(std::string text){
 
 int main(){
     std::string text;
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, text);
-    std::cout << "String with vowels removed: " << remove_vowels(text) << std::endl;
+    std::cout << "Enter the string: ";
+    std::cin >> text;
+    std::cout << "The string after removing vowels is: " << remove_vowels(text) << std::endl;
     return 0;
 }
