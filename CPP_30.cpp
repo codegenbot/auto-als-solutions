@@ -1,4 +1,9 @@
+```cpp
 #include <initializer_list>
+#include <vector>
+
+bool issame(vector<float> a, vector<float> b);
+vector<float> get_positive(vector<float> l);
 
 bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
@@ -16,6 +21,7 @@ vector<float> get_positive(vector<float> l) {
             result.push_back(x);
     }
     return result;
+
 }
 
 int main() {

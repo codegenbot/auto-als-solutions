@@ -1,22 +1,8 @@
-def sort_even(l: list):
-    even = [x for x in l if x % 2 == 0]
-    odd = sorted([x for x in l if x % 2 != 0])
+def sort_even_odd(even_numbers, odd_numbers):
+    result = [i if i % 2 == 0 else next(j) for i, j in zip(even_numbers, iter(odd_numbers))]
+    return result
 
-    result = []
-    i, j = 0, 0
+even_numbers = [1, 4, 6, 8]
+odd_numbers = [3, 5, 7]
 
-    while i < len(even) or j < len(odd):
-        if i >= len(even):
-            result.append(odd[j])
-            j += 1
-        elif j >= len(odd):
-            result.append(even[i])
-            i += 1
-        elif even[i] < odd[j]:
-            result.append(even[i])
-            i += 1
-        else:
-            result.append(odd[j])
-            j += 1
-
-    return tuple(result)
+print(sort_even_odd(even_numbers, odd_numbers))
