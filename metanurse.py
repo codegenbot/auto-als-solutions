@@ -5,7 +5,7 @@ def parse_observations(observations):
 
 def choose_action(obs):
     if obs[2] > 0:  # ResponseNone
-        return 17  # StartChestCompression
+        return 1  # CheckSignsOfLife
     if obs[7] > 0:  # BreathingNone
         return 29  # UseBagValveMask
     if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
@@ -21,30 +21,33 @@ def choose_action(obs):
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
     if obs[44] == 0:
-        return 19  # OpenBreathingDrawer
-    if obs[44] > 0 and obs[46] == 0:
         return 25  # UseSatsProbe
     if obs[45] == 0:
-        return 20  # OpenCirculationDrawer
-    if obs[45] > 0 and obs[47] == 0:
         return 27  # UseBloodPressureCuff
     if obs[46] > 0 and obs[47] > 0:
         return 16  # ViewMonitor
     if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
-    if obs[45] > 0 and obs[51] < 60:
-        return 14  # UseVenflonIVCatheter
-    if obs[45] > 0 and obs[51] < 60:
-        return 15  # GiveFluids
-    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[48] > 0 and obs[50] >= 8:
+    if obs[47] > 0 and obs[51] < 60:
+        if obs[45] == 0:
+            return 14  # UseVenflonIVCatheter
+        else:
+            return 15  # GiveFluids
+    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[48] > 0 and obs[49] >= 8:
         return 48  # Finish
     return 16  # ViewMonitor as default action
 
 while True:
-    observations = input()
-    obs = parse_observations(observations)
-    action = choose_action(obs)
-    print(action)
-    sys.stdout.flush()
-    if action == 48:
+    try:
+        observations = input()
+        obs = parse_observations(observations)
+        action = choose_action(obs)
+        print(action)
+        sys.stdout.flush()
+        if action == 48:
+            break
+    except EOFError:
         break
+    except Exception as e:
+        print(0)  # DoNothing as fallback
+        sys.stdout.flush()
