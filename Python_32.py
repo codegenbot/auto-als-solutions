@@ -1,12 +1,4 @@
-```
-def find_zero():
-    xs = list(map(float, input("Enter coefficients: ").split()))
-    n = len(xs)
-    if n % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
-    x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
-        coeff for i, coeff in enumerate(xs) if i % 2 == 0
-    )
-    return round(x, 2)
-
-print(find_zero())
+def find_zero(xs):
+    if len(xs) != 2:
+        return "Input list must contain exactly two elements"
+    return -xs[1] / xs[0]
