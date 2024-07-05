@@ -1,4 +1,3 @@
-```cpp
 double find_zero(vector<double> xs){
     double root = 1;
     for(int i=1; i<xs.size();i+=2) {
@@ -8,8 +7,9 @@ double find_zero(vector<double> xs){
 }
 
 int main() {
-    vector<double> xs = {...}; 
-    double solution = find_zero(xs);    
-    assert (abs(xs) < 1e-3);   
+    vector<double> xs = {1.0, -3.5, 2.25, -1.125}; // your coefficients
+    double solution = find_zero(xs);
+    
+    assert (abs(xs) < 1e-3); 
     return 0;
 }
