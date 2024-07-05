@@ -1,26 +1,22 @@
+```cpp
+#include <cmath>
 #include <vector>
-using namespace std;
 
-double find_zero(vector<double> coeffs) {
-    double root = 1;
-    for(int i=0; i<coeffs.size();i++) {
-        if(i%2==0){
-            root = -coeffs[i]/(root);
-        } else {
-            root = (double)(coeffs[i-1])/(coeffs[i]+root);
-        }
+double findZero(std::vector<double> xs){
+    double a = xs[0];
+    double b = 0;
+    for(int i=1; i<xs.size(); i+=2) {
+        b += xs[i];
     }
-    return round(root, 10);
+    return -b / (2*a);
 }
 
 int main() {
-    vector<double> coeffs;
-    coeffs.push_back(2); 
-    coeffs.push_back(-7.5);
-    coeffs.push_back(3.5);
-    coeffs.push_back(-1);
-
-    double solution = find_zero(coeffs);
-    
+    std::vector<double> coeffs = {};
+    coeffs.push_back(1.0);
+    coeffs.push_back(2.0);
+    coeffs.push_back(-3.5);
+    double solution = findZero(coeffs);
+    assert(std::abs(coeffs[0] + coeffs.size() * solution - 0) < 1e-3); 
     return 0;
 }
