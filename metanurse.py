@@ -10,9 +10,17 @@ def choose_action(obs):
     disability_checked = max(obs[21:27])
     exposure_checked = max(obs[27:33])
     
+    # Check for critical conditions
     if obs[7] > 0.5:  # BreathingNone
         return 29  # UseBagValveMask
     
+    if obs[46] > 0.5 and obs[-1] < 65:  # If sats measured and < 65%
+        return 29  # UseBagValveMask
+    
+    if obs[45] > 0.5 and obs[-2] < 20:  # If MAP measured and < 20
+        return 15  # GiveFluids
+    
+    # ABCDE assessment
     if airway_checked < 0.5:
         return 3  # ExamineAirway
     elif breathing_checked < 0.5:
@@ -24,13 +32,11 @@ def choose_action(obs):
     elif exposure_checked < 0.5:
         return 7  # ExamineExposure
     
-    if obs[39] < 0.5:  # MeasuredMAP not recent
-        return 27  # UseBloodPressureCuff
-    if obs[40] < 0.5:  # MeasuredSats not recent
-        return 25  # UseSatsProbe
-    if obs[41] < 0.5:  # MeasuredResps not recent
+    # Monitor vital signs
+    if obs[39] < 0.5:  # If vital signs not recently measured
         return 16  # ViewMonitor
     
+    # Treat issues
     if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
         return 30  # UseNonRebreatherMask
     
@@ -41,12 +47,12 @@ def choose_action(obs):
         return 29  # UseBagValveMask
     
     # Check if patient is stabilized
-    if (obs[46] > 0.5 and obs[-1] >= 88 and
-        obs[45] > 0.5 and obs[-2] >= 60 and
-        obs[40] > 0.5 and obs[-7] >= 8):
+    if (obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
+        obs[45] > 0.5 and obs[-2] >= 60 and  # MAP >= 60
+        obs[40] > 0.5 and obs[-7] >= 8):     # Resp rate >= 8
         return 48  # Finish
     
-    return 16  # ViewMonitor (default action to keep checking vitals)
+    return 16  # ViewMonitor as default action
 
 for line in sys.stdin:
     observations = parse_observations(line)
