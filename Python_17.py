@@ -1,3 +1,4 @@
+```
 from typing import List
 
 
@@ -12,7 +13,9 @@ def parse_music(music_string: str) -> List[int]:
         elif char == '.|':
             beat_count += 1
         else:
-            music_list.append(beat_count)
-            beat_count = 0
-    music_list.append(beat_count)
+            if beat_count > 0:
+                music_list.append(beat_count)
+                beat_count = 0
+    if beat_count > 0:
+        music_list.append(beat_count)
     return music_list
