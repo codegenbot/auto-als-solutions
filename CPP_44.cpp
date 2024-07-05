@@ -1,17 +1,15 @@
-```cpp
 #include <string>
 using namespace std;
 
 string change_base(int x, int base) {
-    char* res = new char[1000];  
-    string s = "";
+    char res[1000];  
+    string s;
     while (x > 0) {
         int rem = x % base;
         char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
         s.push_back(c);
         x /= base;
     }
-    delete[] res; // Don't forget to deallocate the memory
     return s;
 }
 
