@@ -1,7 +1,11 @@
 def evaluate_boolean_expression(expression):
-    tokens = expression.replace('t', 'True').replace('f', 'False').split('|')
-    evaluated_tokens = [eval(token.replace('&', ' and ')) for token in tokens]
-    return any(evaluated_tokens)
+    expression = (
+        expression.replace('T', 'True')
+        .replace('F', 'False')
+        .replace('|', ' or ')
+        .replace('&', ' and ')
+    )
+    return eval(expression)
 
-expression = input().strip().lower()
+expression = input().strip()
 print(evaluate_boolean_expression(expression))
