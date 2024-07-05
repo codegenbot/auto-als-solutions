@@ -5,7 +5,7 @@ def evaluate_boolean_expression(expression):
         .replace('|', ' or ')
         .replace('&', ' and ')
     )
-    return eval(expression.lower())
+    return eval(expression)
 
 expression = input().strip()
 print(evaluate_boolean_expression(expression))
