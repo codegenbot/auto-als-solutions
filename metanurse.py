@@ -20,7 +20,7 @@ def choose_action(obs, step_counter):
     if obs[7] > 0.5:  # BreathingNone
         return 29  # UseBagValveMask
     
-    # ABCDE assessment loop
+    # ABCDE assessment
     if airway_checked < 0.5:
         return 3  # ExamineAirway
     elif breathing_checked < 0.5:
@@ -43,11 +43,10 @@ def choose_action(obs, step_counter):
     elif obs[27] > 0.5 and obs[45] < 0.5:  # BloodPressureCuff used but not measured
         return 27  # UseBloodPressureCuff
     
-    # Check vitals
     if obs[39] < 0.5 or obs[40] < 0.5 or obs[41] < 0.5 or obs[45] < 0.5 or obs[46] < 0.5:
         return 16  # ViewMonitor
     
-    # Interventions based on vitals
+    # Interventions based on vital signs
     if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
         return 30  # UseNonRebreatherMask
     
@@ -60,7 +59,7 @@ def choose_action(obs, step_counter):
     if obs[39] > 0.5 and obs[-8] > 150:  # If heart rate measured and > 150
         return 9  # GiveAdenosine
     
-    # Check if stabilization criteria are met
+    # Check if patient is stabilized
     if (obs[3] > 0.5 and  # AirwayClear
         obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
         obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
@@ -74,4 +73,5 @@ for line in sys.stdin:
     observations = parse_observations(line)
     action = choose_action(observations, step_counter)
     print(action)
-    sys.stdout
+    sys.stdout.flush()
+    step_counter
