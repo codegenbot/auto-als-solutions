@@ -1,4 +1,4 @@
-```cpp
+```
 #include <cmath>
 #include <vector>
 
@@ -12,7 +12,7 @@ double findZero(std::vector<double> xs){
 }
 
 int main() {
-    std::vector<double> coeffs(3); // 3 coefficients
+    std::vector<double> coeffs;
     coeffs.push_back(1.0);
     coeffs.push_back(2.0);
     coeffs.push_back(-3.5);
