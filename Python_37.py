@@ -1,8 +1,10 @@
-def sort_even_odd(even_numbers, odd_numbers):
-    result = [i if i % 2 == 0 else next(j) for i, j in zip(even_numbers, iter(odd_numbers))]
-    return result
+def oddEven(even, odd):
+    return [i if i % 2 == 0 else j for i, j in zip(even, odd)]
 
-even_numbers = [1, 4, 6, 8]
-odd_numbers = [3, 5, 7]
+def sort_even():
+    even_numbers = list(map(int, input("Enter the numbers separated by space: ").split()))
+    odd_numbers = [i for i in range(1, 100) if i not in even_numbers]
+    result = oddEven(even_numbers, odd_numbers)
+    print(result)
 
-print(sort_even_odd(even_numbers, odd_numbers))
+sort_even()
