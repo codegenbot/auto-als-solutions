@@ -1,6 +1,5 @@
 #include <string>
-#include <iostream>
-
+#include <iostream> 
 using namespace std;
 
 string change_base(int x, int base) {
