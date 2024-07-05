@@ -1,12 +1,12 @@
-```
 #include <string>
 
-std::string remove_vowels(std::string text){
-    std::string result = "";
+using namespace std;
+
+string remove_vowels(string text){
+    string result = "";
     for(char c : text){
         if(toupper(c) != 'A' && toupper(c) != 'E' && toupper(c) != 'I' && toupper(c) != 'O' && toupper(c) != 'U'){
             result += c;
         }
     }
     return result;
-}
