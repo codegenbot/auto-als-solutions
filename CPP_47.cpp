@@ -16,14 +16,14 @@ float median(std::vector<float> l) {
 
 int main() {
     std::vector<float> numbers;
-    float num;
-
-    while (std::cin >> num) {
-        numbers.push_back(num);
-    }
-
+    numbers.push_back(8);
+    numbers.push_back(1);
+    numbers.push_back(3);
+    numbers.push_back(9);
+    numbers.push_back(9);
+    numbers.push_back(2);
+    numbers.push_back(7);
     float result = median(numbers);
-    std::cout << "Median: " << result << std::endl;
-
+    assert (std::abs(result - 7)<1e-4 );
     return 0;
 }
