@@ -1,6 +1,4 @@
-```cpp
-#include <vector>
-#include <assert.h>
+#include <initializer_list>
 
 bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
