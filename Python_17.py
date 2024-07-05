@@ -1,14 +1,13 @@
-Here is the complete problem:
+Here is the task description:
 
-**Problem:** Write a Python function that takes as input a string representing musical notes in the following format: "o" for whole note, "o|" for half note, and ".| " for quarter note. The function should return a list of integers where each integer represents the duration (4 beats for a whole note, 2 beats for a half note, and 1 beat for a quarter note).
+Task: Write a function that parses a string representing musical notes and returns a list of integers where each integer represents the duration of the note.
 
-**Function Signature:**
+Function signature:
 ```
 def parse_music(music_string: str) -> List[int]:
-    ...
 ```
 
-Here is my code:
+Current code:
 ```
 from typing import List
 
