@@ -3,45 +3,49 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, step_count):
-    if step_count >= 350:
-        return 48  # Finish if step limit reached
+def choose_action(obs, step_counter):
+    if step_counter >= 350:
+        return 48  # Finish if max steps reached
 
     if obs[17] > 0.5:  # RadialPulseNonPalpable
-        return 17 if step_count % 2 == 0 else 10  # Alternate between StartChestCompression and GiveAdrenaline
+        return 17 if step_counter % 2 == 0 else 10  # Alternate between StartChestCompression and GiveAdrenaline
 
     if obs[7] > 0.5:  # BreathingNone
         return 29  # UseBagValveMask
 
     if obs[24] < 0.5:  # UseMonitorPads not used
-        return 24  # UseMonitorPads
+        return 24
 
-    if obs[25] < 0.5:  # UseSatsProbe not used
-        return 25  # UseSatsProbe
-
-    if obs[26] < 0.5:  # UseAline not used
-        return 26  # UseAline
-
-    if obs[39] < 0.5 or obs[40] < 0.5 or obs[41] < 0.5:
-        return 16  # ViewMonitor
-
-    if obs[3] < 0.5:  # AirwayClear not checked
-        return 3  # ExamineAirway
-
-    if obs[4] < 0.5:  # ExamineBreathing not done
-        return 4  # ExamineBreathing
+    if obs[16] < 0.5:  # ViewMonitor not recent
+        return 16
 
     if obs[30] < 0.5:  # UseNonRebreatherMask not used
-        return 30  # UseNonRebreatherMask
+        return 30
 
     if obs[14] < 0.5:  # UseVenflonIVCatheter not used
-        return 14  # UseVenflonIVCatheter
+        return 14
 
-    if obs[15] < 0.5:  # GiveFluids not done
-        return 15  # GiveFluids
+    if obs[15] < 0.5:  # GiveFluids not given
+        return 15
+
+    if obs[3] < 0.5:  # ExamineAirway not checked
+        return 3
+    if obs[4] < 0.5:  # ExamineBreathing not checked
+        return 4
+    if obs[5] < 0.5:  # ExamineCirculation not checked
+        return 5
+    if obs[6] < 0.5:  # ExamineDisability not checked
+        return 6
+    if obs[7] < 0.5:  # ExamineExposure not checked
+        return 7
+
+    if obs[25] < 0.5:  # UseSatsProbe not used
+        return 25
+    if obs[27] < 0.5:  # UseBloodPressureCuff not used
+        return 27
 
     if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
-        return 30  # UseNonRebreatherMask
+        return 29  # UseBagValveMask
 
     if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
         return 15  # GiveFluids
@@ -57,10 +61,10 @@ def choose_action(obs, step_count):
 
     return 16  # ViewMonitor (default action to keep checking vitals)
 
-step_count = 0
+step_counter = 0
 for line in sys.stdin:
     observations = parse_observations(line)
-    action = choose_action(observations, step_count)
+    action = choose_action(observations, step_counter)
     print(action)
     sys.stdout.flush()
-    step_count += 1
+    step_counter += 1
