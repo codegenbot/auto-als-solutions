@@ -1,4 +1,5 @@
-#include <string>
+#include<string>
+using namespace std;
 
 string flip_case(string str){
     string result = "";
@@ -13,3 +14,4 @@ string flip_case(string str){
         }
     }
     return result;
+}
