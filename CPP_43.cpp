@@ -1,13 +1,12 @@
-#include <vector>
-using namespace std;
+#include <algorithm>
 
 bool pairs_sum_to_zero(vector<int> l) {
-    unordered_set<int> s;
-    for (int i : l) {
-        if (s.find(-i) != s.end()) {
+    set<int> s(l.begin(), l.end());
+    for (auto it = s.begin(); it != s.end(); ++it) {
+        int complement = -(*it);
+        if (s.find(complement) != s.end() && *it != complement) {
             return true;
         }
-        s.insert(i);
     }
     return false;
 }
