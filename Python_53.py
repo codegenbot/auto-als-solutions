@@ -1,4 +1,4 @@
-```python
+```
 def add(x: int, y: int) -> int:
     while True:
         try:
