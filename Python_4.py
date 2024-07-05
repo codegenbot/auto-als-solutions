@@ -7,4 +7,9 @@ def mean_absolute_deviation(numbers: List[float]) -> float:
 
     for num in numbers:
         if not isinstance(num, (int, float)):
-            return "Error: Non-numeric value in the list"
+            return "Error: List contains non-numeric values"
+
+    mean = sum(numbers) / len(numbers)
+    total_deviation = sum(abs(num - mean) for num in numbers)
+
+    return total_deviation / len(numbers)
