@@ -23,5 +23,5 @@ int main() {
     cin >> n;
     cout << "Enter the base: ";
     cin >> b;
-    cout << "Base " << b << " representation of " << change_base(n, b);
+    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
     return 0;
