@@ -1,14 +1,3 @@
-Here is the task description:
-
-Task: Write a function that parses a string representing musical notes and returns a list of integers where each integer represents the duration of the note.
-
-Function signature:
-```
-def parse_music(music_string: str) -> List[int]:
-```
-
-Current code:
-```
 from typing import List
 
 
