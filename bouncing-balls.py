@@ -1,8 +1,12 @@
-from decimal import Decimal
+from decimal import Decimal, getcontext
+import sys
 
-starting_height = Decimal(input())
-first_bounce_height = Decimal(input())
-num_bounces = int(input())
+getcontext().prec = 50
+
+input_data = sys.stdin.read().strip().split()
+starting_height = Decimal(input_data[0])
+first_bounce_height = Decimal(input_data[1])
+num_bounces = int(input_data[2])
 
 bounciness_index = first_bounce_height / starting_height
 total_distance = Decimal(0)
