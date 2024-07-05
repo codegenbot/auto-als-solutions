@@ -11,14 +11,14 @@ def substring_indices(text, target):
     return indices
 
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read
-
-    data = input().split()
+    # Read two integers for gcd
+    try:
+        a, b = map(int, input("Enter two integers: ").split())
+        print(gcd(a, b))
+    except ValueError:
+        print("Please enter two valid integers.")
     
-    a, b = int(data[0]), int(data[1])
-    print(gcd(a, b))
-
-    text = data[2]
-    target = data[3]
+    # Read text and target for substring indices
+    text = input("Enter the text: ").strip()
+    target = input("Enter the target: ").strip()
     print(substring_indices(text, target))
