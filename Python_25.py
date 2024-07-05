@@ -1,5 +1,5 @@
-def get_max_min_average(input_str):
-    numbers = input_str.split()
+def get_max_min_average(input_string):
+    numbers = input_string.split()
     numbers = [int(num) for num in numbers]
 
     if not numbers:
