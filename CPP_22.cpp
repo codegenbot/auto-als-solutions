@@ -1,14 +1,18 @@
-#include <optional>
+#include <any>
 #include <vector>
 #include <list>
 
-using namespace std;
+namespace std;
+    
+typedef any Any;
+typedef optional<int> OInt;
 
-vector<int> filter_integers(list<any> values) {
+vector<int> filter_integers(list<Any> values) {
     vector<int> result;
     for (const auto& value : values) {
-        if (any_cast<optional<int>>(value)) {
-            result.push_back(any_cast<int>(value));
+        OInt oint = get_if<OInt>(&value);
+        if(oint) {
+            result.push_back(get<OInt>(value));
         }
     }
     return result;
