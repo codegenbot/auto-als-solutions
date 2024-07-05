@@ -1,7 +1,7 @@
 #include <cmath>
 #include <vector>
 
-double polyZero(std::vector<double> coeffs) {
+double findZero(std::vector<double> coeffs) {
     double a = coeffs[0];
     double b = 0;
     for(int i=1; i<coeffs.size(); i+=2) {
@@ -11,8 +11,24 @@ double polyZero(std::vector<double> coeffs) {
 }
 
 int main() {
-    std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
-    double solution = polyZero(coeffs);
+    std::vector<double> coeffs;
+    int n;
+    scanf("%d", &n);
+    coeffs.resize(n+1);
+    for(int i=0; i<=n; i++) {
+        scanf("%lf", &coeffs[i]);
+    }
+    double solution = findZero(coeffs);
+
+    // Define poly function to calculate polynomial value
+    double polyValue = 0;
+    for(int i=0; i<coeffs.size(); i++) {
+        if(i % 2 == 0) {
+            polyValue += coeffs[i] * std::pow(solution, i);
+        }
+    }
+
+    printf("%.3lf\n", polyValue);
 
     return 0;
 }
