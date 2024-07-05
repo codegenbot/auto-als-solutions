@@ -1,4 +1,3 @@
-````
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -20,4 +19,3 @@ int main() {
     assert (std::abs(result - 7)<1e-4 );
     return 0;
 }
-```
