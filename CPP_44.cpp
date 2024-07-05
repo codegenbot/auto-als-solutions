@@ -4,21 +4,26 @@
 using namespace std;
 
 string change_base(int x, int base) {
-    if (x < base) {
-        return to_string(x);
-    }
     string res = "";
     while (x > 0) {
-        res = to_string(x % base) + res;
+        int rem = x % base;
+        if (rem < 10) {
+            res = to_string(rem) + res; // added parentheses for concatenation
+        } else {
+            res = char('A' + rem - 10) + res; // changed type of expression to 'char'
+        }
         x /= base;
     }
     return res;
 }
 
 int main() {
-    int x;
+    int num, base;
     cout << "Enter a number: ";
-    cin >> x;
-    assert (change_base(x, x + 1) == to_string(x));
+    cin >> num;
+    cout << "Enter the base: ";
+    cin >> base;
+    string result = change_base(num, base);
+    cout << "The number in the new base is: " << result << endl;
     return 0;
 }
