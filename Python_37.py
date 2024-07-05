@@ -1,8 +1,8 @@
 def check(func):
     result = func()
     if all(num % 2 == 0 for num in result) or all(num % 2 != 0 for num in result):
-        print("The numbers are sorted.")
+        print("The output is sorted correctly.")
     else:
-        print("The numbers are not sorted.")
+        print("The output is not sorted correctly.")
 
 check(sort_even_odd)
