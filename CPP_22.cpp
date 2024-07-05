@@ -1,15 +1,18 @@
-#include <boost/any.hpp>
+#include <any>
 #include <vector>
 #include <list>
 
-std::vector<int> filter_integers(std::list<boost::any>& values) {
+std::vector<int> filter_integers(std::list<std::any> values) {
     std::vector<int> result;
-    for (const auto& value : values) {
-        if (boost::any_cast<bool>(value)) {
-            try {
-                int val = boost::any_cast<int>(value);
-                result.push_back(val);
-            } catch (...) {}
+    for (auto& value : values) {
+        if (value.type() == typeid(bool)) {
+            bool val = boost::get<bool>(value);
+            if (val) {
+                try {
+                    int num = boost::get<int>(value);
+                    result.push_back(num);
+                } catch (...) {}
+            }
         }
     }
     return result;
