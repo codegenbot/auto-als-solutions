@@ -1,3 +1,4 @@
+```
 #include <vector>
 
 bool same(vector<float> a, vector<float> b) {
@@ -16,3 +17,4 @@ vector<float> get_positives(vector<float> l) {
             result.push_back(x);
     }
     return result;
+}
