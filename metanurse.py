@@ -5,7 +5,7 @@ def parse_observations(observations):
 
 def choose_action(obs, step):
     if step > 350:
-        return 48  # Finish (timeout)
+        return 48  # Finish if timeout
 
     if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
         return 8  # ExamineResponse
@@ -27,14 +27,9 @@ def choose_action(obs, step):
         return 6  # ExamineDisability
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
-    if obs[44] == 0:
-        return 19  # OpenBreathingDrawer
-    if obs[47] == 0:
-        return 2  # CheckRhythm
 
-    if obs[7] > 0:  # BreathingNone
+    if obs[7] > 0 and obs[46] > 0 and obs[52] == 0:
         return 29  # UseBagValveMask
-
     if obs[46] > 0 and obs[52] < 65:
         return 17  # StartChestCompression
     if obs[46] > 0 and obs[52] < 88:
