@@ -1,24 +1,16 @@
-def find_zero(xs: list):
-    if len(xs) < 2:
-        raise ValueError("xs must have at least two coefficients")
-    n = len(xs)
-    if n % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
-    x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
-        coeff for i, coeff in enumerate(xs) if i % 2 == 0
-    )
-    return round(x, 2)
+def find_zero():
+    xs = []
+    while True:
+        try:
+            inp = input(
+                "Enter coefficients (space-separated integers), or 'done' if finished: "
+            )
+            if inp.lower() == "done":
+                break
+            xs.extend(map(int, inp.split()))
+        except ValueError as e:
+            print(f"Invalid input: {e}. Try again.")
+    return find_zero(xs)
 
 
-def main():
-    num_coefficients = int(input("Enter number of coefficients: "))
-    xs = [int(i) for i in input("Enter coefficients (space separated): ").split()]
-
-    try:
-        print(find_zero(xs))
-    except ValueError as e:
-        print(e)
-
-
-if __name__ == "__main__":
-    main()
+print(find_zero())
