@@ -1,6 +1,5 @@
-```
-def get_max_min_average():
-    numbers = input("Enter some numbers (space separated): ").split()
+def get_max_min_average(input_str):
+    numbers = input_str.split()
     numbers = [int(num) for num in numbers]
 
     if not numbers:
@@ -11,5 +10,3 @@ def get_max_min_average():
     average = sum(numbers) / len(numbers)
 
     return f"Max: {max_num}, Min: {min_num}, Average: {average}"
-
-print(get_max_min_average())
