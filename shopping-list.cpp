@@ -6,21 +6,25 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
+
+    if (n <= 0) {
+        cout << "0.00" << endl;
+        return 0;
+    }
+
     vector<double> prices(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> prices[i];
-    }
-
     vector<double> discounts(n);
-    for (int i = 0; i < n; ++i) {
+
+    for (int i = 0; i < n; ++i)
+        cin >> prices[i];
+
+    for (int i = 0; i < n; ++i)
         cin >> discounts[i];
-    }
 
-    long long total = 0;
-    for (int i = 0; i < n; ++i) {
-        total += static_cast<long long>(prices[i] * 100) * (100 - static_cast<long long>(discounts[i]));
-    }
+    double total = 0.0;
+    for (int i = 0; i < n; ++i)
+        total += prices[i] * (1 - discounts[i] / 100.0);
 
-    cout << fixed << setprecision(2) << total / 10000.0 << endl;
+    cout << fixed << setprecision(2) << total << endl;
     return 0;
 }
