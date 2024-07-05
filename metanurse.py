@@ -28,51 +28,40 @@ def choose_action(obs, step_counter, last_action):
     if obs[39] > 0.5 and obs[-8] > 150:  # If heart rate measured and > 150
         return 9  # GiveAdenosine
 
+    if not all(obs[i] > 0.5 for i in [3, 46, 40, 45]):  # If any assessment not done
+        return next((i for i in [3, 4, 5, 6, 7] if obs[i] < 0.5), 16)  # Examine or ViewMonitor
+
     if (obs[3] > 0.5 and  # AirwayClear
         obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
         obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
         obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
         return 48  # Finish
 
-    return abcde_assessment(obs, last_action)
+    return 16 if last_action != 16 else 0  # ViewMonitor or DoNothing
 
 def cardiac_arrest_protocol(obs, last_action):
     if obs[24] < 0.5:  # MonitorPads not used
         return 24  # UseMonitorPads
     if obs[28] < 0.5:  # DefibPads not attached
         return 28  # AttachDefibPads
-    if last_action != 2:
+    if last_action != 2:  # If we haven't just checked rhythm
         return 2  # CheckRhythm
-    if obs[38] > 0.5 or obs[32] > 0.5:  # VF or VT
-        return 40  # DefibrillatorCharge
-    if last_action == 40:
-        return 41  # DefibrillatorCurrentUp
-    if last_action == 41:
+    if obs[38] > 0.5:  # VF rhythm
+        return 40 if last_action != 40 else 41  # DefibrillatorCharge or DefibrillatorSync
+    if last_action != 17:  # If we're not already doing chest compressions
         return 17  # StartChestCompression
-    if last_action == 17:
-        return 29  # UseBagValveMask
-    if last_action == 29:
+    if last_action != 10:  # If we haven't just given Adrenaline
         return 10  # GiveAdrenaline
-    return 23  # ResumeCPR
+    return 29  # UseBagValveMask
 
-def abcde_assessment(obs, last_action):
-    airway_checked = max(obs[:7])
-    breathing_checked = max(obs[7:16])
-    circulation_checked = max(obs[16:21])
-    disability_checked = max(obs[21:27])
-    exposure_checked = max(obs[27:33])
-
-    if airway_checked < 0.5:
-        return 3  # ExamineAirway
-    if breathing_checked < 0.5:
-        return 4  # ExamineBreathing
-    if circulation_checked < 0.5:
-        return 5  # ExamineCirculation
-    if disability_checked < 0.5:
-        return 6  # ExamineDisability
-    if exposure_checked < 0.5:
-        return 7  # ExamineExposure
-
-    return 16 if last_action != 16 else 0  # ViewMonitor or DoNothing
-
-step_counter = 
+step_counter = 0
+last_action = None
+for line in sys.stdin:
+    observations = parse_observations(line)
+    action = choose_action(observations, step_counter, last_action)
+    print(action)
+    sys.stdout.flush()
+    last_action = action
+    step_counter += 1
+    if action == 48:  # Finish
+        break
