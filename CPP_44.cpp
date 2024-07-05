@@ -1,22 +1,18 @@
+```cpp
 #include <string>
 using namespace std;
 
 string change_base(int x, int base) {
     char* res = new char[1000];  
     string s = "";
-    int i = 0;
     while (x > 0) {
         int rem = x % base;
-        if(rem < 10)
-            res[i++] = '0' + rem;
-        else if(rem <= 35)
-            res[i++] = 'A' + rem - 10;
-        else 
-            res[i++] = '-';
+        char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
+        s.push_back(c);
         x /= base;
     }
-    res[i] = '\0';
-    return string(res);
+    delete[] res; // Don't forget to deallocate the memory
+    return s;
 }
 
 int main() {
@@ -25,7 +21,5 @@ int main() {
     cin >> num;
     cout << "Enter the base: ";
     cin >> base;
-    cout << "The conversion result is: " << change_base(num, base) << endl;
-    
-    delete[] new char[1000];
+    cout << "The conversion result is: " << change_base(num, base);
 }
