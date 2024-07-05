@@ -18,14 +18,7 @@ bool issame(vector<string> a, vector<string> b){
 vector<string> filter_by_substring(vector<string> strings, string substring){
     vector<string> result;
     for(auto str : strings){
-        if(str.find(substring) != string::npos){
-            bool isSame = true;
-            for(auto otherStr : result){
-                if(!issame({str}, {otherStr})){
-                    isSame = false; break;
-                }
-            }
-            if(isSame) continue;
+        if(str.find(substring) != string::npos && issame({str}, filter_by_substring(strings, substring))){
             result.push_back(str);
         }
     }
