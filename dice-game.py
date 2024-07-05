@@ -10,6 +10,5 @@ def probability_peter_wins(n, m):
     return Decimal(count / total).quantize(Decimal('1.00000000'), rounding=ROUND_DOWN)
 
 if __name__ == "__main__":
-    n = int(input().strip())
-    m = int(input().strip())
+    n, m = map(int, input().split())
     print(probability_peter_wins(n, m))
