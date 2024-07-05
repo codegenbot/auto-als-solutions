@@ -1,11 +1,7 @@
-def sort_even_odd():
-    even_numbers = input("Enter even numbers (space separated): ")
-    odd_numbers = input("Enter odd numbers (space separated): ")
+```
+def check():
+    numbers = list(map(int, input("Enter even and odd numbers (space separated): ").split()))
+    print(sorted(numbers))
 
-    even = list(map(int, even_numbers.split()))
-    odd = list(map(int, odd_numbers.split()))
-
-    even.sort()
-    odd.sort()
-
-    return sorted(even + odd)
+# Test the function
+check()
