@@ -20,6 +20,7 @@ int main() {
         total += prices[i] * (1 - discounts[i] / 100.0);
     }
 
-    cout << total << endl;
+    cout.precision(2);
+    cout << fixed << total << endl;
     return 0;
 }
