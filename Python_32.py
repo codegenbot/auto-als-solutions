@@ -1,8 +1,10 @@
-```
 def find_zero():
     while True:
         try:
-            coeffs = [int(x) for x in input("Enter coefficients separated by spaces: ").split()]
+            coeffs = [
+                int(x)
+                for x in input("Enter coefficients separated by spaces: ").split()
+            ]
             if len(coeffs) < 2:
                 raise ValueError("xs must have at least two coefficients")
             n = len(coeffs)
