@@ -1,14 +1,16 @@
 ```
 def find_zero():
-    xs = []
     while True:
         try:
-            inp = input("Enter coefficients (space-separated integers), or 'done' if finished: ")
-            if inp.lower() == 'done':
-                break
-            xs.extend(map(int, inp.split()))
+            xs = [int(i) for i in input("Enter coefficients separated by space: ").split()]
+            if len(xs) < 2:
+                raise ValueError("xs must have at least two coefficients")
+            n = len(xs)
+            if n % 2 != 0:
+                raise ValueError("xs must have even number of coefficients")
+            x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
+                coeff for i, coeff in enumerate(xs) if i % 2 == 0
+            )
+            return round(x, 2)
         except ValueError as e:
-            print(f"Invalid input: {e}. Try again.")
-    return find_zero(xs)
-
-print(find_zero())
+            print(f"Error: {str(e)}")
