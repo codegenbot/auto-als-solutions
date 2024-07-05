@@ -22,13 +22,11 @@ void cutVector(const vector<int>& vec) {
 
     cout << cutIndex << endl;
     for (int i = 0; i < cutIndex; ++i) {
-        cout << vec[i];
-        if (i < cutIndex - 1) cout << " ";
+        cout << vec[i] << " ";
     }
-    cout << endl << n - cutIndex << endl;
+    cout << endl;
     for (int i = cutIndex; i < n; ++i) {
-        cout << vec[i];
-        if (i < n - 1) cout << " ";
+        cout << vec[i] << " ";
     }
     cout << endl;
 }
