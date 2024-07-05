@@ -1,13 +1,15 @@
+#include <string>
+#include <bits/stdc++.h>
+
+using namespace std;
+
 string change_base(int x, int base) {
+    if (x < base) {
+        return to_string(x);
+    }
     string res = "";
     while (x > 0) {
-        int rem = x % base;
-        if (rem < 10) {
-            res = to_string(rem) + res;
-        } else {
-            res = 'A' + rem - 10 + res;
-        }
+        res = to_string(x % base) + res;
         x /= base;
     }
     return res;
-}
