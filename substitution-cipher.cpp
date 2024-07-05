@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -8,16 +8,20 @@ int main() {
     string cipher1, cipher2, message;
     cin >> cipher1 >> cipher2 >> message;
 
-    map<char, char> cipherMap;
+    unordered_map<char, char> cipher_map;
     for (size_t i = 0; i < cipher1.size(); ++i) {
-        cipherMap[cipher1[i]] = cipher2[i];
+        cipher_map[cipher1[i]] = cipher2[i];
     }
 
-    string decipheredMessage;
-    for (char ch : message) {
-        decipheredMessage += cipherMap[ch];
+    string deciphered_message;
+    for (char c : message) {
+        if (cipher_map.find(c) != cipher_map.end()) {
+            deciphered_message += cipher_map[c];
+        } else {
+            deciphered_message += c;
+        }
     }
 
-    cout << decipheredMessage << endl;
+    cout << deciphered_message << endl;
     return 0;
 }
