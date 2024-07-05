@@ -11,7 +11,7 @@ string change_base(int x, int base) {
         s.push_back(c);
         x /= base;
     }
-    return s.substr(0, s.length());
+    return s;
 }
 
 int main() {
