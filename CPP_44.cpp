@@ -1,5 +1,5 @@
 #include <string>
-#include <stringstream>
+#include <sstream>
 
 string change_base(int x, int base) {
     string res = "";
@@ -8,7 +8,7 @@ string change_base(int x, int base) {
         if (rem < 10) {
             res = to_string(rem) + res;
         } else {
-            res = static_cast<char>(55 + rem - 10) + res;
+            res = char('A' + rem - 10) + res;
         }
         x /= base;
     }
