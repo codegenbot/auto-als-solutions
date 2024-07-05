@@ -1,6 +1,5 @@
 #include <string>
-#include <iostream>
-
+#include <iostream> 
 using namespace std;
 
 string change_base(int x, int base) {
@@ -23,6 +22,6 @@ int main() {
     cin >> n;
     cout << "Enter the base: ";
     cin >> b;
-    cout << "Base " << b << " representation of " << change_base(n, b);
+    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
     return 0;
 }
