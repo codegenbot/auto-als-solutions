@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,7 +18,4 @@ int main() {
     float result = median(numbers);
     assert (std::abs(result - 7)<1e-4 );
     return 0;
-}
-
-void testMain() {
 }
