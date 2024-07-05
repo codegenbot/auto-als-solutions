@@ -1,7 +1,13 @@
+```cpp
 #include <cmath>
 #include <vector>
+#include <cassert>
+#include <ostream>
+#include <iostream>
 
-double poly(std::vector<double> coeffs, double solution) {
+using namespace std;
+
+double poly(vector<double> coeffs, double solution) {
     double result = coeffs[0];
     for(int i=1; i<coeffs.size(); i++) {
         if(i%2==0)
@@ -12,7 +18,7 @@ double poly(std::vector<double> coeffs, double solution) {
     return result;
 }
 
-double findZero(std::vector<double> coeffs){
+double findZero(vector<double> coeffs){
     double a = coeffs[0];
     double b = 0;
     for(int i=1; i<coeffs.size(); i+=2) {
@@ -22,10 +28,11 @@ double findZero(std::vector<double> coeffs){
 }
 
 int main() {
-    std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
+    vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
 
     assert(abs(poly(coeffs, solution))< 1e-3);
 
+    cout << "The zero of the polynomial is: " << solution << endl;
     return 0;
 }
