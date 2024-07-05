@@ -1,5 +1,5 @@
 #include <vector>
-#include <cmath>
+#include <assert.h>
 
 bool issame(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
@@ -20,6 +20,6 @@ vector<float> get_positive(vector<float> l) {
 }
 
 int main() {
-    assert(issame(get_positive({}), {}));
+    assert(issame(get_positive({}), {}) == true);
     return 0;
 }
