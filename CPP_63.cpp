@@ -26,3 +26,4 @@ int main() {
     scanf("%d", &n);
     printf("The %dth element in the fibfib sequence is: %d\n", n, fibfib(n));
     return 0;
+}
