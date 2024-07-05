@@ -13,16 +13,15 @@ double findZero(std::vector<double> coeffs){
 int main() {
     std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
-
-    // Initialize polyValue
+    
     double polyValue = 0;
     for(int i=0; i<coeffs.size(); i++) {
         if(i % 2 == 0) {
             polyValue += coeffs[i] * std::pow(solution, i);
         }
     }
-
+    
     assert (abs(polyValue)< 1e-3);
-
+    
     return 0;
 }
