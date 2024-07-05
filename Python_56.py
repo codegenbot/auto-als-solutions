@@ -1,5 +1,4 @@
-```
-def correct_bracketing(brackets: str):
+def `correct_bracketing(brackets: str):
     stack = []
     for bracket in brackets:
         if bracket == "<":
@@ -8,4 +7,4 @@ def correct_bracketing(brackets: str):
             if len(stack) == 0:
                 return False
             stack.pop()
-    return len(stack) == 0
+    return len(stack) == 0`
