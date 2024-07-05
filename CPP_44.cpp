@@ -1,10 +1,11 @@
+```cpp
 #include <iostream>
 #include <string>
 
 using namespace std;
 
 string change_base(int x, int base) {
-    if (x < base) {
+    if (base <= 1) {
         return to_string(x);
     }
     string res = "";
