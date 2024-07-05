@@ -1,3 +1,8 @@
+```cpp
+#ifdef __cpp_initializer_lists 201103L
+#include <initializer_list>
+#endif
+
 #include <vector>
 #include <assert.h>
 
@@ -18,4 +23,5 @@ std::vector<float> get_positive(std::vector<float> l) {
     }
     return result;
 }
-assert(issame(get_positive({}), {}) == true);
+
+assert(issame(get_positive({}), std::vector<float>()) == true);
