@@ -11,12 +11,19 @@ def substring_indices(text, target):
     return indices
 
 if __name__ == "__main__":
+    import sys
+    input = sys.stdin.read
+    data = input().split('\n')
+    
     try:
-        a, b = map(int, input("Enter two integers: ").split())
+        a, b = map(int, data[0].split())
         print(gcd(a, b))
-    except ValueError:
+    except (ValueError, IndexError):
         print("Please provide exactly two integers separated by space.")
-
-    text = input("Enter the text string: ").strip()
-    target = input("Enter the target string: ").strip()
-    print(substring_indices(text, target))
+    
+    if len(data) > 2:
+        text = data[1].strip()
+        target = data[2].strip()
+        print(substring_indices(text, target))
+    else:
+        print("Please provide both text and target strings.")
