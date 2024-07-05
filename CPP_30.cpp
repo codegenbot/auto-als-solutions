@@ -1,5 +1,5 @@
 #include <vector>
-#include <cmath>
+using namespace std;
 
 bool same(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
@@ -10,7 +10,7 @@ bool same(vector<float> a, vector<float> b) {
     return true;
 }
 
-vector<float> get_positives(vector<float> l) {
+vector<float> get_positive(vector<float> l) {
     vector<float> result;
     for (float x : l) {
         if (x > 0)
@@ -19,7 +19,7 @@ vector<float> get_positives(vector<float> l) {
     return result;
 }
 
-int test() {
-    assert(same(get_positives({}), {}));
+int main() {
+    assert(same(get_positive({}), {}));
     return 0;
 }
