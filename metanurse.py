@@ -10,6 +10,9 @@ def choose_action(obs):
     disability_checked = max(obs[21:27])
     exposure_checked = max(obs[27:33])
     
+    if obs[7] > 0.5:  # BreathingNone
+        return 29  # UseBagValveMask
+    
     if airway_checked < 0.5:
         return 3  # ExamineAirway
     elif breathing_checked < 0.5:
@@ -21,6 +24,13 @@ def choose_action(obs):
     elif exposure_checked < 0.5:
         return 7  # ExamineExposure
     
+    if obs[39] < 0.5:  # MeasuredMAP not recent
+        return 27  # UseBloodPressureCuff
+    if obs[40] < 0.5:  # MeasuredSats not recent
+        return 25  # UseSatsProbe
+    if obs[41] < 0.5:  # MeasuredResps not recent
+        return 16  # ViewMonitor
+    
     if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
         return 30  # UseNonRebreatherMask
     
@@ -30,7 +40,13 @@ def choose_action(obs):
     if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
         return 29  # UseBagValveMask
     
-    return 48  # Finish
+    # Check if patient is stabilized
+    if (obs[46] > 0.5 and obs[-1] >= 88 and
+        obs[45] > 0.5 and obs[-2] >= 60 and
+        obs[40] > 0.5 and obs[-7] >= 8):
+        return 48  # Finish
+    
+    return 16  # ViewMonitor (default action to keep checking vitals)
 
 for line in sys.stdin:
     observations = parse_observations(line)
