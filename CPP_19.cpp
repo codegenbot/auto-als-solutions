@@ -1,11 +1,11 @@
-```
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <iostream>
 
-string sort_numbers(string numbers) {
-    vector<string> numVec;
-    string temp;
+std::string sort_numbers(std::string numbers) {
+    std::vector<std::string> numVec;
+    std::string temp;
 
     for (int i = 0; i < numbers.length(); i++) {
         if (numbers[i] == ' ') {
@@ -17,9 +17,9 @@ string sort_numbers(string numbers) {
     }
     numVec.push_back(temp);
 
-    sort(numVec.begin(), numVec.end());
+    std::sort(numVec.begin(), numVec.end());
 
-    string result = "";
+    std::string result = "";
     for (const auto& str : numVec) {
         result += str + " ";
     }
