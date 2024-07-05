@@ -1,24 +1,21 @@
-#include <iostream>
-#include <string>
-
+```cpp
+#include <bits/stdc++.h>
 using namespace std;
 
 string change_base(int x, int base) {
-    if (x < base) {
-        return to_string(x);
-    }
     string res = "";
     while (x > 0) {
-        res = to_string(x % base) + res;
+        int rem = x % base;
+        if (rem < 10) {
+            res = to_string(rem) + res;
+        } else {
+            res = (rem < 10) ? to_string(rem) : string(1,"A") + res;
+        }
         x /= base;
     }
     return res;
 }
 
 int main() {
-    int x;
-    cout << "Enter a number: ";
-    cin >> x;
-    assert (change_base(x, x + 1) == to_string(x));
-    return 0;
+    // your test cases here
 }
