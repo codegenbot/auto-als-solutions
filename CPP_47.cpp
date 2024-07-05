@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -15,16 +16,14 @@ float median(std::vector<float> l) {
 
 int main() {
     std::vector<float> numbers;
-    int n;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-    for(int i=0; i<n; i++) {
-        float num;
-        std::cout << "Enter element #"<<i+1<<": ";
-        std::cin >> num;
+    float num;
+
+    while (std::cin >> num) {
         numbers.push_back(num);
     }
+
     float result = median(numbers);
-    std::cout << "Median: "<<result<<std::endl;
+    std::cout << "Median: " << result << std::endl;
+
     return 0;
 }
