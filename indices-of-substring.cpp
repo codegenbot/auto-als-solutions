@@ -20,7 +20,6 @@ vector<int> indices_of_substring(const string& text, const string& target) {
 int main() {
     string text, target;
     getline(cin, text);
-    cin.ignore(); // Clear the buffer
     cin >> target;
 
     vector<int> result = indices_of_substring(text, target);
