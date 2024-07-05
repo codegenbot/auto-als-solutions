@@ -1,7 +1,7 @@
 #include <vector>
 #include <cmath>
 
-bool same(vector<float> a, vector<float> b) {
+bool issame(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
         return false;
     for (int i = 0; i<a.size(); i++)
@@ -10,17 +10,16 @@ bool same(vector<float> a, vector<float> b) {
     return true;
 }
 
-vector<float> get_positives(vector<float> l) {
+vector<float> get_positive(vector<float> l) {
     vector<float> result;
     for (float x : l) {
         if (x > 0)
             result.push_back(x);
     }
     return result;
-
 }
 
 int main() {
-    assert(same(get_positives({}), {}));
+    assert(issame(get_positive({}), {}));
     return 0;
 }
