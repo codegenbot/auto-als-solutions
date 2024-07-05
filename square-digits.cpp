@@ -14,6 +14,7 @@ string squareDigits(int num) {
 
 int main() {
     int num;
+    cout << "Enter a positive integer: ";
     cin >> num;
     if (num <= 0) {
         cout << "Please enter a positive integer." << endl;
