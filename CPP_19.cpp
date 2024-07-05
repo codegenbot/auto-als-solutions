@@ -1,28 +1,43 @@
-#include <vector>
+```cpp
 #include <algorithm>
-#include <string>
-#include <iostream>
+using namespace std;
 
-std::string sort_numbers(std::string numbers) {
-    std::vector<std::string> numVec;
-    std::string temp;
+string sortNumbers(string inputString) {
+    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
+                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
+                                {"eight", 8}, {"nine", 9}};
 
-    for (int i = 0; i < numbers.length(); i++) {
-        if (numbers[i] == ' ') {
-            numVec.push_back(temp);
-            temp = "";
-        } else {
-            temp += numbers[i];
+    vector<string> numVector;
+    string temp;
+
+    for (int i = 0; i < inputString.length(); i++) {
+        if (inputString[i] == ' ') {
+            continue;
         }
+        temp = "";
+        while (i < inputString.length() && inputString[i] != ' ') {
+            temp += inputString[i];
+            i++;
+        }
+        numVector.push_back(temp);
     }
-    numVec.push_back(temp);
 
-    std::sort(numVec.begin(), numVec.end());
+    sort(numVector.begin(), numVector.end(), [&numMap](string a, string b) {
+        return to_string(numMap[a]) < to_string(numMap[b]);
+    });
 
-    std::string result = "";
-    for (const auto& str : numVec) {
-        result += str + " ";
+    string result = "";
+    for (int i = 0; i < numVector.size(); i++) {
+        if (i > 0) {
+            result += " ";
+        }
+        result += numVector[i];
     }
 
     return result;
+}
+
+int main() {
+    assert(sortNumbers("six five four three two one zero") == "zero one two three four five six");
+    return 0;
 }
