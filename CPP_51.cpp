@@ -11,11 +11,10 @@ std::string remove_vowels(std::string text){
     return result;
 }
 
-int main() {
-    string text;
-    cout << "Enter a string: ";
-    cin >> text;
-    string output = remove_vowels(text);
-    cout << "String after removing vowels: " << output << endl;
+int main(){
+    std::string text;
+    std::cout << "Enter the string: ";
+    std::cin >> text;
+    std::cout << "The string after removing vowels is: " << remove_vowels(text) << std::endl;
     return 0;
 }
