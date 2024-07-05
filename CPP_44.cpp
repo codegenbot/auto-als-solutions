@@ -1,22 +1,28 @@
 #include <string>
+#include <iostream>
+
 using namespace std;
 
 string change_base(int x, int base) {
     string res = "";
     while (x > 0) {
         int rem = x % base;
-        char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
-        res.push_back(c);
+        if (rem < 10) {
+            res = to_string(rem) + res;
+        } else {
+            res = (char)(65 + rem - 10) + res;
+        }
         x /= base;
     }
     return res;
 }
 
 int main() {
-    int num, base;
+    int n, b;
     cout << "Enter a number: ";
-    cin >> num;
+    cin >> n;
     cout << "Enter the base: ";
-    cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
+    cin >> b;
+    cout << "Base " << b << " representation of " << change_base(n, b);
+    return 0;
 }
