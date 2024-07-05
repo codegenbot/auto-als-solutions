@@ -1,5 +1,5 @@
 #include <string>
-#include <sstream>
+using namespace std;
 
 string change_base(int x, int base) {
     string res = "";
@@ -8,9 +8,19 @@ string change_base(int x, int base) {
         if (rem < 10) {
             res = to_string(rem) + res;
         } else {
-            res = char('A' + rem - 10) + res;
+            res = (char)(65 + rem - 10) + res;
         }
         x /= base;
     }
     return res;
+}
+
+int main() {
+    int n, b;
+    cout << "Enter a number: ";
+    cin >> n;
+    cout << "Enter the base: ";
+    cin >> b;
+    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
+    return 0;
 }
