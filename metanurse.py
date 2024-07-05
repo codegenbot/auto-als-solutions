@@ -22,7 +22,7 @@ def choose_action(obs):
         return 25  # UseSatsProbe
     if obs[45] == 0:
         return 27  # UseBloodPressureCuff
-    if obs[7] > 0:  # BreathingNone
+    if obs[7] > 0:  # BreathingNone detected
         return 29  # UseBagValveMask
     if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
@@ -36,7 +36,7 @@ def choose_action(obs):
         return 16  # ViewMonitor
     if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[53] >= 8 and obs[45] > 0 and obs[51] >= 60:
         return 48  # Finish
-    return 16  # ViewMonitor (regular check)
+    return 16  # ViewMonitor (regularly check vital signs)
 
 while True:
     observations = input()
