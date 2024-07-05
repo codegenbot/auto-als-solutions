@@ -19,12 +19,12 @@ def choose_action(obs, last_action):
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
     if obs[44] == 0:
-        return 19  # OpenBreathingDrawer
-    if obs[44] > 0 and obs[46] == 0:
+        if obs[19] == 0:
+            return 19  # OpenBreathingDrawer
         return 25  # UseSatsProbe
     if obs[45] == 0:
-        return 20  # OpenCirculationDrawer
-    if obs[45] > 0 and obs[47] == 0:
+        if obs[20] == 0:
+            return 20  # OpenCirculationDrawer
         return 27  # UseBloodPressureCuff
     if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
@@ -34,25 +34,23 @@ def choose_action(obs, last_action):
         if last_action != 17:
             return 17  # StartChestCompression
         else:
-            return 22  # BagDuringCPR
+            return 23  # ResumeCPR
     if obs[28] == 0:
         return 2  # CheckRhythm
     if obs[28] > 0 and any(obs[29:39]):
         if obs[32] > 0:  # HeartRhythmVT
             return 11  # GiveAmiodarone
         if obs[38] > 0:  # HeartRhythmVF
-            if obs[28] == 0:
-                return 28  # AttachDefibPads
-            elif last_action != 40:
+            if last_action != 40:
                 return 40  # DefibrillatorCharge
             else:
-                return 43  # DefibrillatorPace
+                return 41  # DefibrillatorCurrentUp
     if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[53] >= 8 and obs[45] > 0 and obs[51] >= 60:
         return 48  # Finish
     return 16  # ViewMonitor (regularly check vital signs)
 
 step_count = 0
-last_action = None
+last_action = -1
 while True:
     try:
         observations = input()
@@ -66,3 +64,6 @@ while True:
         step_count += 1
     except EOFError:
         break
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
