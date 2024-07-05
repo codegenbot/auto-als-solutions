@@ -2,14 +2,12 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
-
 int main() {
     int n;
-    cin >> n;
-    vector<float> vec1(n), vec2(n);
-    for (int i = 0; i < n; ++i) cin >> vec1[i];
-    for (int i = 0; i < n; ++i) cin >> vec2[i];
+    std::cin >> n;
+    std::vector<float> vec1(n), vec2(n);
+    for (int i = 0; i < n; ++i) std::cin >> vec1[i];
+    for (int i = 0; i < n; ++i) std::cin >> vec2[i];
     
     double sum = 0.0;
     for (int i = 0; i < n; ++i) {
@@ -17,8 +15,8 @@ int main() {
         sum += diff * diff;
     }
     
-    double distance = sqrt(sum);
-    cout << distance << endl;
+    double distance = std::sqrt(sum);
+    std::cout << distance << std::endl;
     
     return 0;
 }
