@@ -1,3 +1,4 @@
+```cpp
 int main() {
     float numbers[] = {8, 1, 3, 9, 9, 2, 7};
     int n = sizeof(numbers) / sizeof(*numbers);
