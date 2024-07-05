@@ -1,15 +1,12 @@
 #include <string>
-#include <sstream>
 
-string change_base(int x, int base) {
-    string res = "";
+std::string change_base(int x, int base) {
+    if (x < base) {
+        return std::to_string(x);
+    }
+    std::string res = "";
     while (x > 0) {
-        int rem = x % base;
-        if (rem < 10) {
-            res = to_string(rem) + res;
-        } else {
-            res = char('A' + rem - 10) + res;
-        }
+        res = std::to_string(x % base) + res;
         x /= base;
     }
     return res;
