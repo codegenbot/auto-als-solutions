@@ -13,73 +13,71 @@ class ResuscitationState:
     REASSESS = 6
     CPR = 7
 
-def choose_action(obs, state):
+def is_stable(obs):
+    return (obs[46] > 0.5 and obs[-1] >= 88 and 
+            obs[45] > 0.5 and obs[-2] >= 60 and 
+            obs[40] > 0.5 and obs[-7] >= 8)
+
+def choose_action(obs, state, step_count):
+    if step_count > 350:
+        return 48, state, step_count + 1
+
     if state == ResuscitationState.INITIAL:
-        return 1, ResuscitationState.AIRWAY
+        return 1, ResuscitationState.AIRWAY, step_count + 1
 
     if state == ResuscitationState.AIRWAY:
         if obs[3] < 0.5:
-            return 3, state
+            return 3, state, step_count + 1
         if obs[7] > 0.5:
-            return 29, state
-        return 18, ResuscitationState.BREATHING
+            return 29, state, step_count + 1
+        if is_stable(obs):
+            return 16, ResuscitationState.REASSESS, step_count + 1
+        return 18, ResuscitationState.BREATHING, step_count + 1
 
     if state == ResuscitationState.BREATHING:
         if obs[7] > 0.5:
-            return 1, ResuscitationState.CPR
+            return 1, ResuscitationState.CPR, step_count + 1
         if obs[11] < 0.5:
-            return 4, state
+            return 4, state, step_count + 1
         if obs[40] < 0.5:
-            return 25, state
-        if obs[39] < 0.5:
-            return 27, state
+            return 25, state, step_count + 1
         if obs[46] > 0.5 and obs[-1] < 88:
-            return 30, state
-        return 19, ResuscitationState.CIRCULATION
+            return 30, state, step_count + 1
+        if is_stable(obs):
+            return 16, ResuscitationState.REASSESS, step_count + 1
+        return 19, ResuscitationState.CIRCULATION, step_count + 1
 
     if state == ResuscitationState.CIRCULATION:
         if obs[17] < 0.5:
-            return 5, state
+            return 5, state, step_count + 1
         if obs[39] < 0.5:
-            return 38, state
+            return 27, state, step_count + 1
         if obs[45] > 0.5 and obs[-2] < 60:
-            return 15, state
-        return 20, ResuscitationState.DISABILITY
+            return 15, state, step_count + 1
+        if is_stable(obs):
+            return 16, ResuscitationState.REASSESS, step_count + 1
+        return 20, ResuscitationState.DISABILITY, step_count + 1
 
     if state == ResuscitationState.DISABILITY:
         if obs[21] < 0.5:
-            return 6, state
-        return 21, ResuscitationState.EXPOSURE
+            return 6, state, step_count + 1
+        if is_stable(obs):
+            return 16, ResuscitationState.REASSESS, step_count + 1
+        return 7, ResuscitationState.EXPOSURE, step_count + 1
 
     if state == ResuscitationState.EXPOSURE:
         if obs[27] < 0.5:
-            return 7, state
-        return 16, ResuscitationState.REASSESS
+            return 7, state, step_count + 1
+        if is_stable(obs):
+            return 16, ResuscitationState.REASSESS, step_count + 1
+        return 16, ResuscitationState.REASSESS, step_count + 1
 
     if state == ResuscitationState.REASSESS:
-        if obs[46] > 0.5 and obs[-1] >= 88 and obs[45] > 0.5 and obs[-2] >= 60 and obs[40] > 0.5 and obs[-7] >= 8:
-            return 48, state
-        return 3, ResuscitationState.AIRWAY
+        if is_stable(obs):
+            return 48, state, step_count + 1
+        return 3, ResuscitationState.AIRWAY, step_count + 1
 
     if state == ResuscitationState.CPR:
-        if obs[17] > 0.5:
-            return 3, ResuscitationState.AIRWAY
-        if obs[28] < 0.5:
-            return 28, state
-        if obs[39] < 0.5:
-            return 39, state
-        return 17, state
-
-    return 0, state
-
-state = ResuscitationState.INITIAL
-
-for line in sys.stdin:
-    try:
-        observations = parse_observations(line)
-        action, state = choose_action(observations, state)
-        print(action)
-        sys.stdout.flush()
-    except Exception:
-        print(0)
-        sys.stdout.flush()
+        if obs[7] < 0.5 and obs[17] > 0.5:
+            return 3, ResuscitationState.AIRWAY, step_count + 1
+        if obs[28] < 0
