@@ -1,11 +1,9 @@
 ```
-fibonacci_num = int(input("Enter a number: "))
-
 def prime_fib(n: int):
     a, b = 0, 1
     count = 0
     while True:
-        if is_prime(b):
+        if is_prime(b) and count < n:
             if count == n - 1:
                 return b
             count += 1
@@ -18,5 +16,3 @@ def is_prime(num: int):
         if num % i == 0:
             return False
     return True
-
-print(prime_fib(fibonacci_num))
