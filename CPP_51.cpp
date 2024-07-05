@@ -11,7 +11,10 @@ std::string remove_vowels(std::string text){
     return result;
 }
 
-int main() {
-    assert(remove_vowels("ybcd") == "ybcd");
+int userMain(){
+    std::string text;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, text);
+    std::cout << "String with vowels removed: " << remove_vowels(text) << std::endl;
     return 0;
 }
