@@ -3,55 +3,42 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, state):
-    state['step'] += 1
-    
-    if state['step'] > 300:
-        return 48  # Finish if too many steps
+def choose_action(obs, step_count):
+    if step_count >= 350:
+        return 48  # Finish if step limit reached
 
     if obs[17] > 0.5:  # RadialPulseNonPalpable
-        state['cpr_needed'] = True
-        return 17  # StartChestCompression
+        return 17 if step_count % 2 == 0 else 10  # Alternate between StartChestCompression and GiveAdrenaline
 
-    if state['cpr_needed']:
-        if state['cpr_cycle'] < 30:
-            state['cpr_cycle'] += 1
-            return 17  # Continue chest compressions
-        else:
-            state['cpr_cycle'] = 0
-            return 29  # BagDuringCPR
+    if obs[7] > 0.5:  # BreathingNone
+        return 29  # UseBagValveMask
 
-    if not state['monitor_on']:
-        if obs[24] < 0.5:
-            return 24  # UseMonitorPads
-        elif obs[25] < 0.5:
-            return 25  # UseSatsProbe
-        elif obs[26] < 0.5:
-            return 26  # UseAline
-        elif obs[27] < 0.5:
-            return 27  # UseBloodPressureCuff
-        else:
-            state['monitor_on'] = True
-            return 16  # ViewMonitor
+    if obs[24] < 0.5:  # UseMonitorPads not used
+        return 24  # UseMonitorPads
 
-    if not state['abcde_complete']:
-        if not state['airway']:
-            state['airway'] = True
-            return 3  # ExamineAirway
-        elif not state['breathing']:
-            state['breathing'] = True
-            return 4  # ExamineBreathing
-        elif not state['circulation']:
-            state['circulation'] = True
-            return 5  # ExamineCirculation
-        elif not state['disability']:
-            state['disability'] = True
-            return 6  # ExamineDisability
-        elif not state['exposure']:
-            state['exposure'] = True
-            return 7  # ExamineExposure
-        else:
-            state['abcde_complete'] = True
+    if obs[25] < 0.5:  # UseSatsProbe not used
+        return 25  # UseSatsProbe
+
+    if obs[26] < 0.5:  # UseAline not used
+        return 26  # UseAline
+
+    if obs[39] < 0.5 or obs[40] < 0.5 or obs[41] < 0.5:
+        return 16  # ViewMonitor
+
+    if obs[3] < 0.5:  # AirwayClear not checked
+        return 3  # ExamineAirway
+
+    if obs[4] < 0.5:  # ExamineBreathing not done
+        return 4  # ExamineBreathing
+
+    if obs[30] < 0.5:  # UseNonRebreatherMask not used
+        return 30  # UseNonRebreatherMask
+
+    if obs[14] < 0.5:  # UseVenflonIVCatheter not used
+        return 14  # UseVenflonIVCatheter
+
+    if obs[15] < 0.5:  # GiveFluids not done
+        return 15  # GiveFluids
 
     if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
         return 30  # UseNonRebreatherMask
@@ -62,32 +49,18 @@ def choose_action(obs, state):
     if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
         return 29  # UseBagValveMask
 
-    if obs[38] > 0.5 and obs[-8] > 150 and obs[-1] >= 88 and obs[-2] >= 60 and obs[-7] >= 8:
-        return 9  # GiveAdenosine only if other vitals are stable
-
     if (obs[3] > 0.5 and  # AirwayClear
         obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
         obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
         obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-        return 48  # Finish
+        return 48  # Finish if stabilized
 
     return 16  # ViewMonitor (default action to keep checking vitals)
 
-state = {
-    'step': 0,
-    'cpr_needed': False,
-    'cpr_cycle': 0,
-    'monitor_on': False,
-    'abcde_complete': False,
-    'airway': False,
-    'breathing': False,
-    'circulation': False,
-    'disability': False,
-    'exposure': False
-}
-
+step_count = 0
 for line in sys.stdin:
     observations = parse_observations(line)
-    action = choose_action(observations, state)
+    action = choose_action(observations, step_count)
     print(action)
     sys.stdout.flush()
+    step_count += 1
