@@ -1,18 +1,15 @@
-#include <vector>
-using namespace std;
-
-double find_zero(vector<double> coeffs){
-    double a = coeffs[0];
-    double b = 0;
-    for(int i=1; i<coeffs.size(); i+=2) {
-        b += coeffs[i];
+```cpp
+double find_zero(vector<double> xs){
+    double root = 1;
+    for(int i=1; i<xs.size();i+=2) {
+        root = -xs[i]/(i*root);
     }
-    return -b / (2*a);
+    return round(root, 10);
 }
 
 int main() {
-    vector<double> coeffs; 
-    double solution = find_zero(coeffs); 
-    assert(abs(poly(coeffs, solution)) < 1e-3);
+    vector<double> xs = {...}; 
+    double solution = find_zero(xs);    
+    assert (abs(xs) < 1e-3);   
     return 0;
 }
