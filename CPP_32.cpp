@@ -2,14 +2,12 @@
 #include <vector>
 
 double poly(std::vector<double> coeffs, double solution) {
-    double result = coeffs[0];
-    for(int i=1; i<coeffs.size(); i++) {
-        if(i%2==0)
-            result += coeffs[i] * pow(solution, (i/2));
-        else
-            result += coeffs[i] * pow(solution, ((i-1)/2));
+    double value = 0;
+    for(int i=0; i<coeffs.size(); i++) {
+        int power = (int)pow(1.0, i);
+        value += coeffs[i] * pow(solution, i);
     }
-    return result;
+    return value;
 }
 
 double findZero(std::vector<double> coeffs){
@@ -25,7 +23,7 @@ int main() {
     std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
 
-    assert(abs(poly(coeffs, solution))< 1e-3);
+    assert (abs(poly(coeffs, solution))< 1e-3);
 
     return 0;
 }
