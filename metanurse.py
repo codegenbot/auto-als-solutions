@@ -4,36 +4,33 @@ def parse_observations(observations):
     return list(map(float, observations.split()))
 
 def choose_action(obs):
-    airway_checked = max(obs[:7])
-    breathing_checked = max(obs[7:16])
-    circulation_checked = max(obs[16:21])
-    disability_checked = max(obs[21:27])
-    exposure_checked = max(obs[27:33])
-    
-    if airway_checked < 0.5:
+    if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
+        return 8  # ExamineResponse
+    if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
         return 3  # ExamineAirway
-    elif breathing_checked < 0.5:
+    if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
         return 4  # ExamineBreathing
-    elif circulation_checked < 0.5:
+    if obs[16] == 0 and obs[17] == 0:
         return 5  # ExamineCirculation
-    elif disability_checked < 0.5:
+    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
         return 6  # ExamineDisability
-    elif exposure_checked < 0.5:
+    if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
-    
-    if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
+    if obs[44] == 0:
+        return 25  # UseSatsProbe
+    if obs[45] == 0:
+        return 27  # UseBloodPressureCuff
+    if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
-    
-    if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
+    if obs[45] > 0 and obs[51] < 60:
         return 15  # GiveFluids
-    
-    if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
-        return 29  # UseBagValveMask
-    
     return 48  # Finish
 
-for line in sys.stdin:
-    observations = parse_observations(line)
-    action = choose_action(observations)
+while True:
+    observations = input()
+    obs = parse_observations(observations)
+    action = choose_action(obs)
     print(action)
     sys.stdout.flush()
+    if action == 48:
+        break
