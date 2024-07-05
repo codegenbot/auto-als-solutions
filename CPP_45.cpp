@@ -1,5 +1,8 @@
+```c++
+#include <cassert>
+
 int triangle_area(int a, int h) {
-    return (a * h) / 2.0f;
+    return (a * h) / 2;
 }
 
 int main() {
