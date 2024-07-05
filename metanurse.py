@@ -3,75 +3,65 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, step_counter):
-    if step_counter >= 350:
-        return 48  # Finish if 350 steps reached
+class ResuscitationState:
+    INITIAL = 0
+    AIRWAY = 1
+    BREATHING = 2
+    CIRCULATION = 3
+    DISABILITY = 4
+    EXPOSURE = 5
+    REASSESS = 6
 
-    airway_checked = max(obs[:7])
-    breathing_checked = max(obs[7:16])
-    circulation_checked = max(obs[16:21])
-    disability_checked = max(obs[21:27])
-    exposure_checked = max(obs[27:33])
-    
-    # Check for cardiac arrest conditions
-    if (obs[46] > 0.5 and obs[-1] < 65) or (obs[45] > 0.5 and obs[-2] < 20):
-        return 17  # StartChestCompression
-    
-    if obs[7] > 0.5:  # BreathingNone
-        return 29  # UseBagValveMask
-    
-    # ABCDE assessment
-    if airway_checked < 0.5:
-        return 3  # ExamineAirway
-    elif breathing_checked < 0.5:
-        return 4  # ExamineBreathing
-    elif circulation_checked < 0.5:
-        return 5  # ExamineCirculation
-    elif disability_checked < 0.5:
-        return 6  # ExamineDisability
-    elif exposure_checked < 0.5:
-        return 7  # ExamineExposure
-    
-    # Use equipment
-    if obs[25] < 0.5:  # UseSatsProbe not used
-        return 19  # OpenBreathingDrawer
-    elif obs[25] > 0.5 and obs[46] < 0.5:  # SatsProbe used but not measured
-        return 25  # UseSatsProbe
-    
-    if obs[27] < 0.5:  # UseBloodPressureCuff not used
-        return 20  # OpenCirculationDrawer
-    elif obs[27] > 0.5 and obs[45] < 0.5:  # BloodPressureCuff used but not measured
-        return 27  # UseBloodPressureCuff
-    
-    if obs[39] < 0.5 or obs[40] < 0.5 or obs[41] < 0.5 or obs[45] < 0.5 or obs[46] < 0.5:
-        return 16  # ViewMonitor
-    
-    # Interventions based on vital signs
-    if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
-        return 30  # UseNonRebreatherMask
-    
-    if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
-        return 15  # GiveFluids
-    
-    if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
-        return 29  # UseBagValveMask
-    
-    if obs[39] > 0.5 and obs[-8] > 150:  # If heart rate measured and > 150
-        return 9  # GiveAdenosine
-    
-    # Check if patient is stabilized
-    if (obs[3] > 0.5 and  # AirwayClear
-        obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
-        obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
-        obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-        return 48  # Finish
-    
-    return 16  # ViewMonitor (default action to keep checking vitals)
+def choose_action(obs, state):
+    if state == ResuscitationState.INITIAL:
+        return 25, ResuscitationState.AIRWAY  # Attach sats probe first
 
-step_counter = 0
+    if state == ResuscitationState.AIRWAY:
+        if obs[3] < 0.5:
+            return 3, state  # Examine airway
+        if obs[7] > 0.5:
+            return 35, state  # Perform airway maneuvers
+        return 29, ResuscitationState.BREATHING  # Use bag valve mask
+
+    if state == ResuscitationState.BREATHING:
+        if obs[40] < 0.5:
+            return 4, state  # Examine breathing
+        if obs[46] > 0.5 and obs[-1] < 88:
+            return 30, state  # Use non-rebreather mask
+        return 27, ResuscitationState.CIRCULATION  # Use blood pressure cuff
+
+    if state == ResuscitationState.CIRCULATION:
+        if obs[39] < 0.5:
+            return 38, state  # Take blood pressure
+        if obs[45] > 0.5 and obs[-2] < 60:
+            return 15, state  # Give fluids
+        return 6, ResuscitationState.DISABILITY  # Examine disability
+
+    if state == ResuscitationState.DISABILITY:
+        if obs[21] < 0.5:
+            return 6, state  # Examine disability
+        return 7, ResuscitationState.EXPOSURE  # Examine exposure
+
+    if state == ResuscitationState.EXPOSURE:
+        if obs[27] < 0.5:
+            return 7, state  # Examine exposure
+        return 16, ResuscitationState.REASSESS  # View monitor
+
+    if state == ResuscitationState.REASSESS:
+        if obs[46] > 0.5 and obs[-1] >= 88 and obs[45] > 0.5 and obs[-2] >= 60 and obs[40] > 0.5 and obs[-7] >= 8:
+            return 48, state  # Finish if stabilized
+        return 3, ResuscitationState.AIRWAY  # Start ABCDE assessment again
+
+    return 0, state  # Default action
+
+state = ResuscitationState.INITIAL
+
 for line in sys.stdin:
-    observations = parse_observations(line)
-    action = choose_action(observations, step_counter)
-    print(action)
-    sys.stdout.flush()
-    step_counter
+    try:
+        observations = parse_observations(line)
+        action, state = choose_action(observations, state)
+        print(action)
+        sys.stdout.flush()
+    except Exception:
+        print(0)  # Default to DoNothing if unexpected error occurs
+        sys.stdout.flush()
