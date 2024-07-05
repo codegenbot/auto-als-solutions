@@ -14,10 +14,11 @@ string squareDigits(int num) {
 
 int main() {
     int num;
-    if (cin >> num && num > 0) {
-        cout << squareDigits(num) << endl;
+    cin >> num;
+    if (num <= 0) {
+        cout << "Please enter a positive integer." << endl;
     } else {
-        cout << "Invalid input" << endl;
+        cout << squareDigits(num) << endl;
     }
     return 0;
 }
