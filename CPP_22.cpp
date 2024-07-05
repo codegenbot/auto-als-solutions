@@ -2,12 +2,13 @@
 #include <vector>
 #include <list>
 
-std::vector<int> filter_integers(std::list<std::any> values) {
-    std::vector<int> result;
+using namespace std;
+
+vector<int> filter_integers(list<any> values) {
+    vector<int> result;
     for (const auto& value : values) {
-        if(value.type() == typeid(int)) {
-            int val = std::any_cast<int>(value);
-            result.push_back(val);
+        if (any_cast<optional<int>>(value)) {
+            result.push_back(any_cast<int>(value));
         }
     }
     return result;
