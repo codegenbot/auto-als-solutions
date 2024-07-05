@@ -1,2 +1,5 @@
-def oddEven(even, odd):
-    return [i if i % 2 == 0 else j for i, j in zip(even, odd)]
+```
+def sort_even_odd(even, odd):
+    even.sort()
+    odd.sort()
+    return sorted(even + odd)
