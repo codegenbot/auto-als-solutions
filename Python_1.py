@@ -14,8 +14,11 @@ def separate_paren_groups(paren_string: str) -> List[str]:
         elif char == ')':
             if stack and stack[-1] == '(':
                 stack.pop()
-                current_group += char
-                groups.append(current_group)
+                if not stack:  # Check if stack is empty
+                    groups.append(current_group)
+                    current_group = ''
+            else:
+                groups.append('('+current_group+')')  # Unmatched closing parenthesis, treat as new group
                 current_group = ''
 
-    return groups
+    return [g for g in groups if g]
