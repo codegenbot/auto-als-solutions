@@ -11,10 +11,7 @@ double findZero(std::vector<double> xs){
 }
 
 int main() {
-    std::vector<double> coeffs(1, 0.0); // Initialize with a default value of 0.0
-    coeffs[0] = 1.0;
-    coeffs[1] = 2.0;
-    coeffs[2] = -3.5;
+    std::vector<double> coeffs = {1.0, 2.0, -3.5}; 
     double solution = findZero(coeffs);
     return 0;
 }
