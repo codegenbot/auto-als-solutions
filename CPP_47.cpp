@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -23,7 +24,7 @@ int main() {
         std::cin >> input;
         if (input == -1) break;
         numbers.push_back(input);
-    }
+   }
     
     float result = median(numbers);
     assert(std::abs(result - 7.0f) < 1e-4); 
