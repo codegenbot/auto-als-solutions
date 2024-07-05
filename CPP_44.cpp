@@ -1,5 +1,6 @@
-```cpp
 #include <string>
+#include <iostream>
+
 using namespace std;
 
 string change_base(int x, int base) {
@@ -7,9 +8,9 @@ string change_base(int x, int base) {
     while (x > 0) {
         int rem = x % base;
         if (rem < 10) {
-            res += to_string(rem);
+            res = to_string(rem) + res;
         } else {
-            res += (rem - 10 + 55);
+            res = (char)(65 + rem - 10) + res;
         }
         x /= base;
     }
@@ -17,10 +18,11 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int num, base;
+    int n, b;
     cout << "Enter a number: ";
-    cin >> num;
+    cin >> n;
     cout << "Enter the base: ";
-    cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
+    cin >> b;
+    cout << "Base " << b << " representation of " << change_base(n, b);
+    return 0;
 }
