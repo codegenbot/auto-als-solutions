@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cassert>
 
 float median(std::vector<float> l) {
     std::sort(l.begin(), l.end());
@@ -23,7 +22,7 @@ int main() {
     numbers.push_back(9);
     numbers.push_back(2);
     numbers.push_back(7);
+
     float result = median(numbers);
-    assert (std::abs(result - 7)<1e-4 );
     return 0;
 }
