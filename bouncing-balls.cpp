@@ -16,7 +16,9 @@ int main() {
         currentHeight *= bouncinessIndex;
     }
     
-    totalDistance += currentHeight;
+    if (numberOfBounces > 0) {
+        totalDistance += currentHeight;
+    }
 
     std::cout << std::fixed << std::setprecision(15) << totalDistance << std::endl;
     return 0;
