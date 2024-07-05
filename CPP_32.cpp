@@ -12,7 +12,7 @@ double findZero(std::vector<double> xs){
 }
 
 int main() {
-    std::vector<double> coeffs({1.0, 2.0, -3.5});
+    std::vector<double> coeffs({1.0, 2.0, -3.5}); 
     double solution = findZero(coeffs);
     return 0;
 }
