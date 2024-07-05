@@ -75,8 +75,8 @@ def choose_action(obs, state):
 state = ResuscitationState.INITIAL
 
 for line in sys.stdin:
-    observations = parse_observations(line)
     try:
+        observations = parse_observations(line)
         action, state = choose_action(observations, state)
         print(action)
         sys.stdout.flush()
