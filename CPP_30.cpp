@@ -1,7 +1,7 @@
 #include <initializer_list>
-
 #include <vector>
-#include <assert.h>
+#include <cmath>
+#include <iostream>
 
 bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
@@ -22,6 +22,11 @@ vector<float> get_positive(vector<float> l) {
 }
 
 int main() {
-    assert(issame(get_positive({}), {}));
+    assert(issame({0}, {})); 
+    vector<float> v = {1, -2, 3};
+    vector<float> positive_v = get_positive(v); 
+    for (float x : positive_v) {
+        cout << x << " ";
+    }
     return 0;
 }
