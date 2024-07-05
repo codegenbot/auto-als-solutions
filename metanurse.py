@@ -19,7 +19,7 @@ def choose_action(obs):
         return 30  # UseNonRebreatherMask
 
     if obs[45] > 0 and obs[51] < 60:
-        if obs[14] == 0:
+        if obs[13] == 0:  # Check if VenflonIVCatheter hasn't been used
             return 14  # UseVenflonIVCatheter
         return 15  # GiveFluids
 
@@ -39,7 +39,7 @@ def choose_action(obs):
     if obs[46] > 0 and obs[52] >= 88 and obs[45] > 0 and obs[51] >= 60 and obs[47] > 0 and obs[53] >= 8:
         return 48  # Finish
 
-    return 1  # CheckSignsOfLife as fallback
+    return 1  # CheckSignsOfLife as fallback action
 
 while True:
     observations = input()
