@@ -2,9 +2,9 @@ from decimal import Decimal, getcontext
 
 getcontext().prec = 50
 
-starting_height = Decimal(input())
-first_bounce_height = Decimal(input())
-num_bounces = int(input())
+starting_height = Decimal(input("Enter the starting height: "))
+first_bounce_height = Decimal(input("Enter the height after first bounce: "))
+num_bounces = int(input("Enter the number of bounces: "))
 
 bounciness_index = first_bounce_height / starting_height
 total_distance = starting_height
