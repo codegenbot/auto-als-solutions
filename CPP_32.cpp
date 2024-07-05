@@ -1,7 +1,7 @@
 #include <cmath>
 #include <vector>
 #include <cassert>
-#include <iostream>
+#include <ostream>
 
 using namespace std;
 
