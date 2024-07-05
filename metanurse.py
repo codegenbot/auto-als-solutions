@@ -3,54 +3,51 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
+def check_vitals(obs):
+    sats = obs[-1] if obs[39] > 0 else 0
+    map = obs[-3] if obs[37] > 0 else 0
+    hr = obs[-7] if obs[33] > 0 else 0
+    rr = obs[-6] if obs[34] > 0 else 0
+    return sats, map, hr, rr
+
 def choose_action(obs):
-    # Check response
+    sats, map, hr, rr = check_vitals(obs)
+
     if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
         return 8  # ExamineResponse
-
-    # Airway
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
         return 3  # ExamineAirway
-    if obs[6] > 0:  # Tongue obstruction
-        return 35  # PerformAirwayManoeuvres
-
-    # Breathing
     if obs[7] == 0 and obs[8] == 0 and obs[9] == 0 and obs[10] == 0:
         return 4  # ExamineBreathing
-    if obs[34] == 0:
-        return 25  # UseSatsProbe
-    if obs[39] > 0 and obs[46] < 88:
-        return 30  # UseNonRebreatherMask
-
-    # Circulation
     if obs[16] == 0 and obs[17] == 0:
         return 5  # ExamineCirculation
+    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
+        return 6  # ExamineDisability
+    if obs[25] == 0 and obs[26] == 0:
+        return 7  # ExamineExposure
+    
+    if obs[34] == 0:
+        return 25  # UseSatsProbe
     if obs[35] == 0:
         return 27  # UseBloodPressureCuff
     if obs[38] == 0:
         return 38  # TakeBloodPressure
 
-    # Check vitals
-    if obs[39] > 0:  # If vitals are measured
-        hr = obs[40]
-        map = obs[44]
-        sats = obs[46]
+    if sats < 88 and obs[29] == 0:
+        return 30  # UseNonRebreatherMask
+    if sats < 88 and obs[29] > 0:
+        return 29  # UseBagValveMask
 
-        if hr > 150:
-            return 9  # GiveAdenosine
-        if map < 60:
-            return 15  # GiveFluids
+    if hr > 150:
+        return 9  # GiveAdenosine
 
-    # Disability
-    if obs[20] == 0 and obs[21] == 0 and obs[22] == 0:
-        return 6  # ExamineDisability
+    if rr < 8:
+        return 29  # UseBagValveMask
 
-    # Exposure
-    if obs[25] == 0 and obs[26] == 0:
-        return 7  # ExamineExposure
+    if map < 60:
+        return 15  # GiveFluids
 
-    # Check if patient is stabilized
-    if obs[39] > 0 and obs[46] >= 88 and obs[41] >= 8 and obs[44] >= 60:
+    if sats >= 88 and map >= 60 and rr >= 8:
         return 48  # Finish
 
     return 16  # ViewMonitor
