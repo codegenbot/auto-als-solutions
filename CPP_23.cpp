@@ -1,4 +1,9 @@
-int myStringLength(string str){
+```cpp
+int strLength(string str){
     return str.length();
 }
-assert (myStringLength("asdasnakj") == 13);
+
+int main(){
+    assert(strLength("asdasnakj") == 12);
+    return 0;
+}
