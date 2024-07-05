@@ -1,16 +1,16 @@
-#include <string>
-#include <iostream> 
+#include <iostream>
 using namespace std;
 
 string change_base(int x, int base) {
-    string res = "";
+    char res[1000];
+    string s = "";
     while (x > 0) {
         int rem = x % base;
         char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
-        res.push_back(c);
+        s.push_back(c);
         x /= base;
     }
-    return res;
+    return s;
 }
 
 int main() {
