@@ -1,9 +1,10 @@
-#include <string>
+```cpp
+#include <iostream>
 using namespace std;
 
 string change_base(int x, int base) {
-    char res[1000];  
-    string s;
+    char res[1000];
+    string s = "";
     while (x > 0) {
         int rem = x % base;
         char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
