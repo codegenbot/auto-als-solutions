@@ -1,5 +1,6 @@
-```cpp
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 string change_base(int x, int base) {
@@ -9,7 +10,7 @@ string change_base(int x, int base) {
         if (rem < 10) {
             res = to_string(rem) + res;
         } else {
-            res = (rem < 10) ? to_string(rem) : string(1,"A") + res;
+            res = (char)(65 + rem - 10) + res;
         }
         x /= base;
     }
@@ -17,15 +18,11 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int x, b;
+    int num, base_num;
     cout << "Enter a number: ";
-    cin >> x;
-    cout << "Enter the base (2-36): ";
-    cin >> b;
-    
-    if(b < 2 || b > 36)
-        return -1;
-    
-    string result = change_base(x, b);
-    cout << "Base-" << b << " : " << result << endl;
+    cin >> num;
+    cout << "Enter the base: ";
+    cin >> base_num;
+    cout << change_base(num, base_num);
+    return 0;
 }
