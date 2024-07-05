@@ -11,4 +11,5 @@ def get_max_min_average():
     average = sum(numbers) / len(numbers)
 
     return f"Max: {max_num}, Min: {min_num}, Average: {average}"
+
 print(get_max_min_average())
