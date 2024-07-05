@@ -14,8 +14,8 @@ class ResuscitationState:
     CPR = 7
 
 def is_stable(obs):
-    return (obs[46] > 0.5 and obs[-1] >= 88 and 
-            obs[45] > 0.5 and obs[-2] >= 60 and 
+    return (obs[46] > 0.5 and obs[-1] >= 88 and
+            obs[45] > 0.5 and obs[-2] >= 60 and
             obs[40] > 0.5 and obs[-7] >= 8)
 
 def choose_action(obs, state, step_count):
@@ -23,13 +23,13 @@ def choose_action(obs, state, step_count):
         return 48, state, step_count + 1
 
     if state == ResuscitationState.INITIAL:
-        return 1, ResuscitationState.AIRWAY, step_count + 1
+        return 8, ResuscitationState.AIRWAY, step_count + 1
 
     if state == ResuscitationState.AIRWAY:
         if obs[3] < 0.5:
             return 3, state, step_count + 1
         if obs[7] > 0.5:
-            return 29, state, step_count + 1
+            return 35, state, step_count + 1
         if is_stable(obs):
             return 16, ResuscitationState.REASSESS, step_count + 1
         return 18, ResuscitationState.BREATHING, step_count + 1
@@ -80,4 +80,4 @@ def choose_action(obs, state, step_count):
     if state == ResuscitationState.CPR:
         if obs[7] < 0.5 and obs[17] > 0.5:
             return 3, ResuscitationState.AIRWAY, step_count + 1
-        if obs[28] < 0
+        if obs[28] < 0.5
