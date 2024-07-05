@@ -1,4 +1,3 @@
-````
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -15,9 +14,18 @@ float median(std::vector<float> l) {
 }
 
 int main() {
-    std::vector<float> numbers = {8, 1, 3, 9, 9, 2, 7};
+    std::vector<float> numbers;
+    float input;
+    
+    // Read inputs from user
+    while (true) {
+        std::cout << "Enter a number (-1 to finish): ";
+        std::cin >> input;
+        if (input == -1) break;
+        numbers.push_back(input);
+    }
+    
     float result = median(numbers);
-    assert (std::abs(result - 7)<1e-4 );
+    assert(std::abs(result - 7.0f) < 1e-4); 
     return 0;
 }
-```
