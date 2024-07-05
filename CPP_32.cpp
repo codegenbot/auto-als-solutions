@@ -1,7 +1,6 @@
-```cpp
 #include <cmath>
 #include <vector>
-#include <iostream>
+#include <cassert>
 
 using namespace std;
 
@@ -29,8 +28,7 @@ int main() {
     vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
 
-    cout << "The root is: " << solution << endl;
-    cout << "The value of the polynomial at this root is: " << poly(coeffs, solution) << endl;
+    assert(abs(poly(coeffs, solution))< 1e-3);
 
     return 0;
 }

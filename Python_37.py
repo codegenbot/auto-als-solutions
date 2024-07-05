@@ -1,8 +1,10 @@
-def sort_even_odd(even_numbers, odd_numbers):
-    result = [i if i % 2 == 0 else next(j) for i, j in zip(even_numbers, iter(odd_numbers))]
-    return result
+```
+def sort_even_odd(even, odd):
+    even.sort()
+    odd.sort()
+    return odd + even
 
-even_numbers = [1, 4, 6, 8]
-odd_numbers = [3, 5, 7]
+even_numbers = [1, 2, 3, 4, 5]
+odd_numbers = [6, 7, 8, 9, 10]
 
 print(sort_even_odd(even_numbers, odd_numbers))
