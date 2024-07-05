@@ -1,6 +1,8 @@
-```
 from typing import List
 
 
 def remove_duplicates(numbers: List[int]) -> List[int]:
-    return sorted(list(set(numbers)))
+    if len(set(numbers)) != len(numbers):
+        return "Error: The input list contains duplicates."
+    else:
+        return list(set(numbers))
