@@ -24,18 +24,25 @@ vector<int> findSubstringIndices(const string &text, const string &target) {
 }
 
 int main() {
-    // For gcd problem
     int a, b;
+    string text, target;
+    
+    // For gcd problem
+    cout << "Enter two integers for gcd calculation: ";
     cin >> a >> b;
-    cout << gcd(a, b) << endl;
+    cout << "GCD: " << gcd(a, b) << endl;
+    
+    // Clear newline character left in input buffer
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     
     // For substring indices problem
-    string text, target;
-    cin.ignore(); // To ignore the newline character after reading integers
+    cout << "Enter text string: ";
     getline(cin, text);
+    cout << "Enter target string: ";
     getline(cin, target);
     
     vector<int> indices = findSubstringIndices(text, target);
+    cout << "Indices: ";
     for (int index : indices) {
         cout << index << " ";
     }
