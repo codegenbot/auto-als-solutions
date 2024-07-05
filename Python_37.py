@@ -1,4 +1,6 @@
+```
 def sort_even(l: list):
     return [
-        i if i % 2 != 0 else j for i, j in zip(sorted([x for x in l if x % 2 == 0]), l)
+        x if i % 2 != 0 else sorted([y for y in l if i % 2 == 0 and y < x])[0] if [y for y in l if i % 2 == 0 and y < x] else None
+        for i, x in enumerate(l)
     ]
