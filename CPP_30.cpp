@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 
 bool same(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
