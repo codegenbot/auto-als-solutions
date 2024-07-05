@@ -1,13 +1,15 @@
+```cpp
 #include <iostream>
 #include <sstream>
 #include <string>
 
 std::string string_sequence(int n) {
     std::ostringstream oss;
-    for (int i = 0; i <= n; ++i) {
+    if (n == 0)
+        return "";
+    for (int i = 1; i <= n; ++i) {
         oss << i << " ";
     }
-    oss << std::endl; 
     return oss.str();
 }
 
