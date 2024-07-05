@@ -1,4 +1,3 @@
-```cpp
 vector<int> parse_nested_parens(string paren_string) {
     vector<int> result;
     stack<int> nesting_levels(0);
