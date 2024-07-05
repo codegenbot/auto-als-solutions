@@ -1,11 +1,10 @@
-def decode_cyclic():
-    s = input("Enter the cyclic string: ")
+```Python
+def decode_cyclic(s: str):
     result = ""
-    groups = [s[i : i + 3] for i in range(0, len(s), 3)]
+    groups = [s[i:i+2] for i in range(0, len(s), 2)]
     for group in groups:
-        if len(group) == 2:
-            result += group[1]
-            result += group[0]
+        if len(group) == 1:
+            result += group * 3
         else:
-            result += group
-    print("Decoded string: ", result)
+            result += group[1] + group[0]
+    return result
