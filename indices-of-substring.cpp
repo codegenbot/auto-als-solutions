@@ -19,8 +19,11 @@ vector<int> indices_of_substring(const string& text, const string& target) {
 
 int main() {
     string text, target;
+    
+    // Read the entire input text, including newline characters
     getline(cin, text);
-    cin >> target;
+    // Read the target string
+    getline(cin, target);
 
     vector<int> result = indices_of_substring(text, target);
     cout << result.size() << endl;
