@@ -45,7 +45,7 @@ def choose_action(obs, state, last_action_time):
         if obs[17] < 0.5:
             return 5, state, current_time
         if obs[39] < 0.5:
-            return 38, state, current_time
+            return 27, state, current_time
         if obs[45] > 0.5 and obs[-2] < 60:
             return 15, state, current_time
         return 20, ResuscitationState.DISABILITY, current_time
@@ -53,7 +53,7 @@ def choose_action(obs, state, last_action_time):
     if state == ResuscitationState.DISABILITY:
         if obs[21] < 0.5:
             return 6, state, current_time
-        return 21, ResuscitationState.EXPOSURE, current_time
+        return 7, ResuscitationState.EXPOSURE, current_time
 
     if state == ResuscitationState.EXPOSURE:
         if obs[27] < 0.5:
@@ -66,7 +66,7 @@ def choose_action(obs, state, last_action_time):
         return 3, ResuscitationState.AIRWAY, current_time
 
     if state == ResuscitationState.CPR:
-        if obs[17] > 0.5:
+        if obs[7] < 0.5 and obs[17] > 0.5:
             return 3, ResuscitationState.AIRWAY, current_time
         if obs[28] < 0.5:
             return 28, state, current_time
