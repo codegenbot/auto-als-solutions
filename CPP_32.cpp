@@ -1,7 +1,6 @@
 #include <cmath>
 #include <vector>
-#include <ostream>
-
+#include <iostream>
 using namespace std;
 
 double poly(vector<double> coeffs, double solution) {
@@ -28,7 +27,8 @@ int main() {
     vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
 
-    cout << "Solution: " << solution << endl;
-    cout << "Polynomial value at the solution: " << poly(coeffs, solution) << endl;
+    cout << "Solution: " << solution << std::endl;
+    cout << "Polynomial value at the solution: " << poly(coeffs, solution) << std::endl;
 
     return 0;
+}
