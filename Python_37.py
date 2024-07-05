@@ -1,7 +1,8 @@
-def sort_even(l: list):
-    return [
-        x if i % 2 != 0 else (
-            next((y for y in l if i % 2 == 0 and y < x), None) if any(i % 2 == 0 and y < x for y in l) else None
-        )
-        for i, x in enumerate(l)
-    ]
+def sort_even_odd(even_numbers, odd_numbers):
+    result = [i if i % 2 == 0 else next(j) for i, j in zip(even_numbers, iter(odd_numbers))]
+    return result
+
+even_numbers = [1, 4, 6, 8]
+odd_numbers = [3, 5, 7]
+
+print(sort_even_odd(even_numbers, odd_numbers))
