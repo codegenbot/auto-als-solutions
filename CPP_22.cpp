@@ -1,18 +1,19 @@
-#include <boost/any.hpp>
+#include <any>
+#include <vector>
+#include <list>
 
-namespace boost {
-    using namespace std;
-}
-
-typedef boost::any Any;
-typedef boost::optional<int> OInt;
+namespace std;
+    
+typedef any Any;
+typedef optional<int> OInt;
 
 vector<int> filter_integers(list<Any> values) {
     vector<int> result;
     for (const auto& value : values) {
-        OInt oint = boost::any_cast<OInt>(value);
+        OInt oint = get_if<OInt>(&value);
         if(oint) {
-            result.push_back(boost::any_cast<int>(value));
+            result.push_back(get<OInt>(value));
         }
     }
     return result;
+}
