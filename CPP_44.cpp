@@ -1,4 +1,4 @@
-```cpp
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -13,6 +13,8 @@ string change_base(int x, int base) {
     }
     return s;
 }
+
+using namespace std;
 
 int main() {
     int num, base;
