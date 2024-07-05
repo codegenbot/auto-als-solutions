@@ -7,16 +7,18 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<float> vec1(n), vec2(n);
+    vector<double> vec1(n), vec2(n);
     for (int i = 0; i < n; ++i) cin >> vec1[i];
     for (int i = 0; i < n; ++i) cin >> vec2[i];
     
-    float sum = 0.0;
+    double sum = 0.0;
     for (int i = 0; i < n; ++i) {
-        float diff = vec1[i] - vec2[i];
+        double diff = vec1[i] - vec2[i];
         sum += diff * diff;
     }
     
-    cout << sqrt(sum) << endl;
+    double distance = sqrt(sum);
+    cout << distance << endl;
+    
     return 0;
 }
