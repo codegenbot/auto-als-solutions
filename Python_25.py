@@ -1,4 +1,4 @@
-```python
+```
 def find_max_value(nums: List[int]) -> int:
     max_val = nums[0]
     for num in nums:
