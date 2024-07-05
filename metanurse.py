@@ -38,14 +38,14 @@ def choose_action(obs, step_count):
     if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
     if obs[45] > 0 and obs[51] < 60:
-        if obs[14] == 0:
-            return 14  # UseVenflonIVCatheter
+        return 14  # UseVenflonIVCatheter
+    if obs[45] > 0 and obs[51] < 60:
         return 15  # GiveFluids
 
     if obs[46] > 0 and obs[52] < 65:
         return 17  # StartChestCompression
 
-    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[46] > 0 and obs[52] >= 8:
+    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[48] > 0 and obs[49] >= 8:
         return 48  # Finish
 
     return 0  # DoNothing
