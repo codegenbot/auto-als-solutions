@@ -1,8 +1,7 @@
-```cpp
 #include <cmath>
 #include <vector>
 
-double findZero(std::vector<double> coeffs) {
+double findZero(std::vector<double> coeffs){
     double a = coeffs[0];
     double b = 0;
     for(int i=1; i<coeffs.size(); i+=2) {
@@ -12,24 +11,10 @@ double findZero(std::vector<double> coeffs) {
 }
 
 int main() {
-    std::vector<double> coeffs;
-    double x;
-    int n;
-
-    std::cout << "Enter the number of coefficients: ";
-    std::cin >> n;
-
-    coeffs.resize(n);
-
-    std::cout << "Enter the coefficients:\n";
-    for(int i = 0; i < n; ++i) {
-        std::cout << "Enter coefficient for x^" << (n - 1 - i) << ": ";
-        std::cin >> coeffs[i];
-    }
-
+    std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
     double solution = findZero(coeffs);
 
-    // Define poly function to calculate polynomial value
+    // Initialize polyValue
     double polyValue = 0;
     for(int i=0; i<coeffs.size(); i++) {
         if(i % 2 == 0) {
