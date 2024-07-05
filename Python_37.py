@@ -1,8 +1,18 @@
+```
 def check(func):
     result = func()
-    if all(num % 2 == 0 for num in result) or all(num % 2 != 0 for num in result):
-        print("The output is sorted correctly.")
-    else:
-        print("The output is not sorted correctly.")
+    return result
+
+def sort_even_odd():
+    even_numbers = input("Enter even numbers (space separated): ")
+    odd_numbers = input("Enter odd numbers (space separated): ")
+
+    even = list(map(int, even_numbers.split()))
+    odd = list(map(int, odd_numbers.split()))
+
+    even.sort()
+    odd.sort()
+
+    return sorted(even + odd)
 
 check(sort_even_odd)
