@@ -1,6 +1,2 @@
-```
-def car_race_collision(num_cars):
-    total_collisions = 0
-    for i in range(num_cars):
-        total_collisions += i
-    return total_collisions
+def car_race_collision(num_cars=1):
+    return num_cars * (num_cars - 1) // 2
