@@ -5,60 +5,67 @@ def parse_observations(observations):
 
 def choose_action(obs, step_count, state):
     if step_count >= 350:
-        return 48, state
+        return 48, state  # Finish if step limit reached
 
-    if state == 'initial':
-        if step_count == 0:
-            return 1, 'check_airway'  # CheckSignsOfLife
-    elif state == 'check_airway':
-        return 3, 'check_breathing'  # ExamineAirway
-    elif state == 'check_breathing':
-        return 4, 'check_circulation'  # ExamineBreathing
-    elif state == 'check_circulation':
-        return 5, 'setup_equipment'  # ExamineCirculation
-    elif state == 'setup_equipment':
-        if obs[39] < 0.5:  # TurnOnDefibrillator not done
-            return 39, 'setup_equipment'
-        elif obs[24] < 0.5:  # UseMonitorPads not used
-            return 24, 'setup_equipment'
-        elif obs[25] < 0.5:  # UseSatsProbe not used
-            return 25, 'setup_equipment'
-        elif obs[27] < 0.5:  # UseBloodPressureCuff not used
-            return 27, 'setup_equipment'
-        elif obs[14] < 0.5:  # UseVenflonIVCatheter not used
-            return 14, 'treatment'
-        else:
-            return 16, 'treatment'  # ViewMonitor
+    if 'signs_of_life_checked' not in state:
+        state['signs_of_life_checked'] = True
+        return 1, state  # CheckSignsOfLife
 
-    if state == 'treatment':
-        if obs[17] > 0.5:  # RadialPulseNonPalpable
-            return 17, 'cpr'  # StartChestCompression
-        elif obs[7] > 0.5:  # BreathingNone
-            return 29, 'treatment'  # UseBagValveMask
-        elif obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
-            return 30, 'treatment'  # UseNonRebreatherMask
-        elif obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
-            return 15, 'treatment'  # GiveFluids
-        elif obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
-            return 29, 'treatment'  # UseBagValveMask
-        elif (obs[3] > 0.5 and  # AirwayClear
-              obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
-              obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
-              obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-            return 48, 'finished'  # Finish if stabilized
-        else:
-            return 16, 'treatment'  # ViewMonitor
+    if 'airway_examined' not in state:
+        state['airway_examined'] = True
+        return 3, state  # ExamineAirway
 
-    if state == 'cpr':
-        if step_count % 2 == 0:
-            return 17, 'cpr'  # StartChestCompression
-        else:
-            return 10, 'cpr'  # GiveAdrenaline
+    if 'breathing_examined' not in state:
+        state['breathing_examined'] = True
+        return 4, state  # ExamineBreathing
 
-    return 16, state  # ViewMonitor (default action)
+    if 'circulation_examined' not in state:
+        state['circulation_examined'] = True
+        return 5, state  # ExamineCirculation
 
-state = 'initial'
+    if 'defibrillator_on' not in state:
+        state['defibrillator_on'] = True
+        return 39, state  # TurnOnDefibrillator
+
+    if 'monitor_pads_used' not in state:
+        state['monitor_pads_used'] = True
+        return 24, state  # UseMonitorPads
+
+    if 'sats_probe_used' not in state:
+        state['sats_probe_used'] = True
+        return 25, state  # UseSatsProbe
+
+    if 'bp_cuff_used' not in state:
+        state['bp_cuff_used'] = True
+        return 27, state  # UseBloodPressureCuff
+
+    if obs[17] > 0.5:  # RadialPulseNonPalpable
+        return 17, state  # StartChestCompression
+
+    if obs[7] > 0.5 or (obs[40] > 0.5 and obs[-7] < 8):  # BreathingNone or RespRate < 8
+        return 29, state  # UseBagValveMask
+
+    if 'oxygen_given' not in state:
+        state['oxygen_given'] = True
+        return 30, state  # UseNonRebreatherMask
+
+    if 'iv_access' not in state:
+        state['iv_access'] = True
+        return 14, state  # UseVenflonIVCatheter
+
+    if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
+        return 15, state  # GiveFluids
+
+    if (obs[3] > 0.5 and  # AirwayClear
+        obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
+        obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
+        obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
+        return 48, state  # Finish if stabilized
+
+    return 16, state  # ViewMonitor (default action to keep checking vitals)
+
 step_count = 0
+state = {}
 for line in sys.stdin:
     observations = parse_observations(line)
     action, state = choose_action(observations, step_count, state)
