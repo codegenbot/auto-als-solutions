@@ -3,72 +3,82 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs, step_counter):
-    if step_counter >= 350:
-        return 48  # Finish if 350 steps reached
+class ABCDEAssessment:
+    def __init__(self):
+        self.step = 'A'
+        self.equipment_used = set()
+        self.counter = 0
 
-    airway_checked = max(obs[:7])
-    breathing_checked = max(obs[7:16])
-    circulation_checked = max(obs[16:21])
-    disability_checked = max(obs[21:27])
-    exposure_checked = max(obs[27:33])
-    
-    if obs[17] > 0.5 and obs[16] < 0.5:  # RadialPulseNonPalpable and RadialPulsePalpable not recent
-        return 17  # StartChestCompression
-    
-    if obs[7] > 0.5:  # BreathingNone
-        return 29  # UseBagValveMask
-    
-    if airway_checked < 0.5:
-        return 3  # ExamineAirway
-    elif breathing_checked < 0.5:
-        return 4  # ExamineBreathing
-    elif circulation_checked < 0.5:
-        return 5  # ExamineCirculation
-    elif disability_checked < 0.5:
-        return 6  # ExamineDisability
-    elif exposure_checked < 0.5:
-        return 7  # ExamineExposure
-    
-    if obs[25] < 0.5:  # UseSatsProbe not used
-        return 19  # OpenBreathingDrawer
-    elif obs[25] > 0.5 and obs[46] < 0.5:  # SatsProbe used but not measured
-        return 25  # UseSatsProbe
-    
-    if obs[27] < 0.5:  # UseBloodPressureCuff not used
-        return 20  # OpenCirculationDrawer
-    elif obs[27] > 0.5 and obs[45] < 0.5:  # BloodPressureCuff used but not measured
-        return 27  # UseBloodPressureCuff
-    
-    if obs[39] < 0.5 or obs[40] < 0.5 or obs[41] < 0.5 or obs[45] < 0.5 or obs[46] < 0.5:
-        return 16  # ViewMonitor
-    
-    if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
-        return 30  # UseNonRebreatherMask
-    
-    if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
-        return 15  # GiveFluids
-    
-    if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
-        return 29  # UseBagValveMask
-    
-    if obs[39] > 0.5 and obs[-8] > 150:  # If heart rate measured and > 150
-        return 9  # GiveAdenosine
-    
-    if (obs[3] > 0.5 and  # AirwayClear
-        obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
-        obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
-        obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-        return 48  # Finish
-    
+    def next_step(self):
+        steps = 'ABCDE'
+        self.step = steps[steps.index(self.step) + 1] if self.step != 'E' else 'E'
+
+def choose_action(obs, assessment):
+    assessment.counter += 1
+    if assessment.counter > 300:
+        return 48  # Finish if too many steps
+
+    if assessment.step == 'A':
+        if 3 not in assessment.equipment_used:
+            assessment.equipment_used.add(3)
+            return 3  # ExamineAirway
+        if obs[3] > 0.5:  # AirwayClear
+            assessment.next_step()
+        else:
+            return 35  # PerformAirwayManoeuvres
+
+    elif assessment.step == 'B':
+        if 19 not in assessment.equipment_used:
+            assessment.equipment_used.add(19)
+            return 19  # OpenBreathingDrawer
+        if 25 not in assessment.equipment_used:
+            assessment.equipment_used.add(25)
+            return 25  # UseSatsProbe
+        if 4 not in assessment.equipment_used:
+            assessment.equipment_used.add(4)
+            return 4  # ExamineBreathing
+        if obs[46] > 0.5 and obs[-1] < 88:  # If sats measured and < 88%
+            return 30  # UseNonRebreatherMask
+        if obs[40] > 0.5 and obs[-7] < 8:  # If resp rate measured and < 8
+            return 29  # UseBagValveMask
+        assessment.next_step()
+
+    elif assessment.step == 'C':
+        if 20 not in assessment.equipment_used:
+            assessment.equipment_used.add(20)
+            return 20  # OpenCirculationDrawer
+        if 27 not in assessment.equipment_used:
+            assessment.equipment_used.add(27)
+            return 27  # UseBloodPressureCuff
+        if 5 not in assessment.equipment_used:
+            assessment.equipment_used.add(5)
+            return 5  # ExamineCirculation
+        if obs[17] > 0.5:  # RadialPulseNonPalpable
+            return 17  # StartChestCompression
+        if obs[45] > 0.5 and obs[-2] < 60:  # If MAP measured and < 60
+            return 15  # GiveFluids
+        if obs[38] > 0.5 and obs[-8] > 150:  # If heart rate measured and > 150
+            return 9  # GiveAdenosine
+        assessment.next_step()
+
+    elif assessment.step == 'D':
+        if 6 not in assessment.equipment_used:
+            assessment.equipment_used.add(6)
+            return 6  # ExamineDisability
+        assessment.next_step()
+
+    elif assessment.step == 'E':
+        if 7 not in assessment.equipment_used:
+            assessment.equipment_used.add(7)
+            return 7  # ExamineExposure
+        if (obs[3] > 0.5 and  # AirwayClear
+            obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
+            obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
+            obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
+            return 48  # Finish
+
     return 16  # ViewMonitor (default action to keep checking vitals)
 
-step_counter = 0
+assessment = ABCDEAssessment()
 for line in sys.stdin:
-    observations = parse_observations(line)
-    action = choose_action(observations, step_counter)
-    print(action)
-    sys.stdout.flush()
-    step_counter += 1
-    if action == 48:  # Finish
-        break
+    observations = parse
