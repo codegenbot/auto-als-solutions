@@ -1,25 +1,36 @@
-#include <vector>
 #include <algorithm>
+using namespace std;
 
 string sort_numbers(string numbers) {
-    vector<string> numVec;
+    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
+                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
+                                {"eight", 8}, {"nine", 9}};
+
+    vector<string> numVector;
     string temp;
 
     for (int i = 0; i < numbers.length(); i++) {
         if (numbers[i] == ' ') {
-            numVec.push_back(temp);
-            temp = "";
-        } else {
-            temp += numbers[i];
+            continue;
         }
+        temp = "";
+        while (i < numbers.length() && numbers[i] != ' ') {
+            temp += numbers[i];
+            i++;
+        }
+        numVector.push_back(temp);
     }
-    numVec.push_back(temp);
 
-    sort(numVec.begin(), numVec.end());
+    sort(numVector.begin(), numVector.end(), [&numMap](string a, string b) {
+        return to_string(numMap[a]) < to_string(numMap[b]);
+    });
 
     string result = "";
-    for (const auto& str : numVec) {
-        result += str + " ";
+    for (int i = 0; i < numVector.size(); i++) {
+        if (i > 0) {
+            result += " ";
+        }
+        result += numVector[i];
     }
 
     return result;
