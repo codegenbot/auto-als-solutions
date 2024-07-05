@@ -1,4 +1,6 @@
+#include <iostream>
 #include <string>
+
 using namespace std;
 
 string change_base(int x, int base) {
@@ -6,9 +8,9 @@ string change_base(int x, int base) {
     while (x > 0) {
         int rem = x % base;
         if (rem < 10) {
-            res = to_string(rem) + res;
+            res = to_string(rem) + res; // added parentheses for concatenation
         } else {
-            res = (char)(65 + rem - 10) + res;
+            res = char('A' + rem - 10) + res; // changed type of expression to 'char'
         }
         x /= base;
     }
@@ -16,11 +18,12 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int n, b;
+    int num, base;
     cout << "Enter a number: ";
-    cin >> n;
+    cin >> num;
     cout << "Enter the base: ";
-    cin >> b;
-    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
+    cin >> base;
+    string result = change_base(num, base);
+    cout << "The number in the new base is: " << result << endl;
     return 0;
 }
