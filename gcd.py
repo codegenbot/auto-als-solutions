@@ -6,24 +6,17 @@ def gcd(a, b):
 def substring_indices(text, target):
     indices = []
     for i in range(len(text) - len(target) + 1):
-        if text[i: i + len(target)] == target:
+        if text[i:i + len(target)] == target:
             indices.append(i)
     return indices
 
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read
-    data = input().split('\n')
-    
     try:
-        a, b = map(int, data[0].split())
+        a, b = map(int, input("Enter two integers: ").split())
         print(gcd(a, b))
-    except (ValueError, IndexError):
+    except ValueError:
         print("Please provide exactly two integers separated by space.")
-    
-    if len(data) > 2:
-        text = data[1].strip()
-        target = data[2].strip()
-        print(substring_indices(text, target))
-    else:
-        print("Please provide both text and target strings.")
+
+    text = input("Enter the text string: ").strip()
+    target = input("Enter the target string: ").strip()
+    print(substring_indices(text, target))
