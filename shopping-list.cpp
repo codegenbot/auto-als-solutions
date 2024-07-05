@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 int main() {
@@ -7,12 +8,12 @@ int main() {
     cin >> n;
     vector<double> prices(n);
     for (int i = 0; i < n; ++i) {
-        cin >> prices[i];
+        cin >> fixed >> setprecision(2) >> prices[i];
     }
 
     vector<double> discounts(n);
     for (int i = 0; i < n; ++i) {
-        cin >> discounts[i];
+        cin >> fixed >> setprecision(2) >> discounts[i];
     }
 
     double total = 0.0;
@@ -20,7 +21,6 @@ int main() {
         total += prices[i] * (1 - discounts[i] / 100.0);
     }
 
-    cout.precision(2);
-    cout << fixed << total << endl;
+    cout << fixed << setprecision(2) << total << endl;
     return 0;
 }
