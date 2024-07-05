@@ -1,9 +1,5 @@
 Here is the modified code:
 
-```
-from typing import List
-
-
 Task: Write a function that parses a string representing musical notes and returns a list of integers where each integer represents the duration of the note.
 
 def parse_music(music_string: str) -> List[int]:
