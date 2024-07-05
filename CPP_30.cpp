@@ -1,14 +1,14 @@
 #include <vector>
-#include <algorithm>
+#include <cassert>
 
-bool issame(float x) {
-    return true;
+bool isSame(vector<float> a, vector<float> b) {
+    return a.size() == b.size();
 }
 
-std::vector<float> get_positive(std::vector<float> l) {
-    std::vector<float> result;
+vector<float> get_positive(vector<float> l) {
+    vector<float> result;
     for (float x : l) {
-        if (x > 0 || !issame(x)) {
+        if (x > 0) {
             result.push_back(x);
         }
     }
