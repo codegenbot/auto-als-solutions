@@ -1,18 +1,12 @@
-```
-from typing import List
-import math
+def get_max_min_average():
+    numbers = input("Enter some numbers (space separated): ").split()
+    numbers = [int(num) for num in numbers]
 
+    if not numbers:
+        return "No numbers entered."
 
-def factorize(n: int) -> List[int]:
-    factors = []
-    for i in range(2, math.isqrt(n) + 1):
-        while n % i == 0:
-            count = 0
-            while n % i == 0:
-                n //= i
-                count += 1
-            if count > 0:
-                factors.append(i * count)
-    if n > 1:
-        factors.append(n)
-    return sorted(factors)
+    max_num = max(numbers)
+    min_num = min(numbers)
+    average = sum(numbers) / len(numbers)
+
+    return f"Max: {max_num}, Min: {min_num}, Average: {average}"
