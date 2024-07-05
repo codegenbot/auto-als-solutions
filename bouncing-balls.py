@@ -1,6 +1,4 @@
-from decimal import Decimal, getcontext
-
-getcontext().prec = 50
+from decimal import Decimal
 
 starting_height = Decimal(input())
 first_bounce_height = Decimal(input())
