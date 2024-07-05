@@ -5,20 +5,23 @@ def gcd(a, b):
 
 def substring_indices(text, target):
     indices = []
-    i = text.find(target)
-    while i != -1:
-        indices.append(i)
-        i = text.find(target, i + 1)
+    for i in range(len(text) - len(target) + 1):
+        if text[i: i + len(target)] == target:
+            indices.append(i)
     return indices
 
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read
-    data = input().split()
+    mode = input("Enter mode (gcd/substring): ").strip()
     
-    a, b = int(data[0]), int(data[1])
-    print(gcd(a, b))
-    
-    text = data[2]
-    target = data[3]
-    print(substring_indices(text, target))
+    if mode == "gcd":
+        try:
+            a, b = map(int, input("Enter two integers: ").split())
+            print(gcd(a, b))
+        except ValueError:
+            print("Please provide exactly two integers separated by space.")
+    elif mode == "substring":
+        text = input("Enter the text string: ").strip()
+        target = input("Enter the target string: ").strip()
+        print(substring_indices(text, target))
+    else:
+        print("Invalid mode. Please enter 'gcd' or 'substring'.")
