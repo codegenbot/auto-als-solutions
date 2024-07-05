@@ -2,16 +2,12 @@
 #include <vector>
 #include <string>
 
-bool isSame(vector<string> a, vector<string> b){
-    if(a.size() != b.size()) return false;
-    for(auto str : a){
-        if(std::find(b.begin(), b.end(), str) == b.end()) return false;
-    }
-    return true;
+bool issame(vector<string> a, vector<string>b){
+    return a == b;
 }
 
-vector<string> filter_by_substring(vector<string> strings, string substring){
-    vector<string> result;
+std::vector<std::string> filter_by_substring(std::vector<std::string> strings, std::string substring){
+    std::vector<std::string> result;
     for(auto str : strings){
         if(str.find(substring) != std::string::npos){
             result.push_back(str);
@@ -20,7 +16,7 @@ vector<string> filter_by_substring(vector<string> strings, string substring){
     return result;
 }
 
-int main(){
-    assert(isSame(filter_by_substring({"grunt", "trumpet", "prune", "gruesome"}, "run") ,{"grunt", "prune"}));
+int main() {
+    assert(std::equal(filter_by_substring({"grunt", "trumpet", "prune", "gruesome"}, "run"), {"grunt", "prune"}));
     return 0;
 }
