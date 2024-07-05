@@ -1,5 +1,5 @@
 def decode_cyclic():
-    s = input("Enter a string: ")
+    s = input("Enter the cyclic string: ")
     result = ""
     groups = [s[i : i + 3] for i in range(0, len(s), 3)]
     for group in groups:
