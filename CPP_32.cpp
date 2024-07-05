@@ -1,6 +1,9 @@
+```cpp
 #include <cmath>
 #include <vector>
 #include <cassert>
+#include <ostream>
+#include <iostream>
 
 using namespace std;
 
@@ -30,5 +33,6 @@ int main() {
 
     assert(abs(poly(coeffs, solution))< 1e-3);
 
+    cout << "The zero of the polynomial is: " << solution << endl;
     return 0;
 }

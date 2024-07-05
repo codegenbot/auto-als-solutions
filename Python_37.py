@@ -1,10 +1,3 @@
-```
-def sort_even_odd(even, odd):
-    even.sort()
-    odd.sort()
-    return odd + even
-
-even_numbers = [1, 2, 3, 4, 5]
-odd_numbers = [6, 7, 8, 9, 10]
-
-print(sort_even_odd(even_numbers, odd_numbers))
+def check():
+    nums = list(map(int, input("Enter even and odd numbers (space separated): ").split()))
+    print(sorted([num for num in nums if num % 2 == 0]))
