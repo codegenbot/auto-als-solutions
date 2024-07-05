@@ -17,7 +17,6 @@ vector<float> get_positives(vector<float> l) {
             result.push_back(x);
     }
     return result;
-
 }
 
 int main() {
