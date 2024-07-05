@@ -3,7 +3,7 @@
 #include <list>
 
 namespace std;
-    
+
 typedef any Any;
 typedef optional<int> OInt;
 
@@ -16,4 +16,3 @@ vector<int> filter_integers(list<Any> values) {
         }
     }
     return result;
-}
