@@ -1,6 +1,5 @@
-```cpp
 #include <vector>
-#include <assert.h>
+#include <cmath>
 
 bool same(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
@@ -18,6 +17,7 @@ vector<float> get_positives(vector<float> l) {
             result.push_back(x);
     }
     return result;
+
 }
 
 int main() {
