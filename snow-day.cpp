@@ -11,7 +11,7 @@ int main() {
     for (int i = 0; i < hours; ++i) {
         snow += snow_rate;
         snow -= snow * melt_rate;
-        if (snow < 0) snow = 0;
+        if (snow < 0) snow = 0; // Ensure snow is not negative
     }
 
     cout << fixed << setprecision(16) << snow << endl;
