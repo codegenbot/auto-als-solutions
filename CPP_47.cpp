@@ -15,7 +15,14 @@ float median(std::vector<float> l) {
 }
 
 int main() {
-    std::vector<float> numbers = {8, 1, 3, 9, 9, 2, 7};
+    std::vector<float> numbers;
+    numbers.push_back(8);
+    numbers.push_back(1);
+    numbers.push_back(3);
+    numbers.push_back(9);
+    numbers.push_back(9);
+    numbers.push_back(2);
+    numbers.push_back(7);
     float result = median(numbers);
     assert (std::abs(result - 7)<1e-4 );
     return 0;
