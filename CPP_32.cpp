@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 using namespace std;
 
@@ -16,7 +15,6 @@ double find_zero(vector<double> coeffs) {
 
 int main() {
     vector<double> coeffs;
-    // Fill the coefficients array
     coeffs.push_back(2); 
     coeffs.push_back(-7.5);
     coeffs.push_back(3.5);
