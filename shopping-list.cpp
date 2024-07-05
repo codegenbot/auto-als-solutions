@@ -8,19 +8,19 @@ int main() {
     cin >> n;
     vector<double> prices(n);
     for (int i = 0; i < n; ++i) {
-        cin >> fixed >> setprecision(2) >> prices[i];
+        cin >> prices[i];
     }
 
     vector<double> discounts(n);
     for (int i = 0; i < n; ++i) {
-        cin >> fixed >> setprecision(2) >> discounts[i];
+        cin >> discounts[i];
     }
 
-    double total = 0.0;
+    long long total = 0;
     for (int i = 0; i < n; ++i) {
-        total += prices[i] * (1 - discounts[i] / 100.0);
+        total += static_cast<long long>(prices[i] * 100) * (100 - static_cast<long long>(discounts[i]));
     }
 
-    cout << fixed << setprecision(2) << total << endl;
+    cout << fixed << setprecision(2) << total / 10000.0 << endl;
     return 0;
 }
