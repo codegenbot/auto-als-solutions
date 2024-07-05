@@ -1,7 +1,6 @@
-```
 def check(func):
     result = func()
-    return result
+    print(result)
 
 def sort_even_odd():
     even_numbers = input("Enter even numbers (space separated): ")
