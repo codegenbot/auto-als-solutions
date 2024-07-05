@@ -2,6 +2,9 @@ from typing import List
 
 
 def concatenate(strings: List[str]) -> str:
-    if not isinstance(strings, list) or not all(isinstance(s, str) for s in strings):
-        return "Invalid input format"
-    return "".join(strings)
+    return ''.join(strings)
+
+
+if __name__ == "__main__":
+    strings = input("Enter a list of strings (space-separated): ").split()
+    print(concatenate(strings))
