@@ -1,6 +1,9 @@
+Here is the modified code:
+
+```cpp
 #include <vector>
-#include <assert.h>
 #include <initializer_list>
+#include <assert.h>
 
 bool issame(std::vector<float> a, std::vector<float> b) {
     if (a.size() != b.size())
