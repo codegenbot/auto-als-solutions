@@ -20,8 +20,8 @@ void cutVector(const vector<int>& vec) {
         }
     }
 
-    cout << cutIndex << endl;   // Print the size of the first subvector
-    cout << n - cutIndex << endl; // Print the size of the second subvector
+    cout << cutIndex << endl;
+    cout << n - cutIndex << endl;
 
     for (int i = 0; i < cutIndex; ++i) {
         cout << vec[i] << " ";
