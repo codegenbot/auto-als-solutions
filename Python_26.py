@@ -3,4 +3,6 @@ from typing import List
 
 def remove_duplicates(numbers: List[int]) -> List[int]:
     seen = {}
-    return [seen.setdefault(x, x) for x in numbers]
+    result = [seen.setdefault(x, x) for x in numbers]
+    print(result)
+    return result
