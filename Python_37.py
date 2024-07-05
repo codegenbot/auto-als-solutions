@@ -1,10 +1,11 @@
-```
-def sort_even_odd(even, odd):
+def sort_even_odd():
+    even_numbers = input("Enter even numbers (space separated): ")
+    odd_numbers = input("Enter odd numbers (space separated): ")
+
+    even = list(map(int, even_numbers.split()))
+    odd = list(map(int, odd_numbers.split()))
+
     even.sort()
     odd.sort()
-    return odd + even
 
-even_numbers = [1, 2, 3, 4, 5]
-odd_numbers = [6, 7, 8, 9, 10]
-
-print(sort_even_odd(even_numbers, odd_numbers))
+    return sorted(even + odd)
