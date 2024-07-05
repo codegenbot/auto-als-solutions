@@ -10,7 +10,7 @@ int main() {
     double snow = initial_snow;
     for (int i = 0; i < hours; ++i) {
         snow += snow_rate;
-        snow *= (1 - melt_rate);
+        snow -= snow * melt_rate;
     }
 
     cout << fixed << setprecision(16) << snow << endl;
