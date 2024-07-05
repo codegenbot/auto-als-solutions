@@ -1,1 +1,1 @@
-return [i if i % 2 == 0 else next(iter(odd)) for i in even]
+return [i if i % 2 == 0 else next(iter(odd)) for _ in range(len(even))]
