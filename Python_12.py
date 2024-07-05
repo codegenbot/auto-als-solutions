@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional
 
-def longest(strings: List[str]) -> str:
+def longest(strings: List[str]) -> Optional[str]:
     if not strings:
-        raise ValueError("No strings provided")
+        return None
     return max(strings, key=len)
