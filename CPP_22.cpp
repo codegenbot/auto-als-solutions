@@ -1,13 +1,14 @@
-#include <boost/any_cast.hpp>
+#include <optional>
+#include <vector>
+#include <list>
+
+using namespace std;
 
 vector<int> filter_integers(list<any> values) {
     vector<int> result;
-    for (auto& value : values) {
-        if (boost::any_cast<bool>(value)) {
-            try {
-                int val = boost::any_cast<int>(value);
-                result.push_back(val);
-            } catch (...) {}
+    for (const auto& value : values) {
+        if (any_cast<optional<int>>(value)) {
+            result.push_back(any_cast<int>(value));
         }
     }
     return result;
