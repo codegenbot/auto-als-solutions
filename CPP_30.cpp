@@ -1,3 +1,8 @@
+```cpp
+#ifdef __cpp_initializer_lists 201103L
+#include <initializer_list>
+#endif
+
 #include <vector>
 #include <assert.h>
 
