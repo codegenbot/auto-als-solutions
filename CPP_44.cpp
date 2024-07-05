@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 using namespace std;
 
@@ -5,22 +6,18 @@ string change_base(int x, int base) {
     string res = "";
     while (x > 0) {
         int rem = x % base;
-        if (rem < 10) {
-            res = to_string(rem) + res;
-        } else {
-            res = (char)(65 + rem - 10) + res;
-        }
+        char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
+        res.push_back(c);
         x /= base;
     }
     return res;
 }
 
 int main() {
-    int n, b;
+    int num, base;
     cout << "Enter a number: ";
-    cin >> n;
+    cin >> num;
     cout << "Enter the base: ";
-    cin >> b;
-    cout << "Base " << b << " representation of " << n << " is " << change_base(n, b);
-    return 0;
+    cin >> base;
+    cout << "The conversion result is: " << change_base(num, base);
 }
