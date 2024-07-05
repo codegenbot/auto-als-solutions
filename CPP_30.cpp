@@ -1,8 +1,9 @@
 #include <initializer_list>
 #include <vector>
+
 using namespace std;
 
-bool issame(vector<float> a, vector<float> b) {
+bool issame(vector<float> a, vector<float> b) => {
     if(a.size() != b.size())
         return false;
     for(int i = 0; i<a.size(); i++)
@@ -11,7 +12,7 @@ bool issame(vector<float> a, vector<float> b) {
     return true;
 }
 
-vector<float> get_positive(vector<float> l) {
+vector<float> get_positive(vector<float> l) => {
     vector<float> result;
     for (float x : l) {
         if (x > 0)
@@ -19,4 +20,8 @@ vector<float> get_positive(vector<float> l) {
     }
     return result;
 }
-assert(issame(get_positive({}), {}) == true);
+
+int main() {
+    assert(issame(get_positive({}), {}));
+    return 0;
+}
