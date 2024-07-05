@@ -1,6 +1,5 @@
 #include <cmath>
 #include <vector>
-#include <string>
 
 double findZero(std::vector<double> xs){
     double a = xs[0];
@@ -12,15 +11,11 @@ double findZero(std::vector<double> xs){
 }
 
 int main() {
-    std::vector<double> polys = {1.0, 2.0, -3.5};
-    double solution = findZero(polys);
-    assert(abs(solution - poly(polys, solution)) < 1e-3); 
+    std::vector<double> coeffs(3); // 3 coefficients
+    coeffs.push_back(1.0);
+    coeffs.push_back(2.0);
+    coeffs.push_back(-3.5);
+    double solution = findZero(coeffs);
+    assert(std::abs(coeffs[0] + coeffs.size() * solution - 0) < 1e-3); 
     return 0;
-}
-double poly(std::vector<double> xs, double x){
-    double result = xs[0];
-    for(int i=1; i<xs.size(); i++) {
-        result += xs[i] * pow(x, i);
-    }
-    return result;
 }
