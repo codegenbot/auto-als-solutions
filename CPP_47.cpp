@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cassert>
 
 float median(std::vector<float> l) {
     std::sort(l.begin(), l.end());
@@ -15,16 +14,18 @@ float median(std::vector<float> l) {
 
 int main() {
     std::vector<float> numbers;
-    int n;
+    int num_elements;
     std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-    for(int i=0; i<n; i++) {
-        float num;
-        std::cout << "Enter element #"<<i+1<<": ";
-        std::cin >> num;
-        numbers.push_back(num);
+    std::cin >> num_elements;
+    
+    for(int i=0; i<num_elements; ++i) {
+        float element;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> element;
+        numbers.push_back(element);
     }
+    
     float result = median(numbers);
-    std::cout << "Median: "<<result<<std::endl;
+    std::cout << "Median: " << result << "\n";
     return 0;
 }
