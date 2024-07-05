@@ -1,36 +1,14 @@
-```cpp
 #include <cmath>
 #include <vector>
 #include <iostream>
 
-using namespace std;
-
-double poly(vector<double> coeffs, double solution) {
-    double result = coeffs[0];
-    for(int i=1; i<coeffs.size(); i++) {
-        if(i%2==0)
-            result += coeffs[i] * pow(solution, (i/2));
-        else
-            result += coeffs[i] * pow(solution, ((i-1)/2));
-    }
-    return result;
-}
-
-double findZero(vector<double> coeffs){
-    double a = coeffs[0];
-    double b = 0;
-    for(int i=1; i<coeffs.size(); i+=2) {
-        b += coeffs[i];
-    }
-    return -b / (2*a);
-}
+std::vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
 
 int main() {
-    vector<double> coeffs = {1.0, -7.0, 12.0, -6.0}; 
-    double solution = findZero(coeffs);
+    double solution = std::findZero(coeffs);
 
-    cout << "The root is: " << solution << endl;
-    cout << "The value of the polynomial at this root is: " << poly(coeffs, solution) << endl;
+    std::cout << "The root is: " << solution << std::endl;
+    std::cout << "The value of the polynomial at this root is: " << std::poly(coeffs, solution) << std::endl;
 
     return 0;
 }
