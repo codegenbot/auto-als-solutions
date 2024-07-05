@@ -35,12 +35,12 @@ def choose_action(obs, state):
             return 38, state  # Take blood pressure
         if obs[45] > 0.5 and obs[-2] < 60:
             return 15, state  # Give fluids
-        return 6, ResuscitationState.DISABILITY  # Examine disability
+        return 14, ResuscitationState.DISABILITY  # Use Venflon IV catheter
 
     if state == ResuscitationState.DISABILITY:
         if obs[21] < 0.5:
             return 6, state  # Examine disability
-        return 7, ResuscitationState.EXPOSURE  # Examine exposure
+        return 33, ResuscitationState.EXPOSURE  # Take blood for arterial blood gas
 
     if state == ResuscitationState.EXPOSURE:
         if obs[27] < 0.5:
@@ -50,7 +50,7 @@ def choose_action(obs, state):
     if state == ResuscitationState.REASSESS:
         if obs[46] > 0.5 and obs[-1] >= 88 and obs[45] > 0.5 and obs[-2] >= 60 and obs[40] > 0.5 and obs[-7] >= 8:
             return 48, state  # Finish if stabilized
-        return 3, ResuscitationState.AIRWAY  # Start ABCDE assessment again
+        return 3, ResuscitationState.AIRWAY  # Restart ABCDE assessment
 
     return 0, state  # Default action
 
