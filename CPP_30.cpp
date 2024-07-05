@@ -1,4 +1,3 @@
-```
 #include <vector>
 #include <assert.h>
 
@@ -11,7 +10,7 @@ bool same(vector<float> a, vector<float> b) {
     return true;
 }
 
-vector<float> get_positives(vector<float> l) {
+vector<float> get_positive(vector<float> l) {
     vector<float> result;
     for (float x : l) {
         if (x > 0)
@@ -20,7 +19,7 @@ vector<float> get_positives(vector<float> l) {
     return result;
 }
 
-int main() {
-    assert(same(get_positives(vector<float>(0)), vector<float>(0)));
+int main_test() {
+    assert(same(get_positive({}), {}) == true);
     return 0;
 }
