@@ -1,10 +1,11 @@
-#include <vector>
-#include <string>
-
+```cpp
 bool issame(vector<string> a, vector<string> b) {
-    if (a.size() != b.size()) return false;
+    if (a.size() != b.size())
+        throw runtime_error("Vectors of different sizes");
+    
     for (int i = 0; i < a.size(); i++) {
-        if (filter_by_substring(a, b[i]).size() != 1) return false;
+        if (find(b.begin(), b.end(), a[i]) == b.end())
+            throw runtime_error("Vectors not the same");
     }
     return true;
 }
