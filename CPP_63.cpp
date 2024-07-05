@@ -1,9 +1,10 @@
+```
 #include <stdio.h>
 
 using namespace std;
 
 int fibfib(int n) {
-    if (n == 0 || n == 1)
+    if (n <= 1)
         return 0;
     else if (n == 2)
         return 1;
@@ -23,6 +24,6 @@ int main() {
     int n;
     printf("Enter the value of n: ");
     scanf("%d", &n);
-    printf("The %dth element in the fibfib sequence is: %d\n", n, fibfib(n));
+    printf("FibFib number at position %d is %d\n", n, fibfib(n));
     return 0;
 }
