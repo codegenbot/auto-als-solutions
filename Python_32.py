@@ -20,13 +20,11 @@ def main():
             break
         except ValueError as e:
             print(e)
-    
-    if len(xs) < 2:
-        raise ValueError("xs must have at least two coefficients")
-    if len(xs) % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
-
     try:
+        if len(xs) < 2:
+            raise ValueError("xs must have at least two coefficients")
+        if len(xs) % 2 != 0:
+            raise ValueError("xs must have even number of coefficients")
         print(find_zero(xs))
     except ValueError as e:
         print(e)
