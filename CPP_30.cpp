@@ -1,8 +1,7 @@
-```cpp
 #include <vector>
 #include <assert.h>
 
-bool issame(std::vector<float> a, std::vector<float> b) {
+bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
         return false;
     for(int i = 0; i<a.size(); i++)
@@ -11,8 +10,8 @@ bool issame(std::vector<float> a, std::vector<float> b) {
     return true;
 }
 
-std::vector<float> get_positive(std::vector<float> l) {
-    std::vector<float> result;
+vector<float> get_positive(vector<float> l) {
+    vector<float> result;
     for (float x : l) {
         if (x > 0)
             result.push_back(x);
@@ -21,6 +20,6 @@ std::vector<float> get_positive(std::vector<float> l) {
 }
 
 int main() {
-    assert(issame(get_positive({}), {}) == true); 
+    assert(issame(get_positive({}), {}) );
     return 0;
 }
