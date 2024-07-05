@@ -1,3 +1,9 @@
+```cpp
+#ifdef __cpp_initializer_lists 201103L
+#include <initializer_list>
+#endif
+
+#include <vector>
 #include <assert.h>
 
 bool issame(std::vector<float> a, std::vector<float> b) {
@@ -18,7 +24,4 @@ std::vector<float> get_positive(std::vector<float> l) {
     return result;
 }
 
-int main() {
-    assert(issame(get_positive({}), {}) == true);
-    return 0;
-}
+assert(issame(get_positive({}), {}) == true);
