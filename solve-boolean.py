@@ -1,7 +1,7 @@
 def evaluate_boolean_expression(expression):
     expression = (
-        expression.replace('T', 'true')
-        .replace('F', 'false')
+        expression.replace('T', 'True')
+        .replace('F', 'False')
         .replace('|', ' or ')
         .replace('&', ' and ')
     )
