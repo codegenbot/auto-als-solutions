@@ -11,12 +11,10 @@ int main() {
     double totalDistance = startingHeight;
     double currentHeight = firstBounceHeight;
     
-    for (int i = 1; i <= numberOfBounces; ++i) {
+    for (int i = 1; i < numberOfBounces; ++i) {
         totalDistance += 2 * currentHeight;
         currentHeight *= bouncinessIndex;
     }
-    
-    totalDistance -= currentHeight;
 
     std::cout << std::fixed << std::setprecision(15) << totalDistance << std::endl;
     return 0;
