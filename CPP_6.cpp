@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <stack>
 #include <vector>
@@ -25,10 +26,12 @@ vector<int> parse_nested_parens(string paren_string) {
     return result;
 }
 
-string paren_string = "(()()) ((())) () ((())()())";
-vector<int> result = parse_nested_parens(paren_string);
-for (int i : result) {
-    cout << i << " ";
+int main() {
+    string paren_string = "(()()) ((())) () ((())()())";
+    vector<int> result = parse_nested_parens(paren_string);
+    for (int i : result) {
+        cout << i << " ";
+    }
+    cout << endl;
+    return 0;
 }
-cout << endl;
-return 0;
