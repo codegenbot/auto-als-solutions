@@ -19,7 +19,7 @@ int main() {
     }
     
     double distance = sqrt(sum);
-    cout << fixed << setprecision(6) << distance << endl;
+    cout << fixed << setprecision(14) << distance << endl;
     
     return 0;
 }
