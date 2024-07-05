@@ -1,7 +1,9 @@
-```
-def check():
-    numbers = list(map(int, input("Enter even and odd numbers (space separated): ").split()))
+def sort_even():
+    numbers = list(
+        map(int, input("Enter even and odd numbers (space separated): ").split())
+    )
     print(sorted(numbers))
 
-# Test the function
-check()
+
+def check():
+    sort_even()
