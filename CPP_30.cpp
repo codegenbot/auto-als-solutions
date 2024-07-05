@@ -17,9 +17,8 @@ vector<float> get_positive(vector<float> l) {
             result.push_back(x);
     }
     return result;
-}
 
+}
 int main() {
     assert(same(get_positive({}), {}));
     return 0;
-}
