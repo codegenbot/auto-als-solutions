@@ -1,8 +1,8 @@
-```cpp
+```
 #include <vector>
 #include <cmath>
 
-bool issame(vector<float> a, vector<float> b){
+bool same(vector<float> a, vector<float> b) {
     if(a.size() != b.size())
         return false;
     for(int i = 0; i<a.size(); i++)
@@ -18,11 +18,11 @@ vector<float> get_positive(vector<float> l) {
             result.push_back(x);
     }
     return result;
+
 }
 
 int main() {
-    vector<float> input = {};
-    vector<float> output = get_positive(input);
-    assert(issame(output, {}));
+    vector<float> v1 = get_positive({-1, 2, -3, 4});
+    assert(same(get_positive(v1), {2, 4}));
     return 0;
 }
