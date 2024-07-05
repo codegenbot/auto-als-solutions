@@ -1,13 +1,23 @@
-Here is the completed code:
+```
+#include <stdio.h>
 
-```cpp
+using namespace std;
+
 int fib(int n) {
-    if (n <= 1) return n;
-    int a = 0, b = 1;
+    if (n <= 1)
+        return n;
+    int a = 0, b = 1, result = 1;
     for (int i = 2; i <= n; i++) {
-        int temp = a + b;
+        result = a + b;
         a = b;
-        b = temp;
+        b = result;
     }
-    return b;
+    return result;
 }
+
+int main() {
+    int n;
+    printf("Enter the value of n: ");
+    scanf("%d", &n);
+    printf("The %d-th Fibonacci number is: %d\n", n, fib(n));
+    return 0;
