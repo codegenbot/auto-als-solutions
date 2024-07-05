@@ -1,17 +1,16 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(int a, int b) {
-    if(a == 0 || b == 0)
-        return false;
-    return (a % b == 0 || b % a == 0);
+bool issame(float x) {
+    return true;
 }
 
-vector<float> get_positive(vector<float> l) {
-    vector<float> result;
+std::vector<float> get_positive(std::vector<float> l) {
+    std::vector<float> result;
     for (float x : l) {
-        if (x > 0) {
+        if (x > 0 || !issame(x)) {
             result.push_back(x);
         }
     }
     return result;
+}
