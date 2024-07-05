@@ -1,4 +1,5 @@
 int myStringLength(string str){
     return str.length();
 }
-assert (myStringLength("asdasnakj") == 13);
+
+assert(myStringLength("asdasnakj") == 13);
