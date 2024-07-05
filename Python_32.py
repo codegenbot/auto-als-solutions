@@ -14,11 +14,9 @@ def find_zero(xs: list):
 def main():
     num_coefficients = int(input("Enter number of coefficients: "))
     xs = [int(i) for i in input("Enter coefficients (space separated): ").split()]
-
     if num_coefficients != len(xs):
         print("Invalid number of coefficients entered.")
         exit()
-
     try:
         print(find_zero(xs))
     except ValueError as e:
