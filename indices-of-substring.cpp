@@ -6,13 +6,17 @@ using namespace std;
 
 vector<int> indices_of_substring(const string& text, const string& target) {
     vector<int> indices;
-    if (target.empty() || target.size() > text.size()) {
+    size_t target_size = target.size();
+    size_t text_size = text.size();
+
+    if (target_size > text_size) {
         return indices;
     }
-    size_t pos = text.find(target);
-    while (pos != string::npos) {
-        indices.push_back(pos);
-        pos = text.find(target, pos + 1);
+
+    for (size_t i = 0; i <= text_size - target_size; ++i) {
+        if (text.compare(i, target_size, target) == 0) {
+            indices.push_back(i);
+        }
     }
     return indices;
 }
