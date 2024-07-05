@@ -1,12 +1,12 @@
-```cpp
 #include <cmath>
 #include <vector>
+#include <string>
 
-double findZero(std::vector<double> polys){
-    double a = polys[0];
+double findZero(std::vector<double> xs){
+    double a = xs[0];
     double b = 0;
-    for(int i=1; i<polys.size(); i+=2) {
-        b += polys[i];
+    for(int i=1; i<xs.size(); i+=2) {
+        b += xs[i];
     }
     return -b / (2*a);
 }
@@ -17,10 +17,10 @@ int main() {
     assert(abs(solution - poly(polys, solution)) < 1e-3); 
     return 0;
 }
-double poly(std::vector<double> polys, double x){
-    double result = polys[0];
-    for(int i=1; i<polys.size(); i++) {
-        result += polys[i] * pow(x, i);
+double poly(std::vector<double> xs, double x){
+    double result = xs[0];
+    for(int i=1; i<xs.size(); i++) {
+        result += xs[i] * pow(x, i);
     }
     return result;
 }
