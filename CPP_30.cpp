@@ -1,5 +1,6 @@
+```cpp
 #include <vector>
-#include <initializer_list>
+#include <cmath>
 
 bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
@@ -20,6 +21,8 @@ vector<float> get_positive(vector<float> l) {
 }
 
 int main() {
-    assert(issame(get_positive({}), {}));
+    vector<float> input = {};
+    vector<float> output = get_positive(input);
+    assert(issame(output, {}));
     return 0;
 }
