@@ -3,11 +3,13 @@ import sys
 def parse_observations(observations):
     return list(map(float, observations.split()))
 
-def choose_action(obs):
-    if obs[2] > 0:  # ResponseNone
-        return 1  # CheckSignsOfLife
+def choose_action(obs, step_count):
+    if step_count > 350:
+        return 48  # Finish if timeout reached
+
     if obs[7] > 0:  # BreathingNone
         return 29  # UseBagValveMask
+
     if obs[0] == 0 and obs[1] == 0 and obs[2] == 0:
         return 8  # ExamineResponse
     if obs[3] == 0 and obs[4] == 0 and obs[5] == 0 and obs[6] == 0:
@@ -20,34 +22,41 @@ def choose_action(obs):
         return 6  # ExamineDisability
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
+
     if obs[44] == 0:
+        return 19  # OpenBreathingDrawer
+    if obs[44] > 0 and obs[46] == 0:
         return 25  # UseSatsProbe
     if obs[45] == 0:
+        return 20  # OpenCirculationDrawer
+    if obs[45] > 0 and obs[47] == 0:
         return 27  # UseBloodPressureCuff
+
     if obs[46] > 0 and obs[47] > 0:
         return 16  # ViewMonitor
+
     if obs[46] > 0 and obs[52] < 88:
         return 30  # UseNonRebreatherMask
-    if obs[47] > 0 and obs[51] < 60:
-        if obs[45] == 0:
+    if obs[45] > 0 and obs[51] < 60:
+        if obs[14] == 0:
             return 14  # UseVenflonIVCatheter
-        else:
-            return 15  # GiveFluids
-    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[48] > 0 and obs[49] >= 8:
-        return 48  # Finish
-    return 16  # ViewMonitor as default action
+        return 15  # GiveFluids
 
+    if obs[46] > 0 and obs[52] < 65:
+        return 17  # StartChestCompression
+
+    if obs[46] > 0 and obs[52] >= 88 and obs[47] > 0 and obs[51] >= 60 and obs[46] > 0 and obs[52] >= 8:
+        return 48  # Finish
+
+    return 0  # DoNothing
+
+step_count = 0
 while True:
-    try:
-        observations = input()
-        obs = parse_observations(observations)
-        action = choose_action(obs)
-        print(action)
-        sys.stdout.flush()
-        if action == 48:
-            break
-    except EOFError:
+    observations = input()
+    obs = parse_observations(observations)
+    action = choose_action(obs, step_count)
+    print(action)
+    sys.stdout.flush()
+    if action == 48:
         break
-    except Exception as e:
-        print(0)  # DoNothing as fallback
-        sys.stdout.flush()
+    step_count += 1
