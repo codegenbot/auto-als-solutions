@@ -1,15 +1,18 @@
-double find_zero(vector<double> xs){
-    double root = 1;
-    for(int i=1; i<xs.size();i+=2) {
-        root = -xs[i]/(i*root);
+```cpp
+#include <cmath>
+#include <vector>
+
+double findZero(std::vector<double> xs){
+    double a = xs[0];
+    double b = 0;
+    for(int i=1; i<xs.size(); i+=2) {
+        b += xs[i];
     }
-    return round(root, 10);
+    return -b / (2*a);
 }
 
 int main() {
-    vector<double> xs = {1.0, -3.5, 2.25, -1.125}; // your coefficients
-    double solution = find_zero(xs);
-    
-    assert (abs(xs) < 1e-3); 
+    std::vector<double> coeffs = {1.0, -3.5 / 2.0}; 
+    double solution = findZero(coeffs);
     return 0;
 }
