@@ -1,5 +1,6 @@
-```
+```cpp
 #include <vector>
+#include <assert.h>
 
 bool issame(vector<float> a, vector<float> b){
     if(a.size() != b.size())
@@ -17,28 +18,13 @@ vector<float> get_positive(vector<float> l) {
             result.push_back(x);
     }
     return result;
-
 }
 
 int main() {
     assert(issame(get_positive({}), {}));
-    vector<float> a = {1.5, -2.4, 3.9};
-    vector<float> b = {-1.6, -0.7, -3.8};
-    
-    if (issame(a,b)) {
-        cout << "same" << endl;
-    } else {
-        cout << "not same" << endl;
-    }
-    
-    a = get_positive(a);
-    b = get_positive(b);
-
-    if (issame(a,b)) {
-        cout << "same" << endl;
-    } else {
-        cout << "not same" << endl;
-    }
-
+    vector<float> v = {1, -2, 3, 4};
+    vector<float> positive_v = get_positive(v);
+    bool same = issame(v, {0, -2, 3, 0});
+    cout << "Same? " << (same ? "Yes" : "No") << endl;
     return 0;
 }
