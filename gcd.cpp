@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ int main() {
     cout << gcd(a, b) << endl;
     
     // Clear input buffer before reading strings
-    cin.ignore();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     
     // For substring indices problem
     string text, target;
