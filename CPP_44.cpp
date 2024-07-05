@@ -7,10 +7,11 @@ string change_base(int x, int base) {
     string res = "";
     while (x > 0) {
         int rem = x % base;
-        if (rem < 10) {
+        if (rem <= 9) {
             res = to_string(rem) + res;
         } else {
-            res = (char)(65 + rem - 10) + res;
+            char c = 'A' + rem - 10;
+            res = c + res;
         }
         x /= base;
     }
@@ -18,11 +19,17 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    int num, base_num;
+    int x, b;
     cout << "Enter a number: ";
-    cin >> num;
-    cout << "Enter the base: ";
-    cin >> base_num;
-    cout << change_base(num, base_num);
+    cin >> x;
+    cout << "Enter the base (2-36): ";
+    cin >> b;
+    
+    if(b < 2 || b > 36) {
+        cout << "Invalid base";
+    } else {
+        string result = change_base(x, b);
+        cout << "In base " << b << ": " << result << endl;
+    }
     return 0;
 }
