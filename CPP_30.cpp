@@ -1,3 +1,4 @@
+#include <vector>
 #include <initializer_list>
 
 bool issame(vector<float> a, vector<float> b){
