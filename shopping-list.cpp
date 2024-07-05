@@ -5,25 +5,21 @@ using namespace std;
 
 int main() {
     int n;
-    cin >> n;
+    if (!(cin >> n)) return 1;
 
-    if (n <= 0) {
-        cout << "0.00" << endl;
-        return 0;
+    vector<double> prices(n), discounts(n);
+    for (int i = 0; i < n; ++i) {
+        if (!(cin >> prices[i])) return 1;
     }
 
-    vector<double> prices(n);
-    vector<double> discounts(n);
-
-    for (int i = 0; i < n; ++i)
-        cin >> prices[i];
-
-    for (int i = 0; i < n; ++i)
-        cin >> discounts[i];
+    for (int i = 0; i < n; ++i) {
+        if (!(cin >> discounts[i]) || discounts[i] < 0 || discounts[i] > 100) return 1;
+    }
 
     double total = 0.0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) {
         total += prices[i] * (1 - discounts[i] / 100.0);
+    }
 
     cout << fixed << setprecision(2) << total << endl;
     return 0;
