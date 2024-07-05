@@ -1,3 +1,4 @@
+```Python
 def check(func):
     return func()
 
