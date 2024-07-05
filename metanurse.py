@@ -16,21 +16,19 @@ def choose_action(obs):
         return 6  # ExamineDisability
     if obs[25] == 0 and obs[26] == 0:
         return 7  # ExamineExposure
-    if obs[44] == 0:
+    if obs[34] == 0:
         return 25  # UseSatsProbe
-    if obs[45] == 0:
+    if obs[35] == 0:
         return 27  # UseBloodPressureCuff
-    if obs[46] > 0 and obs[52] < 88:
-        return 30  # UseNonRebreatherMask
-    if obs[45] > 0 and obs[51] < 60:
-        return 15  # GiveFluids
-    return 48  # Finish
+    if obs[38] == 0:
+        return 38  # TakeBloodPressure
+    if obs[39] > 0 and obs[46] > 88:
+        return 48  # Finish
+    return 16  # ViewMonitor
 
-while True:
+for _ in range(350):
     observations = input()
     obs = parse_observations(observations)
     action = choose_action(obs)
     print(action)
     sys.stdout.flush()
-    if action == 48:
-        break
