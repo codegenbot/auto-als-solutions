@@ -1,3 +1,4 @@
+```cpp
 #include <initializer_list>
 #include <vector>
 
@@ -20,8 +21,6 @@ std::vector<float> get_positive(std::vector<float> l) {
 }
 
 int main_test() {
-    std::vector<float> input = {};
-    std::vector<float> output = get_positive(input);
-    assert(issame(output, {}));
+    assert(issame(get_positive({}), {}));
     return 0;
 }
