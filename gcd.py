@@ -11,9 +11,18 @@ def substring_indices(text, target):
     return indices
 
 if __name__ == "__main__":
-    a, b = map(int, input("Enter two integers: ").split())
-    print(gcd(a, b))
-    
-    text = input("Enter text: ").strip()
-    target = input("Enter target: ").strip()
-    print(substring_indices(text, target))
+    task = input("Enter task (gcd/substring): ").strip()
+
+    if task == "gcd":
+        try:
+            a, b = map(int, input("Enter two integers: ").split())
+            print(gcd(a, b))
+        except ValueError:
+            print("Please provide exactly two integers separated by space.")
+
+    elif task == "substring":
+        text = input("Enter the text string: ").strip()
+        target = input("Enter the target string: ").strip()
+        print(substring_indices(text, target))
+    else:
+        print("Unknown task. Please enter 'gcd' or 'substring'.")
