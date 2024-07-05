@@ -13,6 +13,13 @@ double findZero(std::vector<double> xs){
 int main() {
     std::vector<double> polys = {1.0, 2.0, -3.5};
     double solution = findZero(polys);
-    assert(std::abs(polys[1] + polys.size() * solution - 0) < 1e-3); 
+    assert(abs(solution - poly(polys, solution)) < 1e-3); 
     return 0;
+}
+double poly(std::vector<double> xs, double x){
+    double result = xs[0];
+    for(int i=1; i<xs.size(); i++) {
+        result += xs[i] * pow(x, i);
+    }
+    return result;
 }
