@@ -4,57 +4,46 @@ def parse_observations(observations):
     return list(map(float, observations.split()))
 
 def choose_action(obs, state):
-    if state['phase'] == 'initial_setup':
-        if obs[24] < 0.5:
-            return 24, state  # UseMonitorPads
-        if obs[25] < 0.5:
-            return 25, state  # UseSatsProbe
-        if obs[26] < 0.5:
-            return 26, state  # UseAline
-        if obs[27] < 0.5:
-            return 27, state  # UseBloodPressureCuff
-        state['phase'] = 'abcde_assessment'
-        return 16, state  # ViewMonitor
+    if state == "start":
+        return 24, "monitor_pads"  # UseMonitorPads
+    elif state == "monitor_pads":
+        return 25, "sats_probe"  # UseSatsProbe
+    elif state == "sats_probe":
+        return 27, "bp_cuff"  # UseBloodPressureCuff
+    elif state == "bp_cuff":
+        return 3, "airway"  # ExamineAirway
+    elif state == "airway":
+        return 4, "breathing"  # ExamineBreathing
+    elif state == "breathing":
+        return 5, "circulation"  # ExamineCirculation
+    elif state == "circulation":
+        return 6, "disability"  # ExamineDisability
+    elif state == "disability":
+        return 7, "exposure"  # ExamineExposure
+    elif state == "exposure":
+        return 16, "assess"  # ViewMonitor
 
-    if state['phase'] == 'abcde_assessment':
-        if obs[3] < 0.5:
-            return 3, state  # ExamineAirway
-        if obs[4] < 0.5:
-            return 4, state  # ExamineBreathing
-        if obs[5] < 0.5:
-            return 5, state  # ExamineCirculation
-        if obs[6] < 0.5:
-            return 6, state  # ExamineDisability
-        if obs[7] < 0.5:
-            return 7, state  # ExamineExposure
-        state['phase'] = 'treatment'
-        return 16, state  # ViewMonitor
+    # Assess vitals and treat
+    if state == "assess":
+        if obs[39] > 0.5 and obs[-7] < 8:  # RespRate measured and < 8
+            return 29, "assess"  # UseBagValveMask
+        elif obs[46] > 0.5 and obs[-1] < 88:  # Sats measured and < 88%
+            return 30, "assess"  # UseNonRebreatherMask
+        elif obs[45] > 0.5 and obs[-2] < 60:  # MAP measured and < 60
+            return 15, "assess"  # GiveFluids
+        elif obs[38] > 0.5 and obs[-8] > 150:  # HeartRate measured and > 150
+            return 9, "assess"  # GiveAdenosine
+        elif (obs[3] > 0.5 and  # AirwayClear
+              obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
+              obs[39] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
+              obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
+            return 48, "finish"  # Finish
+        else:
+            return 16, "assess"  # ViewMonitor
 
-    if state['phase'] == 'treatment':
-        if obs[46] > 0.5 and obs[-1] < 65:  # Sats < 65%
-            return 17, state  # StartChestCompression
-        if obs[45] > 0.5 and obs[-2] < 20:  # MAP < 20
-            return 17, state  # StartChestCompression
-        
-        if obs[46] > 0.5 and obs[-1] < 88:  # Sats < 88%
-            return 30, state  # UseNonRebreatherMask
-        if obs[45] > 0.5 and obs[-2] < 60:  # MAP < 60
-            return 15, state  # GiveFluids
-        if obs[40] > 0.5 and obs[-7] < 8:  # RespRate < 8
-            return 29, state  # UseBagValveMask
-        if obs[38] > 0.5 and obs[-8] > 150:  # HeartRate > 150
-            return 9, state  # GiveAdenosine
+    return 0, state  # DoNothing
 
-        if (obs[3] > 0.5 and  # AirwayClear
-            obs[46] > 0.5 and obs[-1] >= 88 and  # Sats >= 88%
-            obs[40] > 0.5 and obs[-7] >= 8 and  # RespRate >= 8
-            obs[45] > 0.5 and obs[-2] >= 60):  # MAP >= 60
-            return 48, state  # Finish
-
-    return 16, state  # ViewMonitor (default action)
-
-state = {'phase': 'initial_setup'}
-
+state = "start"
 for line in sys.stdin:
     observations = parse_observations(line)
     action, state = choose_action(observations, state)
