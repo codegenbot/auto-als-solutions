@@ -17,5 +17,15 @@ string change_base(int x, int base) {
 }
 
 int main() {
-    // your test cases here
+    int x, b;
+    cout << "Enter a number: ";
+    cin >> x;
+    cout << "Enter the base (2-36): ";
+    cin >> b;
+    
+    if(b < 2 || b > 36)
+        return -1;
+    
+    string result = change_base(x, b);
+    cout << "Base-" << b << " : " << result << endl;
 }
