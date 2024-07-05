@@ -1,4 +1,3 @@
-```
 from typing import List
 
 
@@ -17,5 +16,5 @@ def parse_music(music_string: str) -> List[int]:
             i += 3
         else:
             if i >= len(music_string):
-                return []  # Return an empty list if no pattern is found
+                return []  
     return result
