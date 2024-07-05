@@ -25,4 +25,3 @@ int main() {
     cin >> b;
     cout << "Base " << b << " representation of " << change_base(n, b);
     return 0;
-}
