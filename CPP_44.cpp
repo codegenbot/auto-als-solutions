@@ -1,9 +1,9 @@
-```
+```cpp
 #include <string>
 using namespace std;
 
 string change_base(int x, int base) {
-    char res[1000];
+    char res[1000];  
     string s = "";
     while (x > 0) {
         int rem = x % base;
