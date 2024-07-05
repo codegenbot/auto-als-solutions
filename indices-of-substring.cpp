@@ -12,7 +12,7 @@ vector<int> indices_of_substring(const string& text, const string& target) {
     size_t pos = text.find(target);
     while (pos != string::npos) {
         indices.push_back(pos);
-        pos = text.find(target, pos - target.size() + 2);
+        pos = text.find(target, pos + 1 - target.size() + 1);
     }
     return indices;
 }
