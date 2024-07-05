@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 int main() {
@@ -8,11 +9,9 @@ int main() {
 
     double snow = initial_snow;
     for (int i = 0; i < hours; ++i) {
-        snow += snow_rate;
-        snow -= snow * melt_rate;
+        snow = (snow + snow_rate) * (1 - melt_rate);
     }
 
-    cout.precision(20);
-    cout << snow << endl;
+    cout << fixed << setprecision(16) << snow << endl;
     return 0;
 }
