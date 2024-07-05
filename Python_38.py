@@ -7,4 +7,4 @@ def decode_cyclic(s: str):
             result += group * 3
         else:
             result += group[1] + group[0]
-    return result
+    return result```
