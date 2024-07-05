@@ -1,3 +1,4 @@
+```cpp
 #include <cmath>
 #include <vector>
 
@@ -12,12 +13,20 @@ double findZero(std::vector<double> coeffs) {
 
 int main() {
     std::vector<double> coeffs;
+    double x;
     int n;
-    scanf("%d", &n);
-    coeffs.resize(n+1);
-    for(int i=0; i<=n; i++) {
-        scanf("%lf", &coeffs[i]);
+
+    std::cout << "Enter the number of coefficients: ";
+    std::cin >> n;
+
+    coeffs.resize(n);
+
+    std::cout << "Enter the coefficients:\n";
+    for(int i = 0; i < n; ++i) {
+        std::cout << "Enter coefficient for x^" << (n - 1 - i) << ": ";
+        std::cin >> coeffs[i];
     }
+
     double solution = findZero(coeffs);
 
     // Define poly function to calculate polynomial value
@@ -28,7 +37,7 @@ int main() {
         }
     }
 
-    printf("%.3lf\n", polyValue);
+    assert (abs(polyValue)< 1e-3);
 
     return 0;
 }
