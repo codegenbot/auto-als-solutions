@@ -1,4 +1,4 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 int main() {
@@ -9,9 +9,11 @@ int main() {
     float snow = initial_snow;
     for (int i = 0; i < hours; ++i) {
         snow += snow_rate;
-        snow *= (1 - melt_rate);
+        snow -= snow_rate * melt_rate;
+        snow -= snow * melt_rate;
     }
 
+    cout.precision(20);
     cout << snow << endl;
     return 0;
 }
