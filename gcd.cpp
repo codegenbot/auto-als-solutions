@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <limits>
 
 using namespace std;
 
@@ -25,17 +24,14 @@ vector<int> findSubstringIndices(const string &text, const string &target) {
 }
 
 int main() {
-    int a, b;
-    string text, target;
-    
     // For gcd problem
+    int a, b;
     cin >> a >> b;
     cout << gcd(a, b) << endl;
     
-    // Ensure ignoring newline character properly after reading integers
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    
     // For substring indices problem
+    string text, target;
+    cin.ignore(); // To ignore the newline character after reading integers
     getline(cin, text);
     getline(cin, target);
     
