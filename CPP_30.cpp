@@ -1,6 +1,6 @@
-```cpp
 #include <vector>
 #include <assert.h>
+#include <initializer_list>
 
 bool same(vector<float> a, vector<float> b) {
     if (a.size() != b.size())
@@ -20,7 +20,7 @@ vector<float> get_positives(vector<float> l) {
     return result;
 }
 
-int main_test() {
+int main() {
     assert(same(get_positives({}), {}));
     return 0;
 }
