@@ -10,9 +10,9 @@ def probability_peter_wins(n, m):
     return Decimal(count / total).quantize(Decimal('1.00000000'), rounding=ROUND_DOWN)
 
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read
-    data = input().strip().split()
-    n = int(data[0])
-    m = int(data[1])
-    print(probability_peter_wins(n, m))
+    try:
+        n = int(input("Enter the number of sides on Peter's die: ").strip())
+        m = int(input("Enter the number of sides on Colin's die: ").strip())
+        print(probability_peter_wins(n, m))
+    except ValueError:
+        print("Please enter valid integer values for n and m.")
