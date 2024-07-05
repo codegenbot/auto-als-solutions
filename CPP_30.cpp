@@ -1,4 +1,4 @@
-```cpp
+```
 #include <vector>
 #include <assert.h>
 
@@ -20,7 +20,7 @@ vector<float> get_positives(vector<float> l) {
     return result;
 }
 
-int main_test() {
-    assert(same(get_positives({}), {}));
+int main() {
+    assert(same(get_positives(vector<float>(0)), vector<float>(0)));
     return 0;
 }
