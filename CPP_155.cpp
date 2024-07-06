@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-// Function declaration for issame
 bool issame(std::vector<int> a, std::vector<int> b);
 
 std::vector<int> even_odd_count(int num) {
@@ -17,7 +16,6 @@ std::vector<int> even_odd_count(int num) {
     return result;
 }
 
-// Define the issame function
 bool issame(std::vector<int> a, std::vector<int> b) {
     return (a == b);
 }
