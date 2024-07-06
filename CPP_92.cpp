@@ -1,8 +1,8 @@
 Here is the completed code:
 
 bool any_int(float a, float b, float c) {
-    if (a == int(a) && b == int(b) && c == int(c)) {
-        return a == b + c || a == c + b || b == c + a || b == a + c || c == a + b;
-    }
-    return false;
+    int ai = (int)a;
+    int bi = (int)b;
+    int ci = (int)c;
+    return (ai == bi + ci) || (bi == ai + ci) || (ci == ai + bi);
 }
