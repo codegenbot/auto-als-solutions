@@ -27,5 +27,24 @@ string exchange(vector<int> lst1, vector<int> lst2) {
 }
 
 int main() {
-   // Your code here
+    vector<int> lst1, lst2;
+    int n1, n2;
+
+    cout << "Enter the number of elements in list 1: ";
+    cin >> n1;
+
+    for (int i = 0; i < n1; i++) {
+        cout << "Enter element " << i+1 << ": ";
+        cin >> lst1.push_back();
+    }
+
+    cout << "Enter the number of elements in list 2: ";
+    cin >> n2;
+
+    for (int i = 0; i < n2; i++) {
+        cout << "Enter element " << i+1 << ": ";
+        cin >> lst2.push_back();
+    }
+    
+    cout << exchange(lst1, lst2) << endl;
 }
