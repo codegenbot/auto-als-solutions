@@ -1,10 +1,6 @@
 ```cpp
-#ifdef __GXX_EXPERIMENTAL__
-#define _SCL_SECURE_NO_WARNINGS
-#endif
-
 #include <vector>
-#include <utility>
+#include <set>
 
 int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<std::pair<int, int>>& path) {
     if (grid.empty() || grid[0].empty()) return -1;
@@ -13,11 +9,6 @@ int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<s
     if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size())
         return -2;
 
-    if(grid[x][y] == 'X') {
-        path.push_back(std::make_pair(x, y));
-        return 1;
-    }
-    
     return 0;
 }
 
@@ -28,4 +19,19 @@ bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
         if (a[i] != b[i])
             return false;
     return true;
+}
+
+std::vector<int> minPath(std::vector<std::pair<int, int>> grid) {
+    std::vector<int> path;
+    // implement your path-finding algorithm here
+    for (const auto& pair : grid) {
+        path.push_back(pair.first);
+        path.push_back(pair.second);
+    }
+    return path;
+}
+
+int main() {
+    assert(isEqual(minPath({{1, 3}, {3, 2}}), {1, 3, 3, 2}));
+    return 0;
 }
