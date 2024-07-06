@@ -1,33 +1,56 @@
-vector<int> minPath(vector<vector<int>> grid, int k) {
-    vector<pair<vector<int>, int>> memo(grid.size() * grid[0].size(), make_pair(vector<int>(), 0));
-    
-    for (int i = 0; i < grid.size(); i++) {
-        for (int j = 0; j < grid[0].size(); j++) {
-            int val = grid[i][j];
-            if (k == 1) {
-                memo[i * grid[0].size() + j] = make_pair(vector<int>(1, val), 0);
-            } else {
-                vector<pair<vector<int>, int>> newMemo;
-                for (int x = -1; x <= 1; x++) {
-                    for (int y = -1; y <= 1; y++) {
-                        if (i + x >= 0 && i + x < grid.size() && j + y >= 0 && j + y < grid[0].size()) {
-                            int val2 = grid[i + x][j + y];
-                            if (k > 1) {
-                                for (auto &p : memo[(i * grid[0].size() + j) % (grid.size() * grid[0].size())]) {
-                                    p.first.push_back(val2);
-                                    p.second++;
-                                    newMemo.emplace_back(move(p));
+vector<int> minPath(vector<vector<int>>& grid, int k) {
+    vector<int> result;
+    for (int i = 0; i < k; i++) {
+        bool updated = false;
+        for (int j = 0; j < grid.size(); j++) {
+            for (int col = 0; col < grid[0].size(); col++) {
+                if (result.empty() || grid[j][col] == result.back()) {
+                    vector<int> path(j, col);
+                    int value = 1;
+                    bool validPath = true;
+                    for (int index = 1; index <= k; index++) {
+                        value++;
+                        if (index + j < 0 || index + j >= grid.size() || 
+                            index + col < 0 || index + col >= grid[0].size()) {
+                            validPath = false;
+                            break;
+                        }
+                        bool found = false;
+                        for (int pathIndex = 0; !found && pathIndex < i; pathIndex++) {
+                            if (path[pathIndex] == j && path[colIndex] == col) {
+                                found = true;
+                            } else if (path[pathIndex] + j >= grid.size() || 
+                                       path[pathIndex] + col >= grid[0].size()) {
+                                validPath = false;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            for (int row = 0; row < grid.size(); row++) {
+                                for (int colIndex = 0; colIndex < grid[0].size(); colIndex++) {
+                                    if (grid[row][colIndex] == value && 
+                                       !found && !isVisited(path, row, colIndex)) {
+                                        j = row;
+                                        col = colIndex;
+                                        found = true;
+                                        break;
+                                    }
                                 }
-                            } else {
-                                newMemo.emplace_back(make_pair(vector<int>(1, val2), 1));
+                                if (found) {
+                                    break;
+                                }
                             }
                         }
                     }
+                    if (!validPath || !result.empty() && result.back() < grid[j][col]) {
+                        continue;
+                    }
+                    result.push_back(grid[j][col]);
+                    updated = true;
+                    break;
                 }
-                memo[(i * grid[0].size() + j) % (grid.size() * grid[0].size())] = min_element(newMemo.begin(), newMemo.end());
             }
         }
     }
-    
-    return memo[0].first;
+    return result;
 }
