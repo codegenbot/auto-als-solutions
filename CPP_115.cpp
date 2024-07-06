@@ -1,4 +1,12 @@
+```cpp
 #include <vector>
+
+int main() {
+    vector<vector<int>> grid = {{0,1,0,0},{0,1,0,0},{0,0,0,1}};
+    int capacity = 2;
+    
+    cout << max_fill(grid, capacity) << endl;
+}
 
 int max_fill(vector<vector<int>> grid, int capacity) {
     int rows = grid.size();
@@ -13,5 +21,5 @@ int max_fill(vector<vector<int>> grid, int capacity) {
         }
     }
     
-    return (total_water + capacity - 1) / capacity;
+    return total_water / capacity + (total_water % capacity != 0);
 }
