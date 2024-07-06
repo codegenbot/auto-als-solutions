@@ -6,4 +6,7 @@ int findMaxValue(std::vector<int> numbers) {
     return maxValue;
 }
 
-assert (std::search({3, 10, 10, 9, 2}, {3, 10, 10, 9, 2}) == -1);
+int main() {
+    assert(std::search({3, 10, 10, 9, 2}, {3, 10, 10, 9, 2}) == -1);
+    return 0;
+}
