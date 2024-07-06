@@ -1,22 +1,15 @@
-Here is the completed code:
-
-```cpp
 bool is_happy(string s) {
-    if (s.length() < 3)
+    int len = s.length();
+    if (len < 3)
         return false;
-    for (int i = 0; i <= s.length()-3; i++) {
-        string substr = s.substr(i, 3);
+    for (int i = 0; i <= len - 3; i++) {
         bool unique = true;
-        for (char c : substr) {
-            int count = 0;
-            for (int j = i; j < i+3 && j<s.length(); j++) {
-                if (s[j] == c)
-                    count++;
-            }
-            if (count > 1) {
+        set<char> letters;
+        for (int j = 0; j < 3; j++)
+            letters.insert(s[i + j]);
+        for (char c : s.substr(i, 3)) {
+            if (letters.find(c) == letters.end())
                 unique = false;
-                break;
-            }
         }
         if (!unique)
             return false;
