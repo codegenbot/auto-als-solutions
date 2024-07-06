@@ -24,6 +24,6 @@ std::vector<int> order_by_points(std::vector<int> nums) {
     return result;
 }
 
-bool issame(std::vector<int> a, std::vector<int>b){
+bool issame(std::vector<int> a, std::vector<int> b){
     return a == b;
 }
