@@ -1,17 +1,16 @@
-```cpp
+```c++
 #include <iostream>
 #include <string>
 
-int is_bored(std::string S) {
+int is_bored(std::string input) {
     int count = 0;
-    size_t pos = 0;
-    while ((pos = S.find("I", pos)) != std::string::npos) {
-        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
-            pos = S.find("I", pos + 1);
-        else
+    for(int i=0; i<input.length();i++) {
+        if(input[i] == 'I' && !ispunct(input[i+1])) {
             count++;
+        }
     }
     return count;
+}
 
 int main() {
     std::string input;

@@ -1,7 +1,7 @@
+```
 #include <iostream>
 #include <vector>
 #include <string>
-#include <algorithm>
 
 using namespace std;
 
@@ -43,11 +43,9 @@ vector<string> select_words(string s, int n) {
 }
 
 int main() {
-    string s = "Mary had a little lamb";
-    int n = 4;
     cout << "{";
-    for (const auto& str : select_words(s, n)) {
-        cout << "\"" << str << "\", ";
+    for (const string& s : select_words("Mary had a little lamb", 4)) {
+        cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
     return 0;

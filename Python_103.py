@@ -1,4 +1,4 @@
-def rounded_avg(n, m):
+def rounded_avg(a, b):
     import math
-    avg = math.ceil((n + m) / 2)
-    return bin(avg)[2:].zfill(math.floor(math.log2(avg)) + 1)
+    avg = math.ceil((a + b) / 2)
+    return bin(int(str(avg), 2))[2:]
