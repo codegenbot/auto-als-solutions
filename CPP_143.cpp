@@ -1,30 +1,33 @@
 string words_in_sentence(string sentence){
-    string result = "";
-    int len;
-    for(int i=0; ispace(sentence[i]); i++){
-        sentence.erase(0,i);
-        len = 0;
-        for(int j=i;j<length(sentence);j++)
-            if(!isalpha(sentence[j])){
-                len++;
-                break;
-            }
-            else
-                len++;
-
-        bool isPrime = true;
-        if(len > 1){
-            for(int k=2;k*k<=len;k++){
-                if(len % k == 0){
-                    isPrime = false;
+    vector<string> words = split(sentence, ' ');
+    string result;
+    for(auto word : words) {
+        int len = word.length();
+        bool is_prime = true;
+        if(len > 1) {
+            for(int i = 2; i*i <= len; i++) {
+                if(len % i == 0) {
+                    is_prime = false;
                     break;
                 }
             }
-
-            if(isPrime)
-                result += sentence.substr(i, len) + " ";
+            if(is_prime) {
+                result += word + " ";
+            }
         }
     }
+    return result.substr(0, result.length() - 1);
+}
 
-    return result;
+vector<string> split(const string& str, char delim){
+    vector<string> tokens;
+    size_t prev = 0, pos = 0;
+    do {
+        pos = str.find(delim, prev);
+        if(pos == string::npos) pos = str.length();
+        string token = str.substr(prev, pos - prev);
+        tokens.push_back(token);
+        prev = pos + 1;
+    } while (pos < str.length());
+    return tokens;
 }
