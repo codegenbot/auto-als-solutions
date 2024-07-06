@@ -12,4 +12,4 @@ def x_or_y(n, x, y):
     else:
         return y
 
-print(x_or_y(int(input("Enter a number: ")), input("Enter X: "), input("Enter Y: ")))
+print(x_or_y(int(input("Enter a number: ")), input("Enter x: "), input("Enter y: ")))
