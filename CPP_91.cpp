@@ -3,20 +3,22 @@
 
 int is_bored(std::string S) {
     int count = 0;
-    size_t pos = 0;
-    while ((pos = S.find("I", pos)) != std::string::npos) {
-        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
-            pos = S.find("I", pos + 1);
-        else
+    std::string::iterator pos = S.begin();
+    while ((pos = std::find(pos, S.end(), 'I')) != S.end()) {
+        if (std::find(pos, S.end(), '.') == S.end() && 
+            std::find(pos, S.end(), '?') == S.end() && 
+            std::find(pos, S.end(), '!') == S.end())
             count++;
+        else
+            pos = std::find(pos + 1, S.end(), '.');
     }
     return count;
 
-int main 
-{
+int main() {
     std::string input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
+    return 0;
 }
