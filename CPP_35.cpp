@@ -2,6 +2,10 @@
 #include <algorithm>
 #include <cmath>
 
-int maxAbsSum(vector<int> l) {
-    return std::abs(*std::max_element(l.begin(), l.end()));
+int myMaximumNumber(int n) {
+    int l[n];
+    for (int i = 0; i < n; i++) {
+        cin >> l[i];
+    }
+    return std::abs(*std::max_element(std::begin(l), std::end(l)));
 }
