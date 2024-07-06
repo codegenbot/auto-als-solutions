@@ -1,6 +1,6 @@
-#include <iostream>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
 
 vector<int> unique(vector<int> l) {
@@ -9,11 +9,8 @@ vector<int> unique(vector<int> l) {
     return result;
 }
 
-int main() {
-    vector<int> input = {5, 3, 5, 2, 3, 3, 9, 0, 123};
-    vector<int> output = unique(input);
-    for (int i : output) {
-        cout << i << " ";
-    }
-    return 0;
+vector<int> unique_copy(iterator first, iterator last) {
+    unordered_set<int> s(first, last);
+    vector<int> v(s.begin(), s.end());
+    return v;
 }
