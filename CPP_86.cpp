@@ -1,25 +1,22 @@
-```cpp
 #include <string>
 #include <algorithm>
 using namespace std;
 
 string anti_shuffle(string s){
     string result = "";
-    int i = 0;
-    while(i<s.size()){
+    for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
             result += ' ';
-            i++;
             continue;
         }
         string word = "";
         for(int j=i; j<s.size() && s[j] != ' '; j++){
             word += s[j];
         }
-        i = j;
+        i = j - 1;
         sort(word.begin(), word.end());
         result += s.substr(i, j - i);
-        i = j;
+        i++;
     }
     return result;
 }
