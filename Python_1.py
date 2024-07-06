@@ -1,24 +1,27 @@
-Here is the solution:
+from typing import List
+
 
 def separate_paren_groups(paren_string: str) -> List[str]:
-    stack = []
     groups = []
-    current_group = ''
-    
+    stack = []
+    current_group = ""
+
     for char in paren_string:
-        if char == ' ':
+        if char == " ":
             continue
-        if char == '(':
+        if char in ["(", "[", "{"]:
             stack.append(char)
             current_group += char
-        elif char == ')':
-            if stack:
-                stack.pop()
+        elif char in [")", "]", "}"]:
+            if stack and stack.pop() == "(":
                 current_group += char
-                if not stack:
-                    groups.append(current_group)
-                    current_group = ''
             else:
-                raise ValueError('Unbalanced parentheses')
-    
-    return groups
+                groups.append(current_group)
+                current_group = ""
+
+    if stack:
+        groups.append(current_group)
+    else:
+        groups.append(current_group)
+
+    return [group[1:-1] for group in groups]
