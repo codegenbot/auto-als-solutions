@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 int findMaxValue(vector<int> numbers) {
@@ -20,6 +21,5 @@ int findMaxValue(vector<int> numbers) {
 
 int main() {
     assert(findMaxValue({3, 10, 10, 9, 2}) == -1);
-    cout << "All test passed." << endl;
     return 0;
 }
