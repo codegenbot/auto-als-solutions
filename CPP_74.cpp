@@ -3,7 +3,13 @@
 #include <string>
 
 bool issame(std::vector<std::string> a) {
-    return a.size() == 0;
+    size_t len = a[0].length();
+    for (const auto& str : a) {
+        if (str.length() != len) {
+            return false;
+        }
+    }
+    return true;
 }
 
 std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {

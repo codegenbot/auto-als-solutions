@@ -42,17 +42,10 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    if(arr.size() > 0)
+    std::vector<int> result = pluck(arr);
+    if(result.size() > 0)
     {
-        std::vector<int> result = pluck(arr);
-        if(result.size() > 0)
-        {
-            std::cout << "The output is: " << *result.begin() << std::endl;
-        }
-        else
-        {
-            std::cout << "No output" << std::endl;
-        }
+        std::cout << "The output is: " << *result.begin() << std::endl;
     }
     else
     {
