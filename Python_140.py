@@ -1,1 +1,4 @@
-input6 = f"_{input()}_"
+```
+input6 = "your input string"
+output = input6.replace("_", "-")
+print(output)
