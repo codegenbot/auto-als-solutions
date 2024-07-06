@@ -1,11 +1,11 @@
+```cpp
 #include <cassert>
 
 int multiply(int a, int b) {
-    return (a % 10) * (b % 10);
+    if(a < 10 && b < 10)
+        return (a * 10 + b) * (a * 10 + b);
+    else 
+        return (a % 10) * (b % 10);
 }
 
-int main() {
-    assert(multiply(0, 0) == 0);
-    // Other test cases here...
-    return 0;
-}
+assert(multiply(0, 0) == 0);

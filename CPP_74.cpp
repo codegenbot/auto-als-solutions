@@ -1,11 +1,12 @@
-```cpp
+```
 #include <vector>
 #include <algorithm>
 #include <string>
 
 bool issame(std::vector<std::string> a) {
-    for (int i = 0; i < a.size() - 1; i++) {
-        if (!(a[i] == a[i + 1])) return false;
+    std::sort(a.begin(), a.end());
+    for (int i = 1; i < a.size(); i++) {
+        if (a[i] != a[0]) return false;
     }
     return true;
 }

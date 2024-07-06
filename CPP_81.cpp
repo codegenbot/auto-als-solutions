@@ -28,25 +28,18 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
         else if (grade > 0.7)
             letterGrade = "D";
         else
-            letterGrade = "E";
+            letterGrade = "F";
         result.push_back(letterGrade);
     }
     return result;
 }
 
-bool operator==(const std::vector<std::string>& a, const std::vector<std::string>& b) {
-    if (a.size() != b.size())
-        return false;
-
-    for (int i = 0; i < a.size(); ++i)
-        if (a[i] != b[i])
-            return false;
-
-    return true;
+bool std::issame(std::vector<std::string> a, std::vector<std::string> b) {
+    return a == b;
 }
 
 int main() {
-    if (!numerical_letter_grade({0.0f, 0.7f}) == {{"E"}, {"D-"}})
-        return 1;
+    if (!std::issame({{"E"}, {"D-" }}, numerical_letter_grade({0.0f, 0.7f})))
+        return 1; // assertion failed
     return 0;
 }

@@ -1,3 +1,4 @@
+```c++
 #include <string>
 
 int is_bored(std::string S) {
@@ -13,7 +14,8 @@ int is_bored(std::string S) {
 
 int main() {
     std::string input;
-    std::getline(std::cin, input);
+    std::cin >> input; // Read the string
+    std::cin.ignore(); // Consume the newline character
     int result = is_bored(input);
     std::cout << "Count: " << result << std::endl;
     return 0;

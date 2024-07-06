@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <sstream>
 
@@ -21,9 +20,6 @@ int main()
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
-    ostringstream oss;
-    oss << "The " << to_string(n) << "-th Fibonacci number is: " << fib(n);
-    string output = oss.str();
-    cout << output << endl;
+    cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
 }
