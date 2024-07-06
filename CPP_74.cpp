@@ -2,13 +2,17 @@
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a) {
-    size_t len = a[0].length();
-    for (const auto& str : a) {
-        if (str.length() != len) {
+bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i].compare(b[i]) != 0) {
             return false;
         }
     }
+
     return true;
 }
 
@@ -23,7 +27,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2 += str.length();
     }
 
-    if (lst1 == lst2) {
+    if (issame(lst1, lst2)) {
         return lst1;
     } else if (sum1 < sum2) {
         return lst1;
