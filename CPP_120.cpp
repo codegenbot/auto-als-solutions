@@ -1,8 +1,6 @@
-```
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
 bool same(vector<int> a, vector<int> b) {
@@ -27,8 +25,9 @@ int main() {
     int n, k;
     cout << "Enter the number of elements: ";
     cin >> n;
-    vector<int> arr(n);
+    vector<int> arr(n, 0); // Initialize with default values
     for (int i = 0; i < n; i++) {
+        cout << "Element " << i+1 << ": ";
         cin >> arr[i];
     }
     cout << "Enter k: ";
