@@ -1,7 +1,12 @@
-#include <initializer_list>
+#include <vector>
+#include <algorithm>
 
-bool issame(vector<int> a, vector<int> b) {
-    return a == b;
+bool issame(vector<pair<int, int>> a, vector<pair<int, int>> b) {
+    if(a.size() != b.size()) return false;
+    for(int i=0; i<a.size(); i++){
+        if(a[i] != b[i]) return false;
+    }
+    return true;
 }
 
 vector<int> pluck(vector<int> arr) {
@@ -20,10 +25,12 @@ vector<int> pluck(vector<int> arr) {
     
     vector<int> result;
     for (int i = 1; i < nodes.size(); i++) {
-        if (issame({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
+        if(issame(vector<pair<int, int>>({nodes[i-1].first, nodes[i-1].second}), 
+                  vector<pair<int, int>>({nodes[i].first, nodes[i].second})) ) {
             continue;
         }
         result.push_back(nodes[i].first);
     }
     
     return result;
+}
