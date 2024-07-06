@@ -1,20 +1,17 @@
-Here is the completed code:
-
-```cpp
-#include <vector>
-using namespace std;
-
 int search(vector<int> lst) {
-    map<int, int> freq;
-    for (int i : lst) {
-        if (freq.find(i) == freq.end())
-            freq[i] = 1;
-        else
-            freq[i]++;
+    map<int, int> freqMap;
+    for (int num : lst) {
+        if (!freqMap.count(num)) {
+            freqMap[num] = 1;
+        } else {
+            freqMap[num]++;
+        }
     }
-    for (auto p : freq) {
-        if (p.second >= p.first)
-            return p.first;
+
+    for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
+        if (it->second >= it->first && it->first > 0) {
+            return it->first;
+        }
     }
     return -1;
 }
