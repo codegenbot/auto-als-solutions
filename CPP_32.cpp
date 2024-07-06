@@ -10,11 +10,10 @@ double poly(double x) {
 
 double find_zero(vector<double> xs){
     int ncoeff = xs.size();
-    vector<double> coeffs(xs.begin(), xs.end());
-    double x0 = xs[1];
-    double sum = 0;
+    coeffs = xs;
+    double x = 1.0;
     for (int i = 2; i < ncoeff; i+=2) {
-        sum += coeffs[i] * pow(-sum / coeffs[i-1], i);
+        x = -poly(x) / poly(1);
     }
-    return round(sum, 10);
+    return round(x, 10);
 }
