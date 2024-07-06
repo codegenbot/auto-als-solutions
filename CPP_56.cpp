@@ -1,3 +1,6 @@
+#include <string>
+using namespace std;
+
 bool correct_bracketing(string brackets){
     int opening = 0;
     for(char c : brackets) {
@@ -10,3 +13,4 @@ bool correct_bracketing(string brackets){
         }
     }
     return opening == 0;
+}
