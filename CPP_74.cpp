@@ -1,14 +1,9 @@
-```
 #include <vector>
 #include <algorithm>
 #include <string>
 
 bool issame(std::vector<std::string> a) {
-    std::sort(a.begin(), a.end());
-    for (int i = 1; i < a.size(); i++) {
-        if (a[i] != a[0]) return false;
-    }
-    return true;
+    return a.size() == 0;
 }
 
 std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
