@@ -1,15 +1,13 @@
 ```
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
-    stack = []
+    level = 0
     max_level = 0
     for char in paren_string:
         if char == '(':
-            stack.append(char)
-            level = len(stack)
+            level += 1
             max_level = max(max_level, level)
         elif char == ')':
-            stack.pop()
-            level = len(stack)
-            result.append(level)
+            level -= 1
+        result.append(level)
     return result
