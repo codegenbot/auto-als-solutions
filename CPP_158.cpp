@@ -1,4 +1,3 @@
-```cpp
 #include <algorithm>
 #include <iostream>
 using namespace std;
@@ -20,6 +19,6 @@ int main() {
             int unique_b = b.size() - (set<char>(b.begin(), b.end())).size();
             return unique_a > unique_b;
         });
-    cout << result << endl; 
+    cout << result << endl; // Use this if you want to print the result
     return 0;
 }
