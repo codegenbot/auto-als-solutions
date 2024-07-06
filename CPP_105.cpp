@@ -1,49 +1,58 @@
-vector<string> by_length(vector<int> arr){
-    vector<int> digits; // store digits between 1 and 9
-    for (int i : arr) {
-        if (i >= 1 && i <= 9) {
-            digits.push_back(i);
-        }
-    }
+#include <vector>
+#include <string>
 
-    sort(digits.begin(), digits.end()); // sort the digits
+using namespace std;
 
-    reverse(digits.begin(), digits.end()); // reverse the sorted digits
+bool issame(vector<string> a, vector<string> b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i)
+        if (a[i] != b[i]) return false;
+    return true;
+}
 
-    vector<string> names;
-    for (int digit : digits) {
-        if (digit >= 1 && digit <= 9) {
-            switch (digit) {
+vector<vector<string>> group_by_length(vector<int> arr) {
+    vector<vector<string>> result;
+    map<int, vector<string>> mp;
+
+    for (int num : arr) {
+        if (num >= 1 && num <= 9) {
+            string str = "";
+            switch (num) {
                 case 1:
-                    names.push_back("One");
+                    str = "One";
                     break;
                 case 2:
-                    names.push_back("Two");
+                    str = "Two";
                     break;
                 case 3:
-                    names.push_back("Three");
+                    str = "Three";
                     break;
                 case 4:
-                    names.push_back("Four");
+                    str = "Four";
                     break;
                 case 5:
-                    names.push_back("Five");
+                    str = "Five";
                     break;
                 case 6:
-                    names.push_back("Six");
+                    str = "Six";
                     break;
                 case 7:
-                    names.push_back("Seven");
+                    str = "Seven";
                     break;
                 case 8:
-                    names.push_back("Eight");
+                    str = "Eight";
                     break;
                 case 9:
-                    names.push_back("Nine");
+                    str = "Nine";
                     break;
             }
+            mp[str.length()].push_back(str);
         }
     }
 
-    return names;
+    for (auto it = mp.begin(); it != mp.end(); ++it) {
+        result.push_back(it->second);
+    }
+
+    return result;
 }
