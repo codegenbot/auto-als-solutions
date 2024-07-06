@@ -1,5 +1,5 @@
-Write a function called `file_name_check` that takes a string as an argument representing a file name. This function should check if the given file name is in the following format: 
-The first part of the file name can contain at most three digits.
-There must be exactly one dot (.) in the file name.
-The part before the dot must only consist of letters.
-The part after the dot must be either 'txt', 'exe' or 'dll'.
+Here is the task description and function signature for the given problem:
+
+Write a Python function to check if a file name meets certain conditions. The function should take a string representing the file name as input and return 'Yes' if the file name is valid and 'No' otherwise.
+
+A file name is considered valid if it does not contain more than three digits, has exactly one dot (.), the part before the dot consists only of letters, and the extension is either 'txt', 'exe', or 'dll'.
