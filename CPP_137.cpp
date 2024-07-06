@@ -20,11 +20,3 @@ boost::any compare_one(boost::any a, boost::any b) {
     else
         return "None";
 }
-
-int main() {
-    boost::any a = 10.5; 
-    boost::any b = "hello";
-    boost::any result = compare_one(a, b);
-    cout << "Result: " << any_cast<string>(result) << endl;
-    return 0;
-}
