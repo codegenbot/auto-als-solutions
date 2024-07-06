@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -9,8 +10,10 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     return true;
 }
 
-void sort_array(std::vector<int>& array) { 
-    std::sort(array.begin(), array.end());
+std::vector<int> sort_array(const std::vector<int>& array) { 
+    std::vector<int> result = array;
+    std::sort(result.begin(), result.end());
+    return result;
 }
 
 int main() {
@@ -20,5 +23,5 @@ int main() {
     }
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
-    sort_array(array1); 
+    array1 = sort_array({21, 14, 23, 11}); 
 }
