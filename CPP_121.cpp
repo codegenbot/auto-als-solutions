@@ -1,18 +1,10 @@
-```cpp
-#include <iostream>
-#include <vector>
-
-int sumOdd(const char* str) {
+int sumOdd(std::string str) {
     int sum = 0;
-    for (char c : std::string(str)) { 
-        if ((int)c % 2 != 0) {
-            sum += (int)c;
+    for (char c : str) { 
+        int i = static_cast<int>(c);
+        if (i % 2 != 0) {
+            sum += i;
         }
     }
     return sum;
-}
-
-int main() {
-    std::cout << sumOdd("Hello") << std::endl; 
-    return 0;
 }
