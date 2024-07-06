@@ -1,15 +1,17 @@
+Here is the completed code:
+
 int max_fill(vector<vector<int>> grid, int capacity) {
     int ans = 0;
-    for (const auto& row : grid) {
-        int fill = 0;
-        for (int i = 0; i < row.size(); ++i) {
-            if (row[i] == 1) {
-                fill += 1;
+    for (const auto &row : grid) {
+        int remaining_water = 0;
+        for (int water : row) {
+            remaining_water += water;
+            if (remaining_water > capacity) {
+                while (remaining_water > 0) {
+                    remaining_water -= capacity;
+                    ans++;
+                }
             }
-        }
-        while (fill > 0) {
-            fill -= capacity;
-            ans++;
         }
     }
     return ans;
