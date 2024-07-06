@@ -1,6 +1,6 @@
-```cpp
 #include <vector>
 #include <cassert>
+
 using namespace std;
 
 vector<int> findCommon(vector<int>a,vector<int>b){
@@ -12,5 +12,5 @@ vector<int> findCommon(vector<int>a,vector<int>b){
 }
 
 int main(){
-    assert(findCommon({4, 3, 2, 8}, {}) == vector<int>()); 
+    assert(findCommon({4, 3, 2, 8}, {}) == vector<int>());
 }
