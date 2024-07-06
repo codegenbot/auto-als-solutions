@@ -1,8 +1,11 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
+using namespace std;
+
+bool std::issame(std::vector<string> a, const vector<string>& b) {
     if (a.size() != b.size()) {
         return false;
     }
@@ -57,7 +60,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     } else {
         for (const auto& str : lst1) {
             for (const auto& sub_str : lst2) {
-                if (str.find(sub_str) != std::string::npos || sub_str.find(str) != std::string::npos) {
+                if (str.find(sub_str) != string::npos || sub_str.find(str) != string::npos) {
                     return lst1;
                 }
             }
