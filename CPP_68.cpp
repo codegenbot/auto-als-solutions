@@ -1,17 +1,10 @@
+#include <initializer_list>
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
 
 bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
     if (a.first != b.first) return a.first < b.first;
     return a.second < b.second;
-}
-
-int main() {
-    std::vector<int> arr = {7, 9, 7, 1};
-    std::vector<int> result = pluck(arr);
-    assert(result.empty());
-    return 0;
 }
 
 std::vector<int> pluck(std::vector<int> arr) {
@@ -36,4 +29,28 @@ std::vector<int> pluck(std::vector<int> arr) {
     }
     
     return {nodes[0].first};
+}
+
+int main() {
+    std::vector<int> arr;
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    for (int i = 0; i < n; ++i) {
+        int x;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> x;
+        arr.push_back(x);
+    }
+    std::vector<int> result = pluck(arr);
+    if(result.size() > 0)
+    {
+        std::cout << "The output is: " << *result.begin() << std::endl;
+    }
+    else
+    {
+        std::cout << "No output" << std::endl;
+    }
+    
+    return 0;
 }
