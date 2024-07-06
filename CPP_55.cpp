@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 
 using namespace std;
@@ -12,7 +11,7 @@ int fib(int n) {
         a = b;
         b = result;
     }
-    return result;
+    //return result;
 }
 
 int main() 
