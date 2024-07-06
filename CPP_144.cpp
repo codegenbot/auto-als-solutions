@@ -1,17 +1,11 @@
-#include <string>
-#include <sstream>
-
+#include<string>
 using namespace std;
 
 bool simplify(string x, string n) {
-    int a = 0, b = 1, c = 0, d = 1;
-    stringstream s(x);
-    s >> a >> b;
-    s.clear();
-    s.str(n);
-    s >> c >> d;
-    if (b*d == a*c)
-        return true;
-    else
-        return false;
+    int a = stoi(strtok((x.substr(1,x.find('/'))).c_str(),"/"));
+    int b = stoi(x.substr(0,1));
+    int c = stoi(strtok((n.substr(1,n.find('/'))).c_str(),"/"));
+    int d = stoi(n.substr(0,1));
+
+    return (a*d) == (b*c);
 }
