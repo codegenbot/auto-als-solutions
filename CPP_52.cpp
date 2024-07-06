@@ -15,9 +15,7 @@ int main() {
     std::vector<int> numbers = {1, 2, 3, 4, 5};
     int threshold = 3;
 
-    bool result = below_threshold(numbers, threshold);
-
-    if (result) {
+    if (below_threshold(numbers, threshold)) {
         std::cout << "All numbers are below the threshold." << std::endl;
     } else {
         std::cout << "At least one number is not below the threshold." << std::endl;
