@@ -19,7 +19,9 @@ vector<string> numerical_letter_grade(vector<float> grades) {
             result.push_back("C+");
         else if (g >= 2.3)
             result.push_back("C");
-        else if (g >= 1.3)
+        else if (g >= 1.7)
+            result.push_back("D+");
+        else if (g >= 1.0)
             result.push_back("D");
         else
             result.push_back("E");
