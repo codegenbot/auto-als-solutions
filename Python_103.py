@@ -1,4 +1,3 @@
-```
 def rounded_avg(n, m):
     from math import ceil
     avg = (n + m) / 2

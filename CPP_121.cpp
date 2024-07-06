@@ -2,12 +2,11 @@
 #include <iostream>
 #include <vector>
 
-int sumOdd(std::string str) {
+int sumOdd(const char* str) {
     int sum = 0;
-    for (char c : str) { 
-        if (static_cast<int>(c) % 2 != 0) {
-            // Convert char to int and add it to sum
-            sum += static_cast<int>(c);
+    for (size_t i = 0; str[i]; ++i) { 
+        if ((unsigned)str[i] % 2 != 0) {
+            sum += (unsigned)str[i];
         }
     }
     return sum;
