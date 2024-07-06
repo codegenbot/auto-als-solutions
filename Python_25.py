@@ -1,4 +1,3 @@
-```
 from typing import List
 import math
 
@@ -21,5 +20,11 @@ def factorize(n: int) -> List[int]:
         factors.append(n)
     return factors
 
-n = int(input("Enter a number: "))
-print(factorize(n))
+
+def main():
+    num = int(input("Enter a number: "))
+    print(factorize(num))
+
+
+if __name__ == "__main__":
+    main()
