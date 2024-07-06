@@ -8,6 +8,7 @@ bool issame(std::vector<int> a,std::vector<int>b){
         if(a[i] != b[i]) return false;
     }
     return true;
+}
 
 std::vector<int> strange_sort_list(std::vector<int> lst) {
     std::vector<int> result;
