@@ -1,40 +1,29 @@
-```cpp
-#include <iostream>
-#include <cctype>
-#include <vector>
 #include <string>
-
-int countDigits(const std::string& str) {
-    int count = 0;
-    for (char c : str) {
-        if (std::isdigit(c)) {
-            count++;
-        }
-    }
-    return count;
-}
+#include <cctype>
 
 std::string file_name_check(std::string file_name) {
-    if (countDigits(file_name) > 3) {
-        return "No";
+    int count = 0;
+    bool has_dot = false;
+    for(int i=0; i<file_name.length(); i++){
+        if(file_name[i] >= '0' && file_name[i] <= '9'){
+            count++;
+            if(count > 3) return "No";
+        }
+        else if(file_name[i] == '.'){
+            has_dot = true;
+        }
+        else if(i > 0 && !has_dot){
+            if(!isalpha(file_name[i])) return "No";
+        }
     }
-
-    size_t dotPos = file_name.find('.');
-    if (dotPos == std::string::npos || file_name.find('.') != dotPos) {
-        return "No";
-    }
-
-    std::string prefix = file_name.substr(0, dotPos);
-    std::string suffix = file_name.substr(dotPos + 1);
-
-    if (prefix.empty() || !isalpha(prefix[0])) {
-        return "No";
-    }
-
-    std::vector<std::string> validSuffixes = {"txt", "exe", "dll"};
-    if (std::find(validSuffixes.begin(), validSuffixes.end(), suffix) == validSuffixes.end()) {
-        return "No";
-    }
-
+    if(!has_dot) return "No";
+    size_t pos = file_name.find('.');
+    string ext = file_name.substr(pos+1);
+    if(ext != "txt" && ext != "exe" && ext != "dll") return "No";
     return "Yes";
+}
+
+int main() {
+    assert(file_name_check("s.") == "No");
+    return 0;
 }
