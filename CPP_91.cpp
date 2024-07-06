@@ -1,11 +1,17 @@
-```
-int count = 0;
-size_t pos = 0;
-while ((pos = S.find(".", pos)) != string::npos || (pos = S.find("?", pos)) != string::npos || (pos = S.find("!", pos)) != string::npos) {
-    size_t start = pos == string::npos ? pos : 1;
-    if (S.substr(start, 2) == " I") {
-        count++;
+#include <string>
+
+int is_bored(std::string S){
+    int boredom_count = 0;
+    size_t start = 0;
+    
+    while((start = S.find("I", start)) != std::string::npos) {
+        if (S[start] == 'I' && (S.find('.', start+1) == std::string::npos 
+                && S.find('?', start+1) == std::string::npos 
+                && S.find('!', start+1) == std::string::npos)) {
+            boredom_count++;
+        }
+        start++;
     }
-    pos = ++start;
+    
+    return boredom_count;
 }
-return count;
