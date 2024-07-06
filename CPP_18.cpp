@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 int how_many_times(std::string str, std::string substring) {
@@ -5,11 +6,13 @@ int how_many_times(std::string str, std::string substring) {
     size_t pos = 0;
     while ((pos = str.find(substring)) != std::string::npos) {
         count++;
-        str.erase(0, pos + substring.length());
+        str.erase(0, pos + substring.size());
     }
     return count;
+
 }
 
 int main() {
-    assert (how_many_times("john doe", "john") == 1);
+    assert(how_many_times("john doe", "john") == 1);
+    return 0;
 }
