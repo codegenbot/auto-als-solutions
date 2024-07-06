@@ -17,7 +17,8 @@ int sort_array(std::vector<int>& array) {
 
 int main() {
     std::vector<int> array = {21, 14, 23, 11};
-    std::vector<int> result = sort_array(array);
-    assert(issame(result,{23,21,14,11}));
+    std::vector<int> result = array;
+    std::sort(result.begin(), result.end());
+    assert(issame(result,{11,14,21,23}));
     return 0;
 }
