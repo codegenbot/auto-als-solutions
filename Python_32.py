@@ -32,6 +32,8 @@ def main():
 def find_zero(coeffs):
     a, b, c = coeffs[:3]
     d = coeffs[3:]
+    if len(d) % 2 != 0:
+        raise ValueError("Invalid number of coefficients. Try again.")
     roots = []
     for i in range(0, len(d), 2):
         temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
