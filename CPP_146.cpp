@@ -1,31 +1,10 @@
-#include <iostream>
-#include <vector>
+#include<vector>
 
-int specialFilter(std::vector<int> nums) {
+int specialFilter(std::vector<int> nums){
     int count = 0;
-    for (int num : nums) {
-        if (abs(num) > 10 && (num % 10) % 2 != 0 && (num / 10) % 10 % 2 != 0) {
+    for(int num : nums){
+        if(abs(num) > 10 && (num % 10) % 2 != 0 && (abs(num) / 10) % 2 != 0){
             count++;
         }
     }
     return count;
-}
-
-int main() {
-    std::vector<int> nums;
-    int n;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-    
-    for(int i=0; i<n; i++){
-        std::cout << "Enter element " << (i+1) << ": ";
-        int temp;
-        std::cin >> temp;
-        nums.push_back(temp);
-    }
-    
-    int result = specialFilter(nums);
-    std::cout << "The number of elements that meet the filter criteria is: " << result << std::endl;
-    
-    return 0;
-}
