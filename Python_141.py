@@ -4,8 +4,8 @@ def file_name_check(file_name):
         return 'No'
     if file_name.count('.') != 1:
         return 'No'
-    if not file_name[:file_name.index('.').lower().isalpha():
+    if not file_name[:file_name.index('.').lstrip().isalpha():
         return 'No'
-    if not file_name[file_name.index('.'):].lower().endswith(('.txt', '.exe', '.dll')):
+    if file_name[file_name.index('.'):].lower() not in ['txt', 'exe', 'dll']:
         return 'No'
     return 'Yes'
