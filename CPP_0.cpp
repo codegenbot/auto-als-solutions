@@ -1,9 +1,10 @@
-bool has_close_elements(vector<float> numbers, float threshold) {
-    for (int i = 0; i < numbers.size(); i++) {
-        for (int j = i + 1; j < numbers.size(); j++) {
-            if (abs(numbers[i] - numbers[j]) <= threshold)
-                return true;
+float diff = numeric_limits<float>::max();
+for(int i = 0; i < numbers.size() - 1; i++) {
+    for(int j = i + 1; j < numbers.size(); j++) {
+        float temp = abs(numbers[i] - numbers[j]);
+        if(temp < threshold && temp < diff) {
+            diff = temp;
         }
     }
-    return false;
 }
+return (diff < threshold);
