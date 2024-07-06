@@ -10,12 +10,11 @@ def factorize(n: int) -> List[int]:
             i += 1
         else:
             count = 0
-            while n % (i * i) == 0:
+            while n % i == 0:
+                n //= i
                 count += 1
-                n //= i * i
-            for _ in range(count):
-                factors.append(i)
-            n = max(2, int(math.sqrt(n)))
+            factors.append(i for _ in range(count))
+            i = 2
     if n > 1:
         factors.append(n)
-    return factors
+    return [factor for factor in factors if isinstance(factor, int)] or [n]
