@@ -1,3 +1,7 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+
 std::string string_sequence(int n) {
     std::ostringstream oss;
     for (int i = 1; i <= n; ++i) {
@@ -6,4 +10,5 @@ std::string string_sequence(int n) {
         oss << i;
     }
     oss << std::endl; 
-    return oss;
+    return oss.str();
+}
