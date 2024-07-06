@@ -1,4 +1,6 @@
-```
+Here is the solution:
+
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
