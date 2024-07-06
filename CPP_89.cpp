@@ -1,5 +1,9 @@
-string encrypt(string s){
-    string result = "";
+```cpp
+#include <iostream>
+#include <string>
+
+std::string encrypt(std::string s){
+    std::string result = "";
     for(int i=0; i<s.length(); i++){
         char c = s[i];
         if(c >= 'a' && c <= 'z'){
@@ -10,4 +14,10 @@ string encrypt(string s){
         result += c;
     }
     return result;
+}
+
+int main() {
+    assert(encrypt("a")=="e");
+    std::cout << "Encryption of 'a' is: " << encrypt("a") << std::endl;
+    return 0;
 }

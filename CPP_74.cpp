@@ -1,13 +1,13 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <random>
+#include <cstdlib> // For rand() function
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(vector<string> a, vector<string> b) {
     return a == b;
 }
 
-std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
+vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     if (issame(lst1, lst2)) {
         return lst1;
     } else {
@@ -26,16 +26,20 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         } else if (sum1 > sum2) {
             return lst2;
         } else {
-            std::random_device rd;  // obtain a random number from hardware
-            std::mt19937 eng(rd()); // seed the generator
- 
-            std::bernoulli_distribution dist(0.5); // probability of true
-
-            if (dist(eng)) {
+            if (rand() % 2 == 0) {
                 return lst1;
             } else {
                 return lst2;
             }
         }
     }
+}
+
+int main() {
+    vector<string> list1 = {"this"};
+    vector<string> list2 = {};
+    
+    assert (issame(total_match(list1, list2), {}));
+    
+    return 0;
 }
