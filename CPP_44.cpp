@@ -1,12 +1,12 @@
 string change_base(int x, int base) {
-    string res = "";
+    string result = "";
     while (x > 0) {
-        int remainder = x % base;
-        if (remainder < 10)
-            res.insert(0, to_string(remainder));
+        int rem = x % base;
+        if (rem < 10)
+            result = to_string(rem) + result;
         else
-            res.insert(0, "A");
+            result = 'A' + rem - 10 + result;
         x /= base;
     }
-    return res;
+    return result;
 }

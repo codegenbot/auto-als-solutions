@@ -1,7 +1,14 @@
 #include <algorithm>
 #include <cmath>
 
-int main() {
-    std::vector<int> l = {5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10};
-    return std::abs(*std::max_element(l.begin(), l.end()));
+int findMax(int n) {
+    std::vector<int> l;
+    for (int i = 0; i <= n; i++) {
+        int num;
+        std::cout << "Enter number: ";
+        std::cin >> num;
+        l.push_back(num);
+    }
+    
+    return *std::max_element(l.begin(), l.end());
 }
