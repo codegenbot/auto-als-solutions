@@ -1,4 +1,7 @@
-long long double_the_difference(vector<float> lst){
+#include <vector>
+#include <cmath>
+
+long long double_the_difference(std::vector<float> lst) {
     long long sum = 0;
     for(float n : lst){
         if(int(n) > 0 && int(n) % 2 != 0){ 
@@ -6,4 +9,11 @@ long long double_the_difference(vector<float> lst){
         }
     }
     return sum;
+}
+
+int main() {
+    std::vector<float> lst; 
+    // ... populate the vector ...
+    assert(double_the_difference(lst) == 0 );
+    return 0;
 }
