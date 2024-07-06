@@ -1,10 +1,10 @@
 #include <openssl/ssl.h>
 #include <openssl/x509v3.h>
 #include <openssl/evp.h>
-#include <sstream>
 #include <string>
+#include <sstream>
 
-std::string string_to_md5(const std::string& text) {
+std::string string_to_md5(std::string text) {
     if (text.empty()) return "";
 
     unsigned char result[16];
