@@ -1,4 +1,3 @@
-```Python
 def decode_shift(s: str):
     s = s.strip().lower()
     key = len(s) - s.count(' ')
