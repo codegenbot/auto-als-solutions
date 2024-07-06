@@ -12,14 +12,6 @@ int main() {
         return count;
     }
 
-    int main() {
-        std::string s1, s2;
-        std::cout << "Enter the string: ";
-        std::cin >> s1;
-        std::cout << "Enter the substring: ";
-        std::cin >> s2;
-
-        std::cout << "The number of times the substring appears in the string is: " << how_many_times(s1, s2) << std::endl;
-
-        return 0;
-    }
+    std::cout << how_many_times("Hello World Hello", "Hello") << std::endl;
+    return 0;
+}
