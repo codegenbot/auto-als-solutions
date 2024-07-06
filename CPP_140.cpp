@@ -1,22 +1,15 @@
-Here is the completed code:
-
-string fix_spaces(string text){
-    string result = "";
-    bool wasSpace = false;
-
-    for(int i = 0; i < text.length(); i++){
-        if(text[i] == ' '){
-            if(wasSpace || i == text.length() - 1) {
-                result += "-";
+string fix_spaces(string text) {
+    string new_text = "";
+    for (int i = 0; i < text.length(); i++) {
+        if (text[i] == ' ') {
+            if (new_text.length() >= 2 && new_text[new_text.length()-1] == ' ' && new_text[new_text.length()-2] == ' ') {
+                new_text += '-';
             } else {
-                wasSpace = true;
-                result += '_';
+                new_text += '_';
             }
-        }else{
-            wasSpace = false;
-            result += text[i];
+        } else {
+            new_text += text[i];
         }
     }
-
-    return result;
+    return new_text;
 }
