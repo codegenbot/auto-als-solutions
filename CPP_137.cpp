@@ -1,5 +1,6 @@
 #include <boost/any.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <string>
 
 using namespace boost;
 
