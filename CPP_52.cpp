@@ -16,26 +16,24 @@ int main() {
     int threshold;
 
     // Read input from user
-    int n;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-    for (int i = 0; i < n; ++i) {
+    std::cout << "Enter the elements of the list: ";
+    for (int i = 0; i < 5; ++i) {
         int num;
-        std::cout << "Enter element " << i + 1 << ": ";
         std::cin >> num;
         list.push_back(num);
     }
-    std::cout << "Enter the threshold: ";
+
+    std::cout << "Enter the threshold value: ";
     std::cin >> threshold;
 
-    // Check if all elements are below the threshold
+    // Check if all elements in the list are below the threshold
     bool result = below_threshold(list, threshold);
 
-    // Print output
+    // Print the output
     if (result) {
-        std::cout << "All elements are below the threshold." << std::endl;
+        std::cout << "All elements in the list are below the threshold." << std::endl;
     } else {
-        std::cout << "At least one element is not below the threshold." << std::endl;
+        std::cout << "At least one element in the list is not below the threshold." << std::endl;
     }
 
     return 0;
