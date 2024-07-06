@@ -1,4 +1,4 @@
-```
+```cpp
 std::string solve(std::string s) {
     std::string result = "";
     bool foundLetter = false;
