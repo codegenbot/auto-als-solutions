@@ -6,7 +6,7 @@ vector<int> eat(int number, int need, int remaining) {
     vector<int> result;
     
     int total = number + need;
-    int left = min(total - 1000, remaining);
+    int left = min(min(total - 1000, remaining), 0);
     
     if (left < 0) {
         total -= left;
@@ -20,30 +20,28 @@ vector<int> eat(int number, int need, int remaining) {
 }
 
 int main() {
-    cout << "Eating..." << endl;
-    vector<int> output1 = eat(5, 6, 10);
-    for (int i : output1) {
+    vector<int> output;
+
+    output = eat(5, 6, 10);
+    for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
-    cout << "Eating..." << endl;
-    vector<int> output2 = eat(4, 8, 9);
-    for (int i : output2) {
+
+    output = eat(4, 8, 9);
+    for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
-    cout << "Eating..." << endl;
-    vector<int> output3 = eat(1, 10, 10);
-    for (int i : output3) {
+
+    output = eat(1, 10, 10);
+    for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
-    cout << "Eating..." << endl;
-    vector<int> output4 = eat(2, 11, 5);
-    for (int i : output4) {
+
+    output = eat(2, 11, 5);
+    for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
