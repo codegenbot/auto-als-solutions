@@ -1,5 +1,6 @@
-```
-def max_rolling_sum(numbers: list[int]) -> int:
+from typing import List
+
+def max_rolling_sum(numbers: list) -> int:
     if not numbers:
         return 0
 
