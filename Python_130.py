@@ -1,3 +1,4 @@
+```
 def tri(n):
     if n == 0:
         return [3]
@@ -6,11 +7,8 @@ def tri(n):
     elif n == 2:
         return [3, 2]
     else:
-        result = [3, 2]
-        for i in range(2, n):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                last_three = result[-3:]
-                result.append(sum(last_three))
-        return result
+        sequence = [3, 2]
+        for _ in range(2, n + 1):
+            next_num = sum(sequence[-2:]) if len(sequence) % 2 != 0 else (sequence[-1] + sequence[0]) / 2
+            sequence.append(next_num)
+        return sequence
