@@ -1,3 +1,8 @@
+#include<stdio.h>
+#include<math.h>
+#include<vector>
+using namespace std;
+
 vector<int> compare(vector<int> game, vector<int> guess) {
     vector<int> result(game.size()); // initialize with same size as game
     for (int x : game) { 
