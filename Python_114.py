@@ -1,5 +1,8 @@
+```
 def minSubArraySum(nums):
     if not nums:
+        return 0
+    if max(nums) > 0:
         return 0
     min_sum = float("inf")
     current_sum = 0
@@ -10,4 +13,4 @@ def minSubArraySum(nums):
             min_sum = min(min_sum, current_sum)
             current_sum -= nums[left]
             left += 1
-    return min(min_sum, 0) if min_sum != float("inf") else 0
+    return min_sum

@@ -1,11 +1,11 @@
+#include <iostream>
 #include <cassert>
-#include <cmath>
 
 bool any_int(float a, float b, float c) {
     return (int(a) + int(b)) == int(c) || (int(a) + int(c)) == int(b) || (int(b) + int(c)) == int(a);
 }
 
 int main() {
-    assert(any_int(3.01,4,7)==false); 
+    assert(any_int(3.01, 4, 7) == false);
     return 0;
 }
