@@ -1,24 +1,15 @@
-#include <iostream>
 #include <string>
 
 using namespace std;
 
-string flip_case(string str) {
+string flip_case(string str){
     string result = "";
-    for (char c : str) {
-        if (islower(c)) {
-            result += toupper(c);
-        } else {
-            result += tolower(c);
-        }
+    for(int i=0; i<str.length(); i++){
+        char c = str[i];
+        if(c >= 'a' && c <= 'z')
+            result += (char)(c - ('a' - 'A'));
+        else
+            result += c;
     }
     return result;
-}
-
-int main() {
-    string str;
-    cout << "Enter a string: ";
-    getline(cin, str);
-    cout << "Flipped case: " << flip_case(str) << endl;
-    return 0;
 }
