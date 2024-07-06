@@ -1,8 +1,7 @@
-#define _MSC_VER 1800
 #include <vector>
 #include <algorithm>
 
-bool same(std::vector<int> a, std::vector<int> b) {
+bool issame(std::vector<int> a, std::vector<int> b) {
     return a.size() == b.size() && std::all_of(a.begin(), a.end(), [&](int x) { return std::find(b.begin(), b.end(), x) != b.end(); });
 }
 
@@ -13,6 +12,6 @@ std::vector<int> make_a_pile(int n) {
     return pile;
 } 
 
-int main() {
-    assert(same(make_a_pile(8), make_a_pile(8)));
+int newmain() {
+    assert(issame(make_a_pile(8), make_a_pile(8)));
 }
