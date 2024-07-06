@@ -1,3 +1,5 @@
+```cpp
+#include <boost/any.hpp>
 #include <boost/optional.hpp>
 #include <vector>
 #include <list>
@@ -11,8 +13,11 @@ typedef boost::optional<int> OInt;
 std::vector<int> filter_integers(std::list<boost::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if (boost::any_cast<OInt>(value)) {
-            result.push_back(boost::any_cast<OInt>(value).get());
+        if (value.type() == typeid(OInt)) {
+            OInt oi = boost::any_cast<OInt>(value);
+            if (oi) {
+                result.push_back(*oi);
+            }
         }
     }
     return result;
