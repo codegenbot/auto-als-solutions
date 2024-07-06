@@ -4,7 +4,7 @@ int main() {
     int n;
     cout << "Enter a number: ";
     cin >> n;
-    cout << string_sequence(n) << endl;
+    cout << "The sequence is: " << string_sequence(n) << endl;
     return 0;
 }
 
