@@ -1,22 +1,9 @@
-Here is the completed code:
-
 int search(vector<int> lst) {
-    unordered_map<int, int> freqMap;
-    for (int num : lst) {
-        if (freqMap.find(num) == freqMap.end()) {
-            freqMap[num] = 1;
-        } else {
-            freqMap[num]++;
+    int max = -1;
+    for (const auto& num : lst) {
+        if (num > 0 && num <= count(lst.begin(), lst.end(), num)) {
+            max = num;
         }
     }
-
-    int maxVal = -1;
-    for (auto& pair : freqMap) {
-        if (pair.second >= pair.first && pair.first > 0) {
-            maxVal = pair.first;
-            break;
-        }
-    }
-
-    return maxVal;
+    return max;
 }
