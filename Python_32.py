@@ -1,6 +1,5 @@
 import math
 
-
 def main():
     while True:
         try:
