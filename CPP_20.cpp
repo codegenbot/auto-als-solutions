@@ -2,10 +2,6 @@
 #include <algorithm>
 #include <limits>
 
-bool issame(vector<float> a,vector<float>b){
-    return (a==b);
-}
-
 vector<float> find_closest_elements(vector<float> numbers) {
     sort(numbers.begin(), numbers.end());
     float minDiff = numeric_limits<float>::max();
@@ -21,6 +17,10 @@ vector<float> find_closest_elements(vector<float> numbers) {
     }
 
     return {closestPair.first, closestPair.second};
+}
+
+bool issame(vector<float> a,vector<float>b){
+    return (a==b);
 }
 
 int main() {
