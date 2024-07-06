@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <cassert>
 
@@ -27,3 +28,4 @@ int main() {
     {temp = 1;}
     assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return 0;
+}
