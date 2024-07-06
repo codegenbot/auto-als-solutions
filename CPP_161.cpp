@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -18,11 +19,11 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    cin >> input; 
+    cin >> input; // read till newline
     if (input.back() != '\n') { 
-        getline(cin, input);  
+        getline(cin, input);  // handle remaining line
     }
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // consume remaining newline characters
     if(input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
