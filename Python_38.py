@@ -1,16 +1,9 @@
-```
-def decode_cyclic():
-    s = input()  
+def decode_cyclic(s: str):
     result = ""
     while len(s) > 0:
-        if s:
-            result += s[0]
-            s = s[1:]
-        elif len(s) >= 2:
+        if len(s) >= 2:
             result += s[1] + s[0]
             s = s[2:]
-        else:
-            return result
+        result += s[0]
+        s = s[1:]
     return result
-
-print(decode_cyclic())

@@ -1,20 +1,19 @@
-```cpp
-#include <boost/optional.hpp>
 #include <vector>
 #include <list>
 
-namespace boost {
 using namespace std;
-}
 
-typedef boost::optional<int> OInt;
+typedef pair<string, int> Pair;
+typedef vector<Pair> VecPair;
 
-std::vector<int> filter_integers(std::list<boost::any> values) {
-    std::vector<int> result;
+vector<int> filter_integers(list<any> values) {
+    vector<int> result;
     for (const auto& value : values) {
-        OInt oint = boost::any_cast<OInt>(value);
-        if(oint) {
-            result.push_back(boost::any_cast<int>(value));
+        any_cast<map<string, int>>(value).insert({{"key", 0}});
+
+        map<string, int> m = any_cast<map<string, int>>(value);
+        if(m.find("key") != m.end()) {
+            result.push_back(m.at("key"));
         }
     }
     return result;

@@ -1,5 +1,14 @@
-```
-import math
+def find_zero(xs: list):
+    if len(xs) < 2:
+        raise ValueError("xs must have at least two coefficients")
+    n = len(xs)
+    if n % 2 != 0:
+        raise ValueError("xs must have even number of coefficients")
+    x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
+        coeff for i, coeff in enumerate(xs) if i % 2 == 0
+    )
+    return round(x, 2)
+
 
 def main():
     while True:
@@ -19,19 +28,9 @@ def main():
     if len(xs) % 2 != 0:
         raise ValueError("xs must have even number of coefficients")
 
-    try:
-        print(find_zero(xs))
-    except ValueError as e:
-        print(e)
-
-
-def find_zero(coeffs):
-    a, b, c = coeffs
-    discriminant = (b**2) - 4*a*c
-    if discriminant < 0:
-        raise ValueError("Quadratic equation has no real roots")
-    return (-b + math.sqrt(discriminant)) / (2 * a)
-
-
-if __name__ == "__main__":
-    main()
+    while True:
+        try:
+            print(find_zero(xs))
+            break
+        except ValueError as e:
+            print(e)

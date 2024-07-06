@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,10 +23,11 @@ bool isPalindrome(string s) {
     return s == rev;
 }
 
-cin >> w;
-vector<int> q(3);
-for(int i=0; i<3; i++) cin >> q[i];
-if(will_it_fly(q, w))
-    cout << "YES";
-else
-    cout << "NO";
+int main() {
+    cout << "Will it fly? ";
+    if (will_it_fly({5}, 5)) {
+        cout << "Yes." << endl;
+    } else {
+        cout << "No." << endl;
+    }
+}
