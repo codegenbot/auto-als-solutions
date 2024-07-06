@@ -1,2 +1,5 @@
-def cycpattern_check(a , b):
-    return any(b in a[i:i+len(b)] for i in range(len(a)))
+def cycpattern_check(a, b):
+    for i in range(len(b)):
+        if (b[i:] + b[:i]).encode("utf-8") in a.encode("utf-8"):
+            return True
+    return False

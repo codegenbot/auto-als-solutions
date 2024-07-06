@@ -1,8 +1,13 @@
+#include <iostream>
+using namespace std;
+
 int multiply(int a, int b) {
-    return (a % 10) * (b % 10);
+    int unitA = a % 10;
+    int unitB = b % 10;
+    return (unitA * unitB);
 }
 
 int main() {
     assert(multiply(0, 0) == 0);
-    // ...
+    // rest of your code
 }
