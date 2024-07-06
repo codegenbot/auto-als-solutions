@@ -1,4 +1,3 @@
-```cpp
 string anti_shuffle(string s){
     string result = "";
     int i = 0;
