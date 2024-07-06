@@ -1,19 +1,21 @@
-```
-struct MD5_CTX {
-    unsigned int bytes_processed;
-    unsigned int bits_processed;
-    unsigned char state[4];
-    unsigned char buffer[64];
-};
-
 #include <string>
 #include <sstream>
-#include <cstring>
 
-// Forward declarations for the MD5 functions
-void MD5_Init_early(MD5_CTX* ctx);
-void MD5_Update(MD5_CTX* ctx, const unsigned char* ptr, size_t len);
-void MD5_Final(unsigned char result[16], MD5_CTX* ctx);
+struct MD5_CTX {
+    unsigned char md5Variables[16];
+};
+
+void MD5_Init_early(MD5_CTX* ctx) {
+    // implement this function
+}
+
+void MD5_Update(MD5_CTX* ctx, const unsigned char* ptr, size_t len) {
+    // implement this function
+}
+
+void MD5_Final(unsigned char result[16], MD5_CTX* ctx) {
+    // implement this function
+}
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
@@ -27,10 +29,11 @@ std::string string_to_md5(const char* text) {
     MD5_Final(result, &mdContext);
 
     std::ostringstream oss;
-    oss << std::hex | std::ios::fill('0');
+    oss << std::hex;
     for (int i = 0; i < 16; ++i) {
+        oss.fill('0');
         oss.width(2);
-        oss << (int)result[i];
+        oss << static_cast<int>(result[i]);
     }
 
     return oss.str();
