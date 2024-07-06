@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -29,13 +30,7 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     return closest_pairs;
 }
 
-int main() {
-    std::vector<float> numbers = {3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
-    std::vector<std::pair<float, float>> result = find_closest_elements(numbers);
-    
-    for (auto &pair : result) {
-        std::cout << "({:.1f}, {:.1f})\n".format(pair.first, pair.second);
-    }
-    
-    return 0;
+int main { 
+    std::vector<float> numbers = {1.0f, 2.0f, 3.0f, 4.0f};
+    auto closest_pairs = find_closest_elements(numbers);
 }
