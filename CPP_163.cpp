@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -9,4 +10,9 @@ vector<int> generate_integers(int a, int b) {
         }
     }
     return result;
+}
+
+int main() {
+    assert(generate_integers(17, 89) == vector<int>());
+    return 0;
 }
