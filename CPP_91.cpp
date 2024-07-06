@@ -2,9 +2,10 @@ int is_bored(string S) {
     int count = 0;
     size_t pos = 0;
     while ((pos = S.find("I", pos)) != string::npos) {
-        if (S.find(".", pos) == string::npos && S.find("?", pos) == string::npos && S.find("!", pos) == string::npos)
+        if (S[pos] == ' ' || S[pos+1] == '.' || S[pos+1] == '?' || S[pos+1] == '!') {
             count++;
-        pos = max(pos, S.find("."));
+        }
+        pos += 2; // skip " I" or " i"
     }
     return count;
 }
