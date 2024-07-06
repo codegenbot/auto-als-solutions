@@ -6,15 +6,11 @@ int findMaxValue(std::vector<int> numbers) {
     return maxValue;
 }
 
-bool containsSequence(const std::vector<int>& numbers) {
-    return std::search(numbers.begin(), numbers.end(), {3, 10, 10, 9, 2}.begin(), {3, 10, 10, 9, 2}.end()) != {3, 10, 10, 9, 2}.end();
+bool containsSequence(const std::vector<int>& numbers, const std::vector<int>& sequence) {
+    return std::search(numbers.begin(), numbers.end(), sequence.begin(), sequence.end()) != sequence.end();
 }
 
 int main() {
-    std::vector<int> numbers = {3, 10, 10, 9, 2};
-    if (containsSequence(numbers)) {
-        return 1;
-    } else {
-        return -1;
-    }
+    assert(!containsSequence({3, 10, 10, 9, 2}, {3, 10, 10, 9, 2}));
+    return 0;
 }
