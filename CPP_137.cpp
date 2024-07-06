@@ -3,21 +3,31 @@
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(float)) {
-        return boost::any(b.convert_to<int>() > boost::any_cast<int>(a) ? b : a);
+        return (int)b > (int)a ? boost::any(b) : a;
     }
     else if (a.type() == typeid(float) && b.type() == typeid(int)) {
-        return boost::any(boost::any_cast<float>(b) > boost::any_cast<float>(a) ? b : a);
+        return (float)b > (float)a ? b : a;
     }
-    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
-        string s1 = boost::any_cast<string>(a), s2 = boost::any_cast<string>(b);
-        return boost::any((s1 == "None" || s2 == "None") ? ((s1 > s2) ? a : b) : (s1 > s2 ? b : a));
+    else if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
+        std::string strA = boost::any_cast<std::string>(a);
+        std::string strB = boost::any_cast<std::string>(b);
+        
+        if ((strA == "None" || strB == "None") && strA != strB)
+            return a > b ? a : b;
+        else
+            return "None";
     }
-    else if (a.type() == typeid(string)) {
-        string s = boost::any_cast<string>(a);
-        return boost::any((s == "None" || boost::any_cast<string>(b) == "None") ? ((s > boost::any_cast<string>(b)) ? a : b) : (s > boost::any_cast<string>(b) ? b : a));
+    else if (a.type() == typeid(std::string)) {
+        std::string str = boost::any_cast<std::string>(a);
+        
+        if ((str == "None" || boost::any_cast<std::string>(b) == "None"))
+            return "None";
+        else
+            return str > boost::any_cast<std::string>(b) ? a : b;
     }
-    else if (boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") {
-        return boost::any((boost::any_cast<string>(a) > boost::any_cast<string>(b)) ? a : b);
+    else if (boost::any_cast<std::string>(a) == "None") {
+        return "None";
     }
-    return boost::any("None");
+    
+    return a;
 }
