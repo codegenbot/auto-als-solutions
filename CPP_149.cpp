@@ -1,13 +1,21 @@
-#include <algorithm>
-#include <vector>
-#include <string>
-
+#include <bits/stdc++.h>
+using namespace std;
 bool issame(vector<string>, vector<string>);
 vector<string> sorted_list_sum(vector<string>);
 
 int main() {
     vector<string> lst;
-    // Your code here
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        string s;
+        cin >> s;
+        lst.push_back(s);
+    }
+    vector<string> res = sorted_list_sum(lst);
+    for (const auto &s : res) {
+        cout << s << " ";
+    }
     return 0;
 }
 
