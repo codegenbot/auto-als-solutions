@@ -1,3 +1,4 @@
+#include <string>
 #include <sstream>
 
 std::string string_to_md5(const char* text) {
