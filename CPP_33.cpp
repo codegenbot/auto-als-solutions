@@ -5,16 +5,19 @@ using namespace std;
 
 vector<int> sort_third(vector<int> l) {
     vector<int> result;
-    
     for (int i = 0; i < l.size(); i++) {
         if (i % 3 == 0) {
-            for (int j = 0; j < l[i]; j++) {
-                result.push_back(l[i]);
+            vector<int> temp;
+            for (int j = i; j < l.size() && j % 3 == 0; j++)
+                temp.push_back(l[j]);
+            sort(temp.begin(), temp.end());
+            for (int j = 0; j < temp.size(); j++) {
+                result.push_back(temp[j]);
+                if (j < l.size() - 1 && i + j % 3 != l.size() - 1)
+                    result.push_back(l[i + j % 3]);
             }
-        } else {
+        } else
             result.push_back(l[i]);
-        }
     }
-    
     return result;
 }
