@@ -10,7 +10,12 @@ std::vector<std::vector<int>> compare(const std::vector<int>& game, const std::v
         if (game[i] == guess[i]) {
             result.push_back({{0}});
         } else {
-            result.push_back({{std::abs(game[i] - guess[i])}});
+            if(std::abs(game[i]-guess[i])<1){
+                result.push_back({{0,1}}); // correct values in the inner vector
+            }
+            else{
+                result.push_back({{std::abs(game[i] - guess[i])}});
+            }
         }
     }
     return result;
@@ -19,6 +24,6 @@ std::vector<std::vector<int>> compare(const std::vector<int>& game, const std::v
 int main_function() {
     std::vector<int> game = {1,2,3,5};
     std::vector<int> guess = {-1,2,3,4};
-    assert(std::issame(compare(game,guess),{{0},{0},{0,1}}));
+    assert(std::issame(compare(game,guess),{{0},{0},{0,{1}}}));
     return 0;
 }
