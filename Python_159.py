@@ -1,3 +1,4 @@
+```
 def eat(number, need, remaining):
     if remaining >= need:
         eaten = min(1000, number + (need - remaining))

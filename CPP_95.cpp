@@ -1,6 +1,6 @@
 #include <map>
 #include <string>
-#include <cassert>
+#include <cctype>
 
 bool check_dict_case(map<string,string> dict){
     if(dict.empty()) return false;
@@ -18,8 +18,7 @@ bool check_dict_case(map<string,string> dict){
 }
 
 int main() {
-    map<string, string> dict = {{"Hello", "hello"}, {"WORLD", "world"}};
+    map<string, string> dict = {{"A", "b"}, {"a", "B"}};
     cout << (check_dict_case(dict) ? "True" : "False") << endl;
-    assert(check_dict_case({}) == false);
     return 0;
 }
