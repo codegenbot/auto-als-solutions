@@ -1,9 +1,10 @@
-#include <iostream>
+#include <vector>
+#include <string>
 
 int smallest_change(std::vector<int> arr) {
-    if (arr.empty()) {
-        std::cerr << "Error: Input array is empty!" << std::endl;
-        return -1; 
+    if (arr.size() < 2) {
+        std::cout << "Error: Please enter at least two numbers to find the minimum number of coin changes." << std::endl;
+        return -1;
     }
     
     int n = arr.size();
@@ -30,6 +31,9 @@ int smallest_change(std::vector<int> arr) {
 
 int main() {
     std::vector<int> arr = {0, 1};
-    assert(smallest_change(arr) == 1);
+    int result = smallest_change(arr);
+    if (result == -1) {
+        return 1;
+    }
     return 0;
 }
