@@ -1,15 +1,21 @@
-#include "/usr/include/boost/any.hpp"
-using namespace boost;
+```cpp
+#include <boost/optional.hpp>
+#include <vector>
+#include <list>
 
-typedef boost::any Any;
+namespace boost {
+    using namespace std;
+}
+
 typedef boost::optional<int> OInt;
 
-vector<int> filter_integers(list<Any> values) {
-    vector<int> result;
+std::vector<int> filter_integers(std::list<boost::any> values) {
+    std::vector<int> result;
     for (const auto& value : values) {
         OInt oint = boost::any_cast<OInt>(value);
         if(oint) {
-            result.push_back(boost::any_cast<int>(value));
+            int num = boost::any_cast<int>(value);
+            result.push_back(num);
         }
     }
     return result;
