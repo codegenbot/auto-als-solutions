@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <set>
@@ -5,11 +6,14 @@
 using namespace std;
 
 bool issame(vector<int> v1, vector<int> v2) {
-    if(v1.size() != v2.size()) return false;
-    for(int i=0; i<v1.size(); i++) {
-        if(find(v2.begin(), v2.end(), v1[i]) == v2.end())
+    if(v1.size() != v2.size())
+        return false;
+    
+    for(int i = 0; i < v1.size(); i++) {
+        if(v1[i] != v2[i])
             return false;
     }
+    
     return true;
 }
 
@@ -26,18 +30,20 @@ vector<int> common(vector<int> l1, vector<int> l2) {
 }
 
 int main() {
-    vector<int> v1 = {1, 2, 3};
-    vector<int> v2 = {3, 4, 5};
+    vector<int> v1 = {1, 2, 3, 4};
+    vector<int> v2 = {2, 4, 6, 8};
     
     if(issame(v1, v2)) {
-        cout << "The vectors are same." << endl;
+        cout << "Vectors are same" << endl;
     } else {
-        cout << "The vectors are not same." << endl;
+        cout << "Vectors are not same" << endl;
         
         vector<int> common_elements = common(v1, v2);
-        for(int i=0; i<common_elements.size(); i++) {
+        
+        for(int i = 0; i < common_elements.size(); i++) {
             cout << common_elements[i] << " ";
         }
+        
         cout << endl;
     }
     
