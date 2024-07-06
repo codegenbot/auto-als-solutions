@@ -1,8 +1,7 @@
-```
 def modp(n, p):
     if n < 0:
         n += p
-    
+
     def egcd(a, b):
         if a == 0:
             return b, 0, 1
