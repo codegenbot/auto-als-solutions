@@ -1,13 +1,14 @@
-vector<int> remove_duplicates(vector<int> numbers) {
-    unordered_map<int, bool> seen;
-    vector<int> result;
+#include <vector>
+#include <algorithm>
 
+using namespace std;
+
+vector<int> remove_duplicates(vector<int> numbers) {
+    vector<int> unique_numbers;
     for (int num : numbers) {
-        if (!seen.count(num) || !seen[num]) {
-            seen[num] = true;
-            result.push_back(num);
+        if (find(unique_numbers.begin(), unique_numbers.end(), num) == unique_numbers.end()) {
+            unique_numbers.push_back(num);
         }
     }
-
-    return result;
+    return unique_numbers;
 }
