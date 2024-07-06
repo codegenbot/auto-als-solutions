@@ -1,4 +1,3 @@
-```
 def valid_date(date):
     day, month, year = map(int, date.split('-'))
     if len(str(date)) != 8: 
