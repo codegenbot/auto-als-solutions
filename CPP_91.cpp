@@ -1,28 +1,21 @@
-#include <iostream>
+Here's the completed code:
+
+```cpp
 #include <string>
 using namespace std;
 
 int is_bored(string S) {
-    int count = 0;
+    int boredoms = 0;
     string sentence;
     for (char c : S) {
         if (c == '.' || c == '?' || c == '!') {
-            if (sentence.substr(0, 2) == "I ") {
-                count++;
+            if (sentence.length() > 2 && sentence.substr(0, 2) == "I ") {
+                boredoms++;
             }
-            sentence = "";
+            sentence.clear();
         } else {
             sentence += c;
         }
     }
-    return count;
-}
-
-int main() {
-    string S;
-    cout << "Enter a string: ";
-    getline(cin, S);
-    int result = is_bored(S);
-    cout << "Number of boredoms: " << result << endl;
-    return 0;
+    return boredoms;
 }
