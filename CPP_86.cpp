@@ -1,17 +1,18 @@
-string anti_shuffle(string s){
+string anti_shuffle(string s) {
     string result = "";
-    for(int i=0; i<s.size(); i++){
-        if(s[i] == ' '){
-            result += ' ';
-            continue;
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == ' ') {
+            result += " ";
+        } else {
+            string word = "";
+            while (i < s.length() && s[i] != ' ') {
+                word += s[i];
+                i++;
+            }
+            for (int j = 0; j < word.length(); j++) {
+                result += word[j];
+            }
         }
-        string word = "";
-        for(int j=i; j<s.size() && s[j] != ' '; j++){
-            word += s[j];
-        }
-        i = j - 1;
-        sort(word.begin(), word.end());
-        result += word;
     }
     return result;
 }
