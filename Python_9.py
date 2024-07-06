@@ -1,1 +1,1 @@
-print(max_rolling_sum([1, 2, 3, 4, 5]))
+print(max_rolling_sum([14, -5, 12]))
