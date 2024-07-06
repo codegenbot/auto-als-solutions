@@ -6,15 +6,17 @@ int fib(int n) {
         a = b;
         b = temp;
     }
-    if (b > 500000) {
-        std::cout << "Fibonacci number too large. It is greater than 500,000." << std::endl;
-    } else {
-        return b;
-    }
+    return b;
 }
 
 int main() {
-    assert(fib(12) == 144);
-    // Add more test cases or your code logic here
+    if (fib(30) > 268934816) {
+        std::cout << "Error: Fibonacci number exceeded maximum limit!" << std::endl;
+    } else {
+        int n;
+        std::cout << "Enter a positive integer: ";
+        std::cin >> n;
+        std::cout << "Fibonacci of " << n << ": " << fib(n) << std::endl;
+    }
     return 0;
 }
