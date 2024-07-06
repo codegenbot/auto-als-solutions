@@ -1,4 +1,3 @@
-```cpp
 #include <openssl/ssl.h>
 #include <openssl/x509v3.h>
 #include <openssl/evp.h>
@@ -9,10 +8,19 @@ std::string string_to_md5(std::string text) {
     if (text.empty()) return "";
 
     unsigned char result[16];
-    MD5((unsigned const char*)text.c_str(), text.size(), result);
+    EVP_MD_CTX mdctx;
+    EVP_MD *md = EVP_md5();
+    unsigned char *d;
+    int len;
+
+    EVP_MD_CTX_init(&mdctx);
+    EVP_DigestInit_ex(&mdctx, md, NULL);
+    EVP_DigestUpdate(&mdctx, text.c_str(), text.size());
+    EVP_DigestFinal_ex(&mdctx, result, &len);
+
     std::stringstream ss;
     for (int i = 0; i < 16; i++) {
-        ss << std::hex << std::setfill('0') << std::setw(2) << (int)result[i];
+        ss << hex << setfill('0') << setw(2) << (int)result[i];
     }
     return ss.str();
 }
