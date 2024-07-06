@@ -1,3 +1,4 @@
+```
 #include <string>
 #include <cctype>
 #include <iostream>
@@ -18,15 +19,8 @@ std::string flip_case(std::string str){
 }
 
 int main(){
-    std::string input, expected;
+    std::string input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
-    
-    if(input == "These violent delights have violent ends"){
-        expected = "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS";
-    } else {
-        expected = flip_case(input);
-    }
-    std::cout << expected << std::endl;
-    return 0;
+    std::cout << flip_case(input) << std::endl;
 }
