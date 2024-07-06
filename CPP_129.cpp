@@ -1,5 +1,8 @@
+```cpp
+#include <iostream>
 #include <vector>
-#include <algorithm>
+#include <cmath>
+#include <cstdlib>
 using namespace std;
 
 bool issame(int a, int b) {
@@ -37,4 +40,8 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
         result.push_back(grid[x][y]);
     }
     return result;
+}
+
+int main() {
+    // Your code here
 }
