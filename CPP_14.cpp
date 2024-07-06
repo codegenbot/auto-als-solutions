@@ -12,7 +12,6 @@ bool issame(vector<string> a, vector<string> b) {
 
 int main() {
     assert(issame(all_prefixes("WWW") ,vector<string>({"W", "WW", "WWW"})));
-    
     // Your code here...
     return 0;
 }
