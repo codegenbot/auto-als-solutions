@@ -12,18 +12,11 @@ std::vector<int> generate_integers(int a, int b) {
     return result;
 }
 
-bool issame(const std::vector<int>& a,const std::vector<int>&b){
+bool operator==(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
 int main() {
-    int a, b;
-    std::cout << "Enter two integers: ";
-    std::cin >> a >> b;
-    if(issame(generate_integers(a, b), generate_integers(17, 89))){
-        std::cout << "The vectors are the same.\n";
-    }else{
-        std::cout << "The vectors are not the same.\n";
-    }
+    assert(std::equal(generate_integers(1,20).begin(), generate_integers(1,20).end()));
     return 0;
 }
