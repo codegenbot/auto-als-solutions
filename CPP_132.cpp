@@ -1,19 +1,26 @@
-Here is the completed code:
+int main() {
+    string str;
+    cin >> str;
 
-```cpp
-int count_open = 0, count_close = 0;
+    bool result = false;
+    int count = 0;
 
-for (char c : str) {
-    if (c == '[') {
-        count_open++;
-    } else if (c == ']') {
-        if (count_open > 0) {
-            count_open--;
-            count_close++;
-        } else {
-            return false;
+    for (char c : str) {
+        if (c == '[') {
+            count++;
+        } else if (c == ']') {
+            if (count > 0) {
+                count--;
+            }
+        }
+
+        if (count >= 1 && c == ']') {
+            result = true;
+            break;
         }
     }
-}
 
-return count_close >= 1;
+    cout << (result ? "true" : "false");
+
+    return 0;
+}
