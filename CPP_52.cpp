@@ -12,12 +12,11 @@ bool below_threshold(vector<int> l, int t) {
 
 int main() {
     assert(!below_threshold({1, 8, 4, 10}, 10));
-    vector<int> numbers = {2, 7, 11};
-    int threshold = 5;
-    
+    vector<int> numbers = {5, 2, 9};
+    int threshold = 7;
     if(below_threshold(numbers, threshold)) {
-        cout << "All numbers are below the threshold." << endl;
+        cout << "All elements are below the threshold." << endl;
     } else {
-        cout << "At least one number is not below the threshold." << endl;
+        cout << "At least one element is not below the threshold." << endl;
     }
 }
