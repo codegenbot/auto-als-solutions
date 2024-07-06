@@ -1,18 +1,14 @@
-```
 from typing import List
 
 
-def concatenate() -> str:
-    num_strings = int(input("Enter number of strings: "))
-    strings = []
-    
-    for _ in range(num_strings):
-        s = input("Enter string: ")
-        strings.append(s)
-        
-    result = ""
-    for s in strings:
-        result += s
-    return result
+def concatenate():
+    while True:
+        try:
+            strings = input("Enter space-separated strings (or 'stop' to finish): ").split()
+            if strings[0].lower() == 'stop':
+                break
+            return " ".join(strings)
+        except ValueError:
+            print("Invalid input. Please enter a list of strings.")
 
 print(concatenate())
