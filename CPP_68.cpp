@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <climits>
 
@@ -8,7 +9,7 @@ vector<pair<int, int>> pluck(vector<int> arr) {
     
     if(arr.empty()) return result; // If array is empty
     
-    int smallestEven = INT_MAX;
+    int smallestEven = INT_MAX; 
     int smallestIndex = 0;
     
     for(int i = 0; i < arr.size(); i++) {
