@@ -5,4 +5,3 @@ int main
     using std::size_type;
     assert(check_dict_case(std::map<std::string, std::string>()) == false);
     return 0;
-}
