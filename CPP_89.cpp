@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -20,4 +19,3 @@ int main() {
     assert(encrypt("a")=="e");
     std::cout << "Encryption of 'a' is: " << encrypt("a") << std::endl;
     return 0;
-}
