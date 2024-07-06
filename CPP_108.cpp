@@ -1,17 +1,17 @@
-int count_nums(vector<int> n){
+int count_nums(vector<int> nums) {
     int count = 0;
-    for(int num : n){
-        bool has_positive_sum_of_digits = false;
-        long abs_num = labs(num);
-        while(abs_num > 0){
-            int digit = abs_num % 10;
-            if(digit != 0 || (num < 0 && digit == -1)){
-                has_positive_sum_of_digits = true;
-                break;
-            }
-            abs_num /= 10;
+    for (auto num : nums) {
+        if (num < 0)
+            num = -num;
+        bool has_positive_sum = false;
+        while (num > 0) {
+            int digit = num % 10;
+            if (digit != 0 || num / 10 == 0)
+                has_positive_sum = true;
+            num /= 10;
         }
-        if(has_positive_sum_of_digits) count++;
+        if (has_positive_sum)
+            count++;
     }
     return count;
 }

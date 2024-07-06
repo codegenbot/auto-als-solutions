@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 
@@ -33,15 +34,18 @@ int skjkasdkd(vector<int> lst) {
 }
 
 int main() {
-    vector<int> lst;
-    cout << "Enter numbers separated by spaces: ";
-    for(int i; cin >> i;){
-        lst.push_back(i);
+    vector<int> input;
+    cout << "Enter numbers (enter 'stop' to finish): ";
+    string temp;
+    while(true){
+        cin >> temp;
+        if(temp == "stop") break;
+        input.push_back(stoi(temp));
     }
-
-    int result = skjkasdkd(lst);
-
-    cout << "Sum of digits of the largest prime number is: " << result;
-
+    
+    int result = skjkasdkd(input);
+    
+    cout << "The sum of digits for the maximum prime number is: " << result << endl;
+    
     return 0;
 }
