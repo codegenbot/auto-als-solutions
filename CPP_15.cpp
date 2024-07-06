@@ -1,9 +1,9 @@
-Here is the solution:
+#include <sstream>
 
 string string_sequence(int n) {
-    ostringstream oss;
+    stringstream ss;
     for (int i = 0; i <= n; ++i) {
-        oss << i << " ";
+        ss << i << " ";
     }
-    return oss.str();
+    return ss.str();
 }
