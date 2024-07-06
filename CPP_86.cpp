@@ -1,3 +1,8 @@
+```cpp
+#include <string>
+#include <algorithm>
+using namespace std;
+
 string anti_shuffle(string s){
     string result = "";
     for(int i=0; i<s.size(); i++){
@@ -10,7 +15,19 @@ string anti_shuffle(string s){
             word += s[j];
         }
         i = j - 1;
-        result += word + " ";
+        char temp[word.size()+1]; 
+        strcpy(temp,word.c_str());
+        sort(temp, temp+word.size());
+        result += temp;
     }
-    return result.substr(0, result.size()-1); 
+    return result;
+}
+
+int main(){
+    string str;
+    cout << "Enter a sentence: ";
+    getline(cin, str);
+    string output = anti_shuffle(str);
+    cout << "Antishuffled sentence: " << output << endl;
+    return 0;
 }

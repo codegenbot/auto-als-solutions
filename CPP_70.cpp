@@ -1,4 +1,5 @@
-```cpp
+```
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -12,6 +13,7 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         int min_val = *min_element(lst.begin(), lst.end());
         result.push_back(min_val);
         lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
+        
         if (!lst.empty()) {
             vector<int> temp;
             for(int i : lst){
@@ -32,16 +34,10 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> input; // get your input here
-    std::cout << "Enter elements separated by spaces: ";
-    for (int i = 0; i < 5; ++i) {
-        int num;
-        std::cin >> num;
-        input.push_back(num);
-    }
-    std::vector<int> result = strange_sort_list(input);
-    std::cout << "Sorted List: ";
-    for (int i : result)
+    std::vector<int> test = {1, 2, 3, 4, 5};
+    std::vector<int> sorted = strange_sort_list(test);
+    for (int i : sorted) {
         std::cout << i << " ";
+    }
     return 0;
 }
