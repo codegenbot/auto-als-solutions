@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,7 +6,7 @@ bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
-void strange_sort_list(const std::vector<int>& lst) { 
+void strange_sort_list(const std::vector<int>& lst) {
     std::vector<int> result;
     while (!lst.empty()) {
         int min_val = *std::min_element(lst.begin(), lst.end());
