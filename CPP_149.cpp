@@ -6,9 +6,13 @@ bool issame(vector<string>, vector<string>);
 vector<string> sorted_list_sum(vector<string>);
 
 int main() {
-    vector<string> lst;
     // Your code here
     return 0;
+}
+
+bool issame(vector<string> v1, vector<string> v2) {
+    // your logic here
+    return true; // replace with actual logic
 }
 
 vector<string> sorted_list_sum(vector<string> lst) {
