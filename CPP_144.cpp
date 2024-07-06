@@ -1,43 +1,34 @@
-bool simplify(string x, string n) {
-    int a = 0, b = 0, c = 0, d = 0; 
-    string s1, s2;
-    
-    // Split the strings into two numbers each
-    for(int i = 0; i < x.length(); ++i) {
-        if(x[i] == '/') break;
-        if(x[i] != ' ') a = a*10 + (x[i]-'0');
-    }
-    for(int i = x.length()-1; i > 0; --i) {
-        if(x[i] == '/') break;
-        s1 += x[i];
-    }
-    
-    for(int i = 0; i < n.length(); ++i) {
-        if(n[i] == '/') break;
-        if(n[i] != ' ') c = c*10 + (n[i]-'0');
-    }
-    for(int i = n.length()-1; i > 0; --i) {
-        if(n[i] == '/') break;
-        s2 += n[i];
-    }
-    
-    // Calculate the gcd
-    int temp;
-    while(d != 0) {
-        temp = d;
-        d = a % d;
-        a = temp;
-    }
-    temp = c;
-    while(temp != 0) {
-        d = c % d;
-        c = temp;
-        temp = d;
-        d = a % d;
-        a = temp;
-    }
-    
-    // Check if the result is a whole number
-    if(c/a == stoi(s1)/stoi(s2)) return true;
-    else return false;
+#include<string>
+using namespace std;
+
+bool simplify(string x,string n){
+    int numerator1 = 0, denominator1 = 0;
+    int numerator2 = 0, denominator2 = 0;
+
+    size_t pos1 = x.find('/');
+    size_t pos2 = n.find('/');
+
+    string num1 = x.substr(0, pos1);
+    string den1 = x.substr(pos1 + 1);
+    string num2 = n.substr(0, pos2);
+    string den2 = n.substr(pos2 + 1);
+
+    numerator1 = stoi(num1) * stoi(den2);
+    denominator1 = stoi(den1) * stoi(num2);
+
+    numerator2 = stoi(num1) * stoi(num2);
+    denominator2 = stoi(den1) * stoi(den2);
+
+    if (gcd(numerator1, denominator1) == 1)
+        return true;
+    else
+        return false;
+
+}
+
+int gcd(int a, int b){
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
 }
