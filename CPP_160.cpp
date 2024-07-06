@@ -1,9 +1,7 @@
-```cpp
-#include <vector>
-#include <string>
-#include <cctype>
-#include <cstdlib>
+```
+#include <cstddef>
 #include <stdexcept>
+#include <cmath>
 
 int do_algebra(vector<string> operato, vector<int> operand) {
     string expression = "";
@@ -12,21 +10,15 @@ int do_algebra(vector<string> operato, vector<int> operand) {
         expression += operato[i];
     }
     expression += to_string(operand.back());
-    int result;
-    try {
-        result = eval(expression.c_str());
-    } catch(const std::runtime_error& e) {
-        std::cout << "Invalid input: " << e.what() << std::endl;
-    }
+    int result = eval(expression.c_str());
     return result;
 }
 
 long long eval(const char* pExpr) {
     const char* pEnd = NULL;
-    long long v = strtoll(pExpr, &pEnd, 10);
+    double v = strtod(pExpr, &pEnd);
     if (*pEnd == '\0') {
-        return v;
-    } else {
-        throw std::runtime_error("Invalid input");
+        return (int)v;
     }
+    throw runtime_error("Invalid input");
 }
