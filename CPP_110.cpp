@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 using namespace std;
 
@@ -11,11 +10,12 @@ public:
                 oddCount++;
             }
         }
-        return (oddCount == 0 ? "YES" : "NO");
+        return oddCount == 0 ? "YES" : "NO";
     }
 
     int main() {
         assert(exchange({100, 200}, {200, 200}) == "YES");
+        // Add more test cases here
         cout << "Test cases passed." << endl;
         return 0;
     }
