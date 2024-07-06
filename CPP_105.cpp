@@ -3,11 +3,11 @@
 #include <initializer_list>
 using namespace std;
 
-bool issame(const vector<vector<string>>& v1, const vector<vector<string>>& v2) {
+bool issame(const vector<string>& v1, const vector<string>& v2) {
     if(v1.size() != v2.size())
         return false;
     for(int i = 0; i < v1.size(); i++)
-        if(!issame(v1[i], v2[i]))
+        if(v1[i] != v2[i])
             return false;
     return true;
 }
@@ -62,6 +62,8 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    assert(issame({{ "One" }}, {{"Eight", "Four"}}, {result}));
+    if (!issame(vector<string>({"One"}), vector<string>({"Four", "Eight"}), vector<string>(result))) {
+        return 1; 
+    }
     return 0;
 }
