@@ -1,8 +1,5 @@
 def simplify(x, n):
-    def lcm(a, b):
-        return a * b // math.gcd(int(a.split('/')[0]), int(b.split('/')[0])) * int(b.split('/')[1]) // math.gcd(int(a.split('/')[0]), int(b.split('/')[1]))
+    x_num, x_denom = map(int, x.split("/"))
+    n_num, n_denom = map(int, n.split("/"))
 
-    x_num, x_den = map(int, x.split('/'))
-    n_num, n_den = map(int, n.split('/'))
-
-    return (x_num*n_num) % lcm(x_den, n_den) == 0
+    return (x_num * n_denom) % (x_denom * n_num) == 0
