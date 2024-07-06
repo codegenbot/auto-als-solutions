@@ -1,4 +1,4 @@
-#include <initializer_list>
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -14,21 +14,25 @@ std::vector<int> pluck(std::vector<int> arr) {
             nodes.push_back({arr[i], i});
         }
     }
-    
+
     if (nodes.empty()) {
         return {};
     }
-    
+
     std::sort(nodes.begin(), nodes.end(), compare);
-    
-    std::vector<int> result;
+
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) != false) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
     }
-    
-    return {nodes[0].first};
+
+    int result = nodes[0].first;
+    for(int i = 0; i < arr.size(); ++i){
+        if(arr[i] == result){
+            return {result};
+        }
+    }
 }
 
 int main() {
@@ -42,15 +46,16 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    std::vector<int> result = pluck(arr);
-    if(result.size() > 0)
+    std::vector<int> output = pluck(arr);
+    if(output.size() > 0)
     {
-        std::cout << "The output is: " << *result.begin() << std::endl;
+        std::cout << "The output is: " << output[0] << std::endl;
     }
     else
     {
         std::cout << "No output" << std::endl;
     }
+
     
     return 0;
 }
