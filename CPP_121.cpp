@@ -9,10 +9,9 @@ int sumOdd(std::string str) {
         }
     }
     return sum;
-
 }
 
 int main() {
-    std::cout << sumOdd("Hello") << std::endl; // process the string input
+    std::cout << sumOdd("Hello") << std::endl; 
     return 0;
 }
