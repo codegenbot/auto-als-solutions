@@ -1,4 +1,4 @@
-```
+````
 def total_match(lst1, lst2):
     sum1 = sum(len(s) for s in lst1)
     sum2 = sum(len(s) for s in lst2)
@@ -7,4 +7,6 @@ def total_match(lst1, lst2):
     elif sum1 > sum2:
         return lst2
     else:
-        return lst1
+        min_len = min(len(s) for s in lst1 + lst2)
+        return [s for s in (lst1 + lst2) if len(s) == min_len]
+```
