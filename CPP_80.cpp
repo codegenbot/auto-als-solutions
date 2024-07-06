@@ -33,4 +33,3 @@ int main() {
     else
         cout << "The given string is not happy." << endl;
     return 0;
-}
