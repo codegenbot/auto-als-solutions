@@ -1,9 +1,11 @@
-#include <cstdint>
+```cpp
+#include <initializer_list>
 #include <vector>
+#include <cstdint>
 
 int smallest_change(vector<int> arr) {
     int n = arr.size();
-    vector<vector<uint64_t>> dp(n, vector<uint64_t>(n));
+    vector<vector<uint64_t>> dp(n, vector<uint64_t>(n-1));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -22,10 +24,4 @@ int smallest_change(vector<int> arr) {
     }
     
     return dp[0][n-1].size();
-}
-
-int main() {
-    vector<int> arr = {0, 1};
-    assert (smallest_change(arr) == 1);
-    return 0;
 }
