@@ -1,11 +1,5 @@
-```
-def file_name_check(file_name):
-    if len([c for c in file_name if c.isdigit()]) > 3:
-        return 'No'
-    if file_name.count('.') != 1:
-        return 'No'
-    if file_name[:file_name.index('.')] and not file_name[:file_name.index('.')).isalpha():
-        return 'No'
-    if file_name.split('.')[1].lower() not in ['txt', 'exe', 'dll']:
-        return 'No'
-    return 'Yes'
+Here is the task description and function signature for the given problem:
+
+Write a Python function to check if a file name meets certain conditions. The function should take a string representing the file name as input and return 'Yes' if the file name is valid and 'No' otherwise.
+
+A file name is considered valid if it does not contain more than three digits, has exactly one dot (.), the part before the dot consists only of letters, and the extension is either 'txt', 'exe', or 'dll'.
