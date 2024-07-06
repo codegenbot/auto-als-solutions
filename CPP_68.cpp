@@ -22,24 +22,25 @@ std::vector<int> pluck(std::vector<int> arr) {
 }
 
 int main() {
-    // Add your code here
-    std::vector<int> input;
-    // Read input from user
+    std::vector<int> arr;
     int n;
-    cin >> n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
     for(int i = 0; i < n; i++){
-        int val;
-        cin >> val;
-        input.push_back(val);
+        int x;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> x;
+        arr.push_back(x);
     }
     
-    vector<int> output = pluck(input);
-    // Print the output
-    cout << "Output: ";
-    for(auto x : output) {
-        cout << x << " ";
-    }
-    cout << endl;
+    // call the function
+    auto output = pluck(arr);
 
+    if(output.size() > 0) {
+        std::cout << "The smallest even value is " << output[0] << " at index " << output[1];
+    } else {
+        std::cout << "No even values found";
+    }
+    
     return 0;
 }
