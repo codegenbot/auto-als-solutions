@@ -1,9 +1,13 @@
-```cpp
-int main() {
-    vector<vector<int>> grid = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    int k = 3;
-    vector<int> result = minPath(grid, k); 
-    for (auto x : result)
-        cout << x << " ";
-    return 0;
+vector<int> minPath(vector<vector<int>>& grid, int k) {
+    int n = grid.size();
+    vector<int> res;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (res.empty() || grid[i][j] <= res.back()) {
+                res.push_back(grid[i][j]);
+                if (res.size() == k) return res;
+            }
+        }
+    }
+    return res;
 }

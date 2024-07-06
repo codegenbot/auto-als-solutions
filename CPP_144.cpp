@@ -1,17 +1,15 @@
 #include<string>
 using namespace std;
 
-bool simplify(string x,string n){
-    int a = stoi(strtok((x.substr(1)).c_str(),"/"));
-    int b = stoi(x.substr(0,1));
-    int c = stoi(strtok((n.substr(1)).c_str(),"/"));
-    int d = stoi(n.substr(0,1));
-    
-    if(b==d){
-        return a*c==b*d;
-    }else{
-        long long temp=a*b;
-        long long temp2=c*d;
-        return temp==temp2;
-    }
+bool simplify(string x, string n) {
+    int a = stoi(strtok(x.substr(1).c_str(), "/"));
+    int b = stoi(strtok(NULL, "/"));
+    int c = stoi(strtok(n.substr(1).c_str(), "/"));
+    int d = stoi(strtok(NULL, "/"));
+
+    long long m = (long long) a * d;
+    long long n2 = (long long) b * c;
+
+    if(m%n2==0) return true;
+    else return false;
 }
