@@ -1,21 +1,18 @@
-```cpp
-#include <boost/optional.hpp>
 #include <vector>
 #include <list>
 
-namespace boost {
-using namespace std;
-}
+typedef struct {
+    bool isPresent;
+    int value;
+} IntWrapper;
 
-typedef boost::optional<int> OInt;
-
-std::vector<int> filter_integers(std::list<boost::any> values) {
+std::vector<int> filter_integers(std::list<int> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        OInt oint = boost::any_cast<OInt>(value);
-        if(oint) {
-            result.push_back(boost::any_cast<int>(value));
-        }
+        IntWrapper wrapper;
+        wrapper.isPresent = true;
+        wrapper.value = value;
+        result.push_back(wrapper.value);
     }
     return result;
 }
