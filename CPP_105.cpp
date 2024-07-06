@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -20,7 +21,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
             case 3:
                 temp.push_back(num);
                 break;
-            default: 
+            default:
                 continue; 
         }
     }
