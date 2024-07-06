@@ -1,4 +1,3 @@
-```
 def double_the_difference():
     lst = input("Enter numbers separated by space: ").split()
     try:
