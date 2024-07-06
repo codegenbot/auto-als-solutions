@@ -1,3 +1,4 @@
+```
 def eat(number, need, remaining):
     if number < need and number < remaining:
         eaten = number
