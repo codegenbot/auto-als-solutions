@@ -1,4 +1,3 @@
-```cpp
 #include <algorithm>
 #include <vector>
 #include <initializer_list>
@@ -7,7 +6,7 @@ bool same(std::vector<int> a, std::vector<int> b) {
     return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
 }
 
-std::vector<int> order_by_points(std::vector<int> nums) {
+std::vector<int> sortNumbersByPoints(std::vector<int> nums) {
     auto comp = [&nums](int a, int b) {
         int sumA = 0, sumB = 0;
         for (char c : std::to_string(a)) sumA += c - '0';
@@ -20,7 +19,6 @@ std::vector<int> order_by_points(std::vector<int> nums) {
     return nums;
 }
 
-int testMain() {
-    assert(same(order_by_points({0,6,6,-76,-21,23,4}), {-76, -21, 0, 4, 23, 6, 6}));
+int main() {
+    assert(same(sortNumbersByPoints({0,6,6,-76,-21,23,4}), {-76, -21, 0, 4, 23, 6, 6}));
     return 0;
-}
