@@ -9,8 +9,7 @@ bool pairs_sum_to_zero(std::vector<int> l) {
         }
     }
     for (int i = 0; i < l.size(); ++i) {
-        if (std::find(std::next(l.begin(), i), l.end(), -l[i]) != l.end()) 
-            return true;
+        if (std::find(std::begin(l), std::end(l), -l[i]) != std::end(l)) return true;
     }
     return false;
 }
