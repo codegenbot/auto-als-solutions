@@ -1,15 +1,6 @@
+#include <string>
 #include <iostream>
 #include <limits>
-#include <string>
-
-int main() {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::string word;
-    std::cout << "Enter a word: ";
-    std::getline(std::cin, word);
-    std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
-
-}
 
 std::string get_closest_vowel(std::string str) {
     int min_dist = std::numeric_limits<int>::max();
@@ -25,4 +16,12 @@ std::string get_closest_vowel(std::string str) {
         }
     }
     return std::string(1, closest_vowel);
+}
+
+int main() {
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::string word;
+    std::cout << "Enter a word: ";
+    std::getline(std::cin, word);
+    std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
 }
