@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -6,7 +7,7 @@ int is_bored(std::string S) {
     size_t pos = 0;
     while ((pos = S.find("I", pos)) != std::string::npos) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
-            S.erase(pos, 1);
+            pos = S.find("I", pos + 1);
         else
             pos = S.find(".", pos) + 1;
     }

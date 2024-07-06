@@ -16,6 +16,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
             temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
+        }
     }
 
     std::sort(temp.begin(), temp.end());
@@ -57,11 +58,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     return result;
 }
 
-int main() {
-    std::vector<int> arr = {9, 4, 8};
-    std::vector<std::string> result = by_length(arr);
-    if (!issame(result, {"Nine", "Four", "Eight"})) {
-        return 1; 
-    }
+int mainTest() {
+    assert (issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
     return 0;
 }
