@@ -13,7 +13,7 @@ std::string string_to_md5(const char* text) {
     const char* ptr = text;
     size_t len = strlen(text);
     MD5_update(&mdContext, reinterpret_cast<const unsigned char*>(ptr), len); 
-    MD5_final(&mdContext, result);
+    MD5_final(result, &mdContext);
 
     std::ostringstream oss;
     for (int i = 0; i < 16; ++i) {
