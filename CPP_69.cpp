@@ -1,8 +1,4 @@
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-int search(const vector<int>& v) {
+int search(const std::vector<int>& v) {
     for(int i = 1; i < v.size(); i++) {
         if(v[i] == v[0])
             return -1;
