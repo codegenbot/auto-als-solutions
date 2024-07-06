@@ -3,15 +3,16 @@
 #include <vector>
 #include <algorithm>
 
+// Define issame function here...
 bool issame(std::vector<int> a, std::vector<int> b) {
-    if (a.size() != b.size()) {
+    if (a.size() != b.size())
         return false;
-    }
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) {
+    
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i])
             return false;
-        }
     }
+    
     return true;
 }
 
