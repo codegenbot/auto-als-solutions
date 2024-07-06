@@ -1,3 +1,4 @@
+```
 from typing import List
 
 
@@ -8,6 +9,6 @@ def parse_music(music_string: str) -> List[int]:
     while i < len(music_string):
         if music_string[i] == '|':
             i += 1
-        result.append(beats[music_string[i:i+2]])
+        result.append(beats.get(music_string[i:i+2], 0))
         i += 2
     return result
