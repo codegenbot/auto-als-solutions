@@ -22,18 +22,22 @@ vector<int> maximum(vector<int> arr, int k) {
     return result;
 }
 
-cout << "Enter the number of elements: ";
-cin >> n;
-vector<int> arr(n);
-for (int i = 0; i < n; i++) {
-    cin >> arr[i];
-}
-cout << "Enter k: ";
-cin >> k;
-if(k > n) k = n;
-vector<int> result = maximum(arr, k);
-if(same(result, vector<int>(k, 243))) {
-    cout << "Maximum values are equal.\n";
-} else {
-    cout << "Maximum values are not equal.\n";
+int main() {
+    cin >> n;
+    cout << "Enter the number of elements: ";
+    int n, k;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    cout << "Enter k: ";
+    cin >> k;
+    if(k > n) k = n;
+    vector<int> result = maximum(arr, k);
+    if(same(result, vector<int>(k, 243))) {
+        cout << "Maximum values are equal.\n";
+    } else {
+        cout << "Maximum values are not equal.\n";
+    }
 }
