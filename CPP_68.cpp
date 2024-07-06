@@ -1,16 +1,27 @@
 #include <vector>
 
-bool isSame(const std::vector<int>& vec) {
-    if (vec.size() == 0) {
-        return true;
+bool issame(int a, int b) {
+    return a == b;
+}
+
+vector<int> pluck(vector<int> arr) {
+    vector<int> result;
+    if (arr.empty()) {
+        return result;
     }
     
-    int first = vec[0];
-    for (int i = 1; i < vec.size(); i++) {
-        if (vec[i] != first) {
-            return false;
+    int smallest_even = INT_MAX;
+    int index = -1;
+    
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] % 2 == 0 && arr[i] < smallest_even) {
+            smallest_even = arr[i];
+            index = i;
         }
     }
     
-    return true;
+    result.push_back(smallest_even);
+    result.push_back(index);
+    
+    return result;
 }
