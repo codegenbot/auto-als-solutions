@@ -1,25 +1,34 @@
-int smallest_change(vector<int> arr) {
+#include <iostream>
+#include <string>
+#include <vector>
+
+int smallest_change(std::vector<int> arr) {
     int n = arr.size();
+    std::string str = "";
+    for (int i : arr) {
+        str += std::to_string(i);
+    }
     int left = 0, right = n - 1;
     int changes = 0;
-
     while (left < right) {
-        if (arr[left] != arr[right]) {
-            // count the number of elements to be changed
-            int minChange = 1;
-            for (int i = left + 1; i <= right; i++) {
-                if (arr[i] == arr[right]) {
-                    minChange = i - left;
-                    break;
-                }
+        if (str[left] != str[right]) {
+            changes++;
+            if (str[left] == str[right - 1]) {
+                right--;
+            } else if (str[right] == str[left + 1]) {
+                left++;
+            } else {
+                break;
             }
-            changes += minChange;
-            left += minChange;
         } else {
             left++;
             right--;
         }
     }
-
     return changes;
+}
+
+int main() {
+    std::cout << smallest_change({0, 1}) << std::endl;
+    return 0;
 }
