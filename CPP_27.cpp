@@ -1,3 +1,7 @@
+```cpp
+#include <string>
+#include <cctype>
+
 int main
 {
     std::string input;
