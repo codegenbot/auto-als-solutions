@@ -1,3 +1,4 @@
+```cpp
 #include <cmath>
 
 bool iscuber(int a){
@@ -8,3 +9,4 @@ bool iscuber(int a){
         i++;
     }
     return false;
+}
