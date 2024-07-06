@@ -3,7 +3,5 @@ def split_words(txt):
     words = txt.split()
     if len(words) > 0:
         return words
-    words = txt.replace(',', ' ')
-    if len(words.split()) > 0:
-        return words.split()
-    return sum(1 for c in txt.lower() if ord(c) % 2 == 1 and ord('a') <= ord(c) <= ord('z'))
+    else:
+        return sum(1 for char in txt if 'a' <= char <= 'z' and ord(char) % 2 == 1)
