@@ -9,7 +9,7 @@ while True:
             for s in inp.split():
                 if not set(s).issubset({'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '}):
                     raise ValueError
-                if s:  # Check if the string is not empty
+                if s:  
                     strings += [s.strip()]
         break
     except ValueError:
