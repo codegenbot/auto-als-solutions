@@ -1,10 +1,9 @@
-```cpp
 #include <vector>
 
 int main() {
-    std::vector<std::vector<int>> grid = {{1,0,0},{1,1,0}};
+    vector<vector<int>> grid = {{1,0}, {1,0}, {1,0}};
     int capacity = 2;
-    cout << max_fill(grid, capacity) << endl;
+    cout << max_fill(grid, capacity);
 }
 
 int max_fill(vector<vector<int>> grid, int capacity) {
