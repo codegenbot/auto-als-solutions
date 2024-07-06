@@ -12,8 +12,8 @@ int specialFilter(std::vector<int> nums) {
 }
 
 int main() {
-    std::vector<int> numbers = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-    int result = specialFilter(numbers);
-    std::cout << "The number of integers that meet the condition is: " << result << std::endl;
+    std::vector<int> nums = {111, 222, 333};
+    int result = specialFilter(nums);
+    std::cout << "The number of integers in the array that meet the specified conditions is: " << result << std::endl;
     return 0;
 }
