@@ -1,24 +1,22 @@
-int is_bored(string S){
-    int count = 0;
-    string sentence;
+int is_bored(string S) {
+    int boredom_count = 0;
+    string word;
+    bool in_sentence = false;
 
-    for(int i=0; i<S.length(); i++){
-        if(S[i] == '.' || S[i] == '?' || S[i] == '!'){
-            string word = S.substr(0, i);
-            if(word.find("I") != string::npos)
-                count++;
-            sentence.clear();
-            S.erase(0, i+1);
-        }
-        else {
-            sentence += S[i];
+    for (char c : S) {
+        if (c == '.' || c == '?' || c == '!') {
+            in_sentence = false;
+        } else if (in_sentence) {
+            word += c;
+        } else if (word.size() > 0) {
+            word = c == ' ' ? "" : c + " ";
+            in_sentence = true;
+        } else if (c == 'I' && c != ' ') {
+            boredom_count++;
+            in_sentence = true;
+            word = c == ' ' ? "" : c + " ";
         }
     }
 
-    // last sentence
-    string word = S;
-    if(word.find("I") != string::npos)
-        count++;
-
-    return count;
+    return boredom_count;
 }
