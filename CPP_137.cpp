@@ -1,17 +1,21 @@
 #include <boost/any.hpp>
-#include <string>
+#include <iostream>
 
 using namespace boost;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (any_cast<int>(a) > any_cast<int>(b)) return a;
-    else if (any_cast<double>(a) > any_cast<double>(b)) return a;
-    else if (any_cast<std::string>(a) > any_cast<std::string>(b)) return a;
-    else if (any_cast<int>(a) == any_cast<int>(b)) return "None";
-    else if (any_cast<double>(a) == any_cast<double>(b)) return "None";
-    else if (any_cast<std::string>(a) == any_cast<std::string>(b)) return "None";
-    else if (any_cast<int>(a) < any_cast<int>(b)) return b;
-    else if (any_cast<double>(a) < any_cast<double>(b)) return b;
-    else if (any_cast<std::string>(a) < any_cast<std::string>(b)) return b;
-    return "None";
+    int i1 = any_cast<int>(a);
+    int i2 = any_cast<int>(b);
+    double d1 = any_cast<double>(a);
+    double d2 = any_cast<double>(b);
+    std::string s1 = any_cast<std::string>(a);
+    std::string s2 = any_cast<std::string>(b);
+
+    if (i1 > i2) return a;
+    else if (d1 > d2) return a;
+    else if (s1 > s2) return a;
+    else if (i1 == i2) return "None";
+    else if (d1 == d2) return "None";
+    else if (s1 == s2) return "None";
+    return b;
 }
