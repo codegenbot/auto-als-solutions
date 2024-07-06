@@ -2,18 +2,21 @@
 #include <vector>
 using namespace std;
 
+int search(const vector<int>& vec, int target) {
+    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
+}
+
 int main() {
     vector<int> vec;
     int n;
-    cout << "Enter number of elements: ";
+    cout << "Enter the number of elements: ";
     cin >> n;
+    vec.resize(n);
     
-    for(int i = 0; i < n; i++) {
-        int num;
-        cin >> num;
-        vec.push_back(num);
-    }
+    cout << "Enter the elements: ";
+    for(int i = 0; i < n; i++)
+        cin >> vec[i];
     
-    assert(std::find(vec.begin(), vec.end(), 10) != vec.end());
+    assert(search(vec, vec[0]) == distance(vec.begin(), vec.end()));
     return 0;
 }
