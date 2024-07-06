@@ -4,13 +4,13 @@
 int is_bored(std::string S) {
     int count = 0;
     size_t pos = 0;
-    while ((pos = S.find("I", pos)) != stdstring::npos) {
-        if (S.find(".", pos) == stdstring::npos && S.find("?", pos) == stdstring::npos && S.find("!", pos) == stdstring::npos)
-            count++; 
+    while ((pos = S.find("I", pos)) != std::string::npos) {
+        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
+            pos = S.find("I", pos + 1);
         else
-            pos = S.find('.', pos) + 1;
+            count++;
     }
-    return count; 
+    return count;
 
 int main() {
     std::string input;
@@ -19,3 +19,4 @@ int main() {
     int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
     return 0;
+}
