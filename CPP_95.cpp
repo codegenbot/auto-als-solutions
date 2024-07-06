@@ -8,3 +8,9 @@ bool check_dict_case(std::map<std::string, std::string> dict) {
     }
     return true;
 }
+
+int main() {
+    std::map<std::string, std::string> myDict;
+    assert(check_dict_case(myDict) == false);
+    return 0;
+}
