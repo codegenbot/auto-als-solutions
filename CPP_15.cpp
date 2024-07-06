@@ -17,5 +17,4 @@ int main() {
     std::cout << "Enter a number: ";
     std::cin >> n;
     std::cout << string_sequence(n) << std::endl;
-    return 0;
 }
