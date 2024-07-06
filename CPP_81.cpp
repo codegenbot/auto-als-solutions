@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <string>
 
@@ -35,14 +34,20 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     return result;
 }
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    return a == b;
+bool areEqual(std::vector<std::string> a, std::vector<std::string> b) {
+    if (a.size() != b.size())
+        return false;
+
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i])
+            return false;
+    }
+
+    return true;
 }
 
 int main() {
-    std::vector<float> grades(2); // Initialize vector size to 2
-    grades[0] = 0.0f; grades[1] = 0.7f;
-    if (!issame(numerical_letter_grade(grades), {"E", "D-"}))
-        return 1; 
+    if (!areEqual({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})))
+        return 1;
     return 0;
 }
