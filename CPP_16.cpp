@@ -1,17 +1,16 @@
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
 int count_distinct_characters(string str) {
-    vector<char> charSet;
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    vector<char> chars;
     for (char c : str) {
-        if (tolower(c) >= 'a' && tolower(c) <= 'z') {
-            bool found = false;
-            for (char ch : charSet) {
-                if (ch == tolower(c)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-                charSet.push_back(tolower(c));
+        if (!binary_search(chars.begin(), chars.end(), c)) {
+            chars.push_back(c);
         }
     }
-    return charSet.size();
+    return chars.size();
 }
