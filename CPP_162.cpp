@@ -1,7 +1,9 @@
+#include <iostream>
 #include <string>
-#include <openssl/evp.h>
+#include <openssl/evp.h> 
+#include <sstream>
 
-std::string string_to_md5(std::string text) {
+std::string string_to_md5(const std::string& text) {
     if (text.empty()) return "None";
     
     unsigned char result[MD5_DIGEST_LENGTH];
