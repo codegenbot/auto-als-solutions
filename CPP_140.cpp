@@ -8,10 +8,10 @@ string fix_spaces(string text){
         }else if(text[i] == ' '){
             bool consecutive = true;
             for(int j = i + 1; j < text.length(); j++){
-                if(j >= text.length() || text[j] != ' '){
+                if(j < text.length() && text[j] == ' '){
+                    consecutive = false;
                     break;
                 }
-                consecutive = false;
             }
             if(consecutive){
                 result += "-";
