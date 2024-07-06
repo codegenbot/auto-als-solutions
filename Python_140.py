@@ -1,4 +1,5 @@
-```python
+```
+import re
 def fix_spaces(text):
     text = text.replace("--", "- ")
     text = text.replace("---", "- -")
