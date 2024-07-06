@@ -3,20 +3,18 @@
 #include <cmath>
 
 int sum_squares(const std::vector<double>& lst) {
-    int result = 0;
-    for (double x : lst) {
-        double ceil_x = ceil(x);
-        result += pow(ceil_x, 2);
+    int sum = 0;
+    for (double num : lst) {
+        sum += num * num;
     }
-    return result;
-
+    return sum;
 }
 
 int main() {
     std::vector<double> lst;
     double num;
 
-    while (std::cin >> num) {
+    while ((std::cin >> num) && (!std::cin.peek())) { 
         lst.push_back(num);
     }
 
