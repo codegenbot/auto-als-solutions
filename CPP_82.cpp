@@ -1,4 +1,4 @@
-```cpp
+```
 #include <iostream>
 #include <string>
 
@@ -14,7 +14,6 @@ bool prime_length(const std::string& str) {
     return is_prime;
 }
 
-int main_test() {
+int main() {
     std::cout << (prime_length("0") ? "true" : "false") << std::endl;
-    return 0;
 }
