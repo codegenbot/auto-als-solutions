@@ -1,4 +1,7 @@
+#include <iostream>
+#include <string>
 #include <boost/any.hpp>
+
 using namespace std;
 using namespace boost;
 
@@ -8,9 +11,11 @@ boost::any compare_one(boost::any a, boost::any b) {
     double db = any_cast<double>(b);
     string sb = any_cast<string>(b);
 
-    if (da > db || (!db.has_value() && !sa.empty()))
+    if (da > db)
         return a;
-    else if (sb > sa || (!da.has_value() && !sb.empty()))
+    else if (sa > sb)
+        return a;
+    else if (sb > sa)
         return b;
     else
         return boost::any("None");
