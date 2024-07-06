@@ -1,6 +1,6 @@
 Here is the solution:
 
-```
+```python
 from typing import List
 
 def factorize(n: int) -> List[int]:
