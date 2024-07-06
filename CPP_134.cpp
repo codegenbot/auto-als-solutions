@@ -1,12 +1,11 @@
-bool check_if_last_char_is_a_letter(string txt){
+Here is the completed code:
+
+```cpp
+bool check_if_last_char_is_a_letter(string txt) {
     if(txt.empty()) return false;
-    char last_char = txt.back();
-    bool is_part_of_word = false;
-    for(int i=0; i<txt.length(); i++){
-        if(!isspace(txt[i])){
-            is_part_of_word = true;
-            break;
-        }
+    for(int i = 0; i < txt.length() - 1; i++) {
+        if(!isspace(txt[i])) return false;
     }
-    return !isalpha(last_char) || is_part_of_word;
+    char c = txt.back();
+    return isalpha(c);
 }
