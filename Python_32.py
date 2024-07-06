@@ -5,27 +5,23 @@ def main():
             if num_coefficients % 2 != 0:
                 print("Number of coefficients must be even. Try again.")
                 continue
+            coefficients = input("Enter coefficients (space separated): ")
+            xs = [int(coeff) for coeff in coefficients.split()]
             break
         except ValueError as e:
             print(e)
 
-    xs = [
-        int(coeff)
-        for coeff in (input("Enter coefficients (space separated): ") + " ").split()
-    ]
-    while len(xs) % 2 != 0:
-        if num_coefficients == len(xs):
-            raise ValueError("xs must have even number of coefficients")
-        new_coeff = input(f"Add more coefficients: ")
-        xs += [int(coeff) for coeff in new_coeff.split()]
-
     if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
+    if len(xs) % 2 != 0:
+        raise ValueError("xs must have even number of coefficients")
 
     try:
-        print(find_zero(xs))
-    except ValueError as e:
-        print(e)
+        roots = find_zero(xs)
+        for root in roots:
+            print(root)
+    except Exception as e:
+        print(f"Program did not receive expected input: {e}")
 
 
 def find_zero(coeffs):
