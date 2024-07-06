@@ -1,9 +1,12 @@
-```
-bool issame(vector<int>& a, vector<int>& b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
-    }
+#include <bits/stdc++.h>
+using namespace std;
+
+bool issame(vector<int> a,vector<int>b){
+    if(a.size() != b.size())
+        return false;
+    for(int i = 0; i < a.size(); i++)
+        if(a[i] != b[i])
+            return false;
     return true;
 }
 
@@ -36,4 +39,9 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
         result.push_back(grid[x][y]);
     }
     return result;
+}
+
+int main() {
+    assert(issame(vector<int>(minPath({{1, 3}, {3, 2}}, 10)), vector<int>({1, 3, 1, 3, 1, 3, 1, 3, 1, 3})));
+    return 0;
 }

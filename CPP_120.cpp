@@ -1,3 +1,5 @@
+Here's the corrected code:
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -5,7 +7,7 @@
 
 using namespace std;
 
-bool areEqual(vector<int> a, vector<int> b) {
+bool issame(vector<int> a, vector<int> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -34,7 +36,7 @@ int main() {
     cout << "Enter k: ";
     cin >> k;
     vector<int> result = maximum(arr, k);
-    if(areEqual(result, vector<int>(k, 243))) {
+    if(issame(result, vector<int>(k, 243))) {
         cout << "Maximum values are equal.\n";
     } else {
         cout << "Maximum values are not equal.\n";
