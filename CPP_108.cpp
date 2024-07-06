@@ -1,5 +1,4 @@
-```cpp
-#include <vector>
+#include <initializer_list>
 
 int count_nums(std::vector<int> nums) {
     int count = 0;

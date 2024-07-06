@@ -1,10 +1,5 @@
-```cpp
 #include <iostream>
 #include <string>
-
-bool isVowel(char c) {
-    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
-}
 
 std::string get_closest_vowel(std::string word) {
     std::string closestVowel = "";
@@ -25,6 +20,10 @@ std::string get_closest_vowel(std::string word) {
         }
     }
     return closestVowel;
+}
+
+bool isVowel(char c) {
+    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
 
 int main() {
