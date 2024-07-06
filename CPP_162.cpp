@@ -1,8 +1,9 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <cstring>
 #include <openssl/md5.h>
+#include <cstring>
+#include <openssl/ssl.h>
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
@@ -13,13 +14,13 @@ std::string string_to_md5(const char* text) {
         MD5_Init(&mdContext);
         const char* ptr = text;
         size_t len = strlen(text);
-        MD5_update(&mdContext, reinterpret_cast<const unsigned char*>(ptr), len); // note: update instead of Update
-        MD5_final(result, &mdContext);
+        MD5_update(&mdContext, (const unsigned char*)ptr, len); // note: update instead of Update
+        MD5_final(&mdContext, result);
     } else {
         MD5_Init(&mdContext);
         const char* ptr = text;
         size_t len = strlen(text);
-        MD5_Update(&mdContext, ptr, len); // use Update if OpenSSL version < 3.0
+        MD5_Update(&mdContext, (unsigned char*)ptr, len); // use Update if OpenSSL version < 3.0
         MD5_Final(result, &mdContext);
     }
 
