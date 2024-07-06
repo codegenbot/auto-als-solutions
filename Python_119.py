@@ -10,10 +10,7 @@ def match_parens(lst):
             elif char == ')':
                 close_count += 1
                 
-            if open_count < close_count:
-                matching = False
-                break
-        
-        if not matching:
-            return "No"
-    return "Yes"
+        if open_count != close_count:
+            matching = False
+            
+    return "Yes" if matching else "No"
