@@ -1,12 +1,14 @@
+Here is the completed code:
+
 string string_xor(string a, string b) {
-    string result = "";
-    for(int i=0; i<a.length(); i++) {
-        if(a[i] == '1' && b[i] == '1')
-            result += '0';
-        else if(a[i] == '0' && b[i] == '0')
-            result += '0';
+    string result;
+    for (int i = 0; i < a.size(); i++) {
+        if (i >= b.size())
+            result += a[i] ^ '0';
         else
-            result += a[i];
+            result += a[i] ^ b[i];
     }
+    while (result.size() < max(a.size(), b.size()))
+        result += '0';
     return result;
 }
