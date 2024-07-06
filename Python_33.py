@@ -1,3 +1,2 @@
-```
 def sort_third(lst):
-    return [i for sublist in sorted(map(list, lst)) for i in sublist]
+    return [i if isinstance(i, list) else ([i] if isinstance(i, int) else i) for i in lst]
