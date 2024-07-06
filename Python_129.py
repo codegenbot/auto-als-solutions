@@ -1,8 +1,8 @@
-```
 def minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
     visited = set()
+    min_paths = []
     res = []
 
     def dfs(i, j, path, sum_path):
@@ -32,8 +32,10 @@ def minPath(grid, k):
     min_path = []
     for i, j in boundary_cells:
         visited.add((i, j))
-        res = dfs(i, j, [], k)
-        if res:
-            min_path = min([path for path in set(tuple(x) for x in res)], key=lambda x: len(x))
-            break
+        res = [p for p in [(dfs(x, y, [m[x][y]], k)) for x, y in ((i,j))] if p]
+        for path in set(tuple(x) for x in res):
+            if path:
+                min_path = min([path], key=lambda x: len(x))
+                break
+
     return min_path if min_path else []
