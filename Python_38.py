@@ -1,3 +1,5 @@
+Here is the modified code:
+
 ```
 def decode_cyclic(s: str):
     min_len = len(s)
