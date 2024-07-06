@@ -1,7 +1,9 @@
-bool any_int(float a, float b, float c){
-    if (round(a) == a && round(b) == b && round(c) == c) {
-        return (a == b + c || a == c + b || b == a + c || b == c + a || c == a + b || c == b + a);
-    } else {
-        return false;
-    }
+Here's the completed code:
+
+```cpp
+bool any_int(float a, float b, float c) {
+    if (abs(a - (b + c)) < 1e-9) return true;
+    if (abs(b - (a + c)) < 1e-9) return true;
+    if (abs(c - (a + b)) < 1e-9) return true;
+    return false;
 }
