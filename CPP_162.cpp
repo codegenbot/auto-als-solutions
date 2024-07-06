@@ -1,5 +1,9 @@
+```cpp
 #include <string>
 #include <sstream>
+#include <iomanip>
+#include <cstring>
+#include <openssl/md5.h>
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
