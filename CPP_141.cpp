@@ -1,7 +1,3 @@
-#include <cctype>
-#include<string>
-using namespace std;
-
 string file_name_check(string file_name){
     int count_dot = 0;
     bool starts_with_letter = false;
