@@ -3,7 +3,8 @@
 using namespace std;
 
 int findElement(const vector<int>& vec, int target) {
-    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
+    auto it = find(vec.begin(), vec.end(), target);
+    return it == vec.end() ? -1 : distance(it, vec.end());
 }
 
 int main() {
@@ -17,6 +18,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(find(vec.begin(), vec.end(), 10) == vec.end() ? -1 : distance(vec.begin(), find(vec.begin(), vec.end(), 10)), );
+    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? findElement(vec, 10) : -1,  );
     return 0;
 }
