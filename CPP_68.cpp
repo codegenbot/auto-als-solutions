@@ -7,11 +7,10 @@ vector<int> pluck(vector<int> arr) {
             evenNodes.push_back({arr[i], i});
         }
     }
-    
     if (evenNodes.empty()) {
         return {};
     }
-    
-    auto smallestEven = min(evenNodes.begin(), evenNodes.end());
-    return {{smallestEven->first, smallestEven->second}};
+    auto smallest = *min_element(evenNodes.begin(), evenNodes.end());
+    vector<int> result = {smallest.first, smallest.second};
+    return result;
 }
