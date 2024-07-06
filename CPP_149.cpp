@@ -34,8 +34,8 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 
 int main() {
-    std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
-    std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
+    std::vector<std::string> vec1({"aaaa", "bbbb", "dd", "cc"});
+    std::vector<std::string> vec2({"cc", "dd", "aaaa", "bbbb"});
     assert(issame(sorted_list_sum(vec1), vec2));
     return 0;
 }
