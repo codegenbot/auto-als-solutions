@@ -14,7 +14,6 @@ int vowels_count(string s) {
             case 'u':
                 count++;
                 break;
-
             case 'y':
                 if (s.back() == c) {
                     count++;
