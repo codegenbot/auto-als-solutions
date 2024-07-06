@@ -1,4 +1,6 @@
-string anti_shuffle(string s){
+#include <string>
+
+string anti_shuffle(string s) {
     string result = "";
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){

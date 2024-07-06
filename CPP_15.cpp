@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -19,5 +18,4 @@ int main() {
     std::cout << "Enter a number: ";
     std::cin >> n;
     std::cout << string_sequence(n) << std::endl;
-    return 0;
 }
