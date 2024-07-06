@@ -1,19 +1,21 @@
 ```
 def sum_squares(numbers):
     try:
-        lst = [float(i) for i in numbers.split()]
+        lst = [int(i) for i in numbers.split()]
     except ValueError:
         print("Invalid input. Please enter only numbers.")
         return None
 
     total_sum = 0
-    for i in range(len(lst)):
-        if i % 3 == 0:
-            total_sum += lst[i] ** 2
-        elif i % 4 == 0 and i % 3 != 0:
-            total_sum += lst[i] ** 3
+    for i, num in enumerate(lst[:-1]):
+        if (i+1) % 3 == 0:
+            total_sum += num ** 2
+        elif (i+1) % 4 == 0 and (i+1) % 3 != 0:
+            total_sum += num ** 3
+    for num in lst[-1:]:
+        if (len(lst) - len(numbers.split()) + i+1) % 3 == 0:
+            total_sum += num ** 2
     return total_sum
-
 
 numbers = input("Enter numbers separated by space: ")
 print(sum_squares(numbers))
