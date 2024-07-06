@@ -22,7 +22,7 @@ def factorize(n: int) -> List[int]:
 
 
 def main():
-    num = int(input("Enter a number to factorize: "))
+    num = int(input("Enter a number: "))
     print(factorize(num))
 
 
