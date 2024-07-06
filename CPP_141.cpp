@@ -1,6 +1,5 @@
 #include <string>
 #include <cctype>
-#include <vector>
 
 int countDigits(const string& str) {
     int count = 0;
