@@ -1,14 +1,30 @@
+Here is the solution:
+
+```cpp
 #include <vector>
 
 using namespace std;
 
 int prod_signs(vector<int> arr) {
-    if (arr.empty()) return -32768;
-    int sign = 1;
-    long long sum = 0;
+    int sign_product = 1;
+    long sum_magnitudes = 0;
+
     for (int num : arr) {
-        sign *= (num > 0 ? 1 : (num < 0 ? -1 : 0));
-        sum += abs(num);
+        if (num == 0) {
+            return 0;
+        }
+        if (num > 0) {
+            sign_product *= 1;
+        } else if (num < 0) {
+            sign_product *= -1;
+        }
+
+        sum_magnitudes += abs(num);
     }
-    return sign * sum;
+
+    if (arr.empty()) {
+        return INT_MIN; // equivalent to -32768
+    }
+
+    return sum_magnitudes * sign_product;
 }
