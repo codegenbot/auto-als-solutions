@@ -1,18 +1,19 @@
+#include <initializer_list>
 #include <vector>
-#include <iostream>
+#include <cstdint>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<int>> dp(n, std::vector<int>(n-1));
-
+    std::vector<std::vector<uint64_t>> dp(n, std::vector<uint64_t>(n-1));
+    
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
     }
-
+    
     for (int length = 2; length <= n; length++) {
         for (int i = 0; i < n - length + 1; i++) {
             int j = i + length - 1;
-
+            
             if (arr[i] == arr[j]) {
                 dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
@@ -20,26 +21,6 @@ int smallest_change(std::vector<int> arr) {
             }
         }
     }
-
-    return dp[0][n-1].size();
-}
-
-int main() {
-    std::vector<int> arr;
-    int n;
-    std::cout << "Enter the number of elements in the array: ";
-    std::cin >> n;
     
-    for (int i = 0; i < n; i++) {
-        int val;
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> val;
-        arr.push_back(val);
-    }
-
-    int minChanges = smallest_change(arr);
-
-    std::cout << "The minimum number of operations to make the array monotonic is: " << minChanges << std::endl;
-
-    return 0;
+    return dp[0][n-1].size();
 }

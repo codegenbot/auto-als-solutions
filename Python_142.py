@@ -1,6 +1,6 @@
 ```
-def sum_squares():
-    lst = [int(i) for i in input("Enter numbers separated by space: ").split()]
+def sum_squares(numbers):
+    lst = [int(i) for i in numbers.split()]
     total_sum = 0
     for i in range(len(lst)):
         if i % 3 == 0:
@@ -9,4 +9,5 @@ def sum_squares():
             total_sum += lst[i] ** 3
     return total_sum
 
-print(sum_squares())
+numbers = input("Enter numbers separated by space: ")
+print(sum_squares(numbers))
