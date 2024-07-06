@@ -1,6 +1,9 @@
+```
 def sum_squares(lst):
     total = 0
-    for i in range(len(lst)):
-        if (i % 3 == 0 and i % 4 != 0) or (i % 4 == 0 and i % 3 != 0):
-            total += lst[i] ** ((i % 3 == 0) * 2 + (i % 4 == 0))
+    for num in lst:
+        if isinstance(num, int) and num >= 0:
+            total += num ** 2
+        elif isinstance(num, float) and num >= 0:
+            total += round(num) ** 2
     return total
