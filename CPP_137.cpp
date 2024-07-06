@@ -1,18 +1,41 @@
-#include <boost/any.hpp>
 #include <iostream>
 #include <string>
 
-using namespace std;
-using namespace boost;
+struct Any {
+    using type = void;
 
-boost::any compare_one(boost::any a, boost::any b) {
-    if (any_cast<double>(a) > any_cast<double>(b)) {
-        return a;
-    } else if (any_cast<string>(a) > any_cast<string>(b)) {
-        return a;
-    } else if (any_cast<string>(b) > any_cast<string>(a)) {
-        return b;
-    } else {
-        return "None";
+    template<typename T>
+    struct retype { using type = T; };
+
+    template<typename T>
+    bool operator==(const T& t) const {
+        return true;
     }
+
+    template<typename T>
+    bool operator<(const T& t) const {
+        return false;
+    }
+};
+
+template<typename A, typename B>
+Any compare(const Any&A, const Any&B) {
+    if (std::any_cast<int>(A) < std::any_cast<int>(B))
+        return A;
+    else if (std::any_cast<int>(A) > std::any_cast<int>(B))
+        return B;
+    else
+        return A;
+
+    if (std::any_cast<std::string>(A) > std::any_cast<std::string>(B)) {
+        // Do some conversion to double
+        double num1 = std::stod(std::any_cast<std::string>(A));
+        double num2 = std::stod(std::any_cast<std::string>(B));
+        if (num1 < num2)
+            return A;
+        else if (num1 > num2)
+            return B;
+    }
+
+    return Any();
 }
