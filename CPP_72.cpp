@@ -22,19 +22,13 @@ bool isPalindrome(string s) {
     return s == rev;
 }
 
-int main() {
-    vector<int> q;
-    int w;
-
-    cin >> w;
-    for(int i = 0; i < w; i++) {
-        int num;
-        cin >> num;
-        q.push_back(num);
-    }
-
-    if(will_it_fly(q, w)) cout << "Yes";
-    else cout << "No";
-
-    return 0;
+cin >> w;
+vector<int> q(5);
+for(int i=0;i<5;i++)
+{
+    cin>>q[i];
 }
+if(will_it_fly(q,w))
+cout<<"The airplane will fly";
+else
+cout<<"The airplane won't fly";
