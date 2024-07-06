@@ -1,29 +1,19 @@
 #include <iostream>
 #include <string>
-#include <boost/any.hpp>
 
 using namespace std;
 
-boost::any compare_one(boost::any a, boost::any b) {
-    double da = any_cast<double>(a);
-    string sa = any_cast<string>(a);
-    double db = any_cast<double>(b);
-    string sb = any_cast<string>(b);
-
-    if (da > db)
-        return a;
-    else if (sa > sb)
-        return a;
-    else if (sb > sa)
-        return b;
+string compare_one(double a, string b) {
+    if (a > stod(b))
+        return to_string(a);
     else
-        return "None";
+        return b;
 }
 
 int main() {
-    boost::any a = 10.5; 
-    boost::any b = "hello";
-    boost::any result = compare_one(a, b);
-    cout << "Result: " << any_cast<string>(result) << endl;
+    double a = 10.5; 
+    string b = "hello";
+    string result = compare_one(a, b);
+    cout << "Result: " << result << endl;
     return 0;
 }
