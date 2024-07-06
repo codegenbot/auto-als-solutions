@@ -1,6 +1,10 @@
-```
-bool issame(const string& a, const string& b) {
-    return a == b;
+bool issame(string a, string b) {
+    if(a.length() != b.length()) 
+        return false;
+    for(int i = 0; i < a.length(); i++) 
+        if(a[i] != b[i]) 
+            return false;
+    return true;
 }
 
 vector<string> filter_by_prefix(vector<string> strings, string prefix){
