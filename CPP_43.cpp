@@ -1,3 +1,4 @@
+```cpp
 bool pairs_sum_to_zero(std::vector<int> l) {
     std::sort(l.begin(), l.end());
     for (int i = 0; i < l.size() - 1; ++i) {
@@ -8,8 +9,8 @@ bool pairs_sum_to_zero(std::vector<int> l) {
             ++j;
         }
     }
-    for (int i = 0; i < l.size(); ++i) {
-        if (std::find(std::begin(l), std::end(l), -l[i]) != std::end(l)) return true;
+    for(int i = 0; i < l.size(); i++) {
+        if(std::abs(l[i]) * 2 == std::accumulate(l.begin(), l.end(), 0)) return true;
     }
     return false;
 }
