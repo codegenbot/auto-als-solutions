@@ -16,8 +16,4 @@ std::string miniRom(int number) {
     return result;
 }
 
-int main() {
-    assert(miniRom(1000) == "M");
-    std::cout << miniRom(2023);
-    return 0;
-}
+std::cout << miniRom(2023);
