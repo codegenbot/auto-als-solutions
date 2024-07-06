@@ -1,13 +1,9 @@
-Here is the completed code:
-
 bool iscuber(int a){
-    int i = 1;
-    while (true) {
-        int cube = pow(i,3);
-        if(cube == a)
+    int i = 0;
+    while (pow(i+1,3) <= a){
+        if(pow(i+1,3) == a)
             return true;
-        else if(cube > a)
-            return false;
         i++;
     }
+    return false;
 }
