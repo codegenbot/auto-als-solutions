@@ -1,6 +1,6 @@
-Here is the modified code:
+Here is the solution to the problem:
 
-```
+```Python
 def minSubArraySum(nums):
     if not nums:
         return 0
