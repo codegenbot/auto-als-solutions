@@ -8,4 +8,3 @@ string remove_vowels(string text){
             result += c;
     }
     return result;
-}
