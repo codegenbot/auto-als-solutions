@@ -1,6 +1,5 @@
 ```cpp
 #include <cmath>
-
 int digits(int n){
     int product = 1;
     while(n > 0){
