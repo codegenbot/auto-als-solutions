@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 #include <vector>
 
@@ -14,6 +14,4 @@ int sumOdd(int x) {
     return sum;
 }
 
-int main() {
-    std::cout << sumOdd(0) << std::endl;
-}
+std::cout << sumOdd(0) << std::endl;
