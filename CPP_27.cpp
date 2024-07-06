@@ -1,8 +1,19 @@
-for(int i = 0; i < str.length(); i++){
-    if(str[i] >= 'a' && str[i] <= 'z'){
-        str[i] -= ('a' - 'A');
-    } else if(str[i] >= 'A' && str[i] <= 'Z'){
-        str[i] += ('a' - 'A');
+Here is the completed code:
+
+```cpp
+#include<string>
+using namespace std;
+
+string flip_case(string str){
+    string result = "";
+    for(int i=0; i<str.length();i++){
+        char c = str[i];
+        if(c >= 'a' && c <= 'z'){
+            c -= 32;
+        } else if (c >= 'A' && c <= 'Z') {
+            c += 32;
+        }
+        result += c;
     }
+    return result;
 }
-return str;
