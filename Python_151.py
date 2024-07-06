@@ -1,6 +1,15 @@
-def double_the_difference(lst):
-    return (
-        sum(i**2 for i in filter(lambda x: isinstance(x, int) and x >= 0, lst)) * 2
-        if lst
-        else 0
-    )
+```
+def double_the_difference():
+    lst = []
+    while True:
+        num = input("Enter a number (or 'stop' to finish): ")
+        if num.lower() == 'stop':
+            break
+        try:
+            num = int(num)
+            lst.append(num)
+        except ValueError:
+            print("Invalid input. Please enter an integer.")
+    return sum(i**2 for i in lst if isinstance(i, int) and i % 2 != 0)
+
+print(double_the_difference())
