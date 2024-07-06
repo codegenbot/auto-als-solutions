@@ -1,50 +1,35 @@
-int smallest_change(vector<int> arr) {
+#include <iostream>
+#include <string>
+#include <vector>
+
+int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    vector<vector<bool>> dp(n, vector<bool>(n, false));
-    
-    for (int i = 0; i < n; i++) {
-        dp[i][i] = true;
+    std::string str = "";
+    for (int i : arr) {
+        str += std::to_string(i);
     }
-    
-    for (int len = 2; len <= n; len++) {
-        for (int i = 0; i < n - len + 1; i++) {
-            int j = i + len - 1;
-            if (arr[i] == arr[j]) {
-                dp[i][j] = true;
-            } else {
-                dp[i][j] = false;
-                for (int k = i; k <= j; k++) {
-                    if (dp[i][k-1] && dp[k+1][j]) {
-                        dp[i][j] = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
+    int left = 0, right = n - 1;
     int changes = 0;
-    for (int i = 0, j = n - 1; i < j; ) {
-        if (!dp[i][j]) {
-            if (arr[i] != arr[j]) {
-                if (arr[i] == arr[j-1]) {
-                    j--;
-                } else if (arr[j] == arr[i+1]) {
-                    i++;
-                } else {
-                    changes++;
-                    break;
-                }
+    while (left < right) {
+        if (str[left] != str[right]) {
+            changes++;
+            if (str[left] == str[right - 1]) {
+                right--;
+            } else if (str[right] == str[left + 1]) {
+                left++;
             } else {
-                changes++;
                 break;
             }
-        }
-        if (dp[i][j]) {
-            i++;
-            j--;
+        } else {
+            left++;
+            right--;
         }
     }
-    
     return changes;
+
+}
+
+int main() {
+    std::cout << smallest_change({0, 1}) << std::endl;
+    return 0;
 }
