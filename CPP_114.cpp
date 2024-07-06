@@ -1,13 +1,13 @@
+```cpp
 #include <iostream>
 #include <vector>
-#include <climits>
 #include <cassert>
 
 using namespace std;
 
-long long minSubArraySum(vector<long long> nums) {
-    long long min_sum = LLONG_MAX;
-    long long current_sum = 0;
+int64_t minSubArraySum(vector<int64_t> nums) {
+    int64_t min_sum = INT64_MAX;
+    int64_t current_sum = 0;
 
     for (int i = 0; i < nums.size(); i++) {
         current_sum += nums[i];
