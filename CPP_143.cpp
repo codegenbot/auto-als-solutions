@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-std::string words_in_sentence(std::string sentence) {
-    std::vector<std::string> words = split(sentence, ' ');
-    std::string result;
+string words_in_sentence(string sentence) {
+    vector<string> words = split(sentence, ' ');
+    string result;
     
     for (const auto& word : words) {
         if (is_prime(word.length())) {
@@ -27,10 +27,10 @@ bool is_prime(int n) {
     return true;
 }
 
-std::vector<std::string> split(const std::string& str, char c) {
-    std::vector<std::string> tokens;
+vector<string> split(const string& str, char c) {
+    vector<string> tokens;
     size_t pos = 0;
-    while ((pos = str.find(c)) != std::string::npos) {
+    while ((pos = str.find(c)) != string::npos) {
         tokens.push_back(str.substr(0, pos));
         str.erase(0, pos + 1);
     }
