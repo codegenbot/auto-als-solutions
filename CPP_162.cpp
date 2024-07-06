@@ -1,8 +1,3 @@
-#include <iostream>
-#include <string>
-#include "digest.h"
-using namespace std;
-
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
@@ -17,16 +12,11 @@ std::string string_to_md5(const char* text) {
     unsigned char result[16];
     MD5_Final(&mdContext, result);
 
-    string output;
+    std::string output;
     for (int i = 0; i < 32; ++i) { 
         char temp[3] = {(char)(result[i >> 2]), (char)((i & 2) ? 0 : ((result[(i >> 2)] >> ((3 - i % 4) * 8)) & 0xFF)), '\0'};
-        output += string(temp); 
+        output += std::string(temp); 
     }
 
     return output;
-}
-
-int main() {
-    cout << string_to_md5("password") << endl;
-    return 0;
 }
