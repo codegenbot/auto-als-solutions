@@ -24,3 +24,4 @@ int main() {
     std::cout << "Sum of squares: " << sum << std::endl;
 
     return 0;
+}
