@@ -1,4 +1,4 @@
-```
+```cpp
 #include <initializer_list>
 
 #include <vector>
@@ -21,5 +21,5 @@ int main() {
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
     std::vector<int> temp = sort_array({21, 14, 23, 11});
-    assert (issame(temp , {23, 21, 14, 11}));
+    assert (issame(temp , {11, 14, 21, 23}));
 }
