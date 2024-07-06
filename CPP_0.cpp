@@ -8,7 +8,6 @@ bool has_close_elements(vector<float> numbers, float threshold){
         }
     }
     return false;
-
 }
 
 int main(){
