@@ -1,18 +1,7 @@
-```
 #include <vector>
 #include <algorithm>
 
 using namespace std;
-
-bool issame(vector<int> v1, vector<int> v2) {
-    if (v1.size() != v2.size()) 
-        return false;
-    for (int i = 0; i < v1.size(); i++) {
-        if (v1[i] != v2[i]) 
-            return false;
-    }
-    return true;
-}
 
 vector<int> strange_sort_vector(vector<int> lst) {
     vector<int> result;
@@ -40,4 +29,11 @@ vector<int> strange_sort_vector(vector<int> lst) {
     return result;
 }
 
-assert(issame(strange_sort_vector({111111}) , {111111}));
+int main() {
+    vector<int> numbers = {3, 1, 2, 7, 4};
+    vector<int> sortedNumbers = strange_sort_vector(numbers);
+    for (int num : sortedNumbers) {
+        cout << num << " ";
+    }
+    return 0;
+}
