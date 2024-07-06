@@ -1,6 +1,3 @@
-```cpp
-#include <iostream>
-
 bool isPrime(int num) {
     for (int i = 2; i * i <= num; i++) {
         if (num % i == 0)
@@ -20,12 +17,4 @@ int prime_fib(int n) {
         while (!isPrime(fib))
             fib++;
     }
-}
-
-int main() {
-    int n;
-    std::cout << "Enter the number: ";
-    std::cin >> n;
-    std::cout << "The " << n << "th prime Fibonacci number is: " << prime_fib(n) << std::endl;
-    return 0;
 }
