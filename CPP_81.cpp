@@ -1,5 +1,4 @@
-#include <vector>
-#include <string>
+#include <initializer_list>
 
 std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     std::vector<std::string> result;
@@ -39,7 +38,6 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    if (!issame({{"E"}, {"D-"}}, numerical_letter_grade({0.0f, 0.7f})))
-        return 1; // assertion failed
+    if (!issame(numerical_letter_grade({0.0, 0.7}), {"E", "D-"}))
+        return 1; 
     return 0;
-}
