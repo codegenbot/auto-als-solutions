@@ -1,25 +1,31 @@
 #include <vector>
+#include <cassert>
 
-std::vector<float> get_positive(std::vector<float> l) {
-    std::vector<float> result;
-    for (float num : l) {
-        if (num > 0) {
-            result.push_back(num);
+bool issame(const std::vector<float>& a, const std::vector<float>& b) {
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+}
+
+vector<vector<float>> get_positive(vector<vector<float>> l) {
+    vector<vector<float>> result;
+    for (auto& nums : l) {
+        vector<float> new_nums = get_positive(nums);
+        if (!new_nums.empty()) {
+            result.push_back(new_nums);
         }
     }
     return result;
 }
 
-bool issame(std::vector<float> a, std::vector<float> b) {
-    if(a.size()!=b.size())return false;
-    for(int i=0;i<a.size();i++){
-        if(a[i]!=b[i]) return false;
-    }
-    return true;
-}
-
 int main() {
-    std::vector<float> result = get_positive({1, -2, 3});
-    assert(issame(result, {1, 3}));
+    vector<vector<float>> input = {{1.0, -2.0, 3.0}, {-4.0, 5.0, -6.0}};
+    vector<vector<float>> output = get_positive(input);
+
+    for (const auto& nums : output) {
+        for (float num : nums) {
+            std::cout << num << " ";
+        }
+        std::cout << std::endl;
+    }
+
     return 0;
 }
