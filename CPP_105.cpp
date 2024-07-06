@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,8 +18,8 @@ std::vector<std::string> by_length(std::vector<int> arr) {
         }
     }
 
-    std::sort(temp.begin(), temp.end());
-    std::reverse(temp.begin(), temp.end());
+    sort(temp.begin(), temp.end());
+    reverse(temp.begin(), temp.end());
 
     std::vector<std::string> result;
     for (int i : temp) {
@@ -66,5 +65,6 @@ int main() {
         std::cout << str << " ";
     }
     std::cout << std::endl;
+
     return 0;
 }
