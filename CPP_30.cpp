@@ -7,7 +7,7 @@ bool issame(const std::vector<float>& a, const std::vector<float>& b) {
 
 vector<vector<float>> get_positive(vector<vector<float>> l) {
     vector<vector<float>> result;
-    for (auto &num : l) {
+    for (vector<float> num : l) {
         if (std::all_of(num.begin(), num.end(), [](float x){ return x > 0; })) {
             result.push_back(get_positive(num));
         }
