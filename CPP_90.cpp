@@ -1,13 +1,13 @@
 Here is the completed code:
 
 int next_smallest(vector<int> lst) {
-    if (lst.size() < 2) return -1; // Return None
-    vector<int> sorted = lst;
-    sort(sorted.begin(), sorted.end());
-    for (int i = 0; i < sorted.size() - 1; ++i) {
-        if (sorted[i] != sorted[i + 1]) {
-            return sorted[i + 1];
+    vector<int> vec = lst; // copy the input vector
+    if (vec.empty()) return -1; // empty vector has no 2nd smallest element
+    sort(vec.begin(), vec.end()); // sort the vector in ascending order
+    for (int i = 1; i < vec.size(); i++) {
+        if (vec[i] != vec[0]) { // found a different element from the first one
+            return vec[i]; // this is the 2nd smallest element
         }
     }
-    return -1; // Return None
+    return -1; // all elements are equal to the first one, no 2nd smallest
 }
