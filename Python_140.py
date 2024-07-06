@@ -1,4 +1,6 @@
 ```
+import re
+
 def fix_spaces():
     text = input("Enter your text: ")
     text = text.replace("--", "- ")
