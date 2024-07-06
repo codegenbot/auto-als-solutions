@@ -2,12 +2,9 @@
 using namespace std;
 
 bool cycpattern_check(string a, string b) {
-    for (int i = 0; i < a.length(); i++) {
-        for (int j = 0; j <= a.length() - b.length(); j++) {
-            if (a.substr(j).compare(a.substr(i) + a.substr(0, i)) == 0) {
-                return true;
-            }
-        }
+    for (int i = 0; i < a.length() - b.length() + 1; i++) { 
+        if (a.substr(i).compare(b.substr(0, a.length()-i)) == 0)
+            return true;
     }
     return false;
 }
