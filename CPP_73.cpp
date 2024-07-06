@@ -1,50 +1,29 @@
 int smallest_change(vector<int> arr) {
     int n = arr.size();
-    vector<vector<bool>> dp(n, vector<bool>(n, false));
+    vector<vector<bool>> dp(n, vector<bool>(n));
     
-    for (int i = 0; i < n; i++) {
+    for(int i=0; i<n; i++){
         dp[i][i] = true;
     }
     
-    for (int len = 2; len <= n; len++) {
-        for (int i = 0; i < n - len + 1; i++) {
-            int j = i + len - 1;
-            if (arr[i] == arr[j]) {
-                dp[i][j] = true;
+    for(int length = 2; length <= n; length++){
+        for(int start = 0; start < n - length + 1; start++){
+            int end = start + length - 1;
+            
+            if(arr[start] == arr[end]){
+                dp[start][end] = dp[start+1][end-1];
             } else {
-                dp[i][j] = false;
-                for (int k = i; k <= j; k++) {
-                    if (dp[i][k-1] && dp[k+1][j]) {
-                        dp[i][j] = true;
-                        break;
-                    }
-                }
+                dp[start][end] = (dp[start+1][end] || dp[start][end-1]);
             }
         }
     }
     
-    int changes = 0;
-    for (int i = 0, j = n - 1; i < j; ) {
-        if (!dp[i][j]) {
-            if (arr[i] != arr[j]) {
-                if (arr[i] == arr[j-1]) {
-                    j--;
-                } else if (arr[j] == arr[i+1]) {
-                    i++;
-                } else {
-                    changes++;
-                    break;
-                }
-            } else {
-                changes++;
-                break;
-            }
-        }
-        if (dp[i][j]) {
-            i++;
-            j--;
+    int res = 0;
+    for(int i=0; i<n-1; i++){
+        if(!dp[i][i+1]){
+            res++;
         }
     }
     
-    return changes;
+    return res;
 }

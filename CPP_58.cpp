@@ -6,10 +6,13 @@ vector<int> common(vector<int> l1, vector<int> l2) {
     set<int> s1(l1.begin(), l1.end());
     set<int> s2(l2.begin(), l2.end());
 
-    set<int> result;
-    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
-                      back_inserter(result));
+    set<int> resultIntersection;
+    if(s1.size() < 1 || s2.size() < 1)
+        return {"Error: At least one list is empty."}.push_back(0);
 
-    vector<int> r(result.begin(), result.end());
-    return r;
+    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
+                      inserter(resultIntersection, resultIntersection.begin()));
+
+    vector<int> result(resultIntersection.begin(), resultIntersection.end());
+    return result;
 }
