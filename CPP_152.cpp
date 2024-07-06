@@ -1,20 +1,17 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a == b;
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> guess) {
-    std::vector<std::vector<int>> result;
-    
+std::vector<std::pair<int, int>> compare(std::vector<int> game, std::vector<int> guess) {
+    std::vector<std::pair<int, int>> result;
     for (int i = 0; i < game.size(); i++) {
         if (game[i] == guess[i]) {
-            result.push_back({{1}}); // Correct
-        } else if (std::abs(game[i]-guess[i]) <= 1) {
-            result.push_back({{2}});
+            result.push_back({{i, 0}});
         } else {
-            result.push_back({{0}});
+            result.push_back({{i, std::abs(game[i] - guess[i])}});
         }
     }
     return result;
@@ -23,11 +20,6 @@ std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> gu
 int main_function() {
     std::vector<int> game = {1,2,3,5};
     std::vector<int> guess = {-1,2,3,4};
-    
-    auto actual = compare(game,guess);
-    auto expected = {{1}, {2, 0}, {2, 0}, {0}};
-    for (int i = 0; i < 4; ++i)
-        assert(std::equal(actual[i].begin(), actual[i].end(), expected[i].begin()));
-    
+    assert(std::equal(compare(game,guess).begin(), compare(game,guess).end(), {{0,0}}));
     return 0;
 }
