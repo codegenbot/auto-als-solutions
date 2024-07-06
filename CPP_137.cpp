@@ -1,7 +1,5 @@
-```cpp
 #include <iostream>
 #include <string>
-#include <boost/config.hpp>
 #include <boost/any.hpp>
 
 using namespace std;
