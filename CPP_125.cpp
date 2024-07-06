@@ -1,8 +1,8 @@
 ```cpp
-#define __GXX_EXPERIMENTAL_CXX0X 1
-
 #include <vector>
 #include <string>
+
+#define __GXX_EXPERIMENTAL_CXX0X 1
 
 bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     return a == b;
