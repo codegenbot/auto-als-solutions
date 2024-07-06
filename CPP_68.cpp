@@ -1,16 +1,8 @@
 #include <vector>
 #include <algorithm>
 
-bool same(vector<pair<int, int>> a, vector<pair<int, int>> b) {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i].first != b[i].first || a[i].second != b[i].second) {
-            return false;
-        }
-    }
-    return true;
+bool same(const vector<int>& a, const vector<int>& b) {
+    return a == b;
 }
 
 vector<int> extract(vector<int> arr) {
@@ -34,6 +26,5 @@ vector<int> extract(vector<int> arr) {
         }
     }
     
-    int resultValue = nodes[0].first;
-    return vector<int>(1, resultValue);
+    return {nodes[0].first};
 }
