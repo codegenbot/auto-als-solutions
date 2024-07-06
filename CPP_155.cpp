@@ -1,14 +1,13 @@
-Here is the solution:
-
 vector<int> even_odd_count(int num) {
-    int countEven = 0, countOdd = 0;
-    while (num != 0) {
-        int digit = num % 10;
-        if (digit % 2 == 0)
-            countEven++;
-        else
-            countOdd++;
-        num /= 10;
+    vector<int> result(2);
+    int n = abs(num);
+    while(n){
+        if(n%10%2) {
+            result[1]++;
+        } else {
+            result[0]++;
+        }
+        n /= 10;
     }
-    return {countEven, countOdd};
+    return result;
 }
