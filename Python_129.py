@@ -8,14 +8,18 @@ def minPath(grid, k):
         if (i, j) in visited:
             return None
         if 0 <= i < n and 0 <= j < n and grid[i][j] == k:
-            return ((path + [m[i][j]]), sum_path)
+            if sum_path + k == path[-1]:
+                return [path]
+            else:
+                return []
         if 0 <= i < n and 0 <= j < n and grid[i][j] != k:
             return None
         for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
-                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
-                min_paths.append(new_path)
+                new_path = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
+                if new_path:
+                    return new_path
 
     def find_min_path(grid, k):
         n = len(grid)
@@ -34,8 +38,9 @@ def minPath(grid, k):
             visited.add((i, j))
             paths = [p for p in [dfs(i, j, [m[i][j]], k)] if p]
             for path in set(tuple(x) for x in paths):
-                if not path: continue
-                if not min_path or len(path) < len(min_path):
+                if not path:
+                    continue
+                if not min_path or len(path) > len(min_path):
                     min_path = path
 
         return min_path if min_path else []
