@@ -1,4 +1,3 @@
-```
 def largest_prime_factor(n: int):
     def is_prime(k: int) -> bool:
         if k < 2:
