@@ -1,3 +1,4 @@
+```
 def double_the_difference(input_list):
     odd_sum = sum(i for i in input_list if isinstance(i, int) and i % 2 != 0)
     return abs(sum(i**2 for i in input_list if isinstance(i, int) and i > 0) - (2 * odd_sum))
