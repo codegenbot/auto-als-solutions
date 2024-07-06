@@ -1,7 +1,7 @@
 def double_the_difference():
     lst = input("Enter numbers separated by space: ").split()
     try:
-        numbers = [int(i) for i in lst]
+        numbers = [int(i) for i in lst if i.replace('-', '', 1).isdigit()]
         odd_sum = sum(i for i in numbers if i % 2 != 0)
         return abs(sum(i**2 for i in numbers if i > 0) - (2 * odd_sum))
     except ValueError:
