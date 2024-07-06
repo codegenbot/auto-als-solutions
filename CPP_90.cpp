@@ -1,11 +1,12 @@
-```cpp
+#include <vector>
+
 int next_smallest(vector<int> lst) {
-    if (lst.empty()) return 0; 
+    if (lst.size() < 2) return -1; 
     sort(lst.begin(), lst.end());
-    for (int i = 1; i < lst.size(); i++) {
-        if (lst[i] != lst[0]) {
-            return lst[i];
+    for (int i = 0; i < lst.size()-1; i++) {
+        if (lst[i] != lst[i+1]) {
+            return lst[i+1];
         }
     }
-    return 0; 
+    return -1; 
 }
