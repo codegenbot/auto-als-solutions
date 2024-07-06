@@ -1,14 +1,12 @@
 int main() {
     vector<int> lst;
-    int result;
-    cout << "Enter the numbers (space-separated): ";
-    for(int i = 0; i < 5; i++) {
+    int result = solution(lst);
+    cout << "Enter numbers separated by spaces: ";
+    for (int i = 0; i < 5; i++) {
         int num;
         cin >> num;
         lst.push_back(num);
     }
-    result = solution(lst);
-    cout << "Sum of odd-indexed even numbers: " << result << endl;
     return 0;
 }
 
