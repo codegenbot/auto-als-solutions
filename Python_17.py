@@ -10,7 +10,7 @@ def parse_music(music_string: str) -> List[int]:
             else:
                 music_list.append(4)
                 i += 1
-        elif i+2 <= len(music_string) and music_string[i:i+3] == '.||':
+        elif i+2 <= len(music_string) and music_string[i:i+3] == '.|.|':
             music_list.append(1)
             i += 3
     return music_list
