@@ -1,5 +1,5 @@
+```
 import math
-
 
 def main():
     while True:
@@ -12,9 +12,14 @@ def main():
         except ValueError as e:
             print(e)
 
-    xs = []
-    while len(xs) < num_coefficients:
-        new_coeff = input(f"Enter coefficients (space separated): ")
+    xs = [
+        int(coeff)
+        for coeff in (input("Enter coefficients (space separated): ") + " ").split()
+    ]
+    while len(xs) % 2 != 0:
+        if num_coefficients == len(xs):
+            raise ValueError("xs must have even number of coefficients")
+        new_coeff = input(f"Add more coefficients: ")
         xs += [int(coeff) for coeff in new_coeff.split()]
 
     if len(xs) < 2:
