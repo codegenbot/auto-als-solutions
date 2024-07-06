@@ -1,10 +1,12 @@
 ```
 def compare_one(a, b):
-    if isinstance(a, str) and isinstance(b, str):
-        return a if float(a.replace(',', '.')) > float(b.replace(',', '.')) else b
-    elif isinstance(a, (int, float)):
-        return b if isinstance(b, (int, float)) and b > a else None
-    elif isinstance(b, (int, float)):
-        return a if a > b else None
+    if isinstance(a, str) and isinstance(b, (int, float)):
+        a = str(a).replace('.', '').replace(',', '.').format(float)
+    elif isinstance(b, str) and isinstance(a, (int, float)):
+        b = str(b).replace('.', '').replace(',', '.')
+    if a > b:
+        return a
+    elif b > a:
+        return b
     else:
-        raise ValueError("Invalid input type")
+        return None
