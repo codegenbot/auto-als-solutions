@@ -16,7 +16,7 @@ int main() {
     std::vector<double> lst;
     double num;
 
-    while(std::cin >> num) {
+    while (std::cin >> num) {
         lst.push_back(num);
     }
 
