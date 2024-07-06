@@ -1,4 +1,3 @@
-```
 #include <initializer_list>
 #include <vector>
 #include <algorithm>
@@ -22,15 +21,14 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::sort(nodes.begin(), nodes.end(), compare);
     
-    int result = -1;
+    std::vector<int> result;
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if ((nodes[i-1].first, nodes[i-1].second) > (nodes[i].first, nodes[i].second)) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
-        result = nodes[i].first;
     }
     
-    return {result};
+    return {nodes[0].first};
 }
 
 int main() {
@@ -51,7 +49,7 @@ int main() {
     }
     else
     {
-        std::cout << "No result" << std::endl;
+        std::cout << "No output" << std::endl;
     }
     
     return 0;
