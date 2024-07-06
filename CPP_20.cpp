@@ -1,15 +1,7 @@
+```
 #include <algorithm>
 #include <vector>
 #include <numeric>
-
-bool issame(vector<float> a,vector<float> b){
-    for(int i = 0; i<a.size(); i++){
-        if(a[i] != b[i]){
-            return false;
-        }
-    }
-    return true;
-}
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
     std::vector<std::pair<float, float>> closest_pairs;
