@@ -8,7 +8,7 @@ int is_bored(std::string S) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
             pos = S.find(".", pos + 1);
         else
-            pos = S.find(".", pos) + 1;
+            count++;
     }
     return count;
 
