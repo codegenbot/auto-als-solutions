@@ -1,18 +1,7 @@
 #include <array>
 
-std::vector<int> generate_integers(int start, int end) {
-    std::vector<int> result;
-    for (int i = start; i <= end; ++i) {
-        result.push_back(i);
-    }
-    return result;
-}
-
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a == b;
-}
-
 int main_test() {
-    assert(issame(generate_integers(17, 89), generate_integers(17, 89)));
+    std::vector<int> result = generate_integers(17, 89);
+    assert(result.size() == 73); // the difference between 89 and 17 is 72
     return 0;
 }
