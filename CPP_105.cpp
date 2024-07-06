@@ -60,7 +60,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 int main() {
     std::vector<int> arr = {9, 4, 8};
     std::vector<std::string> result = by_length(arr);
-    if (!issame({ "One", "Four", "Eight" }, result)) {
+    if (!issame({{"One"}}, {"Four"}, {"Eight"}} , {result})) {
         return 1; 
     }
     return 0;
