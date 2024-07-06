@@ -28,12 +28,7 @@ std::vector<int> pluck(std::vector<int> arr) {
         }
     }
     
-    if (!result.empty())
-        result.push_back(nodes[0].first);
-    else
-        return arr;
-    
-    return result;
+    return {nodes[0].first};
 }
 
 int main() {
@@ -47,10 +42,17 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    std::vector<int> result = pluck(arr);
-    if(result.size() > 0)
+    if(arr.size() > 0)
     {
-        std::cout << "The output is: " << *result.begin() << std::endl;
+        std::vector<int> result = pluck(arr);
+        if(result.size() > 0)
+        {
+            std::cout << "The output is: " << *result.begin() << std::endl;
+        }
+        else
+        {
+            std::cout << "No output" << std::endl;
+        }
     }
     else
     {
