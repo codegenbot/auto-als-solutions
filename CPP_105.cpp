@@ -3,10 +3,10 @@
 using namespace std;
 
 bool issame(const vector<string>& v1, const vector<string>& v2) {
-    if(v1.size() != v2.size())
+    if (v1.size() != v2.size())
         return false;
-    for(int i = 0; i < v1.size(); i++)
-        if(v1[i] != v2[i])
+    for (int i = 0; i < v1.size(); i++)
+        if (v1[i] != v2[i])
             return false;
     return true;
 }
@@ -14,9 +14,7 @@ bool issame(const vector<string>& v1, const vector<string>& v2) {
 vector<string> by_length(vector<int> arr) {
     vector<pair<int, int>> temp;
     for (int i : arr) {
-        if (i >= 1 && i <= 9) {
-            temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
-        }
+        temp.push_back({i >= 1 && i <= 9 ? (i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
     }
 
     sort(temp.begin(), temp.end());
@@ -24,7 +22,7 @@ vector<string> by_length(vector<int> arr) {
 
     vector<string> result;
     for (auto& t : temp) {
-        switch(t.first) {
+        switch(t.second) {
             case 1:
                 result.push_back("One");
                 break;
