@@ -1,14 +1,14 @@
-bool is_sorted(vector<int> lst){
-    for(int i=1; i<lst.size(); i++){
-        if(lst[i-1] >= lst[i]) return false;
-        bool duplicate = false;
-        for(int j=i-1; j>=0 && !duplicate; j--){
-            if(lst[j] == lst[i]){
-                duplicate = true;
-                break;
-            }
+Here's the completed code:
+
+bool is_sorted(vector<int> lst) {
+    if (lst.size() <= 1) return true; // single element or empty vector
+    bool sorted = true;
+    for (int i = 1; i < lst.size(); ++i) {
+        if (lst[i] <= lst[i-1]) { // not strictly increasing
+            if (count(lst.begin(), lst.end(), lst[i]) > 1) return false; // duplicate found
+            sorted = false;
+            break;
         }
-        if(!duplicate) return false;
     }
-    return true;
+    return sorted;
 }

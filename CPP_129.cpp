@@ -1,32 +1,47 @@
-vector<int> minPath(vector<vector<int>> grid, int k) {
-    int n = grid.size();
-    vector<vector<bool>> visited(n, vector<bool>(n));
-    vector<int> res;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (!visited[i][j]) {
-                dfs(grid, i, j, k, visited, res);
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> minPath(vector<vector<int>>& grid, int k) {
+    vector<vector<int>> dp(grid.size(), vector<int>(grid[0].size()));
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[0].size(); j++) {
+            if (i == 0 || j == 0) {
+                dp[i][j] = grid[i][j];
+            } else {
+                int minVal = INT_MAX;
+                if (grid[i-1][j] < minVal) minVal = grid[i-1][j];
+                if (grid[i][j-1] < minVal) minVal = grid[i][j-1];
+                dp[i][j] = minVal;
             }
         }
     }
+
+    vector<int> res;
+    int i = 0, j = 0;
+    for (int l = 0; l < k; l++) {
+        res.push_back(grid[i][j]);
+        if (i == 0) {
+            j++;
+        } else if (j == 0) {
+            i--;
+        } else if (grid[i-1][j] <= grid[i][j-1]) {
+            i--;
+        } else {
+            j--;
+        }
+    }
+
     return res;
 }
 
-void dfs(vector<vector<int>>& grid, int x, int y, int k, vector<vector<bool>>& visited, vector<int>& res) {
-    if (k == 0) {
-        return;
+int main() {
+    vector<vector<int>> grid = {{1,2,3}, {4,5,6}, {7,8,9}};
+    int k = 3;
+    vector<int> result = minPath(grid, k);
+    for (int i : result) {
+        cout << i << " ";
     }
-    visited[x][y] = true;
-    res.push_back(grid[x][y]);
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -1; j <= 1; j++) {
-            if (i == 0 && j == 0) continue;
-            int nx = x + i;
-            int ny = y + j;
-            if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && !visited[nx][ny]) {
-                dfs(grid, nx, ny, k - 1, visited, res);
-                return;
-            }
-        }
-    }
+    cout << endl;
+    return 0;
 }
