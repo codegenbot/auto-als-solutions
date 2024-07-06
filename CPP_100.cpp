@@ -1,4 +1,5 @@
-#define _MSC_VER 1800
+#include <initializer_list>
+
 #include <vector>
 #include <algorithm>
 
