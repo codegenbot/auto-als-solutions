@@ -1,9 +1,13 @@
-bool check_map_case(map<string, string> dict) {
+#include <string>
+#include <map>
+#include <cctype>
+
+bool check_map_case(std::map<std::string, std::string> dict) {
     bool all_lower = true;
     bool all_upper = true;
 
     for (auto& pair : dict) {
-        if (dict.empty()) {
+        if (pair.first.empty()) {
             return false;
         }
         string key = pair.first;

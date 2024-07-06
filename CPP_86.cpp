@@ -1,25 +1,20 @@
-```cpp
-#include <string>
 #include <algorithm>
 using namespace std;
 
-string anti_shuffle(string s){
+string anti_shuffle(string s) {
     string result = "";
-    int i = 0;
-    while(i<s.size()){
+    for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
             result += ' ';
-            i++;
             continue;
         }
-        int j = i + 1;
-        for(;j<s.size() && s[j] != ''; j++){
-            
+        vector<char> word;
+        for(int j=i; j<s.size() && s[j] != ' '; j++){
+            word.push_back(s[j]);
         }
-        string word = s.substr(i, j - i);
+        i = j - 1;
         sort(word.begin(), word.end());
-        result += word;
-        i = j;
+        result += string(word.begin(), word.end());
     }
     return result;
 }
