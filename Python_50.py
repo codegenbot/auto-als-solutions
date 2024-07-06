@@ -1,6 +1,9 @@
-def decode_shift():
-    s = input("Enter the encoded text: ")
-    if isinstance(s, str):
-        return "".join([chr(((ord(ch) - 97 if ch.islower() else 65) - 5) % 26 + 97 if ch.islower() else 65) for ch in s])
-    else:
-        return "Invalid input. Please enter a string."
+```
+def decode_shift(s: str):
+    result = ""
+    for ch in s:
+        if ch.islower():
+            result += chr(((ord(ch) - 97) - 5) % 26 + 97)
+        else:
+            result += chr(((ord(ch) - 65) - 5) % 26 + 65)
+    return result
