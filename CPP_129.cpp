@@ -1,3 +1,7 @@
+#include <vector>
+#include <utility>
+#include <initializer_list>
+
 bool isEqual(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size())
         return false;
@@ -8,31 +12,29 @@ bool isEqual(std::vector<int> a, std::vector<int> b) {
 }
 
 int pathFinder(std::vector<std::vector<char>> grid, int x, int y, std::vector<std::pair<int, int>>& path) {
-    if(x<0 || y<0 || x>=grid.size() || y>=grid[0].size()) 
-        return 0; 
-
-    if(grid[x][y] == '#') 
-        return 1; 
-
-    grid[x][y] = '#'; 
-
-    for(int i=-1;i<=1;i++) {
-        for(int j=-1;j<=1;j++) { 
-            int newX = x + i;
-            int newY = y + j; 
-            if(newX>=0 && newX<grid.size() && newY>=0 && newY<grid[0].size()) {
-                if(isPath(grid, newX, newY)) {
-                    std::pair<int,int> p = std::make_pair(newX,newY);
-                    path.push_back(p); 
-                    int res = 1 + pathFinder(grid, newX, newY,path); 
-                    if(res > 0) 
-                        return res; 
+    if (grid.empty() || x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
+        return -1;
+    
+    if (grid[x][y] == 'O') {
+        path.push_back({x, y});
+        grid[x][y] = 'X';
+        
+        int newX = -1;
+        int newY = -1;
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (grid[i][j] == 'O') {
+                    newX = i;
+                    newY = j;
+                    break;
                 }
-            }  
+            }
+            if (newX != -1) break;
         }
+        
+        int ret = pathFinder(grid, newX, newY, path);
+        return ret > 0 ? 1 : ret;
+    } else {
+        return 0;
     }
-
-    grid[x][y] = '.'; 
-
-    return 0;
 }
