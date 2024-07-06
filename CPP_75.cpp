@@ -1,21 +1,13 @@
-#include <cmath>
-
-bool is_multiply_prime(int a) {
-    for (int i = 2; i <= sqrt(a); i++) {
-        if (a % i == 0) {
-            int j = 2;
-            while (j * j <= i) {
-                if (i % j == 0 || i % (j + 2) == 0)
-                    return false;
-                j++;
-            }
-            int k = 2;
-            while (k * k <= a / i) {
-                if ((a / i) % k == 0 || (a / i) % (k + 2) == 0)
-                    return false;
+bool is_multiply_prime(int a){
+    for(long long i=2;i*i<=a;i++){
+        long long j=i;
+        while(j*j<=a){
+            long long k=j;
+            while(k*k<=a){
+                if(i*j*k==a) return true;
                 k++;
             }
-            return true;
+            j++;
         }
     }
     return false;
