@@ -3,7 +3,7 @@ def minPath(grid, k):
     m = [[i * n + j for j in range(n)] for i in range(n)]
     visited = set()
     min_paths = []
-
+    
     def dfs(i, j, path, sum_path):
         if (i, j) in visited:
             return None
