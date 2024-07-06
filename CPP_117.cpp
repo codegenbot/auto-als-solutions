@@ -41,10 +41,8 @@ vector<string> select_words(string s, int n) {
     }
 
     return result;
-
 }
 
-{
 cout << "{";
 for (const string& s : select_words("Mary had a little lamb", 4)) {
     cout << "\"" << s << "\", ";
@@ -74,4 +72,3 @@ for (const string& s : select_words("Uncle sam", 3)) {
     cout << "\"" << s << "\", ";
 }
 cout << "}" << endl;
-}
