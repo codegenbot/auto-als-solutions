@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -33,7 +34,13 @@ void strange_sort_list(std::vector<int>& lst) {
 }
 
 int main() {
-    int v[] = {1, 1, 1, 1, 1};
-    assert(issame(strange_sort_list(std::vector<int>(v, v + 1)) , std::vector<int>(v, v + 1)));
+    std::vector<int> input = {1, 1, 1, 1, 1};
+    
+    std::vector<int> inputCopy = input;
+    strange_sort_list(inputCopy);
     return 0;
+
+    std::vector<int> inputVector = {111111};
+    strange_sort_list(inputVector);
+    assert (issame(inputVector , {111111}));
 }

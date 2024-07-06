@@ -1,22 +1,17 @@
-#include <vector>
-#include <iostream>
-
-int main() {
-    std::vector<int> lst;
+```cpp
+int sumOdd(int x) {
     int sum = 0;
-    int num;
-    for (int i = 1; ; i++) {
-        std::cin >> num;
-        if (!(num % 2 != 0)) {
-            break;
+    for (int i = 1; i <= 10; ) { 
+        int y;
+        std::cin >> y;
+        if (y % 2 != 0) {
+            sum += y;
         }
-        lst.push_back(num);
-    }
-
-    for (int i = 1; i < lst.size(); i++) {
-        if (lst[i] % 2 != 0) {
-            sum += lst[i];
-        }
+        ++i;
     }
     return sum;
+}
+
+int main() {
+    std::cout << sumOdd(0) << std::endl;
 }

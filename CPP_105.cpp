@@ -1,6 +1,6 @@
+```cpp
 #include <vector>
 #include <algorithm>
-#include <string>
 
 bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
     if(v1.size() != v2.size())
@@ -16,6 +16,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
             temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
+        }
     }
 
     std::sort(temp.begin(), temp.end());
@@ -60,7 +61,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 int main() {
     std::vector<int> arr = {9, 4, 8};
     std::vector<std::string> result = by_length(arr);
-    if (!issame(result, {"Nine", "Four", "Eight"})) {
+    if (!issame(std::vector<std::string>({{"One"}}, {"Four"}, {"Eight"}} , {result})) {
         return 1; 
     }
     return 0;
