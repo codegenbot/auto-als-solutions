@@ -1,31 +1,44 @@
 #include <algorithm>
+#include <string>
+
 using namespace std;
 
 string anti_shuffle(string s) {
     string result = "";
     for (const auto& word : split(s, " ")) {
-        result += anti_sort(word) + " ";
-    }
-    return result.substr(0, result.size() - 1);
-}
-
-string anti_sort(const string& str) {
-    string result;
-    for (char c : str) {
-        if (!result.empty() && result.back() <= c)
-            continue;
-        result += c;
+        for (char c : word) {
+            if (!result.empty()) {
+                result += " ";
+            }
+            for (int i = 0; i < c; i++) {
+                result += static_cast<char>(i);
+            }
+            result += c;
+        }
     }
     return result;
 }
 
-vector<string> split(const string& s, const string& delimiter) {
-    vector<string> result;
-    size_t pos = 0, prev = 0;
-    while ((pos = s.find(delimiter, prev)) != string::npos) {
-        result.push_back(s.substr(prev, pos - prev));
-        prev = pos + delimiter.size();
+string split(const string& s, const string& delimiter) {
+    size_t pos = 0;
+    string token;
+    vector<string> tokens;
+    while ((pos = s.find(delimiter)) != string::npos) {
+        token = s.substr(0, pos);
+        tokens.push_back(token);
+        s.erase(0, pos + delimiter.length());
     }
-    result.push_back(s.substr(prev));
+    tokens.push_back(s);
+    return join(tokens, " ");
+}
+
+string join(const vector<string>& tokens, const string& delimiter) {
+    string result;
+    for (const auto& token : tokens) {
+        if (!result.empty()) {
+            result += delimiter;
+        }
+        result += token;
+    }
     return result;
 }

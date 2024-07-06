@@ -1,11 +1,25 @@
-Here is the completed code:
+#include <vector>
+#include <map>
+
+using namespace std;
 
 int search(vector<int> lst) {
-    int max = 0;
-    for (const auto &num : lst) {
-        if (num > 0 && num >= max) {
-            max = num;
+    map<int, int> freq;
+    for (int num : lst) {
+        if (freq.find(num) == freq.end()) {
+            freq[num] = 1;
+        } else {
+            freq[num]++;
         }
     }
-    return max == 0 ? -1 : max;
+
+    int maxFreq = -1;
+    for (auto p : freq) {
+        if (p.second >= p.first && p.first > 0) {
+            maxFreq = p.first;
+            break;
+        }
+    }
+
+    return maxFreq;
 }
