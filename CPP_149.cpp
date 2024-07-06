@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -34,8 +33,8 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 
 int main() {
-    std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
-    std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
-    assert(issame(sorted_list_sum(vec1), vec2));
+    std::vector<std::string> lst = {"aaaa", "bbbb", "dd", "cc"};
+    std::vector<std::string> expected = {"cc", "dd", "aaaa", "bbbb"};
+    assert(issame(sorted_list_sum(lst), expected));
     return 0;
 }
