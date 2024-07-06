@@ -5,31 +5,20 @@
 
 std::string anti_shuffle(std::string s) {
     std::stringstream result;
-    bool inWord = false;
+    std::string word;
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
-            if(inWord){
-                sort(word.begin(), word.end());
-                result << word << " ";
-                inWord = false;
-            }
-            else{
-                result << s[i];
-            }
+            result << ' ';
+            continue;
         }
-        else{
-            if(!inWord){
-                inWord = true;
-                word += s[i];
-            }
-            else{
-                word += s[i];
-            }
+        for(int j=i; j<s.size() && s[j] != ' '; j++){
+            word += s[j];
         }
-    }
-    if(inWord){
-        sort(word.begin(), word.end());
-        result << word;
+        std::sort(word.begin(), word.end());
+        while (!word.empty()) {
+            result << word.back();
+            word.pop_back();
+        }
     }
     return result.str();
 }
