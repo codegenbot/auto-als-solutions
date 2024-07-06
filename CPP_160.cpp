@@ -1,25 +1,48 @@
-#include<stdio.h>
-#include<math.h>
-#include<vector>
-#include<string>
-using namespace std;
-#include<algorithm>
-#include<stdlib.h>
+#include <vector>
+#include <string>
+#include <algorithm>
 
-int do_algebra(vector<string> operato, vector<int> operand){
-    int result = operand[0];
-    for(int i=1; i<operand.size();i++){
-        if(operato[i-1] == "+")  result += operand[i];
-        else if(operato[i-1] == "-") result -= operand[i];
-        else if(operato[i-1] == "*") result *= operand[i];
-        else if(operato[i-1] == "//") {
-            if(result < 0) return -1;
-            result = result / static_cast<int>(operand[i]);
-        }
-        else{
-            if(result < 0) return -1;
-            result = pow(static_cast<double>(result), operand[i]);
+using namespace std;
+
+int do_algebra(vector<string> operatorVec, vector<int> operandVec) {
+    string expression = "";
+    
+    for (int i = 0; i < operatorVec.size(); i++) {
+        expression += to_string(operandVec[i]);
+        
+        if (i < operatorVec.size() - 1) {
+            expression += operatorVec[i];
         }
     }
+    
+    int result = eval(expression.c_str());
+    
     return result;
+}
+
+int eval(char* str)
+{
+    char temp[10];
+    int i, j, k;
+
+    for(i=0;str[i];i++)
+    {
+        if(str[i] == ' ')
+            continue;
+        
+        else
+        {
+            if(str[i] >= '0' && str[i] <= '9')
+            {
+                for(j=i;str[j]>='0'&&str[j]<='9';j++);
+                for(k=0;(k<10)&&(str[j-k]>='0'&&str[j-k]<='9');k++)
+                    temp[k] = str[j-k];
+                temp[k] = '\0';
+                i = j;
+            }
+        }
+    }
+
+    int num = atoi(temp);
+    return num;
 }
