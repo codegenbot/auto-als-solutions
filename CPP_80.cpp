@@ -1,5 +1,6 @@
-#include <iostream>
+```cpp
 #include <string>
+#include <iostream>
 
 bool is_happy(std::string s) {
     if (s.length() < 3)
@@ -27,14 +28,13 @@ bool is_happy(std::string s) {
 }
 
 int main() {
-    std::string s;
+    std::string input;
     std::cout << "Enter a string: ";
-    std::cin >> s;
-
-    if (is_happy(s))
+    std::cin >> input;
+    if (is_happy(input)) {
         std::cout << "The string is happy.\n";
-    else
+    } else {
         std::cout << "The string is not happy.\n";
-
+    }
     return 0;
 }
