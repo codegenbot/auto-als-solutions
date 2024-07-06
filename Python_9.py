@@ -1,10 +1,11 @@
 def max_rolling_sum(lst):
+    if not isinstance(lst, list) or any(not isinstance(x, int) for x in lst):
+        raise ValueError("Input must be a list of integers")
     if len(lst) == 0:
         return 0
-    max_sum = current_sum = sum(lst[:1])
-    for num in lst[1:]:
-        current_sum = max(num, current_sum + num)
-        max_sum = max(max_sum, current_sum)
-    return max_sum
+    current_max = max_window = sum(lst[:1])
+    for window in zip(*[iter(lst)]*2):
+        current_max = max(current_max, sum(window))
+    return current_max
 
-print(max_rolling_sum([14, -5, 12]))
+print(max_rolling_sum([1, 2, 3, 4, 5]))
