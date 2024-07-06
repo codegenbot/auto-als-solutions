@@ -7,11 +7,10 @@ string solve(int N) {
     while (N > 0) {
         int remainder = N % 2;
         if (remainder == 1)
-            binary.push_back('1');
+            binary.insert(0, "1");
         else
-            binary.push_back('0');
+            binary.insert(0, "0");
         N /= 2;
     }
-    reverse(binary.begin(), binary.end());
     return binary;
 }
