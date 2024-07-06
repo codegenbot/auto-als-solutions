@@ -7,7 +7,7 @@ int count_nums(vector<int> nums) {
         long abs_num = labs(num);
         while (abs_num > 0) {
             int digit = abs_num % 10;
-            if ((digit != 0 && digit != -1) || (num < 0 && digit == 1)) {
+            if ((digit != 0 && digit != -1) || (num < 0 && digit == 0)) {
                 has_positive_sum = true;
                 break;
             }
@@ -16,4 +16,3 @@ int count_nums(vector<int> nums) {
         if (has_positive_sum) count++;
     }
     return count;
-}
