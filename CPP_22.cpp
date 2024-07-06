@@ -1,26 +1,18 @@
-#include <boost/optional.hpp>
+#include <optional>
 #include <vector>
 #include <list>
-#include <any>
-#include <typeindex>
 
-namespace boost {
-    using namespace std;
-}
-
-typedef boost::optional<int> OInt;
-
-std::vector<int> filter_integers(std::list<std::any> values) {
+std::vector<int> filter_integers(std::list<any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if (value.type() == typeid(OInt)) {
+        if (value.type() == typeid(Optional<int>)) {
             try {
-                OInt oint = boost::any_cast<OInt>(value);
-                if (oint.is_initialized()) {
-                    result.push_back(*oint);
+                Optional<int> oint = any_cast<Optional<int>>(value);
+                if (oint.has_value()) {
+                    result.push_back(oint.value());
                 }
-            } catch (boost::bad_any_cast&) {
-                // Ignore non-OInt values
+            } catch (bad_any_cast&) {
+                // Ignore non-Optional values
             }
         }
     }
