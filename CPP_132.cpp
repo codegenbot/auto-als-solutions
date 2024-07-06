@@ -1,8 +1,26 @@
-bool is_nested(string str) {
-    int open = 0, close = 0;
+int main() {
+    string str;
+    cin >> str;
+
+    bool result = false;
+    int count = 0;
+
     for (char c : str) {
-        if (c == '[') open++;
-        else if (c == ']') close++;
+        if (c == '[') {
+            count++;
+        } else if (c == ']') {
+            if (count > 0) {
+                count--;
+            }
+        }
+
+        if (count >= 1 && c == ']') {
+            result = true;
+            break;
+        }
     }
-    return open > close && ((open + close) % 2 != 0);
+
+    cout << (result ? "true" : "false");
+
+    return 0;
 }
