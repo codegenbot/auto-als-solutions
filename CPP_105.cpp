@@ -1,17 +1,49 @@
-vector<string> by_length(vector<int> arr) {
-    vector<int> temp;
+vector<string> by_length(vector<int> arr){
+    vector<int> digits; // store digits between 1 and 9
     for (int i : arr) {
-        if (i >= 1 && i <= 9)
-            temp.push_back(i);
+        if (i >= 1 && i <= 9) {
+            digits.push_back(i);
+        }
     }
-    sort(temp.begin(), temp.end());
-    reverse(temp.begin(), temp.end());
-    vector<string> result;
-    map<int, string> intToDigit = {{1, "One"}, {2, "Two"}, {3, "Three"}, {4, "Four"}, 
-                                    {5, "Five"}, {6, "Six"}, {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
-    for (int i : temp) {
-        if (intToDigit.find(i) != intToDigit.end())
-            result.push_back(intToDigit[i]);
+
+    sort(digits.begin(), digits.end()); // sort the digits
+
+    reverse(digits.begin(), digits.end()); // reverse the sorted digits
+
+    vector<string> names;
+    for (int digit : digits) {
+        if (digit >= 1 && digit <= 9) {
+            switch (digit) {
+                case 1:
+                    names.push_back("One");
+                    break;
+                case 2:
+                    names.push_back("Two");
+                    break;
+                case 3:
+                    names.push_back("Three");
+                    break;
+                case 4:
+                    names.push_back("Four");
+                    break;
+                case 5:
+                    names.push_back("Five");
+                    break;
+                case 6:
+                    names.push_back("Six");
+                    break;
+                case 7:
+                    names.push_back("Seven");
+                    break;
+                case 8:
+                    names.push_back("Eight");
+                    break;
+                case 9:
+                    names.push_back("Nine");
+                    break;
+            }
+        }
     }
-    return result;
+
+    return names;
 }

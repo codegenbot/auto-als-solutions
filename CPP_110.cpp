@@ -1,13 +1,19 @@
 Here is the solution:
 
 string exchange(vector<int> lst1, vector<int> lst2) {
-    int even = 0;
-    for (int x : lst1) {
-        if (x % 2 == 0)
-            even++;
+    bool possible = true;
+    for (int num : lst1) {
+        if (num % 2 != 0) {
+            for (int &otherNum : lst2) {
+                if (otherNum % 2 == 0) {
+                    swap(num, otherNum);
+                    possible = false;
+                    break;
+                }
+            }
+            if (!possible)
+                break;
+        }
     }
-    if (even == lst1.size())
-        return "YES";
-    else
-        return "NO";
+    return possible ? "YES" : "NO";
 }
