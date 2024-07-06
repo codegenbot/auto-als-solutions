@@ -1,4 +1,3 @@
 #include <utility>
-
-int minPath(vector<vector<char>> grid, int x, int y, vector<pair<int,int>>& path) {
+int minPath(vector<vector<char>> grid, int x, int y, vector<pair<int, int>>& path) {
     ...
