@@ -20,7 +20,10 @@ def minPath(grid, k):
                 == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k
             ):
                 return [
-                    grid[x][y]
-                    for x, y in [(i, j)] + dp[i * n + j][(n - 1) * n + (n - 1)][1]
-                ]
+                    [grid[x][y] for x, y in [(i, j)] + path]
+                    for i in range(n)
+                    for j in range(n)
+                    if dp[i * n + j][(n - 1) * n + (n - 1)][0]
+                    == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k
+                ][0]
     return []
