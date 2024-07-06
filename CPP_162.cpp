@@ -1,3 +1,9 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
@@ -12,10 +18,10 @@ std::string string_to_md5(const char* text) {
     unsigned char result[16];
     MD5_Final(&mdContext, result);
 
-    std::string output;
+    std::stringstream stream;
     for (int i = 0; i < 16; ++i) { 
-        output += std::to_string((int)result[i]);
+        stream << setfill('0') << setw(2) << hex << static_cast<int>(result[i]);
     }
 
-    return output;
+    return stream.str();
 }
