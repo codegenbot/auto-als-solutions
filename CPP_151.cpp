@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <cmath>
 using namespace std;
@@ -15,7 +14,7 @@ long long double_the_difference(vector<double> lst) {
 
 int main() {
     vector<double> lst({1.5, 2.5, -3.4, 4.7});
-    long long odd_sum = double_the_difference(lst);
-    cout << "The sum of squares of odd numbers in the list is: " << odd_sum << endl;
+    long long odd_sum = 0;
+    assert(double_the_difference(lst) == odd_sum);
     return 0;
 }
