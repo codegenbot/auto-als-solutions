@@ -1,18 +1,11 @@
-```cpp
-#include <string>
-#include <iomanip>
-#include <sstream>
-
-using namespace std;
-
-string string_to_md5(const char* text) {
-    if (*text == '\0') return "";
+string string_to_md5(const string& text) {
+    if (text.empty()) return "";
 
     unsigned char result[16];
     MD5_CTX mdContext;
     MD5_Init(&mdContext);
-    const char* ptr = text;
-    size_t len = strlen(text);
+    const char* ptr = text.c_str();
+    size_t len = text.length();
     MD5_Update(&mdContext, ptr, len);
     MD5_Final(result, &mdContext);
 
@@ -21,5 +14,5 @@ string string_to_md5(const char* text) {
         oss << setfill('0') << setw(2) << hex << (int)result[i];
     }
 
-    return string(oss.str());
+    return oss.str();
 }
