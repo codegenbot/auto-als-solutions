@@ -1,12 +1,12 @@
 int fib4(int n) {
-    if (n < 0) return -1; // handle invalid input
-    int a = 0, b = 2, c = 2, d = 0;
-    for (int i = 4; i <= n; ++i) {
+    if (n < 0 || n > 4) return 0;
+    int a = 0, b = 0, c = 2, d = 0;
+    for (int i = 5; i <= n; ++i) {
         int temp = a + b + c + d;
-        d = c;
-        c = b;
-        b = a;
-        a = temp;
+        a = b;
+        b = c;
+        c = d;
+        d = temp;
     }
-    return a;
+    return d;
 }
