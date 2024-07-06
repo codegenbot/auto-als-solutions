@@ -8,8 +8,8 @@ bool pairs_sum_to_zero(std::vector<int> l) {
             ++j;
         }
     }
-    for(int i=0; i<l.size(); i++) {
-        if(std::find(l.begin(), l.end(), -std::abs(l[i])) != l.end()) 
+    for(int i=0; i<l.size(); i++){
+        if(std::find(l.begin()+i+1, l.end(), -std::abs(l[i])) != l.end())
             return true;
     }
     return false;
