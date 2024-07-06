@@ -1,25 +1,22 @@
-int count_nums(vector<int> v) {
+#include<vector>
+using namespace std;
+
+int count_nums(vector<int> nums) {
     int count = 0;
-    for (int num : v) {
-        if (num > 0) {
-            int sign = abs(num) / pow(10, int(log10(abs(num)))) < 0 ? -1 : 1;
-            int sum_digits = 0;
-            while (abs(num)) {
-                sum_digits += abs(num) % 10;
-                num /= 10;
+    for (int num : nums) {
+        if (num >= 0) {
+            int sum = 0;
+            bool sign = false;
+            for (long long temp = abs(num); temp > 0; temp /= 10) {
+                if (sign)
+                    sum -= temp % 10;
+                else
+                    sum += temp % 10;
+                sign = !sign;
             }
-            if (sign * sum_digits > 0)
+            if (sum > 0) {
                 count++;
-        } else if (num < 0) {
-            num = -num;
-            int sign = abs(num) / pow(10, int(log10(abs(num)))) < 0 ? -1 : 1;
-            int sum_digits = 0;
-            while (abs(num)) {
-                sum_digits += abs(num) % 10;
-                num /= 10;
             }
-            if (sign * sum_digits > 0)
-                count++;
         }
     }
     return count;
