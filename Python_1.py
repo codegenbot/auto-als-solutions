@@ -7,25 +7,31 @@ def separate_paren_groups(paren_string: str) -> list:
         if char == " ":
             continue
         elif char == "(":
-            if not stack or stack[-1] == ")":
-                current_group += char
-            else:
-                stack.append(char)
-                current_group += char
+            stack.append(char)
+            current_group += char
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()
-            current_group += char
-            while stack and stack[-1] != "(":
-                stack.pop()
-            if not stack or stack[-1] == "(":
-                groups.append("(" + current_group + ")")
+                groups.append(current_group + ")")
                 current_group = ""
+            else:
+                if stack:
+                    pass
+                else:
+                    groups.append("(" + current_group + ")")
+                    current_group = ""
 
-        elif char.isalpha() or (char.isspace() and stack):
+        elif char.isalpha():
+            while stack and stack[-1].isalpha():
+                current_group += stack.pop()
+            current_group += char
+        elif char.isspace() and stack:
             pass
 
-    if stack:
-        groups.append("(" + current_group + ")")
+    while stack:
+        if stack[-1] == "(":
+            break
+        current_group += stack.pop()
+    groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]

@@ -1,3 +1,4 @@
+```
 #include <cassert>
 
 bool any_int(float a, float b, float c) {
@@ -9,15 +10,10 @@ bool any_int(float a, float b, float c) {
 
 int main() {
     assert(any_int(3.01, 4, 7) == false);
-    if (true) {
-        int num;
-        std::cout << "Enter the number: ";
-        std::cin >> num;
-        if (any_int((float)num, 0, 10)) {
-            std::cout << "Any integer.\n";
-        } else {
-            std::cout << "Not any integer.\n";
-        }
+    if (any_int(1.0, 2.0, 3.0)) {
+        std::cout << "Triangle" << std::endl;
+    } else {
+        std::cout << "Not a Triangle" << std::endl;
     }
     return 0;
 }
