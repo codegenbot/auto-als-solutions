@@ -1,15 +1,14 @@
-Problem: 
-This problem can be solved using Python programming. The problem description is not available for this problem.
-
-def parse_nested_parens(paren_string: str) -> List[int]:
+```
+def parse_nested_parens(paren_string: str) -> list:
     result = []
-    stack = []
-    levels = []
-    for char in paren_string:
-        if char == '(':
-            stack.append(char)
-            levels.append(0)
-        elif char == ')':
-            levels[-1] += 1
-            stack.pop()
-    return levels
+    for group in paren_string.split():
+        level = 0
+        max_level = 0
+        for char in group:
+            if char == '(':
+                level += 1
+            elif char == ')':
+                level -= 1
+            max_level = max(max_level, level)
+        result.append(max_level)
+    return result
