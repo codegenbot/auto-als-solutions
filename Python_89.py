@@ -1,3 +1,4 @@
+```
 def encrypt(s):
     result = ""
     for char in s:
@@ -7,7 +8,7 @@ def encrypt(s):
             if value + 3 > 25: 
                 result += chr((value + 3) % 26 + ascii_offset)
             else:
-                result += chr((value + 3) % 26 + ascii_offset)
+                result += chr((value + 3) + ascii_offset)
         else:
             result += char
     return result
