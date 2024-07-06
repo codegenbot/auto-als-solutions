@@ -1,6 +1,5 @@
 #include <vector>
 #include <initializer_list>
-#include <algorithm>
 
 std::vector<int> generate_integers(int start, int end) {
     std::vector<int> result;
