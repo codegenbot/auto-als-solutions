@@ -1,3 +1,4 @@
+#include<stdio.h>
 #include<string>
 #include<algorithm>
 using namespace std;
