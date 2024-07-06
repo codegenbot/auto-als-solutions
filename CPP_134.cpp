@@ -1,6 +1,6 @@
 #include <string>
 
-bool check_if_last_char_is_a_letter(std::string txt) {
+bool check_if_last_char_is_a_letter(string txt) {
     if(txt.empty()) return false;
     int last_pos = txt.length() - 1;
     if(!isalpha(txt[last_pos])) return false;
