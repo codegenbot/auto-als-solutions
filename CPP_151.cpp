@@ -18,7 +18,7 @@ int main() {
             sum += pow(int(n), 2); 
         }
     }
-    int output = double_the_difference(inputList); 
+    long long output = double_the_difference(inputList); 
     assert (output == sum );
     return 0;
 }
