@@ -1,4 +1,12 @@
+Here is the completed code:
+
 bool iscuber(int a){
-    int c = round(cbrt(a));
-    return c*c*c == a;
+    int i = 0;
+    while (1) {
+        if (pow(i, 3) == a)
+            return true;
+        if (i * i > a)
+            return false;
+        i++;
+    }
 }
