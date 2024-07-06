@@ -7,15 +7,12 @@ def match_parens(lst):
         for char in string:
             if char == '(':
                 open_count += 1
+                close_count = 0  
             elif char == ')':
-                if open_count > 0:  
-                    open_count -= 1
-                    close_count += 1
-                else:
+                close_count += 1
+                if close_count > open_count:  
                     matching = False
-        
-        if open_count != 0 or close_count != 0:
-            matching = False
+                    break
         
         if not matching:
             return "No"
