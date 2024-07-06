@@ -1,6 +1,4 @@
-```
 #include <vector>
-#include <algorithm>
 
 int sumOfDigits(int n) {
     int sum = 0;
