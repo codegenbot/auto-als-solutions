@@ -24,19 +24,27 @@ def minPath(grid, k):
             or []
         )
 
-    boundary_cells = (
-        [(0, j) for j in range(n)]
-        + [(n - 1, j) for j in range(n)]
-        + [(i, 0) for i in range(n)]
-        + [(i, n - 1) for i in range(n)]
-    )
-    min_path = []
-    for i, j in boundary_cells:
-        visited.add((i, j))
-        paths = [p for p in [dfs(i, j, [m[i][j]], k)] if p]
-        for path in set(tuple(x) for x in paths):
-            if path:
-                min_path = min([path], key=lambda x: len(x))
-                break
+    def find_min_path(grid, k):
+        n = len(grid)
+        m = [[i * n + j for j in range(n)] for i in range(n)]
+        visited = set()
+        min_paths = []
 
-    return min_path if min_path else []
+        boundary_cells = (
+            [(0, j) for j in range(n)]
+            + [(n - 1, j) for j in range(n)]
+            + [(i, 0) for i in range(n)]
+            + [(i, n - 1) for i in range(n)]
+        )
+        min_path = []
+        for i, j in boundary_cells:
+            visited.add((i, j))
+            paths = [p for p in [dfs(i, j, [m[i][j]], k)] if p]
+            for path in set(tuple(x) for x in paths):
+                if path:
+                    min_path = min([path], key=lambda x: len(x))
+                    break
+
+        return min_path if min_path else []
+
+    return find_min_path(grid, k)
