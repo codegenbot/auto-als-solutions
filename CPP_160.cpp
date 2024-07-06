@@ -1,52 +1,18 @@
-#include<stdio.h>
-#include<math.h>
-#include<vector>
-#include<string>
-using namespace std;
-#include<algorithm>
-#include<stdlib.h>
-
-int do_algebra(vector<string> operato, vector<int> operand) {
+int do_algebra(vector<string> operator_, vector<int> operand) {
     int result = 0;
-    for (int i = 0; i < operato.size(); i++) {
-        if (operato[i] == "+") {
+    for (int i = 1; i < operand.size(); i++) {
+        if (*operator_.begin() == "+") {
             result += operand[i];
-        } else if (operato[i] == "-") {
+        } else if (*operator_.begin() == "-") {
             result -= operand[i];
-        } else if (operato[i] == "*") {
-            int temp = 0;
-            for (int j = i; j < operato.size(); j++) {
-                if (operato[j] == "*") {
-                    temp += operand[j] * operand[i];
-                } else if (operato[j] == "-") {
-                    temp -= operand[j] * operand[i];
-                    break;
-                }
-            }
-            result = temp;
-        } else if (operato[i] == "//") {
-            int temp = 0;
-            for (int j = i; j < operato.size(); j++) {
-                if (operato[j] == "//") {
-                    temp += operand[j] / operand[i];
-                } else if (operato[j] == "-") {
-                    temp -= operand[j] / operand[i];
-                    break;
-                }
-            }
-            result = temp;
-        } else if (operato[i] == "**") {
-            int temp = 1;
-            for (int j = i; j < operato.size(); j++) {
-                if (operato[j] == "**") {
-                    temp *= pow(operand[j], operand[i]);
-                } else if (operato[j] == "-") {
-                    temp /= pow(operand[j], operand[i]);
-                    break;
-                }
-            }
-            result = temp;
+        } else if (*operator_.begin() == "*") {
+            result *= operand[i];
+        } else if (*operator_.begin() == "//") {
+            result /= (operand[i] + 0.5);
+        } else if (*operator_.begin() == "**") {
+            result = pow(operand[0], operand[i]);
         }
+        operator_.erase(operator_.begin());
     }
     return result;
 }
