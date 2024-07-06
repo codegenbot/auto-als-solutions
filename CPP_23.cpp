@@ -1,7 +1,17 @@
-```
-#include <string>
-#include <cstring>
+#include <iostream>
+using namespace std;
 
-int std::str_len(std::string str){
-    return str.length();
+int str_len(char *str){
+    int len = 0;
+    while (*str != '\0'){
+        len++;
+        str++;
+    }
+    return len;
+}
+
+int main(){
+    char s[] = "Hello, World!";
+    cout << "The length of the string is: " << str_len(s) << endl;
+    return 0;
 }
