@@ -1,7 +1,7 @@
-```
 def modp(n: int, p: int):
     if n < 0:
         n += p
+
     def egcd(a, b):
         if a == 0:
             return b, 0, 1
@@ -11,6 +11,6 @@ def modp(n: int, p: int):
 
     g, y, x = egcd(n, p)
     if g != 1:
-        return None 
+        return None
     else:
         return x % p
