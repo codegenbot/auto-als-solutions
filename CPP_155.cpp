@@ -1,15 +1,23 @@
-#include<string>
-#include<vector>
-using namespace std;
+#include <iostream>
+#include <vector>
 
-vector<int> even_odd_count(int num) {
+// Function declaration for issame
+bool issame(std::vector<int> a, std::vector<int> b);
+
+std::vector<int> even_odd_count(int num) {
     vector<int> result(2, 0);
-    string str = to_string(abs(num));
-    for(char c : str) {
-        if(stoi(c) % 2 == 0)
+    while (num != 0) {
+        int digit = num % 10;
+        if (digit % 2 == 0)
             result[0]++;
         else
             result[1]++;
+        num /= 10;
     }
     return result;
+}
+
+// Define the issame function
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return (a == b);
 }
