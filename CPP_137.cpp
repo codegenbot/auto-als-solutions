@@ -1,31 +1,14 @@
 #include <boost/any.hpp>
 #include <string>
 
+using namespace boost;
+
 boost::any compare_one(boost::any a, boost::any b) {
-    if (a.type() == typeid(int) && b.type() == typeid(float)) {
-        return (int)b > (int)a ? b : a;
-    }
-    else if (a.type() == typeid(float) && b.type() == typeid(int)) {
-        return (float)b > (float)a ? b : a;
-    }
-    else if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
-        std::string str1 = boost::any_cast<std::string>(a);
-        std::string str2 = boost::any_cast<std::string>(b);
-
-        if ((str1 == "None" || str2 == "None") && str1 != str2)
-            return a > b ? a : b;
-        else
-            return "None";
-    }
-    else if (a.type() == typeid(std::string)) {
-        std::string str = boost::any_cast<std::string>(a);
-
-        return (str == "None" || boost::any_cast<std::string>(b) == "None") ?
-               "None" : (str > boost::any_cast<std::string>(b) ? a : b);
-    }
-    else if (boost::any_cast<std::string>(a) == "None" || boost::any_cast<std::string>(b) == "None") {
-        return "None";
-    }
-    else if (boost::any_cast<float>(b) > boost::any_cast<float>(a)) {
-        return b;
-    }
+    if (any_cast<int>(a) > any_cast<int>(b)) return a;
+    else if (any_cast<double>(a) > any_cast<double>(b)) return a;
+    else if (any_cast<std::string>(a) > any_cast<std::string>(b)) return a;
+    else if (any_cast<int>(a) == any_cast<int>(b)) return "None";
+    else if (any_cast<double>(a) == any_cast<double>(b)) return "None";
+    else if (any_cast<std::string>(a) == any_cast<std::string>(b)) return "None";
+    return b;
+}
