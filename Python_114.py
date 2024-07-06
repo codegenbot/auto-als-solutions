@@ -1,3 +1,6 @@
+Here is the modified code:
+
+```
 def minSubArraySum(nums):
     if not nums:
         return 0
