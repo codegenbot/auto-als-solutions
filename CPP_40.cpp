@@ -1,16 +1,17 @@
 bool triples_sum_to_zero(vector<int> l) {
     sort(l.begin(), l.end());
+    l.erase(unique(l.begin(), l.end()), l.end());
     for (int i = 0; i < l.size() - 2; i++) {
         int left = i + 1;
         int right = l.size() - 1;
         while (left < right) {
             int sum = l[i] + l[left] + l[right];
-            if (sum < 0)
-                left++;
-            else if (sum > 0)
-                right--;
-            else
+            if (sum == 0)
                 return true;
+            else if (sum < 0)
+                left++;
+            else
+                right--;
         }
     }
     return false;
