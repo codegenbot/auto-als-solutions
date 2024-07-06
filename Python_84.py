@@ -1,3 +1,3 @@
 ```
 def solve(N):
-    return format(N, 'b')
+    return format(int(N), 'b')

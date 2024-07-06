@@ -1,11 +1,11 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(vector<pair<int,int>> a, vector<pair<int,int>> b) {
+bool same(vector<pair<int, int>> a, vector<pair<int, int>> b) {
     return a == b;
 }
 
-vector<int> pluck(vector<int> arr) {
+vector<int> extract(vector<int> arr) {
     vector<pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i] % 2 == 0) {
@@ -14,17 +14,11 @@ vector<int> pluck(vector<int> arr) {
     }
     
     if (nodes.empty()) {
-        return {};
+        return vector<int>();
     }
     
     sort(nodes.begin(), nodes.end());
     
-    vector<int> result;
-    for (int i = 1; i < nodes.size(); i++) {
-        if(issame(vector<pair<int,int>>({nodes[i-1].first, nodes[i-1].second}), vector<pair<int,int>>({nodes[i].first, nodes[i].second})))
-            continue;
-        result.push_back(nodes[i].first);
-    }
-    
-    return result;
+    int result = nodes[0].first;
+    return vector<int>(1, result);
 }

@@ -1,5 +1,5 @@
+```cpp
 #include <iostream>
-
 using namespace std;
 
 int fib(int n) {
@@ -14,10 +14,9 @@ int fib(int n) {
     return result;
 }
 
-int main() 
-{
-    int n;
+int main() {
     cout << "Enter the value of n: ";
+    int n;
     cin >> n;
     cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;

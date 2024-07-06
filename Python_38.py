@@ -1,8 +1,7 @@
-```
 def decode_cyclic(s: str):
     min_len = len(s)
     result = ""
-
+    
     for i in range(min_len):
         temp_s = s[i:] + s[:i]
         
