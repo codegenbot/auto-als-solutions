@@ -1,3 +1,2 @@
-```Python
 def solve(N):
-    return bin(sum(int(i) for i in str(bin(N)[2:])))[2:]
+    return bin((1 << len(bin(N)[2:])) + N)[2:]
