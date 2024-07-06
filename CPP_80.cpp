@@ -1,8 +1,8 @@
-```
+```cpp
 #include <iostream>
 #include <string>
 
-bool is_happy(const std::string& s) {
+bool is_happy(std::string s) {
     if (s.length() < 3)
         return false;
 
@@ -28,15 +28,13 @@ bool is_happy(const std::string& s) {
 }
 
 int main() {
-    std::string s;
+    std::string str;
     std::cout << "Enter a string: ";
-    std::getline(std::cin, s);
-
-    if (is_happy(s)) {
+    std::getline(std::cin, str);
+    if (is_happy(str))
         std::cout << "The string is happy." << std::endl;
-    } else {
+    else
         std::cout << "The string is not happy." << std::endl;
-    }
 
     return 0;
 }
