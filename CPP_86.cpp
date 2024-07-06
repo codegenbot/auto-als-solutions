@@ -1,5 +1,4 @@
-#include <string>
-#include <cassert>
+using namespace std;
 
 string anti_shuffle(string s) {
     string result = "";
@@ -15,6 +14,7 @@ string anti_shuffle(string s) {
             for (int j = 0; j < word.length(); j++) {
                 result += word[j];
             }
+            i--;
         }
     }
     return result;
