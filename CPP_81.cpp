@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <string>
 
@@ -34,7 +35,7 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     return result;
 }
 
-bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size())
         return false;
 
@@ -47,6 +48,9 @@ bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    assert(isSame({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})));
+    std::vector<std::string> expected({{"E"}, {"D-"}});
+    std::vector<float> input({0.0f, 0.7f});
+    std::vector<std::string> result = numerical_letter_grade(input);
+    assert(issame(expected, result));
     return 0;
 }
