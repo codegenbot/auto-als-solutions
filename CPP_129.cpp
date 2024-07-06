@@ -19,4 +19,3 @@ bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
         if (a[i] != b[i])
             return false;
     return true;
-}
