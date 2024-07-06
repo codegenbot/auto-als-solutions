@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <cassert>
 
@@ -6,11 +5,14 @@ bool issame(const std::vector<float>& a, const std::vector<float>& b) {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-vector<float> get_positive(vector<float> l) {
-    vector<float> result;
-    for (float num : l) {
-        if (num > 0) {
-            result.push_back(num);
+vector<vector<float>> get_positive(vector<vector<float>> l) {
+    vector<vector<float>> result;
+    for (vector<float> num : l) {
+        if (!num.empty()) {
+            vector<float> temp = get_positive(num);
+            if (!temp.empty()) {
+                result.push_back(temp);
+            }
         }
     }
     return result;
