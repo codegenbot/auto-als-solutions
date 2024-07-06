@@ -1,4 +1,5 @@
-Here is the completed code:
-
-def find_zero(xs: list):
-    return (-xs[1] / xs[-1]) if len(xs) > 2 else 0
+def find_zero(xs):
+    if len(xs) == 2:
+        return (-xs[1]) / xs[0]
+    elif len(xs) > 2:
+        return (-xs[-1]) / xs[-2]
