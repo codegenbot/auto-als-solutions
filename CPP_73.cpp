@@ -1,11 +1,9 @@
-```cpp
 #include <vector>
-#include <cstddef>
 #include <cstdint>
 
-int smallest_change(vector<int> arr) {
+int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    vector<vector<uint64_t>> dp(n, vector<uint64_t>(n));
+    std::vector<std::vector<unsigned long long int>> dp(n, std::vector<unsigned long long int>(n));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;

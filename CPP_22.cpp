@@ -1,25 +1,29 @@
-```cpp
-#include <boost/optional.hpp>
+```
 #include <vector>
 #include <list>
+#include <optional>
+#include <typeindex>
 
-namespace boost {
-    using namespace std;
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-typedef boost::optional<int> OInt;
-
-std::vector<int> filter_integers(std::list<boost::any> values) {
+std::vector<int> filter_integers(std::list<std::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if (value.type() == typeid(OInt)) {
+        if (value.type() == typeid(int)) {
             try {
-                int num = boost::any_cast<OInt>(value).get();
+                int num = std::any_cast<int>(value);
                 result.push_back(num);
-            } catch(boost::bad_any_cast const&) {
+            } catch(const std::bad_any_cast&) {
                 // Ignore non-integer values
             }
         }
     }
     return result;
+}
+
+int main() {
+    assert(issame(filter_integers({3, 4, 3, 3, 1, 'a', 'b'}), {3, 3, 3}));
+    return 0;
 }

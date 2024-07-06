@@ -1,6 +1,2 @@
-def by_length(words):
-    result = []
-    for word in words:
-        if len(word) >= 4:
-            result.append(word)
-    return result
+def by_length(arr):
+    return [i if i >= 4 else "" for i in arr]
