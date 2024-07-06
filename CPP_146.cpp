@@ -1,5 +1,5 @@
 #include <vector>
-#include <iostream>
+#include <initializer_list>
 
 int specialFilter(std::vector<int> nums){
     int count = 0;
@@ -9,27 +9,3 @@ int specialFilter(std::vector<int> nums){
         }
     }
     return count;
-}
-
-int main() {
-    std::vector<int> input; 
-    int number; 
-
-    cout << "Enter the numbers of your choice. Type 'stop' to finish." << endl;
-
-    while (true) {   
-        cin >> number;
-
-        if (number == 0) continue;
-
-        if (std::string("stop") == std::to_string(number)) {
-            break;
-        }
-        
-        input.push_back(number);
-    } 
-
-    int result = specialFilter(input);
-    cout << "The result is: " << result << endl; 
-    return 0;
-}
