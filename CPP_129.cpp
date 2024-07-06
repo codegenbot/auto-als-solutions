@@ -5,18 +5,13 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
         for (int j = 0; j < n; ++j) {
             if (!res.size() || grid[i][j] > res.back()) {
                 res.push_back(grid[i][j]);
-                while (k-- && !res.empty()) {
-                    res.pop_back();
-                }
             } else if (grid[i][j] == res.back()) {
                 res.push_back(grid[i][j]);
                 k--;
-                while (k-- && !res.empty()) {
-                    res.pop_back();
-                }
             }
         }
     }
+    
     return res;
 }
 

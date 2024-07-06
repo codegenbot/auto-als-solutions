@@ -1,35 +1,43 @@
-```
+```Python
 def minPath(grid, k):
     n = len(grid)
-    m = [[i * n + j for j in range(n)] for i in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j] == k:
+                start = (i, j)
+
     visited = set()
     min_paths = []
 
     def dfs(i, j, path, sum_path):
         if (i, j) in visited:
             return None
-        visited.add((i, j))
-        if (i, j) == (0, 0) or (i, j) == (n - 1, n - 1) or grid[i][j] == k:
-            return ((path, sum_path), m[i][j])
-        new_sum = sum_path + grid[i][j]
+        if 0 <= i < n and 0 <= j < n:
+            if (i, j) == start:
+                return ((path + [k]), sum_path)
+            return None
         for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
-                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], new_sum)
+                new_path, new_sum = dfs(ni, nj, path + [k], sum_path + k)
                 if new_path:
-                    return (new_path, new_sum)
-        return None
+                    min_paths.append(new_path)
+        return (
+            min([p for p in set(tuple(x) for x in min_paths) if p], key=lambda x: len(x))
+            or []
+        )
 
     def main():
         boundary_cells = [(0, j) for j in range(n)] + [(n - 1, j) for j in range(n)] + [(i, 0) for i in range(n)] + [(i, n - 1) for i in range(n)]
         min_path = []
         for i, j in boundary_cells:
-            paths = [p for p in [dfs(i, j, [m[i][j]], grid[i][j])] if p] 
-            for path, _ in set(paths):
+            visited.add((i, j))
+            paths = [p for p in [dfs(i, j, [], 0)] if p] 
+            for path in set(tuple(x) for x in paths):
                 if path:
-                    min_path = path
+                    min_path = min([path], key=lambda x: len(x))
                     break
 
-        return min_path
+        return min_path if min_path else []
 
     print(main())
