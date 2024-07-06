@@ -1,20 +1,22 @@
-Here is the completed code:
+#include <map>
+#include <string>
+#include <cctype>
 
-```cpp
-bool check_dict_case(map<string, string> dict) {
-    bool allUpper = true;
+bool check_dict_case(std::map<std::string, std::string> dict) {
+    if (dict.empty()) return false;
+
     bool allLower = true;
+    bool allUpper = true;
 
-    for (auto &pair : dict) {
-        if (!pair.first.empty() && !isupper(pair.first[0])) {
-            allUpper = false;
-            break;
-        }
-        if (!pair.first.empty() && !islower(pair.first[0])) {
-            allLower = false;
-            break;
-        }
+    for (auto& pair : dict) {
+        if (!islower(pair.first[0])) allLower = false;
+        if (!isupper(pair.first[0])) allUpper = false;
     }
 
-    return (allUpper || allLower);
+    return allLower || allUpper;
+}
+
+int main() {
+    // your code here
+    return 0;
 }
