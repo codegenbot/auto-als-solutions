@@ -13,9 +13,5 @@ bool will_it_fly(vector<int> q, int w) {
 
 int main() {
     assert(will_it_fly({5}, 5) == true);
-    vector<int> q1 = {1,2,3};
-    int w1 = 6;
-    cout << (will_it_fly(q1,w1) ? "Will it fly" : "Won't it fly") << endl;
-    
-    return 0;
+    // Your code here
 }
