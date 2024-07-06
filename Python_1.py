@@ -1,5 +1,7 @@
-```
-def separate_paren_groups(paren_string: str) -> list:
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
     stack = []
     groups = []
     current_group = ""
@@ -30,6 +32,7 @@ def separate_paren_groups(paren_string: str) -> list:
     if stack:
         while stack:
             stack.pop()
-        groups.append("(" + current_group + ")")
+        if stack and current_group:
+            groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]
