@@ -1,13 +1,12 @@
-```
-def longest_word_with_max_unique_chars(words):
+def find_max(words):
     max_word = ''
     max_unique_chars = 0
+    words = input("Enter a list of words separated by space: ").split()
     for word in words:
         unique_chars = set(word)
         if len(unique_chars) > max_unique_chars:
             max_unique_chars = len(unique_chars)
             max_word = word
         elif len(unique_chars) == max_unique_chars:
-            if len(word) > len(max_word):
-                max_word = word
+            max_word = min(max_word, word)
     return max_word
