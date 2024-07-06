@@ -1,13 +1,13 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
+namespace {
 bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); ++i)
         if (a[i] != b[i]) return false;
     return true;
+}
 }
 
 vector<string> by_length(vector<int> arr) {
@@ -21,5 +21,40 @@ vector<string> by_length(vector<int> arr) {
     sort(numbers.begin(), numbers.end());
     reverse(numbers.begin(), numbers.end());
 
-    return numbers;
+    vector<string> result;
+    for (string str : numbers) {
+        string newstr = "";
+        switch (stoi(str)) {
+            case 1:
+                newstr = "One";
+                break;
+            case 2:
+                newstr = "Two";
+                break;
+            case 3:
+                newstr = "Three";
+                break;
+            case 4:
+                newstr = "Four";
+                break;
+            case 5:
+                newstr = "Five";
+                break;
+            case 6:
+                newstr = "Six";
+                break;
+            case 7:
+                newstr = "Seven";
+                break;
+            case 8:
+                newstr = "Eight";
+                break;
+            case 9:
+                newstr = "Nine";
+                break;
+        }
+        result.push_back(newstr);
+    }
+
+    return result;
 }
