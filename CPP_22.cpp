@@ -2,7 +2,7 @@
 #include <boost/any.hpp>
 
 bool issame(const vector<int>& a, const vector<int>& b) {
-    return a == b;
+    return a.size() == b.size() && all_of(a.begin(), a.end(), [&](int x) { return count(b.begin(), b.end(), x) > 0; });
 }
 
 int main() {
