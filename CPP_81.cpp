@@ -6,38 +6,46 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size()) {
         return false;
     }
+    
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) {
             return false;
         }
     }
+    
     return true;
 }
 
 int main() {
-    std::vector<std::string> a, b;
-    int n;
-    std::cout << "Enter the number of strings: ";
-    std::cin >> n;
-    for (int i = 0; i < n; i++) {
-        std::string str;
+    int n1, n2;
+    std::vector<std::string> v1, v2;
+
+    // Read user input
+    std::cout << "Enter number of strings for vector 1: ";
+    std::cin >> n1;
+
+    for (int i = 0; i < n1; i++) {
+        std::string temp;
         std::cout << "Enter string " << i + 1 << ": ";
-        std::getline(std::cin, str);
-        a.push_back(str);
+        std::getline(std::cin, temp);
+        v1.push_back(temp);
     }
-    int m;
-    std::cout << "Enter the number of strings: ";
-    std::cin >> m;
-    for (int i = 0; i < m; i++) {
-        std::string str;
+
+    std::cout << "Enter number of strings for vector 2: ";
+    std::cin >> n2;
+
+    for (int i = 0; i < n2; i++) {
+        std::string temp;
         std::cout << "Enter string " << i + 1 << ": ";
-        std::getline(std::cin, str);
-        b.push_back(str);
+        std::getline(std::cin, temp);
+        v2.push_back(temp);
     }
-    if (issame(a, b)) {
-        std::cout << "The vectors are the same.\n";
+
+    if (issame(v1, v2)) {
+        std::cout << "Vectors are same." << std::endl;
     } else {
-        std::cout << "The vectors are not the same.\n";
+        std::cout << "Vectors are not same." << std::endl;
     }
+
     return 0;
 }
