@@ -3,7 +3,7 @@
 using namespace std;
 
 int search(const vector<int>& vec, int target) {
-    return (find(vec.begin(), vec.end(), target) != vec.end()) ? distance(vec.begin(), find(vec.begin(), vec.end(), target)) : -1;
+    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
 }
 
 int main() {
