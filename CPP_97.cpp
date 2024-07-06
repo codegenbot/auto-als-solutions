@@ -1,11 +1,8 @@
-```cpp
-#include <cassert>
-
 int multiply(int a, int b) {
-    if(a < 10 && b < 10)
-        return (a * 10 + b) * (a * 10 + b);
-    else 
-        return (a % 10) * (b % 10);
-}
+    int unitsA = a % 10;
+    int tensA = (a / 10) % 10;
+    int unitsB = b % 10;
+    int tensB = (b / 10) % 10;
 
-assert(multiply(0, 0) == 0);
+    return (unitsA * unitsB) + ((tensA * unitsB) + (tensA * tensB) * 10);
+}
