@@ -19,3 +19,4 @@ int main() {
     long long odd_sum = 13;
     assert(double_the_difference(lst) == odd_sum); 
     return 0;
+}
