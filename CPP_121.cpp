@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 
@@ -14,7 +13,7 @@ int sumOdd(int x) {
         if (y % 2 != 0) {
             sum += y;
         }
-   }
+    }
     
     return sum;
 }
