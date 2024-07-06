@@ -1,12 +1,7 @@
-Here is the solution:
+Here is the completed code:
 
+```cpp
 bool iscuber(int a){
-    int i = 0;
-    while (1) {
-        if (pow(i, 3) == a)
-            return true;
-        else if (i * i > a)
-            return false;
-        i++;
-    }
+    int i = cbrt(a);
+    return (i*i*i == a);
 }
