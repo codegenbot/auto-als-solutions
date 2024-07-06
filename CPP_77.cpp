@@ -1,4 +1,3 @@
-```cpp
 #include <cmath>
 bool iscuber(int a){
     int c = round(cbrt(a));
