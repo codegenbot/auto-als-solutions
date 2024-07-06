@@ -1,6 +1,5 @@
-#include <string>
+#include <iostream>
 #include <vector>
-
 using namespace std;
 
 bool will_it_fly(vector<int> q, int w) {
@@ -25,16 +24,18 @@ bool isPalindrome(string s) {
 int main() {
     vector<int> q;
     int w;
-
-    cin >> w;
-    for(int i = 0; i < w; i++) {
-        int num;
-        cin >> num;
-        q.push_back(num);
+    cout << "Enter the number of questions (q): ";
+    cin >> q.size();
+    for(int i=0; i<q.size(); ++i){
+        cout << "Enter question " << i+1 << ": ";
+        cin >> q[i];
     }
-
-    if(will_it_fly(q, w)) cout << "Yes";
-    else cout << "No";
-
+    cout << "Enter weight (w): ";
+    cin >> w;
+    if(will_it_fly(q, w)) {
+        cout << "The answer will fly.\n";
+    } else {
+        cout << "The answer will not fly.\n";
+    }
     return 0;
 }
