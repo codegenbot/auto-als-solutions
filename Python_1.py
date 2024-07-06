@@ -16,9 +16,8 @@ def separate_paren_groups(paren_string: str) -> List[str]:
             if stack and stack[-1] == '(':
                 stack.pop()
                 if not stack:  
-                    groups.append(current_group + char)  
-                else:
-                    current_group += char
+                    groups.append('()'+current_group+'()')  # Check for '()' string
+                    current_group = ''
             else:
                 current_group += char
 
