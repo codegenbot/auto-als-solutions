@@ -1,7 +1,7 @@
 double find_zero(vector<double> xs){
-    double a = xs[0], b = 0;
-    for (int i = 1; i < xs.size(); i++) {
-        b += (i % 2 == 0) ? xs[i] : -xs[i];
+    double sum = 0;
+    for(int i=1; i<xs.size();i+=2){
+        sum += (-1) * xs[i]/(double)i * pow(xs[0], (double)(i-1));
     }
-    return -b / a;
+    return -sum;
 }
