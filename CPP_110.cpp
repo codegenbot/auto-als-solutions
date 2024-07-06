@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 using namespace std;
 
@@ -10,7 +11,8 @@ public:
                 oddCount++;
             }
         }
-        return oddCount == 0 ? "YES" : "NO";
+        string result = oddCount == 0 ? "YES" : "NO";
+        return result;
     }
 
     int main() {
