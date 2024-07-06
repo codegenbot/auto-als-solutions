@@ -8,16 +8,6 @@ bool any_int(float a, float b, float c) {
 }
 
 int main() {
-    assert(any_int(3.01, 4, 7) == false);
-    if (true) {
-        int num;
-        std::cout << "Enter the number: ";
-        std::cin >> num;
-        if (any_int((float)num, 0, 10)) {
-            std::cout << "Any integer.\n";
-        } else {
-            std::cout << "Not any integer.\n";
-        }
-    }
+    assert(any_int(3.01f, 4.0f, 7) == false);
     return 0;
 }
