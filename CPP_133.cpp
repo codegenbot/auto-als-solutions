@@ -1,4 +1,4 @@
-```
+```c++
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -10,7 +10,6 @@ int sum_squares(const std::vector<double>& lst) {
         result += pow(ceil_x, 2);
     }
     return result;
-
 }
 
 int main() {
