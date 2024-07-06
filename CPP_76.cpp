@@ -1,6 +1,4 @@
-Here's the solution:
-
+#include <cmath>
 bool is_simple_power(int x, int n) {
-    double log_value = log((double)x) / log((double)n);
-    return round(log_value) == log_value;
+    return std::pow(n, std::log(x) / std::log(n)) == x;
 }
