@@ -1,4 +1,3 @@
-```
 def sum_squares(numbers):
     try:
         lst = [int(i) for i in numbers.split()]
@@ -7,13 +6,10 @@ def sum_squares(numbers):
         return None
 
     total_sum = 0
-    for i, num in enumerate(lst[:-1]):
-        if (i+1) % 3 == 0:
-            total_sum += num ** 2
-        elif (i+1) % 4 == 0 and (i+1) % 3 != 0:
+    for i, num in enumerate(lst):
+        if i % 3 == 0:  
             total_sum += num ** 3
-    for num in lst[-1:]:
-        if (len(lst) - len(numbers.split()) + i+1) % 3 == 0:
+        elif i % 3 == 1:  
             total_sum += num ** 2
     return total_sum
 
