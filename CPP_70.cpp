@@ -13,17 +13,20 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         result.push_back(min_val);
         lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
         if (!lst.empty()) {
-            vector<int> temp;
+            int max_val = *max_element(lst.begin(), lst.end());
+            bool found_max = false;
             for(int i : lst){
-                if(i == *max_element(lst.begin(), lst.end())){
-                    temp.push_back(i);
+                if(i == max_val){
+                    lst.erase(remove(lst.begin(), lst.end(), i), lst.end());
+                    found_max = true;
                     break;
                 }
             }
-            for(int x:temp){
-                lst.erase(remove(lst.begin(), lst.end(), x), lst.end());
+            if (!found_max) {
+                result.push_back(*max_element(lst.begin(), lst.end()));
+            } else {
+                result.push_back(*max_element(lst.begin(), lst.end()));
             }
-            result.push_back(*max_element(lst.begin(), lst.end()));
         } else {
             result.push_back(*min_element(lst.begin(), lst.end()));
         }
@@ -32,7 +35,7 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> input; // get your input here
+    std::vector<int> input; 
     std::cout << "Enter elements separated by spaces: ";
     for (int i = 0; i < 5; ++i) {
         int num;
