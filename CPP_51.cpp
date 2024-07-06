@@ -12,6 +12,6 @@ string remove_vowels(string text){
     return result;
 }
 
-bool isVowel(char c) {
+bool std::isVowel(char c) {
     return toupper(c) == 'A' || toupper(c) == 'E' || toupper(c) == 'I' || toupper(c) == 'O' || toupper(c) == 'U';
 }
