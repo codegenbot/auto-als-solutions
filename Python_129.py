@@ -1,3 +1,4 @@
+```
 def minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
@@ -18,7 +19,12 @@ def minPath(grid, k):
         return None
 
     min_sum = float("inf")
-    boundary_cells = ((0, j) for j in range(n)) + ((n - 1, j) for j in range(n)) + ((i, 0) for i in range(n)) + ((i, n - 1) for i in range(n))
+    boundary_cells = (
+        [(0, j) for j in range(n)]
+        + [(n - 1, j) for j in range(n)]
+        + [(i, 0) for i in range(n)]
+        + [(i, n - 1) for i in range(n)]
+    )
 
     for i, j in boundary_cells:
         visited.add((i, j))
