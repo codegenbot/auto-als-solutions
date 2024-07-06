@@ -1,11 +1,9 @@
-#include <iostream>
-using namespace std;
+```cpp
+#include <stdio.h>
 
-// Function declaration
-int fibfib(int n);
+int fibfib(int n);  
 
-int main()
-{
+int main() {
     int n;
     printf("Enter the value of n: ");
     scanf("%d", &n);
@@ -14,10 +12,13 @@ int main()
 }
 
 int fibfib(int n) {
-    if (n == 0)
-        return 0;
-    else if (n == 1)
-        return 1;
-    else
-        return fibfib(n - 1) + fibfib(n - 2);
+    if (n <= 1)
+        return n;
+    int a = 0, b = 1;
+    for (int i = 2; i <= n; i++) {
+        int temp = a + b;
+        a = b;
+        b = temp;
+    }
+    return b;
 }
