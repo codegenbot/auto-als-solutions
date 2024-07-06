@@ -7,18 +7,17 @@ def modp(*args):
     
     def egcd(a, b):
         if a == 0:
-            return (b, 0, 1)
+            return b, 0, 1
+        elif b == 0:
+            return a, 1, 0
         else:
-            gcd, x, y = egcd(b, a % b)
-            return (gcd, y, x)
+            gcd, y, x = egcd(b, a % b)
+            return gcd, y - (a // b) * x, x
 
-    g, _, _ = egcd(n, p)
+    g, y, x = egcd(n, p)
     if g != 1:
-        return None
+        result = None
     else:
-        result = pow(0, p-2, p)
-        for i in range(p):
-            if pow(i, -(p-2), p) == 1:
-                result = i
-                break
-        return result
+        result = pow(x % p, -1, p) if x % p != 0 else None
+
+    return result
