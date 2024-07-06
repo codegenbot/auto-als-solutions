@@ -1,14 +1,26 @@
-#include<string>
+#include <string>
+#include <iostream>
+
 using namespace std;
 
 bool simplify(string x, string n) {
-    int a = 0, b = 1, c = 0, d = 1;
-    istringstream iss1(x), iss2(n);
-    iss1 >> a >> b;
-    iss2 >> c >> d;
+    int a = 0, b = 0, c = 0, d = 0;
     
-    long gcd = abs(a*d - c*b);
-    long lcm = abs(a*d)/gcd * ((a>0)?1:-1) * ((d>0)?1:-1);
+    size_t pos = x.find('/');
+    a = stoi(x.substr(0, pos));
+    b = stoi(x.substr(pos + 1));
 
-    return (lcm/b == a && lcm%d == c);
+    pos = n.find('/');
+    c = stoi(n.substr(0, pos));
+    d = stoi(n.substr(pos + 1));
+
+    return (a * d) == (b * c);
+}
+
+int main() {
+    cout << simplify("1/5", "5/1") << endl;  // true
+    cout << simplify("1/6", "2/1") << endl;  // false
+    cout << simplify("7/10", "10/2") << endl;  // false
+
+    return 0;
 }
