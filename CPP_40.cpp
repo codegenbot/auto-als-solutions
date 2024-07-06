@@ -1,4 +1,6 @@
 #include <vector>
+#include <algorithm>
+
 using namespace std;
 
 bool triples_sum_to_zero(vector<int> l) {
@@ -8,13 +10,12 @@ bool triples_sum_to_zero(vector<int> l) {
         int right = l.size() - 1;
         while (left < right) {
             int sum = l[i] + l[left] + l[right];
-            if (sum > 0) {
-                right--;
-            } else if (sum < 0) {
-                left++;
-            } else {
+            if (sum == 0)
                 return true;
-            }
+            else if (sum < 0)
+                left++;
+            else
+                right--;
         }
     }
     return false;
