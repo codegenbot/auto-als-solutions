@@ -1,18 +1,6 @@
 import math
 
 
-def find_zero(coeffs):
-    roots = []
-    for i in range(0, len(coeffs), 2):
-        temp = [coeffs[i], coeffs[i + 1]]
-        try:
-            root = (-temp[1] + math.sqrt(temp[1] ** 2 - 4 * temp[0])) / (2 * temp[0])
-            roots.append(-temp[1] / (2 * root))
-        except (ZeroDivisionError, ValueError) as e:
-            print(f"Failed to calculate a root: {e}")
-    return roots
-
-
 def main():
     while True:
         try:
@@ -24,23 +12,37 @@ def main():
         except ValueError as e:
             print(e)
 
-    coeffs = [
+    xs = [
         int(coeff)
         for coeff in (input("Enter coefficients (space separated): ") + " ").split()
     ]
-    while len(coeffs) % 2 != 0:
-        if num_coefficients == len(coeffs):
-            raise ValueError("coeffs must have even number of coefficients")
-        new_coeff = input(f"Add more coefficients: ")
-        coeffs += [int(coeff) for coeff in new_coeff.split()]
 
-    if len(coeffs) < 2:
-        raise ValueError("coeffs must have at least two coefficients")
+    if len(xs) != num_coefficients:
+        raise ValueError("Invalid number of coefficients. Try again.")
 
-    try:
-        print(find_zero(coeffs))
-    except ValueError as e:
-        print(e)
+    if num_coefficients % 2 != 0:
+        print("Number of coefficients must be even. Try again.")
+    else:
+        try:
+            print(find_zero(xs))
+        except ValueError as e:
+            print(e)
+
+
+def find_zero(coeffs):
+    a, b, c = coeffs[:3]
+    d = coeffs[3:]
+    roots = []
+    for i in range(0, len(d), 2):
+        temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
+        try:
+            root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * temp[2])) / (
+                2 * temp[0]
+            )
+            roots.append(-d[i] / root)
+        except (ZeroDivisionError, ValueError) as e:
+            print(f"Failed to calculate a root: {e}")
+    return roots
 
 
 if __name__ == "__main__":
