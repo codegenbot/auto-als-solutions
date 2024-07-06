@@ -4,17 +4,14 @@ def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
     level = 0
     for char in paren_string:
-        if char == '(' and level == 0:
-            result.append(1)
-            level = 1
-        elif char == ')' and level > 0:
+        if char == '(':
+            if level > 0:
+                result.append(-1)
+                level -= 1
+            else:
+                result.append(1)
+                level = 1
+        elif char == ')':
             result.append(-1)
             level -= 1
-        elif char == '(' and level > 0:
-            result.append(1)
-            level += 1
-        elif char == ')' and level == 0:
-            break
-        else: 
-            level = 0 
     return result
