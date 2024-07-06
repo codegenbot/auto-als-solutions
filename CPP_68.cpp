@@ -21,19 +21,16 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::sort(nodes.begin(), nodes.end(), compare);
     
-    std::vector<int> result;
+    int result = nodes[0].first;
+    
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
+        if (arr[nodes[i-1].second] != arr[nodes[i].second]) {
             return {};
         }
+        result = nodes[i].first;
     }
     
-    if (!result.empty())
-        result.push_back(nodes[0].first);
-    else
-        return arr;
-    
-    return result;
+    return {result};
 }
 
 int main() {
