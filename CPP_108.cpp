@@ -3,23 +3,24 @@
 
 int count_nums(std::vector<int> nums) {
     int count = 0;
-    std::size_t _M_len;
-    constexpr std::size_t size() const { return _M_len; }
-    for (std::size_t i = 0; i < size(); ++i) {
+    for (int num : nums) {
         bool has_positive_sum = false;
-        if (nums[i] < 0) {
-            nums[i] = -nums[i];
+        if (num < 0) {
+            num = -num;
         }
-        while (nums[i] > 0) {
-            int digit = nums[i] % 10;
+        while (num > 0) {
+            int digit = num % 10;
             if (digit != 0) {
                 has_positive_sum = true;
                 break;
             }
-            nums[i] /= 10;
+            num /= 10;
         }
         if (has_positive_sum) {
             count++;
         }
     }
     return count;
+
+std::size_t _M_len;
+constexpr std::size_t size() const { return _M_len; }
