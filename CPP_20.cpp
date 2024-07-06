@@ -1,3 +1,4 @@
+```cpp
 #include <algorithm>
 #include <vector>
 
@@ -6,7 +7,7 @@ bool issame(std::vector<float> a, std::vector<float> b) {
         return false;
     }
     for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) {
+        if (std::abs(a[i] - b[i]) > 1e-6) {
             return false;
         }
     }
@@ -33,4 +34,13 @@ std::pair<float, float> find_closest_elements(std::vector<float> numbers) {
     }
 
     return {closest_pair[0], closest_pair[1]};
+}
+
+int main() {
+    std::vector<float> a = {1.0, 2.0, 3.0};
+    std::vector<float> b = {1.00001, 2.00002, 3.00003};
+    if (issame(a, b)) {
+        // Do something
+    }
+    return 0;
 }
