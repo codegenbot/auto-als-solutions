@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -24,10 +25,11 @@ vector<int> maximum(vector<int> arr, int k) {
 
 int main() {
     cin >> n;
-    cout << "Enter the number of elements: ";
     int n, k;
+    cout << "Enter the number of elements: ";
     cin >> n;
-    vector<int> arr(n);
+    vector<int> arr;
+    arr.resize(n);  // or simply: vector<int> arr(n);
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
