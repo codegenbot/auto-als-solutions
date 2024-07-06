@@ -34,7 +34,6 @@ void strange_sort_list(std::vector<int>& lst) {
 
 int main() {
     std::vector<int> input = {1, 1, 1, 1, 1};
-    
     strange_sort_list(input);
     return 0;
 }
