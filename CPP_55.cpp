@@ -21,4 +21,3 @@ int main()
     cin >> n;
     cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
-}

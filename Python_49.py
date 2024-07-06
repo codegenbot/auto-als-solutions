@@ -11,6 +11,7 @@ def modp(n: int, p: int):
 
     g, y, x = egcd(n, p)
     if g != 1:
-        return None  
+        return None 
     else:
-        return pow(x, p-2, p)
+        result = pow(x, -(p-2), p)
+        return result
