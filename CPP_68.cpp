@@ -22,3 +22,8 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     return result;
 }
+
+int main() {
+    assert(is_same(pluck({7, 9, 7, 1}) , {}));
+    return 0;
+}
