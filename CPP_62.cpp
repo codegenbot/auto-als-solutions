@@ -5,7 +5,7 @@ using namespace std;
 vector<float> derivative(vector<float> xs) {
     vector<float> res;
     for (int i = 1; i < xs.size(); i++) {
-        res.push_back((xs[i] - xs[i-1]) / abs(xs[i] - xs[i-1]));
+        res.push_back(xs[i-1] - xs[i]);
     }
     return res;
 }
