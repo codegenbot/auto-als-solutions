@@ -1,10 +1,16 @@
-int next_smallest(vector<int> lst) {
-    if (lst.size() < 2) return -1; // Return None
-    sort(lst.begin(), lst.end());
-    for (int i = 0; i < lst.size()-1; i++) {
-        if (lst[i] != lst[i+1]) {
-            return lst[i+1];
+#include <vector>
+#include <algorithm>
+
+int next_smallest(vector<int> numbers) {
+    if (numbers.empty()) {
+        return 0;
+    }
+    
+    int smallest = *min_element(numbers.begin(), numbers.end());
+    for (int num : numbers) {
+        if (num > smallest) {
+            return num;
         }
     }
-    return -1; // Return None
+    return -1; // or any other value to indicate that the next smallest number does not exist
 }
