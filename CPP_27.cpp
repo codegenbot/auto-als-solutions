@@ -1,10 +1,9 @@
-```cpp
 #include <string>
 #include <cctype>
 #include <ostream>
 
 std::string flip_case(std::string str){
-    std::string result = "";
+    std::string result(str);
     for(char c: str){
         if(isalpha(c)){
             if(islower(c))
@@ -12,7 +11,7 @@ std::string flip_case(std::string str){
             else
                 result += tolower(c);
         }else{
-            result.append(1, c);
+            result.push_back(c); 
         }
     }
     return result;
@@ -24,4 +23,3 @@ int main(){
     std::getline(std::cin, input);
     std::cout << flip_case(input) << std::endl;
     return 0;
-}

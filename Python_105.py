@@ -1,2 +1,5 @@
+```
 def by_length(arr):
-    return [name for num, name in zip(map(str, arr), ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"]) if name[0] == '1']
+    num_names = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five",
+                 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+    return [num_names[num] for num in sorted(arr)]
