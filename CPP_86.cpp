@@ -1,8 +1,6 @@
-```
 #include <string>
 #include <algorithm>
 #include <iostream>
-
 using namespace std;
 
 string anti_shuffle(string s){
