@@ -1,14 +1,9 @@
 vector<int> even_odd_count(int num) {
-    vector<int> result;
-    int n = abs(num);
-    while (n > 0) {
-        int digit = n % 10;
-        if (digit % 2 == 0)
-            result.push_back(1);
-        else
-            result.push_back(0);
-        n /= 10;
+    int ev = 0, od = 0;
+    string str = to_string(abs(num));
+    for (char c : str) {
+        if (c - '0' % 2 == 0) ev++;
+        else od++;
     }
-    reverse(result.begin(), result.end());
-    return result;
+    return {ev, od};
 }
