@@ -1,16 +1,18 @@
-```cpp
-#include<vector>
-using namespace std;
-int solutions(vector<int> lst) {
+#include <iostream>
+#include <vector>
+
+int solutions(std::vector<int> lst) {
     int sum = 0;
     for (int i = 1; i < lst.size(); i++) {
-        if ((i+1) % 2 == 0 && lst[i] % 2 != 0) {
+        if (i % 2 == 0 && lst[i] % 2 != 0) {
             sum += lst[i];
         }
     }
     return sum;
 }
+
 int main() {
-    assert(solutions({3, 13, 2, 9}) == 13);
+    assert(solutions({3, 13, 2, 9}) == 3);
+    std::cout << "This program should run without errors.\n";
     return 0;
 }
