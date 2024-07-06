@@ -9,4 +9,4 @@ def search(lst):
     for key, value in frequency_dict.items():
         if value > max_freq_num:
             max_freq_num = value
-    return max_freq_num
+    return max_freq_num if max_freq_num != -1 else None
