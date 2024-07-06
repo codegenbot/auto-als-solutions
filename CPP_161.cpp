@@ -1,9 +1,10 @@
-```cpp
 #include <string>
 #include <iostream>
 
 std::string solve(std::string input) {
     // implement your logic here
+    std::string output = input;
+    return output;
 }
 
 int main() {
