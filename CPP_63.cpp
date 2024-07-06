@@ -1,6 +1,6 @@
-#include <iostream>
+#include <stdio.h>
 
-using std::cout; using std::cin; using std::endl;
+using namespace std;
 
 int fibfib(int n) {
     if (n <= 1)
@@ -19,10 +19,6 @@ int fibfib(int n) {
     }
 }
 
-int main() {
-    int n;
-    cout << "Enter the value of n: ";
-    cin >> n;
-    cout << "FibFib number at position " << n << " is " << fibfib(n) << endl;
-    return 0;
-}
+printf("Enter the value of n: ");
+scanf("%d", &n);
+printf("FibFib number at position %d is %d\n", n, fibfib(n));

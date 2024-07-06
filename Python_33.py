@@ -1,3 +1,2 @@
-```python
 def sort_third(lst):
-    return sorted([x if isinstance(x, list) else [x] if x % 3 == 0 else [x] for x in lst])
+    return [i if isinstance(i, list) else [i // 3] if i % 3 == 0 else [i] for i in lst]
