@@ -1,3 +1,4 @@
+```
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
     for (const auto& str : lst) {
@@ -7,14 +8,11 @@ vector<string> sorted_list_sum(vector<string> lst) {
     }
     sort(result.begin(), result.end(), 
          [](const string& a, const string& b) {
-             return a < b;
+             if (a.length() != b.length()) {
+                 return a.length() < b.length();
+             } else {
+                 return a < b;
+             }
          });
-    vector<string> sortedLst = lst;
-    sort(sortedLst.begin(), sortedLst.end());
-    for (const auto& str : result) {
-        if (sortedLst != vector<string>(1, str)) {
-            return {};
-        }
-    }
     return result;
 }
