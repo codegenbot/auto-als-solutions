@@ -49,7 +49,7 @@ int main() {
     }
     else
     {
-        std::cout << "No output" << std::endl;
+        std::cout << "No result" << std::endl;
     }
     
     return 0;
