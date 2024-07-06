@@ -18,18 +18,12 @@ vector<int> filter_integers(list<boost::any> values) {
 }
 
 int main() {
-    list<boost::any> values;
-    values.push_back('c');
-    values.push_back('a');
-    values.push_back('b');
-
-    vector<int> output = filter_integers(values);
-    
-    if (issame({97, 97, 98}, output)) {
-        cout << "The output is same as expected." << endl;
+    list<boost::any> values = {"c", "a", "b"};
+    vector<int> integers = filter_integers(values);
+    if (issame(integers, vector<int>{})) {
+        cout << "The vectors are same." << endl;
     } else {
-        cout << "The output is not same as expected." << endl;
+        cout << "The vectors are not same." << endl;
     }
-    
     return 0;
 }
