@@ -12,8 +12,7 @@ def sum_squares(numbers):
 while True:
     numbers = input("Enter numbers separated by space: ")
     try:
-        result = sum_squares(numbers)
-        print(result)
+        print(sum_squares(numbers))
         break
     except ValueError:
-        print("Invalid input. Please enter numbers separated by spaces.")
+        print("Invalid input. Please enter only numeric values.")
