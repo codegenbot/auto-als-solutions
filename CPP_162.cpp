@@ -7,13 +7,9 @@ std::string string_to_md5(const char* text) {
     MD5_CTX mdContext;
 #ifndef OPENSSL_3_0_0_OR_LATER
     MD5_Init(&mdContext);
-#endif
     const char* ptr = text;
     size_t len = strlen(text);
-    #ifndef OPENSSL_3_0_0_OR_LATER
     MD5_Update(&mdContext, ptr, len);
-    #endif
-#ifndef OPENSSL_3_0_0_OR_LATER
     MD5_Final(result, &mdContext);
 #else
     // Use new functions (not shown here)
