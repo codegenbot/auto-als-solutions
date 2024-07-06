@@ -23,12 +23,9 @@ bool isPalindrome(string s) {
 }
 
 cin >> w;
-vector<int> q(5);
-for(int i=0;i<5;i++)
-{
-    cin>>q[i];
-}
-if(will_it_fly(q,w))
-cout<<"The airplane will fly";
+vector<int> q(3);
+for(int i=0; i<3; i++) cin >> q[i];
+if(will_it_fly(q, w))
+    cout << "YES";
 else
-cout<<"The airplane won't fly";
+    cout << "NO";
