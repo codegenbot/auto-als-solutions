@@ -1,4 +1,3 @@
-```cpp
 vector<string> issame(vector<string> lst) {
     vector<string> result;
     for (const auto& str : lst) {
