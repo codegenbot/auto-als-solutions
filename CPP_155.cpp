@@ -1,18 +1,14 @@
-Here is the solution:
-
-```cpp
-#include <vector>
-
 vector<int> even_odd_count(int num) {
-    vector<int> result(2);
-    int n = abs(num); // remove sign bit if present
-    while(n > 0) {
+    vector<int> result;
+    int n = abs(num);
+    while (n > 0) {
         int digit = n % 10;
-        if(digit % 2 == 0)
-            result[0]++;
+        if (digit % 2 == 0)
+            result.push_back(1);
         else
-            result[1]++;
+            result.push_back(0);
         n /= 10;
     }
+    reverse(result.begin(), result.end());
     return result;
 }
