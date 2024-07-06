@@ -1,10 +1,5 @@
 #include <algorithm>
-#include <vector>
 #include <limits>
-
-bool issame(vector<float> a, vector<float> b) {
-    return a == b;
-}
 
 vector<float> find_closest_elements(vector<float> numbers) {
     sort(numbers.begin(), numbers.end());
@@ -20,6 +15,10 @@ vector<float> find_closest_elements(vector<float> numbers) {
     }
     
     return vector<float>({closest_pair.first, closest_pair.second});
+}
+
+bool issame(vector<float> a, vector<float> b) {
+    return a == b;
 }
 
 int main() {
