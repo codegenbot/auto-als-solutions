@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <functional>
 
-std::vector<int> sumByDigitSort(std::vector<int> arr) {
+std::vector<int> sortArrayByDigitSum(std::vector<int> arr) {
     std::vector<int> res = arr;
     sort(res.begin(), res.end(), [](int a, int b)->bool{
         long long sum1 = 0, sum2 = 0;

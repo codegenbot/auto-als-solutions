@@ -1,4 +1,3 @@
-```cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -6,12 +5,15 @@ using namespace std;
 int main() {
     vector<int> vec;
     int n;
+    cout << "Enter number of elements: ";
     cin >> n;
+    
     for(int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        vec.push_back(x);
+        int num;
+        cin >> num;
+        vec.push_back(num);
     }
-    assert(std::find(vec.begin(), vec.end(), 1) != vec.end());
+    
+    assert(std::find(vec.begin(), vec.end(), 10) != vec.end());
     return 0;
 }
