@@ -1,29 +1,30 @@
+#include <iostream>
 #include <string>
-#include <sstream>
-
 using namespace std;
 
 int fruit_distribution(string s, int n) {
-    stringstream ss(s);
-    int apples = 0;
-    int oranges = 0;
-    
-    string token;
-    while (getline(ss, token, ' ') && !token.empty()) {
-        if (token.find("apples") != string::npos || token.find("AppleS") != string::npos) {
-            if (token.find("and") == string::npos) {
-                apples = stoi(token.substr(0, token.length() - 8));
-            } else {
-                apples = stoi(token.substr(0, token.find("and")));
-            }
-        } else if (token.find("oranges") != string::npos || token.find("OrangeS") != string::npos) {
-            if (token.find("and") == string::npos) {
-                oranges = stoi(token.substr(0, token.length() - 7));
-            } else {
-                oranges = stoi(token.substr(0, token.find("and")));
-            }
-        }
+    string apples, oranges;
+    size_t found = s.find(" and ");
+    if (found != string::npos) {
+        apples = s.substr(0, found);
+        oranges = s.substr(found + 5);
     }
+    else {
+        if (s.find(" apples") != string::npos)
+            apples = s.substr(0, s.find(" apples"));
+        if (s.find(" oranges") != string::npos)
+            oranges = s.substr(s.find(" and ") == string::npos ? s.find(" oranges") : s.find(" and ")+3);
+    }
+    int countApples = stoi(apples.substr(0, apples.find(" ")));
+    int countOranges = stoi(oranges.substr(0, oranges.find(" ")));
+    
+    return n - (countApples + countOranges);
+}
 
-    return n - apples - oranges;
+int main() {
+    cout << fruit_distribution("5 apples and 6 oranges", 19) << endl;
+    cout << fruit_distribution("0 apples and 1 oranges",3) << endl;
+    cout << fruit_distribution("2 apples and 3 oranges", 100) << endl;
+    cout << fruit_distribution("100 apples and 1 oranges",120) << endl;
+    return 0;
 }
