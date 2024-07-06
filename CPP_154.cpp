@@ -4,8 +4,7 @@ using namespace std;
 bool cycpattern_check(string a, string b) {
     for (int i = 0; i < a.size(); i++) {
         string temp = a.substr(i) + a.substr(0, i);
-        if (temp.find(b) != string::npos)
-            return true;
+        if (temp.find(b) != string::npos) return true;
     }
     return false;
 }
