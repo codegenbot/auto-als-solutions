@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 
@@ -29,11 +28,25 @@ bool isPrime(int n) {
         }
     }
     return true;
+
 }
 
 int main() {
-    std::vector<int> numbers = {127, 97, 8192};
+    std::vector<int> numbers;
+    int num;
+    
+    std::cout << "Enter some integers, enter -1 to stop.\n";
+    while (true) {
+        std::cin >> num;
+        
+        if (num == -1)
+            break;
+        
+        numbers.push_back(num);
+    }
+    
     int result = find_max_prime_sum(numbers);
     std::cout << "The sum of the digits in the maximum prime is: " << result << std::endl;
+    
     return 0;
 }
