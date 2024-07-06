@@ -3,14 +3,21 @@ string encode(string message) {
     for (char c : message) {
         if (isalpha(c)) {
             char base = isupper(c) ? 'A' : 'a';
-            if (c == base || c == base + 1) {
-                // Vowels
-                c += 2;
-            } else if (c >= 'a' && c <= 'z') {
-                c -= 2;
-            }
+            char newChar = ((c - base + 2) % 26) + base;
+            if (vowel(base, newChar))
+                newChar = ((newChar - base + 4) % 26) + base;
+            result += newChar;
+        } else {
+            result += c;
         }
-        result += c;
     }
     return result;
+}
+
+bool vowel(char base, char c) {
+    if (isupper(c)) {
+        return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    } else {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
 }

@@ -1,17 +1,19 @@
+Here's the solution:
+
+```cpp
+#include <string>
+
+using namespace std;
+
 int is_bored(string S) {
     int count = 0;
     string boredom = "I";
-    size_t found;
+    size_t pos = 0;
     
-    for (size_t i = 0; i < S.length(); i++) {
-        if (S[i] == '.' || S[i] == '?' || S[i] == '!') {
-            found = S.find(boredom, i);
-            if (found != string::npos) {
-                count++;
-                i = found + boredom.length() - 1;
-            }
-        }
+    while ((pos = S.find(" ", pos)) != string::npos) {
+        if (S.substr(0, pos).compare(boredom) == 0)
+            count++;
+        pos++;
     }
-    
     return count;
 }
