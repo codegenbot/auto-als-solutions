@@ -1,21 +1,20 @@
+```cpp
 #include <sstream>
-#include "md5.h"
+#include <cstring>
 
-std::string string_to_md5(const char* text) {
-    if (*text == '\0') return "";
-
-    unsigned char result[16];
-    MD5_CTX mdContext;
-    MD5_Init_early(&mdContext);
-    const char* ptr = text;
-    size_t len = strlen(text);
-    MD5_Update(&mdContext, reinterpret_cast<const unsigned char*>(ptr), len); 
-    MD5_Final(result, &mdContext);
-
-    std::ostringstream oss;
-    for (int i = 0; i < 16; ++i) {
-        oss << std::hex << std::setfill('0') << std::setw(2) << (int)(result[i] & 0xFF);
+std::string readInput() {
+    std::string input;
+    char buffer[256];
+    while (true) {
+        fgets(buffer, sizeof(buffer), stdin);
+        input = buffer;
+        if (input[input.size() - 1] == '\n') break;  // To handle the newline character
     }
+    return input;
+}
 
-    return oss.str();
+int main() {
+    std::string text = readInput();
+    std::cout << "MD5 of entered text: " << string_to_md5(text.c_str()) << std::endl;
+    return 0;
 }
