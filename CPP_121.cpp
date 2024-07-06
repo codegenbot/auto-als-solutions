@@ -1,21 +1,6 @@
-int main() {
-    int n;
-    std::vector<int> lst;
-    
-    std::cout << "Enter number of elements: ";
-    std::cin >> n;
-    
-    for (int i = 0; i < n; i++) {
-        int val;
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> val;
-        lst.push_back(val);
-    }
-    
-    std::cout << "Sum of odd elements: " << solution(lst) << std::endl;
-
-    return 0;
-}
+```
+#include <vector>
+#include <algorithm>
 
 int solution(std::vector<int> lst) {
     int sum = 0;
@@ -25,3 +10,18 @@ int solution(std::vector<int> lst) {
         }
     }
     return sum;
+}
+
+int main() {
+    std::vector<int> lst;
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    for (int i = 0; i < n; i++) {
+        int num;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> num;
+        lst.push_back(num);
+    }
+    return solution(lst);
+}
