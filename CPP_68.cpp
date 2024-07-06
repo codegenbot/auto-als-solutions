@@ -1,11 +1,29 @@
-#include <vector>
-#include <algorithm>
+#include <initializer_list>
 
-bool const &issame(std::vector<int>& a, std::vector<int>& b) {
+bool issame(vector<int> a, vector<int> b) {
     return a == b;
 }
 
-int main() {
-    assert(issame(pluck({7, 9, 7, 1}), {})); 
-    return 0;
-}
+vector<int> pluck(vector<int> arr) {
+    vector<pair<int, int>> nodes;
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] % 2 == 0) {
+            nodes.push_back({arr[i], i});
+        }
+    }
+    
+    if (nodes.empty()) {
+        return {};
+    }
+    
+    sort(nodes.begin(), nodes.end());
+    
+    vector<int> result;
+    for (int i = 1; i < nodes.size(); i++) {
+        if (issame({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
+            continue;
+        }
+        result.push_back(nodes[i].first);
+    }
+    
+    return result;
