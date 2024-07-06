@@ -1,47 +1,27 @@
-```cpp
-#include <iostream>
 #include <vector>
-using namespace std;
 
-bool isSame(vector<int> v1, vector<int> v2) {
-    if(v1.size() != v2.size()) 
+bool issame(vector<int> a, vector<int> b) {
+    if (a.size() != b.size())
         return false;
-    for(int i = 0; i < v1.size(); i++) {
-        if(v1[i] != v2[i])
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i])
             return false;
     }
     return true;
 }
 
-vector<std::vector<int>> make_piles(int n) {
-    vector<vector<int>> piles;
-    for (int i = 0; i < n; i++) {
-        vector<int> pile;
-        int stones = 1;
-        for (int j = 0; j <= i; j++) {
-            if ((j + 1) % 2 == 0)
-                stones += 2;
-            else
-                stones++;
-            pile.push_back(stones);
-        }
-        piles.push_back(pile);
+vector<int> make_a_pile(int n) {
+    vector<int> pile;
+    for (int i = 1; i <= n; i++) {
+        if (i % 2 == 0)
+            pile.push_back(i * 2 - 1);
+        else
+            pile.push_back(i * 2);
     }
-    return piles;
+    return pile;
 }
 
 int main() {
-    int n;
-    cout << "Enter the number of piles: ";
-    cin >> n;
-    vector<vector<int>> piles = make_piles(n);
-    for (auto &pile : piles) {
-        cout << "Pile: ";
-        for (int stone : pile) {
-            cout << stone << " ";
-        }
-        cout << endl;
-    }
-
+    assert(issame(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return 0;
 }
