@@ -1,11 +1,10 @@
-Here is the solution:
-
 bool prime_length(string str){
-    int length = str.length();
-    if(length < 2)
-        return false;
-    for(int i = 2; i*i <= length; i++)
-        if(length % i == 0)
-            return false;
-    return true;
+    int len = str.length();
+    bool is_prime = true;
+
+    for(int i = 2; i * i <= len && is_prime; i++){
+        if(len % i == 0) is_prime = false;
+    }
+
+    return is_prime;
 }

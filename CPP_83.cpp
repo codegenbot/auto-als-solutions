@@ -1,14 +1,14 @@
-Here is the completed code:
+#include <vector>
 
-```cpp
 int starts_one_ends(int n) {
     int count = 0;
-    for (int i = 1; i <= 9; i++) {
-        if ((i == 1 || i == n) && n >= 2) {
-            count++;
-        }
-        else if ((i > 1 && i < n) && n >= 3) {
-            count++;
+    for (long long i = 1; ; i *= 10) {
+        if (i > n) break;
+        count += 2;
+        for (long long j = 0; ; j++) {
+            long long num = i + j * (i != 1);
+            if (num > n) break;
+            if (num < 10 || num % 100 == 1 || num % 10 == 1) count++;
         }
     }
     return count;
