@@ -1,2 +1,5 @@
 def solve(N):
-    return bin(sum(int(b) for b in format(N, 'b')))[2:]
+    total = 0
+    for i in bin(N)[2:]:
+        total += int(i)
+    return str(total) if N > 1 else str(total)
