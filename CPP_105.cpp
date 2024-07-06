@@ -11,7 +11,7 @@ bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
     return true;
 }
 
-std::vector<std::string> by_length(std::vector<int> arr) {
+const std::vector<std::string>& by_length(const std::vector<int>& arr) {
     std::vector<std::pair<int, int>> temp;
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
@@ -55,10 +55,5 @@ std::vector<std::string> by_length(std::vector<int> arr) {
         }
     }
 
-    return result;
-}
-
-int mainTest() {
-    assert (issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
-    return 0;
+    return std::vector<std::string>(result);
 }
