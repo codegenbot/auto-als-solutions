@@ -1,6 +1,7 @@
+#include <vector>
 #include <string>
 
-std::string match_parens(std::vector<std::string> lst) {
+string match_parens(vector<string> lst){
     int open = 0, close = 0;
     for(auto s : lst){
         for(char c : s){
