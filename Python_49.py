@@ -1,5 +1,7 @@
+```
 def modp(m, p):
-    n = m % p
-    if n < 0:
-        n += p
-    return n
+    if m < 0:
+        m += p
+    gcd = lambda a, b: (b, a % b) if a else (a, 0)
+    _, x, _ = gcd(m, p)
+    return pow(x, -1*p.bit_length(), p)
