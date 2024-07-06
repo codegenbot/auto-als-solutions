@@ -1,24 +1,17 @@
-```cpp
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-bool same(vector<int> a,vector<int>b){
-    if(a.size() != b.size()) return false;
-    sort(a.begin(), a.end());
-    sort(b.begin(), b.end());
-    for(int i = 0; i < a.size(); i++){
-        if(a[i] != b[i]) return false;
+int main() {
+    int n, m;
+    cout << "Enter the size of list: ";
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cout << "Enter number " << i+1 << ": ";
+        cin >> a[i];
     }
-    return true;
-}
-
-vector<int> strange_sort_list(vector<int> lst) {
-    vector<int> result;
-    while (!lst.empty()) {
-        int min_val = *min_element(lst.begin(), lst.end());
-        result.push_back(min_val);
-        lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
+    vector<int> result = strange_sort_list(a);
+    if (!issame(a, result)) {
+        cout << "The list is not sorted." << endl;
+    } else {
+        cout << "The list is sorted." << endl;
     }
-    return result;
+    return 0;
 }
