@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int is_prime(long long n) {
+long long is_prime(long long n) {
     if (n <= 1)
         return -1;
     if (n == 2)
