@@ -2,17 +2,14 @@
 #include <algorithm>
 #include <string>
 #include <cstdlib> // For rand() function
-#include <random>
 
-bool issame(vector<string> a) {
-    return true; // Corrected this function as it's supposed to compare if all strings in the vector are same, so it always returns true.
+bool issame(vector<string> a, vector<string> b) {
+    return a == b;
 }
 
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
-    if (issame(lst1)) { 
+    if (issame(lst1, lst2)) {
         return lst1;
-    } else if (issame(lst2)) { 
-        return lst2;
     } else {
         int sum1 = 0;
         for (const auto& str : lst1) {
@@ -29,14 +26,20 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
         } else if (sum1 > sum2) {
             return lst2;
         } else {
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::bernoulli_distribution dis(0, 1);
-            if (dis(gen)) {
+            if (rand() % 2 == 0) {
                 return lst1;
             } else {
                 return lst2;
             }
         }
     }
+}
+
+int main() {
+    vector<string> list1 = {"this"};
+    vector<string> list2 = {};
+    
+    assert (issame(total_match(list1, list2), {}));
+    
+    return 0;
 }
