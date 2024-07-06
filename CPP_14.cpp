@@ -1,25 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
+Here is the solution:
 
 vector<string> all_prefixes(string str) {
-    vector<string> prefixes;
-    for (int i = 0; i <= str.length(); i++) {
-        string prefix = str.substr(0, i);
-        prefixes.push_back(prefix);
+    vector<string> result;
+    for (int i = 1; i <= str.length(); i++) {
+        result.push_back(str.substr(0, i));
     }
-    return prefixes;
-}
-
-int main() {
-    string str;
-    cout << "Enter a string: ";
-    cin >> str;
-    vector<string> result = all_prefixes(str);
-    for (string s : result) {
-        cout << s << endl;
-    }
-    return 0;
+    return result;
 }
