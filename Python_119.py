@@ -1,3 +1,4 @@
+```
 def match_parens(lst):
     for string in lst:
         open_count = 0
@@ -12,7 +13,5 @@ def match_parens(lst):
                 
         if open_count != close_count:
             matching = False
-        
-        if not matching:
-            return "No"
-    return "Yes"
+            
+    return "Yes" if any(matching) else "No"
