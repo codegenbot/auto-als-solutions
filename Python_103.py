@@ -1,10 +1,10 @@
-def binary_average(n1, n2):
-    if n1 < 0 or n2 < 0:
-        return "Error: Numbers should be non-negative."
-    elif n1 > n2:
+n = int(input("Enter the first number: "))
+m = int(input("Enter the second number: "))
+
+def rounded_avg(n, m):
+    if n > m:
         return -1
-    else:
-        total = n1 + n2
-        avg = round(total / 2)
-        binary_avg = bin(avg)[2:]
-        return binary_avg
+    avg = round((n + m) / 2)
+    return bin(avg)[2:]
+
+print(rounded_avg(n, m))
