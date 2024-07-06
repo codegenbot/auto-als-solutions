@@ -1,6 +1,8 @@
-```cpp
 #include <string>
 #include <openssl/evp.h>
+
+#include <iomanip>
+#include <sstream>
 
 std::string string_to_md5(std::string text) {
     if (text.empty()) return "";
@@ -17,9 +19,9 @@ std::string string_to_md5(std::string text) {
 
     std::string result = "";
     for (int i = 0; i < 16; i++) {
-        char buffer[3];
-        sprintf(buffer, "%02x", md[i]);
-        result += buffer;
+        std::stringstream buffer;
+        buffer << std::hex << std::setw(2) << std::setfill('0') << (unsigned int)md[i];
+        result += buffer.str();
     }
 
     return result;
