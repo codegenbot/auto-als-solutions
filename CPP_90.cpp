@@ -1,7 +1,9 @@
-```
-int next_smallest(vector<int> lst){
-    if(lst.empty()) return -1;  // Return None which is equivalent to -1 in this case
-    sort(lst.begin(), lst.end());
-    if (lst.size() < 2) return -1;
-    return lst[1];
+Here is the solution:
+
+int next_smallest(vector<int> lst) {
+    vector<int> v(lst);
+    sort(v.begin(), v.end());
+    if (v.size() < 2) return -1;
+    int idx = distance(v.begin(), find(v.begin(), v.end(), v[1]));
+    return *idx == v[0] ? -1 : v[1];
 }
