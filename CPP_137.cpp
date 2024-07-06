@@ -26,4 +26,3 @@ int main() {
     boost::any result = compare_one(a, b);
     cout << "Result: " << any_cast<string>(result) << endl;
     return 0;
-}
