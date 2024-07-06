@@ -8,10 +8,10 @@ int fruit_distribution(string s, int n) {
     }
     
     if (s.find(" oranges") != string::npos) {
-        size_t pos2 = s.find(" oranges");
-        while ((pos2 = s.find(" oranges", pos2)) != string::npos) {
-            oranges = stoi(s.substr(pos2 + 8).erase());
-            pos2 += 8; // Update position for next search
+        size_t temp = s.find(" oranges");
+        while (temp != string::npos) {
+            oranges = stoi(s.substr(temp + 8).erase());
+            temp = s.find(" oranges", temp + 1);
         }
     }
     
