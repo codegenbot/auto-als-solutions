@@ -7,21 +7,19 @@ double poly(const std::vector<double>& coeffs, double x) {
     for (int i = 0; i < coeffs.size(); ++i) {
         result += coeffs[i] * pow(x, i);
     }
-    return abs(result - solution);
+    return result;
 }
 
-double find_zero(std::vector<double> coeffs, double solution) {
-    double left = 1.0;
-    double right = 100.0;
-
-    while (right - left > 1e-9) {
-        double mid = (left + right) / 2.0;
-        if (poly(coeffs, mid) < 0) {
+double find_zero(std::vector<double> coeffs, double solution){
+    double left = 0;
+    double right = 1e9;
+    while (right - left > 1e-6) {
+        double mid = (left + right) / 2;
+        if (poly(coeffs, mid) * poly(coeffs, solution) > 0) {
             left = mid;
         } else {
             right = mid;
         }
     }
-
-    return (-left / right);
+    return (-solution / poly(coeffs, solution));
 }
