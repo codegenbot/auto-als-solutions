@@ -1,6 +1,6 @@
-#include <string>
+using namespace std;
 
-string anti_shuffle(string s) {
+string anti_shuffle(string s){
     string result = "";
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
