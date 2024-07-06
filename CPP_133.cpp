@@ -12,7 +12,7 @@ int sum_squares(const std::vector<float>& lst) {
     return result;
 }
 
-int main() {
+int main() { 
     std::vector<float> lst;
     float num;
 
@@ -23,4 +23,6 @@ int main() {
     int sum = sum_squares(lst);
 
     std::cout << "Sum of squares: " << sum << std::endl;
+
+    return 0;
 }
