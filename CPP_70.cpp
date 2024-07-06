@@ -9,7 +9,15 @@ bool issame(vector<int> a, vector<int> b) {
     return true;
 }
 
-int main() {
-    assert(issame({strange_sort_list({111111})}, {111111}));
-    return 0;
+vector<int> strange_sort_list(vector<int> lst) {
+    vector<int> result;
+    while (!lst.empty()) {
+        int min = *min_element(lst.begin(), lst.end());
+        result.push_back(min);
+        lst.erase(remove(lst.begin(), lst.end(), min), lst.end());
+        if (!lst.empty())
+            result.push_back(*max_element(lst.begin(), lst.end()));
+        lst.erase(remove(lst.begin(), lst.end(), *max_element(lst.begin(), lst.end())), lst.end());
+    }
+    return result;
 }
