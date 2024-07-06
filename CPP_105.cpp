@@ -1,21 +1,20 @@
-```c++
 #include <vector>
 #include <string>
 
-std::vector<std::string> by_length(std::vector<int> arr) {
-    std::vector<int> numbers;
-    for (int num : arr) {
-        if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
-        }
+namespace {
+    bool issame(vector<string> a, vector<string> b) {
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); ++i)
+            if (a[i] != b[i]) return false;
+        return true;
     }
+}
 
-    std::sort(numbers.begin(), numbers.end());
-    std::reverse(numbers.begin(), numbers.end());
-
-    std::vector<std::string> result;
-    for (int num : numbers) {
-        std::string str = "";
+vector<vector<string>> by_length(vector<int> arr) {
+    vector<vector<string>> result;
+    
+    for (int num : arr) {
+        string str = "";
         switch (num) {
             case 1:
                 str = "One";
@@ -45,15 +44,9 @@ std::vector<std::string> by_length(std::vector<int> arr) {
                 str = "Nine";
                 break;
         }
-        result.push_back(str);
+        
+        result.push_back({str});
     }
 
     return result;
-}
-
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i)
-        if (a[i] != b[i]) return false;
-    return true;
 }
