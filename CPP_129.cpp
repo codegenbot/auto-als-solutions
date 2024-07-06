@@ -1,42 +1,41 @@
 #include <vector>
-#include <algorithm>
+#include <queue>
 
-int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<std::pair<int, int>>& path) {
-    if (grid.empty() || grid[0].empty()) return -1;
+int minPath(const std::vector<std::pair<int, int>>& grid, int totalLength) {
+    if (grid.empty()) return -1;
+
+    int res[totalLength];
+    for(int i = 0; i < totalLength; i++) res[i] = 0;
     
-    // Check the boundaries of the grid
-    if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size())
-        return -2;
-
-    return 0;
-}
-
-bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
-    if (a.size() != b.size())
-        return false;
-    for (int i = 0; i < a.size(); i++)
-        if (a[i] != b[i])
-            return false;
-    return true;
-}
-
-int minPath(std::vector<std::pair<int, int>>& path) {
-    std::vector<int> result;
+    std::queue<std::pair<int, int>> Q;
+    for (const auto& p : grid) {
+        Q.push({p.first, p.second});
+    }
     
-    for (auto& p : path) {
-        for (int i = 0; i < p.first; i++) {
-            if (i == p.second - 1)
-                result.push_back(2);
-            else
-                result.push_back(1);
+    while (!Q.empty()) {
+        int x = Q.front().first;
+        int y = Q.front().second;
+        Q.pop();
+        
+        if (res[y] == 0) res[y] = (x == 0)?1:(int)2;
+        for (const auto& p : grid) {
+            if (p.second != 3 && x == p.first) {
+                Q.push({p.first, p.second});
+            }
+            if (p.first > x || p.second > y) continue;
+            if (res[p.second] == res[y]) break;
+            if (res[p.second] == 0) {
+                Q.push({p.first, p.second});
+                res[p.second] = (x == 0)?1:(int)2;
+            }
         }
     }
-
-    return std::accumulate(result.begin(), result.end(), 0);
-}
-
-int main(){
-    int result = minPath({{1, 3}, {3, 2}});
-    assert(isEqual(std::vector<int>({1, 3, 1, 3, 1, 3, 1, 3, 1, 3}), std::vector<int>({1, 3, 1, 3, 1, 3, 1, 3, 1, 3})));
-    return 0;
+    
+    int totalSteps = 0;
+    for(int i = totalLength - 1; i >= 0; i--) {
+        if(res[i] == 1) totalSteps++;
+        else if(res[i] > 1) break;
+    }
+    
+    return totalSteps;
 }
