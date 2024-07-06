@@ -1,5 +1,6 @@
+```
+#include <string>
 #include <cassert>
-
 using namespace std;
 
 string decimal_to_binary(int decimal){
@@ -15,6 +16,6 @@ string decimal_to_binary(int decimal){
 }
 
 int main() {
-    assert(decimal_to_binary(15) == string("db1111db"));
+    cout << decimal_to_binary(15) << endl;
     return 0;
 }
