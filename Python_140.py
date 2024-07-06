@@ -7,5 +7,8 @@ def fix_spaces(text):
     text = text.replace("----", "-   ")
     return re.sub(' +', '_', text)
 
-text = input("Please enter your text: ")
-print(fix_spaces(text))
+while True:
+    text = input("Enter your text: ")
+    if text:  
+        print(fix_spaces(text))
+        break 

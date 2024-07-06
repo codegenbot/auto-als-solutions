@@ -1,6 +1,6 @@
+#include <initializer_list>
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
 
 bool same(std::vector<int> a, std::vector<int> b) { 
     return a.size() == b.size() && std::all_of(a.begin(), a.end(), [&](int x) { return std::find(b.begin(), b.end(), x) != b.end(); });
