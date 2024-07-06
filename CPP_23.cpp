@@ -1,11 +1,10 @@
-```
-#include<string>
-#include<cstring> 
+#include <string>
+#include <cstring>
 
-using namespace std;
-
-int str_len(const string& str){
+int str_len(std::string str){
     return str.length();
 }
 
-assert ("asdasnakj".length() == 9);
+int main(){
+    assert(strlen("asdasnakj") == 9);
+}
