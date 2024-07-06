@@ -1,14 +1,27 @@
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
 vector<int> tri(int n) {
-    vector<int> result(1, 3);
-    if (n > 0) {
-        for (int i = 1; i <= n - 2; i++) {
-            int sum = 0;
-            if (i % 2 == 0) {
-                sum = 1 + i / 2;
-            } else {
-                sum = result[i-1] + result[i-2] + result[i+1];
+    vector<int> result;
+    if (n == 0) return result;
+    result.push_back(3);
+    if (n > 1) {
+        if (n % 2 == 0) {
+            for (int i = 1; i <= n / 2; i++) {
+                result.push_back(i * 2 + 1);
             }
-            result.push_back(sum);
+        } else {
+            result.push_back(1);
+            int prev1 = 3, prev2 = 1;
+            for (int i = 2; i < n; i++) {
+                result.push_back(prev1 + prev2 + 1);
+                if (i % 2 == 0) prev2 = result.back();
+                else {
+                    prev1 = result.back();
+                    prev2 = prev1 - 3;
+                }
+            }
         }
     }
     return result;
