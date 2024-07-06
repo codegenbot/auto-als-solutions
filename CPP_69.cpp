@@ -13,4 +13,3 @@ int findFirstDuplicate(vector<int> lst) {
         }
     }
     return -1;
-}
