@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 #include <boost/any.hpp>
@@ -15,7 +14,7 @@ boost::any compare_one(boost::any a, boost::any b) {
         return a;
     else if (sa > sb)
         return a;
-    else if (db > da)
+    else if (sb > sa)
         return b;
     else
         return boost::any("None");
