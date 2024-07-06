@@ -1,8 +1,7 @@
-```cpp
 #include <vector>
 
 int main() {
-    vector<vector<int>> grid = {{0,1,0},{0,1,0},{1,1,1}};
+    vector<vector<int>> grid = {{1,0,0},{1,1,1},{1,1,1}};
     int capacity = 2;
     cout << max_fill(grid, capacity) << endl;
 }
