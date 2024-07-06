@@ -1,18 +1,17 @@
-```
 def match_parens(lst):
-    stack = []
+    count = 0
     for s in lst:
-        for c in s:
-            if c == '(':
-                stack.append(c)
-            elif c == ')':
-                if len(stack) == 0:
-                    return 'No'
-                stack.pop()
-    if len(stack) == 0:
-        return 'Yes'
-    else:
-        return 'No'
-
-input_list = [line.strip() for line in input("Enter your string: ").split('\n')]
-print(match_parens(input_list))
+        open_count = 0
+        close_count = 0
+        for char in s:
+            if char == '(':
+                open_count += 1
+            elif char == ')':
+                close_count += 1
+            if open_count < close_count:
+                break
+        if open_count == close_count:
+            count += 1
+    return "Strings have matching parentheses" if count == len(lst) else "Strings do not have matching parentheses"
+input_list = [input("Enter string {}: ".format(i+1)) for i in range(int(input("Number of strings: ")))]
+print(match_parens([s.strip() for s in input_list]))
