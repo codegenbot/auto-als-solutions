@@ -31,15 +31,8 @@ def main():
         except ValueError as e:
             print(e)
 
-    try:
-        result = find_zero(xs)
-        if isinstance(result, int):
-            print(f"The zero point is: {result}")
-        else:
-            print(f"The zero point is: {result:.2f}")
-    except ValueError as e:
-        print(e)
-
-
-if __name__ == "__main__":
-    main()
+    result = find_zero(xs)
+    if isinstance(result, int):
+        print(f"The zero point is: {result}")
+    else:
+        print(f"The zero point is: {result:.2f}")
