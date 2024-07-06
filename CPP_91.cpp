@@ -3,12 +3,12 @@
 
 int is_bored(std::string S) {
     int count = 0;
-    std::string::const_iterator pos = S.begin();
+    std::string::iterator pos = S.begin();
     while ((pos = S.find("I", pos)) != S.end()) {
-        if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
+        if (S.find(".", pos) == S.end() && S.find("?", pos) == S.end() && S.find("!", pos) == S.end())
             count++;
         else
-            pos = S.find(".", pos, pos)+1;
+            pos = ++std::find(pos, S.end(), '.');  // use iterator find
     }
     return count;
 
@@ -19,3 +19,4 @@ int main() {
     int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
     return 0;
+}
