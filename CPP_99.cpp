@@ -1,14 +1,9 @@
-Here is the solution:
+#include<stdio.h>
+#include<math.h>
+#include<string>
+using namespace std;
 
-```cpp
-#include <string>
-#include <cmath>
-
-int closest_integer(string value) {
+int closest_integer(string value){
     double num = stod(value);
-    if (num - static_cast<int>(num) < static_cast<int>(num) - num) {
-        return static_cast<int>(num + 0.5);
-    } else {
-        return static_cast<int>(num);
-    }
+    return (num > 0)? ceil(num) : floor(num);
 }
