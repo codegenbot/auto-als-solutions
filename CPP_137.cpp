@@ -1,25 +1,30 @@
-#include <boost/any.hpp>
-#include <boost/numeric/conversion/cast.hpp>
-
-using namespace boost;
-
 boost::any compare_one(boost::any a, boost::any b) {
-    if (is_any_of<string>(a)) {
-        string str_a = any_cast<string>(a);
-        if (is_any_of<string>(b)) {
-            string str_b = any_cast<string>(b);
-            return (stod(str_a) > stod(str_b)) ? a : ((stod(str_a) < stod(str_b)) ? b : boost::any("None"));
-        } else {
-            double num_b = any_cast<double>(b);
-            return (stod(str_a) > num_b) ? a : ((stod(str_a) < num_b) ? b : boost::any("None"));
-        }
-    } else if (is_any_of<string>(b)) {
-        string str_b = any_cast<string>(b);
-        double num_a = any_cast<double>(a);
-        return (num_a > stod(str_b)) ? a : ((num_a < stod(str_b)) ? b : boost::any("None"));
-    } else {
-        double num_a = any_cast<double>(a);
-        double num_b = any_cast<double>(b);
-        return (num_a > num_b) ? a : ((num_a < num_b) ? b : boost::any("None"));
+    if (a.type() == typeid(int) && b.type() == typeid(float)) {
+        return (int)b > (int)a ? b : a;
     }
+    else if (a.type() == typeid(float) && b.type() == typeid(int)) {
+        return (float)b > (float)a ? b : a;
+    }
+    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
+        if ((boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") &&
+            boost::any_cast<string>(a) != boost::any_cast<string>(b))
+            return a > b ? a : b;
+        else
+            return "None";
+    }
+    else if (a.type() == typeid(string)) {
+        return (boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") ?
+               "None" : (boost::any_cast<string>(a) > boost::any_cast<string>(b) ? a : b);
+    }
+    else if (b.type() == typeid(string)) {
+        return (boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") ?
+               "None" : (boost::any_cast<string>(a) > boost::any_cast<string>(b) ? a : b);
+    }
+    else if (a.type() == typeid(float)) {
+        return (float)b > (float)a ? b : a;
+    }
+    else if (b.type() == typeid(float)) {
+        return (float)b > (float)a ? b : a;
+    }
+    return "None";
 }
