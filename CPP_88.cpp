@@ -10,7 +10,11 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     return true;
 }
 
-int sort_array(std::vector<int> array) { 
-    std::sort(array.begin(), array.end());
-    return 0;
+int main() {
+    std::vector<int> array1 = {21, 14, 23, 11};
+    std::vector<int> array2 = {23, 21, 14, 11};
+    assert (issame(array1, array2));
+    int sort_array(std::vector<int>& array) {
+        std::sort(array.begin(), array.end());
+    }
 }
