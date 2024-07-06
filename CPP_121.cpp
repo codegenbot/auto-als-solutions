@@ -1,4 +1,3 @@
-```cpp
 int solutions(vector<int> lst) {
     int sum = 0;
     for (int i = 1; i < lst.size(); i += 2) {
@@ -7,9 +6,23 @@ int solutions(vector<int> lst) {
         }
     }
     return sum;
+
 }
 
 int main() {
     assert(solutions({3, 13, 2, 9}) == 3);
-    return 0;
+    
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    
+    vector<int> lst(n);
+    for (int i = 0; i < n; i++) {
+        cout << "Element "<<i+1<<":";
+        cin >> lst[i];
+    }
+    
+    int result = solutions(lst);
+    cout << "\nThe sum of all the odd elements is: " << result << endl;
+    
 }
