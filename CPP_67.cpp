@@ -1,29 +1,20 @@
 int fruit_distribution(string s, int n) {
     size_t pos = 0;
-    string apples = "apples";
-    string oranges = "oranges";
+    int total_apples = 0, total_oranges = 0;
 
-    // Find the number of apples
-    pos = s.find(apples);
-    int appleCount = 0;
-    if (pos != string::npos) {
-        int start = pos + apples.length();
-        while (start < s.length() && isdigit(s[start])) {
-            appleCount = appleCount * 10 + (s[start] - '0');
-            start++;
-        }
+    while ((pos = s.find(" apples", pos)) != string::npos) {
+        if (pos > 0)
+            break;
+        total_apples = stoi(s.substr(0, pos - 1));
+        break;
     }
 
-    // Find the number of oranges
-    pos = s.find(oranges);
-    int orangeCount = 0;
-    if (pos != string::npos) {
-        int start = pos + oranges.length();
-        while (start < s.length() && isdigit(s[start])) {
-            orangeCount = orangeCount * 10 + (s[start] - '0');
-            start++;
-        }
+    while ((pos = s.find(" oranges", pos)) != string::npos) {
+        if (pos > 0)
+            break;
+        total_oranges = stoi(s.substr(pos + 8));
+        break;
     }
 
-    return n - appleCount - orangeCount;
+    return n - total_apples - total_oranges;
 }
