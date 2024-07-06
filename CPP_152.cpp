@@ -4,13 +4,19 @@
 using namespace std;
 
 vector<int> compare(vector<int> game, vector<int> guess) {
-    vector<int> result;
+    int cow = 0;
+    int ox = 0;
     for (int i = 0; i < game.size(); i++) {
         if (game[i] == guess[i]) {
-            result.push_back(0);
+            cow++;
         } else {
-            result.push_back(abs(game[i] - guess[i]));
+            if (guess[i] != i+1) {
+                ox++;
+            }
         }
     }
+    vector<int> result;
+    result.push_back(cow);
+    result.push_back(ox);
     return result;
 }
