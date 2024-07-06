@@ -1,8 +1,7 @@
-```cpp
 #include <algorithm>
 #include <vector>
 
-bool same(std::vector<int> a, std::vector<int> b) {
+bool isSame(std::vector<int> a, std::vector<int> b) {
     return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
 }
 
@@ -20,8 +19,6 @@ std::vector<int> sortByPoints(std::vector<int> nums) {
 }
 
 int main() {
-    std::vector<int> result = sortByPoints({0,6,6,-76,-21,23,4});
-    std::vector<int> expected = {-76, -21, 0, 4, 23, 6, 6};
-    assert(same(result, expected));
+    assert(isSame(sortByPoints({0,6,6,-76,-21,23,4}) , {-76, -21, 0, 4, 23, 6, 6}));
     return 0;
 }
