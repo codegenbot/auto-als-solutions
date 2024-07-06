@@ -14,11 +14,3 @@ string flip_case(string str){
     }
     return result;
 }
-
-int main() {
-    string s;
-    cout << "Enter a string: ";
-    cin >> s;
-    cout << flip_case(s) << endl;
-    return 0;
-}
