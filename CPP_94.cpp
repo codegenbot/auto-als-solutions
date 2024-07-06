@@ -33,16 +33,22 @@ int skjkasdkd(vector<int> lst) {
 }
 
 int main() {
-    vector<int> lst;
-    cout << "Enter the numbers separated by space: ";
-    int num;
-    while ((cin >> num) && (num != -1)) {
-        lst.push_back(num);
+    vector<int> numbers;
+    cout << "Enter a sequence of space separated integers: ";
+    string input;
+    getline(cin, input);
+    for (string::iterator it = input.begin(); it != input.end(); ++it) {
+        if (*it == ' ') {
+            continue;
+        }
+        int num = 0;
+        for (; it != input.end() && isdigit(*it); ++it) {
+            num = num * 10 + (*it - '0');
+        }
+        numbers.push_back(num);
     }
-    if (!lst.empty()) {
-        cout << "Sum of digits for largest prime number is " << skjkasdkd(lst) << endl;
-    } else {
-        cout << "No numbers entered." << endl;
-    }
+
+    cout << "The sum of the digits of the largest prime number in your sequence is: " << skjkasdkd(numbers) << endl;
+
     return 0;
 }
