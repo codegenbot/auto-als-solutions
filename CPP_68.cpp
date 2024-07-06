@@ -54,8 +54,3 @@ int solve() {
     
     return 0;
 }
-
-int main() {
-    solve();
-    return 0;
-}
