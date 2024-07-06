@@ -3,13 +3,19 @@
 #include <boost/any.hpp>
 
 using namespace std;
+using namespace boost;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (any_cast<double>(a) > any_cast<double>(b))
+    double da = any_cast<double>(a);
+    string sa = any_cast<string>(a);
+    double db = any_cast<double>(b);
+    string sb = any_cast<string>(b);
+
+    if (da > db)
         return a;
-    else if (!boost::any_empty(any_cast<boost::any>(b)) && any_cast<string>(a) > any_cast<string>(b))
+    else if (sa > sb)
         return a;
-    else if (!boost::any_empty(any_cast<boost::any>(a)) && any_cast<string>(b) > any_cast<string>(a))
+    else if (sb > sa)
         return b;
     else
         return boost::any("None");

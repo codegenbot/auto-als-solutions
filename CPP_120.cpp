@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -15,10 +14,10 @@ bool same(vector<int> a, vector<int> b) {
 
 vector<int> maximum(vector<int> arr, int k) {
     vector<int> result;
-    while(k--) {
+    for (int i = 0; i < k; i++) {
         auto it = max_element(arr.begin(), arr.end());
         result.push_back(*it);
-        *it = INT_MIN;
+        arr.erase(it);
     }
     return result;
 }
