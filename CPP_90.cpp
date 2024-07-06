@@ -1,10 +1,13 @@
-Here is the solution:
-
-int next_smallest(vector<int> lst) {
-    if (lst.empty()) return -1; // or any other value that represents None
-    vector<int> sorted = lst;
-    sort(sorted.begin(), sorted.end());
-    auto it = upper_bound(sorted.begin(), sorted.end(), sorted[0]);
-    if (it == sorted.end()) return -1; // or any other value that represents None
-    return *prev(it);
+int next_smallest(vector<int> lst){
+    if(lst.size() < 2) return -1; // Return None
+    vector<int> temp = lst;
+    sort(temp.begin(), temp.end());
+    for(int i = 0; i < temp.size(); i++){
+        if(i == 0 || temp[i] != temp[i-1]){
+            if(i == 1){
+                return temp[i];
+            }
+        }
+    }
+    return -1; // Return None
 }

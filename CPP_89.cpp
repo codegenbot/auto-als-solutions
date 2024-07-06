@@ -1,15 +1,13 @@
 #include <cctype>
-using namespace std;
 
 string encrypt(string s) {
     string result = "";
     for (char c : s) {
         if (isalpha(c)) {
             char base = isupper(c) ? 'A' : 'a';
-            result += (char)((c - base + 2 * 26) % 26 + base);
-        } else {
-            result += c;
+            c = ((c - base + 2 * 26) % 26) + base;
         }
+        result += c;
     }
     return result;
 }
