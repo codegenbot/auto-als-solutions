@@ -1,22 +1,18 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <algorithm>
+#include <vector>
+#include <string>
+
 bool issame(vector<string>, vector<string>);
 vector<string> sorted_list_sum(vector<string>);
 
 int main() {
-    vector<string> lst;
-    int n;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        string s;
-        cin >> s;
-        lst.push_back(s);
-    }
-    vector<string> res = sorted_list_sum(lst);
-    for (const auto &s : res) {
-        cout << s << " ";
-    }
+    // Your code here
     return 0;
+}
+
+bool issame(vector<string> v1, vector<string> v2) {
+    // your logic here
+    return true; // replace with actual logic
 }
 
 vector<string> sorted_list_sum(vector<string> lst) {
