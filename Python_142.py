@@ -1,8 +1,9 @@
+```
 def sum_squares(lst):
     total = 0
-    for i in lst:
-        if isinstance(i, int):
-            total += i**2
-        elif isinstance(i, str) and i.isdigit():
-            total += int(i) ** 3
+    for num in lst:
+        if isinstance(num, int):
+            total += num ** 2
+        elif isinstance(num, str) and num.isdigit():
+            total += int(num) ** 3
     return total
