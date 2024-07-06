@@ -1,5 +1,5 @@
-#include <vector>
 #include <string>
+#include <vector>
 
 bool isOpen(char c) {
     return c == '(';
@@ -9,13 +9,30 @@ bool isClose(char c) {
     return c == ')';
 }
 
-string match_parens(vector<string> lst) {
-    int open = 0, close = 0;
-    for (const string& s : lst) {
+int countOpen(const std::vector<std::string>& lst) {
+    int count = 0;
+    for (const auto& s : lst) {
         for (char c : s) {
-            if (isOpen(c)) open++;
-            else if (isClose(c)) close++;
+            if (isOpen(c)) {
+                count++;
+            }
         }
     }
-    return to_string(open == close) ? "Yes" : "No";
+    return count;
+}
+
+bool matchParens(const std::vector<std::string>& lst) {
+    int open = countOpen(lst);
+    int close = lst.size() - open;
+    return open == close;
+}
+
+int main() {
+    std::vector<std::string> lst = {"(a)", "b(c)"};
+    if (matchParens(lst)) {
+        std::cout << "Yes" << std::endl;
+    } else {
+        std::cout << "No" << std::endl;
+    }
+    return 0;
 }
