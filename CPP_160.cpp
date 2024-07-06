@@ -1,4 +1,4 @@
-```
+```cpp
 #include <cstddef>
 #include <stdexcept>
 #include <cmath>
