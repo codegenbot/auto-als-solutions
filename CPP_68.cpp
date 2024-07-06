@@ -1,13 +1,17 @@
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
+Here is the completed code:
+
+vector<int> pluck(vector<int> arr) {
+    vector<pair<int, int>> evenNodes;
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i] % 2 == 0) {
-            if (result.empty() || arr[i] < result[0].first) {
-                result = {{arr[i], i}};
-            } else if (arr[i] == result[0].first) {
-                result.push_back({{arr[i], i}});
-            }
+            evenNodes.push_back({arr[i], i});
         }
     }
-    return result.size() ? result : vector<pair<int, int>>{{}};
+    
+    if (evenNodes.empty()) {
+        return {};
+    }
+    
+    auto smallestEven = min(evenNodes.begin(), evenNodes.end());
+    return {{smallestEven->first, smallestEven->second}};
 }
