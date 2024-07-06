@@ -1,35 +1,32 @@
+#include <string>
+using namespace std;
+
 string file_name_check(string file_name) {
-    bool isValid = true;
-    int dotCount = 0;
-    int digitCount = 0;
-
-    for (char c : file_name) {
-        if (c == '.') {
-            dotCount++;
-            if (dotCount > 1) {
-                isValid = false;
-                break;
+    bool has_dot = false;
+    int dot_index = -1;
+    int digit_count = 0;
+    string before_dot = "";
+    for (int i = 0; i < file_name.size(); i++) {
+        char c = file_name[i];
+        if (isdigit(c)) {
+            digit_count++;
+            if (digit_count > 3) {
+                return "No";
             }
-        } else if (isdigit(c)) {
-            digitCount++;
-            if (digitCount > 3) {
-                isValid = false;
-                break;
+        } else if (c == '.') {
+            has_dot = true;
+            dot_index = i;
+        } else if (!has_dot && !isalpha(c)) {
+            return "No";
+        } else if (has_dot) {
+            string after_dot = file_name.substr(dot_index + 1);
+            if (after_dot != "txt" && after_dot != "exe" && after_dot != "dll") {
+                return "No";
             }
-        } else if (!isalpha(c) && c != '.') {
-            isValid = false;
-            break;
         }
     }
-
-    string extension = file_name.substr(file_name.find('.') + 1);
-    if (extension.size() > 0) {
-        if (extension != "txt" && extension != "exe" && extension != "dll") {
-            isValid = false;
-        }
-    } else {
-        isValid = false;
+    if (!has_dot || before_dot.empty()) {
+        return "No";
     }
-
-    return isValid ? "Yes" : "No";
+    return "Yes";
 }
