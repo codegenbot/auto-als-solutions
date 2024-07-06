@@ -9,26 +9,26 @@ string change_base(int x, int base) {
         if (remainder >= 10) {
             switch (remainder) {
                 case 10:
-                    result.insert(0, "A");
+                    result = "A" + result;
                     break;
                 case 11:
-                    result.insert(0, "B");
+                    result = "B" + result;
                     break;
                 case 12:
-                    result.insert(0, "C");
+                    result = "C" + result;
                     break;
                 case 13:
-                    result.insert(0, "D");
+                    result = "D" + result;
                     break;
                 case 14:
-                    result.insert(0, "E");
+                    result = "E" + result;
                     break;
                 case 15:
-                    result.insert(0, "F");
+                    result = "F" + result;
                     break;
             }
         } else {
-            result.insert(0, to_string(remainder));
+            result = to_string(remainder) + result;
         }
         x /= base;
     }
