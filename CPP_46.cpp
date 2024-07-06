@@ -1,20 +1,18 @@
 #include <stdio.h>
-
 using namespace std;
 
 int fib4(int n) {
-    if (n <= 1)
+    if (n <= 3)
         return 0;
-    int prev3 = 2;
-    int prev2 = 0;
-    int prev1 = 0;
+    int a = 0, b = 2, c = 0, d = 2, t;
     for (int i = 4; i <= n; i++) {
-        int temp = prev1 + prev2 + prev3;
-        prev3 = prev2;
-        prev2 = prev1;
-        prev1 = temp;
+        t = a + b + c + d;
+        a = b;
+        b = c;
+        c = d;
+        d = t;
     }
-    return prev1;
+    return d;
 }
 
 int main() {
