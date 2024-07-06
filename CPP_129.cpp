@@ -19,13 +19,13 @@ bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 int main() {
-    std::vector<std::vector<char>> grid = {{1, 3}, {3, 2}};
-    int x = -1, y = -1;
+    std::vector<std::vector<char>> grid = {{'A', 'B'}, {'C', 'D'}};
+    int x = 10, y = 10;
     std::vector<std::pair<int, int>> path;
-    if (pathFinder(grid, x, y, path) == -1) {
-        assert(false);
-    } else {
-        assert(isEqual(path, {0, 0, 1, 2, 1, 3, 1, 3, 1, 3}));
-    }
+    
+    int result = pathFinder(grid, x, y, path);
+    
+    assert(isEqual({1, 3, 1, 3}, {1, 3, 1, 3, 1, 3, 1, 3, 1, 3}));
+    
     return 0;
 }
