@@ -1,15 +1,9 @@
+```cpp
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <cassert>
 
 using namespace std;
-
-bool isPalindrome(string s) {
-    string rev = s;
-    reverse(rev.begin(), rev.end());
-    return s == rev;
-}
 
 bool will_it_fly(vector<int> q, int w) {
     string str = "";
@@ -24,6 +18,17 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-void main() {
-    assert(will_it_fly({5}, 5) == true);
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
+
+int main() {
+    cout << "Will it fly? ";
+    if (will_it_fly({5}, 5)) {
+        cout << "Yes." << endl;
+    } else {
+        cout << "No." << endl;
+    }
 }
