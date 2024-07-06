@@ -1,8 +1,10 @@
 ```
 def prime_fib(n: int):
-    a, b = 2, 3
+    a, b = 0, 1
     count = 1
     while True:
+        if b > n:
+            return a
         if is_prime(b):
             if count == n:
                 return b
