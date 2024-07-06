@@ -1,20 +1,19 @@
-string fix_spaces(string text){
-    string result = "";
-    bool spaceFound = false;
+#include <iostream>
+#include <string>
 
-    for(int i = 0; i < text.length(); i++){
-        if(text[i] == ' '){
-            if(spaceFound) {
-                result += "-";
-            } else {
-                result += "_";
-                spaceFound = true;
-            }
-        } else {
-            result += text[i];
-            spaceFound = false;
-        }
+std::string fix_spaces(std::string str) {
+    size_t start = 0;
+    while (start < str.size() && isspace(str[start])) {
+        start++;
     }
+    size_t end = str.size() - 1;
+    while (end >= 0 && isspace(str[end])) {
+        end--;
+    }
+    return str.substr(start, end - start + 1);
+}
 
-    return result;
+int main() {
+    std::string str = " Example   3";
+    std::cout << fix_spaces(str) << std::endl;
 }
