@@ -1,4 +1,4 @@
-```cpp
+```
 #include <string>
 #include <vector>
 
@@ -16,6 +16,17 @@ bool is_prime(int n) {
     return true;
 }
 
+vector<string> split(const string& str, const string& delimiter) {
+    vector<string> result;
+    size_t pos = 0;
+    while ((pos = str.find(delimiter)) != std::string::npos) {
+        result.push_back(str.substr(0, pos));
+        str.erase(0, pos + delimiter.length());
+    }
+    result.push_back(str);
+    return result;
+}
+
 string trim(const string& str) {
     int start = 0;
     while (start < str.length() && isspace(str[start])) {
@@ -26,17 +37,6 @@ string trim(const string& str) {
         end--;
     }
     return str.substr(start, end - start + 1);
-}
-
-vector<string> split(const string& str, const string& delimiter) {
-    vector<string> result;
-    size_t pos = 0;
-    while ((pos = str.find(delimiter)) != std::string::npos) {
-        result.push_back(str.substr(0, pos));
-        str.erase(0, pos + delimiter.length());
-    }
-    result.push_back(str);
-    return result;
 }
 
 string words_in_sentence(string sentence) {
