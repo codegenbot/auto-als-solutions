@@ -4,6 +4,16 @@
 
 using namespace std;
 
+string words_in_sentence(string sentence){
+    string result = "";
+    for (const auto& word : split(sentence, " ")) {
+        if (is_prime(word.length())) {
+            result += word + " ";
+        }
+    }
+    return result.substr(0, result.size() - 1);
+}
+
 bool is_prime(int n) {
     if (n <= 1) return false;
     for (int i = 2; i * i <= n; i++) {
@@ -23,12 +33,10 @@ vector<string> split(const string& str, const string& delimiter) {
     return tokens;
 }
 
-string words_in_sentence(string sentence){
-    string result = "";
-    for (const auto& word : split(sentence, " ")) {
-        if (is_prime(word.length())) {
-            result += word + " ";
-        }
-    }
-    return result.substr(0, result.size() - 1);
+int main() {
+    string input;
+    cout << "Enter a sentence: ";
+    getline(cin, input);
+    cout << words_in_sentence(input) << endl;
+    return 0;
 }
