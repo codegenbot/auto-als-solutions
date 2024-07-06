@@ -4,27 +4,27 @@
 using namespace std;
 
 string decimal_to_binary(int decimal){
-    string bin = "";
+    string binary = "";
     if (decimal < 0) {
-        bin = "-" + decimal_to_binary(-decimal);
-        return bin;
+        string result = "-" + decimal_to_binary(-decimal);
+        return result;
     }
     while(decimal > 0){
         if((decimal & 1) == 1)
-            bin = "1" + bin;
+            binary = "1" + binary;
         else
-            bin = "0" + bin;
+            binary = "0" + binary;
         decimal >>= 1;
     }
-    string resultBinary = "0b" + bin;
-    return resultBinary;
+    string binaryResult = "0b" + binary;
+    return binaryResult;
 }
 
-int main() {
+void printBinary() {
     int decimal;
     cout << "Enter a decimal number: ";
     cin >> decimal;
     string binary = decimal_to_binary(decimal);
     cout << "The binary representation of the entered decimal number is: " << binary << endl;
-    return 0;
+    return;
 }

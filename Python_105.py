@@ -1,3 +1,4 @@
+```
 def by_length(arr):
     mapping = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5, "Six": 6, "Seven": 7, "Eight": 8, "Nine": 9}
-    return [name for num in arr if str(mapping.get(str(num), 'Invalid')).startswith('1')]
+    return [mapping.get(str(i), str(i)) for i in arr if "One" <= mapping.get(str(i), str(i)) <= "Nine"]
