@@ -1,4 +1,3 @@
-```
 def choose_num(x, y):
     if x % 2 == 0 and y % 2 == 0:
         return min(y, max(x, 2))
