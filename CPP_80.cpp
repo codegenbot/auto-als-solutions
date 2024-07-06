@@ -23,7 +23,6 @@ bool is_happy(string s){
     }
     return true;
 
-}
 cout << "Enter a string: ";
 getline(cin, s);
 if(is_happy(s))
