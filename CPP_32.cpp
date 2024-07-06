@@ -14,13 +14,14 @@ double poly(vector<double> xs, double x){
 }
 
 double find_zero(vector<double> xs){
-    if(xs.size() % 2 != 0)
-        return -1; // invalid input: number of coefficients must be even
-    double x = 1.0; // initial guess for the root
-    double y = poly(xs, x);
-    while(abs(y) > 1e-6){ // loop until the result is close enough to zero
-        x -= y/poly({(double)i*x for i in range(xs.size())},x); // Newton-Raphson method
-        y = poly(xs, x);
+    double x = -1.0; // Initial guess
+    double tol = 1e-6; // Tolerance for convergence
+
+    while(true) {
+        double p = poly(xs, x); // Evaluate polynomial at current x
+        if (abs(p) < tol) { // Check for convergence
+            return x;
+        }
+        x -= p / poly({xs[0], 1}, x); // Update x using Newton's method
     }
-    return x;
 }
