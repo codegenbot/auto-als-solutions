@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
+#include <boost/config.hpp>
 #include <boost/any.hpp>
 
 using namespace std;
+using namespace boost;
 
 boost::any compare_one(boost::any a, boost::any b) {
     double da = any_cast<double>(a);
