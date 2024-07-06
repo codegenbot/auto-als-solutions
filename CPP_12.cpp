@@ -1,16 +1,12 @@
-Here is the completed code:
-
-```cpp
-string longest(vector<string> strings) {
-    if (strings.empty()) {
-        return "";
-    }
+string longest(vector<string> strings){
+    if(strings.empty()) return "";
     string res = strings[0];
-    for (const auto& s : strings) {
-        if (s.length() > res.length()) {
-            res = s;
-        } else if (s.length() == res.length()) {
-            res = s;
+    for(auto str : strings){
+        if(str.length() > res.length()){
+            res = str;
+        }
+        else if(str.length() == res.length()){
+            res = str;
         }
     }
     return res;
