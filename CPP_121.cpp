@@ -1,17 +1,19 @@
+#include <iostream>
 #include <vector>
-using namespace std;
 
 int main() {
-    vector<int> lst;
+    std::vector<int> lst;
     int n;
-    cin >> n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    
     for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        lst.push_back(x);
+        std::cout << "Enter element " << i + 1 << ": ";
+        std::cin >> lst.push_back(i);
     }
+    
     int result = solution(lst);
-    cout << result << endl;
+    std::cout << "Sum of odd elements at even positions: " << result << std::endl;
     return 0;
 }
 
