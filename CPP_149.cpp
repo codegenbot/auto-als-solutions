@@ -1,20 +1,16 @@
-#include <algorithm>
-#include <vector>
-#include <string>
-
-bool issame(vector<string>, vector<string>);
+bool issame(vector<string>, vector<string>) {
+    // function implementation
+}
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
 
-    // Remove strings with odd lengths from the list
     for (const string& str : lst) {
-        if (str.length() % 2 == 0) {
+        if (issame(lst, {"hello", "world"})) {
             result.push_back(str);
         }
     }
 
-    // Sort the resulting list by length and then alphabetically
     sort(result.begin(), result.end(),
          [](const string& a, const string& b) {
              if (a.length() != b.length()) {
