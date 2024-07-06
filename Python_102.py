@@ -1,5 +1,8 @@
+```
 def choose_num(x, y):
-    for i in range(max(x, y), min(x, y), -1):
-        if i % 2 == 0:
+    if x > y:
+        x, y = y, x
+    for i in range(y, 0, -1):
+        if (i-1) % 2 == 0 and (x+1) <= i:
             return i
     return -1
