@@ -1,7 +1,7 @@
-```
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
 
@@ -21,4 +21,5 @@ int main(){
         cout << x << " ";
     }
     cout << endl;
+    assert(common(a, b) == vector<int>{2, 3});
 }
