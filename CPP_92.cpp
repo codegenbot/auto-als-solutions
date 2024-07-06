@@ -1,13 +1,11 @@
 #include <cassert>
+#include <cmath>
 
 bool any_int(float a, float b, float c) {
-    if (a == int(a) && b == int(b) && c == int(c)) {
-        return a == b + c || a == c + b || b == a + c || b == c + a || c == a + b;
-    }
-    return false;
+    return (int(a) + int(b)) == int(c) || (int(a) + int(c)) == int(b) || (int(b) + int(c)) == int(a);
 }
 
 int main() {
-    assert(any_int(3.01, 4, 7) == false);
+    assert(any_int(3.01,4,7)==false); 
     return 0;
 }
