@@ -1,8 +1,7 @@
-```
 #include <iostream>
 #include <vector>
 
-std::vector<int> pluck(std::vector<int> arr) {
+std::vector<int> pluck(const std::vector<int>& arr) {
     std::vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
@@ -23,12 +22,14 @@ std::vector<int> pluck(std::vector<int> arr) {
 }
 
 int main() {
-    std::vector<int> arr = {1, 2, 3, 4};
-    std::vector<int> output = pluck(arr);
+    std::vector<int> input;
+    // add code to read from user and store in 'input'
+    
+    std::vector<int> output = pluck(input);
 
+    // print the output
     for(int i : output) {
         std::cout << i << " ";
     }
-    
     return 0;
 }
