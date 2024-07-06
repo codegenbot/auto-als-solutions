@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 #include <string>
 
@@ -11,7 +11,7 @@ bool is_happy(string s){
         bool unique = true;
         for(char c : str){
             int count = 0;
-            for(int j = i; j <= i+2; j++){
+            for(int j = i; j <= s.size() && j < i+3; j++){
                 if(s[j] == c) count++;
             }
             if(count > 1) {

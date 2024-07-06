@@ -1,8 +1,18 @@
 #include <vector>
-#include <algorithm>
+#include <cassert>
 
-bool same(std::vector<int> a, std::vector<int> b) { return a.size() == b.size() && std::all_of(a.begin(), a.end(), [&](int x) { return std::find(b.begin(), b.end(), x) != b.end(); }); }
+std::vector<int> make_a_pile(int n) {
+    std::vector<int> pile;
+    for (int i = 8; i <= 22 + (n - 1) * 2; i += 2) {
+        pile.push_back(i);
+    }
+    return pile;
+}
 
-std::vector<int> make_a_pile(int n) { std::vector<int> pile; for (int i = 1; i <= n; i++) pile.push_back(i % 2 ? i * 2 - 1 : i * 2); return pile; } 
+bool issame(std::vector<int> a, std::vector<int> b) { return a == b; }
 
-int main() { assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14})); }
+int main() {
+    int x;
+    std::vector<int> pile = make_a_pile(8);
+    assert(issame(pile, {8, 10, 12, 14, 16, 18, 20, 22}));
+}
