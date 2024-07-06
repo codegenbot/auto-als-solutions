@@ -1,4 +1,5 @@
-```cpp
+Here is the modified code:
+
 #include <vector>
 #include <cassert>
 
@@ -24,8 +25,5 @@ vector<int> make_a_pile(int n) {
 }
 
 int main() {
-    int temp;
-    {temp = 1;}
     assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return 0;
-}
