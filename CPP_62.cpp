@@ -1,10 +1,11 @@
 #include <vector>
-#include <cmath>
+#include <cmath> 
 using namespace std;
 
-bool isSame(vector<float> a, vector<float> b) {
-    for (int i = 0; i < a.size(); i++) {
-        if (std::abs(a[i] - b[i]) > 1e-4) return false;
+vector<float> derivative(vector<float> xs) {
+    vector<float> res;
+    for (int i = 1; i < xs.size(); i++) {
+        res.push_back((xs[i] - xs[0]) * (xs[i] > xs[0]));
     }
-    return true;
+    return res;
 }
