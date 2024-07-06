@@ -3,7 +3,6 @@
 #include <string>
 
 string decimal_to_binary(int decimal);
-
 int main() {
     string result = decimal_to_binary(15);
     assert(result == "db11111db");
