@@ -4,7 +4,7 @@ bool is_happy(string s) {
     for (int i = 0; i <= s.length() - 3; i++) {
         string t = s.substr(i, 3);
         bool duplicate = true;
-        int charCount[256] = {0}; 
+        int charCount[256] = {0}; // Assuming ASCII characters
         for (char c : t) {
             charCount[c]++;
         }
