@@ -1,33 +1,24 @@
 ```cpp
-#include <vector>
-#include <algorithm>
-#include <string>
-
-using namespace std;
-
-bool issame(vector<string> a, const vector<string>& b) {
+bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size()) {
         return false;
     }
-    
     for (size_t i = 0; i < a.size(); ++i) {
-        if (a[i].compare(b[i]) != 0) {
+        if (a[i].length() != b[i].length()) {
             return false;
         }
     }
-
     return true;
 }
-
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
-        sum1 += std::size_t(str.length());
+        sum1 += str.length();
     }
     
     int sum2 = 0;
     for (const auto& str : lst2) {
-        sum2 += std::size_t(str.length());
+        sum2 += str.length();
     }
 
     if (issame(lst1, lst2)) {
@@ -40,14 +31,14 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     
     int sum1lst = 0, sum2lst = 0;
     for (const auto& str : lst1) {
-        sum1lst += std::size_t(str.length());
+        sum1lst += str.length();
         for (char c : str) {
             sum1lst += 1;
         }
     }
 
     for (const auto& str : lst2) {
-        sum2lst += std::size_t(str.length());
+        sum2lst += str.length();
         for (char c : str) {
             sum2lst += 1;
         }
