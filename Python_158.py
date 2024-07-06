@@ -1,11 +1,13 @@
-def longest_word_with_unique_characters(words):
+```
+def longest_word_with_max_unique_chars(words):
     max_word = ''
-    max_length = 0
+    max_unique_chars = 0
     for word in words:
         unique_chars = set(word)
-        if len(unique_chars) > max_length:
-            max_length = len(unique_chars)
+        if len(unique_chars) > max_unique_chars:
+            max_unique_chars = len(unique_chars)
             max_word = word
-        elif len(unique_chars) == max_length:
-            max_word = min(max_word, word)
+        elif len(unique_chars) == max_unique_chars:
+            if len(word) > len(max_word):
+                max_word = word
     return max_word
