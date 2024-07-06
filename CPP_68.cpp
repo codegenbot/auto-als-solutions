@@ -22,12 +22,3 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     return result;
 }
-
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a.size() == b.size();
-}
-
-int main() {
-    assert(is_same(pluck({7, 9, 7, 1}) , {}));
-    return 0;
-}
