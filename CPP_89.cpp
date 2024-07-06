@@ -1,15 +1,19 @@
 string encrypt(string s){
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
     string result = "";
+    
     for(int i=0; i<s.length(); i++){
-        char c = s[i];
-        if(c >= 'a' && c <= 'z'){
-            c = (c - 'a' + 26) % 26;
-            c += 'a';
-        } else if(c >= 'A' && c <= 'Z'){
-            c = (c - 'A' + 26) % 26;
-            c += 'A';
+        char c = tolower(s[i]);
+        int pos = alphabet.find(c);
+        
+        if(pos != -1){
+            pos = (pos + 2*2) % 26;
+            result += alphabet[pos];
         }
-        result += c;
+        else{
+            result += s[i];
+        }
     }
+    
     return result;
 }
