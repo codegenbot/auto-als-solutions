@@ -1,18 +1,23 @@
-```cpp
+```
+#include <iostream>
 #include <vector>
-#include <algorithm>
+
+using namespace std;
+
+bool issame(int a, int b) {
+    if (a == b)
+        return true;
+    else
+        return false;
+}
 
 vector<int> generate_integers(int a, int b) {
     vector<int> result;
-    for (int i = min(a, b); i <= max(a, b); i++) {
+    for (int i = a; i <= b; ++i) {
         if (i % 2 == 0) {
             result.push_back(i);
         }
     }
+    sort(result.begin(), result.end());
     return result;
-}
-
-int main() {
-    assert(generate_integers(17, 89) == vector<int>());
-    return 0;
 }

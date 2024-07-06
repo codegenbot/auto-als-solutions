@@ -17,7 +17,7 @@ boost::any compare_one(boost::any a, boost::any b) {
     else if (db > da)
         return b;
     else
-        return boost::any("None");
+        return boost::any("Both are equal");
 }
 
 int main() {
