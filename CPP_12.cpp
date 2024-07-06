@@ -1,6 +1,9 @@
+#include <vector>
+#include <string>
+
 using namespace std;
 
-string longestResult(vector<string> strings){
+string longest(vector<string> strings){
     if(strings.empty()) return "";
     string result = strings[0];
     for(auto str : strings){
