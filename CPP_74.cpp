@@ -1,3 +1,5 @@
+namespace std { using size_type = size_t; }
+
 #include <vector>
 #include <algorithm>
 #include <string>

@@ -1,14 +1,15 @@
+```cpp
 #include <iostream>
 #include <string>
 
 int is_bored(std::string S) {
     int count = 0;
-    std::string::const_iterator pos = S.begin();
-    while ((pos = S.find("I", pos)) != S.end()) {
-        if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
-            count++;
+    size_t pos = 0;
+    while ((pos = S.find("I", pos)) != std::string::npos) {
+        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
+            pos = S.find("I", pos + 1);
         else
-            pos = S.find(".", pos, pos)+1;
+            count++;
     }
     return count;
 
@@ -18,4 +19,4 @@ int main() {
     std::getline(std::cin, input);
     int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
-    return 0;
+}

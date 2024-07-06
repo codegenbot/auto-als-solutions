@@ -15,8 +15,15 @@ std::vector<int> sort_array(std::vector<int>& array) {
 }
 
 int main() {
-    std::vector<int> array1({21, 14, 23, 11});
-    std::vector<int> array2({23, 21, 14, 11});
-    assert (issame(array1, array2));
-    array1 = sort_array(std::move(array1)); 
+    std::vector<int> array1 = {21, 14, 23, 11};
+    std::vector<int> array2 = {23, 21, 14, 11};
+    if (issame(array1, array2)) {
+        array1 = sort_array(std::move(array1)); 
+        for(int i : array1) {
+            std::cout << i << " ";
+        }
+    } else {
+        std::cout << "Arrays are not same" << std::endl;
+    }
+    return 0;
 }
