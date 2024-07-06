@@ -13,12 +13,14 @@ int is_bored(std::string S) {
     }
     return count;
 
-int main 
-{
+int main() {
     std::string input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     int result = is_bored(input);
-    std::cout << "Number of 'I' without punctuation: " << result << "\n";
+    if (result == 0)
+        std::cout << "The number of 'I's without punctuation in the given string is 0." << "\n";
+    else
+        std::cout << "The number of 'I's without punctuation in the given string is " << result << "." << "\n";
     return 0;
 }
