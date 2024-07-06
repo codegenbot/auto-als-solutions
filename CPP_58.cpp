@@ -12,3 +12,4 @@ vector<int> common(vector<int> l1, vector<int> l2) {
 
     vector<int> r(result.begin(), result.end());
     return r;
+}
