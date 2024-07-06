@@ -1,6 +1,13 @@
-long long minSubArraySum(vector<long long> nums) {
-    long long min_sum = INT_MAX;
-    long long current_sum = 0;
+#include <iostream>
+#include <vector>
+#include <cassert>
+#include <climits>
+
+using namespace std;
+
+int64_t minSubArraySum(vector<int64_t> nums) {
+    int64_t min_sum = INT_MAX;
+    int64_t current_sum = 0;
 
     for (int i = 0; i < nums.size(); i++) {
         current_sum += nums[i];
@@ -13,4 +20,9 @@ long long minSubArraySum(vector<long long> nums) {
     }
 
     return min_sum;
+}
+
+int main1() { 
+    assert(minSubArraySum({1, -1}) == -1);
+    return 0;
 }
