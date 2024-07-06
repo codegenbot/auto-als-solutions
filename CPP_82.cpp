@@ -1,10 +1,16 @@
-#include <cmath>
-
-bool prime_length(string str) {
+```cpp
+bool prime_length(string str){
     int n = str.length();
-    if (n <= 1) return false;
-    for (int i = 2; i * i <= n; ++i) {
-        if (n % i == 0) return false;
+    bool isPrime = true;
+
+    if(n <= 1) return false;
+
+    for(int i=2; i*i<=n; i++){
+        if(n%i == 0) {
+            isPrime = false;
+            break;
+        }
     }
-    return true;
+
+    return isPrime;
 }
