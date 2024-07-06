@@ -1,37 +1,12 @@
 #include <vector>
 #include <algorithm>
-using namespace std;
 
-bool issame(vector<int> a,vector<int>b){
-    if(a.size() != b.size()) return false;
-    sort(a.begin(), a.end());
-    sort(b.begin(), b.end());
-    for(int i = 0; i < a.size(); i++){
-        if(a[i] != b[i]) return false;
-    }
-    return true;
-
-int main() {
-    vector<int> lst;
-    int n;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        int temp;
-        cin >> temp;
-        lst.push_back(temp);
-    }
-
-    vector<int> result = strange_sort_list(lst);
-
-    cout << "Sorted List: ";
-    for(int x : result) {
-        cout << x << " ";
-    }
-    return 0;
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
 }
 
-vector<int> strange_sort_list(vector<int> lst) {
-    vector<int> result;
+std::vector<int> strange_sort_list(std::vector<int> lst) {
+    std::vector<int> result;
     while (!lst.empty()) {
         int min_val = *min_element(lst.begin(), lst.end());
         result.push_back(min_val);
@@ -48,7 +23,8 @@ vector<int> strange_sort_list(vector<int> lst) {
                 lst.erase(remove(lst.begin(), lst.end(), x), lst.end());
             }
             result.push_back(*max_element(lst.begin(), lst.end()));
+        } else {
+            result.push_back(*min_element(lst.begin(), lst.end()));
         }
     }
     return result;
-}
