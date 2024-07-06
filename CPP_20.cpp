@@ -1,8 +1,3 @@
-```cpp
-#include <algorithm>
-#include <vector>
-#include <numeric>
-
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
     std::vector<std::pair<float, float>> closest_pairs;
 
