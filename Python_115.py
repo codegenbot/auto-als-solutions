@@ -3,5 +3,5 @@ import math
 
 def max_fill(grid, capacity):
     total_water = sum(sum(row) for row in grid)
-    buckets_needed = math.ceil(total_water / float(capacity))
-    return buckets_needed
+    fill_count = math.ceil(total_water / (capacity * 1.0))
+    return int(fill_count)
