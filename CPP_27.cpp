@@ -1,5 +1,6 @@
-#include <iostream>
+```cpp
 #include <string>
+#include <cctype>
 
 std::string flip_case(std::string str){
     std::string result = "";
@@ -16,9 +17,6 @@ std::string flip_case(std::string str){
 }
 
 int main() {
-    std::string s;
-    std::cout << "Enter a string: ";
-    std::cin >> s;
-    std::cout << "Flip Case: " << flip_case(s) << std::endl;
+    std::cout << flip_case("Hello, World!") << std::endl;
     return 0;
 }
