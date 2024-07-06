@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+
 std::string solve(std::string str) {
     // implement your logic here
     return str;
