@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+
 int Strongest_Extension(std::string class_name,std::vector<std::string> extensions){
     int max_strength = 0;
     std::string strongest_extension;
@@ -17,5 +20,3 @@ int Strongest_Extension(std::string class_name,std::vector<std::string> extensio
 
     return class_name + "." + strongest_extension;
 }
-#include <string>
-#include <vector>
