@@ -1,6 +1,3 @@
-```
-import math
-
 def main():
     while True:
         try:
@@ -19,18 +16,19 @@ def main():
     if len(xs) % 2 != 0:
         raise ValueError("xs must have even number of coefficients")
 
-    try:
-        print(find_zero(xs))
-    except ValueError as e:
-        print(e)
-
-
-def find_zero(coeffs):
-    a, b, c = coeffs
-    discriminant = (b**2) - 4*a*c
-    if discriminant < 0:
-        raise ValueError("Quadratic equation has no real roots")
-    return (-b + math.sqrt(discriminant)) / (2 * a)
+    while True:
+        response = input("Do you want to find the zero? (y/n): ")
+        if response.lower() == "y":
+            try:
+                print(find_zero(xs))
+                break
+            except ValueError as e:
+                print(e)
+        elif response.lower() == "n":
+            print("Program ended.")
+            exit()
+        else:
+            print("Invalid input. Try again.")
 
 
 if __name__ == "__main__":
