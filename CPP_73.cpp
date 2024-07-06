@@ -1,9 +1,9 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<uint64_t>> dp(n, std::vector<uint64_t>(n-1));
+    std::vector<std::vector<int>> dp(n, std::vector<int>(n-1));
 
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -32,13 +32,14 @@ int main() {
     
     for (int i = 0; i < n; i++) {
         int val;
-        std::cout << "Enter element " << i + 1 << ": ";
+        std::cout << "Enter element " << i+1 << ": ";
         std::cin >> val;
         arr.push_back(val);
     }
-    
-    int result = smallest_change(arr);
-    std::cout << "The smallest possible change is: " << result << std::endl;
+
+    int minChanges = smallest_change(arr);
+
+    std::cout << "The minimum number of operations to make the array monotonic is: " << minChanges << std::endl;
 
     return 0;
 }
