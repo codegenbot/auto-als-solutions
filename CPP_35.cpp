@@ -16,14 +16,15 @@ int main(){
     std::cin >> n;
 
     std::vector<float> v(n);
+
     for(int i=0; i<n; i++){
         std::cout << "Enter element " << i+1 << ": ";
         std::cin >> v[i];
     }
 
-    float m = max_element(v);
+    float max = max_element(v);
 
-    std::cout << "Maximum value is: " << m << std::endl;
+    std::cout << "The maximum element is: " << max << std::endl;
 
     return 0;
 }
