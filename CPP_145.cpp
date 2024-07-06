@@ -1,8 +1,9 @@
-Here is the modified code:
-
-```cpp
 #include <vector>
 #include <algorithm>
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return (a.size() == b.size()) && (a == b);
+}
 
 std::vector<int> sortByDigitSum(std::vector<int> &arr) {
     std::sort(arr.begin(), arr.end(), [&](int a, int b)->bool{
@@ -18,8 +19,4 @@ std::vector<int> sortByDigitSum(std::vector<int> &arr) {
         return sum1 < sum2;
     });
     return arr;
-}
-
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return (a.size() == b.size()) && (a == b);
 }
