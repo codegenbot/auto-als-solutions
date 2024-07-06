@@ -1,20 +1,14 @@
+```cpp
 #include <vector>
-#include <iostream>
+using namespace std;
 
-int sum_squares(std::vector<int> lst) {
-    int sum = 0;
-    for (int i = 0; i < lst.size(); i++) {
-        if (i % 3 == 0 && i % 4 != 0)
-            sum += lst[i] * lst[i];
-        else if (i % 4 == 0 && i % 3 != 0)
-            sum += lst[i] * lst[i] * lst[i];
+int sum_squares(vector<int> lst){
+    int result = 0;
+    for(int i = 0; i < lst.size(); i++){
+        if(i % 3 == 0 && i % 4 != 0)
+            result += lst[i] * lst[i];
+        else if(i % 4 == 0 && i % 3 != 0)
+            result += pow(lst[i], 3);
     }
-    return sum;
-}
-
-int main() {
-    std::vector<int> lst = {-1, -3, 17};
-    int result = sum_squares(lst);
-    std::cout << "The result is: " << result << std::endl;
-    return 0;
+    return result;
 }
