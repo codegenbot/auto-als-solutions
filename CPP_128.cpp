@@ -10,8 +10,8 @@ int prod_signs(std::vector<int> arr) {
             return -32768; 
         }
         sign_product *= ((num > 0) ? 1 : ((num < 0) ? -1 : 0));
-        sum_of_magnitudes += std::abs(num);
+        sum_of_magnitudes += abs(num);
     }
 
-    return sign_product * static_cast<long long>(sum_of_magnitudes);
+    return sign_product * sum_of_magnitudes;
 }
