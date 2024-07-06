@@ -4,4 +4,8 @@ int multiply(int a, int b) {
     return (a % 10) * (b % 10);
 }
 
-assert(multiply(0, 0) == 0);
+int main() {
+    assert(multiply(0, 0) == 0);
+    // Other test cases here...
+    return 0;
+}
