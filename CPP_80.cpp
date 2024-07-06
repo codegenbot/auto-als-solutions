@@ -1,17 +1,20 @@
 bool is_happy(string s) {
-    int len = s.length();
-    if (len < 3)
+    if (s.length() < 3)
         return false;
-    for (int i = 0; i <= len - 3; i++) {
-        bool unique = true;
-        set<char> letters;
-        for (int j = 0; j < 3; j++)
-            letters.insert(s[i + j]);
-        for (char c : s.substr(i, 3)) {
-            if (letters.find(c) == letters.end())
-                unique = false;
+    for (int i = 0; i <= s.length() - 3; i++) {
+        string t = s.substr(i, 3);
+        bool duplicate = true;
+        int charCount[256] = {0}; // Assuming ASCII characters
+        for (char c : t) {
+            charCount[c]++;
         }
-        if (!unique)
+        for (char c : t) {
+            if (charCount[c] > 1) {
+                duplicate = false;
+                break;
+            }
+        }
+        if (!duplicate)
             return false;
     }
     return true;
