@@ -1,3 +1,4 @@
+```
 def modp(*args):
     n = args[0]
     p = args[1]
@@ -5,7 +6,9 @@ def modp(*args):
         n += p
 
     def egcd(a, b):
-        if b == 0:
+        if a == 0 and b != 0:
+            return b, 0, 1
+        elif b == 0:
             return a, 1, 0
         else:
             gcd, y, x = egcd(b, a % b)
