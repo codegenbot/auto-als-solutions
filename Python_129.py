@@ -18,20 +18,17 @@ def minPath(grid, k):
         return None
 
     min_sum = float("inf")
-    boundary_cells = (
-        [(0, j) for j in range(n)]
-        + [(n - 1, j) for j in range(n)]
-        + [(i, 0) for i in range(n)]
-        + [(i, n - 1) for i in range(n)]
-    )
+    boundary_cells = ((0, j) for j in range(n)) + ((n - 1, j) for j in range(n)) + ((i, 0) for i in range(n)) + ((i, n - 1) for i in range(n))
 
     for i, j in boundary_cells:
         visited.add((i, j))
         res.append(dfs(i, j, [m[i][j]], k))
 
-    for path in set(path[0] for path in res if path is not None and len(path) > 0):
-        if len(path) < min_sum:
-            min_sum = len(path)
-            min_path = list(path)
+    min_sum = float("inf")
+    for path in res:
+        if path:
+            if len(path) < min_sum:
+                min_sum = len(path)
+                min_path = path
 
     return min_path if min_path else []
