@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 
 int sumOfDigits(int num) {
@@ -15,7 +16,7 @@ int largestPrime(vector<int> lst) {
             return i;
         }
     }
-    return -1; 
+    return -1; // or some default value
 }
 
 bool isPrime(int num) {
