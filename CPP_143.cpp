@@ -1,18 +1,8 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
-
-string words_in_sentence(string sentence){
-    string result = "";
-    for (const auto& word : split(sentence, " ")) {
-        if (is_prime(word.length())) {
-            result += word + " ";
-        }
-    }
-    return result.substr(0, result.size() - 1);
-}
 
 bool is_prime(int n) {
     if (n <= 1) return false;
@@ -33,10 +23,20 @@ vector<string> split(const string& str, const string& delimiter) {
     return tokens;
 }
 
-int main() {
-    string input;
+string words_in_sentence(string sentence){
+    string result = "";
+    for (const auto& word : split(sentence, " ")) {
+        if (is_prime(word.length())) {
+            result += word + " ";
+        }
+    }
+    return result.substr(0, result.size() - 1);
+}
+
+int main(){
+    string s;
     cout << "Enter a sentence: ";
-    getline(cin, input);
-    cout << words_in_sentence(input) << endl;
+    getline(cin,s);
+    cout << words_in_sentence(s) << endl;
     return 0;
 }
