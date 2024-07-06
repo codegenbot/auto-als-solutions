@@ -1,13 +1,6 @@
-def decode_shift(s: str):
-    s = s.strip().lower()
-    key = len(s) - s.count(" ")
-    return "".join(
-        [
-            (
-                chr((ord("a") + (ord(ch.lower()) - ord("a")) + 26 - key) % 26)
-                if ch.isalpha()
-                else chr(ord(ch))
-            )
-            for ch in s
-        ]
-    )
+```Python
+n = input("Enter a string: ")
+if n.isalnum():
+    print(decode_shift(n))
+else:
+    print("Invalid input. Please enter only alphanumeric characters and spaces.")
