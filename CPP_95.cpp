@@ -1,6 +1,4 @@
-```c++
-bool check_dict_case(map<string,string> dict); 
-
+```cpp
 bool check_dict_case(map<string,string> dict){
     if(dict.empty()) return false;
     bool allLower = true;
@@ -14,4 +12,8 @@ bool check_dict_case(map<string,string> dict){
     }
     
     return allLower || allUpper;
+}
+
+int main() {
+    // Your code here
 }
