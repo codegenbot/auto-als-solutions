@@ -1,6 +1,3 @@
-import math
-
-
 def main():
     while True:
         try:
@@ -8,16 +5,22 @@ def main():
             if num_coefficients % 2 != 0:
                 print("Number of coefficients must be even. Try again.")
                 continue
-            coefficients = input("Enter coefficients (space separated): ")
-            xs = [int(coeff) for coeff in coefficients.split()]
             break
         except ValueError as e:
             print(e)
 
+    xs = [
+        int(coeff)
+        for coeff in (input("Enter coefficients (space separated): ") + " ").split()
+    ]
+    while len(xs) % 2 != 0:
+        if num_coefficients == len(xs):
+            raise ValueError("xs must have even number of coefficients")
+        new_coeff = input(f"Add more coefficients: ")
+        xs += [int(coeff) for coeff in new_coeff.split()]
+
     if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
-    if len(xs) % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
 
     try:
         print(find_zero(xs))
@@ -26,11 +29,19 @@ def main():
 
 
 def find_zero(coeffs):
-    a, b, c = coeffs
-    discriminant = (b**2) - 4 * a * c
-    if discriminant < 0:
-        raise ValueError("Quadratic equation has no real roots")
-    return (-b + math.sqrt(discriminant)) / (2 * a)
+    a, b, c = coeffs[:3]
+    d = coeffs[3:]
+    roots = []
+    for i in range(0, len(d), 2):
+        temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
+        try:
+            root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * temp[2])) / (
+                2 * temp[0]
+            )
+            roots.append(-d[i] / root)
+        except (ZeroDivisionError, ValueError) as e:
+            print(f"Failed to calculate a root: {e}")
+    return roots
 
 
 if __name__ == "__main__":

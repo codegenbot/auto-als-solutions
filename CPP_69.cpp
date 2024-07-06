@@ -1,30 +1,33 @@
-#include <iostream>
-#include <map>
-#include <vector>
+// Your code should return the count of smallest number that has same frequency as any other number.
 
-int search(std::vector<int> lst) {
-    std::map<int, int> freqMap;
+#include <iostream>
+using namespace std;
+
+int search(vector<int> lst) {
+    map<int, int> freq;
     for (int num : lst) {
-        if (freqMap.find(num) == freqMap.end()) {
-            freqMap[num] = 1;
+        if (freq.find(num) == freq.end()) {
+            freq[num] = 1;
         } else {
-            freqMap[num]++;
+            freq[num]++;
         }
     }
-    for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
-        if (it->second >= it->first && it->first > 0) {
-            return it->first;
+    int min_freq = INT_MAX;
+    for (auto p : freq) {
+        if (p.second < min_freq) {
+            min_freq = p.second;
+        }
+    }
+    for (auto p : freq) {
+        if (p.second == min_freq && p.first > 0) {
+            return p.first;
         }
     }
     return -1;
 }
 
 int main() {
-    std::vector<int> lst = {3, 10, 10, 9, 2};
-    int result = search(lst);
-    if (result != -1)
-        std::cout << "First element greater than or equal to its frequency is: " << result << std::endl;
-    else
-        std::cout << "No such element found." << std::endl;
+    vector<int> lst = {3, 10, 10, 9, 2};
+    cout << search(lst);
     return 0;
 }
