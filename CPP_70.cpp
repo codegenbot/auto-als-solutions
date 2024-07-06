@@ -1,10 +1,6 @@
+#include <iostream>
 #include <vector>
 #include <algorithm>
-
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return (a.size() == b.size()) && std::all_of(a.begin(), a.end(), 
-        [b](int x) {return std::find(b.begin(), b.end(), x) != b.end();});
-}
 
 std::vector<int> strange_sort_list(std::vector<int> lst) {
     std::vector<int> result;
@@ -29,9 +25,4 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         }
     }
     return result;
-}
-
-int main() {
-    assert(issame(strange_sort_list({111}), std::vector<int>{111}));
-    return 0;
 }
