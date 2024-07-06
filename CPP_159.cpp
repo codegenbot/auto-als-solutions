@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -34,11 +35,5 @@ int main() {
     }
     cout << endl;
 
-    output = eat(1, 10, 10);
-    for (int i : output) {
-        cout << i << " ";
-    }
-    cout << endl;
-    
     return 0;
 }
