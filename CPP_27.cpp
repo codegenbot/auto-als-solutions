@@ -16,9 +16,9 @@ string flip_case(string str){
 }
 
 int main() {
-    string input;
+    string s;
     cout << "Enter a string: ";
-    getline(cin, input);
-    cout << flip_case(input) << endl;
+    cin >> s;
+    cout << flip_case(s) << endl;
     return 0;
 }
