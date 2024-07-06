@@ -22,4 +22,4 @@ def minPath(grid, k):
             if not visited[i][j]:
                 dfs(i, j, [grid[i][j]])
 
-    return res
+    return sorted(res)
