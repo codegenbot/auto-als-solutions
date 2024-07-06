@@ -1,10 +1,6 @@
 #include <iostream>
 #include <vector>
 
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a.size() == b.size();
-}
-
 std::vector<int> pluck(std::vector<int> arr) {
     std::vector<int> result;
     if (arr.empty()) {
@@ -25,6 +21,10 @@ std::vector<int> pluck(std::vector<int> arr) {
     result.push_back(index);
     
     return result;
+}
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a.size() == b.size();
 }
 
 int main() {
