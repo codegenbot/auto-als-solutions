@@ -1,3 +1,4 @@
+```c++
 #include <vector>
 #include <string>
 
@@ -29,8 +30,6 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        if (!issame(words, {word})) {
-            std::cout << word << std::endl;
-        }
+        std::cout << word << std::endl;
     }
 }
