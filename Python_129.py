@@ -20,7 +20,6 @@ def minPath(grid, k):
 
     for i in range(N):
         for j in range(N):
-            if grid[i][j] == 1:
-                return [i, j]
-
-    return []
+            if grid[i][j] == 0:
+                return []
+    return result
