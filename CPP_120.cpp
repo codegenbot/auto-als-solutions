@@ -1,7 +1,7 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
 
 bool same(vector<int> a, vector<int> b) {
@@ -13,10 +13,10 @@ bool same(vector<int> a, vector<int> b) {
 }
 
 vector<int> maximum(vector<int> arr, int k) {
-    vector<int> result(k);
+    vector<int> result;
     for (int i = 0; i < k; i++) {
         auto it = max_element(arr.begin(), arr.end());
-        result[i] = *it;
+        result.push_back(*it);
         arr.erase(it);
     }
     return result;
