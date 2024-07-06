@@ -1,9 +1,10 @@
-```c++
 #include <map>
 #include <string>
-#include <algorithm>
+#include <assert>
 #include <cctype>
 #include <iostream>
+
+#include <cassert>
 
 bool check_dict_case(map<string,string> dict){
     if(dict.empty()) return false;
