@@ -15,14 +15,16 @@ def separate_paren_groups(paren_string: str) -> List[str]:
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()
-                if not stack:
+                if not stack:  # Check if stack is empty
                     groups.append(current_group)
                     current_group = ""
             else:
-                groups.append("(" + current_group + ")")
+                groups.append(
+                    "(" + current_group + ")"
+                )  # Unmatched closing parenthesis, treat as new group
                 current_group = ""
 
-    if stack:
+    if stack:  # Handle unmatched opening parentheses at the end of the string
         while stack and stack[-1] == "(":
             stack.pop()
         groups.append("(" + current_group + ")")
