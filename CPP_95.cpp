@@ -1,8 +1,7 @@
-#include <iostream>
-#include <string>
 #include <map>
+#include <string>
 
-bool check_dict_case(map<string,string> dict){ 
+bool check_dict_case(map<string,string> dict){
     if(dict.empty()) return false;
     bool allLower = true;
     bool allUpper = true;
@@ -18,6 +17,7 @@ bool check_dict_case(map<string,string> dict){
 }
 
 int main() {
-    assert(check_dict_case({}) == false);
+    map<string, string> dict = {{"A", "b"}, {"a", "B"}};
+    assert(check_dict_case(dict) == true);
     return 0;
 }
