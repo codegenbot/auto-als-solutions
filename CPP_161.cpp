@@ -1,4 +1,9 @@
+```cpp
+#include <iostream>
+#include <cctype>
 #include <string>
+
+using namespace std;
 
 string solve(string s){
     string result = "";
@@ -10,4 +15,12 @@ string solve(string s){
         }
     }
     return result;
+}
+
+int main(){
+    string s;
+    cout << "Enter a string: ";
+    cin >> s;
+    cout << solve(s) << endl;
+    return 0;
 }
