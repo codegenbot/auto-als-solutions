@@ -1,4 +1,4 @@
-```cpp
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -6,45 +6,41 @@ bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
-std::vector<int> strange_sort_list(std::vector<int> lst) {
+void strange_sort_list(const std::vector<int>& lst) {
     std::vector<int> result;
     while (!lst.empty()) {
-        int min_val = *min_element(lst.begin(), lst.end());
+        int min_val = *std::min_element(lst.begin(), lst.end());
         result.push_back(min_val);
-        lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
+        lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
+
         if (!lst.empty()) {
-            int max_val = *max_element(lst.begin(), lst.end());
-            bool found_max = false;
-            for(int i : lst){
-                if(i == max_val){
-                    lst.erase(remove(lst.begin(), lst.end(), i), lst.end());
-                    found_max = true;
+            int max_val = *std::max_element(lst.begin(), lst.end());
+            std::vector<int> temp;
+            for (int i : lst) {
+                if (i == max_val) {
+                    lst.erase(std::remove(lst.begin(), lst.end(), i), lst.end());
                     break;
+                } else {
+                    temp.push_back(i);
                 }
             }
-            if (!found_max) {
-                result.push_back(*max_element(lst.begin(), lst.end()));
-            } else {
-                result.push_back(*max_element(lst.begin(), lst.end()));
-            }
+            result.insert(result.end(), temp.begin(), temp.end());
         } else {
-            result.push_back(*min_element(lst.begin(), lst.end()));
+            int min_val2 = *std::min_element(lst.begin(), lst.end());
+            result.push_back(min_val2);
         }
     }
-    return result;
 }
 
 int main() {
-    std::vector<int> input; 
-    std::cout << "Enter elements separated by spaces: ";
+    std::vector<int> input;
+    std::cout << "Enter elements of the vector separated by space: ";
     for (int i = 0; i < 5; ++i) {
         int num;
         std::cin >> num;
         input.push_back(num);
     }
-    std::vector<int> result = strange_sort_list(input);
-    std::cout << "Sorted List: ";
-    for (int i : result)
-        std::cout << i << " ";
+    
+    strange_sort_list(input); 
     return 0;
 }

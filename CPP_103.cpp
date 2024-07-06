@@ -24,9 +24,8 @@ string rounded_avg(int n,int m){
 }
 
 int main() {
-    cout << rounded_avg(1,5) << endl; 
-    cout << rounded_avg(7,5) << endl; 
-    cout << rounded_avg(10,20) << endl; 
-    cout << rounded_avg(20,33) << endl; 
+    cout << rounded_avg(7,5) << endl; // "11"
+    cout << rounded_avg(10,20) << endl; // "1111"
+    cout << rounded_avg(20,33) << endl; // "11010"
     return 0;
 }

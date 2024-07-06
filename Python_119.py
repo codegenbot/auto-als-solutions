@@ -1,8 +1,17 @@
 ```
 def match_parens(lst):
-    open_count = 0
     for string in lst:
-        open_count += string.count('(') - string.count(')')
-        if open_count < 0:
-            return "No"
-    return "Yes" if open_count == 0 else "No"
+        open_count = 0
+        close_count = 0
+        matching = True
+        
+        for char in string:
+            if char == '(':
+                open_count += 1
+            elif char == ')':
+                close_count += 1
+        
+        if open_count != close_count:
+            matching = False
+        
+    return "Yes" if matching else "No"
