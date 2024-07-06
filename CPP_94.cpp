@@ -1,4 +1,3 @@
-```
 #include <vector>
 
 int sumOfDigits(int num) {
@@ -8,15 +7,6 @@ int sumOfDigits(int num) {
         num /= 10;
     }
     return sum;
-}
-
-int largestPrime(vector<int> lst) {
-    for (int i : lst) {
-        if (isPrime(i)) {
-            return i;
-        }
-    }
-    return -1; // or some default value
 }
 
 bool isPrime(int num) {
@@ -29,6 +19,17 @@ bool isPrime(int num) {
         }
     }
     return true;
+}
+
+int largestPrime(vector<int> lst) {
+    int max_prime = -1;
+    for (int i : lst) {
+        if (isPrime(i)) {
+            if (i > max_prime)
+                max_prime = i;
+        }
+    }
+    return max_prime;
 }
 
 int skjkasdkd(vector<int> lst) {
