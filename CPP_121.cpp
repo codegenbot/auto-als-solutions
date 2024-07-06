@@ -4,9 +4,10 @@
 
 int sumOdd(const char* str) {
     int sum = 0;
-    for (size_t i = 0; str[i]; ++i) { 
-        if ((unsigned)str[i] % 2 != 0) {
-            sum += (unsigned)str[i];
+    std::string s(str); 
+    for (char c : s) { 
+        if ((int)c % 2 != 0) {
+            sum += (int)c;
         }
     }
     return sum;
