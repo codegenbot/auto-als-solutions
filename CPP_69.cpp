@@ -2,6 +2,14 @@
 #include <vector>
 using namespace std;
 
+int search(const vector<int>& v) {
+    for(int i = 1; i < v.size(); i++) {
+        if(v[i] == v[0])
+            return -1;
+    }
+    return -2;
+}
+
 int main() {
     vector<int> vec;
     int n;
@@ -13,14 +21,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    bool found = false;
-    for(auto it = vec.begin(); it != vec.end(); ++it) {
-        if(*it == vec[0]) {
-            found = true;
-            break;
-        }
-    }
-
-    assert(found);
+    assert(search(vec) == -2); 
     return 0;
 }
