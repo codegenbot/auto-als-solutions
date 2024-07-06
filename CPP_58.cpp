@@ -15,15 +15,12 @@ vector<int> common(vector<int> a, vector<int> b){
 bool issame(vector<int> a, vector<int> b) {
     if (a.size() != b.size())
         return false;
-    for (int i = 0; i < a.size();i++){
+    for (int i = 0; i < a.size(); i++)
         if (find(b.begin(), b.end(), a[i]) == b.end())
             return false;
-    }
     return true;
 }
 
 int main(){
-    vector<int> a = {4, 3, 2, 8};
-    vector<int> b = {1,2,3,4};
-    assert(common(a, b) == vector<int>{2, 3});
+    assert(common({4, 3, 2, 8}, {1,2,3,4}) == vector<int>( {2, 3} ));
 }
