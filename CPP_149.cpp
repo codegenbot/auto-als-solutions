@@ -1,9 +1,8 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool sorted_list_sum(std::vector<std::string> a, std::vector<std::string> b) {
+bool sortedListSum(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size())
         return false;
 
@@ -38,4 +37,3 @@ int main() {
     std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
     assert(sortedListSum(vec1) == vec2);
     return 0;
-}
