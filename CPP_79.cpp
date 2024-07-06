@@ -5,20 +5,19 @@
 using namespace std;
 
 string decimal_to_binary(int decimal){
-    string bin = "";
-    if (decimal < 0) {
-        bin = "-" + decimal_to_binary(-decimal);
-        return bin;
-    }
+    string binary = "";
     while(decimal > 0){
         if((decimal & 1) == 1)
-            bin = "1" + bin;
+            binary = "1" + binary;
         else
-            bin = "0" + bin;
+            binary = "0" + binary;
         decimal >>= 1;
     }
-    string resultBinary = "0b" + bin;
-    return resultBinary;
+    if (decimal < 0) {
+        binary = "-" + binary;
+        decimal = -decimal;
+    }
+    return "0b" + binary;
 }
 
 int main() {
