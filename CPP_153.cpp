@@ -1,7 +1,9 @@
+#include <iostream>
 #include <string>
 #include <vector>
+#include <cctype>
 
-int Strongest_Extension(std::string class_name,std::vector<std::string> extensions){
+std::string Strongest_Extension(std::string class_name, std::vector<std::string> extensions) {
     int max_strength = 0;
     std::string strongest_extension;
 
@@ -19,4 +21,9 @@ int Strongest_Extension(std::string class_name,std::vector<std::string> extensio
     }
 
     return class_name + "." + strongest_extension;
+}
+
+int main() {
+    assert(Strongest_Extension("Sp", {"671235", "Bb"}) == "Sp.671235");
+    return 0;
 }
