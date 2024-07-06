@@ -10,8 +10,10 @@ bool is_multiply_prime(int a){
     for(int i=2; a > 1; ){
         while(a % i == 0) {
             a /= i;
-            i++; // <--- Add this line!
+            i++; 
         }
+        if(a%i == 0 && !prime[i]) return false;
+        i++;
     }
     return true;
 }

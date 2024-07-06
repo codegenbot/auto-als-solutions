@@ -31,11 +31,10 @@ int main() {
     std::cout << "Enter a string: ";
     std::cin >> s;
 
-    if (is_happy(s)) {
-        std::cout << "String is happy" << std::endl;
-    } else {
-        std::cout << "String is not happy" << std::endl;
-    }
+    if (is_happy(s))
+        std::cout << "The string is happy.\n";
+    else
+        std::cout << "The string is not happy.\n";
 
     return 0;
 }
