@@ -1,25 +1,23 @@
-```cpp
 #include <vector>
 #include <string>
 
 using namespace std;
 
 bool issame(const vector<string>& a, const vector<string>& b) {
-    if (a.size() != b.size()) return false;
-    for (size_t i = 0; i < a.size(); ++i)
-        if (a[i] != b[i]) return false;
-    return true;
+    return a == b;
 }
 
 vector<vector<string>> split_words(string txt) { 
     vector<vector<string>> result;
     size_t pos = 0;
     while ((pos = txt.find(' ')) != string::npos) {
-        result.push_back({txt.substr(0, pos)});
+        result.push_back(vector<string>{txt.substr(0, pos)});
         txt.erase(0, pos + 1);
     }
-    if (txt.empty()) return result;
-    result.push_back({txt});
+    if (txt.empty()) {
+        return result;
+    }
+    result.push_back(vector<string>{txt});
     return result;
 }
 
