@@ -1,4 +1,5 @@
 def match_parens(lst):
+    """Complete the following code given the task description and function signature.."""
     for string in lst:
         open_count = 0
         close_count = 0
@@ -9,11 +10,10 @@ def match_parens(lst):
                 open_count += 1
             elif char == ')':
                 close_count += 1
-                
+        
         if open_count != close_count:
             matching = False
-            
-    if not any(matching):
-        return "No"
-    else:
-        return "Yes"
+        
+        if not matching:
+            return "No"
+    return "Yes"
