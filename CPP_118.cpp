@@ -14,7 +14,7 @@ std::string get_closest_vowel(std::string str) {
             }
         }
     }
-    return std::string(1, closest_vowel);
+    return std::string(1, closest_vowel); // This line can be removed because it's not needed
 }
 
 int main() {
@@ -23,3 +23,4 @@ int main() {
     std::getline(std::cin, word);
     std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
     return 0;
+}
