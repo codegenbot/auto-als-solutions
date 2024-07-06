@@ -1,3 +1,1 @@
-bool issame(vector<float> a, vector<float> b) {
-    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
-}
+return (pair.first <= std::min(numbers[i], numbers[j]) && pair.second >= std::max(numbers[i], numbers[j]));
