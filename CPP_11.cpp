@@ -1,11 +1,11 @@
 string string_xor(string a, string b) {
     string result = "";
     for (int i = 0; i < a.length(); i++) {
-        if ((a[i] - '0') ^ (b[i] - '0')) {
-            result += "1";
-        } else {
-            result += "0";
-        }
+        int val1 = a[i] - '0';
+        int val2 = b[i] - '0';
+        int res = val1 ^ val2;
+        char c = res + '0';
+        result += c;
     }
     return result;
 }
