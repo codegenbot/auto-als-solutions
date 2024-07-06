@@ -1,9 +1,9 @@
-```cpp
+```
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <memory>
+
 using namespace std;
 
 vector<string> select_words(string s, int n) {
@@ -43,12 +43,11 @@ vector<string> select_words(string s, int n) {
     return result;
 }
 
-int main() {
+void main() {
     cout << "{";
     vector<string> result = select_words("Mary had a little lamb", 4);
     for (const string& s : result) {
         cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
-    return 0;
 }
