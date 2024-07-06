@@ -1,22 +1,13 @@
-#include <stdio.h>
-using namespace std;
+Here is the completed code:
 
 int fib4(int n) {
-    if (n <= 3) return 0;
-    int prev3[] = {0, 0, 2};
-    for (int i = 4; i <= n; i++) {
-        int sum = prev3[0] + prev3[1] + prev3[2];
-        prev3[0] = prev3[1];
-        prev3[1] = prev3[2];
-        prev3[2] = sum;
+    if (n < 0) return -1; // Return error for negative input
+    int fib4[5] = {0, 0, 2, 0, 0}; // Base cases
+    for (int i = 5; i <= n; ++i) {
+        int sum = fib4[i-1] + fib4[i-2] + fib4[i-3] + fib4[i-4];
+        for (int j = 4; j > 0; --j)
+            fib4[j] = fib4[j-1];
+        fib4[0] = sum;
     }
-    return prev3[2];
-}
-
-int main() {
-    int n;
-    printf("Enter the position of the number in the sequence: ");
-    scanf("%d", &n);
-    printf("The %dth element is %d.\n", n, fib4(n));
-    return 0;
+    return fib4[n];
 }

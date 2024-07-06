@@ -3,9 +3,9 @@ string change_base(int x, int base) {
     while (x > 0) {
         int remainder = x % base;
         if (remainder < 10)
-            res.insert(0, to_string(remainder));
+            res = to_string(remainder) + res;
         else
-            res.insert(0, "A");
+            res = 'A' + remainder - 10 + res;
         x /= base;
     }
     return res;
