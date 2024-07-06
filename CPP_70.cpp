@@ -1,5 +1,4 @@
 ```cpp
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -13,37 +12,36 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         int min_val = *min_element(lst.begin(), lst.end());
         result.push_back(min_val);
         lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
-        
         if (!lst.empty()) {
-            int max_val = *max_element(lst.begin(), lst.end());
-            for (int i : lst) {
-                if (i == max_val) {
-                    lst.erase(remove(lst.begin(), lst.end(), i), lst.end());
+            vector<int> temp;
+            for(int i : lst){
+                if(i == *max_element(lst.begin(), lst.end())){
+                    temp.push_back(i);
                     break;
                 }
             }
-            result.push_back(max_val);
+            for(int x:temp){
+                lst.erase(remove(lst.begin(), lst.end(), x), lst.end());
+            }
+            result.push_back(*max_element(lst.begin(), lst.end()));
         } else {
-            int min_val2 = *min_element(lst.begin(), lst.end());
-            result.push_back(min_val2);
+            result.push_back(*min_element(lst.begin(), lst.end()));
         }
     }
     return result;
 }
 
 int main() {
-    std::vector<int> input;  // get your input here
-    std::cout << "Enter elements of the vector separated by space: ";
+    std::vector<int> input; // get your input here
+    std::cout << "Enter elements separated by spaces: ";
     for (int i = 0; i < 5; ++i) {
         int num;
         std::cin >> num;
         input.push_back(num);
     }
-    
     std::vector<int> result = strange_sort_list(input);
-    std::cout << "The sorted list is: ";
-    for (int i : result) {
+    std::cout << "Sorted List: ";
+    for (int i : result)
         std::cout << i << " ";
-    }
     return 0;
 }
