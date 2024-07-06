@@ -2,13 +2,11 @@
 #include <cmath>
 
 int findMax(int n) {
-    std::vector<int> l;
-    for (int i = 0; i <= n; i++) {
+    vector<int> l;
+    for (int i = 0; i < n; i++) {
         int num;
-        std::cout << "Enter number: ";
-        std::cin >> num;
+        cin >> num;
         l.push_back(num);
     }
-    
-    return *std::max_element(l.begin(), l.end());
+    return *max_element(l.begin(), l.end());
 }
