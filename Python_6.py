@@ -12,5 +12,7 @@ def parse_nested_parens(paren_string: str) -> List[int]:
         elif char == ')':
             stack.pop()
             max_level -= 1
-    result.append(max_level)
-    return [max_level]
+        if not stack and max_level > 0:
+            result.append(max_level)
+            max_level = 0
+    return result
