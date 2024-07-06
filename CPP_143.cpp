@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <string>
-
+#include <algorithm>
 using namespace std;
 
 vector<string> split(const string& str, const string& delimiter) {
@@ -31,10 +30,4 @@ string words_in_sentence(string sentence){
         }
     }
     return result.substr(0, result.size() - 1);
-}
-
-int main() {
-    // Test the function
-    cout << words_in_sentence("Hello world") << endl;
-    return 0;
 }
