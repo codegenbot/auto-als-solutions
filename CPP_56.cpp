@@ -1,8 +1,12 @@
-bool correct_bracketing(string brackets){
-    int open = 0, close = 0;
-    for(int i = 0; i < brackets.length(); i++){
-        if(brackets[i] == '<') open++;
-        else if(brackets[i] == '>') close++;
+int stack_size = 0;
+for (char bracket : brackets) {
+    if (bracket == '<') {
+        stack_size++;
+    } else if (bracket == '>') {
+        if (stack_size == 0) {
+            return false;
+        }
+        stack_size--;
     }
-    return open == close;
 }
+return stack_size == 0;
