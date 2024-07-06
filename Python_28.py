@@ -1,4 +1,3 @@
-```
 strings = []
 while True:
     try:
@@ -7,6 +6,5 @@ while True:
         break
     except ValueError:
         print("Invalid input. Please enter strings only.")
-        strings.clear()
-
-print(' '.join(map(str, filter(None, strings))))
+else:
+    print(' '.join(filter(None, strings)))
