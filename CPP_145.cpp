@@ -1,23 +1,20 @@
-#include <vector>
 #include <algorithm>
-#include <set>
+#include <vector>
 
-std::vector<int> sortByDigitSum(std::vector<int> arr) {
-    std::vector<int> res;
-    for (int i : arr) {
-        res.push_back(i);
-    }
-    sort(res.begin(), res.end(), [](int a, int b)->bool{
-        long long sum1 = 0, sum2 = 0;
-        while(a > 0){
-            sum1 += a % 10;
-            a /= 10;
-        }
-        while(b > 0){
-            sum2 += b % 10;
-            b /= 10;
-        }
-        return sum1 < sum2;
+bool isSame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a == b;
+}
+
+std::vector<int> sortByDigitSum(std::vector<int> numbers) {
+    auto lambda = [](int x) { return abs(x); };
+    auto order_by_points = [&lambda](const int& x, const int& y) { return lambda(y) - lambda(x); };
+    std::stable_partition(numbers.begin(), numbers.end(), [order_by_points](int x) {
+        if (x > 0)
+            return std::make_tuple(1, true);
+        else if (x < 0)
+            return std::make_tuple(-1, false);
+        else
+            return std::make_tuple(0, true);
     });
-    return res;
+    return numbers;
 }
