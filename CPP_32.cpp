@@ -12,5 +12,5 @@ int main() {
     vector<double> coeffs = {1.0, 3.0, -5.0, 4.0}; // define the coefficients
     double solution = find_zero(coeffs); // call the function
     vector<double> poly = {1.0, 2.0, 3.0, 4.0}; // define the polynomial
-    assert(abs(poly(solution)) < 1e-3);
+    assert(abs(poly[0] + poly[1]*solution + poly[2]*pow(solution,2) + poly[3]*pow(solution,3)) < 1e-3);
 }
