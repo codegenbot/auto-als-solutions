@@ -1,8 +1,9 @@
+#include <iostream>
 #include <vector>
 #include <map>
 
-int search(vector<int> numbers) {
-    map<int, int> freqMap;
+int findMaxValue(std::vector<int> numbers) {
+    std::map<int, int> freqMap;
     for (int num : numbers) {
         if (freqMap.find(num) == freqMap.end()) {
             freqMap[num] = 1;
@@ -10,10 +11,17 @@ int search(vector<int> numbers) {
             freqMap[num]++;
         }
     }
+    int maxValue = -1;
     for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
-        if (it->second > it->first && it->first > 0) {
-            return it->first;
+        if (it->second >= it->first && it->first > 0) {
+            maxValue = it->first;
+            break;
         }
     }
-    return -1;
+    return maxValue;
+}
+
+int main() {
+    assert(findMaxValue({3, 10, 10, 9, 2}) == 1);
+    return 0;
 }
