@@ -1,10 +1,16 @@
-def calculate_statistics(data: list) -> dict:
-    if not data:
-        return {"minimum": None, "maximum": None, "average": None}
-
-    data = [float(x) for x in data]
-    minimum = min(data)
-    maximum = max(data)
-    average = sum(data) / len(data)
-
-    return {"minimum": minimum, "maximum": maximum, "average": average}
+def factorize(n: int) -> List[int]:
+    i = 2
+    factors = []
+    while i * i <= n:
+        if n % i:
+            i += 1
+        else:
+            n //= i
+            count = 0
+            while n % i == 0:
+                n //= i
+                count += 1
+            factors.extend([i] * count)
+    if n > 1:
+        factors.append(n)
+    return factors
