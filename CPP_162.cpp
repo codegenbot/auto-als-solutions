@@ -1,40 +1,23 @@
-#include <string>
-#include <sstream>
-
-struct MD5_CTX {
-    unsigned char md5Variables[16];
-};
-
-void MD5_Init_early(MD5_CTX* ctx) {
-    // implement this function
-}
-
-void MD5_Update(MD5_CTX* ctx, const unsigned char* ptr, size_t len) {
-    // implement this function
-}
-
-void MD5_Final(unsigned char result[16], MD5_CTX* ctx) {
-    // implement this function
-}
-
+```cpp
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
-    unsigned char result[16];
     MD5_CTX mdContext;
-    MD5_Init_early(&mdContext);
+    MD5_Init(&mdContext);
     const char* ptr = text;
     size_t len = strlen(text);
-    MD5_Update(&mdContext, reinterpret_cast<const unsigned char*>(ptr), len); 
-    MD5_Final(result, &mdContext);
+    for (int i = 0; i < len; ++i) {
+        MD5_Update(&mdContext, reinterpret_cast<const unsigned char*>(ptr + i), 1); 
+    } 
 
-    std::ostringstream oss;
-    oss << std::hex;
-    for (int i = 0; i < 16; ++i) {
-        oss.fill('0');
-        oss.width(2);
-        oss << static_cast<int>(result[i]);
+    unsigned char result[16];
+    MD5_Final(&mdContext, result);
+
+    std::string output;
+    for (int i = 0; i < 32; ++i) { 
+        char temp[3] = {(char)(result[i >> 2]), (char)((i & 2) ? 0 : ((result[(i >> 2)] >> ((3 - i % 4) * 8)) & 0xFF)), '\0'};
+        output += std::string(temp); 
     }
 
-    return oss.str();
+    return output;
 }
