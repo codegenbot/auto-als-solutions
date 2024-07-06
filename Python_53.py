@@ -4,9 +4,6 @@ def add(x: int, y: int) -> int:
         try:
             x = int(input("Enter the first number: "))
             y = int(input("Enter the second number: "))
-            print(f"Result: {x + y}")
-            cont = input("Do you want to continue? (yes/no): ")
-            if cont.lower() != "yes":
-                break
-        except ValueError:
+            return x + y
+        except (ValueError, EOFError):
             print("Invalid input. Please enter a valid integer.")

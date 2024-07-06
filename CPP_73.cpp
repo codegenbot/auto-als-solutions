@@ -1,4 +1,3 @@
-```cpp
 #include <cstdint>
 #include <vector>
 
@@ -26,7 +25,7 @@ int smallest_change(vector<int> arr) {
 }
 
 int main() {
-    assert(smallest_change({0, 1}) == 1);
-    // Add more test cases here
+    vector<int> arr = {0, 1};
+    assert (smallest_change(arr) == 1);
     return 0;
 }
