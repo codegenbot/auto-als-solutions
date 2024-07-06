@@ -2,16 +2,9 @@
 #include <vector>
 #include <algorithm>
 
-std::string find_max(std::vector<std::string> words);
-
-int main() {
-    assert ((find_max({"play", "play", "play"}) == "play"));
-    return 0;
-}
-
-std::string find_max(std::vector<std::string> words) {
-    std::string max_word = *max_element(words.begin(), words.end(),
-        [](const std::string& s1, const std::string& s2) {
+string find_max(vector<string> words){
+    string max_word = *max_element(words.begin(), words.end(),
+        [](const string& s1, const string& s2) {
             if (s1.length() == s2.length()) {
                 return s1 < s2;
             }
