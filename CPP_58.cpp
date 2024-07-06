@@ -3,16 +3,13 @@
 using namespace std;
 
 vector<int> common(vector<int> l1, vector<int> l2) {
-    set<int> s1(l1.begin(), l1.end());
-    set<int> s2(l2.begin(), l2.end());
+    set<int> s11(l1.begin(), l1.end()); 
+    set<int> s22(l2.begin(), l2.end());
 
-    set<int> resultIntersection;
-    if(s1.size() == 0 || s2.size() == 0)
-        throw runtime_error("One of the vectors is empty");
-    
-    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
-                      inserter(resultIntersection, resultIntersection.begin()));
+    set<int> intersection;
+    set_intersection(s11.begin(), s11.end(), s22.begin(), s22.end(),
+                      inserter(intersection, intersection.begin()));
 
-    vector<int> result(resultIntersection.begin(), resultIntersection.end());
+    vector<int> result(intersection.begin(), intersection.end());
     return result;
 }
