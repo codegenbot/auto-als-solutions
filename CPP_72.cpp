@@ -3,8 +3,15 @@ bool will_it_fly(vector<int> q, int w) {
     for (int i : q) {
         str += to_string(i);
     }
-    if (str != reverse(str).s) return false;  // check if it's balanced
+    if (str != reverse(str).s) return false;
     int sum = 0;
-    for (int i : q) sum += i;
-    return sum <= w;  // check if the sum of elements is less than or equal to w
+    for (int i : q) {
+        sum += i;
+    }
+    return sum <= w;
+}
+
+int main() {
+    assert(will_it_fly({5}, 5) == true);
+    // Your code here
 }
