@@ -1,31 +1,28 @@
 #include <vector>
-#include <size_t>
+#include <algorithm>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<size_t>> dp(n, std::vector<size_t>(n-1));
-    
-    for (int i = 0; i < n; i++) {
+    std::vector<std::vector<size_t>> dp(n+1, std::vector<size_t>(n));
+
+    for (int i = 0; i <= n; i++) {
         dp[i][i] = 0;
     }
-    
+
     for (int length = 2; length <= n; length++) {
         for (int i = 0; i < n - length + 1; i++) {
             int j = i + length - 1;
-            
+
             if (arr[i] == arr[j]) {
-                dp[i][j].push_back(dp[i+1][j-1].size());
+                size_t temp = dp[i+1][j-1].size() + 1;
+                size_t min_len = dp[i+1][j].size();
+                dp[i][j] = std::min(temp, min_len);
             } else {
-                size_t min = dp[i+1][j].size() + 1;
-                for (int k = i; k <= j; k++) {
-                    if (k == i || k == j || arr[k] != arr[i]) {
-                        min = std::min(min, dp[i][k-1].size() + dp[k+1][j].size() + 1);
-                    }
-                }
-                dp[i][j].push_back(min);
+                size_t min_len = *std::min_element(dp[i+1].begin(), dp[j].end()) + 1;
+                dp[i][j] = min_len;
             }
         }
     }
-    
+
     return dp[0][n-1].size();
 }

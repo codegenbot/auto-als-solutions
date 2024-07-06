@@ -1,22 +1,20 @@
-Here is the modified code:
-
-```cpp
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
+
+using namespace std;
 
 struct pair {
     int first;
     int second;
 };
 
-bool compare(const struct pair& a, const struct pair& b) {
+bool compare(const pair& a, const pair& b) {
     if (a.first != b.first) return a.first < b.first;
     return a.second < b.second;
 }
 
-std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<struct pair> nodes;
+vector<int> pluck(vector<int> arr) {
+    vector<pair> nodes;
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
             nodes.push_back({arr[i], i});
@@ -27,7 +25,7 @@ std::vector<int> pluck(std::vector<int> arr) {
         return {};
     }
 
-    std::sort(nodes.begin(), nodes.end(), compare);
+    sort(nodes.begin(), nodes.end(), compare);
 
     for (size_t i = 1; i < nodes.size(); ++i) {
         if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
@@ -44,26 +42,25 @@ std::vector<int> pluck(std::vector<int> arr) {
 }
 
 int main() {
-    std::vector<int> arr;
+    vector<int> arr;
     int n;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
     for (int i = 0; i < n; ++i) {
         int x;
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> x;
+        cout << "Enter element " << i+1 << ": ";
+        cin >> x;
         arr.push_back(x);
     }
-    std::vector<int> output = pluck(arr);
+    vector<int> output = pluck(arr);
     if(output.size() > 0)
     {
-        std::cout << "The output is: " << output[0] << std::endl;
+        cout << "The output is: " << output[0] << endl;
     }
     else
     {
-        std::cout << "No output" << std::endl;
+        cout << "No output" << endl;
     }
-
     
     return 0;
 }

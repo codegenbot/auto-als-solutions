@@ -1,9 +1,11 @@
-```cpp
 #include <iostream>
 #include <string>
+#include <limits>
+
+using namespace std;
 
 std::string get_closest_vowel(std::string str) {
-    int min_dist = std::numeric_limits<int>::max();
+    int min_dist = numeric_limits<int>::max();
     char closest_vowel = '\0';
     for (int i = 0; i < str.length(); i++) {
         if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u' ||
@@ -15,15 +17,13 @@ std::string get_closest_vowel(std::string str) {
             }
         }
     }
-    return std::string(1, closest_vowel);
+    return string(1, closest_vowel);
 }
 
 int main() {
-    std::string word;
-    std::cout << "Enter a word: ";
-    char buffer[256];
-    std::cin.get(buffer, 256);
-    word = buffer;
-    std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
+    string word;
+    cout << "Enter a word: ";
+    getline(cin, word);
+    cout << "The closest vowel is: " << get_closest_vowel(word) << endl;
     return 0;
 }

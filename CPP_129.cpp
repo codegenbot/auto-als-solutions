@@ -1,14 +1,14 @@
-```cpp
-#include <iostream>
 #include <vector>
+#include <algorithm>
 #include <cmath>
-#include <cstdlib>
 using namespace std;
 
-bool issame(int a, int b) {
-    if (abs(a - b) == 1)
-        return true;
-    return false;
+bool issame(vector<int>& a, vector<int>& b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) return false;
+    }
+    return true;
 }
 
 vector<int> minPath(vector<vector<int>>& grid, int k) {
@@ -43,5 +43,7 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
 }
 
 int main() {
-    // Your code here
+    vector<vector<int>> grid = {{1, 3}, {3, 2}};
+    assert(issame(minPath(grid, 10), {1, 3, 1, 3, 1, 3, 1, 3, 1, 3}));
+    return 0;
 }
