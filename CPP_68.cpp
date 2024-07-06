@@ -31,7 +31,7 @@ std::vector<int> pluck(std::vector<int> arr) {
     return {nodes[0].first};
 }
 
-int main() {
+int solve() {
     std::vector<int> arr;
     int n;
     std::cout << "Enter the number of elements: ";
@@ -52,5 +52,10 @@ int main() {
         std::cout << "No output" << std::endl;
     }
     
+    return 0;
+}
+
+int main() {
+    solve();
     return 0;
 }
