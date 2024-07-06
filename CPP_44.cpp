@@ -1,12 +1,11 @@
-```cpp
 string change_base(int x, int base) {
     string result = "";
     while (x > 0) {
-        int remainder = x % base;
-        if (remainder < 10)
-            result = to_string(remainder) + result;
+        int rem = x % base;
+        if (rem < 10)
+            result = to_string(rem) + result;
         else
-            result = 'A' + remainder - 10 + result;
+            result = 'A' + rem - 10 + result;
         x /= base;
     }
     return result;
