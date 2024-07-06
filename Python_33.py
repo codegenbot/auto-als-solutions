@@ -1,5 +1,3 @@
 def sort_third_list(lst):
-    if len(lst) < 3:
-        return lst
-    third_elements = [item[2] for item in lst]
-    return sorted(third_elements)
+    sorted_lst = sorted((i for i in enumerate(lst) if i[1][2]), key=lambda x: x[1])
+    return [sublist for sublist in map(lambda x: x[1], sorted_lst)]
