@@ -7,8 +7,8 @@ string fix_spaces(string text){
             result += "_";
         }else if(text[i] == ' '){
             bool consecutive = true;
-            for(int j = i + 1; j < text.length(); j++){
-                if(j < text.length() && text[j] == ' '){
+            for(int j = i + 1; j < text.length() && j > 0; j++){
+                if(text[j] == ' '){
                     consecutive = false;
                     break;
                 }
