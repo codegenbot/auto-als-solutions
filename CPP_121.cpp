@@ -14,5 +14,5 @@ int sumOdd(std::string str) {
 
 int main() {
     std::cout << sumOdd("Hello") << std::endl; 
-    return 0;
+    //return 0;
 }
