@@ -19,7 +19,7 @@ def separate_paren_groups(paren_string: str) -> List[str]:
                     groups.append(current_group + ")")
                     current_group = ""
             else:
-                if current_group: 
+                if current_group:  # Check that the group is not empty
                     groups.append("(" + current_group + ")")
                     current_group = ""
 
