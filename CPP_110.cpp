@@ -11,7 +11,7 @@ public:
                 oddCount++;
             }
         }
-        return (oddCount == 0 ? "NO" : "YES");
+        return (oddCount == 0 ? "YES" : "NO");
     }
 
     string oddOrEven(vector<int> vec) {
@@ -29,8 +29,7 @@ public:
     }
 
     int main() {
-        cout << oddOrEven({100, 200}) << endl;
-        cout << "Test cases passed." << endl;
+        cout << oddOrEven({1, 2, 3}) << endl;
         return 0;
     }
 };
