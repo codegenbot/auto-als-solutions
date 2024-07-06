@@ -1,3 +1,4 @@
+```c++
 #include <algorithm>
 #include <vector>
 
@@ -18,6 +19,8 @@ std::vector<int> sortByPoints(std::vector<int> nums) {
     return nums;
 }
 
+#define _SILENT_STATIC_WARNINGS 1
 int main() {
     assert(same(sortByPoints({0,6,6,-76,-21,23,4}), {-76, -21, 0, 4, 23, 6, 6}));
     return 0;
+}
