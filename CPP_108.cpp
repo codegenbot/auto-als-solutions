@@ -1,8 +1,10 @@
+```cpp
+#include <iostream>
 #include <vector>
 
-int count_nums(vector<int> numbers) {
+int count_nums(std::vector<int> n) {
     int count = 0;
-    for (int num : numbers) {
+    for (int num : n) {
         if (num < 0) {
             num = -num;
         }
@@ -16,4 +18,11 @@ int count_nums(vector<int> numbers) {
         }
     }
     return count;
+}
+
+int main() {
+    std::vector<int> nums = {1};
+    int result = count_nums(nums);
+    std::cout << "The number of positive sums is: " << result << std::endl;
+    return 0;
 }
