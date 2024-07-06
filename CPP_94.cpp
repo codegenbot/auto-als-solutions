@@ -40,7 +40,7 @@ int main() {
         lst.push_back(num);
     }
     if (!lst.empty()) {
-        cout << "Sum of digits in the largest prime number is " << skjkasdkd(lst) << endl;
+        cout << "Sum of digits for the maximum prime number is: " << skjkasdkd(lst) << endl;
     } else {
         cout << "No numbers entered." << endl;
     }
