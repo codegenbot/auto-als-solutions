@@ -1,12 +1,13 @@
+```cpp
 #include <vector>
 #include <cassert>
 
-std::vector<int> generate_integers(int min, int max) {
-    std::vector<int> integers;
-    for (int i = min; i <= max; i++) {
-        integers.push_back(i);
+std::vector<int> generate_integers(int start, int end) {
+    std::vector<int> result;
+    for (int i = start; i <= end; ++i) {
+        result.push_back(i);
     }
-    return integers;
+    return result;
 }
 
 int main_test() {
