@@ -1,8 +1,8 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(vector<int> a, vector<int> b) {
-    return a == b;
+bool issame(vector<int> a,vector<int>b){
+    return a.size() == b.size() && a==b;
 }
 
 vector<int> order_by_points(vector<int> nums) {
@@ -15,7 +15,7 @@ vector<int> order_by_points(vector<int> nums) {
             num /= 10;
         }
         pairs.push_back({sumOfDigits, i});
-   }
+    }
     
     sort(pairs.begin(), pairs.end());
     
