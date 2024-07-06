@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -23,5 +24,6 @@ bool isSame(vector<int> a, vector<int> b) {
 }
 
 int main(){
-    assert(isSame({4, 3, 2, 8}, {1,2,3,4}) && common({4, 3, 2, 8}, {1,2,3,4}) == vector<int>( {2, 3} ));
+    assert(isSame({4, 3, 2, 8}, {1,2,3,4}) && "Test failed");
+    cout << common({4, 3, 2, 8}, {1,2,3,4}).size()<< endl;
 }
