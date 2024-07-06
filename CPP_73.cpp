@@ -1,4 +1,6 @@
-```
+#include <vector>
+#include <cstdint>
+
 int smallest_change(vector<int> arr) {
     int n = arr.size();
     vector<vector<uint64_t>> dp(n, vector<uint64_t>(n-1));
@@ -12,11 +14,9 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                vector<uint64_t> temp = dp[i+1][j-1];
-                dp[i][j].insert(dp[i][j].end(), temp.begin(), temp.end());
+                dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
-                vector<uint64_t> temp(1, 1);
-                dp[i][j].insert(dp[i][j].end(), temp.begin(), temp.end());
+                dp[i][j].push_back(1 + dp[i+1][j].size());
             }
         }
     }
