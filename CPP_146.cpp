@@ -12,12 +12,16 @@ int specialFilter(std::vector<int> nums) {
 }
 
 int main() {
-    std::vector<int> numbers = {};
-    std::cout << "Enter some numbers (negative to stop):" << std::endl;
-    for (int &num : numbers) {
+    std::vector<int> input;
+    int n;
+    std::cout << "Enter number of elements: ";
+    std::cin >> n;
+    for (int i = 0; i < n; ++i) {
+        int num;
+        std::cout << "Enter element " << i + 1 << ": ";
         std::cin >> num;
-        if (num < 0) break;
+        input.push_back(num);
     }
-    
-    int result = specialFilter(numbers);
-    std::cout << "The count is: " << result << std::endl;
+    std::cout << "Result: " << specialFilter(input) << std::endl;
+    return 0;
+}
