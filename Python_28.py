@@ -5,6 +5,9 @@ while True:
     if inp.lower() == 'stop':
         break
     for s in inp.split():
-        if not set(s).issuperset({'!', '?', ','}):
-            strings += [s.strip()]
+        try:
+            s = ''.join(filter(str.isalpha, s)).lower()
+            strings.append(s)
+        except Exception as e:
+            print(f"Error: {e}. Please enter valid string.")
 print(' '.join(filter(None, strings)))
