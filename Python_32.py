@@ -1,3 +1,6 @@
+import math
+
+
 def main():
     while True:
         try:
@@ -18,7 +21,7 @@ def main():
 
     try:
         print(find_zero(xs))
-    except Exception as e:
+    except ValueError as e:
         print(e)
 
 
