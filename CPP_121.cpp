@@ -1,14 +1,21 @@
+#include <vector>
+#include <iostream>
+
 int main() {
-    vector<int> lst;
-    int result;
-    cout << "Enter the numbers (space-separated): ";
-    for(int i = 0; i < 5; i++) {
+    std::vector<int> lst;
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    
+    for (int i = 0; i < n; ++i) {
         int num;
-        cin >> num;
+        std::cout << "Enter element " << i + 1 << ": ";
+        std::cin >> num;
         lst.push_back(num);
     }
-    result = solution(lst);
-    cout << "Sum of odd-indexed even numbers: " << result << endl;
+    
+    int result = solution(lst);
+    std::cout << "The sum of odd elements is: " << result << std::endl;
     return 0;
 }
 
