@@ -1,3 +1,4 @@
+```
 #include <iostream>
 using namespace std;
 
@@ -22,5 +23,4 @@ int main() {
     cout << "Enter the base: ";
     cin >> base;
     cout << "The conversion result is: " << change_base(num, base);
-    return 0;
 }
