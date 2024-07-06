@@ -13,6 +13,16 @@ int main() {
     }
 
     int main() {
-        std::cout << how_many_times("Hello, Hello, World!", "Hello") << std::endl;
+        std::string str;
+        std::cout << "Enter the string: ";
+        std::getline(std::cin, str);
+
+        std::string substring;
+        std::cout << "Enter the substring: ";
+        std::getline(std::cin, substring);
+
+        int result = how_many_times(str, substring);
+        std::cout << "The substring appears " << result << " times in the string." << std::endl;
+
         return 0;
     }
