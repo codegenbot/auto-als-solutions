@@ -1,4 +1,3 @@
-```cpp
 #include <string>
 #include <algorithm>
 using namespace std;
@@ -17,8 +16,10 @@ string anti_shuffle(string s){
             
         }
         string word = s.substr(i, j - i);
-        sort(word.begin(), word.end(), [](char a, char b){return tolower(a) < tolower(b);});
-        result += word;
+        sort(word.begin(), word.end());
+        for(char c : word){
+            result += c;
+        }
         i = j;
     }
     return result;
