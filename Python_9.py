@@ -1,13 +1,12 @@
-def max_rolling_sum(numbers: List[int]) -> int:
-    if not numbers:
-        return 0
+```
+from typing import List
 
-    start = end = current_sum = numbers[0]
-    max_sum = numbers[0]
 
-    for num in numbers[1:]:
-        current_sum = max(num, current_sum + num)
-        max_sum = max(max_sum, current_sum)
-        start = min(start, current_sum - num)
+def rolling_max(numbers: List[int]) -> List[int]:
+    result = [max(numbers[: i + 1]) for i in range(len(numbers))]
+    return result
 
-    return max_sum
+
+print("Enter a list of numbers separated by spaces:")
+input_numbers = list(map(int, input().split()))
+print("The rolling maximum of the given numbers is: ", rolling_max(input_numbers))

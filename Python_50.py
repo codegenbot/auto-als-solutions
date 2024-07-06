@@ -1,3 +1,4 @@
+```
 def decode_shift(s: str):
     s = s.strip().lower()
     key = len(s) - s.count(' ')
@@ -14,8 +15,12 @@ def decode_shift(s: str):
             else:
                 decoded_str += chr(ord(ch))
             shift = 0
-        else: 
-            decoded_str += ch
+        elif 'A' <= ch <= 'Z':
+            if shift:
+                decoded_str += chr((ord(ch)-65+26-key)%26 + 65)
+            else:
+                decoded_str += ch
+            shift = 0
     
     return decoded_str
 

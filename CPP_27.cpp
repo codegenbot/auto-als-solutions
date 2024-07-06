@@ -1,26 +1,25 @@
-```cpp
 #include <string>
 #include <cctype>
 
-int main
-{
+std::string flip_case(std::string str){
+    std::string result = "";
+    for(int i=0; i<str.length();i++){
+        if(isalpha(str[i])){
+            if(islower(str[i]))
+                result += toupper(str[i]);
+            else
+                result += tolower(str[i]);
+        }else{
+            result.append(1, str[i]);
+        }
+    }
+    return result;
+}
+
+int main(){
     std::string input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     std::cout << flip_case(input) << std::endl;
     return 0;
-
-std::string flip_case(std::string str){
-    std::string result = "";
-    for(char c: str){
-        if(isalpha(c)){
-            if(islower(c))
-                result += toupper(c);
-            else
-                result += tolower(c);
-        }else{
-            result.append(1, c);
-        }
-    }
-    return result;
 }
