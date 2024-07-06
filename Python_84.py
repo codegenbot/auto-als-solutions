@@ -1,3 +1,2 @@
-```
 def solve(N):
-    return format(N, 'b')
+    return bin(N)[2:].zfill(len(bin(N)[2:]) * 2 - 2)
