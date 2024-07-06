@@ -3,7 +3,7 @@
 #include <list>
 #include <boost/any.hpp>
 
-bool issame(vector<int> a, vector<int> b) {
+bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
@@ -18,13 +18,12 @@ std::vector<int> filter_integers(std::list<boost::any> values) {
 }
 
 int main() {
-    std::list<boost::any> values = {'a', 'b', 'c'};
-    std::vector<int> filtered = filter_integers(values);
-    bool same = issame({1, 2}, filtered);
-    if (same) {
-        std::cout << "Vectors are the same." << std::endl;
+    std::list<boost::any> values = {"c", "a", "b"};
+    std::vector<int> output = filter_integers(values);
+    if (issame({1, 2}, output)) {
+        // Do something
     } else {
-        std::cout << "Vectors are not the same." << std::endl;
+        // Do something else
     }
     return 0;
 }
