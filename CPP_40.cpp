@@ -13,9 +13,9 @@ bool triples_sum_to_zero(vector<int> l) {
             if (sum == 0)
                 return true;
             else if (sum < 0)
-                {left++; right--;}
+                left++;
             else
-                {right--;}
+                right--;
         }
     }
     return false;
