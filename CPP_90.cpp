@@ -1,9 +1,11 @@
-Here is the solution:
-
 int next_smallest(vector<int> lst) {
-    vector<int> v(lst);
-    sort(v.begin(), v.end());
-    if (v.size() < 2) return -1;
-    int idx = distance(v.begin(), find(v.begin(), v.end(), v[1]));
-    return *idx == v[0] ? -1 : v[1];
+    vector<int> temp = lst;
+    if(temp.size() < 2) return -1; // Return None for empty or one-element list
+    sort(temp.begin(), temp.end());
+    for(int i=0; i<temp.size()-1; i++){
+        if(temp[i] != temp[i+1]) {
+            return temp[i];
+        }
+    }
+    return -1; // Return None if all elements are the same
 }
