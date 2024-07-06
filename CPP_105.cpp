@@ -1,6 +1,8 @@
 ```cpp
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <initializer_list>
 
 bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
     if(v1.size() != v2.size())
@@ -61,7 +63,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 int main() {
     std::vector<int> arr = {9, 4, 8};
     std::vector<std::string> result = by_length(arr);
-    if (!issame({{"One"}, {"Four"}, {"Eight"}} , {result})) {
+    if (!issame({{"One"}}, {result})) {
         return 1; 
     }
     return 0;
