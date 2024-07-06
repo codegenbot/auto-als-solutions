@@ -1,4 +1,7 @@
 namespace std;
+#include <vector>
+#include <algorithm>
+#include <string>
 
 bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size()) {
@@ -45,6 +48,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2lst += str.length();
         for (char c : str) {
             sum2lst += 1;
+        }
     }
 
     if (sum1lst < sum2lst) {
