@@ -20,6 +20,8 @@ bool check_dict_case(std::map<std::string, std::string> dict) {
 int main() {
     std::map<std::string, std::string> dict = {{"Hello", "hello"}, {"WORLD", "world"}};
     std::cout << (check_dict_case(dict) ? "True" : "False") << std::endl;
-    _ASSERT(check_dict_case(std::map<std::string, std::string>()) == false);
+    if(check_dict_case(std::map<std::string, std::string>()) == false){
+        return 1;
+    }
     return 0;
 }
