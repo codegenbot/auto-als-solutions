@@ -1,19 +1,25 @@
-int do_algebra(vector<string> operato, vector<int> operand) {
-    string expression = "";
-    for (int i = 0; i < operato.size(); i++) {
-        expression += to_string(operand[i]);
-        expression += operato[i];
-    }
-    expression += to_string(operand.back());
-    int result = eval(expression.c_str());
-    return result;
-}
+#include<stdio.h>
+#include<math.h>
+#include<vector>
+#include<string>
+using namespace std;
+#include<algorithm>
+#include<stdlib.h>
 
-long long eval(const char* pExpr) {
-    const char* pEnd = NULL;
-    double v = strtod(pExpr, &pEnd);
-    if (*pEnd == '\0') {
-        return (int)v;
+int do_algebra(vector<string> operato, vector<int> operand) {
+    int result = operand[0];
+    for (int i = 0; i < operato.size(); i++) {
+        if (operato[i] == "+") {
+            result += operand[i + 1];
+        } else if (operato[i] == "-") {
+            result -= operand[i + 1];
+        } else if (operato[i] == "*") {
+            result *= operand[i + 1];
+        } else if (operato[i] == "///") {
+            result = result / operand[i + 1];
+        } else if (operato[i] == "**") {
+            result = pow(result, operand[i + 1]);
+        }
     }
-    throw runtime_error("Invalid input");
+    return result;
 }
