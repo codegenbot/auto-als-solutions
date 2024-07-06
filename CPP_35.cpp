@@ -1,6 +1,5 @@
 #include <algorithm>
 
-int findMax(int arr[], int n) {
-    vector<int> l(arr, arr+n);
-    return *std::max_element(l.begin(), l.end());
+int findMax(int arr[], int size) {
+    return *std::max_element(arr, arr + size);
 }
