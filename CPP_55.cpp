@@ -18,10 +18,12 @@ int fib(int n) {
 
 int main() 
 {
-    cin.ignore();
-    string input;
-    getline(cin, input);
-    int n = stoi(input);
-    cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+    ostringstream oss;
+    oss << "The " << to_string(n) << "-th Fibonacci number is: " << fib(n);
+    string output = oss.str();
+    cout << output << endl;
     return 0;
 }
