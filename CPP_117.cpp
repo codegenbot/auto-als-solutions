@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 #include <string>
@@ -52,7 +51,7 @@ int main() {
 
     cout << "{";
     for (const string& s : select_words("Mary had a little lamb", 3)) {
-        cout << "\""<< s << "\", ";
+        cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
 
@@ -64,7 +63,7 @@ int main() {
 
     cout << "{";
     for (const string& s : select_words("Hello world", 4)) {
-        cout << "\""<< s << "\", ";
+        cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
     
