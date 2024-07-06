@@ -1,8 +1,4 @@
-```cpp
 #include <iostream>
-#include <vector>
-#include <string>
-#include <cassert>
 
 std::vector<std::string> romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 int numerals[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
@@ -18,6 +14,6 @@ std::string miniRom(int number) {
 }
 
 int main() {
-    std::cout << miniRom(2023);
+    std::cout << miniRom(2023) << std::endl; // Note: '<< std::endl' to print a new line
     return 0;
 }
