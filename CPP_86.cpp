@@ -1,13 +1,15 @@
+#include <iostream>
+#include <algorithm>
 #include <string>
 
-string anti_shuffle(string s){
-    string result = "";
+std::string anti_shuffle(std::string s) {
+    std::string result = "";
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
             result += ' ';
             continue;
         }
-        string word = "";
+        std::string word = "";
         for(int j=i; j<s.size() && s[j] != ' '; j++){
             word += s[j];
         }
@@ -16,3 +18,4 @@ string anti_shuffle(string s){
         result += word;
     }
     return result;
+}
