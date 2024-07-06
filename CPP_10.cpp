@@ -8,13 +8,13 @@ bool is_palindrome(string str){
 }
 
 string make_palindrome(string str){
-    int len = str.length();
-    for(int i=len-1; i>=0; --i){
-        if(!is_palindrome(str.substr(0, i+1))){
+    if(is_palindrome(str))
+        return str;
+    
+    for(int i=str.size()-1; i>=0; --i){
+        if(!is_palindrome(str+string(1, str[i])))
             break;
-        }
     }
-    string rev = str.substr(i+1);
-    reverse(rev.begin(), rev.end());
-    return str + rev;
+    
+    return str+string(str.rbegin(),str.rend());
 }
