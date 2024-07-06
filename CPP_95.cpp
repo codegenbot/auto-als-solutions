@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <cctype>
 #include <iostream>
 
 bool check_dict_case(std::map<std::string, std::string> dict) {
@@ -20,8 +21,6 @@ bool check_dict_case(std::map<std::string, std::string> dict) {
 int main() {
     std::map<std::string, std::string> dict = {{"Hello", "hello"}, {"WORLD", "world"}};
     std::cout << (check_dict_case(dict) ? "True" : "False") << std::endl;
-    if(check_dict_case(std::map<std::string, std::string>()) == false){
-        return 1;
-    }
+    if (check_dict_case(std::map<std::string, std::string>()) == false) return 1;
     return 0;
 }
