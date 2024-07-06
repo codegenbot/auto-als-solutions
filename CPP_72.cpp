@@ -4,7 +4,7 @@ bool will_it_fly(vector<int> q,int w){
     for(int i=0; i<q.size(); i++){
         str += to_string(q[i]);
     }
-    if(str != reverse(string(str)).str()){
+    if(str != string(reverse(str).begin(),reverse(str).end())){
         return false;
     }
     int sum = 0;
@@ -12,5 +12,4 @@ bool will_it_fly(vector<int> q,int w){
         sum += q[i];
     }
     return sum <= w;
-}
-Here is the completed code:
+}Here is the completed code:```
