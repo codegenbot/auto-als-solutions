@@ -1,5 +1,5 @@
-```c++
-#include <stdio.h>
+```
+#include <iostream>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ int fibfib(int n) {
             int temp = a + b + c;
             a = b;
             b = c;
-            c = temp;
+            c = temp % 2 == 0 ? c : c - ((c/2)*(c/2));
         }
         return c;
     }
@@ -22,8 +22,8 @@ int fibfib(int n) {
 
 int main() {
     int n;
-    printf("Enter the value of n: ");
-    scanf("%d", &n);
-    printf("FibFib number at position %d is %d\n", n, fibfib(n));
+    cout << "Enter the value of n: ";
+    cin >> n;
+    cout << "FibFib number at position " << n << " is " << fibfib(n) << endl;
     return 0;
 }
