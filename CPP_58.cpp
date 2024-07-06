@@ -7,9 +7,9 @@ vector<int> common(vector<int> l1, vector<int> l2) {
     set<int> s2(l2.begin(), l2.end());
 
     set<int> resultIntersection;
-    if(s1.size() < 1 || s2.size() < 1)
-        return {"Error: At least one list is empty."}.push_back(0);
-
+    if(s1.empty() || s2.empty()) {
+        return vector<int>();
+    }
     set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
                       inserter(resultIntersection, resultIntersection.begin()));
 
