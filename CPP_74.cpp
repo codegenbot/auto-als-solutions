@@ -1,5 +1,3 @@
-Here is the modified code:
-
 ```cpp
 #include <vector>
 #include <algorithm>
@@ -19,7 +17,7 @@ bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
     return true;
 }
 
-std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
+std::vector<std::string> total_match(std::vector<std::string> lst1, const std::vector<std::string>& lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
@@ -35,28 +33,28 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     } else if (sum1 < sum2) {
         return lst1;
     } else if (sum1 > sum2) {
-        return lst2;
+        return std::vector<std::string>(lst2.begin(), lst2.end());
     }
     
     int sum1lst = 0, sum2lst = 0;
     for (const auto& str : lst1) {
         sum1lst += str.length();
         for (char c : str) {
-            sum1lst++;
+            sum1lst += 1;
         }
     }
 
     for (const auto& str : lst2) {
         sum2lst += str.length();
         for (char c : str) {
-            sum2lst++;
+            sum2lst += 1;
         }
     }
 
     if (sum1lst < sum2lst) {
         return lst1;
     } else if (sum1lst > sum2lst) {
-        return lst2;
+        return std::vector<std::string>(lst2.begin(), lst2.end());
     } else {
         for (const auto& str : lst1) {
             for (const auto& sub_str : lst2) {
@@ -66,6 +64,6 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
             }
         }
 
-        return lst1.size() < lst2.size() ? lst1 : lst2;
+        return lst1.size() < lst2.size() ? lst1 : std::vector<std::string>(lst2.begin(), lst2.end());
     }
 }
