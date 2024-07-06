@@ -1,6 +1,6 @@
 #include <vector>
-#include <cmath>
-#include <random>
+#include <algorithm>
+using namespace std;
 
 bool issame(int a, int b) {
     if (abs(a - b) == 1)
@@ -34,17 +34,7 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
                 }
             }
         }
-        for (int j = -1; j <= 1; ++j) {
-            for (int l = -1; l <= 1; ++l) {
-                int newX = x + j, newY = y + l;
-                if (newX >= 0 && newX < grid.size() && newY >= 0 && newY < grid.size()) {
-                    if (issame(grid[newX][newY], result.back())) {
-                        result.push_back(grid[newX][newY]);
-                        break;
-                    }
-                }
-            }
-        }
+        result.push_back(grid[x][y]);
     }
     return result;
 }
