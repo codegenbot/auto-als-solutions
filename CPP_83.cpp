@@ -22,3 +22,4 @@ int main() {
     cin >> n;
     cout << "The count of numbers that start or end with 1 is: " << starts_one_ends(n) << endl;
     return 0;
+}
