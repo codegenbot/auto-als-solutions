@@ -1,8 +1,11 @@
-vector<string> split_words(string txt) {
-    vector<string> result;
+#include <vector>
+#include <string>
+
+std::vector<std::string> split_words(std::string txt) {
+    std::vector<std::string> result;
 
     size_t pos = 0;
-    while ((pos = txt.find(' ')) != string::npos) {
+    while ((pos = txt.find(' ')) != std::string::npos) {
         result.push_back(txt.substr(0, pos));
         txt.erase(0, pos + 1);
     }
@@ -12,16 +15,16 @@ vector<string> split_words(string txt) {
     }
 
     size_t commaPos = txt.find(',');
-    if (commaPos == string::npos) {
+    if (commaPos == std::string::npos) {
         int oddCount = 0;
         for (char c : txt) {
             if (c >= 'a' && c <= 'z' && (int)c % 2 != 0) {
                 oddCount++;
             }
         }
-        result.push_back(to_string(oddCount));
+        result.push_back(std::to_string(oddCount));
     } else {
-        while ((pos = txt.find(' ')) != string::npos) {
+        while ((pos = txt.find(' ')) != std::string::npos) {
             result.push_back(txt.substr(0, pos));
             txt.erase(0, pos + 1);
         }
