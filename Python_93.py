@@ -1,3 +1,4 @@
+```
 def encode(message):
     result = ''
     for char in message:
@@ -6,3 +7,4 @@ def encode(message):
             result += chr((ord(char) - ascii_offset + 3) % 26 + ascii_offset)
         else:  
             result += char
+    return result
