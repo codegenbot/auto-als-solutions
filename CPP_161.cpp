@@ -1,21 +1,5 @@
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-string solve(string s){
-    string result = "";
-    for(int i=0; i<s.length(); i++){
-        if(isalpha(s[i])){
-            result += (s[i] >= 'a' && s[i] <= 'z') ? toupper(s[i]) : tolower(s[i]);
-        }else{
-            result += s[i];
-        }
-    }
-    return result;
-}
-
-int main(){
+int main; 
+{
     string input;
     cout << "Enter a string: ";
     getline(cin, input); 
@@ -26,4 +10,3 @@ int main(){
         cout << "Output: " << output << endl;
     }
     return 0;
-}
