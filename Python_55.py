@@ -1,12 +1,11 @@
 ```
-def print_fibonacci():
-    n = int(input("Enter a number: "))
+def nth_fibonacci(n: int) -> int:
     if n <= 0:
-        print("Please enter a positive integer.")
+        return None
     elif n == 1 or n == 2:
-        print(1)
+        return 1
     else:
         a, b = 1, 1
         for _ in range(2, n):
             a, b = b, a + b
-        print(b)
+        return b
