@@ -15,7 +15,7 @@ int main() {
     std::vector<float> lst;
     float num;
 
-    while (std::cin >> num) {
+    while(std::cin >> num) {
         lst.push_back(num);
     }
 
