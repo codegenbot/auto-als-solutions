@@ -1,1 +1,2 @@
-return sum(1 for num in arr if sum(-ord(c) + 48 if c < '3' else -10 if c == '4' for c in str(num)) > 0)
+def count_nums(arr):
+    return sum(1 for num in arr if sum(int(d) for d in str(abs(num))) > 0)
