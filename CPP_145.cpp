@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <vector>
+#include <initializer_list>
 
 bool same(std::vector<int> a, std::vector<int> b) {
     return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
@@ -16,3 +17,4 @@ std::vector<int> order_by_points(std::vector<int> nums) {
     };
     std::sort(nums.begin(), nums.end(), comp);
     return nums;
+}
