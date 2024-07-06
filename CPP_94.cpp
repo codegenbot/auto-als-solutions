@@ -1,37 +1,33 @@
-```cpp
 #include <vector>
+using namespace std;
 
-int sumOfDigits(int num) {
-    int sum = 0;
-    while (num > 0) {
-        sum += num % 10;
-        num /= 10;
-    }
-    return sum;
-}
-
-int largestPrime(vector<int> lst) {
+int skjkasdkd(vector<int> lst) {
+    int max_prime = 0;
     for (int i : lst) {
-        if (isPrime(i)) {
-            return i;
+        if (isPrime(i) && i > max_prime) {
+            max_prime = i;
         }
     }
-    return -1; // or some default value
+    return sumOfDigits(max_prime);
 }
 
-bool isPrime(int num) {
-    if (num <= 1) {
+bool isPrime(int n) {
+    if (n <= 1) {
         return false;
     }
-    for (int i = 2; i * i <= num; i++) {
-        if (num % i == 0) {
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
             return false;
         }
     }
     return true;
 }
 
-int skjkasdkd(vector<int> lst) {
-    int largestPrimeNumber = largestPrime(lst);
-    return sumOfDigits(largestPrimeNumber);
+int sumOfDigits(int n) {
+    int sum = 0;
+    while (n > 0) {
+        sum += n % 10;
+        n /= 10;
+    }
+    return sum;
 }
