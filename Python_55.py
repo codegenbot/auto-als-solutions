@@ -1,5 +1,4 @@
-```
-def nth_fibonacci(n: int) -> int:
+def fib(n: int):
     if n <= 0:
         return None
     elif n == 1 or n == 2:
