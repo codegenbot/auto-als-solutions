@@ -1,9 +1,11 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
 
-namespace std {
-bool issame(vector<string> a, const vector<string>& b) {
+using namespace std;
+
+bool std::issame(std::vector<string> a, const vector<string>& b) {
     if (a.size() != b.size()) {
         return false;
     }
@@ -17,7 +19,7 @@ bool issame(vector<string> a, const vector<string>& b) {
     return true;
 }
 
-vector<string> total_match(vector<string> lst1, vector<string> lst2) {
+std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
