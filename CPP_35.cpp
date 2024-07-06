@@ -10,7 +10,7 @@ float max_element(std::vector<float> l){
     return max;
 }
 
-int main() {
+int main(){
     int n;
     std::cout << "Enter the number of elements: ";
     std::cin >> n;
@@ -21,9 +21,9 @@ int main() {
         std::cin >> v[i];
     }
 
-    float max = max_element(v);
+    float m = max_element(v);
 
-    std::cout << "The maximum element is: " << max << std::endl;
+    std::cout << "Maximum value is: " << m << std::endl;
 
     return 0;
 }
