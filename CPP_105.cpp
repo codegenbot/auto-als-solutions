@@ -2,22 +2,6 @@ bool issame(vector<string> a, vector<string> b) {
     return a == b;
 }
 
-int main() {
-    int b;
-    cin >> b;
-
-    vector<int> arr;
-    for(int i = 0; i < b; ++i) {
-        int num;
-        cin >> num;
-        arr.push_back(num);
-    }
-
-    vector<string> result = by_length(arr);
-
-    return 0;
-}
-
 vector<string> by_length(vector<int> arr) {
     vector<int> numbers;
     for (int num : arr) {
@@ -30,6 +14,7 @@ vector<string> by_length(vector<int> arr) {
     reverse(numbers.begin(), numbers.end());
 
     vector<string> result;
+    int b; // Declare variable b
     for (int num : numbers) {
         string str = "";
         switch (num) {
