@@ -13,7 +13,7 @@ string decimal_to_binary(int decimal){
             binary = "0" + binary;
         decimal >>= 1;
     }
-    return "0b" + binary;
+    return "db" + binary + "db";
 }
 
 int main() {

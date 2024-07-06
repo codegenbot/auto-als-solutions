@@ -6,3 +6,4 @@ def encrypt(s):
             result += chr((ord(char) - ascii_offset + 3) % 26 + ascii_offset)
         else:
             result += char
+    return result
