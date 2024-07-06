@@ -1,17 +1,20 @@
 string get_closest_vowel(string word) {
-    int n = word.size();
-    for (int i = n - 1; i >= 0; --i) {
-        if (!isalpha(word[i])) continue;
-        if (ispunct(word[i]) || isdigit(word[i])) continue;
-        if (word[i] == 'Y' && i > 0 && isupper(word[i-1])) continue;
-        if (word[i] == 'y' && i > 0 && isupper(word[i-1])) continue;
-        for (int j = i + 1; j < n; ++j) {
-            if (!isalpha(word[j])) break;
-            if (ispunct(word[j]) || isdigit(word[j])) break;
-            if (word[j] == 'Y' && j > 0 && isupper(word[i])) continue;
-            if (word[j] == 'y' && j > 0 && isupper(word[i])) continue;
-            return string(1, tolower(word[j]));
+    for (int i = word.length() - 1; i > 0; --i) {
+        if (isvowel(word[i])) {
+            int j;
+            for (j = i - 1; j >= 0 && !isconsonant(word[j]); --j);
+            return j >= 0 ? word.substr(j + 1, i - j - 1) : "";
         }
     }
     return "";
+}
+
+bool isvowel(char c) {
+    c = tolower(c);
+    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+}
+
+bool isconsonant(char c) {
+    c = tolower(c);
+    return !isvowel(c) && c >= 'b' && c <= 'z';
 }
