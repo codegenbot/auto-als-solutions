@@ -24,7 +24,14 @@ string file_name_check(string file_name){
     
     if(count_dot != 1) return "No";
     
-    string after_dot = file_name.substr(file_name.find('.')+1);
+    size_t dot_pos = 0; 
+    for (int i=0; i<file_name.length(); i++) { 
+        if (file_name[i] == '.') { 
+            dot_pos=i; 
+            break; 
+        } 
+    }
+    string after_dot = file_name.substr(dot_pos+1);
     string allowed_extensions[]={"txt","exe","dll"};
     bool found=false;
     for(int i=0; i<3; i++){
