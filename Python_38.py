@@ -1,3 +1,4 @@
+```
 def decode_cyclic(s: str):
     result = ""
     while len(s) > 0:
@@ -6,7 +7,7 @@ def decode_cyclic(s: str):
             s = s[2:]
         else:
             result += s[0]
-            s = ''
+            s = s[1:]
     if len(s) > 0:
-        result += s
+        result += s[0]
     return result
