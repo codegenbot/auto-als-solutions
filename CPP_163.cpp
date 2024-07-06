@@ -1,16 +1,16 @@
 #include <vector>
+#include <initializer_list>
+#include <algorithm>
 
-using namespace std;
-
-vector<int> generate_integers(int start, int end) {
-    vector<int> result;
+std::vector<int> generate_integers(int start, int end) {
+    std::vector<int> result;
     for (int i = start; i <= end; ++i) {
         result.push_back(i);
     }
     return result;
 }
 
-bool issame(vector<int> a, vector<int> b) {
+bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
