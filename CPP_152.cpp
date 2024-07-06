@@ -1,9 +1,8 @@
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
 
-bool issame(const std::vector<int>& a, const std::vector<int>& b) {
-    return a == b;
+bool std::issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return (a.size() == b.size()) && (std::all_of(a.begin(), a.end(), [&](int x) { return x == b[0]; }));
 }
 
 std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
@@ -12,7 +11,7 @@ std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
         if (game[i] == guess[i]) {
             result.push_back(0);
         } else {
-            result.push_back(std::abs(game[i] - guess[i]));
+            result.push_back(abs(game[i] - guess[i]));
         }
     }
     return result;
