@@ -4,7 +4,7 @@ def find_zero(xs: list):
         raise ValueError("xs must have an even number of coefficients")
     max_coeff = abs(max(xs))
     min_coeff = abs(min(xs))
-    for x in range(-max(abs(x) for x in xs), max(abs(x) for x in xs)+1):
-        if round(sum(c * x**(len(xs)-1-i) for i, c in enumerate(reversed(xs))), 10) == 0:
+    for x in range(-max_coeff, max_coeff+1):
+        if round(sum([a * x**i for i, a in enumerate(reversed(xs))]), 10) == 0:
             return round(x, 2)
     return None
