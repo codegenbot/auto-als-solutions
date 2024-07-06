@@ -1,21 +1,23 @@
+```
 vector<double> coeffs = xs;
 double poly(vector<double> coeffs, double x) {
-    double res = 0;
+    double result = 0.0;
     for(int i=0; i<coeffs.size(); i++) {
-        res += coeffs[i] * pow(x, i);
+        result += coeffs[i] * pow(x, i);
     }
-    return res;
+    return result;
 }
 
 double find_zero(vector<double> xs){
-    int n = xs.size();
-    double a = xs[0];
+    vector<double> coeffs = xs;
+    int n = coeffs.size();
+    double a = 1.0;
     for(int i=1; i<n; i++){
         a = 0;
         for(int j=0; j<i; j++)
-            a += xs[j] * pow(1.0, i-j);
+            a += coeffs[j] * pow(1.0, i-j);
         if(a == 0) return 1.0;
     }
-    double x = -xs[1]/2*xs[2];
-    return poly(coeffs, x);
+    double x = -coeffs[1]/2*coeffs[2];
+    return x;
 }
