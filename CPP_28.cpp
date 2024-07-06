@@ -1,9 +1,6 @@
-Here's the completed code:
-
-```cpp
 string concatenate(vector<string> strings){
     string result = "";
-    for(string str : strings){
+    for(string str : strings) {
         result += str;
     }
     return result;
