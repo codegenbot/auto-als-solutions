@@ -16,10 +16,11 @@ string anti_shuffle(string s){
             
         }
         string word = s.substr(i, j - i);
-        sort(word.begin(), word.end());
-        for(char c : word){
-            result += c;
+        for(int k=0; k<word.size(); k++){
+            result += word[k];
         }
+        sort(word.begin(), word.end());
+        result += word;
         i = j;
     }
     return result;
