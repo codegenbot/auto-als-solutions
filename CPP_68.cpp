@@ -23,7 +23,7 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::vector<int> result;
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
+        if (!compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
             return {};
         }
     }
@@ -42,17 +42,10 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    if(arr.size() > 0)
+    std::vector<int> result = pluck(arr);
+    if(result.size() > 0)
     {
-        std::vector<int> result = pluck(arr);
-        if(result.size() > 0)
-        {
-            std::cout << "The output is: " << *result.begin() << std::endl;
-        }
-        else
-        {
-            std::cout << "No output" << std::endl;
-        }
+        std::cout << "The output is: " << *result.begin() << std::endl;
     }
     else
     {
