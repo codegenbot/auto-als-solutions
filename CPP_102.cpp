@@ -1,4 +1,5 @@
 #include <algorithm>
+using namespace std;
 
 int choose_num(int x, int y) {
     if (x > y) {
