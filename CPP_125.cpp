@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <string>
 
@@ -20,6 +21,6 @@ std::vector<std::string> split_words(string txt) {
 }
 
 int main() {
-    assert (issame(std::vector<std::string>(1,std::string("0")) , split_words("")) );
+    assert (issame({split_words("")}, {"0"}));
     return 0;
 }
