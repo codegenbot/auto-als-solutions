@@ -1,9 +1,13 @@
-Here is the completed code:
+Here is the solution:
 
-```cpp
 bool any_int(float a, float b, float c) {
-    if (fmod(a + b - c, 1) == 0 && fmod(a + c - b, 1) == 0 && fmod(b + c - a, 1) == 0) 
+    if (abs(a - (b + c)) < 1e-6 && a == static_cast<int>(a)) {
         return true;
-    else
-        return false;
-}
+    }
+    if (abs(b - (a + c)) < 1e-6 && b == static_cast<int>(b)) {
+        return true;
+    }
+    if (abs(c - (a + b)) < 1e-6 && c == static_cast<int>(c)) {
+        return true;
+    }
+    return false;
