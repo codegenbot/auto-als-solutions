@@ -1,6 +1,11 @@
+```cpp
 #include <algorithm>
 #include <vector>
 #include <utility>
+
+bool issame(vector<int> a, vector<int> b){
+    return a == b;
+}
 
 std::vector<int> order_by_points(std::vector<int> nums) {
     std::vector<std::pair<int, int>> points;
@@ -22,8 +27,4 @@ std::vector<int> order_by_points(std::vector<int> nums) {
     }
 
     return result;
-}
-
-bool issame(std::vector<int> a, std::vector<int>b){
-    return a == b;
 }
