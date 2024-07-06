@@ -1,15 +1,18 @@
+#include <iostream>
+#include <vector>
 #include <algorithm>
+using namespace std;
 
-vector<int> unique(vector<int> l) {
+vector<int> unique(vector<int> l){
     vector<int> result(l.begin(), unique(l.begin(), l.end()).end());
     return result;
 }
 
-template<typename It>
-It unique(It first, It last) {
-    if (first == last) return first;
-    std::sort(first, last);
-    It it = unique(first + 1, last);
-    while (*it == *(first)) ++it;
-    return it;
+int main(){
+    vector<int> v = {5, 3, 5, 2, 3, 3, 9, 0, 123};
+    vector<int> res = unique(v);
+    for(int i:res){
+        cout << i << " ";
+    }
+    return 0;
 }
