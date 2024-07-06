@@ -34,20 +34,19 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     return result;
 }
 
-bool areEqual(std::vector<std::string> a, std::vector<std::string> b) {
+bool operator==(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     if (a.size() != b.size())
         return false;
 
-    for (int i = 0; i < a.size(); i++) {
+    for (int i = 0; i < a.size(); ++i)
         if (a[i] != b[i])
             return false;
-    }
 
     return true;
 }
 
 int main() {
-    if (!areEqual({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})))
+    if (!numerical_letter_grade({0.0f, 0.7f}) == {{"E"}, {"D-"}})
         return 1;
     return 0;
 }
