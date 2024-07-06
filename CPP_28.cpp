@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,6 +9,7 @@ std::string concatenate(const std::vector<std::string>& strings) {
         result += s;
     }
     return result;
+
 }
 
 int main() {
