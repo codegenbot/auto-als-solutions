@@ -1,4 +1,4 @@
-```
+```cpp
 #include <string>
 #include <cctype>
 #include <iostream>
@@ -23,4 +23,5 @@ int main(){
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     std::cout << flip_case(input) << std::endl;
+    return 0;
 }

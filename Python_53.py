@@ -8,5 +8,5 @@ def add(x: int, y: int) -> int:
             got_valid_input = True
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
-    
+
     return x + y

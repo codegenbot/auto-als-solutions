@@ -1,16 +1,15 @@
 #include <string>
 
-int is_bored(std::string S){
+int is_bored(string S){
     int count = 0;
+    string boredom = "I";
     size_t pos = 0;
-    while ((pos = S.find("I", pos)) != std::string::npos) {
-        if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
+    while ((pos = S.find('.', pos)) != string::npos || 
+           (pos = S.find('?', pos)) != string::npos || 
+           (pos = S.find('!', pos)) != string::npos){
+        if(S.substr(0, boredom.size()).compare(boredom) == 0) {
             count++;
-        pos = S.find(".", pos) + 1;
+        }
+        pos++;
     }
     return count;
-}
-
-int main() {
-    // Your original code here
-}
