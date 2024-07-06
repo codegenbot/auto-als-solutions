@@ -24,19 +24,19 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    string input_map_str = argv[1];
+    std::string input_map_str = argv[1];
     map<string, string> dict;
     // parse the input map from the command line argument...
-    int pos = input_map_str.find(',');
-    while (pos != string::npos) {
-        size_t eq_pos = input_map_str.find('=');
-        if (eq_pos == string::npos || pos > eq_pos)
-            break;
-        string key = input_map_str.substr(0, eq_pos);
-        string value = input_map_str.substr(eq_pos + 1, pos - (eq_pos + 1));
-        dict.insert({key, value});
-        input_map_str.erase(0, pos + 1);
-        pos = input_map_str.find(',');
+    
+    if (std::ifstream(input_map_str)) {
+        std::ifstream file(input_map_str);
+        std::string key, value;
+        while (file >> key >> value) {
+            dict[key] = value;
+        }
+    } else {
+        std::cerr << "Error opening file: " << input_map_str << std::endl;
+        return 1;
     }
 
     assert(check_dict_case(dict) == true);
