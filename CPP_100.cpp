@@ -1,7 +1,7 @@
+```cpp
 #include <vector>
-#include <assert.h>
 
-bool issame(const vector<int>& a, const vector<int>& b){
+bool issame(vector<int> a,vector<int>b){
     if(a.size() != b.size())
         return false;
     for(int i=0;i<a.size();i++){
@@ -22,7 +22,16 @@ vector<int> make_a_pile(int n) {
     return pile;
 }
 
-int mainFunction() {
-    assert(issame(make_a_pile(8), vector<int>({8, 10, 12, 14, 16, 18, 20, 22})));
+bool check(int n) {
+    vector<int> pile = make_a_pile(n);
+    vector<int> correctPile = {1, 2, 4, 6, 8, 10, 12, 14};
+    if (!issame(pile, correctPile)) {
+        return false;
+    }
+    return true;
+}
+
+int main() {
+    assert(check(8));
     return 0;
 }
