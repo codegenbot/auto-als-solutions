@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 using namespace std;
 
@@ -22,5 +23,6 @@ int main() {
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
-    cout << "FibFib number at position " << n << " is " << fibfib(n) << "\n";
+    cout << "FibFib number at position " << n << " is " << fibfib(n) << endl;
     return 0;
+}
