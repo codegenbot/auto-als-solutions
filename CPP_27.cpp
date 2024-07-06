@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 #include <cctype>
 
@@ -17,7 +18,7 @@ std::string flip_case(std::string str){
             else
                 result += tolower(c);
         }else{
-            result.append(1, c);
+            result += c;
         }
     }
     return result;
