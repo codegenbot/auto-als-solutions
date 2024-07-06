@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -44,35 +43,26 @@ vector<string> select_words(string s, int n) {
 }
 
 int main() {
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
+    string s;
+    int n;
 
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
+    cout << "Enter a sentence: ";
+    getline(cin, s);
 
-    cout << "{";
-    for (const string& s : select_words("simple white space", 2)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
+    cout << "Number of consonants: ";
+    cin >> n;
 
-    cout << "{";
-    for (const string& s : select_words("Hello world", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
+    vector<string> result = select_words(s, n);
 
-    cout << "{";
-    for (const string& s : select_words("Uncle sam", 3)) {
-        cout << "\"" << s << "\", ";
+    if (result.size() > 0) {
+        cout << "{";
+        for (const string& word : result) {
+            cout << "\"" << word << "\", ";
+        }
+        cout << "}" << endl;
+    } else {
+        cout << "No words found." << endl;
     }
-    cout << "}" << endl;
-    
+
     return 0;
 }
