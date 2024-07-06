@@ -6,28 +6,31 @@ def minPath(grid, k):
     res = []
 
     def dfs(i, j, path, sum_path):
+        nonlocal res
         if (i, j) in visited:
             return None
         if 0 <= i < n and 0 <= j < n and grid[i][j] == k:
-            return ((path + [m[i][j]]), sum_path + k)
+            for p in res[:]:
+                if set(p) == set(path):
+                    return min([p], key=lambda x: len(x))
+            res.append(path)
+            return path
         for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
-                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
+                new_path = dfs(ni, nj, path + [m[ni][nj]], sum_path)
                 if new_path:
-                    res.append(new_path[0])
-        return min([p for p in res if p is not None], key=lambda x: len(x))
+                    return new_path
 
     min_sum = float("inf")
-    boundary_cells = [(0, j) for j in range(n)] + [(n - 1, j) for j in range(n)] + [(i, 0) for i in range(n)] + [(i, n - 1) for i in range(n)]
+    boundary_cells = (
+        [(0, j) for j in range(n)]
+        + [(n - 1, j) for j in range(n)]
+        + [(i, 0) for i in range(n)]
+        + [(i, n - 1) for i in range(n)]
+    )
     min_path = None
     for i, j in boundary_cells:
         visited.add((i, j))
-        res = [dfs(i, j, [m[i][j]], k)]
-        for path in set(tuple(x) for x in res):
-            if path:
-                temp = dfs(*path[1:], path[0], path[1])
-                min_path = temp
-                break
-
-    return min_path if min_path else []
+        dfs(i, j, [m[i][j]], k)
+    return sorted(set(res), key=lambda x: len(x)) if res else []

@@ -28,7 +28,12 @@ std::vector<int> pluck(std::vector<int> arr) {
         }
     }
     
-    return {nodes[0].first};
+    if (!result.empty())
+        result.push_back(nodes[0].first);
+    else
+        return arr;
+    
+    return result;
 }
 
 int main() {

@@ -1,19 +1,19 @@
-```
 def match_parens(lst):
-    count = 0
-    for s in lst:
+    for string in lst:
         open_count = 0
         close_count = 0
-        for char in s:
+        matching = True
+        
+        for char in string:
             if char == '(':
                 open_count += 1
+                close_count = 0  # reset the count of closing parentheses
             elif char == ')':
                 close_count += 1
-            if open_count < close_count:
-                break
-        if open_count == close_count:
-            count += 1
-    return str(count) == str(len(lst)) and "Strings have matching parentheses" or "Strings do not have matching parentheses"
-num_strings = int(input("Number of strings: "))
-input_list = [input("Enter string {}: ".format(i+1)) for i in range(num_strings)]
-print(match_parens([s.strip() for s in input_list]))
+                if close_count > open_count:  # check if they are matched correctly
+                    matching = False
+                    break
+        
+        if not matching:
+            return "No"
+    return "Yes"
