@@ -1,3 +1,4 @@
+```cpp
 #include <stdio.h>
 
 using namespace std;
@@ -13,7 +14,7 @@ int fibfib(int n) {
             int temp = a + b + c;
             a = b;
             b = c;
-            c = temp;
+            c = temp % 2 == 0 ? c : c - ((c/2)*(c/2));
         }
         return c;
     }
