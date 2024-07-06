@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -22,7 +22,7 @@ vector<int> maximum(vector<int> arr, int k) {
     return result;
 }
 
-int main() {
+int originalMain() {
     int n, k;
     cout << "Enter the number of elements: ";
     cin >> n;
@@ -39,4 +39,9 @@ int main() {
     } else {
         cout << "Maximum values are not equal.\n";
     }
+}
+
+int main() {
+    originalMain();
+    return 0;
 }
