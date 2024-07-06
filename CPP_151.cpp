@@ -1,13 +1,25 @@
-Here's the completed code:
-
-long long double_the_difference(vector<float> lst) {
+```cpp
+long long double_the_difference(vector<float> lst){
     long long sum = 0;
-    for (float num : lst) {
-        if (num > 0 && floor(num) == num) { // ignore negative numbers and non-integers
-            if (static_cast<int>(num) % 2 != 0) { // check if the number is odd
-                sum += pow(static_cast<int>(num), 2);
-            }
+    for(float n : lst){
+        if(int(n) > 0 && int(n) % 2 != 0){ 
+            sum += pow(int(n), 2); 
         }
     }
     return sum;
+}
+
+int main() {
+    vector<float> inputList;  
+    // Read your input data here
+
+    long long sum = 0;
+    for(float n : inputList){
+        if(int(n) > 0 && int(n) % 2 != 0){ 
+            sum += pow(int(n), 2); 
+        }
+    }
+    long long output = double_the_difference(inputList); 
+    assert (output == sum );
+    return 0;
 }
