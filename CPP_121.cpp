@@ -1,17 +1,20 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
-int sumOdd(std::string str) {
+int sumOdd(int x) {
     int sum = 0;
-    for (char c : str) { 
-        if (static_cast<int>(c) % 2 != 0) {
-            sum += static_cast<int>(c);
+    for (int i = 1; i <= 10; i++) { 
+        if (i % 2 != 0) {
+            sum += i;
         }
     }
-    return sum;
+    std::string output = "The sum of odd numbers is: ";
+    output += std::to_string(sum);
+    return output;
 }
 
 int main() {
-    std::cout << sumOdd("Hello") << std::endl; // process the string input
+    std::cout << sumOdd(0) << std::endl;
     return 0;
 }
