@@ -1,7 +1,6 @@
+```cpp
 #include <iostream>
 #include <string>
-#include <limits>
-
 using namespace std;
 
 std::string get_closest_vowel(std::string str) {
@@ -17,7 +16,7 @@ std::string get_closest_vowel(std::string str) {
             }
         }
     }
-    return std::string(1, closest_vowel);
+    return string(1, closest_vowel);
 }
 
 int main() {
