@@ -1,10 +1,9 @@
-```
 def encode(message):
     result = ''
     for char in message:
         if char.isalnum():
-            ascii_offset = ord('a') if char.islower() else ord('A')
-            result += chr((ord(char.lower()) - ascii_offset + 3) % 26 + ascii_offset)
+            shift = 3 if not char.isupper() else 3
+            result += chr((ord(char) - ord('a') + shift) % 26 + ord('a')) if 'a' <= char <= 'z' else chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
         else:
             result += char
     return result
