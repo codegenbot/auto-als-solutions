@@ -5,7 +5,7 @@ using namespace std;
 
 int smallest_change(vector<int> arr) {
     int n = arr.size();
-    vector<vector<size_t>> dp(n, vector<size_t>(n));
+    vector<vector<int>> dp(n, vector<int>(n));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -16,12 +16,22 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                dp[i][j].push_back(dp[i+1][j-1].size());
+                size_t sz = dp[i+1][j-1].size();
+                if (sz == 0) {
+                    sz = 1;
+                }
+                dp[i].resize(j - i + 2);
+                dp[i][j - i + 1] = sz;
             } else {
-                dp[i][j].push_back(min(size_t(1), dp[i+1][j-1].size()) + 1);
+                size_t sz = dp[i+1][j-1].size();
+                if (sz == 0) {
+                    sz = 1;
+                }
+                dp[i].resize(j - i + 2);
+                dp[i][j - i + 1] = min(1, sz) + 1;
             }
         }
     }
     
-    return dp[0][n-1].size();
+    return dp[0].size() - 1;
 }
