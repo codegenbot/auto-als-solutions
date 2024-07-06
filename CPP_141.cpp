@@ -1,10 +1,12 @@
-#include <string>
+#include <iostream>
 #include <cctype>
+#include <vector>
+#include <string>
 
 int countDigits(const string& str) {
     int count = 0;
     for (char c : str) {
-        if (isdigit(c)) {
+        if (std::isdigit(c)) {
             count++;
         }
     }
@@ -16,7 +18,7 @@ string file_name_check(string file_name) {
         return "No";
     }
 
-    size_t dotPos = file_name.rfind('.');
+    size_t dotPos = file_name.find('.');
     if (dotPos == string::npos || file_name.find('.') != dotPos) {
         return "No";
     }
