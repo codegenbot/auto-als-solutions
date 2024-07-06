@@ -3,7 +3,7 @@
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    vector<vector<unsigned long long int>> dp(n, vector<unsigned long long int>(n));
+    std::vector<std::vector<unsigned long long int>> dp(n, std::vector<unsigned long long int>(n));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
