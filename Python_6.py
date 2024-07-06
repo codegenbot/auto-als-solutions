@@ -12,5 +12,8 @@ def parse_nested_parens(paren_string: str) -> List[int]:
             result.append(-1)
             level -= 1
         elif level < 0:
-            break
+            return []
+    while level > 0:
+        result.append(-1)
+        level -= 1
     return result
