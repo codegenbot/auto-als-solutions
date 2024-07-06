@@ -1,26 +1,16 @@
-```cpp
 #include <vector>
-#include <iostream>
+#include <algorithm>
 
-bool issame(float f) {
-    return true;
+bool issame(float x1, float x2) {
+    return (x1 - x2) <= 0.0001;
 }
 
-std::vector<float> get_positive(std::vector<float> l){
+std::vector<float> get_positive(std::vector<float> l) {
     std::vector<float> result;
     for(float i : l) {
-        if(i > 0 && !issame(i)) {
+        if(i > 0 || issame(0, i)) {
             result.push_back(i);
         }
     }
     return result;
-}
-
-int main() {
-    std::vector<float> input = {1, -2, 3, -4, 5};
-    std::vector<float> output = get_positive(input);
-    for(float i : output) {
-        std::cout << i << " ";
-    }
-    return 0;
 }
