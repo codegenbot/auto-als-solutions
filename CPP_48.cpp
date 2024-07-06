@@ -1,3 +1,4 @@
+```
 #include <string>
 
 bool is_palindrome(string text) {
@@ -5,7 +6,7 @@ bool is_palindrome(string text) {
     int end = text.length() - 1;
 
     while (start < end) {
-        if (tolower(text[start]) != tolower(text[end])) {
+        if (text[start] != text[end]) {
             return false;
         }
         start++;
