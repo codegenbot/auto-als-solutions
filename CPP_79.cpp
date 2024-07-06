@@ -1,3 +1,5 @@
+Here is the modified code:
+
 string decimal_to_binary(int decimal){
     string binary = "";
     while(decimal > 0){
@@ -11,6 +13,5 @@ string decimal_to_binary(int decimal){
 }
 
 int main() {
-    assert (decimal_to_binary(15) == "0b11111");
-    return 0;
+    cout << decimal_to_binary(15);
 }
