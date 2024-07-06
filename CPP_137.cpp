@@ -1,3 +1,4 @@
+```c++
 #include <iostream>
 #include <string>
 #include <boost/any.hpp>
@@ -14,8 +15,10 @@ boost::any compare_one(boost::any a, boost::any b) {
         return a;
     else if (!sa.empty() && sb.empty())
         return a;
-    else
+    else if (db > da)
         return b;
+    else
+        return boost::any("None");
 }
 
 int main() {

@@ -1,9 +1,3 @@
-```cpp
-#include <iostream>
-#include <string>
-
-using namespace std;
-
 string solve(string s){
     string result = "";
     for(int i=0; i<s.length(); i++){
@@ -14,13 +8,4 @@ string solve(string s){
         }
     }
     return result;
-}
-
-int main(){
-    string input;
-    cout << "Enter a string: ";
-    getline(cin, input);
-    string output = solve(input);
-    cout << "Output: " << output << endl;
-    return 0;
 }
