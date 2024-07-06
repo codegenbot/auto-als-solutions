@@ -1,6 +1,8 @@
+```cpp
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
 
@@ -23,6 +25,7 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-void testMain() {
+int main() {
     assert(will_it_fly({5}, 5) == true);
+    return 0;
 }
