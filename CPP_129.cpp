@@ -3,16 +3,16 @@
 #include <cmath>
 #include <random>
 
-struct Pair {
-    int x;
-    int y;
-};
-
 bool issame(int a, int b) {
     if (abs(a - b) == 1)
         return true;
     return false;
 }
+
+struct array2 {
+    int x;
+    int y;
+};
 
 std::vector<int> minPath(std::vector<std::vector<int>>& grid, int k) {
     std::vector<int> result;
@@ -30,7 +30,7 @@ std::vector<int> minPath(std::vector<std::vector<int>>& grid, int k) {
                 break;
         }
         for (int t = 0; t < k; ++t) {
-            std::vector<struct Pair> directions = {({-1, 0}), ({1, 0}), ({0, -1}), ({0, 1})};
+            array2 directions[] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dis(0, 3);
