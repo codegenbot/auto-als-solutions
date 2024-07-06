@@ -1,5 +1,3 @@
-Here is the modified code:
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -42,7 +40,6 @@ vector<string> select_words(string s, int n) {
     }
 
     return result;
-
 }
 
 int main() {
@@ -53,3 +50,4 @@ int main() {
     }
     cout << "}" << endl;
     return 0;
+}
