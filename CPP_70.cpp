@@ -21,9 +21,12 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> test = {1, 2, 3, 4};
-    for (auto i : strange_sort_list(test)) {
-        std::cout << i << " ";
+    std::vector<int> input = {1, 2, 3};
+    std::vector<int> output = strange_sort_list(input);
+    if (issame(output, {1, 3, 2})) {
+        std::cout << "Success" << std::endl;
+    } else {
+        std::cout << "Failure" << std::endl;
     }
-    std::cout << std::endl;
+    return 0;
 }
