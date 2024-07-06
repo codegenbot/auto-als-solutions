@@ -1,7 +1,7 @@
+Here is the modified code:
+
 ```cpp
 #include <vector>
-#include <algorithm>
-
 bool issame(vector<int> a, vector<int> b) {
     return a == b;
 }
@@ -19,13 +19,11 @@ vector<int> pluck(vector<int> arr) {
     }
     
     sort(nodes.begin(), nodes.end());
-    
     vector<int> result;
     for (int i = 1; i < nodes.size(); i++) {
-        if (issame({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
-            continue;
+        if (!issame({nodes[0].first, nodes[i - 1].second}, {nodes[i].first, nodes[i].second})) {
+            result.push_back(nodes[i].first);
         }
-        result.push_back(nodes[i].first);
     }
     
     return result;
