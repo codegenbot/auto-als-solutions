@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <vector>
+#include <cmath>
 
-int maxElement(const std::vector<int>& l) {
+int main() {
     return *std::max_element(l.begin(), l.end());
 }
