@@ -15,12 +15,16 @@ int main() {
     int n;
     std::cout << "Enter the number of elements: ";
     std::cin >> n;
+
     std::vector<int> nums(n);
     for (int i = 0; i < n; i++) {
         std::cout << "Enter element " << i + 1 << ": ";
         std::cin >> nums[i];
     }
+
     int result = specialFilter(nums);
-    std::cout << "The number of elements that satisfy the condition is: " << result << std::endl;
+
+    std::cout << "Number of elements satisfying the condition: " << result << std::endl;
+
     return 0;
 }
