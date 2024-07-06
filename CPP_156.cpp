@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <string>
 
@@ -8,16 +7,11 @@ std::vector<std::pair<int, std::string>> roman = {{1000, "M"}, {900, "CM"}, {500
 
 std::string int_to_mini_roman(int number) {
     std::string result;
-    for (auto& pair : roman) {
+    for (const auto& pair : roman) {
         while (number >= pair.first) {
             number -= pair.first;
             result += pair.second;
         }
     }
     return result;
-}
-
-int main() {
-    assert(int_to_mini_roman(1000) == "M");
-    return 0;
 }

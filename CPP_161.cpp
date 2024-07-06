@@ -1,16 +1,11 @@
-#include<string>
-using namespace std;
-
 string solve(string s){
-    string result = "";
-    for(char c: s){
-        if(isalpha(c)){
-            result += (isupper(c))? tolower(c) : toupper(c);
-        } else {
-            result += c;
+    string res = "";
+    for(int i=0; i<s.size(); i++){
+        if(isalpha(s[i])){
+            res += (s[i] >= 'a' && s[i] <= 'z') ? toupper(s[i]) : tolower(s[i]);
+        }else{
+            res += s[i];
         }
     }
-    
-    if(result.length() == 0) return string(reverse(s));
-    return result;
+    return res;
 }
