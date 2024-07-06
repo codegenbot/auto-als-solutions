@@ -1,25 +1,55 @@
 ```
 def minPath(grid, k):
     n = len(grid)
-    visited = [[False]*n for _ in range(n)]
-    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-    res = []
-
-    def dfs(i, j, path):
-        nonlocal res
+    m = [[i * j for j in range(1, n + 1)] for i in range(1, n + 1)]
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j] != m[i][j]:
+                m[i][j] = -grid[i][j]
+    
+    visited = [[False for _ in range(n)] for _ in range(n)]
+    path = []
+    min_path = float('inf')
+    min_index = None
+    
+    def dfs(i, j):
+        nonlocal min_path, min_index
         if len(path) == k:
-            res = sorted(path)
-            return True
-        visited[i][j] = True
-        for di, dj in directions:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < n and 0 <= nj < n and not visited[ni][nj]:
-                dfs(ni, nj, path + [grid[ni][nj]])
-        visited[i][j] = False
-
+            if path < min_path:
+                min_path = path[:]
+                min_index = (i, j)
+            return
+        
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            x, y = i + dx, j + dy
+            if 0 <= x < n and 0 <= y < n and not visited[x][y]:
+                if m[x][y] > 0:
+                    path.append(m[x][y])
+                    visited[x][y] = True
+                    dfs(x, y)
+                    path.pop()
+                    visited[x][y] = False
+        
+        if len(path) == k:
+            return
+        
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            x, y = i + dx, j + dy
+            if 0 <= x < n and 0 <= y < n and not visited[x][y]:
+                if m[x][y] > 0:
+                    path.append(m[x][y])
+                    visited[x][y] = True
+                    dfs(x, y)
+                    path.pop()
+                    visited[x][y] = False
+    
     for i in range(n):
         for j in range(n):
             if not visited[i][j]:
-                dfs(i, j, [grid[i][j]])
-
-    return res
+                path.clear()
+                path.append(m[i][j])
+                visited[i][j] = True
+                dfs(i, j)
+                visited[i][j] = False
+    
+    return min_path
