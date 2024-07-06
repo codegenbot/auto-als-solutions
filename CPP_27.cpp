@@ -1,25 +1,18 @@
-```cpp
-#include <iostream>
-#include <string>
-
 int main(){
-    std::string str;
     int i = 0;
-    std::string filp_case(std::string s){
-        for(i = 0; i < s.length(); i++){
-            if(s[i] >= 'a' && s[i] <= 'z'){
-                s[i] = (s[i] - 'a' + 'A'); // Convert lowercase to uppercase
-            }else if(s[i] >= 'A' && s[i] <= 'Z'){
-                s[i] = (s[i] - 'A' + 'a'); // Convert uppercase to lowercase
+    std::string flip_case(std::string str){
+        for(i = 0; i < str.length(); i++){
+            if(str[i] >= 'a' && str[i] <= 'z'){
+                str[i] = toupper((char)str[i]); // Convert lowercase to uppercase
+            }else if(str[i] >= 'A' && str[i] <= 'Z'){
+                str[i] = tolower((char)str[i]); // Convert uppercase to lowercase
             }
         }
-        return s;
+        return str;
     }
-    
-    std::cout << "Enter a string: ";
-    std::cin >> str;
-
-    std::cout << "Flipped case of the input string is: " << filp_case(str) << std::endl;
-
+    string input;
+    cout << "Enter a string: ";
+    getline(cin, input);
+    cout << "Flipped case: " << flip_case(input) << endl;
     return 0;
 }
