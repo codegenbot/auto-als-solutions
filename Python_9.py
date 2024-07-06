@@ -1,4 +1,3 @@
-```
 def max_rolling_sum(nums):
     n = len(nums)
     max_sum = current_sum = sum(nums[:3])
