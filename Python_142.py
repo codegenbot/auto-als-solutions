@@ -1,3 +1,4 @@
+```
 def sum_squares(numbers):
     lst = [int(i) for i in numbers.split()]
     total_sum = 0
@@ -8,5 +9,10 @@ def sum_squares(numbers):
             total_sum += lst[i] ** 3
     return total_sum
 
-numbers = input("Enter numbers separated by space: ")
-print(sum_squares(numbers))
+while True:
+    numbers = input("Enter numbers separated by space: ")
+    try:
+        print(sum_squares(numbers))
+        break
+    except ValueError:
+        print("Invalid input. Please enter only numeric values.")

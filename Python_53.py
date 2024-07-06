@@ -1,5 +1,8 @@
 def add(x: int, y: int) -> int:
     while True:
+        choice = input("Enter 'A' to add and 'Q' to quit: ")
+        if choice.upper() == 'Q':
+            break
         try:
             x = int(input("Enter the first number: "))
             y = int(input("Enter the second number: "))
