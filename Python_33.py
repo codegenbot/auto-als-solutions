@@ -1,3 +1,2 @@
-```
 def sort_third(lst):
-    return sorted((y if isinstance(x, tuple) else (x, x) for x in lst))
+    return sorted([i for i in lst], key=lambda x: (3 if isinstance(x, int) else x[2]))
