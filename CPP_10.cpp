@@ -1,3 +1,4 @@
+#include<stdio.h>
 #include<string>
 using namespace std;
 
@@ -7,19 +8,13 @@ bool is_palindrome(string str){
 }
 
 string make_palindrome(string str){
-    int i = 0; // pointer for prefix
-    int j = str.length() - 1; // pointer for suffix
-
-    while(i <= j && str[i] == str[j]){
-        i++;
-        j--;
+    if(is_palindrome(str))
+        return str;
+    
+    for(int i=str.size()-1; i>=0; --i){
+        if(!is_palindrome(str+string(1, str[i])))
+            break;
     }
-
-    string palindrome;
-    palindrome += str.substr(0, i); // add the non-palindromic part to the palindrome
-    string rev = str.substr(i); // reverse the remaining part
-    reverse(rev.begin(), rev.end()); // make it a palindrome
-    palindrome += rev; // add the reversed part to the palindrome
-
-    return palindrome;
+    
+    return str+string(str.rbegin(),str.rend());
 }
