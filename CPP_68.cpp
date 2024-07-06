@@ -1,6 +1,6 @@
 #include <vector>
 
-vector<int> pluck(vector<int> arr) {
+vector<int> pluck(vector<int> arr){
     vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
@@ -18,3 +18,4 @@ vector<int> pluck(vector<int> arr) {
     }
 
     return result;
+}
