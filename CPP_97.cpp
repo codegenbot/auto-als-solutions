@@ -1,7 +1,9 @@
-Here is the completed code:
-
 int multiply(int a, int b) {
-    int unitA = a % 10;
-    int unitB = b % 10;
-    return (unitA * unitB);
+    return (a % 10) * (b % 10);
+}
+
+int main() {
+    assert(multiply(0, 0) == 0);
+    // Other test cases here...
+    return 0;
 }
