@@ -1,27 +1,18 @@
-#include<stdio.h>
-#include<string>
+#include <string>
 using namespace std;
 
-bool is_palindrome(string str){
+bool is_palindrome(string str) {
     string s(str.rbegin(),str.rend());
     return s==str;
 }
 
-string make_palindrome(string str){
+string make_palindrome(string str) {
     int i = 0, j = str.length() - 1;
-    while(i <= j && str[i] == str[j]){
+    while (i <= j && str[i] == str[j]) {
         i++;
         j--;
     }
-    string prefix = str.substr(0, i);
-    string suffix = str.substr(j+1);
-    return prefix + str.substr(i) + strimplify(suffix);
-}
-
-int main(){
-    // Your test cases here
-    cout << make_palindrome("") << endl;
-    cout << make_palindrome("cat") << endl;
-    cout << make_palindrome("cata") << endl;
-    return 0;
+    string rev = str.substr(i);
+    reverse(rev.begin(), rev.end());
+    return str + rev;
 }
