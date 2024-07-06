@@ -4,7 +4,9 @@ def decode_cyclic(s: str):
         if len(s) >= 2:
             result += s[1] + s[0]
             s = s[2:]
-        else:
+        elif s:
             result += s[0]
             s = ""
+        else:
+            return result
     return result

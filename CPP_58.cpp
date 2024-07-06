@@ -1,19 +1,27 @@
 #include <vector>
-#include <set>
-
 using namespace std;
 
-bool issame(vector<int> a, vector<int> b) {
-    return a.size() == b.size();
+vector<int> common(vector<int> v1, vector<int> v2) {
+    vector<int> result;
+    for (int i = 0; i < v1.size(); i++) {
+        for (int j = 0; j < v2.size(); j++) {
+            if (v1[i] == v2[j]) {
+                result.push_back(v1[i]);
+                break;
+            }
+        }
+    }
+    return result;
 }
 
-vector<int> common(vector<int> l1, vector<int> b2) {
-    set<int> s1(l1.begin(), l1.end());
-    set<int> s2(b2.begin(), b2.end());
+bool issame(vector<int> a, vector<int> b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i]) return false;
+    }
+    return true;
+}
 
-    set<int> intersection;
-    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
-                      inserter(intersection, intersection.begin()));
-
-    return vector<int>(intersection.begin(), intersection.end());
+int main() {
+    assert(issame(common({4, 3, 2, 8}, {}), {}));
 }

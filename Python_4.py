@@ -13,6 +13,6 @@ def mean_absolute_deviation(numbers: List[float]) -> float:
             count += 1
         else:
             raise ValueError("Invalid input: non-numeric value found")
-    if count == 0:
-        return 0
-    return total / count
+    mean = total / count if count > 0 else 0
+
+    return sum(abs(num - mean) for num in numbers) / count if count > 0 else 0

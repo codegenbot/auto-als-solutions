@@ -1,11 +1,5 @@
-#include <boost/any.hpp>
-#include <boost/optional.hpp>
-#include <vector>
-#include <list>
-
-namespace boost {
-using namespace std;
-}
+#include "/usr/include/boost/any.hpp"
+using namespace boost;
 
 typedef boost::any Any;
 typedef boost::optional<int> OInt;

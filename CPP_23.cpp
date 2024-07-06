@@ -1,11 +1,6 @@
-```
-#include<string>
-#include<cstring> 
+#include <string>
+#include <cstring>
 
-using namespace std;
-
-int str_len(const string& str){
-    return str.length();
+int std::str_len(std::string str){
+    return strlen(str.c_str());
 }
-
-assert ("asdasnakj".length() == 9);
