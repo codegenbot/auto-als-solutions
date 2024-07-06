@@ -1,4 +1,6 @@
 ```c++
+#include <string>
+
 int is_bored(std::string S){
     int count = 0;
     size_t pos = 0;
