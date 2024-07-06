@@ -1,17 +1,12 @@
 def match_parens(lst):
-    stack = []
+    open_parens = 0
     for s in lst:
-        for c in s:
-            if c == '(':
-                stack.append(c)
-            elif c == ')':
-                if len(stack) == 0:
-                    return 'No'
-                stack.pop()
-    if len(stack) == 0:
-        return 'Yes'
-    else:
-        return 'No'
-
-input_list = input("Enter your string: ")
-print(match_parens(input_list))
+        if s[0] == '(':
+            open_parens += 1
+        elif s[0] == ')':
+            if open_parens > 0:
+                open_parens -= 1
+            else:
+                return 'No'
+                
+    return 'Yes' if open_parens == 0 else 'No'
