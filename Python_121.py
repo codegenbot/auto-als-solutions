@@ -1,1 +1,4 @@
-'Given an array of integers, write a Python function that returns the total of all odd numbers starting from the second number in the sequence.'
+```python
+def solution(lst):
+    'Given a list of integers, returns the sum of all odd numbers from the second number onwards.'
+    return sum(i for i in lst[1::2] if i % 2 != 0)
