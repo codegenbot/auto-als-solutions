@@ -1,9 +1,8 @@
 #include <vector>
 #include <algorithm>
 
-std::vector<int> sortByDigitSum(std::vector<int> arr) {
-    std::vector<int> res = arr;
-    sort(res.begin(), res.end(), [](int a, int b)->bool{
+std::vector<int> sortByDigitSum(std::vector<int> &arr) {
+    std::sort(arr.begin(), arr.end(), [&](int a, int b)->bool{
         long long sum1 = 0, sum2 = 0;
         while(a > 0){
             sum1 += a % 10;
@@ -15,5 +14,5 @@ std::vector<int> sortByDigitSum(std::vector<int> arr) {
         }
         return sum1 < sum2;
     });
-    return res;
+    return arr;
 }
