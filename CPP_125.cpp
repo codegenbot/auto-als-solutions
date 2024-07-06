@@ -29,12 +29,6 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        if (issame(words, {word})) {
-            for (const auto& w : words) {
-                std::cout << w << std::endl;
-            }
-        } else {
-            std::cout << word << std::endl;
-        }
+        std::cout << word << std::endl;
     }
 }
