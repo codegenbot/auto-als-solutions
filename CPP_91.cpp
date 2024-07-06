@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -6,10 +5,13 @@ int is_bored(std::string S) {
     int count = 0;
     size_t pos = 0;
     while ((pos = S.find("I", pos)) != std::string::npos) {
-        if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
+        if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos) {
             count++;
-        else
-            pos = S.find(".", pos, pos)+1;
+            pos++; // increment `pos` to skip the current "I"
+        } else {
+            pos = S.find(".", pos); // or whichever punctuation mark is found
+            if (pos == std::string::npos) break; // stop searching when punctuation is not found
+        }
     }
     return count;
 
