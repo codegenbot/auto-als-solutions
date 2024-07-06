@@ -1,12 +1,7 @@
-bool is_prime(int num) {
-    if (num <= 1) return false;
-    for (int i = 2; i * i <= num; i++)
-        if (num % i == 0)
-            return false;
-    return true;
-}
-
+```cpp
 int x_or_y(int n, int x, int y) {
-    if (is_prime(n)) return x;
-    else return y;
+    if (isPrime(n))
+        return x;
+    else
+        return y;
 }

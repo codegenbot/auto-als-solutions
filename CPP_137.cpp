@@ -1,30 +1,21 @@
-#include <iostream>
 #include <boost/any.hpp>
+#include <iostream>
 
-using namespace std;
 using namespace boost;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (any_cast<int>(a) > any_cast<int>(b)) return a;
-    else if (any_cast<double>(a) > any_cast<double>(b)) return a;
-    else if (any_cast<string>(a) > any_cast<string>(b)) return a;
-    else if (any_cast<int>(a) == any_cast<int>(b)) return "None";
-    else if (any_cast<double>(a) == any_cast<double>(b)) return "None";
-    else if (any_cast<string>(a) == any_cast<string>(b)) return "None";
-    else return b;
-}
+    int i1 = any_cast<int>(a);
+    int i2 = any_cast<int>(b);
+    double d1 = any_cast<double>(a);
+    double d2 = any_cast<double>(b);
+    std::string s1 = any_cast<std::string>(a);
+    std::string s2 = any_cast<std::string>(b);
 
-int main() {
-    boost::any a = 10; 
-    boost::any b = 20; 
-
-    boost::any result = compare_one(a, b);
-
-    if (boost::any_cast<string>(result) == "None") {
-        cout << "The numbers are equal." << endl;
-    } else {
-        cout << "The larger number is: " << boost::any_cast<int>(result) << endl;
-    }
-
-    return 0;
+    if (i1 > i2) return a;
+    else if (d1 > d2) return a;
+    else if (s1 > s2) return a;
+    else if (i1 == i2) return "None";
+    else if (d1 == d2) return "None";
+    else if (s1 == s2) return "None";
+    return b;
 }
