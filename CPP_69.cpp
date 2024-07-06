@@ -8,12 +8,12 @@ int search(vector<int> lst) {
         }
     }
 
-    int max_freq = -1;
+    int max_freq_key = -1;
     for (auto p : freq) {
-        if (p.second > max_freq) {
-            max_freq = p.second;
+        if (p.second > max_freq_key && p.second >= p.first && p.first > 0) {
+            max_freq_key = p.second;
         }
     }
 
-    return max_freq;
+    return max_freq_key;
 }

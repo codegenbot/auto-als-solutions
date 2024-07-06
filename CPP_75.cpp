@@ -1,4 +1,3 @@
-```c
 bool is_multiply_prime(int a){
     bool prime[100] = {false};
     for(int i=2; i<100; i++){
