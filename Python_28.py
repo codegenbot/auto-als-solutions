@@ -1,3 +1,4 @@
+```
 strings = []
 while True:
     inp = input("Enter strings separated by space (or 'stop' to finish): ")
