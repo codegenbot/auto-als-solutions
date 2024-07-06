@@ -1,14 +1,8 @@
-double find_zero(vector<double> coeffs){
+double find_zero(vector<double> xs){
     double sum = 0;
-    vector<double> poly(1);
-    for (int i = 0; i < coeffs.size(); i++) {
-        if(i % 2 == 0) {
-            poly.push_back(coeffs[i]);
-        } else {
-            for(int j = 0; j <= i/2; j++) {
-                poly[j] += (-1) * pow(poly, i);
-            }
-        }
+    vector<double> coeffs(xs.begin(),xs.end()); // define the coefficients
+    for (int i = 2; i < xs.size(); i+=2) {
+        sum += coeffs[i] * pow(-sum / coeffs[i-1], i);
     }
-    return round(poly[0], 10);
+    return round(sum, 10);
 }
