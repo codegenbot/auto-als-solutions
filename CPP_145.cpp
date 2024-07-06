@@ -1,3 +1,4 @@
+```
 #include <algorithm>
 #include <vector>
 
@@ -6,7 +7,6 @@ bool issame(std::vector<int> a, std::vector<int> b) {
 }
 
 namespace std;
-
 std::vector<int> order_by_points(std::vector<int> nums) {
     auto comp = [&nums](int a, int b) {
         int sumA = 0, sumB = 0;
@@ -20,7 +20,7 @@ std::vector<int> order_by_points(std::vector<int> nums) {
     return nums;
 }
 
-int oldmain() {
+int main2() {
     assert(issame(order_by_points({0,6,6,-76,-21,23,4}) , {-76, -21, 0, 4, 23, 6, 6}));
     return 0;
 }
