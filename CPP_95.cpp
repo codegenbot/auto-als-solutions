@@ -1,3 +1,4 @@
+```c++
 bool check_dict_case(map<string,string> dict); 
 
 bool check_dict_case(map<string,string> dict){
@@ -13,3 +14,4 @@ bool check_dict_case(map<string,string> dict){
     }
     
     return allLower || allUpper;
+}
