@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -35,5 +34,6 @@ int main() {
         std::cout << "The string is happy.\n";
     else
         std::cout << "The string is not happy.\n";
+
     return 0;
 }
