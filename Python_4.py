@@ -1,3 +1,4 @@
+```
 from typing import List
 
 
@@ -8,7 +9,7 @@ def mean_absolute_deviation(numbers: List[float]) -> float:
     count = 0
     for num in numbers:
         if isinstance(num, (int, float)):
-            total += num
+            total += abs(num)
             count += 1
         else:
             raise ValueError("Invalid input: non-numeric value found")
