@@ -1,6 +1,6 @@
 def modp(*args):
-    n = args[0]
-    p = args[1]
+    n = int(args[0])
+    p = int(args[1])
     if n < 0:
         n += p
     def egcd(a, b):
