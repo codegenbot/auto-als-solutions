@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -8,7 +7,7 @@ using namespace std;
 vector<string> split(const string& str, const string& delimiter) {
     vector<string> result;
     size_t pos = 0;
-    while ((pos = str.find(delimiter)) != string::npos) {
+    while ((pos = str.find(delimiter)) != std::string::npos) {
         result.push_back(str.substr(0, pos));
         str.erase(0, pos + delimiter.length());
     }
