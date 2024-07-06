@@ -1,4 +1,3 @@
-```c++
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -25,4 +24,3 @@ int main() {
     std::cout << "Sum of squares: " << sum << std::endl;
 
     return 0;
-}
