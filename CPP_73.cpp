@@ -16,7 +16,7 @@ int smallest_change(std::vector<int>& coins) {
             if (coins[i] == coins[j]) {
                 dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
-                dp[i][j].push_back(1 + std::max(dp[i+1][j], dp[i][j-1]).size());
+                dp[i][j].push_back(1 + dp[i+1][j].size());
             }
         }
     }
