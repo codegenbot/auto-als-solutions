@@ -1,4 +1,4 @@
-```
+input_list = list(map(int, input().split()))
 def sum_squares(lst):
     total_sum = 0
     for i in range(len(lst)):
@@ -8,10 +8,4 @@ def sum_squares(lst):
             total_sum += lst[i] ** 3
     return total_sum
 
-def main():
-    n = int(input("Enter the number of elements in the list: "))
-    lst = [int(i) for i in input("Enter the elements of the list: ").split()]
-    print(sum_squares(lst))
-
-if __name__ == "__main__":
-    main()
+print(sum_squares(input_list))
