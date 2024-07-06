@@ -1,5 +1,4 @@
-```
-def minPathSum(grid, k):
+def minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
     dp = [[[float('inf'), []] for _ in range(n * n)] for _ in range(n * n)]
@@ -10,25 +9,9 @@ def minPathSum(grid, k):
         dp[0][j][0] = dp[0][j - 1][0] + grid[0][j]
     for i in range(1, n):
         for j in range(1, n):
-            if grid[i][j] <= k:
-                dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
-            else:
-                if i > 0 and j > 0 and (dp[(i - 1) * n + j][j - 1][0] == dp[i * n + j][(i - 1) * n + (j - 1)][0]):
-                    continue
-                elif i > 0:
-                    if dp[i * n + j][(i - 1) * n + j][0] <= dp[(i - 1) * n + j][j - 1][0]:
-                        dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
-                    else:
-                        continue
-                elif j > 0:
-                    if dp[i * n + j][(i - 1) * n + j][0] <= dp[(i - 1) * n + j][j - 1][0]:
-                        dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
-                    else:
-                        continue
-                else:
-                    dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
+            dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
     for i in range(n):
         for j in range(n):
             if dp[i * n + j][(n - 1) * n + (n - 1)][0] == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k:
-                return [grid[x][y] for x, y in [(i, j)] + dp[i * n + j][(n - 1) * n + (n - 1)][1]]
+                return [[grid[x][y] for x, y in [(i, j)] + path] for i in range(n) for j in range(n) for path in [dp[i*n+j][m[0][n-1]][1]]
     return []
