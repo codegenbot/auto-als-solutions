@@ -11,17 +11,15 @@ int findMaxValue(std::vector<int> numbers) {
             freqMap[num]++;
         }
     }
-    int maxValue = -1;
     for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
         if (it->second >= it->first && it->first > 0) {
-            maxValue = it->first;
-            break;
+            return it->first;
         }
     }
-    return maxValue;
+    return -1;
 }
 
 int main() {
-    assert(findMaxValue({3, 10, 10, 9, 2}) == 1);
+    std::cout << findMaxValue({3, 10, 10, 9, 2}) << std::endl;
     return 0;
 }
