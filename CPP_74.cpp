@@ -1,12 +1,11 @@
 #include <vector>
 #include <string>
-#include <initializer_list>
 
-bool issame(vector<string> a,vector<string>b){
+bool issame(const std::vector<std::string>& a,const std::vector<std::string>& b){
     return a == b;
 }
 
-vector<string> total_match(vector<string> lst1, vector<string> lst2) {
+std::vector<std::string> total_match(const std::vector<std::string>& lst1, const std::vector<std::string>& lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
