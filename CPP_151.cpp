@@ -14,9 +14,16 @@ long long double_the_difference(vector<double> lst) {
 }
 
 int main() {
-    vector<double> lst({1.5, 2.5, -3.4, 4.7});
+    vector<double> lst;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        double num;
+        cout << "Enter element " << i+1 << ": ";
+        cin >> num;
+        lst.push_back(num);
+    }
     long long odd_sum = double_the_difference(lst);
-    assert(double_the_difference(lst) == odd_sum); 
-    cout << odd_sum;
+    cout << "The sum of squares of odd elements is: " << odd_sum;
     return 0;
-}
