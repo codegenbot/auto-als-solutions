@@ -1,5 +1,5 @@
-#include <cstring>
 #include <iostream>
+#include <cstring> 
 using namespace std;
 
 int str_len(char *str){
@@ -11,8 +11,13 @@ int str_len(char *str){
     return len;
 }
 
-int main(){
+int customMain(){
     char s[] = "Hello, World!";
     cout << "The length of the string is: " << str_len(s) << endl;
+    return 0;
+}
+
+int main(){
+    customMain();
     return 0;
 }
