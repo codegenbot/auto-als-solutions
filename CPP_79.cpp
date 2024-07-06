@@ -1,5 +1,13 @@
+```cpp
 #include <iostream>
 #include <string>
+
+string decimal_to_binary(int decimal);
+int main() {
+    string result = decimal_to_binary(15);
+    assert(result == "db11111db");
+    return 0;
+}
 
 string decimal_to_binary(int decimal){
     string binary = "";
@@ -11,11 +19,4 @@ string decimal_to_binary(int decimal){
         decimal /= 2;
     }
     return "db" + binary + "db";
-}
-
-string decimal_to_binary(int decimal);
-int main() {
-    string result = decimal_to_binary(15);
-    assert(result == "db11111db");
-    return 0;
 }
