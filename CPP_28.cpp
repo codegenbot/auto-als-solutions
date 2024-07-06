@@ -1,5 +1,4 @@
 #include <string>
-#include <vector>
 
 std::string concatenate(std::vector<std::string> strings){
     std::string result = "";
@@ -7,4 +6,3 @@ std::string concatenate(std::vector<std::string> strings){
         result += str;
     }
     return result;
-}
