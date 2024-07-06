@@ -2,21 +2,25 @@ int main() {
     string str;
     cin >> str;
 
-    bool is_nested = false;
-    int count_open = 0;
+    bool result = false;
+    int count = 0;
+
     for (char c : str) {
         if (c == '[') {
-            count_open++;
+            count++;
         } else if (c == ']') {
-            if (count_open > 1) {
-                is_nested = true;
-                break;
+            if (count > 0) {
+                count--;
             }
-            count_open--;
+        }
+
+        if (count >= 1 && c == ']') {
+            result = true;
+            break;
         }
     }
 
-    cout << (is_nested ? "true" : "false") << endl;
+    cout << (result ? "true" : "false");
 
     return 0;
 }
