@@ -13,12 +13,12 @@ int main() {
 
         int max_lowerings = total_water / capacity;
         return max_lowerings + (total_water % capacity > 0);
-    }
+    };
     
     std::vector<std::vector<int>> grid = {{1,1,1,1}, {1,1,1,1}};
     int capacity = 9;
     int result = max_fill(grid, capacity);
-    std::cout << "Max fill is: " << result << std::endl;
+    std::cout << "The maximum number of fillings is: " << result << std::endl;
     
     return 0;
 }
