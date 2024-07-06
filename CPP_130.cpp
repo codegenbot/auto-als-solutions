@@ -1,15 +1,12 @@
 vector<int> tri(int n) {
-    vector<int> result(1, 3);
-    if (n > 0) {
-        for (int i = 1; i <= n - 2; i++) {
-            int sum = 0;
-            if (i % 2 == 0) {
-                sum = 1 + i / 2;
-            } else {
-                sum = result[i-1] + result[i-2] + result[i+1];
-            }
-            result.push_back(sum);
-        }
+    vector<int> result;
+    if (n == 0) return result;
+    result.push_back(3);
+    if (n == 1) return result;
+    result.push_back(1);
+    for (int i = 2; i <= n; i++) {
+        int val = (i % 2 == 0) ? 1 + i / 2 : result[i - 1] + result[i - 2] + result[i - 3];
+        result.push_back(val);
     }
     return result;
 }
