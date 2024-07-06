@@ -1,17 +1,18 @@
-Here is the completed code:
+#include <vector>
+#include <map>
 
 int search(vector<int> lst) {
-    map<int, int> freq;
+    map<int, int> freqMap;
     for (int num : lst) {
-        if (freq.find(num) == freq.end()) {
-            freq[num] = 1;
+        if (freqMap.find(num) == freqMap.end()) {
+            freqMap[num] = 1;
         } else {
-            freq[num]++;
+            freqMap[num]++;
         }
     }
-    for (auto p : freq) {
-        if (p.second >= p.first && p.first > 0) {
-            return p.first;
+    for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
+        if (it->second >= it->first && it->first > 0) {
+            return it->first;
         }
     }
     return -1;
