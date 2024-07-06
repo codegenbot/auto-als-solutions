@@ -1,19 +1,19 @@
 #include <string>
+#include <cctype>
 
-string get_closest_vowel(string word) {
-    for (int i = word.length() - 1; i >= 0; --i) {
-        if (word[i] == 'a' || word[i] == 'e' || word[i] == 'i' ||
-            word[i] == 'o' || word[i] == 'u') {
-            for (int j = i + 1; j < word.length(); ++j) {
-                if (!isVowel(word[j])) {
-                    return string(1, word[i]);
-                }
+std::string get_closest_vowel(std::string word) {
+    for (int i = word.size() - 1; i > 0; --i) {
+        if (!isalpha(word[i])) continue;
+        if (ispunct(word[i]) || !islower(word[i])) continue;
+        if (word[i] == 'y' && (i == 1 || !isalpha(word[i-1]))) continue;
+        for (int j = i - 1; j >= 0; --j) {
+            if (!isalpha(word[j])) break;
+            if (ispunct(word[j]) || !islower(word[j])) break;
+            if (word[j] == 'y' && (j == 0 || !isalpha(word[j-1]))) break;
+            if (strchr("aeiouAEIOU", tolower(word[j])) != NULL) {
+                return word.substr(j, 1);
             }
         }
     }
     return "";
-}
-
-bool isVowel(char c) {
-    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
