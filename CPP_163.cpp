@@ -1,31 +1,16 @@
-#include <iostream>
 #include <vector>
-using namespace std;
+#include <cassert>
 
-// Function to generate integers within a range
-vector<int> generate_integers(int start, int end) {
-    vector<int> result;
-    for (int i = start; i <= end; ++i) {
-        result.push_back(i);
+std::vector<int> generate_integers(int min, int max) {
+    std::vector<int> integers;
+    for (int i = min; i <= max; i++) {
+        integers.push_back(i);
     }
-    return result;
+    return integers;
 }
 
-// Function to compare two integer vectors for sameness
-bool issame(vector<int> a, vector<int> b) {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Main function
 int main_test() {
-    assert(issame(generate_integers(17, 89), generate_integers(17, 89)));
+    std::vector<int> a = generate_integers(17, 89);
+    assert(std::equal(a.begin(), a.end(), a.begin()));
     return 0;
 }
