@@ -1,7 +1,8 @@
-```cpp
+#include <iostream>
 #include <map>
-#include <string>
 #include <cctype>
+
+using namespace std;
 
 bool check_dict_case(map<string, string> dict) {
     if (dict.empty()) return false;
@@ -19,7 +20,8 @@ bool check_dict_case(map<string, string> dict) {
 
 int main() {
     map<string, string> dict;
-    // code to read input and populate the dictionary
-    bool result = check_dict_case(dict);
+    // input your data
+    cout << check_dict_case(dict) << endl;
+
     return 0;
 }
