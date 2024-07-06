@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -12,7 +11,7 @@ std::vector<int> generate_integers(int a, int b) {
     return result;
 }
 
-bool issame(const std::vector<int>& a, const std::vector<int>&b){
+bool issame(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
