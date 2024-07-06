@@ -1,16 +1,19 @@
-```cpp
 #include <iostream>
 using namespace std;
 
 string change_base(int x, int base) {
-    string res;
+    char res[1001];
+    string s = "";
+    size_t size = 0;
     while (x > 0) {
         int rem = x % base;
-        if(rem >= 10) res.insert(0, 1, (char)(rem - 55));
-        else res.insert(0, "01"[rem]);
+        char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
+        s.push_back(c);
         x /= base;
+        size++;
     }
-    return res;
+    res[size] = '\0'; 
+    return string(res);
 }
 
 int main() {
@@ -19,5 +22,4 @@ int main() {
     cin >> num;
     cout << "Enter the base: ";
     cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
-}
+    cout << "The conversion result is: " << change_base(num, base) << endl;
