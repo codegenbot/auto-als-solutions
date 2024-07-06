@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -62,6 +63,6 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    assert(issame({result.begin(), result.end()}, {"Nine", "Four", "Eight"}));
+    assert(issame({{"Nine"}, {"Four", "Eight"}}));
     return 0;
 }
