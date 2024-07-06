@@ -1,4 +1,3 @@
-#include <initializer_list>
 #include <vector>
 #include <cstdint>
 
@@ -23,4 +22,10 @@ int smallest_change(std::vector<int> arr) {
     }
     
     return dp[0][n-1].size();
+}
+
+int main() {
+    std::vector<int> arr = {0, 1};
+    assert(smallest_change(arr) == 1);
+    return 0;
 }
