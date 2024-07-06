@@ -17,6 +17,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? distance(find(vec.begin(), vec.end(), 10), vec.end()) : -1, "");
+    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? distance(vec.begin(), find(vec.end(), 10)) : -1, "");
     return 0;
 }
