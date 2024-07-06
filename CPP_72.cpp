@@ -1,4 +1,6 @@
-#include <algorithm>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 bool will_it_fly(vector<int> q, int w) {
@@ -14,7 +16,16 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-bool isPalindrome(std::string s) {
-    std::string rev = s;
-    std::reverse(rev.begin(), rev.end());
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
     return s == rev;
+}
+
+cin >> w;
+vector<int> q(3);
+for(int i=0; i<3; i++) cin >> q[i];
+if(will_it_fly(q, w))
+    cout << "YES";
+else
+    cout << "NO";

@@ -2,7 +2,7 @@
 using namespace std;
 
 string change_base(int x, int base) {
-    char res[1000];
+    char res[1001];
     string s = "";
     size_t size = 0;
     while (x > 0) {
@@ -12,7 +12,8 @@ string change_base(int x, int base) {
         x /= base;
         size++;
     }
-    return s.substr(0, size);
+    res[size] = '\0'; 
+    return string(res);
 }
 
 int main() {
@@ -21,5 +22,4 @@ int main() {
     cin >> num;
     cout << "Enter the base: ";
     cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
-}
+    cout << "The conversion result is: " << change_base(num, base) << endl;
