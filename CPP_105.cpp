@@ -60,9 +60,8 @@ vector<string> by_length(vector<int> arr) {
 }
 
 int main() {
-    vector<int> arr = {9, 4, 8};
+    vector<int> arr = {5, 2};
     vector<string> result = by_length(arr);
-    if (!issame({ "One" }, { "Four", "Eight" }, {result})) {
-        return 1; 
-    }
+    assert(issame({"One", "Two"}, result));
     return 0;
+}
