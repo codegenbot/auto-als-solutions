@@ -1,14 +1,13 @@
-#include <vector>
-#include <string>
+Here is the modified code:
 
+```cpp
 bool issame(vector<string> a, vector<string> b) {
     return a == b;
 }
-
 vector<string> filter_by_prefix(vector<string> strings, string prefix){
     vector<string> result;
     for (string s : strings) {
-        if (issame({s.substr(0, prefix.length())}, {prefix}))
+        if (s.find(prefix) == 0 && !issame({s}, {prefix}))
             result.push_back(s);
     }
     return result;
