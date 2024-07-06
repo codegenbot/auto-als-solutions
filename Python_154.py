@@ -1,2 +1,8 @@
-def cycpattern_check(a , b):
-    return any(b in a[i:i+len(b)] for i in range(len(a)))
+```
+def cycpattern_check(a, b):
+    if len(b) == 0:
+        return True
+    for i in range(len(b)):
+        if a.replace(b[i:] + b[:i], "") != a:
+            return False
+    return True
