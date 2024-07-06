@@ -1,4 +1,2 @@
 ```
-input6 = "some_value"
-output = f"_{input6}_"
-print(output)
+input6_","_-2816_").replace("_", "-")
