@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -27,13 +28,13 @@ bool is_happy(std::string s) {
 }
 
 int main() {
-    std::string s;
+    std::string input;
     std::cout << "Enter a string: ";
-    std::cin >> s;
-    if (is_happy(s))
-        std::cout << "The string is happy.\n";
+    std::getline(std::cin, input);
+    if (is_happy(input))
+        std::cout << "The string is happy." << std::endl;
     else
-        std::cout << "The string is not happy.\n";
+        std::cout << "The string is not happy." << std::endl;
 
     return 0;
 }
