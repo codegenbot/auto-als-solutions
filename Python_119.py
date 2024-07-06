@@ -14,7 +14,4 @@ def match_parens(lst):
         if open_count != close_count:
             matching = False
         
-        if not matching:
-            print("No")
-        else:
-            print("Yes")
+    return "Yes" if matching else "No"
