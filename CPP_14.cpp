@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -13,12 +14,4 @@ int main() {
     assert(issame(all_prefixes("WWW") ,vector<string>({"W", "WW", "WWW"})));
     // Your code here...
     return 0;
-}
-
-vector<string> all_prefixes(string str) {
-    vector<string> result;
-    for (int i = 1; i <= str.length(); i++) {
-        result.push_back(str.substr(0, i));
-    }
-    return result;
 }
