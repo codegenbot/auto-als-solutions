@@ -2,7 +2,7 @@
 from typing import List
 
 def parse_nested_parens(paren_string: str) -> List[int]:
-    """Parse a string containing nested parentheses and return a list of integers representing the levels."""
+    """"""
     result = []
     level = 0
     for char in paren_string:
