@@ -1,11 +1,13 @@
+#include <string>
+
 string string_xor(string a, string b) {
-    string result = "";
+    string result;
     for (int i = 0; i < a.length(); i++) {
-        int val1 = a[i] - '0';
-        int val2 = b[i] - '0';
-        int res = val1 ^ val2;
-        char c = res + '0';
-        result += c;
+        if ((a[i] - '0') ^ (b[i] - '0')) {
+            result.push_back('1');
+        } else {
+            result.push_back('0');
+        }
     }
     return result;
 }
