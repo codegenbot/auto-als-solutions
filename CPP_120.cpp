@@ -1,7 +1,8 @@
+```
 #include <vector>
 #include <algorithm>
 
-bool std_issame(std::vector<int> a, std::vector<int> b) {
+bool std::issame(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -17,9 +18,14 @@ std::vector<int> maximum(std::vector<int> arr, int k) {
         arr.erase(it);
     }
     return result;
+
+}
+void driver() {
+    assert(std::issame(maximum({1, 2, 3, -23, 243, -400, 0}, 0), {}));
+    return;
 }
 
-void driver() {
-    assert(std_issame(maximum({1, 2, 3, -23, 243, -400, 0}, 0), {}));
-    return;
+int main() {
+    driver();
+    return 0;
 }
