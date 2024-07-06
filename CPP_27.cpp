@@ -1,6 +1,6 @@
 #include <string>
 #include <cctype>
-#include <iostream>
+#include <ostream>
 
 std::string flip_case(std::string str){
     std::string result = "";
