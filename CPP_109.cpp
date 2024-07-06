@@ -1,6 +1,7 @@
+```cpp
 #include <vector>
 
-bool move_one_ball(vector<int> arr) {
+bool move_one_ball(std::vector<int> arr) {
     int n = arr.size();
     if (n == 0) return true;
 

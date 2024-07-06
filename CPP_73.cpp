@@ -1,9 +1,10 @@
+#include <initializer_list>
 #include <vector>
 #include <cstdint>
 
-int smallest_change(std::vector<int> arr) {
+int smallest_change(vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<uint64_t>> dp(n, std::vector<uint64_t>(n-1));
+    vector<vector<uint64_t>> dp(n, vector<uint64_t>(n-1));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -25,7 +26,12 @@ int smallest_change(std::vector<int> arr) {
 }
 
 int main() {
-    std::vector<int> arr = {0, 1};
-    assert(smallest_change(arr) == 1);
-    return 0;
+    int n;
+    std::cin >> n;
+    std::vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> arr[i];
+    }
+    
+    std::cout << smallest_change(arr) << "\n";
 }
