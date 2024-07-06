@@ -39,7 +39,7 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    if (!issame({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})))
+    if (!issame({{"E"}, {"D-"}}, numerical_letter_grade({0.0f, 0.7f})))
         return 1; // assertion failed
     return 0;
 }
