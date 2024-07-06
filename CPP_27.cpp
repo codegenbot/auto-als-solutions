@@ -5,18 +5,19 @@
 int main(){
     std::string str;
     int i = 0;
-
+    
+    std::cout << "Enter a string: ";
     std::cin >> str;
-
+    
     for(i = 0; i < str.length(); i++){
         if(str[i] >= 'a' && str[i] <= 'z'){
-            str[i] = str[i] - 32; // Convert lowercase to uppercase
+            str[i] = toupper(str[i]);
         }else if(str[i] >= 'A' && str[i] <= 'Z'){
-            str[i] = str[i] + 32; // Convert uppercase to lowercase
+            str[i] = tolower(str[i]);
         }
     }
-
-    std::cout << str;
-
+    
+    std::cout << "The flipped case of the string is: " << str << std::endl;
+    
     return 0;
 }
