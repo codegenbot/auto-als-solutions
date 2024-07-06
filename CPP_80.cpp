@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -12,7 +11,7 @@ bool is_happy(string s){
         memcpy(cstr, s.substr(i, 3).c_str(), 3);
         bool unique = true;
         for(char c : s){ 
-            if(count(&cstr[0], &cstr+3, c) > 1) {
+            if(std::count(s.begin(), s.end(), c) > 1) {
                 unique = false;
                 break;
             }
@@ -32,4 +31,3 @@ int main() {
     else
         cout << "The given string is not happy." << endl;
     return 0;
-}
