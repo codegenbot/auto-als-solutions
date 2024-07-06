@@ -28,10 +28,10 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     }
 
     sort(closest_pairs.begin(), closest_pairs.end(),
-        [](const auto &a, const auto &b) {
-            return (abs(a.first - a.second) <
-                   abs(b.first - b.second));
-        });
+         [](const auto &a, const auto &b) {
+             return (abs(a.first - a.second) <
+                    abs(b.first - b.second));
+         });
 
     return closest_pairs;
 }
