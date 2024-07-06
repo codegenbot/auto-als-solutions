@@ -2,11 +2,14 @@
 def add(x: int, y: int) -> int:
     while True:
         try:
-            x = int(input("Enter the first number: "))
-            y = int(input("Enter the second number: "))
-            print(f"The sum of {x} and {y} is: {x + y}")
-            cont = input("Do you want to add again? (yes/no): ")
-            if cont.lower() != 'yes':
-                break
+            while True:
+                x = int(input("Enter the first number: "))
+                if type(x) == int:
+                    break
+            while True:
+                y = int(input("Enter the second number: "))
+                if type(y) == int:
+                    break
+            return x + y
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
