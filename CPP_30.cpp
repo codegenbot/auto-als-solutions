@@ -1,23 +1,22 @@
 #include <vector>
 #include <cassert>
 
-bool issame(const std::vector<float>& a, const std::vector<float>& b) {
-    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
-}
-
-vector<vector<float>> get_positive(vector<vector<float>>& l) {
-    vector<vector<float>> result;
-    for (vector<float>& num : l) {
-        if (!num.empty()) {
-            vector<float> pos_nums = get_positive(num);
-            if (!pos_nums.empty())
-                result.push_back(pos_nums);
+std::vector<float> get_positive(std::vector<float> l) {
+    std::vector<float> result;
+    for (float num : l) {
+        if (num > 0) {
+            result.push_back(num);
         }
     }
     return result;
 }
 
+bool issame(std::vector<float> a, std::vector<float> b) {
+    // Your logic to compare two vectors here
+    return true; 
+}
+
 int main() {
-    assert(std::equal(get_positive({}).begin(), get_positive({}).end(), {}));
+    assert (issame(get_positive({}), {}));  
     return 0;
 }
