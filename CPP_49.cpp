@@ -1,6 +1,3 @@
-#include <stdio.h>
-using namespace std;
-
 int modp(int n, int p) {
     if (n == 0)
         return 1;
