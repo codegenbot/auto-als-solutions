@@ -1,17 +1,26 @@
-int count_nums(vector<int> nums) {
+int count_nums(vector<int> v) {
     int count = 0;
-    for (int num : nums) {
-        bool has_nonzero_sum = false;
-        int sign = (num < 0) ? -1 : 1;
-        num = abs(num);
-        while (num > 0) {
-            int digit = num % 10;
-            if (digit != 0 || sign == -1 && digit == 5)
-                has_nonzero_sum = true;
-            num /= 10;
+    for (int num : v) {
+        if (num > 0) {
+            int sign = abs(num) / pow(10, int(log10(abs(num)))) < 0 ? -1 : 1;
+            int sum_digits = 0;
+            while (abs(num)) {
+                sum_digits += abs(num) % 10;
+                num /= 10;
+            }
+            if (sign * sum_digits > 0)
+                count++;
+        } else if (num < 0) {
+            num = -num;
+            int sign = abs(num) / pow(10, int(log10(abs(num)))) < 0 ? -1 : 1;
+            int sum_digits = 0;
+            while (abs(num)) {
+                sum_digits += abs(num) % 10;
+                num /= 10;
+            }
+            if (sign * sum_digits > 0)
+                count++;
         }
-        if (has_nonzero_sum)
-            count++;
     }
     return count;
 }
