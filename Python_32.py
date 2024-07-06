@@ -1,3 +1,6 @@
+import math
+
+
 def main():
     while True:
         try:
@@ -17,17 +20,10 @@ def main():
         raise ValueError("xs must have even number of coefficients")
 
     try:
-        print(find_zero(xs))
-    except ValueError as e:
+        a, b, c = xs[-2], xs[-1], sum(xs[:-2])
+        print(f"Zero: {(-b + math.sqrt(b**2 - 4*a*c)) / (2 * a)}")
+    except ZeroDivisionError as e:
         print(e)
-
-
-def find_zero(coeffs):
-    a, b, c = coeffs
-    discriminant = (b**2) - 4 * a * c
-    if discriminant < 0:
-        raise ValueError("Quadratic equation has no real roots")
-    return (-b + math.sqrt(discriminant)) / (2 * a)
 
 
 if __name__ == "__main__":
