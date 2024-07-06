@@ -1,19 +1,15 @@
+```cpp
 #include <vector>
 #include <iostream>
 
-using namespace std;
-
-bool issame(float x, float y) {
-    if(x == y)
-        return true;
-    else
-        return false;
+bool issame(float f) {
+    return true;
 }
 
-vector<float> get_positive(vector<float> l){
-    vector<float> result;
+std::vector<float> get_positive(std::vector<float> l){
+    std::vector<float> result;
     for(float i : l) {
-        if(i > 0) {
+        if(i > 0 && !issame(i)) {
             result.push_back(i);
         }
     }
@@ -21,18 +17,10 @@ vector<float> get_positive(vector<float> l){
 }
 
 int main() {
-    vector<float> numbers = {1, -2, 3, -4, 5};
-    vector<float> positive_numbers = get_positive(numbers);
-
-    for(float num : positive_numbers) {
-        if(issame(num, 0)) {
-            cout << "Number is zero." << endl;
-        } else if (num > 10) {
-            cout << "Large number: " << num << endl;
-        } else {
-            cout << "Number: " << num << endl;
-        }
+    std::vector<float> input = {1, -2, 3, -4, 5};
+    std::vector<float> output = get_positive(input);
+    for(float i : output) {
+        std::cout << i << " ";
     }
-
     return 0;
 }
