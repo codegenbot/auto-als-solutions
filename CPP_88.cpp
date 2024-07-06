@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -15,10 +16,7 @@ std::vector<int> sort_array(std::vector<int>& array) {
 }
 
 int main() {
-    std::vector<int> array1; 
-    for (int i : {21, 14, 23, 11}) {
-        array1.push_back(i);
-    }
+    std::vector<int> array1 = {21, 14, 23, 11};
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
     array1 = sort_array(std::move(array1)); 
