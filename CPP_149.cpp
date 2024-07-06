@@ -21,7 +21,7 @@ std::vector<std::string> sorted_list_sum(const std::vector<std::string>& lst) {
             result.push_back(str);
         }
     }
-    sort(result.begin(), result.end(),
+    std::sort(result.begin(), result.end(),
          [&](const std::string& a, const std::string& b) {
              if (stoi(a) != stoi(b)) {
                  return stoi(a) < stoi(b);
