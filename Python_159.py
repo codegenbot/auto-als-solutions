@@ -1,3 +1,7 @@
+```
 def eat(number, need, remaining):
-    eaten = min(number, need)
+    if remaining < need:
+        eaten = min(remaining, need)
+    else:
+        eaten = min(1000, need + (number - remaining))
     return [eaten, max(0, remaining - (need - eaten))]
