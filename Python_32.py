@@ -1,4 +1,7 @@
-def find_zero(xs: list):
+Here's the modified code:
+
+```
+def find_zero(xs):
     if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
     n = len(xs)
@@ -9,19 +12,15 @@ def find_zero(xs: list):
     )
     return round(x, 2)
 
-
 def main():
     num_coefficients = int(input("Enter number of coefficients: "))
     coefficients = input("Enter coefficients (space separated): ")
     xs = [int(coeff) for coeff in coefficients.split()]
-
+    
     try:
-        if len(xs) != num_coefficients:
-            raise ValueError("Number of coefficients does not match input")
         print(find_zero(xs))
     except ValueError as e:
         print(e)
-
-
+        
 if __name__ == "__main__":
     main()
