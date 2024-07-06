@@ -1,8 +1,8 @@
+```cpp
 #include <vector>
 #include <algorithm>
-#include <string>
 
-bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
+bool isSame(std::vector<std::string> v1, std::vector<std::string> v2) {
     if(v1.size() != v2.size())
         return false;
     for(int i = 0; i < v1.size(); i++)
@@ -11,7 +11,7 @@ bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
     return true;
 }
 
-const std::vector<std::string>& by_length(const std::vector<int>& arr) {
+std::vector<std::string> byLength(std::vector<int> arr) {
     std::vector<std::pair<int, int>> temp;
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
@@ -55,5 +55,11 @@ const std::vector<std::string>& by_length(const std::vector<int>& arr) {
         }
     }
 
-    return std::vector<std::string>(result);
+    return result;
+}
+
+int main() {
+    if (!isSame(byLength({9, 4, 8}), {"Nine", "Four", "Eight"}))
+        return 1;
+    return 0;
 }
