@@ -1,25 +1,23 @@
-bool is_happy(string s) {
-    int len = s.length();
-    if(len < 3)
-        return false;
+#include <string>
 
-    for(int i=0; i<len-2; i++) {
-        string three_chars = s.substr(i, 3);
-        bool unique = true;
-        for(char c : three_chars) {
+using namespace std;
+
+bool is_happy(string s) {
+    if (s.length() < 3) return false;
+    for (int i = 0; i <= s.length() - 3; i++) {
+        string sub = s.substr(i, 3);
+        bool distinct = true;
+        for (char c : sub) {
             int count = 0;
-            for(int j=i; j<i+3; j++) {
-                if(s[j] == c)
-                    count++;
+            for (char d : sub) {
+                if (c == d) count++;
             }
-            if(count > 1) {
-                unique = false;
+            if (count > 1) {
+                distinct = false;
                 break;
             }
         }
-        if(!unique)
-            return false;
+        if (!distinct) return false;
     }
-
     return true;
 }
