@@ -1,5 +1,6 @@
 from typing import List
 
+
 def rescale_to_unit(numbers: List[float]) -> list:
     min_value = min(numbers)
     max_value = max(numbers)
