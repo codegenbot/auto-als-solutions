@@ -1,32 +1,33 @@
 string words_in_sentence(string sentence){
-    vector<int> prime_numbers;
-    for(int i=2; i<=100; i++){
+    vector<string> words = split(sentence, ' ');
+    string result;
+    for(auto word : words) {
+        int len = word.length();
         bool is_prime = true;
-        for(int j=2; j*j <= i; j++){
-            if(i % j == 0) {
-                is_prime = false;
-                break;
+        if(len > 1) {
+            for(int i = 2; i*i <= len; i++) {
+                if(len % i == 0) {
+                    is_prime = false;
+                    break;
+                }
+            }
+            if(is_prime) {
+                result += word + " ";
             }
         }
-        if(is_prime) prime_numbers.push_back(i);
     }
-
-    string result = "";
-    vector<string> words = split(sentence, ' ');
-    for(string word : words){
-        if(find(prime_numbers.begin(), prime_numbers.end(), word.length()) != prime_numbers.end())
-            result += word + " ";
-    }
-    return result.substr(0, result.size()-1);
+    return result.substr(0, result.length() - 1);
 }
 
-vector<string> split(string str, char symbol) {
+vector<string> split(const string& str, char delim){
     vector<string> tokens;
-    size_t pos = 0;
-    while((pos = str.find(symbol)) != string::npos) {
-        tokens.push_back(str.substr(0, pos));
-        str.erase(0, pos + 1);
-    }
-    tokens.push_back(str);
+    size_t prev = 0, pos = 0;
+    do {
+        pos = str.find(delim, prev);
+        if(pos == string::npos) pos = str.length();
+        string token = str.substr(prev, pos - prev);
+        tokens.push_back(token);
+        prev = pos + 1;
+    } while (pos < str.length());
     return tokens;
 }
