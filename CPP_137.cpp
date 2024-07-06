@@ -10,8 +10,12 @@ boost::any compare_one(boost::any a, boost::any b) {
     double db = any_cast<double>(b);
     string sb = any_cast<string>(b);
 
-    if(da > 0 && db > 0)
-        return (da > db) ? a : b;
+    if (da > db)
+        return a;
+    else if (sa > sb)
+        return a;
+    else if (db > da || sb > sa)
+        return b;
     else
         return "None";
 }
