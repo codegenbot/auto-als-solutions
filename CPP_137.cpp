@@ -1,22 +1,24 @@
 #include <boost/any.hpp>
-#include <string>
+#include <iostream>
 
 using namespace boost;
+using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    int i1 = any_cast<int>(a);
-    double d1 = any_cast<double>(a);
-    std::string s1 = any_cast<std::string>(a);
-
-    int i2 = any_cast<int>(b);
-    double d2 = any_cast<double>(b);
-    std::string s2 = any_cast<std::string>(b);
-
-    if (i1 > i2) return a;
-    else if (d1 > d2) return a;
-    else if (s1 > s2) return a;
-    else if (i1 == i2) return "None";
-    else if (d1 == d2) return "None";
-    else if (s1 == s2) return "None";
+    if (any_cast<int>(a) > any_cast<int>(b)) return a;
+    else if (any_cast<double>(a) > any_cast<double>(b)) return a;
+    else if (any_cast<string>(a) > any_cast<string>(b)) return a;
+    else if (any_cast<int>(a) == any_cast<int>(b)) return "None";
+    else if (any_cast<double>(a) == any_cast<double>(b)) return "None";
+    else if (any_cast<string>(a) == any_cast<string>(b)) return "None";
     return b;
+}
+
+int main() {
+    boost::any a = 5;
+    boost::any b = 10;
+
+    cout << "Result: " << compare_one(a, b) << endl;
+
+    return 0;
 }
