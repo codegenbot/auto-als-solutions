@@ -10,3 +10,6 @@ def find_max(words):
         elif len(unique_chars) == max_unique_chars and word < max_word:
             max_word = word
     return max_word
+
+words = input("Enter words separated by spaces: ").split()
+print(find_max(words))
