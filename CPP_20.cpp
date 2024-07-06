@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -6,18 +5,20 @@ bool issame(std::vector<float> a, std::vector<float> b) {
     return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
 }
 
-int find_closest_elements(const std::vector<float>& elements, const float& target_value) {
-    int closest_index = -1;
-    float min_diff = std::numeric_limits<float>::max();
-    
-    for(int i=0; i<elements.size(); i++) {
-        if(std::abs(elements[i] - target_value) < min_diff) {
-            min_diff = std::abs(elements[i] - target_value);
-            closest_index = i;
+float find_closest_elements(const std::vector<float>& arr1, const std::vector<float>& arr2) {
+    float min_diff = FLT_MAX;
+    int idx = -1;
+
+    for(int i=0; i<arr1.size(); i++) {
+        for(int j=0; j<arr2.size(); j++) {
+            if(abs(arr1[i]-arr2[j]) < min_diff) {
+                min_diff = abs(arr1[i]-arr2[j]);
+                idx = i;
+            }
         }
     }
-    
-    return closest_index;
+
+    return arr1[idx];
 }
 
 int main() {
