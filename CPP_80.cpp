@@ -1,13 +1,11 @@
-```
-#include <iostream>
 #include <string>
 
-bool is_happy(const std::string& s) {
+bool is_happy(string s) {
     if (s.length() < 3)
         return false;
 
     for (int i = 0; i <= s.length() - 3; i++) {
-        std::string substr = s.substr(i, 3);
+        string substr = s.substr(i, 3);
         bool unique = true;
         for (char c : substr) {
             int count = 0;
@@ -25,16 +23,4 @@ bool is_happy(const std::string& s) {
     }
 
     return true;
-}
-
-int main() {
-    std::string s;
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, s);
-    if (is_happy(s))
-        std::cout << "Happy number.\n";
-    else
-        std::cout << "Not a happy number.\n";
-
-    return 0;
 }
