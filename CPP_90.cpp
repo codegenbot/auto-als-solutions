@@ -1,4 +1,6 @@
 #include <climits>
+#include <vector>
+#include <algorithm>
 
 int next_smallest(std::vector<int> lst) {
     if (lst.empty()) return 0; 
