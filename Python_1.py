@@ -2,8 +2,6 @@ from typing import List
 
 
 def separate_paren_groups(paren_string: str) -> List[str]:
-    if not paren_string:
-        return []
     stack = []
     groups = []
     current_group = ""
@@ -11,23 +9,27 @@ def separate_paren_groups(paren_string: str) -> List[str]:
     for char in paren_string:
         if char == " ":
             continue
-        if char == "(":
+        elif char == "(":
             stack.append(char)
             current_group += char
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()
-                if not stack:  # Check if stack is empty
-                    groups.append(current_group)
+                if not stack:
+                    groups.append(current_group + ")")
                     current_group = ""
             else:
-                groups.append(
-                    "(" + current_group + ")"
-                )  # Unmatched closing parenthesis, treat as new group
+                groups.append("(" + current_group + ")")
                 current_group = ""
 
-    if stack:  # Handle unmatched opening parentheses at the end of the string
-        while stack and stack[-1] == "(":
+        elif char.isalpha() or char.isspace():
+            pass
+
+    while stack and stack[-1] == "(":
+        stack.pop()
+
+    if stack:
+        while stack:
             stack.pop()
         groups.append("(" + current_group + ")")
 
