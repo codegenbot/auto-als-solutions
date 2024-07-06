@@ -63,8 +63,7 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    if (!issame({ "One" }, { "Four", "Eight" }, vector<string>(result.begin(), result.end()))) {
-        return 1; 
+    if (!issame({"One"}, {"Four", "Eight"}, {result})) {
+        return false; 
     }
     return 0;
-}
