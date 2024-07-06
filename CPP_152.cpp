@@ -1,8 +1,8 @@
 #include <initializer_list>
 #include <vector>
 
-bool std::issame(const std::vector<int>& a, const std::vector<int>& b) {
-    return a == b;
+bool std::operator==(const std::vector<int>& a, const std::vector<int>& b) {
+    return a.size() == b.size() && std::all_of(a.begin(), a.end(), [&](int x) { return std::find(b.begin(), b.end(), x) != b.end(); });
 }
 
 std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
