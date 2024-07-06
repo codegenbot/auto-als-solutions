@@ -1,3 +1,4 @@
+```Python
 def decode_shift(s: str):
     s = s.strip().lower()
     key = len(s) - s.count(' ')
@@ -5,5 +6,8 @@ def decode_shift(s: str):
                     else chr(ord(ch)) if ch.isalpha() and not 'a' <= ch <= 'z'
                     else ch for ch in s])
 
-n = input("Enter a string: ")
-print(decode_shift(n))
+n = input("Enter a string or an integer: ")
+if n.isdigit():
+    print(decode_shift(str(int(n))))
+else:
+    print(decode_shift(n))
