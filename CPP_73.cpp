@@ -20,15 +20,15 @@ int smallest_change(vector<int> arr) {
                 if (sz == 0) {
                     sz = 1;
                 }
-                dp[i].resize(j - i + 2);
-                dp[i][j - i + 1] = sz;
+                dp[i].resize(j - i + 1);
+                dp[i][j - i] = sz;
             } else {
                 size_t sz = dp[i+1][j-1].size();
                 if (sz == 0) {
                     sz = 1;
                 }
-                dp[i].resize(j - i + 2);
-                dp[i][j - i + 1] = min(1, sz) + 1;
+                dp[i].resize(j - i + 1);
+                dp[i][j - i] = min(size_t(1), sz) + 1;
             }
         }
     }
