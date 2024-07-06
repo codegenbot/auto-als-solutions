@@ -3,7 +3,8 @@
 #include <string>
 
 bool issame(std::vector<std::string> a) {
-    size_t len = a[0].length();
+    if (a.empty()) return true;
+    int len = a[0].length();
     for (const auto& str : a) {
         if (str.length() != len) {
             return false;
