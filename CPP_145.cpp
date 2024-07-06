@@ -1,12 +1,19 @@
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 
-bool isSame(const std::vector<int>& a, const std::vector<int>& b) {
-    return a == b;
-}
-
-std::vector<int> sortByDigitSum(std::vector<int> numbers) {
-    std::stable_sort(numbers.begin(), numbers.end(), 
-        [&](int x) { return abs(x); });
-    return numbers;
+std::vector<int> sortByDigitSum(std::vector<int> arr) {
+    std::vector<int> res = arr;
+    sort(res.begin(), res.end(), [](int a, int b)->bool{
+        long long sum1 = 0, sum2 = 0;
+        while(a > 0){
+            sum1 += a % 10;
+            a /= 10;
+        }
+        while(b > 0){
+            sum2 += b % 10;
+            b /= 10;
+        }
+        return sum1 < sum2;
+    });
+    return res;
 }
