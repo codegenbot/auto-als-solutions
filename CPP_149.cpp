@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size())
         return false;
 
@@ -22,13 +22,13 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
         }
     }
     std::sort(result.begin(), result.end(),
-         [&](const std::string& a, const std::string& b) {
-             if (std::stoi(a) != std::stoi(b)) {
-                 return std::stoi(a) < std::stoi(b);
-             } else {
-                 return a < b;
-             }
-         });
+             [&](const std::string& a, const std::string& b) {
+                 if (std::stoi(a) != std::stoi(b)) {
+                     return std::stoi(a) < std::stoi(b);
+                 } else {
+                     return a < b;
+                 }
+             });
     return result;
 }
 
