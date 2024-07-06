@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <algorithm>
 
@@ -30,10 +31,10 @@ vector<int> strange_sort_vector(vector<int> lst) {
 }
 
 int main() {
-    vector<int> numbers = {3, 1, 2, 7, 4};
-    vector<int> sortedNumbers = strange_sort_vector(numbers);
-    for (int num : sortedNumbers) {
-        cout << num << " ";
+    vector<int> input = {5, 3, 8, 4, 2};
+    vector<int> output = strange_sort_vector(input);
+    for (int val : output) {
+        cout << val << " ";
     }
     return 0;
 }
