@@ -1,6 +1,5 @@
-#include <vector>
-#include <algorithm>
 #include <initializer_list>
+
 using namespace std;
 
 bool issame(const vector<string>& v1, const vector<string>& v2) {
