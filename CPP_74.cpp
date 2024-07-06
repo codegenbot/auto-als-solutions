@@ -1,13 +1,18 @@
-```c++
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
+bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
+    if (a.size() != b.size()) {
+        return false;
     }
+    
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i].compare(b[i]) != 0) {
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -22,9 +27,13 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2 += str.length();
     }
 
-    if (issame(lst1, lst2)) return lst1;
-    else if (sum1 < sum2) return lst1;
-    else if (sum1 > sum2) return lst2;
+    if (issame(lst1, lst2)) {
+        return lst1;
+    } else if (sum1 < sum2) {
+        return lst1;
+    } else if (sum1 > sum2) {
+        return lst2;
+    }
     
     int sum1lst = 0, sum2lst = 0;
     for (const auto& str : lst1) {
@@ -41,9 +50,11 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         }
     }
 
-    if (sum1lst < sum2lst) return lst1;
-    else if (sum1lst > sum2lst) return lst2;
-    else {
+    if (sum1lst < sum2lst) {
+        return lst1;
+    } else if (sum1lst > sum2lst) {
+        return lst2;
+    } else {
         for (const auto& str : lst1) {
             for (const auto& sub_str : lst2) {
                 if (str.find(sub_str) != std::string::npos || sub_str.find(str) != std::string::npos) {
