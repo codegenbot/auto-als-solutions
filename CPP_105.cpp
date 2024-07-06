@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+#include <initializer_list>
 using namespace std;
 
 bool issame(vector<string> v1, vector<string> v2) {
@@ -61,7 +62,7 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    if (!issame(vector<string>{"Nine", "Four", "Eight"}, result)) {
+    if (!issame({ "One" }, { "Four", "Eight" }, {result})) {
         return 1; 
     }
     return 0;
