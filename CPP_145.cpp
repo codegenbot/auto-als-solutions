@@ -1,20 +1,32 @@
-```cpp
-#include <algorithm>
 #include <vector>
+#include <algorithm>
+#include <functional>
 
-std::vector<int> sortByDigitSum(const std::initializer_list<int>& arr) {
-    std::vector<int> res(arr);
-    std::sort(res.begin(), res.end(), [&](int a, int b)->bool{
+bool issame(std::vector<int> a, std::vector<int> b) {
+    if(a.size() != b.size()) {
+        return false;
+    }
+    
+    for(int i = 0; i < a.size(); i++) {
         long long sum1 = 0, sum2 = 0;
-        while(a > 0){
-            sum1 += a % 10;
-            a /= 10;
+        while(a[i] > 0){
+            sum1 += a[i] % 10;
+            a[i] /= 10;
         }
-        while(b > 0){
-            sum2 += b % 10;
-            b /= 10;
+        while(b[i] > 0){
+            sum2 += b[i] % 10;
+            b[i] /= 10;
         }
-        return sum1 <= sum2;
-    });
-    return res;
+        if(sum1 != sum2) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+int main() {
+    std::vector<int> order_by_points = {0,6,6,-76,-21,23,4};
+    assert(issame(order_by_points, {-76, -21, 0, 4, 23, 6, 6}));
+    return 0;
 }
