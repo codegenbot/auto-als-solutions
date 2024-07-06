@@ -1,3 +1,4 @@
+```cpp
 bool is_happy(string s) {
     if (s.length() <= 2)
         return false;
