@@ -1,8 +1,8 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a.size() == b.size() && std::all_of(a.begin(), a.end(), [&](int x) { return std::count(b.begin(), b.end(), x) > 0; });
 }
 
 std::vector<int> make_a_pile(int n) {
@@ -13,5 +13,5 @@ std::vector<int> make_a_pile(int n) {
 } 
 
 int main() {
-    assert(issame(make_a_pile(8), make_a_pile(8)) && "The test failed");
+    assert(issame(make_a_pile(8), make_a_pile(8)) == true);
 }
