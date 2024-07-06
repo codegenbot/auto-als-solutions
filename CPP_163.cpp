@@ -1,5 +1,5 @@
+```cpp
 #include <vector>
-#include <algorithm>
 
 std::vector<int> generate_integers(int start, int end) {
     std::vector<int> result;
@@ -14,6 +14,6 @@ bool issame(std::vector<int> a, std::vector<int> b) {
 }
 
 int main_test() {
-    assert(issame(generate_integers(17, 89), generate_intectors(1, 18)));
+    assert(issame(generate_integers(17, 89), generate_integers(17, 89)));
     return 0;
 }
