@@ -1,4 +1,3 @@
-```c++
 #include <vector>
 #include <string>
 
@@ -11,54 +10,16 @@ bool issame(vector<string> a, vector<string> b) {
     return true;
 }
 
-vector<vector<string>> group_by_length(vector<int> arr) {
-    vector<vector<string>> result;
+vector<string> by_length(vector<int> arr) {
+    vector<string> numbers;
     for (int num : arr) {
-        string str = "";
-        switch (num) {
-            case 1:
-                str = "One";
-                break;
-            case 2:
-                str = "Two";
-                break;
-            case 3:
-                str = "Three";
-                break;
-            case 4:
-                str = "Four";
-                break;
-            case 5:
-                str = "Five";
-                break;
-            case 6:
-                str = "Six";
-                break;
-            case 7:
-                str = "Seven";
-                break;
-            case 8:
-                str = "Eight";
-                break;
-            case 9:
-                str = "Nine";
-                break;
-        }
-        for (int i = 0; i < num; ++i) {
-            result.back().push_back(str);
+        if (num >= 1 && num <= 9) {
+            numbers.push_back(to_string(num));
         }
     }
 
-    vector<string> temp;
-    for (vector<string>& vec : result) {
-        if (!issame(vec, temp)) {
-            temp = vec;
-            result.push_back(temp);
-            temp.clear();
-        } else {
-            temp.insert(temp.end(), vec.begin(), vec.end());
-        }
-    }
+    sort(numbers.begin(), numbers.end());
+    reverse(numbers.begin(), numbers.end());
 
-    return result;
+    return numbers;
 }
