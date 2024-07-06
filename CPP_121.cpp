@@ -12,6 +12,6 @@ int sumOdd(std::string str) {
 }
 
 int main() {
-    std::cout << sumOdd("Hello") << std::endl; 
+    std::cout << sumOdd("Hello") << std::endl; // process the string input
     return 0;
 }
