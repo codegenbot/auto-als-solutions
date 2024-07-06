@@ -1,4 +1,3 @@
-```cpp
 #include <algorithm>
 #include <vector>
 
@@ -18,12 +17,4 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         lst.erase(std::remove(lst.begin(), lst.end(), max_val), lst.end());
     }
     return result;
-}
-
-int main() {
-    std::vector<int> test = {1, 2, 3, 4};
-    for (auto i : strange_sort_list(test)) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
 }
