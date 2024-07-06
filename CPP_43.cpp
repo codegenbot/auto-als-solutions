@@ -1,8 +1,10 @@
-bool pairs_sum_to_zero(vector<int> l) {
+#include <algorithm>
+
+bool pairs_sum_to_zero(std::vector<int> l) {
     set<int> s(l.begin(), l.end());
-    for (auto it1 = s.begin(); it1 != s.end(); ++it1) {
-        int complement = -(*it1);
-        if (s.find(complement) != s.end() && *it1 != complement) {
+    for (int x : s) {
+        int complement = -x;
+        if (s.find(complement) != s.end() && x != complement) {
             return true;
         }
     }
