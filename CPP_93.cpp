@@ -3,11 +3,11 @@ string encode(string message) {
     for (char c : message) {
         if (isalpha(c)) {
             char base = isupper(c) ? 'A' : 'a';
-            if (c == base) {
-                c = (isupper(c)) ? 'Z' : 'z';
-            } else {
-                int diff = (int)(c - base);
-                c = (char)((diff + 2) % 26 + base);
+            if (c == base || c == base + 1) {
+                // Vowels
+                c += 2;
+            } else if (c >= 'a' && c <= 'z') {
+                c -= 2;
             }
         }
         result += c;
