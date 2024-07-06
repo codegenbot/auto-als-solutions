@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-int sumOddNumbersInVector() {
+int main() {
     std::vector<int> lst;
     int sum = 0;
     for (int i = 1; i <= 10; i++) { 
@@ -15,9 +15,4 @@ int sumOddNumbersInVector() {
         }
     }
     return sum;
-}
-
-int main() {
-    std::cout << "Sum of odd numbers: " << sumOddNumbersInVector() << std::endl;
-    return 0;
 }
