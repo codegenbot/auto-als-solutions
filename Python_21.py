@@ -1,3 +1,4 @@
+```python
 from typing import List
 
 def rescale_to_unit(numbers: List[float]) -> list:
