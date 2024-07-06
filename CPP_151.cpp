@@ -1,11 +1,11 @@
-Here's the completed code:
+Here is the completed code:
 
-long long double_the_difference(vector<float> lst) {
+long long double_the_difference(vector<float> lst){
     long long sum = 0;
-    for (float num : lst) {
-        if (num > 0 && floor(num) == num) { // Check if number is positive and integer
-            if (num % 2 != 0) { // Check if number is odd
-                sum += pow(num, 2); // Calculate the square of the number and add it to the sum
+    for (float x : lst) {
+        if (x >= 0 && floor(x) == x) { // Check if number is non-negative and integer
+            if (fmod(x, 1.0) != 0.0) { // Check if number is odd
+                sum += pow(x, 2);
             }
         }
     }

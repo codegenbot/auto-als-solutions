@@ -1,28 +1,40 @@
 #include <cctype>
+#include<string>
 using namespace std;
 
-string file_name_check(string file_name) {
-    int dot_count = 0;
-    bool has_letters = false;
-    bool has_digits = false;
-    string before_dot = "";
-    for (char c : file_name) {
-        if (c == '.') {
-            dot_count++;
-            if (dot_count > 1) return "No";
-        } else if (isdigit(c)) {
-            has_digits = true;
-        } else if (isalpha(c)) {
-            has_letters = true;
-            before_dot += c;
+string file_name_check(string file_name){
+    int count_dot = 0;
+    bool starts_with_letter = false;
+    int digit_count = 0;
+    
+    for(int i=0; i<file_name.length(); i++){
+        if(file_name[i] == '.'){
+            count_dot++;
+        }
+        else if(isdigit(file_name[i])){
+            digit_count++;
+        }
+        else if(i==0){
+            starts_with_letter=true;
+        }
+        
+        if(count_dot > 1 || (starts_with_letter && !isalpha(file_name[0])) 
+          || digit_count > 3) return "No";
+    }
+    
+    if(count_dot != 1) return "No";
+    
+    string after_dot = file_name.substr(file_name.find('.')+1);
+    string allowed_extensions[]={"txt","exe","dll"};
+    bool found=false;
+    for(int i=0; i<3; i++){
+        if(after_dot == allowed_extensions[i]){
+            found=true;
+            break;
         }
     }
-    string after_dot = file_name.substr(file_name.find('.') + 1);
-    if (has_digits && count(after_dot.begin(), after_dot.end(), '.') > 0) return "No";
-    if (!has_letters || before_dot.empty()) return "No";
-    vector<string> extensions = {"txt", "exe", "dll"};
-    for (string ext : extensions) {
-        if (after_dot == ext) return "Yes";
-    }
-    return "No";
+    
+    if(!found) return "No";
+    
+    return "Yes";
 }
