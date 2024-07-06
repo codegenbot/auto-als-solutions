@@ -1,23 +1,27 @@
-#include <vector>
-#include <algorithm>
+#include <initializer_list>
 
-std::pair<std::vector<float>, std::vector<float>> find_closest_elements(std::vector<float> sorted_points_a, std::vector<float> sorted_points_b) {
-    std::vector<float> closest_points;
-    float min_distance = INT_MAX;
+bool issame(std::vector<float> a, std::vector<float> b) {
+    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
+}
 
-    for (int i = 0; i < sorted_points_a.size() - 1; i++) {
-        for (int j = 0; j < sorted_points_b.size() - 1; j++) {
-            float distance = pow(sorted_points_a[i] - sorted_points_a[i + 1], 2) + pow(sorted_points_b[j] - sorted_points_b[j + 1], 2);
-            if (distance < min_distance) {
-                min_distance = distance;
-                closest_points = {{sorted_points_a[i], sorted_points_a[i + 1]}, {sorted_points_b[j], sorted_points_b[j + 1]}};
+std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
+    std::vector<std::pair<float, float>> closest_pairs;
+
+    for (int i = 0; i < numbers.size() - 1; ++i) {
+        for (int j = i + 1; j < numbers.size(); ++j) {
+            float diff = std::abs(numbers[i] - numbers[j]);
+            if (diff == 0.0f) continue;
+            bool found = false;
+            for (auto &pair : closest_pairs) {
+                if (std::abs(pair.first - pair.second) <= diff) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
             }
         }
     }
 
-    return closest_points;
-}
-
-bool issame(vector<float> a, vector<float> b) {
-    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
-}
+    return closest_pairs;
