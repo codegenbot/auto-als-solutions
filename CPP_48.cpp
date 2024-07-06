@@ -1,4 +1,3 @@
-```
 bool is_palindrome(std::string text) {
     int i = 0, j = text.size() - 1;
     while (i < j) {
@@ -8,4 +7,3 @@ bool is_palindrome(std::string text) {
         j--;
     }
     return true;
-}
