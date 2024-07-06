@@ -1,5 +1,7 @@
+```
 n = int(input("Enter the first number: "))
 m = int(input("Enter the second number: "))
+
 
 def rounded_avg(n, m):
     if n == m == 0:
@@ -8,3 +10,6 @@ def rounded_avg(n, m):
         return str(max(abs(n), abs(m)))
     avg = (n + m) / 2
     print("0" if avg == 0 else bin(int(round(avg)))[2:])
+
+
+print(rounded_avg(n, m))
