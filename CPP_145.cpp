@@ -1,5 +1,10 @@
+```
 #include <vector>
 #include <algorithm>
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
+}
 
 std::vector<int> sortByDigitSum(std::vector<int> arr) {
     std::vector<int> res = arr;
@@ -16,8 +21,4 @@ std::vector<int> sortByDigitSum(std::vector<int> arr) {
         return sum1 < sum2;
     });
     return res;
-}
-
-bool issame(vector<int> a,vector<int>b){
-    return a==b;
 }
