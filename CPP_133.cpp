@@ -16,7 +16,7 @@ int main() {
     std::vector<double> lst;
     double num;
 
-    while (std::cin >> num) {
+    while(std::cin >> num) {
         lst.push_back(num);
     }
 
@@ -24,3 +24,4 @@ int main() {
 
     std::cout << "Sum of squares: " << sum << std::endl;
     return 0;
+}
