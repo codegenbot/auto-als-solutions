@@ -1,14 +1,9 @@
-```
-def max_rolling_sum(numbers: list[int]) -> int:
-    if not numbers:
-        return 0
-
-    start = end = current_sum = numbers[0]
-    max_sum = numbers[0]
-
-    for num in numbers[1:]:
-        current_sum = max(num, current_sum + num)
+def max_rolling_sum(nums):
+    n = len(nums)
+    max_sum = current_sum = sum(nums[:3])
+    for i in range(3, n):
+        current_sum = current_sum + nums[i] - nums[i-3]
         max_sum = max(max_sum, current_sum)
-        start = min(start, current_sum - num)
-
     return max_sum
+
+print(max_rolling_sum([14, -5, 12]))
