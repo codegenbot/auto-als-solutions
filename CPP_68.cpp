@@ -1,29 +1,31 @@
-Here is the corrected code:
-
 ```cpp
 #include <vector>
+#include <algorithm>
 
-vector<int> pluck(vector<int> arr) {
-    vector<int> result;
-    if (arr.empty()) {
-        return result;
-    }
-    
-    int smallest_even = INT_MAX;
-    int index = -1;
+bool same(vector<int> a, vector<int> b) {
+    return a == b;
+}
+
+vector<int> extract(vector<int> arr) {
+    vector<pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0 && arr[i] < smallest_even) {
-            smallest_even = arr[i];
-            index = i;
+        if (arr[i] % 2 == 0) {
+            nodes.push_back({arr[i], i});
         }
     }
     
-    result.push_back(smallest_even);
-    result.push_back(index);
+    if (nodes.empty()) {
+        return {};
+    }
     
-    return result;
-}
-
-int main() {
-    // Use the function
+    sort(nodes.begin(), nodes.end());
+    
+    vector<int> result;
+    for (int i = 1; i < nodes.size(); i++) {
+        if (same({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
+            return {};
+        }
+    }
+    
+    return {nodes[0].first};
 }
