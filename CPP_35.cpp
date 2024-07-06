@@ -3,11 +3,15 @@
 #include <algorithm>
 
 int main() {
+    std::vector<int> l;
     int n;
+    std::cout << "Enter number of elements: ";
     std::cin >> n;
-    std::vector<int> l(n);
-    for(int i = 0; i < n; i++) {
-        std::cin >> l[i];
+    std::cout << "Enter " << n << " integers: ";
+    for(int i=0; i<n; i++) {
+        int num;
+        std::cin >> num;
+        l.push_back(num);
     }
     return *std::max_element(l.begin(), l.end());
 }
