@@ -4,22 +4,22 @@
 #include <any>
 #include <typeindex>
 
-namespace std {
-    using namespace boost;
+namespace boost {
+    using namespace std;
 }
 
-typedef optional<int> OInt;
+typedef boost::optional<int> OInt;
 
-vector<int> filter_integers(list<any> values) {
-    vector<int> result;
+std::vector<int> filter_integers(std::list<std::any> values) {
+    std::vector<int> result;
     for (const auto& value : values) {
-        if (value.type() == type_index(typeid(OInt))) {
+        if (value.type() == typeid(OInt)) {
             try {
-                OInt oint = any_cast<OInt>(value);
-                if (oint) {
+                OInt oint = boost::any_cast<OInt>(value);
+                if (oint.is_initialized()) {
                     result.push_back(*oint);
                 }
-            } catch (bad_any_cast&) {
+            } catch (boost::bad_any_cast&) {
                 // Ignore non-OInt values
             }
         }
