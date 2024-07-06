@@ -1,7 +1,8 @@
+```
 #include <vector>
 #include <algorithm>
 
-bool same(vector<pair<int, int>> a, vector<pair<int, int>> b) {
+bool same(const vector<int>& a, const vector<int>& b) {
     return a == b;
 }
 
@@ -14,11 +15,17 @@ vector<int> extract(vector<int> arr) {
     }
     
     if (nodes.empty()) {
-        return vector<int>();
+        return {};
     }
     
     sort(nodes.begin(), nodes.end());
     
-    int result = nodes[0].first;
-    return vector<int>(1, result);
+    vector<int> result;
+    for (int i = 1; i < nodes.size(); i++) {
+        if (same({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
+            return {};
+        }
+    }
+    
+    return {nodes[0].first};
 }
