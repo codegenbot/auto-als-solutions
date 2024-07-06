@@ -7,11 +7,15 @@ def sum_squares(numbers):
         return None
 
     total_sum = 0
-    for i, num in enumerate(lst):
-        if (i+1) % 3 == 0:
-            total_sum += num ** 2
-        elif (i+1) % 4 == 0 and (i+1) % 3 != 0:
-            total_sum += num ** 3
+    group_count = 0
+    for num in lst:
+        if group_count % 3 == 0 and group_count != 0:  
+            if group_count % 12 == 0:  
+                total_sum += num ** 3
+            else:  
+                total_sum += num ** 2
+        group_count += 1
+
     return total_sum
 
 numbers = input("Enter numbers separated by space: ")

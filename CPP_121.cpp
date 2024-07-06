@@ -1,17 +1,28 @@
 #include <iostream>
 #include <vector>
 
-int sumOfAllOdd(int* nums, int size) {
+int sumOdd(int x) {
     int sum = 0;
-    for (int i = 0; i < size; i++) { 
-        if (*nums % 2 != 0) {
-            sum += *nums;
+    for (int i = 1; i <= 10; i++) { 
+        int y;
+        std::cin >> y;
+        if (y % 2 != 0) {
+            sum += y;
         }
-        nums++;
     }
     return sum;
 }
 
 int main() {
-    std::cout << sumOfAllOdd({3, 13, 2, 9}, 4) << std::endl;
+    int inputNumber = 0;
+    std::cout << "Enter an integer: ";
+    std::cin >> inputNumber;
+
+    int solutions(int x) {
+        return sumOdd(x);
+    }
+
+    assert(sumOdd(inputNumber) == 3);
+
+    return 0;
 }

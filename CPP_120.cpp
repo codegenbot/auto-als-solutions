@@ -1,10 +1,4 @@
-Here's the corrected code:
-
-```cpp
 #include <iostream>
-#include <vector>
-#include <algorithm>
-
 using namespace std;
 
 bool issame(vector<int> a, vector<int> b) {
