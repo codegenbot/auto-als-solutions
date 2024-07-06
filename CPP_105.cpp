@@ -3,7 +3,7 @@
 #include <initializer_list>
 using namespace std;
 
-bool issame(const vector<string>& v1, const vector<string>& v2) {
+bool issame(vector<string> v1, vector<string> v2) {
     if(v1.size() != v2.size())
         return false;
     for(int i = 0; i < v1.size(); i++)
