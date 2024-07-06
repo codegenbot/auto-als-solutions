@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <algorithm>
 
@@ -17,15 +18,14 @@ std::vector<int> maximum(std::vector<int> arr, int k) {
         arr.erase(it);
     }
     return result;
-
 }
 
 void driver() {
-    assert(std::areSame(maximum({1, 2, 3, -23, 243, -400, 0}, 0), {}));
+    assert(std::issame(maximum({1, 2, 3, -23, 243, -400, 0}, 4), {243, 243, 243, 3}));
+    return;
 }
 
-int main()
-{
-   driver();
-   return 0;
+int main() {
+    driver();
+    return 0;
 }
