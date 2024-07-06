@@ -6,34 +6,36 @@ bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
-void strange_sort_list(std::vector<int>& lst) {
+std::vector<int> strange_sort_list(std::vector<int> lst) {
     std::vector<int> result;
     while (!lst.empty()) {
-        int min_val = *std::min_element(lst.begin(), lst.end());
-        result.push_back(min_val);
-        lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
+        int min_val = *min_element(lst.begin(), lst.end());
+        
+        // Remove all occurrences of `min_val` before moving on to `max_val`
+        while (lst.size() > 0 && *std::min_element(lst.begin(), lst.end()) == min_val) {
+            lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
+        }
         
         if (!lst.empty()) {
-            int max_val = *std::max_element(lst.begin(), lst.end());
-            std::vector<int> temp;
-            for (int i : lst) {
-                if (i == max_val) {
-                    lst.erase(std::remove(lst.begin(), lst.end(), i), lst.end());
-                    break;
-                } else {
-                    temp.push_back(i);
-                }
+            int max_val = *max_element(lst.begin(), lst.end());
+            
+            // Remove all occurrences of `max_val` after moving on to the next element
+            while (lst.size() > 0 && *std::min_element(lst.begin(), lst.end()) == max_val) {
+                lst.erase(remove(lst.begin(), lst.end(), max_val), lst.end());
             }
-            result.insert(result.end(), temp.begin(), temp.end());
+            
+            result.push_back(max_val);
         } else {
-            int min_val2 = *std::min_element(lst.begin(), lst.end());
+            int min_val2 = *min_element(lst.begin(), lst.end());
             result.push_back(min_val2);
         }
     }
+    
+    return result;
 }
 
 int main() {
-    std::vector<int> input;
+    std::vector<int> input;  // get your input here
     std::cout << "Enter elements of the vector separated by space: ";
     for (int i = 0; i < 5; ++i) {
         int num;
@@ -41,6 +43,10 @@ int main() {
         input.push_back(num);
     }
     
-    strange_sort_list(input);
+    std::vector<int> result = strange_sort_list(input);
+    std::cout << "The sorted list is: ";
+    for (int i : result) {
+        std::cout << i << " ";
+    }
     return 0;
 }
