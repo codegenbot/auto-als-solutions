@@ -1,5 +1,12 @@
+#include <vector>
 #include <string>
-using namespace std;
+#include <algorithm>
+
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
 
 bool will_it_fly(vector<int> q, int w) {
     string str = "";
@@ -14,18 +21,6 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-bool isPalindrome(string s) {
-    string rev = s;
-    reverse(rev.begin(), rev.end());
-    return s == rev;
-}
-
 int main() {
-    vector<int> q;
-    int w;
-    // get input here
-    // process the input and pass it to your function calls
-    
-    // print output here
-    return 0;
+    assert(will_it_fly({5}, 5) == true);
 }

@@ -4,7 +4,6 @@ def find_zero(xs: list):
     n = len(xs)
     if n % 2 != 0:
         raise ValueError("xs must have even number of coefficients")
-
     x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
         coeff for i, coeff in enumerate(xs) if i % 2 == 0
     )
@@ -20,18 +19,16 @@ def main():
             break
         except ValueError as e:
             print(e)
-
-    if len(xs) < 2:
-        raise ValueError("xs must have at least two coefficients")
-    if len(xs) % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
-
     try:
-        result = find_zero(xs)
-        if isinstance(result, int):
-            print(f"The zero point is: {result}")
+        if len(xs) < 2:
+            raise ValueError("xs must have at least two coefficients")
+        if len(xs) % 2 != 0:
+            raise ValueError("xs must have even number of coefficients")
+        if len(xs) == 2:
+            x = -sum(xs) / sum(1 for _ in xs)
+            print(round(x, 2))
         else:
-            print(f"The zero point is: {result:.2f}")
+            print(find_zero(xs))
     except ValueError as e:
         print(e)
 
