@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -8,7 +9,7 @@ int is_bored(const std::string& S) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
             count++;
         else
-            pos = S.find ".", pos + 1;
+            pos = S.find(".", pos) + 1;
     }
     return count;
 
@@ -19,3 +20,4 @@ int main() {
     int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
     return 0;
+}
