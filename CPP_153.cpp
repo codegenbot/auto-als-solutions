@@ -1,22 +1,22 @@
-Here is the completed code:
+int Strongest_Extension(std::string class_name,std::vector<std::string> extensions){
+    int max_strength = 0;
+    std::string strongest_extension;
 
-string Strongest_Extension(string class_name,vector<string> extensions){
-    string strongest = "";
-    int max_strength = -1;
-    
-    for(auto ext : extensions){
-        int upper = 0, lower = 0;
-        for(char c: ext) {
-            if(isupper(c)) upper++;
-            else if(islower(c)) lower++;
+    for(auto extension : extensions){
+        int cap = 0, sm = 0;
+        for(char c : extension){
+            if(isupper(c)) cap++;
+            else if(islower(c)) sm++;
         }
-        double strength = (double)(upper-lower)/ext.length();
-        
-        if(strength > max_strength || (strength == max_strength && strongest.size() < extensions.size())){
+        int strength = cap - sm;
+        if(strength > max_strength || (strength == max_strength && extension < strongest_extension)){
             max_strength = strength;
-            strongest = ext;
+            strongest_extension = extension;
         }
     }
-    
-    return class_name + "." + strongest;
+
+    return class_name + "." + strongest_extension;
 }
+
+#include <string>
+#include <vector>

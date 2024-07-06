@@ -1,5 +1,8 @@
-#include <string>
+#include <iostream>
 #include <vector>
+#include <string>
+
+using namespace std;
 
 string words_in_sentence(string sentence){
     string result = "";
