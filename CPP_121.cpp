@@ -1,18 +1,20 @@
-#include <iostream>
+```cpp
 #include <vector>
-
 int main() {
+    int solutions = 0;
     std::vector<int> lst;
-    int sum = 0;
-    for (int i = 1; i <= 10; i++) { 
-        int x;
-        std::cin >> x;
-        lst.push_back(x);
+    int input;
+    while (true) {
+        std::cout << "Enter an integer (-1 to finish): ";
+        std::cin >> input;
+        if (input == -1) break;
+        lst.push_back(input);
     }
     for (int i = 1; i < lst.size(); i++) {
         if (lst[i] % 2 != 0) {
-            sum += lst[i];
+            solutions += lst[i];
         }
     }
-    return sum;
+    std::cout << "Sum of odd integers: " << solutions << std::endl;
+    return 0;
 }
