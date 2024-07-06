@@ -2,7 +2,11 @@
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a) {
+bool issame(std::vector<std::string> a1, std::vector<std::string> a2) {
+    if (a1.size() != a2.size()) return false;
+    for (int i = 0; i < a1.size(); i++) {
+        if (a1[i] != a2[i]) return false;
+    }
     return true;
 }
 
@@ -55,4 +59,9 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
 
         return lst1.size() < lst2.size() ? lst1 : lst2;
     }
+}
+
+int main() {
+    total_match({"this"}, {}, {});
+    return 0;
 }
