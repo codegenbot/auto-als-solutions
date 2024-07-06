@@ -1,6 +1,3 @@
+```
 def fix_spaces(text):
-    return (
-        text.replace(" ", "_")
-        .replace("  +", lambda x: "-" + x.group().lstrip())
-        .replace("   ", lambda x: "-_" + x.group().lstrip())
-    )
+    return text.replace(" ", "_").replace("  ","_-").replace("   ","_-_").replace("    ","_-_").replace("     ","____"].replace("      ","_____"]
