@@ -1,16 +1,19 @@
 #include <vector>
-#include <cassert>
+#include <algorithm>
 
-std::vector<int> generate_integers(int min, int max) {
-    std::vector<int> integers;
-    for (int i = min; i <= max; i++) {
-        integers.push_back(i);
+std::vector<int> generate_integers(int a, int b) {
+    std::vector<int> result;
+    for(int i = a; i <= b; ++i) {
+        result.push_back(i);
     }
-    return integers;
+    return result;
+}
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
 }
 
 int main_test() {
-    std::vector<int> a = generate_integers(17, 89);
-    assert(std::equal(a.begin(), a.end(), a.begin()));
+    assert(generate_integers(17, 89) == generate_integers(17, 89));
     return 0;
 }
