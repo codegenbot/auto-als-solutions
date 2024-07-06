@@ -3,7 +3,7 @@
 #include <list>
 
 namespace boost {
-    using namespace std;
+using namespace std;
 }
 
 typedef boost::any Any;
@@ -14,8 +14,7 @@ vector<int> filter_integers(list<Any> values) {
     for (const auto& value : values) {
         OInt oint = boost::any_cast<OInt>(value);
         if(oint) {
-            int num = boost::any_cast<int>(value);
-            result.push_back(num);
+            result.push_back(boost::any_cast<int>(value));
         }
     }
     return result;
