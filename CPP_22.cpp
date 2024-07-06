@@ -1,5 +1,6 @@
 #include <vector>
 #include <boost/any.hpp>
+#include <algorithm>
 
 bool issame(const vector<int>& a, const vector<int>& b) {
     if (a.size() != b.size()) {
