@@ -1,3 +1,4 @@
+```
 def decode_shift(s: str):
     s = s.strip().lower()
     if ' ' not in s:  
