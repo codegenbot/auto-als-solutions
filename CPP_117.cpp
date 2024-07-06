@@ -41,13 +41,15 @@ vector<string> select_words(string s, int n) {
     }
 
     return result;
+
 }
 
-void main() {
+int main() {
     cout << "{";
     vector<string> result = select_words("Mary had a little lamb", 4);
     for (const string& s : result) {
         cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
+    return 0;
 }
