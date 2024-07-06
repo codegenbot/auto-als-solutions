@@ -1,15 +1,20 @@
-Here is the completed code:
+#include <iostream>
 
-```cpp
+using namespace std;
+
 int starts_one_ends(int n) {
     int count = 0;
     for (int i = 1; i <= 9; i++) {
-        if ((i == 1 || i == n) && n >= 2) {
-            count++;
-        }
-        else if ((i > 1 && i < n) && n >= 3) {
+        if (i == 1 || i == n) {
             count++;
         }
     }
     return count;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << starts_one_ends(n) << endl;
+    return 0;
 }
