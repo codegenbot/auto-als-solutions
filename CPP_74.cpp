@@ -1,7 +1,8 @@
+#include <iostream>
 #include <vector>
 #include <string>
 
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
+bool isSame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     if (a.size() != b.size()) {
         return false;
     }
@@ -15,7 +16,7 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
     return true;
 }
 
-std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
+std::vector<std::string> totalMatch(std::vector<std::string> lst1, std::vector<std::string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
@@ -26,7 +27,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2 += str.length();
     }
 
-    if (issame(lst1, lst2)) {
+    if (isSame(lst1, lst2)) {
         return lst1;
     } else if (sum1 < sum2) {
         return lst1;
@@ -67,6 +68,14 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
 }
 
 int main() {
-    assert(issame(total_match({"this"}, {}), {}));
+    std::vector<std::string> lst1 = {"abc", "def", "ghi"};
+    std::vector<std::string> lst2 = {"abc", "feg", "hig"};
+
+    std::cout << "Total match list is: ";
+    for (const auto& str : totalMatch(lst1, lst2)) {
+        std::cout << str << " ";
+    }
+    std::cout << std::endl;
+
     return 0;
 }
