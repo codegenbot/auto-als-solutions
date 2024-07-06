@@ -5,9 +5,9 @@ string flip_case(string str){
     string result = "";
     for (int i = 0; i < str.length(); i++) {
         char c = str[i];
-        if (c >= 'a' && c <= 'z') 
+        if (islower(c)) 
             result += toupper(c);
-        else if (c >= 'A' && c <= 'Z')
+        else if (isupper(c))
             result += tolower(c);
         else
             result += c;
@@ -15,8 +15,10 @@ string flip_case(string str){
     return result;
 }
 
-int main(){
-    string s = flip_case("Hello World!");
-    cout << s << endl;
+int main() {
+    string s;
+    cout << "Enter a string: ";
+    getline(cin, s);
+    cout << "Flipped case: " << flip_case(s) << endl;
     return 0;
 }
