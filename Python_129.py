@@ -1,3 +1,4 @@
+```
 def minPath(grid, k):
     N = len(grid)
     visited = [[False] * N for _ in range(N)]
@@ -11,6 +12,8 @@ def minPath(grid, k):
             k_count += grid[x][y] == int(p)
         if k_count > k:
             return []
+        if len(path) > k:
+            continue
         if len(path) == k:
             result = sorted(list(set(path)))
             return result
