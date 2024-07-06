@@ -15,7 +15,7 @@ int main() {
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
     
-    int sort_array(std::vector<int>& array) { 
+    int sort_array(std::vector<int> array) { 
         std::sort(array.begin(), array.end());
         return 0;
     }
