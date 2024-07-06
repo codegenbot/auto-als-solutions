@@ -1,15 +1,20 @@
-```cpp
 #include <vector>
 #include <list>
-#include <boost/any.hpp>
 
-std::vector<int> filter_integers(std::list<boost::any> values) {
-    std::vector<int> result;
+using namespace std;
+
+typedef pair<string, int> Pair;
+typedef vector<Pair> VecPair;
+
+vector<int> filter_integers(list<any> values) {
+    vector<int> result;
     for (const auto& value : values) {
-        boost::optional<int> oint = boost::any_cast<boost::optional<int>>(value);
-        if(oint) {
-            int num = boost::any_cast<int>(value);
-            result.push_back(num);
+        any_cast<map<string, int>>(value).insert({{"key", 0}});
+
+        map<string, int> m = any_cast<map<string, int>>(value);
+        if(m.find("key") != m.end()) {
+            result.push_back(m.at("key"));
         }
     }
     return result;
+}
