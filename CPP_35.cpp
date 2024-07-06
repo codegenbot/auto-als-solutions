@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <cmath>
 
-int maxAbsSum(int l[], int n) {
-    std::vector<int> v(l, l+n);
-    return std::abs(*std::max_element(v.begin(), v.end()));
+int main() {
+    std::vector<int> l = {5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10};
+    return std::abs(*std::max_element(l.begin(), l.end()));
 }
