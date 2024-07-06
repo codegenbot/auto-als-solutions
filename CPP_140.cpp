@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
 
-std::string fix_spaces(std::string text){
-    std::string result = "";
+using namespace std;
+
+string fix_spaces(string text) {
+    string result = "";
     for(int i = 0; i < text.length(); i++){
         if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length()-1 || text[i+1] != ' ')){
             result += "_";
@@ -26,10 +28,10 @@ std::string fix_spaces(std::string text){
     return result;
 }
 
-int main(){
-    std::string text;
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, text);
-    std::cout << "The fixed string is: " << fix_spaces(text) << std::endl;
+int main() {
+    string input;
+    cout << "Enter a sentence: ";
+    getline(cin, input);
+    cout << "Fixed spaces: " << fix_spaces(input) << endl;
     return 0;
 }
