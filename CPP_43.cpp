@@ -11,15 +11,15 @@ bool pairs_sum_to_zero(std::vector<int> l) {
             ++j;
         }
     }
-    for (int i = 0; i < l.size(); ++i) {
-        if (std::abs(l[i]) * 2 == l[i]) return true;
+    for(int i = 0; i < l.size(); i++) {
+        if(std::find(l.begin(), l.end(), -std::abs(l[i])) != l.end()) {
+            return true;
+        }
     }
     return false;
 }
 
 int main() {
-    std::vector<int> numbers = {-3, 9, -1, 4, 2, 31};
-    bool result = pairs_sum_to_zero(numbers);
-    assert(result == false);
+    assert(pairs_sum_to_zero({-3, 9, -1, 4, 2, 31}) == false);
     return 0;
 }
