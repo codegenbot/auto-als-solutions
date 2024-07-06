@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <cassert>
@@ -5,7 +6,7 @@
 using namespace std;
 
 int64_t minSubArraySum(vector<int64_t> nums) {
-    int64_t min_sum = INT_MAX;
+    int64_t min_sum = INT64_MAX;
     int64_t current_sum = 0;
 
     for (int i = 0; i < nums.size(); i++) {
