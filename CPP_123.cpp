@@ -1,33 +1,22 @@
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
 vector<int> get_odd_collatz(int n) {
-    vector<int> result;
+    vector<int> collatz;
     while (n != 1) {
-        if (n % 2 == 0) {
+        if (n % 2 == 0)
             n /= 2;
-        } else {
-            n = 3 * n + 1;
-        }
-        if (n % 2 != 0) {
-            result.push_back(n);
-        }
+        else
+            n = 3*n + 1;
+        collatz.push_back(n);
     }
-    sort(result.begin(), result.end());
-    return result;
-}
-
-int main() {
-    int n;
-    cout << "Enter a positive integer: ";
-    cin >> n;
-    vector<int> res = get_odd_collatz(n);
-    for (auto i : res) {
-        cout << i << " ";
+    sort(collatz.begin(), collatz.end());
+    vector<int> odd_collatz;
+    for (int num : collatz) {
+        if (num % 2 != 0)
+            odd_collatz.push_back(num);
     }
-    cout << endl;
-    return 0;
+    return odd_collatz;
 }
