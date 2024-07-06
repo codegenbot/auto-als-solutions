@@ -9,6 +9,6 @@ def match_parens(lst):
             if open_parens > 0:
                 open_parens -= 1
             else:
-                return 'No'  # unmatched closing parenthesis
-    
+                return 'No'  
+                
     return 'Yes' if open_parens == 0 and close_parens == 0 else 'No'
