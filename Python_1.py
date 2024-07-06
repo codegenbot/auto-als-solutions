@@ -21,14 +21,15 @@ def separate_paren_groups(paren_string: str) -> List[str]:
                     current_group = ""
 
         elif char.isalpha() or (char.isspace() and stack):
-            pass
+            if stack:
+                current_group += " "
+            else:
+                current_group += char
 
     while stack and stack[-1] == "(":
         stack.pop()
 
     if stack:
-        while stack:
-            stack.pop()
         groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]
