@@ -1,21 +1,10 @@
-#include <vector>
-#include <cmath>
-
-double poly(std::vector<double> coeffs, double x) {
-    double result = 0;
-    for (int i = 0; i < coeffs.size(); ++i) {
-        result += coeffs[i] * pow(x, i);
+```cpp
+double find_zero(vector<vector<double>> coeffs, vector<double> xs){
+    double left = 0;
+    double right = 0;
+    for(int i=0; i<coeffs.size(); i++){
+        left += coeffs[i][0] * pow(xs[0],i);
+        right += coeffs[i][1] * pow(xs[0],i);
     }
-    return result;
-}
-
-double find_zero(std::vector<double> coeffs, double solution){
-    double left = -coeffs[1];
-    double right = coeffs[0];
-    for (int i = 2; i < coeffs.size(); ++i) {
-        if (poly(coeffs, solution) != 0)
-            break;
-        solution -= poly(coeffs, solution) / poly(coeffs, solution);
-    }
-    return solution;
+    return (-left / right);
 }
