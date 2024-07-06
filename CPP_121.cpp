@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 
-int sumOdd(int) {
+int sumOdd(int x) {
     int sum = 0;
-    for (int i = 1; i <= 10; i++) { 
-        std::string y;
-        std::cout << "Enter an odd number: ";
-        std::getline(std::cin, y);
-        if (std::stoi(y) % 2 != 0) {
-            sum += std::stoi(y);
+    for (int i = 1; i <= 10; ) { 
+        int y;
+        std::cin >> y;
+        if (y % 2 != 0) {
+            sum += y;
         }
+        ++i;
     }
     return sum;
 }
