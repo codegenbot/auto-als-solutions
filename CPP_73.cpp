@@ -1,10 +1,9 @@
-```cpp
 #include <vector>
 #include <cstdint>
 
 int smallest_change(vector<int> arr) {
     int n = arr.size();
-    vector<vector<uint64_t>> dp(n, vector<uint64_t>(n-1));
+    vector<vector<int>> dp(n, vector<int>(n));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -15,11 +14,9 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                int count = dp[i+1][j-1].size();
-                dp[i][j].push_back(count);
+                dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
-                int count = 1 + dp[i+1][j].size();
-                dp[i][j].push_back(count);
+                dp[i][j].push_back(1 + dp[i+1][j].size());
             }
         }
     }
