@@ -31,4 +31,3 @@ int main() {
     for (const auto& word : words) {
         std::cout << word << std::endl;
     }
-}
