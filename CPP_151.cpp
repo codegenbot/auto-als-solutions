@@ -1,7 +1,7 @@
+```
 #include <vector>
 #include <cmath>
 #include <iostream>
-
 using namespace std;
 
 long long double_the_difference(vector<double> lst) {
