@@ -1,41 +1,47 @@
-```cpp
-#include <boost/any.hpp>
 #include <string>
+#include <sstream>
+#include <boost/any.hpp>
+#include <boost/convert.hpp>
 
-using namespace std;
+std::string convert(boost::any a) {
+    if (a.type() == typeid(int)) {
+        return std::to_string(boost::any_cast<int>(a));
+    } else if (a.type() == typeid(double)) {
+        return std::to_string(boost::any_cast<double>(a));
+    } else if (a.type() == typeid(float)) {
+        return std::to_string(boost::any_cast<float>(a));
+    } else if (a.type() == typeid(std::string)) {
+        return boost::any_cast<std::string>(a);
+    }
+}
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(float)) {
         return b;
-    }
-    else if (a.type() == typeid(int) && b.type() == typeid(double)) {
+    } else if (a.type() == typeid(int) && b.type() == typeid(double)) {
         return b;
-    }
-    else if (a.type() == typeid(float) && b.type() == typeid(double)) {
+    } else if (a.type() == typeid(float) && b.type() == typeid(double)) {
         return b;
-    }
-    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
-        string str1 = a.convert<string>();
-        string str2 = b.convert<string>();
-        if (stod(str1) > stod(str2))
+    } else if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
+        std::string str1 = convert(a);
+        std::string str2 = convert(b);
+        if (std::stod(str1) > std::stod(str2))
             return a;
-        else if (stod(str1) < stod(str2))
+        else if (std::stod(str1) < std::stod(str2))
             return b;
         else
             return boost::any("None");
-    }
-    else if ((a.type() == typeid(int) && b.type() == typeid(string)) ||
-             (a.type() == typeid(float) && b.type() == typeid(string))) {
-        string str = a.convert<string>();
-        double num2 = stod(b.convert<string>());
-        if (stod(str) > num2)
+    } else if ((a.type() == typeid(int) && b.type() == typeid(std::string)) ||
+               (a.type() == typeid(float) && b.type() == typeid(std::string))) {
+        std::string str = convert(a);
+        double num2 = std::stod(convert(b));
+        if (std::stod(str) > num2)
             return a;
-        else if (stod(str) < num2)
+        else if (std::stod(str) < num2)
             return b;
         else
             return boost::any("None");
-    }
-    else {
+    } else {
         return boost::any("None");
     }
 }
