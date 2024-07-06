@@ -1,6 +1,9 @@
-int search(std::vector<int> lst) {
-    std::map<int, int> freqMap;
-    for (int num : lst) {
+#include <vector>
+#include <map>
+
+int findMaxValue(vector<int> numbers) {
+    map<int, int> freqMap;
+    for (int num : numbers) {
         if (freqMap.find(num) == freqMap.end()) {
             freqMap[num] = 1;
         } else {
