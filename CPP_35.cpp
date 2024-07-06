@@ -1,30 +1,22 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
 
-float max_element(std::vector<float> l){
+int max_element(std::vector<float> l){
     float max = l[0];
     for(int i=1; i<l.size(); i++){
         if(l[i] > max)
             max = l[i];
     }
-    return max;
+    return static_cast<int>(max);
 }
 
 int main(){
     int n;
-    std::cout << "Enter the number of elements: ";
     std::cin >> n;
-
     std::vector<float> v(n);
-
-    for(int i=0; i<n; i++){
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> v[i];
+    for(float &x : v) {
+        std::cin >> x;
     }
-
-    float max = max_element(v);
-
-    std::cout << "The maximum element is: " << max << std::endl;
-
+    std::cout << max_element(v) << std::endl;
     return 0;
 }
