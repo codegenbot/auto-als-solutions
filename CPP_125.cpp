@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <string>
 
@@ -19,7 +20,7 @@ std::vector<std::string> split_words(std::string txt) {
     return result;
 }
 
-int main_program() {
+int mainFunc() {
     std::string user_input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, user_input);
