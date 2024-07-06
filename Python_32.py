@@ -1,5 +1,6 @@
-```
 import math
+
+
 def find_zero(coeffs):
     a, b, c = coeffs
     discriminant = (b**2) - 4 * a * c

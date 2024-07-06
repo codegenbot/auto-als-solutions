@@ -1,4 +1,3 @@
-```
 #include <iostream>
 using namespace std;
 
@@ -19,7 +18,7 @@ int fibfib(int n) {
     }
 }
 
-int main() {
+int startProgram() {
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
