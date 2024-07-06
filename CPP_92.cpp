@@ -1,9 +1,8 @@
-Here's the completed code:
+Here is the completed code:
 
-```cpp
 bool any_int(float a, float b, float c) {
-    if (abs(a - (b + c)) < 1e-9) return true;
-    if (abs(b - (a + c)) < 1e-9) return true;
-    if (abs(c - (a + b)) < 1e-9) return true;
+    if (a == static_cast<int>(a) && b == static_cast<int>(b) && c == static_cast<int>(c)) {
+        return (a == b + c || a == c + b || b == a + c || c == a + b);
+    }
     return false;
 }
