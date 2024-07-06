@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -23,7 +24,7 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
         }
     }
     sort(result.begin(), result.end(),
-         [&](const std::string& a, const std::string& b) {
+         [&](const string& a, const string& b) {
              if (stoi(a) != stoi(b)) {
                  return stoi(a) < stoi(b);
              } else {
