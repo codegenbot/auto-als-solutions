@@ -1,10 +1,9 @@
 #include <boost/any.hpp>
-#include <boost/optional.hpp>
 #include <vector>
 #include <list>
 
 namespace boost {
-using namespace std;
+    using namespace std;
 }
 
 typedef boost::any Any;
@@ -15,7 +14,8 @@ vector<int> filter_integers(list<Any> values) {
     for (const auto& value : values) {
         OInt oint = boost::any_cast<OInt>(value);
         if(oint) {
-            result.push_back(boost::any_cast<int>(value));
+            int num = boost::any_cast<int>(value);
+            result.push_back(num);
         }
     }
     return result;
