@@ -1,9 +1,5 @@
-#include <set>
-using namespace std;
-
 vector<int> unique(vector<int> l) {
-    set<int> s(l.begin(), l.end());
-    vector<int> result(s.begin(), s.end());
-    sort(result.begin(), result.end());
-    return result;
+    sort(l.begin(), l.end());
+    l.erase(unique(l.begin(), l.end()), l.end());
+    return l;
 }
