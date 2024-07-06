@@ -1,4 +1,6 @@
+```cpp
 #include <vector>
+#include <cassert>
 
 bool below_threshold(vector<int> l, int t) {
     for (int num : l) {
@@ -7,16 +9,8 @@ bool below_threshold(vector<int> l, int t) {
         }
     }
     return true;
-
 }
 
 int main() {
     assert(!below_threshold({1, 8, 4, 10}, 10));
-    vector<int> numbers = {5, 2, 9};
-    int threshold = 7;
-    if(below_threshold(numbers, threshold)) {
-        cout << "All elements are below the threshold." << endl;
-    } else {
-        cout << "At least one element is not below the threshold." << endl;
-    }
 }
