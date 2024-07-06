@@ -1,22 +1,17 @@
-#include <vector>
-#include <string>
-using namespace std;
-
 vector<string> by_length(vector<int> arr) {
-    vector<int> result;
-    for (int i : arr) {
-        if (i >= 1 && i <= 9) {
-            result.push_back(i);
+    vector<int> nums;
+    for (int num : arr) {
+        if (num >= 1 && num <= 9) {
+            nums.push_back(num);
         }
     }
-    sort(result.begin(), result.end());
-    reverse(result.begin(), result.end());
-    vector<string> names = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
-    for (int i : result) {
-        cout << i << endl;
-        if (i >= 1 && i <= 9) {
-            cout << names[i - 1] << endl;
-        }
+    sort(nums.begin(), nums.end());
+    reverse(nums.begin(), nums.end());
+    vector<string> result;
+    map<int, string> number_names = {{1, "One"}, {2, "Two"}, {3, "Three"}, {4, "Four"}, 
+                                      {5, "Five"}, {6, "Six"}, {7, "Seven"}, {8, "Eight"}, {9, "Nine"}; 
+    for (int num : nums) {
+        result.push_back(number_names[num]);
     }
-    return vector<string>();
+    return result;
 }
