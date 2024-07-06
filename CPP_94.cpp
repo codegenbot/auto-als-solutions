@@ -10,22 +10,22 @@ int sumOfDigits(int num) {
 }
 
 int largestPrime(vector<int> lst) {
-    int maxPrime = -1;
     for (int i : lst) {
         if (isPrime(i)) {
-            if (i > maxPrime)
-                maxPrime = i;
+            return i;
         }
     }
-    return maxPrime;
+    return -1; // or some default value
 }
 
 bool isPrime(int num) {
-    if (num <= 1) 
+    if (num <= 1) {
         return false;
+    }
     for (int i = 2; i * i <= num; i++) {
-        if (num % i == 0) 
+        if (num % i == 0) {
             return false;
+        }
     }
     return true;
 }
