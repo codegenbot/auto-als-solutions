@@ -1,28 +1,25 @@
-#include <iostream>
 #include <map>
 #include <string>
+#include <algorithm>
 
-using namespace std;
-
-bool check_dict_case(map<basic_string<char>, basic_string<char>> dict) {
+bool check_dict_case(std::map<std::string, std::string> dict){
     if(dict.empty()) return false;
-    
     bool allLower = true;
     bool allUpper = true;
-    
+
     for(auto& pair : dict) {
-        basic_string<char> key = pair.first;
+        string key = pair.first;
         if(!allLower && !allUpper) break;
-        if(allLower && !islower(key[0])) allLower = false;
-        if(allUpper && !isupper(key[0])) allUpper = false;
+        if(allLower && !std::all_of(key.begin(), key.end(), ::islower)) allLower = false;
+        if(allUpper && !std::all_of(key.begin(), key.end(), ::isupper)) allUpper = false;
     }
-    
+
     return allLower || allUpper;
 }
 
 int main() {
-    map<basic_string<char>, basic_string<char>> dict;
-    // Add your code here to fill the dictionary
-    cout << check_dict_case(dict) << endl;
+    std::map<std::string, std::string> dict;
+    // Add elements to the dictionary here
+    std::cout << check_dict_case(dict) << std::endl; 
     return 0;
 }
