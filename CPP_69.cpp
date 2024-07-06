@@ -1,18 +1,11 @@
 #include <algorithm>
 #include <vector>
+#include <initializer_list>
+
 using namespace std;
 
 int main() {
-    vector<int> vec;
-    int n;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-    vec.resize(n);
-    
-    cout << "Enter the elements: ";
-    for(int i = 0; i < n; i++)
-        cin >> vec[i];
-    
+    vector<int> vec({3, 10, 10, 9, 2});
     assert(std::search(vec.begin(), vec.end(), vec.begin(), vec.end()) == vec.end());
     return 0;
 }
