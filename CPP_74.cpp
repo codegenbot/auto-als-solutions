@@ -1,15 +1,29 @@
-#include <algorithm>
+#include <vector>
+#include <string>
+using namespace std;
 
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
-    if (lst1.empty()) return lst2;
-    if (lst2.empty()) return lst1;
+    vector<string> result;
+    int count1 = 0, count2 = 0;
 
-    int sum1 = 0, sum2 = 0;
-    for (const string& s : lst1) sum1 += s.size();
-    for (const string& s : lst2) sum2 += s.size();
+    for (const auto& s : lst1) {
+        count1 += s.length();
+    }
+    for (const auto& s : lst2) {
+        count2 += s.length();
+    }
 
-    if (sum1 < sum2) return lst1;
-    if (sum2 < sum1) return lst2;
+    if (count1 < count2) {
+        result = lst1;
+    } else if (count1 > count2) {
+        result = lst2;
+    } else {
+        if (lst1.size() <= lst2.size()) {
+            result = lst1;
+        } else {
+            result = lst2;
+        }
+    }
 
-    return lst1.empty() ? vector<string>() : lst1;
+    return result;
 }
