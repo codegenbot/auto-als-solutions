@@ -1,39 +1,54 @@
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
 vector<int> minPath(vector<vector<int>> grid, int k) {
     int n = grid.size();
     vector<vector<bool>> visited(n, vector<bool>(n));
     vector<int> res;
+    
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             if (!visited[i][j]) {
                 vector<int> path;
-                dfs(grid, visited, i, j, k, &path);
-                if (res.empty() || path < res) {
-                    res = path;
-                }
+                dfs(grid, visited, i, j, k, path);
+                res = minPath(res, path);
             }
         }
     }
+    
     return res;
 }
 
-vector<int> dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int x, int y, int k, vector<int>* path) {
-    (*path).push_back(grid[x][y]);
-    visited[x][y] = true;
-    if (k == 0) {
-        return *path;
+vector<int> minPath(vector<int> v1, vector<int> v2) {
+    for (int i = 0; i < min(v1.size(), v2.size()); ++i) {
+        if (v1[i] < v2[i]) {
+            return v1;
+        } else if (v1[i] > v2[i]) {
+            return v2;
+        }
     }
-    vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    random_shuffle(directions.begin(), directions.end());
-    for (auto& dir : directions) {
-        int nx = x + dir.first;
-        int ny = y + dir.second;
-        if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && !visited[nx][ny]) {
-            vector<int> p = dfs(grid, visited, nx, ny, k - 1, path);
-            if (!p.empty()) {
-                return p;
+    
+    return v1.size() <= v2.size() ? v1 : v2;
+}
+
+void dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j, int k, vector<int>& path) {
+    if (k == 0) {
+        return;
+    }
+    
+    path.push_back(grid[i][j]);
+    
+    for (int x = max(0, i - 1); x <= min(i + 1, grid.size() - 1); ++x) {
+        for (int y = max(0, j - 1); y <= min(j + 1, grid[0].size() - 1); ++y) {
+            if (!visited[x][y] && abs(x - i) + abs(y - j) == 1) {
+                visited[x][y] = true;
+                dfs(grid, visited, x, y, k - 1, path);
+                visited[x][y] = false;
             }
         }
     }
-    (*path).pop_back();
-    return {};
+    
+    path.pop_back();
 }
