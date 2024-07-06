@@ -1,5 +1,13 @@
-#include <initializer_list>
+```cpp
 #include <vector>
+
+bool isSame(const std::vector<int>& a, const std::vector<int>& b) {
+    if(a.size() != b.size()) return false;
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] != b[i]) return false;
+    }
+    return true;
+}
 
 std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
     std::vector<int> result;
@@ -14,6 +22,6 @@ std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
 }
 
 int main_function() {
-    assert(std::equal(compare({1,2,3,5},{-1,2,3,4}),{2,0,0,1}));
+    assert(isSame(compare({1,2,3,5},{-1,2,3,4}),{2,0,0,1}));
     return 0;
 }
