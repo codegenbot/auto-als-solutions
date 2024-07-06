@@ -1,3 +1,4 @@
+```
 n = None
 m = None
 
@@ -9,10 +10,8 @@ while True:
     except ValueError:
         print("Invalid input! Please enter a valid integer.")
 
-
 def rounded_avg(n, m):
     avg = (n + m) / 2
     return bin(int(round(avg)))[2:]
-
 
 print(rounded_avg(n, m))

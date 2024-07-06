@@ -1,4 +1,3 @@
-#include <vector>
 #include <cmath>
 
 int prod_signs(int* arr, int n) {
@@ -7,7 +6,7 @@ int prod_signs(int* arr, int n) {
 
     for (int i = 0; i < n; ++i) {
         if (arr[i] == 0) {
-            return 0; // If array contains zero, return 0
+            return 0; 
         }
         product *= (arr[i] > 0 ? 1 : -1);
         sum += std::abs(arr[i]);
