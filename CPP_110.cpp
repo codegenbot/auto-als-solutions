@@ -26,16 +26,15 @@ string exchange(vector<int> lst1, vector<int> lst2) {
 }
 
 int main() {
-   int n, m;
-   cin >> n >> m;
-   
-   vector<int> v1(n);
-   for(int i=0; i<n; ++i) 
-       cin >> v1[i];
-   
-   vector<int> v2(m);
-   for(int i=0; i<m; ++i) 
-       cin >> v2[i];
-   
-   cout << exchange(v1, v2) << endl;
+    int n, m;
+    cin >> n >> m;
+    vector<int> lst1(n), lst2(m);
+    for (int i = 0; i < n; i++) {
+        cin >> lst1[i];
+    }
+    for (int i = 0; i < m; i++) {
+        cin >> lst2[i];
+    }
+    cout << exchange(lst1, lst2) << endl;
+    return 0;
 }
