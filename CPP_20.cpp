@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -13,11 +12,7 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
         for (int j = i + 1; j < numbers.size(); ++j) {
             float diff = std::abs(numbers[i] - numbers[j]);
             if (diff == 0.0f) continue;
-            if (std::find_if(closest_pairs.begin(), closest_pairs.end(),
-                    [i, j, &numbers](const auto& pair) {
-                return min(i, j) >= numbers[0] && max(i, j) <= numbers.back() &&
-                       min(numbers[i], numbers[j]) > pair.first && max(numbers[i], numbers[j]) < pair.second;
-            }) == closest_pairs.end()) {
+            if (std::find(closest_pairs.begin(), closest_pairs.end(), std::pair<float, float>(min(numbers[i], numbers[j]), max(numbers[i], numbers[j]))) == closest_pairs.end()) {
                 closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
             }
         }
