@@ -5,15 +5,29 @@
 using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (boost::any_cast<double>(a) > boost::any_cast<double>(b))
+    if (any_cast<double>(a) > any_cast<double>(b))
         return a;
-    else if (boost::any_cast<double>(b) > boost::any_cast<double>(a))
+    else if (any_cast<double>(b) > any_cast<double>(a))
         return b;
 
-    if (boost::any_cast<string>(a) > boost::any_cast<string>(b))
+    if (any_cast<string>(a) > any_cast<string>(b))
         return a;
-    else if (boost::any_cast<string>(b) > boost::any_cast<string>(a))
+    else if (any_cast<string>(b) > any_cast<string>(a))
         return b;
 
-    return boost::any("None");
+    return "None";
+}
+
+int main() {
+    boost::any a = 3.5; // input from user
+    boost::any b = 2.8; // input from user
+
+    boost::any result = compare_one(a, b);
+    
+    if (boost::any_cast<string>(result) == "None")
+        cout << "The two numbers are equal.";
+    else
+        cout << "The bigger number is: " << boost::any_cast<string>(result);
+
+    return 0;
 }
