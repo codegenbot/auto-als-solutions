@@ -1,4 +1,4 @@
-def sort_even(l: list):
+def sort_even(l):
     evens = [x for i, x in enumerate(l) if i % 2 == 0]
     evens.sort()
 
