@@ -1,7 +1,7 @@
+```c++
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <cstddef>
 
 bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size()) return false;
@@ -34,14 +34,14 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     for (const auto& str : lst1) {
         sum1lst += str.length();
         for (char c : str) {
-            sum1lst++;
+            sum1lst += 1;
         }
     }
 
     for (const auto& str : lst2) {
         sum2lst += str.length();
         for (char c : str) {
-            sum2lst++;
+            sum2lst += 1;
         }
     }
 
