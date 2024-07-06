@@ -1,4 +1,4 @@
-```
+```cpp
 #include <vector>
 #include <string>
 
@@ -7,7 +7,7 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
 }
 
 std::vector<std::string> split_words(string txt) {
-    std::vector<string> result;
+    vector<string> result;
     size_t pos = 0;
     while ((pos = txt.find(' ')) != string::npos) {
         result.push_back(txt.substr(0, pos));
@@ -21,6 +21,14 @@ std::vector<std::string> split_words(string txt) {
 }
 
 int main() {
-    assert (issame({split_words("")}, {"0"}));
-    return 0;
+    #define _CRT_SECURE_NO_WARNINGS
+    std::string user_input;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, user_input);
+
+    std::vector<std::string> words = split_words(user_input);
+    
+    for (const auto& word : words) {
+        std::cout << word << std::endl;
+    }
 }

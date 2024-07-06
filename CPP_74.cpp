@@ -1,6 +1,3 @@
-Here is the modified code:
-
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -42,14 +39,14 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     for (const auto& str : lst1) {
         sum1lst += str.length();
         for (char c : str) {
-            sum1lst++;
+            sum1lst += 1;
         }
     }
 
     for (const auto& str : lst2) {
         sum2lst += str.length();
         for (char c : str) {
-            sum2lst++;
+            sum2lst += 1;
         }
     }
 

@@ -1,43 +1,46 @@
+Here is the modified code:
+
+```cpp
 #include <vector>
 #include <algorithm>
+#include <initializer_list>
 
-bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
+struct pair {
+    int first;
+    int second;
+};
+
+bool compare(const struct pair& a, const struct pair& b) {
     if (a.first != b.first) return a.first < b.first;
     return a.second < b.second;
 }
 
 std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<std::pair<int, int>> nodes;
+    std::vector<struct pair> nodes;
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
             nodes.push_back({arr[i], i});
         }
     }
-    
+
     if (nodes.empty()) {
         return {};
     }
-    
+
     std::sort(nodes.begin(), nodes.end(), compare);
-    
-    int result = -1;
+
     for (size_t i = 1; i < nodes.size(); ++i) {
         if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
-        else if(nodes[i].first != nodes[i-1].first){
-            result = nodes[i].first;
-            break;
-        }
     }
-    
+
+    int result = nodes[0].first;
     for(int i = 0; i < arr.size(); ++i){
         if(arr[i] == result){
-            std::vector<int> output = {result};
-            return output;
+            return {result};
         }
     }
-    return {};
 }
 
 int main() {
@@ -51,15 +54,16 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    std::vector<int> result = pluck(arr);
-    if(result.size() > 0)
+    std::vector<int> output = pluck(arr);
+    if(output.size() > 0)
     {
-        std::cout << "The output is: " << *result.begin() << std::endl;
+        std::cout << "The output is: " << output[0] << std::endl;
     }
     else
     {
         std::cout << "No output" << std::endl;
     }
+
     
     return 0;
 }
