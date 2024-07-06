@@ -15,10 +15,10 @@ void sort_array(std::vector<int>& array) {
 }
 
 int main() {
-    std::vector<int> array1;
-    for(int x: (int[]){21, 14, 23, 11}) array1.push_back(x);
-    std::vector<int> array2;
-    for(int x: (int[]){23, 21, 14, 11}) array2.push_back(x);
+    int n1[] = {21, 14, 23, 11};
+    int n2[] = {23, 21, 14, 11};
+    std::vector<int> array1(n1, n1 + sizeof(n1) / sizeof(n1[0]));
+    std::vector<int> array2(n2, n2 + sizeof(n2) / sizeof(n2[0]));
     assert (issame(array1, array2));
     sort_array(array1);
 }
