@@ -12,7 +12,7 @@ vector<int> minPath(vector<vector<int>> grid, int k) {
             if (!visited[i][j]) {
                 vector<int> path;
                 dfs(grid, visited, i, j, k, &path);
-                if (res.empty() || path.size() < res.size() || (path.size() == res.size() && !issame(path, res))) {
+                if (res.empty() || !issame(path, res)) {
                     res = path;
                 }
             }
