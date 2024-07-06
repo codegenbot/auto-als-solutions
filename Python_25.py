@@ -1,11 +1,6 @@
-def main():
-    num = int(input("Enter a positive integer: "))
-    factors = factorize(num)
-    if len(factors) == 1:
-        print(f"{num} is a prime number.")
-    else:
-        print(f"The factors of {num} are: {factors}.")
-
-
-if __name__ == "__main__":
-    main()
+def find_max_factor(n: int) -> int:
+    max_factor = 1
+    for i in range(2, n + 1):
+        if n % i == 0 and i > max_factor:
+            max_factor = i
+    return max_factor
