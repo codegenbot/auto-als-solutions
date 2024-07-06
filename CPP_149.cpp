@@ -2,22 +2,19 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(std::vector<std::string>, std::vector<std::string>);
-std::vector<std::string> sorted_list_sum(std::vector<std::string>);
+bool issame(vector<string>, vector<string>);
 
-int main() {
-    // Your code goes here...
-}
-
-std::vector<string> sorted_list_sum(vector<string> lst) {
+vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
 
+    // Remove strings with odd lengths from the list
     for (const string& str : lst) {
         if (str.length() % 2 == 0) {
             result.push_back(str);
         }
     }
 
+    // Sort the resulting list by length and then alphabetically
     sort(result.begin(), result.end(),
          [](const string& a, const string& b) {
              if (a.length() != b.length()) {
@@ -28,4 +25,15 @@ std::vector<string> sorted_list_sum(vector<string> lst) {
          });
 
     return result;
+}
+
+int main() {
+    // Using the functions
+    vector<string> list = {"Hello", "World", "abc", "xyz", "abcd"};
+    vector<string> sortedList = sorted_list_sum(list);
+    for (const string& str : sortedList) {
+        cout << str << endl;
+    }
+    
+    return 0;
 }
