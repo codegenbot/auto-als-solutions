@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -18,3 +19,4 @@ int main() {
     void sort_array(std::vector<int>& array) { 
         std::sort(array.begin(), array.end());
     }
+}
