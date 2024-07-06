@@ -18,4 +18,3 @@ bool isPalindrome(std::string s) {
     std::string rev = s;
     std::reverse(rev.begin(), rev.end());
     return s == rev;
-}
