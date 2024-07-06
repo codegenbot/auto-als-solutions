@@ -1,5 +1,15 @@
-Write a function called `file_name_check` that takes a string as an argument representing a file name. This function should check if the given file name is in the following format: 
-The first part of the file name can contain at most three digits.
-There must be exactly one dot (.) in the file name.
-The part before the dot must only consist of letters.
-The part after the dot must be either 'txt', 'exe' or 'dll'.
+Here is the corrected code with the initial three lines of indentation and the function signature:
+
+```
+def file_name_check(file_name):
+    if len([c for c in file_name if c.isdigit()]) > 3:
+        return 'No'
+    if file_name.count('.') != 1:
+        return 'No'
+    dot_index = file_name.index('.')
+    if not file_name[:dot_index].isalpha():
+        return 'No'
+    extension = file_name[dot_index + 1:]
+    if extension not in ['txt', 'exe', 'dll']:
+        return 'No'
+    return 'Yes'
