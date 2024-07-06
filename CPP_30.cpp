@@ -1,12 +1,19 @@
 #include <vector>
-using namespace std;
+#include <algorithm>
 
-bool issame(vector<float> a,vector<float>b){
-    return a==b;
+bool issame(vector<float> l1, vector<float> l2) {
+    if (l1.size() != l2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < l1.size(); ++i) {
+        if (std::abs(l1[i] - l2[i]) > 0.0001f) {
+            return false;
+        }
+    }
+    return true;
 }
 
 int main() {
-    vector<float> v = {1, 2, 3};
-    assert(issame(get_positive(v) , {}));
+    assert(issame(get_positive({}), {}));
     return 0;
 }

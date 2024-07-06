@@ -1,19 +1,27 @@
-```cpp
-bool issame(const vector<int>& a, const vector<int>& b) {
+#include <iostream>
+#include <list>
+#include <vector>
+#include <type_traits>
+
+using namespace std;
+
+bool issame(vector<int> a, vector<int> b) {
     return a == b;
 }
 
-vector<int> filter_integers(list_any values) {
-    vector<int> result;
+template<typename T>
+vector<T> filter_integers(list<any> values) {
+    vector<T> result;
     for (const auto& value : values) {
-        if (boost::any_cast<int>(value).good()) {
-            result.push_back(boost::any_cast<int>(value).get());
+        if (holds_alternative<T>(value)) { 
+            result.push_back(get<T>(value)); 
         }
     }
     return result;
 }
 
 int main() {
-    assert(isame(filter_integers({3, 'c', 3, 3, 'a', 'b'}), {3, 3, 3}));
+    list<any> values = {{3, true}, {'c', false}, {3, true}, {3, true}, {'a', false}, {'b', false}};
+    assert(issame(filter_integers(values), vector<int>({3, 3, 3})); 
     return 0;
 }
