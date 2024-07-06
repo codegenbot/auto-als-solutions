@@ -1,32 +1,32 @@
-vector<int> primeNumbers(int n) {
-    vector<int> primes;
-    for (int i = 2; i <= n; ++i) {
-        bool isPrime = true;
-        for (int j = 2; j * j <= i; ++j) {
-            if (i % j == 0) {
-                isPrime = false;
-                break;
-            }
-        }
-        if (isPrime) {
-            primes.push_back(i);
-        }
-    }
-    return primes;
-}
+#include <iostream>
+#include <vector>
+#include <string>
 
-string words_in_sentence(string sentence){
-    vector<string> words;
-    split(sentence, " ", words);
-
-    string result = "";
-    for (const auto &word : words) {
-        int length = word.length();
-        if (any_of(primeNumbers(length).begin(), primeNumbers(length).end(),
-            [&length](int i) { return i == length; })) {
+std::string words_in_sentence(std::string sentence){
+    std::string result = "";
+    for (const auto& word : split(sentence, " ")) {
+        if (is_prime(word.length())) {
             result += word + " ";
         }
     }
-
     return result.substr(0, result.size() - 1);
+}
+
+bool is_prime(int n) {
+    if (n <= 1) return false;
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+
+std::vector<std::string> split(const std::string& str, const std::string& delimiter) {
+    std::vector<std::string> tokens;
+    size_t pos = 0;
+    while ((pos = str.find(delimiter)) != std::string::npos) {
+        tokens.push_back(str.substr(0, pos));
+        str.erase(0, pos + delimiter.length());
+    }
+    tokens.push_back(str);
+    return tokens;
 }
