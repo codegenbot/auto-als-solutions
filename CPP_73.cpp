@@ -13,7 +13,11 @@ int smallest_change(vector<int> arr) {
             if (arr[i] == arr[j]) {
                 dp[i][j] = dp[i+1][j-1];
             } else {
-                dp[i][j] = min(size_t(1), dp[i+1][j-1]) + 1;
+                if (dp[i+1][j-1].empty() || dp[i+1][j-1].back() > 1) {
+                    dp[i][j] = min(size_t(1), size_t(dp[i+1][j-1].size())) + 1;
+                } else {
+                    dp[i][j] = dp[i+1][j-1];
+                }
             }
         }
     }
