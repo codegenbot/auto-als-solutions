@@ -13,7 +13,10 @@ def modp(*args):
             gcd, y, x = egcd(b, a % b)
             return gcd, y - (a // b) * x, x
 
-    g, y, _ = egcd(p - 2, p)
-    result = pow(y % p, -1, p)
+    g, y, x = egcd(n, p)
+    if g != 1:
+        result = None
+    else:
+        result = pow(x % p, -1, p) if x % p != 0 else None
 
     return result
