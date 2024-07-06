@@ -4,5 +4,4 @@ bool issame(vector<string> a, vector<string>b) {
 
 int main() {
     assert(issame(by_length({9, 4, 8}), {"Nine", "Eight", "Four"}));
-    // Rest of your main function...
 }
