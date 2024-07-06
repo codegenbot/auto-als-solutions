@@ -1,9 +1,3 @@
-```
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int smallest_change(vector<int> arr) {
     int n = arr.size();
     vector<vector<size_t>> dp(n, vector<size_t>(n));
@@ -19,7 +13,7 @@ int smallest_change(vector<int> arr) {
             if (arr[i] == arr[j]) {
                 dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
-                dp[i][j].push_back(min(size_t(1), (int)(dp[i+1].size() - 1)) + 1);
+                dp[i][j].push_back(min(size_t(1), dp[i+1].size() - 1) + 1);
             }
         }
     }
