@@ -1,15 +1,11 @@
 ```
 def file_name_check(file_name):
-    count = 0
-    for char in file_name:
-        if char.isdigit():
-            count += 1
-        elif char == '.':
-            break
-        elif char.isalpha():
-            continue
-        else:
-            return 'No'
-    if count > 3 or file_name.split('.')[1].lower() not in ['txt', 'exe', 'dll']:
+    if len([c for c in file_name if c.isdigit()]) > 3:
+        return 'No'
+    if file_name.count('.') != 1:
+        return 'No'
+    if not file_name.split('.')[0][0].isalpha():
+        return 'No'
+    if file_name.split('.')[1].lower() not in ['txt', 'exe', 'dll']:
         return 'No'
     return 'Yes'
