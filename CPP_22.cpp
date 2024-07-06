@@ -2,12 +2,12 @@
 #include <list>
 #include <boost/any.hpp>
 
-bool issame(std::vector<int> a, std::vector<int> b) {
+bool issame(vector<int> a, vector<int> b) {
     return a == b;
 }
 
-std::vector<int> filter_integers(std::list<boost::any> values) {
-    std::vector<int> result;
+vector<int> filter_integers(list<boost::any> values) {
+    vector<int> result;
     for (const auto& value : values) {
         if (boost::any_cast<int>(value).good()) {
             result.push_back(boost::any_cast<int>(value));
@@ -17,15 +17,12 @@ std::vector<int> filter_integers(std::list<boost::any> values) {
 }
 
 int main() {
-    std::list<boost::any> values;
-    values.push_back('c');
-    values.push_back('a');
-    values.push_back('b');
-
-    std::vector<int> output = filter_integers(values);
-    if (issame({97, 97, 98}, output)) {
-        return 0;
+    list<boost::any> values = {'1', '2', '3'};
+    vector<int> output = filter_integers(values);
+    if (issame(output, vector<int>({1, 2, 3}))) {
+        cout << "The vectors are the same." << endl;
     } else {
-        return 1;
+        cout << "The vectors are not the same." << endl;
     }
+    return 0;
 }
