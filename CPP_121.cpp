@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+
 int main() {
     std::vector<int> lst;
     int sum = 0;
