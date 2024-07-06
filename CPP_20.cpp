@@ -1,7 +1,26 @@
-bool issame(const std::vector<float>& a, const std::vector<float>& b) {
-    if(a.size() != b.size()) return false;
-    for(int i = 0; i < a.size(); i++) {
-        if(a[i] != b[i]) return false;
+```cpp
+#include <vector>
+#include <algorithm>
+
+bool issame(std::vector<float> a, std::vector<float> b) {
+    return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
+}
+
+int find_closest_elements(const std::vector<float>& elements, const float& target_value) {
+    int closest_index = -1;
+    float min_diff = std::numeric_limits<float>::max();
+    
+    for(int i=0; i<elements.size(); i++) {
+        if(std::abs(elements[i] - target_value) < min_diff) {
+            min_diff = std::abs(elements[i] - target_value);
+            closest_index = i;
+        }
     }
-    return true;
+    
+    return closest_index;
+}
+
+int main() {
+    assert(issame({1.1, 2.2, 3.1, 4.1, 5.1}, {2.2, 3.1}));
+    return 0;
 }
