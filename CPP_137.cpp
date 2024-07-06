@@ -1,63 +1,26 @@
-#include <string>
-#include <boost/any.hpp>
+#include <boost/any_cast.hpp>
 
 boost::any compare_one(boost::any a, boost::any b) {
-    bool is_number_a = false;
-    bool is_number_b = false;
-
-    if (a.type() == typeid(int)) {
-        is_number_a = true;
-    } else if (a.type() == typeid(float) || a.type() == typeid(double) || a.type() == typeid(long double)) {
-        is_number_a = true;
-    } else {
-        try {
-            boost::any_cast<double>(a);
-            is_number_a = true;
-        } catch (...) {
-            // a is not a number
-        }
-    }
-
-    if (b.type() == typeid(int)) {
-        is_number_b = true;
-    } else if (b.type() == typeid(float) || b.type() == typeid(double) || b.type() == typeid(long double)) {
-        is_number_b = true;
-    } else {
-        try {
-            boost::any_cast<double>(b);
-            is_number_b = true;
-        } catch (...) {
-            // b is not a number
-        }
-    }
-
-    if (is_number_a && is_number_b) {
-        if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
+    if (!boost::any_cast<int>(&a)) {
+        if (!boost::any_cast<int>(&b)) {
+            if (std::to_string(std::stod(boost::any_cast<std::string>(a).c_str())) <
+                std::to_string(std::stod(boost::any_cast<std::string>(b).c_str()))) {
+                return b;
+            } else if (std::to_string(std::stod(boost::any_cast<std::string>(a).c_str())) >
+                        std::to_string(std::stod(boost::any_cast<std::string>(b).c_str()))) {
+                return a;
+            }
+            return "None";
+        } else if (a.convert_to<int>() > b.convert_to<int>()) {
             return a;
-        } else if (boost::any_cast<double>(a) < boost::any_cast<double>(b)) {
+        } else if (a.convert_to<int>() < b.convert_to<int>()) {
             return b;
-        } else {
-            return boost::any("None");
         }
-    }
-
-    // one of them is not a number, compare the other
-    if (!is_number_a && !is_number_b) {
-        if (boost::any_cast<std::string>(a) > boost::any_cast<std::string>(b)) {
-            return a;
-        } else if (boost::any_cast<std::string>(a) < boost::any_cast<std::string>(b)) {
-            return b;
-        } else {
-            return boost::any("None");
-        }
-    }
-
-    // one of them is a number, the other is not
-    if (!is_number_a && is_number_b) {
-        return b;
-    } else if (is_number_a && !is_number_b) {
+        return "None";
+    } else if (a.convert_to<int>() > b.convert_to<int>()) {
         return a;
+    } else if (a.convert_to<int>() < b.convert_to<int>()) {
+        return b;
     }
-
-    return boost::any("None");
+    return "None";
 }
