@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 using namespace std;
 
@@ -16,11 +15,8 @@ string change_base(int x, int base) {
     return s.substr(0, size);
 }
 
-int main() {
-    int num, base;
-    cout << "Enter a number: ";
-    cin >> num;
-    cout << "Enter the base: ";
-    cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
-}
+cout << "Enter a number: ";
+cin >> num;
+cout << "Enter the base: ";
+cin >> base;
+cout << "The conversion result is: " << change_base(num, base);
