@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <algorithm>
 
@@ -22,8 +23,8 @@ vector<int> pluck(vector<int> arr) {
     vector<int> result;
     for (int i = 0; i < arr.size(); i++) {
         bool found = false;
-        for (const auto& node : evenNodes) {
-            if (i == node.second) {
+        for (auto& node : evenNodes) {
+            if (node.second == i) {
                 result.push_back(node.first);
                 found = true;
                 break;
