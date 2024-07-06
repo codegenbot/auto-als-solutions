@@ -1,9 +1,12 @@
-```cpp
 #include <vector>
 #include <string>
 
-bool issame(const std::pair<std::vector<std::string>, std::vector<std::string>> &input) {
-    return iss(input.first, input.second);
+bool issame(const std::pair<std::vector<std::string>, std::vector<std::string>>& input) {
+    if (input.first.size() != input.second.size()) return false;
+    for (int i = 0; i < input.first.size(); ++i) {
+        if (issame(input.first[i], input.second[i])) return false;
+    }
+    return true;
 }
 
 std::vector<std::string> split_words(std::string txt) {
