@@ -1,12 +1,12 @@
 string findLongest(vector<string> strings){
     if(strings.empty()) return "";
-    string max = strings[0];
+    string longest_str = strings[0];
     for(auto str : strings){
-        if(str.length() > max.length()){
-            max = str;
+        if(str.length() > longest_str.length()){
+            longest_str = str;
         }
-        else if(str.length() == max.length())
-            max = str;
+        else if(str.length() == longest_str.length())
+            longest_str = str;
     }
-    return max;
+    return longest_str;
 }
