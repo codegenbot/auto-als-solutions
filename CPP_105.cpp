@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -65,6 +66,5 @@ int main() {
         std::cout << str << " ";
     }
     std::cout << std::endl;
-
     return 0;
 }
