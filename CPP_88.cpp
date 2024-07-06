@@ -9,7 +9,7 @@ bool issame(std::vector<int> a, std::vector<int> b) {
     return true;
 }
 
-std::vector<int> sort_array(std::vector<int> array) {
+std::vector<int> sort_array(std::vector<int> array){
     int first = array.empty() ? 0 : array[0];
     int last = array.empty() ? 0 : array.back();
     if ((first + last) % 2 == 1)
