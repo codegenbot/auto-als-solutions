@@ -11,7 +11,7 @@ bool triples_sum_to_zero(vector<int> l) {
         while (left < right) {
             int sum = l[i] + l[left] + l[right];
             if (sum == 0)
-                return true;
+                right--;
             else if (sum < 0)
                 left++;
             else
