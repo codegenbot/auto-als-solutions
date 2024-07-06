@@ -2,9 +2,16 @@
 #include <iostream>
 
 std::string solve(std::string input) {
-    // implement your logic here
-    std::string output = input;
-    return output;
+    int upper = 0;
+    int lower = 0;
+    for (char c : input) {
+        if (isupper(c)) {
+            upper++;
+        } else if (islower(c)) {
+            lower++;
+        }
+    }
+    return "Uppercase: " + std::to_string(upper) + ", Lowercase: " + std::to_string(lower);
 }
 
 int main() {
