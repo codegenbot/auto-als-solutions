@@ -1,3 +1,4 @@
+```
 def by_length(arr):
-    result = sorted([i for i in arr if 1 <= i <= 9])
-    return [str(num) + " " + ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][num-1] for num in result]
+    mapping = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5, "Six": 6, "Seven": 7, "Eight": 8, "Nine": 9}
+    return [name for num, name in zip(map(str, arr), [mapping[x] for x in map(str, arr)]) if set(str(num))[0] == "1"]
