@@ -1,6 +1,9 @@
-Here is the completed code:
-
+```cpp
+#include <cmath>
 bool iscuber(int a){
-    double c = cbrt(a);
-    return (c == floor(c));
+    int x = round(cbrt(a));
+    return (x*x*x == a);
+}
+int main(){
+    assert(iscuber(1729) == false);
 }
