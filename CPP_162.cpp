@@ -1,22 +1,19 @@
-````
-std::string string_to_md5(const char* text) {
-    if (*text == '\0') return "";
+#include <string>
+#include <vector>
+#include <iostream>
 
-    MD5_CTX mdContext;
-    MD5_Init(&mdContext);
-    const char* ptr = text;
-    size_t len = strlen(text);
-    for (int i = 0; i < len; ++i) {
-        MD5_Update(&mdContext, reinterpret_cast<const unsigned char*>(ptr + i), 1); 
-    } 
+int main() {
+    std::cout << "Enter some text: ";
+    std::string text;
+    std::getline(std::cin, text);
 
-    unsigned char result[16];
-    MD5_Final(&mdContext, result);
-
-    std::string output;
-    for (int i = 0; i < 16; ++i) {
-        output += sprintf("%02x", result[i]);
+    if (text.empty()) {
+        std::cout << "You must enter some text." << std::endl;
+    } else {
+        const char* c_str = text.c_str();
+        std::string output = string_to_md5(c_str);
+        std::cout << "MD5: " << output << std::endl;
     }
 
-    return output;
+    return 0;
 }
