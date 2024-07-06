@@ -1,6 +1,6 @@
-```
 #include <string>
-#include <cassert>
+#include <iostream>
+
 using namespace std;
 
 string decimal_to_binary(int decimal){
@@ -16,6 +16,10 @@ string decimal_to_binary(int decimal){
 }
 
 int main() {
-    cout << decimal_to_binary(15) << endl;
+    int decimal;
+    cout << "Enter a decimal number: ";
+    cin >> decimal;
+    string binary = decimal_to_binary(decimal);
+    cout << "The binary representation of the entered decimal number is: " << binary << endl;
     return 0;
 }

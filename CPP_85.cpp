@@ -1,5 +1,3 @@
-Here is the solution:
-
 int add(vector<int> lst){
     int sum = 0;
     for(int i=1; i<lst.size(); i+=2){
@@ -7,4 +5,10 @@ int add(vector<int> lst){
             sum += lst[i];
     }
     return sum;
+}
+
+int main() {
+    vector<int> input = {4, 4, 6, 8};
+    cout << add(input) << endl;
+    return 0;
 }

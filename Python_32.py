@@ -1,6 +1,3 @@
-import math
-
-
 def main():
     while True:
         try:
@@ -25,10 +22,13 @@ def main():
     if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
 
-    try:
-        print(find_zero(xs))
-    except ValueError as e:
-        print(e)
+    if len(xs) >= 3: 
+        try: 
+            print(find_zero(xs)) 
+        except ValueError as e: 
+            print(e) 
+    else: 
+        print("Not enough coefficients to calculate a root") 
 
 
 def find_zero(coeffs):
@@ -38,7 +38,9 @@ def find_zero(coeffs):
     for i in range(0, len(d), 2):
         temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
         try:
-            root = (-temp[1] + math.sqrt(temp[1]**2 - 4*temp[0]*temp[2])) / (2*temp[0])
+            root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * temp[2])) / (
+                2 * temp[0]
+            )
             roots.append(-d[i] / root)
         except (ZeroDivisionError, ValueError) as e:
             print(f"Failed to calculate a root: {e}")
