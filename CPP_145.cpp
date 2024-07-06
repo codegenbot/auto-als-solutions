@@ -1,8 +1,8 @@
+```cpp
 #include <vector>
 #include <algorithm>
-#include <functional>
 
-std::vector<int> sortArrayByDigitSum(std::vector<int> arr) {
+std::vector<int> sortByDigitSum(std::vector<int> arr) {
     std::vector<int> res = arr;
     sort(res.begin(), res.end(), [](int a, int b)->bool{
         long long sum1 = 0, sum2 = 0;
@@ -17,9 +17,4 @@ std::vector<int> sortArrayByDigitSum(std::vector<int> arr) {
         return sum1 < sum2;
     });
     return res;
-}
-
-int main() {
-    std::vector<int> order_by_points = {0,6,6,-76,-21,23,4};
-    return 0;
 }
