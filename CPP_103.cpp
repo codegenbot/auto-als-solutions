@@ -1,33 +1,34 @@
-```
-#include <iostream>
-#include<string>
+```c++
 #include <cmath>
-#include <algorithm>
-
+#include <string> 
 using namespace std;
 
-string rounded_avg(int n,int m){
-    if(n > m) return "-1";
-    int sum = 0;
-    for(int i=n; i<=m; i++){
+char* rounded_avg(int n, int m) {
+    if (n > m) return "-1";
+    
+    double sum = 0;
+    for (int i = n; i <= m; i++) {
         sum += i;
     }
-    double avg = (double)sum / (m-n+1);
-    int round_avg = floor(avg + 0.5);
-    string res = "";
-    while(round_avg > 0){
-        if(round_avg & 1) res.push_back('1');
-        else res.push_back('0');
-        round_avg >>= 1;
+    
+    double avg = round(sum / (m - n + 1));
+    
+    char* binary = new char[64]; // Allocate space for the binary string
+    int pos = 0; // Initialize a pointer to keep track of the position in the array
+    while (avg > 0) {
+        if (avg >= 2) {
+            avg -= 2;
+            binary[pos] = '1';
+            pos++;
+        } else {
+            avg = 0;
+            binary[pos] = '0';
+            pos++;
+        }
     }
-    reverse(res.begin(), res.end());
-    return res;
-}
-
-int main() {
-    cout << rounded_avg(7,5) << endl; // "-1"
-    cout << rounded_avg(10,20) << endl; // "1111"
-    cout << rounded_avg(20,33) << endl; // "11010"
-    cout << rounded_avg(2,9) << endl; // "1010"
-    return 0;
+    
+    // Add a null terminator at the end of the array
+    binary[pos] = '\0';
+    
+    return binary;
 }
