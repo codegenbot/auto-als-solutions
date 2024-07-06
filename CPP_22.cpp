@@ -1,19 +1,9 @@
-#include <vector>
-#include <list>
-
-using namespace std;
-
-typedef pair<string, int> Pair;
-typedef vector<Pair> VecPair;
-
-vector<int> filter_integers(list<any> values) {
-    vector<int> result;
+std::vector<int> filter_integers(std::list<boost::any> values) {
+    std::vector<int> result;
     for (const auto& value : values) {
-        any_cast<map<string, int>>(value).insert({{"key", 0}});
-
-        map<string, int> m = any_cast<map<string, int>>(value);
-        if(m.find("key") != m.end()) {
-            result.push_back(m.at("key"));
+        boost::any_cast<OInt>(value).unwrap_or(0);
+        if(boost::any_cast<OInt>(value)) {
+            result.push_back(boost::any_cast<int>(value));
         }
     }
     return result;
