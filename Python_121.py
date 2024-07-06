@@ -1,6 +1,5 @@
-def find_max_sum_of_subarrays(arr):
-    max_sum = current_sum = arr[0]
-    for num in arr[1:]:
-        current_sum = max(num, current_sum + num)
-        max_sum = max(max_sum, current_sum)
-    return max_sum
+def find_sum_of_odd_elements_in_alternating_sublist(lst):
+    total = 0
+    for i in range(1, len(lst), 2):
+        total += lst[i]
+    return total
