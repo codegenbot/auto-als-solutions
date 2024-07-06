@@ -4,11 +4,12 @@
 
 std::string string_sequence(int n) {
     std::ostringstream oss;
-    for (int i = 0; i <= n; ++i) {
-        oss << i << " ";
+    for (int i = 1; i <= n; ++i) {
+        if(i != 1)
+            oss << " ";
+        oss << i;
     }
-    if(n != 0)
-        oss << std::endl; 
+    oss << std::endl; 
     return oss.str();
 }
 
@@ -16,9 +17,5 @@ int main() {
     int n;
     std::cout << "Enter a number: ";
     std::cin >> n;
-    if(n > 0) {
-        std::cout << string_sequence(n) << std::endl;
-    }
-    else
-        std::cout << "Error! Please enter a positive integer." << std::endl;
+    std::cout << string_sequence(n) << std::endl;
 }
