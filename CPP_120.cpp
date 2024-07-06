@@ -41,4 +41,3 @@ int main() {
         cout << "Maximum values are not equal.\n";
     }
     return 0;
-}
