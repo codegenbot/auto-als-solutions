@@ -1,41 +1,47 @@
-#include <iostream>
 #include <string>
+#include <sstream>
+#include <boost/any.hpp>
+#include <boost/convert.hpp>
 
-struct Any {
-    using type = void;
-
-    template<typename T>
-    struct retype { using type = T; };
-
-    template<typename T>
-    bool operator==(const T& t) const {
-        return true;
+std::string convert(boost::any a) {
+    if (a.type() == typeid(int)) {
+        return std::to_string(boost::any_cast<int>(a));
+    } else if (a.type() == typeid(double)) {
+        return std::to_string(boost::any_cast<double>(a));
+    } else if (a.type() == typeid(float)) {
+        return std::to_string(boost::any_cast<float>(a));
+    } else if (a.type() == typeid(std::string)) {
+        return boost::any_cast<std::string>(a);
     }
+}
 
-    template<typename T>
-    bool operator<(const T& t) const {
-        return false;
+boost::any compare_one(boost::any a, boost::any b) {
+    if (a.type() == typeid(int) && b.type() == typeid(float)) {
+        return b;
+    } else if (a.type() == typeid(int) && b.type() == typeid(double)) {
+        return b;
+    } else if (a.type() == typeid(float) && b.type() == typeid(double)) {
+        return b;
+    } else if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
+        std::string str1 = convert(a);
+        std::string str2 = convert(b);
+        if (std::stod(str1) > std::stod(str2))
+            return a;
+        else if (std::stod(str1) < std::stod(str2))
+            return b;
+        else
+            return boost::any("None");
+    } else if ((a.type() == typeid(int) && b.type() == typeid(std::string)) ||
+               (a.type() == typeid(float) && b.type() == typeid(std::string))) {
+        std::string str = convert(a);
+        double num2 = std::stod(convert(b));
+        if (std::stod(str) > num2)
+            return a;
+        else if (std::stod(str) < num2)
+            return b;
+        else
+            return boost::any("None");
+    } else {
+        return boost::any("None");
     }
-};
-
-template<typename A, typename B>
-Any compare(const Any&A, const Any&B) {
-    if (std::any_cast<int>(A) < std::any_cast<int>(B))
-        return A;
-    else if (std::any_cast<int>(A) > std::any_cast<int>(B))
-        return B;
-    else
-        return A;
-
-    if (std::any_cast<std::string>(A) > std::any_cast<std::string>(B)) {
-        // Do some conversion to double
-        double num1 = std::stod(std::any_cast<std::string>(A));
-        double num2 = std::stod(std::any_cast<std::string>(B));
-        if (num1 < num2)
-            return A;
-        else if (num1 > num2)
-            return B;
-    }
-
-    return Any();
 }

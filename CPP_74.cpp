@@ -1,3 +1,23 @@
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+bool issame(const vector<string>& a, const vector<string>& b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i].compare(b[i]) != 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {

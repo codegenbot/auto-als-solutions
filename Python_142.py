@@ -1,6 +1,5 @@
 ```
 def sum_squares(numbers):
-
     try:
         lst = [int(i) for i in numbers.split()]
     except ValueError:
@@ -11,11 +10,8 @@ def sum_squares(numbers):
     for i, num in enumerate(lst[:-1]):
         if (i+1) % 3 == 0:
             total_sum += num ** 2
-        elif (i+1) % 4 == 0 and (i+1) % 3 != 0:
+        elif (i+2) % 4 == 0 and (i+2) % 3 != 0:
             total_sum += num ** 3
-    for num in lst[-1:]:
-        if (len(lst) - len(numbers.split()) + i+1) % 3 == 0:
-            total_sum += num ** 2
     return total_sum
 
 numbers = input("Enter numbers separated by space: ")
