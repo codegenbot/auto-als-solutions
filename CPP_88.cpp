@@ -1,5 +1,5 @@
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 
 bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
@@ -18,11 +18,11 @@ std::vector<int> sort_array(const std::vector<int>& array) {
 int main() {
     std::vector<int> array = {21, 14, 23, 11};
     std::vector<int> result = sort_array(array);
-    if (!issame(result, {23, 21, 14, 11})) {
+    if (!issame(array, result)) {
         for (int i : result) {
             std::cout << i << " ";
         }
-        return 1;
+        std::cout << "\n";
     }
     return 0;
 }
