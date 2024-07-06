@@ -1,9 +1,10 @@
+#include <vector>
+using namespace std;
+
 bool pairs_sum_to_zero(vector<int> l) {
-    set<int> s(l.begin(), l.end());
-    for (auto it = s.begin(); it != s.end(); ++it) {
-        if (find(s.begin(), it, -(*it)) != it && find(s.begin(), it, -(*it)) != s.end()) {
-            return true;
-        }
+    unordered_set<int> s(l.begin(), l.end());
+    for (auto i : s) {
+        if (s.count(-i)) return true;
     }
     return false;
 }
