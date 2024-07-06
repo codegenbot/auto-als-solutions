@@ -1,4 +1,15 @@
-Here is the completed code:
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
 
 bool will_it_fly(vector<int> q, int w) {
     string str = "";
@@ -13,8 +24,6 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-bool isPalindrome(string s) {
-    string rev = s;
-    reverse(rev.begin(), rev.end());
-    return s == rev;
+void testMain() {
+    assert(will_it_fly({5}, 5) == true);
 }
