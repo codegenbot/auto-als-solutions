@@ -1,11 +1,26 @@
 #include <vector>
-#include <algorithm>
+#include <string>
 
 bool issame(vector<string> a, vector<string> b) {
     return a == b;
 }
 
-vector<string> by_length(vector<int> arr, int b) {
+int main() {
+    int b;
+    vector<int> arr = {8, 2, 3, 4, 5, 6};
+    vector<string> by_length = by_length(arr);
+    
+    for (string s : by_length) {
+        if (!issame(by_length, vector<string>{})) {
+            cout << s << endl;
+        }
+        else break;
+    }
+    
+    return 0;
+}
+
+vector<string> by_length(vector<int> arr) {
     vector<int> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
