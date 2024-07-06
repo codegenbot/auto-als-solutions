@@ -1,4 +1,3 @@
-```cpp
 int fib(int n); // Function declaration
 
 int main() {
