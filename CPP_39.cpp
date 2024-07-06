@@ -2,21 +2,6 @@
 
 using namespace std;
 
-int prime_fib(int n) {
-    int a = 0, b = 1, count = 0;
-    while (count <= n) {
-        if (isPrime(b)) {
-            if (count == n)
-                return b;
-            count++;
-        }
-        int temp = a;
-        a = b;
-        b = temp + b;
-    }
-    return -1; // or throw an exception
-}
-
 bool isPrime(int num) {
     if (num <= 1)
         return false;
@@ -24,4 +9,17 @@ bool isPrime(int num) {
         if (num % i == 0)
             return false;
     return true;
+}
+
+int prime_fib(int n) {
+    int a = 0, b = 1, fib = 0;
+    for (int i = 0; ; i++) {
+        if (i == n - 1)
+            return a;
+        fib = a + b;
+        a = b;
+        b = fib;
+        while (!isPrime(fib))
+            fib++;
+    }
 }
