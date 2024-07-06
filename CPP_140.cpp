@@ -1,23 +1,24 @@
 ```cpp
 #include <string>
-#include <iostream>
+using namespace std;
 
-std::string fix_spaces(const std::string& str) {
-    int i = 0;
-    int j = 0;
+string fix_spaces(string text) {
+    string result = "";
+    bool spaceFound = false;
 
-    while (j < str.length()) {
-        if ((str[j] == ' ') && (i > 0) && (str[i-1] == ' ')) {
-            j++;
+    for(int i = 0; i < text.length(); i++){
+        if(text[i] == ' '){
+            if(spaceFound) {
+                result += "-";
+            } else {
+                result += "_";
+                spaceFound = true;
+            }
         } else {
-            str[i++] = str[j++];
+            result += text[i];
+            spaceFound = false;
         }
     }
 
-    return str.substr(0, i);
-}
-
-int main() {
-    std::string str = " Example   3";
-    cout << fix_spaces(str) << endl;
+    return result;
 }
