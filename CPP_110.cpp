@@ -1,22 +1,32 @@
-string exchange(vector<int> lst1, vector<int> lst2) {
-    int even_count = 0;
-    for (int num : lst1) {
-        if (num % 2 == 0) {
-            even_count++;
-        } else {
-            bool found_even = false;
-            for (int num2 : lst2) {
-                if (num2 % 2 == 0) {
-                    swap(lst1[std::distance(lst1.begin(), find(lst1.begin(), lst1.end(), num))],
-                         lst2[std::distance(lst2.begin(), find(lst2.begin(), lst2.end(), num2))]);
-                    found_even = true;
-                    break;
-                }
-            }
-            if (!found_even) {
-                return "NO";
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+
+bool hasOdd(std::vector<int>& vec) {
+    for (int num : vec) {
+        if (num % 2 != 0)
+            return true;
+    }
+    return false;
+}
+
+std::string exchange(std::vector<int> lst1, std::vector<int> lst2) {
+    while (!hasOdd(lst1)) {
+        bool found = false;
+        for (int i = 0; i < lst2.size(); i++) {
+            if (lst2[i] % 2 != 0) {
+                std::swap(lst1.back(), lst2[i]);
+                found = true;
+                break;
             }
         }
+        if (!found)
+            return "NO";
     }
-    return even_count == lst1.size() ? "YES" : "NO";
+    return "YES";
+}
+
+int main() {
+    assert(exchange({100, 200}, {200, 200}) == "YES");
 }
