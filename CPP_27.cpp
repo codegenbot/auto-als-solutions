@@ -1,4 +1,6 @@
+```c++
 #include <string>
+#include <cctype>
 
 std::string flip_case(std::string str){
     std::string result = "";
@@ -13,3 +15,10 @@ std::string flip_case(std::string str){
         }
     }
     return result;
+}
+
+int main {
+    std::string s;
+    getline(std::cin, s);
+    std::cout << flip_case(s) << std::endl;
+}
