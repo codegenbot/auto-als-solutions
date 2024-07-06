@@ -23,11 +23,12 @@ bool issame(vector<int> a, vector<int> b) {
 }
 
 int main(){
-    vector<int> v1 = {4, 3, 2, 8};
-    vector<int> v2 = {};
-    cout << "Common elements: ";
-    for(int x:v1)cout<<x<<" ";
-    cout<<endl;
-    vector<int> result = common(v1,v2);
-    cout << "Vector 1 and Vector 2 are same: " << (issame(v1, v2)? "true" : "false") << endl;
-}
+    vector<int> a = {4, 3, 2, 8};
+    vector<int> b;
+    
+    vector<int> result = common(a,b);
+    
+    for(auto i: result) {
+        cout << i << " ";
+    }
+    cout << endl;
