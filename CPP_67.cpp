@@ -1,30 +1,37 @@
-#include <iostream>
-#include <string>
-using namespace std;
-
 int fruit_distribution(string s, int n) {
-    string apples, oranges;
-    size_t found = s.find(" and ");
-    if (found != string::npos) {
-        apples = s.substr(0, found);
-        oranges = s.substr(found + 5);
-    }
-    else {
-        if (s.find(" apples") != string::npos)
-            apples = s.substr(0, s.find(" apples"));
-        if (s.find(" oranges") != string::npos)
-            oranges = s.substr(s.find(" and ") == string::npos ? s.find(" oranges") : s.find(" and ")+3);
-    }
-    int countApples = stoi(apples.substr(0, apples.find(" ")));
-    int countOranges = stoi(oranges.substr(0, oranges.find(" ")));
-    
-    return n - (countApples + countOranges);
-}
+    size_t pos = 0;
+    int apples = 0;
+    int oranges = 0;
 
-int main() {
-    cout << fruit_distribution("5 apples and 6 oranges", 19) << endl;
-    cout << fruit_distribution("0 apples and 1 oranges",3) << endl;
-    cout << fruit_distribution("2 apples and 3 oranges", 100) << endl;
-    cout << fruit_distribution("100 apples and 1 oranges",120) << endl;
-    return 0;
+    // Find the position of "apples" and count the number of apples.
+    while ((pos = s.find(" apples", pos)) != string::npos) {
+        if (pos + 8 <= s.length()) {
+            int start = pos;
+            while (s[start] >= '0' && s[start] <= '9') start++;
+            int end = start;
+            while (end < s.length() && s[end] >= '0' && s[end] <= '9') end++;
+            apples = stoi(s.substr(start, end - start));
+        }
+        pos += 8;
+    }
+
+    // Find the position of "oranges" and count the number of oranges.
+    while ((pos = s.find(" oranges", pos)) != string::npos) {
+        if (pos + 8 <= s.length()) {
+            int start = pos;
+            while (s[start] >= '0' && s[start] <= '9') start++;
+            int end = start;
+            while (end < s.length() && s[end] >= '0' && s[end] <= '9') end++;
+            oranges = stoi(s.substr(start, end - start));
+        }
+        pos += 8;
+    }
+
+    // Calculate the total number of fruits and return the difference.
+    int totalFruits = n;
+    if (totalFruits > apples + oranges) {
+        return totalFruits - apples - oranges;
+    } else {
+        return 0;
+    }
 }
