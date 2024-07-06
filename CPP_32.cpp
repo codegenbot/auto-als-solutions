@@ -1,15 +1,27 @@
-double find_zero(vector<double> xs){
-    int n = xs.size();
-    double a = xs[0];
-    for(int i=1; i<n; i++){
-        a = 0;
-        for(int j=0; j<i; j++)
-            a += xs[j] * pow(1.0, i-j);
-        if(a == 0) return 1.0;
+```cpp
+#include <vector>
+#include <cmath>
+
+double poly(const std::vector<double>& coeffs, double x) {
+    double result = 0;
+    for (int i = 0; i < coeffs.size(); ++i) {
+        result += coeffs[i] * pow(x, i);
     }
-    double solution = -xs[1]/2*xs[2];
-    while (abs((int)polynomial(xs, solution)) > 1e-3){
-        solution = polynomial(xs, solution);
+    return abs(result - solution);
+}
+
+double find_zero(std::vector<double> coeffs, double solution) {
+    double left = 1.0;
+    double right = 100.0;
+
+    while (right - left > 1e-9) {
+        double mid = (left + right) / 2.0;
+        if (poly(coeffs, mid) < 0) {
+            left = mid;
+        } else {
+            right = mid;
+        }
     }
-    return solution;
+
+    return (-left / right);
 }
