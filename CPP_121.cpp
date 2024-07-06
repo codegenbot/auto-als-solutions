@@ -1,5 +1,5 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
 
 int main() {
     std::vector<int> lst;
@@ -7,13 +7,15 @@ int main() {
     std::cout << "Enter the number of elements: ";
     std::cin >> n;
     
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
+        int num;
         std::cout << "Enter element " << i + 1 << ": ";
-        std::cin >> lst.push_back(i);
+        std::cin >> num;
+        lst.push_back(num);
     }
     
     int result = solution(lst);
-    std::cout << "Sum of odd elements at even positions: " << result << std::endl;
+    std::cout << "The sum of odd elements is: " << result << std::endl;
     return 0;
 }
 
