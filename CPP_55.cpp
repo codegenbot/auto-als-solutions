@@ -1,18 +1,24 @@
-Here is the completed code:
+#include <iostream>
 
-```cpp
+using namespace std;
+
 int fib(int n) {
-    if (n <= 1) return n;
-    int a = 0, b = 1;
+    if (n <= 1)
+        return n;
+    int a = 0, b = 1, result = 1;
     for (int i = 2; i <= n; i++) {
-        int temp = a + b;
+        result = a + b;
         a = b;
-        b = temp;
+        b = result;
     }
-    return b;
-
+    return result;
 }
-int main() {
-    assert(fib(12) == 144);
+
+int main() 
+{
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+    cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
 }
