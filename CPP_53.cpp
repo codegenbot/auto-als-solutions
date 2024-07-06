@@ -4,6 +4,7 @@ int main() {
     std::cin >> x;
     std::cout << "Enter second number: ";
     std::cin >> y;
-    int sum = add(x, y);
-    std::cout << "Sum: " << sum << std::endl;
+    int result = add(x, y);
+    std::cout << "The sum is: " << result << std::endl;
+    return 0;
 }
