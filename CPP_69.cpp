@@ -1,4 +1,7 @@
-int search(vector<int> numbers) {
+#include <bits/stdc++.h>
+using namespace std;
+
+int findMaxValue(vector<int> numbers) {
     map<int, int> freqMap;
     for (int num : numbers) {
         if (freqMap.find(num) == freqMap.end()) {
@@ -13,4 +16,10 @@ int search(vector<int> numbers) {
         }
     }
     return -1;
+}
+
+int main() {
+    assert(findMaxValue({3, 10, 10, 9, 2}) == -1);
+    cout << "All test passed." << endl;
+    return 0;
 }
