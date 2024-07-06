@@ -1,7 +1,5 @@
-```cpp
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
 
 bool issame(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size())
@@ -38,6 +36,6 @@ void strange_sort_list(std::vector<int>& lst) {
 int main() {
     std::vector<int> lst = {1};
     strange_sort_list(lst);
-    assert(issame({111111}, {1, 1, 1, 1, 1}));
+    assert(issame({111111} , {1, 1, 1, 1, 1}));
     return 0;
 }
