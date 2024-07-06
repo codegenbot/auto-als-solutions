@@ -1,9 +1,9 @@
+```c++
 #include <string>
 #include <iostream>
 
 std::string solve(std::string input) {
-    // implementation of the solve function
-    return input;
+    // your solution here
 }
 
 int main() {
