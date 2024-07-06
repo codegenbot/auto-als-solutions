@@ -1,15 +1,9 @@
+Here is the completed code:
+
 int max_fill(vector<vector<int>> grid, int capacity) {
-    int rows = grid.size();
-    int cols = grid[0].size();
     int total_water = 0;
-    
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
-            if(grid[i][j] == 1){
-                total_water += 1;
-            }
-        }
+    for (vector<int> well : grid) {
+        total_water += accumulate(well.begin(), well.end(), 0);
     }
-    
-    return total_water / capacity + (total_water % capacity != 0);
+    return ceil((double)total_water / capacity);
 }
