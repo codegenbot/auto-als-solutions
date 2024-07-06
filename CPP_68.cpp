@@ -1,4 +1,4 @@
-```cpp
+```
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -8,7 +8,14 @@ bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
     return a.second < b.second;
 }
 
-std::vector<int> extractEvenNodes(std::vector<int> arr) { 
+int main() {
+    std::vector<int> arr = {7, 9, 7, 1};
+    std::vector<int> result = pluck(arr);
+    assert(result.empty());
+    return 0;
+}
+
+std::vector<int> pluck(std::vector<int> arr) {
     std::vector<std::pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
@@ -30,15 +37,4 @@ std::vector<int> extractEvenNodes(std::vector<int> arr) {
     }
     
     return {nodes[0].first};
-}
-
-int main() {
-    std::vector<int> arr = {7, 9, 7, 1};
-    std::cout << extractEvenNodes(arr).size() << " ";
-    if(extractEvenNodes(arr).empty()) 
-        std::cout << -1;
-    else
-        for(int i: extractEvenNodes(arr)) {
-            std::cout << i << " ";
-        }
 }
