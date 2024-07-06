@@ -1,16 +1,33 @@
 #include <iostream>
+#include <vector>
+#include <string>
 
-int sumOdd(int x) {
-    int sum = 0;
-    for (int i = 1; i <= 10; i++) { 
-        if (i % 2 != 0) {
-            sum += i;
-        }
-    }
-    return sum;
+// Convert the given input integer to a string
+std::string intToString(int x) {
+    std::string str = std::to_string(x);
+    return str;
 }
 
 int main() {
-    std::cout << "Sum of odd numbers: " << sumOdd(0) << std::endl;
+    // Read user input as an integer
+    int x; 
+    std::cout << "Enter an integer: ";
+    std::cin >> x;
+
+    // Convert the integer to a string and then convert it to uppercase or lowercase according to the problem description.
+    std::string str = intToString(x);
+    if(str.size() % 2 == 0) {
+        for(int i=0; i<str.size(); i++) {
+            str[i] = toupper((unsigned char)str[i]);
+        }
+    } else {
+        for(int i=0; i<str.size(); i++) {
+            str[i] = tolower((unsigned char)str[i]);
+        }
+    }
+
+    // Print the modified string
+    std::cout << "Modified string: " << str << std::endl;
+
     return 0;
 }
