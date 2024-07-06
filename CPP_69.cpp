@@ -1,13 +1,17 @@
 ```cpp
-#include <algorithm>
-#include <vector>
-
-int findMaxValue(std::vector<int> numbers) {
-    int maxVal = -1;
+int search(vector<int> numbers) {
+    map<int, int> freqMap;
     for (int num : numbers) {
-        if (num > maxVal) {
-            maxVal = num;
+        if (freqMap.find(num) == freqMap.end()) {
+            freqMap[num] = 1;
+        } else {
+            freqMap[num]++;
         }
     }
-    return maxVal;
+    for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
+        if (it->second >= it->first && it->first > 0) {
+            return it->first;
+        }
+    }
+    return -1;
 }
