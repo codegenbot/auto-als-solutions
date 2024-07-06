@@ -1,10 +1,8 @@
-#include <vector>
-#include <string>
-
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
+```cpp
+bool issame(const std::vector<std::string>& vec1, const std::vector<std::string>& vec2) {
+    if (vec1.size() != vec2.size()) return false;
+    for (int i = 0; i < vec1.size(); ++i) {
+        if (vec1[i] != vec2[i]) return false;
     }
     return true;
 }
@@ -29,13 +27,8 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        std::cout << word << std::endl;
-    }
-
-    bool same = issame(split_words(user_input), split_words("example string"));
-    if (same) {
-        std::cout << "Words are the same." << std::endl;
-    } else {
-        std::cout << "Words are not the same." << std::endl;
+        if (!issame({word}, words)) {
+            std::cout << word << std::endl;
+        }
     }
 }
