@@ -1,10 +1,9 @@
-```cpp
 #include <algorithm>
 #include <vector>
 #include <numeric>
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
-    float min_diff = std::numeric_limits<float>::max();
+    float min_diff = numeric_limits<float>::max();
     std::vector<std::pair<float, float>> closest_pairs;
 
     for (int i = 0; i < numbers.size() - 1; ++i) {
