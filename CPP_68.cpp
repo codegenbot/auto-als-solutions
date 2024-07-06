@@ -2,15 +2,7 @@
 #include <algorithm>
 
 bool same(vector<pair<int, int>> a, vector<pair<int, int>> b) {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i].first != b[i].first || a[i].second != b[i].second) {
-            return false;
-        }
-    }
-    return true;
+    return a == b;
 }
 
 vector<int> extract(vector<int> arr) {
@@ -22,18 +14,11 @@ vector<int> extract(vector<int> arr) {
     }
     
     if (nodes.empty()) {
-        return {};
+        return vector<int>();
     }
     
     sort(nodes.begin(), nodes.end());
     
-    vector<int> result;
-    for (int i = 1; i < nodes.size(); i++) {
-        if (same({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
-            return {};
-        }
-    }
-    
-    int resultValue = nodes[0].first;
-    return vector<int>(1, resultValue);
+    int result = nodes[0].first;
+    return vector<int>(1, result);
 }
