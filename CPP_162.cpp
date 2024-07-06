@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 #include <openssl/evp.h>
 
@@ -9,7 +10,7 @@ string string_to_md5(string text) {
     unsigned char result[MD5_DIGEST_LENGTH];
     MD5_CTX mdContext;
     MD5_Init(&mdContext);
-    const char* ptr = (char*)text.c_str();
+    const char* ptr = text.c_str();
     size_t len = text.size();
     MD5_Update(&mdContext, (char*)ptr, len);
     MD5_Final(result, &mdContext);
