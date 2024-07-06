@@ -1,7 +1,5 @@
-```cpp
 #include <iostream>
 #include <string>
-#include <limits>
 
 std::string get_closest_vowel(std::string str) {
     int min_dist = std::numeric_limits<int>::max();
