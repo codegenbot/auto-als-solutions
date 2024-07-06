@@ -1,17 +1,7 @@
-```
 def smallest_change(arr):
     n = len(arr)
-    left = right = 0
-    count = 0
-    
-    while left < n // 2:
-        if arr[left] != arr[n - left - 1]:
-            for i in range(n):
-                if arr[i] == arr[n - left - 1]:
-                    arr[i], arr[left] = arr[left], arr[i]
-                    count += 1
-                    break
-        else:
-            left += 1
-    
-    return count
+    arr_palindromic = arr.copy()
+    for i in range(n // 2):
+        if arr[i] != arr[n - i - 1]:
+            arr_palindromic[i] = arr_palindromic[n - i - 1]
+    return sum(1 for a, b in zip(arr, arr_palindromic) if a != b)
