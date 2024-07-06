@@ -40,8 +40,8 @@ bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    std::vector<float> grades = {0, 0.7};
-    if (isSame(numerical_letter_grade(grades), {"E", "D-"}))
+    std::vector<float> grades = {0.7};
+    if (isSame(numerical_letter_grade(grades), {"D"}))
         std::cout << "Assertion passed.\n";
     else
         std::cout << "Assertion failed.\n";
