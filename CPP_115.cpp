@@ -1,11 +1,16 @@
-```cpp
 int max_fill(vector<vector<int>> grid, int capacity) {
-    int total_water = 0;
+    int ans = 0;
     for (const auto& row : grid) {
-        total_water += accumulate(row.begin(), row.end(), 0);
+        int fill = 0;
+        for (int i = 0; i < row.size(); ++i) {
+            if (row[i] == 1) {
+                fill += 1;
+            }
+        }
+        while (fill > 0) {
+            fill -= capacity;
+            ans++;
+        }
     }
-    
-    int times_to_lower_buckets = -(-total_water / capacity); // integer division
-    
-    return times_to_lower_buckets;
+    return ans;
 }
