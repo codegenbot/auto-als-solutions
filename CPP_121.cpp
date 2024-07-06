@@ -1,24 +1,19 @@
-```cpp
+```
 #include <iostream>
 #include <vector>
 
-int solutions(const std::vector<int>& lst) {
+int sumOdd(int x) {
     int sum = 0;
-    for (int i = 1; i < lst.size(); i++) {
-        if (lst[i] % 2 != 0) {
-            sum += lst[i];
+    for (int i = 1; i <= 10; i++) { 
+        int y;
+        std::cin >> y;
+        if (y % 2 != 0) {
+            sum += y;
         }
     }
     return sum;
 }
 
 int main() {
-    std::vector<int> lst;
-    int sum = 0;
-    for (int i = 1; i <= 10; i++) { 
-        int x;
-        std::cin >> x;
-        lst.push_back(x);
-    }
-    std::cout << solutions(lst) << std::endl;
+    std::cout << sumOdd(0) << std::endl;
 }
