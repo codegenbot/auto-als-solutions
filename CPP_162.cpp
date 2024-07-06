@@ -1,7 +1,6 @@
 ```cpp
 #include <sstream>
 #include <cstring>
-#include <iomanip>
 
 struct MD5_CTX {
     unsigned long int ipad[64];
@@ -74,7 +73,7 @@ std::string string_to_md5(const char* text) {
 
     std::ostringstream oss;
     for (int i = 0; i < 16; ++i) {
-        oss << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(result[i]);
+        oss << std::hex << std::setfill('0') << std::setw(2) << static_cast<unsigned>(result[i]);
     }
 
     return oss.str();
