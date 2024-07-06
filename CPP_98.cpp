@@ -1,4 +1,3 @@
-```
 using namespace std;
 
 int count_upper(string s) {
