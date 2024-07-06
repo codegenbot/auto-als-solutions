@@ -1,14 +1,22 @@
-int main 
-{
-    std::cout << "Enter a string: ";
-    std::string S;
-    std::cin >> S;
+#include <iostream>
+#include <string>
+
+int is_bored(std::string S) {
     int count = 0;
     size_t pos = 0;
     while ((pos = S.find("I", pos)) != std::string::npos) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
-            count++;
-        pos = S.find(". ", pos) + 1; 
+            S.erase(pos, 1);
+        else
+            pos = S.find(".", pos) + 1;
     }
-    std::cout << "The string has " << count << " bored sentences.\n";
+    return count;
+
+int main() {
+    std::string input;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, input);
+    int result = is_bored(input);
+    std::cout << "Number of 'I' without punctuation: " << result << "\n";
+    return 0;
 }
