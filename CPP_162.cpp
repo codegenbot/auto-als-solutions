@@ -1,19 +1,28 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <cstring>
 #include <openssl/md5.h>
+#include <cstring>
+#include <openssl/ssl.h>
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
     unsigned char result[16];
     MD5_CTX mdContext;
-    MD5_init(&mdContext);
-    const char* ptr = text;
-    size_t len = strlen(text);
-    MD5_update(&mdContext, reinterpret_cast<const unsigned char*>(ptr), len); 
-    MD5_final(result, &mdContext);
+    if (OPENSSL_VERSION_NUMBER >= 0x30000000LL) {
+        MD5_Init(&mdContext);
+        const char* ptr = text;
+        size_t len = strlen(text);
+        MD5_UPDATE(&mdContext, (const unsigned char*)ptr, len); 
+        MD5_FINISH(&mdContext, result);
+    } else {
+        MD5_Init(&mdContext);
+        const char* ptr = text;
+        size_t len = strlen(text);
+        MD5_Update(&mdContext, (unsigned char*)ptr, len); 
+        MD5_Final(result, &mdContext);
+    }
 
     std::ostringstream oss;
     for (int i = 0; i < 16; ++i) {
