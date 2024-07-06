@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 int multiply(int a, int b) {
     int unitA = a % 10;
     int unitB = b % 10;
@@ -9,5 +6,4 @@ int multiply(int a, int b) {
 
 int main() {
     assert(multiply(0, 0) == 0);
-    // rest of your code
 }
