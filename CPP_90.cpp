@@ -1,5 +1,3 @@
-#include <vector>
-#include <algorithm>
 #include <climits>
 
 int next_smallest(std::vector<int> lst) {
