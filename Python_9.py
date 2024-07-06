@@ -1,4 +1,3 @@
-```Python
 def max_rolling_sum(numbers: list[int]) -> int:
     if not numbers:
         return 0
@@ -12,3 +11,8 @@ def max_rolling_sum(numbers: list[int]) -> int:
         start = min(start, current_sum - num)
 
     return max_sum
+
+
+numbers = [1, 2, 3, 4, 5]
+result = max_rolling_sum(numbers)
+print(result)

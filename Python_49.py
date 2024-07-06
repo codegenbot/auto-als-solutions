@@ -1,8 +1,9 @@
-```
-def modp(n, p):
+def modp(*args):
+    n = args[0]
+    p = args[1]
     if n < 0:
         n += p
-
+    
     def egcd(a, b):
         if a == 0:
             return b, 0, 1
