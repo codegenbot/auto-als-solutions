@@ -1,4 +1,10 @@
+```c++
+#include <vector>
 #include <algorithm>
+
+bool issame(vector<int> a, vector<int> b) {
+    return a == b;
+}
 
 vector<int> order_by_points(vector<int> nums) {
     vector<pair<int, int>> pairs;
