@@ -1,16 +1,18 @@
 #include <algorithm>
 #include <vector>
-
-int findMaxValue(std::vector<int> numbers) {
-    int maxValue = *std::max_element(numbers.begin(), numbers.end());
-    return maxValue;
-}
-
-bool containsSequence(const std::vector<int>& numbers, const std::vector<int>& sequence) {
-    return std::search(numbers.begin(), numbers.end(), sequence.begin(), sequence.end()) != sequence.end();
-}
+using namespace std;
 
 int main() {
-    assert(!containsSequence({3, 10, 10, 9, 2}, {3, 10, 10, 9, 2}));
+    vector<int> vec;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    vec.resize(n);
+    
+    cout << "Enter the elements: ";
+    for(int i = 0; i < n; i++)
+        cin >> vec[i];
+    
+    assert(std::search(vec.begin(), vec.end(), vec.begin(), vec.end()) == vec.end());
     return 0;
 }
