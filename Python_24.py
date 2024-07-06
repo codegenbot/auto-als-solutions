@@ -1,4 +1,6 @@
 def largest_divisor(n: int) -> int:
-    for i in range(n, 0, -1):
+    i = n - 1
+    while i > 0:
         if n % i == 0:
             return i
+        i -= 1
