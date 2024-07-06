@@ -3,7 +3,8 @@ from typing import List
 import math
 
 
-def factorize(n: int) -> List[int]:
+def factorize() -> None:
+    n = int(input("Enter a number: "))
     factors = []
     i = 2
     while i * i <= n:
@@ -19,7 +20,7 @@ def factorize(n: int) -> List[int]:
             n = max(2, int(math.sqrt(n)))
     if n > 1:
         factors.append(n)
-    return factors
+    print(factors)
 
-n = int(input("Enter a number: "))
-print(factorize(n))
+
+factorize()
