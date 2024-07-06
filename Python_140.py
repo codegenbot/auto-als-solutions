@@ -3,7 +3,7 @@ def fix_spaces(text):
     text += " "
     new_text = ""
     for char in text:
-        if not new_text or char != " " or (new_text and new_text[-1] != " "):
+        if char != " " or (len(new_text) > 0 and new_text[-1] != " "):
             new_text += char
         elif len(new_text) > 1 and new_text[-1] != "-":
             new_text += "-"
