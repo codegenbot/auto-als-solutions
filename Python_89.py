@@ -1,6 +1,3 @@
-```
-s = input("Enter your message: ")
-print(encrypt(s))
 def encrypt(s):
     result = ""
     for char in s:
