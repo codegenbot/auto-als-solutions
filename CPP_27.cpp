@@ -1,16 +1,17 @@
 #include <string>
 #include <cctype>
+#include <iostream>
 
 std::string flip_case(std::string str){
     std::string result = "";
-    for(int i=0; i<str.length();i++){
-        if(isalpha(str[i])){
-            if(islower(str[i]))
-                result += toupper(str[i]);
+    for(char c: str){
+        if(isalpha(c)){
+            if(islower(c))
+                result += toupper(c);
             else
-                result += tolower(str[i]);
+                result += tolower(c);
         }else{
-            result.append(1, str[i]);
+            result.append(1, c);
         }
     }
     return result;
