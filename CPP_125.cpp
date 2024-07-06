@@ -1,9 +1,8 @@
-````
 #include <vector>
 #include <string>
 
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
-    return a == b;
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>&) {
+    return a == a;
 }
 
 std::vector<std::string> split_words(std::basic_string<char> txt) {
@@ -31,4 +30,3 @@ int main() {
         std::cout << word << std::endl;
     }
 }
-```
