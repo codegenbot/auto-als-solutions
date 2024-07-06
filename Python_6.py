@@ -5,15 +5,15 @@ def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
     level = 0
     for char in paren_string:
-        if char == '(' and level == 0:
+        if char == '(' and level > 0:
+            result.append(-1)
+            level -= 1
+        elif char == '(' and level == 0:
             result.append(1)
-            level = 1
+            level += 1
         elif char == ')' and level > 0:
             result.append(-1)
             level -= 1
-        elif char == '(' and level > 0:
-            level -= 1
-            result.append(-1)
         elif char == ')' and level == 0:
-            return result + [0]
-    return result + [0]
+            break
+    return result
