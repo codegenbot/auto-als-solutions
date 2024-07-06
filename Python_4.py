@@ -1,9 +1,20 @@
 ```
-numbers = input("Enter numbers separated by space: ").split()
-try:
-    numbers = [float(num) for num in numbers]
-except ValueError:
-    print("Invalid input")
-    exit()
+from typing import List
 
-print(mean_absolute_deviation(numbers))
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    if not numbers:
+        return 0
+    numeric_numbers = [num for num in numbers if isinstance(num, (int, float))]
+    
+    if not numeric_numbers:
+        return 0
+    
+    total = sum(numeric_numbers)
+    count = len(numeric_numbers)
+    mean = total / count if count else 0
+    
+    try:
+        return sum(abs(num - mean) for num in numeric_numbers) / count
+    except ZeroDivisionError:
+        return float('nan')
