@@ -1,13 +1,14 @@
 double find_zero(vector<vector<double>> polys) {
-    double left = polys[0][1];
-    double right = polys[0][1];
-    for (int i = 0; i < polys.size(); i++) {
-        if (polys[i][2] > right) {
-            right = polys[i][2];
+    vector<double> coeffs;
+    double left = 0, right = 0;
+    for (const auto& poly : polys) {
+        double x = 1;
+        double sum = 0;
+        for (int i = poly.size() - 1; i >= 0; --i) {
+            sum += poly[i] * pow(x, i);
         }
-        if (polys[i][0] < left) {
-            left = polys[i][0];
-        }
+        if (sum > 0) right = x;
+        else left = x;
     }
     return (-left / right);
 }
