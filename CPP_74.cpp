@@ -17,9 +17,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2 += str.length();
     }
 
-    if (lst1 == lst2) {
-        return lst1;
-    } else if (sum1 < sum2) {
+    if (sum1 < sum2) {
         return lst1;
     } else if (sum1 > sum2) {
         return lst2;
