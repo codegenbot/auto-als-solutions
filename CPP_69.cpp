@@ -3,8 +3,7 @@
 using namespace std;
 
 int findElement(const vector<int>& vec, int target) {
-    auto it = find(vec.begin(), vec.end(), target);
-    return it == vec.end() ? -1 : distance(it, vec.end());
+    return distance(vec.begin(), find(vec.begin(), vec.end(), target) - vec.begin());
 }
 
 int main() {
