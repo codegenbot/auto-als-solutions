@@ -6,6 +6,6 @@ int is_bored(std::string S){
     while ((pos = S.find("I", pos)) != std::string::npos) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
             count++;
-        pos = S.find(".", pos) + 1;
+        pos = S.find(". ", pos) + 1; // update the position
     }
     return count;
