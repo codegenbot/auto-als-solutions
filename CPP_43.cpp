@@ -1,9 +1,14 @@
-bool pairs_sum_to_zero(vector<int> l) {
-    set<int> s(l.begin(), l.end());
-    for (auto it1 = s.begin(); it1 != s.end(); ++it1) {
-        int complement = -(*it1);
-        if (s.find(complement) != s.end() && *it1 != complement) {
-            return true;
+#include <vector>
+#include <algorithm>
+
+bool pairs_sum_to_zero(std::vector<int> l) {
+    std::sort(l.begin(), l.end());
+    for (int i = 0; i < l.size() - 1; i++) {
+        if (std::abs(l[i]) + l[i] == 0) return true;
+        int j = i + 1;
+        while (j < l.size() && l[j] <= std::abs(l[i])) {
+            if (l[i] + l[j] == 0) return true;
+            j++;
         }
     }
     return false;
