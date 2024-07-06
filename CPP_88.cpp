@@ -1,6 +1,7 @@
 ```cpp
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
@@ -14,13 +15,8 @@ int main() {
     std::vector<int> array1 = {21, 14, 23, 11};
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
-    void sort_array(std::vector<int>& array) {
+    // Sort and compare
+    void sort_array(std::vector<int>& array) { 
         std::sort(array.begin(), array.end());
     }
-    std::vector<int> array3 = array1;
-    sort_array(array3);
-    for(int i : array3) {
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
 }
