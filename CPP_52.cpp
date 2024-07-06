@@ -1,8 +1,5 @@
 ```cpp
-#include <iostream>
-#include <vector>
-
-bool below_threshold(std::vector<int> l, int t) {
+bool below_threshold(vector<int> l, int t) {
     for (int num : l) {
         if (num >= t) {
             return false;
@@ -12,16 +9,14 @@ bool below_threshold(std::vector<int> l, int t) {
 }
 
 int main() {
-    std::vector<int> numbers = {1, 2, 3, 4, 5};
+    vector<int> numbers = {1, 2, 3, 4, 5};
     int threshold = 3;
-
-    bool result = below_threshold(numbers, threshold);
-
-    if (result) {
-        std::cout << "All numbers are below the threshold." << std::endl;
+    
+    if(below_threshold(numbers, threshold)) {
+        cout << "All elements are below the threshold." << endl;
     } else {
-        std::cout << "At least one number is not below the threshold." << std::endl;
+        cout << "At least one element is not below the threshold." << endl;
     }
-
+    
     return 0;
 }
