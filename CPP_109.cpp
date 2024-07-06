@@ -1,11 +1,19 @@
-```c++
-bool move_one_ball(vector<int> arr){
+#include <iostream>
+#include <vector>
+
+bool move_one_ball(std::vector<int> arr) {
     int n = arr.size();
-    if(n == 0) return true; 
-    for(int i = 1; i < n; i++){
-        if(arr[i] <= arr[0]){
-            return false; 
-        }
+    if (n == 0) return true;
+
+    for (int i = 1; i < n; ++i) {
+        if (arr[i] < arr[0]) return false;
     }
+
     return true;
+}
+
+int main() {
+    assert(move_one_ball({})==true);
+    std::cout << "Program executed successfully." << std::endl;
+    return 0;
 }
