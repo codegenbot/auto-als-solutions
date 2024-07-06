@@ -1,37 +1,22 @@
-bool hasOdd(vector<int>& v) {
-    for (int num : v) {
-        if (num % 2 != 0)
-            return true;
-    }
-    return false;
-}
-
 string exchange(vector<int> lst1, vector<int> lst2) {
-    int oddCount = 0;
+    int even_count = 0;
     for (int num : lst1) {
-        if (num % 2 != 0) {
-            oddCount++;
-        }
-    }
-    if (!hasOdd(lst2)) {
-        return "YES";
-    } else if (oddCount == 0) {
-        return "NO";
-    } else {
-        for (int i = 0; i < lst1.size(); i++) {
-            if (lst1[i] % 2 != 0 && oddCount > 0) {
-                int j;
-                for (j = 0; j < lst2.size(); j++) {
-                    if (lst2[j] % 2 != 0) {
-                        swap(lst1[i], lst2[j]);
-                        oddCount--;
-                        break;
-                    }
+        if (num % 2 == 0) {
+            even_count++;
+        } else {
+            bool found_even = false;
+            for (int num2 : lst2) {
+                if (num2 % 2 == 0) {
+                    swap(lst1[std::distance(lst1.begin(), find(lst1.begin(), lst1.end(), num))],
+                         lst2[std::distance(lst2.begin(), find(lst2.begin(), lst2.end(), num2))]);
+                    found_even = true;
+                    break;
                 }
-                if (oddCount > 0)
-                    return "NO";
+            }
+            if (!found_even) {
+                return "NO";
             }
         }
     }
-    return "YES";
+    return even_count == lst1.size() ? "YES" : "NO";
 }
