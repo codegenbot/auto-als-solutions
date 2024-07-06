@@ -1,17 +1,8 @@
-#include <string>
-
-int correct_bracketing(string brackets) {
+bool correct_bracketing(std::string brackets){
     int count = 0;
-    for (char c : brackets) {
-        if (c == '(') {
-            count++;
-        } else if (c == ')') {
-            if (count == 0)
-                return 0; // Wrong bracketing
-            count--;
-        }
+    for(char c : brackets){
+        if(c == '(')count++;
+        else if(c == ')')if(count > 0)count--;else return false;
     }
-    if(count != 0)
-        return 0; // Wrong bracketing
-    return 1; // Correct bracketing
+    return count == 0 && c != '(';
 }
