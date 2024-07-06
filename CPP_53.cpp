@@ -1,15 +1,12 @@
-```cpp
+#include <iostream>
+using namespace std;
+
 int main() {
     int x, y;
-    std::cout << "Enter first number: ";
-    std::cin >> x;
-    std::cout << "Enter second number: ";
-    std::cin >> y;
-    int sum = add(x, y);
-    std::cout << "The sum is: " << sum << std::endl;
+    cout << "Enter first number: ";
+    cin >> x;
+    cout << "Enter second number: ";
+    cin >> y;
+    cout << "Sum is: " << add(x, y) << endl;
     return 0;
-}
-
-int add(int x, int y) {
-    return x + y;
 }
