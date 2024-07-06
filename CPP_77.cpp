@@ -1,3 +1,12 @@
+```cpp
 bool iscuber(int a){
-    return cbrt(a) == round(cbrt(a));
+    int i = 1;
+    while (true) {
+        long long value = pow(i, 3);
+        if(value == a)
+            return true;
+        if(value > a)
+            return false;
+        i++;
+    }
 }
