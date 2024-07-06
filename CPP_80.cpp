@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -31,3 +32,4 @@ int main() {
     else
         cout << "The given string is not happy." << endl;
     return 0;
+}
