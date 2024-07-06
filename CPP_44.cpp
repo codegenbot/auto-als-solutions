@@ -1,15 +1,16 @@
+```
 #include <iostream>
 using namespace std;
 
 string change_base(int x, int base) {
-    string res = "";
+    char res[1000];
+    string s = "";
     while (x > 0) {
         int rem = x % base;
-        if(rem >= 10) res.insert(0, 1, (char)(rem - 55));
-        else res.insert(0, 1, '0' + rem);
-        x /= base;
+        if(rem >= 10) res[--x] = (char)(rem - 55);
+        else res[--x] = '0' + rem;
     }
-    return res;
+    return string(res);
 }
 
 int main() {
