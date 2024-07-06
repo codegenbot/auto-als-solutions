@@ -8,7 +8,7 @@ vector<pair<int, int>> pluck(vector<int> arr) {
     
     if(arr.empty()) return result; // If array is empty
     
-    int smallestEven = INT_MAX; 
+    int smallestEven = INT_MAX;
     int smallestIndex = 0;
     
     for(int i = 0; i < arr.size(); i++) {
@@ -20,5 +20,5 @@ vector<pair<int, int>> pluck(vector<int> arr) {
     
     result.push_back({smallestEven, smallestIndex});
     
-    return vector<pair<int, int>>(result); 
+    return result;
 }
