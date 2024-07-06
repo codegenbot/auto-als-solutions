@@ -8,28 +8,32 @@ def minPath(grid, k):
     def dfs(i, j, path, sum_path):
         if (i, j) in visited:
             return None
-        visited.add((i, j))
-        if (i, j) == (0, 0) or (i, j) == (n - 1, n - 1) or grid[i][j] == k:
-            return ((path, sum_path), m[i][j])
-        new_sum = sum_path + grid[i][j]
-        for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            ni, nj = i + x, j + y
-            if 0 <= ni < n and 0 <= nj < n:
-                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], new_sum)
-                if new_path:
-                    return (new_path, new_sum)
+        new_path = list(path)
+        new_sum = sum_path
+        if 0 <= i < n and 0 <= j < n:
+            if (i, j) == (0, j) or (i, j) == (n - 1, j) or (i, j) == (i, 0) or (i, j) == (i, n - 1):
+                new_path.append((i, j))
+            for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                ni, nj = i + x, j + y
+                if 0 <= ni < n and 0 <= nj < n:
+                    new_path2, new_sum2 = dfs(ni, nj, new_path, new_sum)
+                    if new_path2:
+                        return ((new_path, new_sum), new_sum2)
+        if grid[i][j] == k:
+            return ((new_path, new_sum), new_sum + k)
         return None
 
     def main():
         boundary_cells = [(0, j) for j in range(n)] + [(n - 1, j) for j in range(n)] + [(i, 0) for i in range(n)] + [(i, n - 1) for i in range(n)]
         min_path = []
         for i, j in boundary_cells:
-            paths = [p for p in [dfs(i, j, [m[i][j]], grid[i][j])] if p] 
-            for path, _ in set(paths):
-                if path:
-                    min_path = path
+            visited.add((i, j))
+            paths = [p for p in [dfs(i, j, [m[i][j]], 0)] if p] 
+            for path in set(tuple(x) for x in paths):
+                if path[1]:
+                    min_path = min([path for path in paths], key=lambda x: x[1])
                     break
 
-        return min_path
+        return min_path[0][0] if min_path else []
 
     print(main())
