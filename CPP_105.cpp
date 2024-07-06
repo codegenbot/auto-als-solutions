@@ -1,7 +1,6 @@
 ```cpp
 #include <vector>
 #include <algorithm>
-#include <string>
 
 bool isSame(std::vector<std::string> v1, std::vector<std::string> v2) {
     if(v1.size() != v2.size())
@@ -60,8 +59,7 @@ std::vector<std::string> byLength(std::vector<int> arr) {
 }
 
 int main() {
-    if (!isSame(byLength({9, 4, 8}) , {"Nine", "Four", "Eight"})) {
-        return 1;  // Return 1 to indicate failure
-    }
-    return 0; // Return 0 to indicate success
+    if (!isSame(byLength({9, 4, 8}), {"Nine", "Four", "Eight"}))
+        return 1;
+    return 0;
 }
