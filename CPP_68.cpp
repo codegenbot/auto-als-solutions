@@ -1,6 +1,7 @@
+#include <initializer_list>
+
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
 
 bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
     if (a.first != b.first) return a.first < b.first;
@@ -41,6 +42,8 @@ std::vector<int> pluck(std::vector<int> arr) {
     {
         return {};
     }
+    
+    return result;
 }
 
 int main() {
@@ -65,4 +68,3 @@ int main() {
     }
     
     return 0;
-}
