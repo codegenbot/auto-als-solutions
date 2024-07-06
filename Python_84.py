@@ -1,2 +1,5 @@
+```
 def solve(N):
-    return bin(int(N))[2:]
+    if not isinstance(N, int):
+        return "Error: Input must be an integer"
+    return bin(N)[2:]
