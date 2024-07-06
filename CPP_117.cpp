@@ -7,17 +7,20 @@ using namespace std;
 
 vector<string> select_words(string s, int n) {
     vector<char> word;
-    int consonants = 0;
     vector<string> result;
+    int consonants = 0;
 
     for (char c : s) {
         if (c == ' ') {
             if (consonants == n) {
-                string tempWord(word.begin(), word.end());
-                result.push_back(tempWord);
-                word.clear();
-                consonants = 0;
+                string tempStr = "";
+                for (char w : word) {
+                    tempStr += w;
+                }
+                result.push_back(tempStr);
             }
+            word.clear();
+            consonants = 0;
         } else {
             bool isVowel = false;
             switch (tolower(c)) {
@@ -37,8 +40,11 @@ vector<string> select_words(string s, int n) {
     }
 
     if (consonants > 0) {
-        string tempWord(word.begin(), word.end());
-        result.push_back(tempWord);
+        string tempStr = "";
+        for (char w : word) {
+            tempStr += w;
+        }
+        result.push_back(tempStr);
     }
 
     return result;
