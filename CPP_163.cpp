@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -15,7 +16,14 @@ bool issame(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
-int main_test() { 
-    assert(std::equal(generate_integers(17,89).begin(), generate_integers(17,89).end(), {}));
+int main() {
+    int a, b;
+    std::cout << "Enter two integers: ";
+    std::cin >> a >> b;
+    if(issame(generate_integers(a, b), generate_integers(17, 89))){
+        std::cout << "The vectors are the same.\n";
+    }else{
+        std::cout << "The vectors are not the same.\n";
+    }
     return 0;
 }
