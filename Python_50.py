@@ -1,8 +1,11 @@
 def decode_shift(s: str):
-    result = ""
-    for ch in s:
-        if ch.islower():
-            result += chr(((ord(ch) - 97) - 5) % 26 + 97)
-        else:
-            result += chr(((ord(ch) - 65) - 5) % 26 + 65)
-    return result
+    return "".join(
+        [
+            chr(
+                (ord(ch) - 3 if "n" <= ch <= "z" else ord(ch) - 3 + 26) % 26 + 97
+                if ch.islower()
+                else ord(ch) - 32
+            )
+            for ch in s
+        ]
+    )
