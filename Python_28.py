@@ -1,3 +1,4 @@
+```Python
 strings = []
 while True:
     try:
