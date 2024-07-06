@@ -1,3 +1,4 @@
+```cpp
 namespace std;
 
 bool issame(vector<int> a, vector<int> b) {
@@ -10,8 +11,7 @@ vector<vector<int>> compare(vector<int> game, vector<int> guess) {
         if (game[i] == guess[i]) {
             result.push_back({{0}});
         } else {
-            vector<int> temp;
-            temp.push_back(std::abs(game[i]-guess[i]));
+            vector<int> temp = {std::abs(game[i] - guess[i])};
             result.push_back(temp);
         }
     }
@@ -21,6 +21,6 @@ vector<vector<int>> compare(vector<int> game, vector<int> guess) {
 int main_function() {
     vector<int> game = {1,2,3,5};
     vector<int> guess = {-1,2,3,4};
-    assert(issame(compare(game,guess), {{0},{0,{0}}}));
+    assert(std::issame(compare(game,guess), {{0},{0,{0}}}));
     return 0;
 }
