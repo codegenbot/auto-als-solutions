@@ -1,12 +1,20 @@
-Here is the solution:
+#include <vector>
 
-int prod_signs(vector<int> arr){
-    long long product = 1;
-    long long sum = 0;
-    for(int i: arr){
-        if(i < 0) product *= -1;
-        else if(i > 0) product *= 1;
-        sum += abs(i);
+int prod_signs(std::vector<int> arr) {
+    int sign_product = 1;
+    long long sum_magnitude = 0;
+
+    if (arr.empty()) {
+        return -32768;
     }
-    return product * (sum == 0) ? -32768 : sum;
+
+    for (int num : arr) {
+        if (num == 0) {
+            return 0;
+        }
+        sign_product *= (num > 0 ? 1 : -1);
+        sum_magnitude += abs(num);
+    }
+
+    return static_cast<int>(sum_magnitude * sign_product);
 }
