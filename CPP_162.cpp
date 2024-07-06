@@ -15,7 +15,7 @@ std::string string_to_md5(const std::string& text) {
     EVP_DigestFinal_ex(&ctx, md, &len);
     EVP_MD_CTX_cleanup(&ctx);
 
-    std::string result;
+    std::string result = "";
     for (int i = 0; i < 16; i++) {
         char buffer[3];
         sprintf(buffer, "%02x", md[i]);
