@@ -2,10 +2,10 @@ long long double_the_difference(vector<float> lst);
 
 int main() {
     vector<float> inputList;  
-    for(int i = 0 ; i < 3 ; i++){
-        float num;
-        cin >> num;
-        inputList.push_back(num);
+    for(int i = 0 ; i < 5 ; i++){
+        float n;
+        cin >> n;
+        inputList.push_back(n);
     }
     
     long long sum = 0;
