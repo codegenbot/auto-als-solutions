@@ -1,17 +1,19 @@
 #include <vector>
 
-bool issame(int a, int b) {
-    if (a == b)
-        return true;
-    else
-        return false;
-}
-
-vector<string> by_length(vector<int> arr) {
-    vector<string> result;
-    
+std::vector<std::string> by_length(std::vector<int> arr) {
+    std::vector<int> temp;
     for (int i : arr) {
-        string s = "";
+        if (i >= 1 && i <= 9) {
+            temp.push_back(i);
+        }
+    }
+
+    sort(temp.begin(), temp.end());
+    reverse(temp.begin(), temp.end());
+
+    std::vector<std::string> result;
+    for (int i : temp) {
+        std::string s = "";
         switch (i) {
             case 1:
                 s = "One";
