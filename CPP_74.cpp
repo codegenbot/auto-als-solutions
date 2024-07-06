@@ -1,6 +1,6 @@
-```
+```cpp
 #include <vector>
-#include <algorithm>
+#include <string>
 
 bool issame(vector<string> a,vector<string>b){
     return a == b;
@@ -18,7 +18,10 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     }
     
     if (sum1 < sum2) {
-        return lst1;
+        return issame(lst1, lst2)?lst1:lst2;
     } else if (sum1 > sum2) {
-        return lst2;
+        return issame(lst1, lst2)?lst2:lst1;
+    } else {
+        return issame(lst1, lst2)?lst1:lst2;
     }
+}
