@@ -1,3 +1,4 @@
+#include <initializer_list>
 #include <vector>
 #include <algorithm>
 
@@ -6,32 +7,53 @@ bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
     return a.second < b.second;
 }
 
-int pluck(std::vector<int> arr) {
-    int prev = -1;
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<std::pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); ++i) {
-        if (arr[i] % 2 == 0 && (prev == -1 || i > prev)) {
-            return arr[i];
+        if (arr[i] % 2 == 0) {
+            nodes.push_back({arr[i], i});
         }
-        prev = i;
     }
-    return -1;
+    
+    if (nodes.empty()) {
+        return {};
+    }
+    
+    std::sort(nodes.begin(), nodes.end(), compare);
+    
+    std::vector<int> result;
+    for (size_t i = 1; i < nodes.size(); ++i) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
+            return {};
+        }
+    }
+    
+    return {nodes[0].first};
 }
 
 int main() {
+    std::vector<int> arr;
     int n;
     std::cout << "Enter the number of elements: ";
     std::cin >> n;
-    std::vector<int> arr(n);
     for (int i = 0; i < n; ++i) {
         int x;
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> x;
-        arr[i] = x;
+        while(true){
+            std::cout << "Enter element " << i+1 << ": ";
+            std::cin >> x;
+            if(x>0){
+                arr.push_back(x);
+                break;
+            }
+            else{
+                std::cout << "Invalid input. Please enter a positive integer.\n";
+            }
+        }
     }
-    int result = pluck(arr);
-    if(result != -1)
+    std::vector<int> result = pluck(arr);
+    if(result.size() > 0)
     {
-        std::cout << "The output is: " << result << std::endl;
+        std::cout << "The output is: " << *result.begin() << std::endl;
     }
     else
     {
