@@ -1,5 +1,4 @@
 ```cpp
-#include <vector>
 #include <cstdint>
 
 int smallest_change(vector<int> arr) {
