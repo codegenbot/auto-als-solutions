@@ -9,6 +9,7 @@ std::string concatenate(const std::vector<std::string>& strings) {
         result += s;
     }
     return result;
+
 }
 
 int main() {
