@@ -1,34 +1,23 @@
-int countDigits(const string& str) {
+Here is the completed code:
+
+string file_name_check(string file_name){
     int count = 0;
-    for (char c : str) {
-        if (isdigit(c)) {
+    bool has_dot = false;
+    for(int i=0; i<file_name.length(); i++){
+        if(file_name[i] >= '0' && file_name[i] <= '9'){
             count++;
+            if(count > 3) return "No";
+        }
+        else if(file_name[i] == '.'){
+            has_dot = true;
+        }
+        else if(i > 0 && !has_dot){
+            if(!isalpha(file_name[i])) return "No";
         }
     }
-    return count;
-}
-
-string file_name_check(string file_name) {
-    if (countDigits(file_name) > 3) {
-        return "No";
-    }
-
-    size_t dotPos = file_name.find('.');
-    if (dotPos == string::npos || file_name.find('.') != dotPos) {
-        return "No";
-    }
-
-    string prefix = file_name.substr(0, dotPos);
-    string suffix = file_name.substr(dotPos + 1);
-
-    if (prefix.empty() || !isalpha(prefix[0])) {
-        return "No";
-    }
-
-    vector<string> validSuffixes = {"txt", "exe", "dll"};
-    if (find(validSuffixes.begin(), validSuffixes.end(), suffix) == validSuffixes.end()) {
-        return "No";
-    }
-
+    if(!has_dot) return "No";
+    size_t pos = file_name.find('.');
+    string ext = file_name.substr(pos+1);
+    if(ext != "txt" && ext != "exe" && ext != "dll") return "No";
     return "Yes";
 }

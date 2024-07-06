@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 #include <limits>
@@ -7,16 +6,12 @@ std::string get_closest_vowel(std::string str) {
     int min_dist = std::numeric_limits<int>::max();
     char closest_vowel = '\0';
     for (int i = 0; i < str.length(); i++) {
-        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')) {
+        if ((str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u') ||
+            (str[i] == 'A' || str[i] == 'E' || str[i] == 'I' || str[i] == 'O' || str[i] == 'U')) {
             int dist = i;
             if (dist < min_dist) {
                 min_dist = dist;
-                for (char c : "aeiouAEIOU") {
-                    if (str[i] == c) {
-                        closest_vowel = c;
-                        break;
-                    }
-                }
+                closest_vowel = str[i];
             }
         }
     }
