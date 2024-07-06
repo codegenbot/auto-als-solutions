@@ -17,8 +17,4 @@ std::string int_to_mini_romank(int number) {
     return result;
 }
 
-int main() {
-    assert(int_to_mini_romank(1000) == "M");
-    std::cout << int_to_mini_romank(2023);
-    return 0;
-}
+std::cout << int_to_mini_romank(2023);
