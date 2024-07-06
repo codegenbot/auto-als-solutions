@@ -1,4 +1,5 @@
-```from typing import List
+```
+from typing import List
 
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
@@ -14,7 +15,5 @@ def parse_nested_parens(paren_string: str) -> List[int]:
             level -= 1
             result.append(-1)
         elif char == ')' and level == 0:
-            return result
-    if level != 0:
-        raise ValueError("Unbalanced parentheses")
-    return result```
+            return result + [0]
+    return result + [0]
