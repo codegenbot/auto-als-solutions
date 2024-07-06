@@ -9,5 +9,6 @@ int main() {
     for(int i = 0; i < n; i++) {
         std::cin >> l[i];
     }
+    
     return *std::max_element(l.begin(), l.end());
 }
