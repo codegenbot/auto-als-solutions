@@ -1,10 +1,8 @@
-Here's the completed code:
+#include <cmath>
+
+using namespace std;
 
 bool is_simple_power(int x, int n) {
-    double y = pow(n, 1);
-    while(y <= x){
-        if(y == x) return true;
-        y *= n;
-    }
-    return false;
+    double y = pow(n, log(x) / log(n));
+    return (y == static_cast<int>(y));
 }
