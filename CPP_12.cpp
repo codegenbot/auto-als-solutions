@@ -1,12 +1,15 @@
-string findLongest(vector<string> strings){
+#include <vector>
+#include <string>
+
+using namespace std;
+
+string longest(vector<string> strings){
     if(strings.empty()) return "";
-    string max = strings[0];
+    string result = strings[0];
     for(auto str : strings){
-        if(str.length() > max.length()){
-            max = str;
+        if(str.length() > result.length()){
+            result = str;
         }
-        else if(str.length() == max.length())
-            max = str;
     }
-    return max;
+    return result;
 }
