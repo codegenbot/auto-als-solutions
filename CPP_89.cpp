@@ -1,7 +1,7 @@
 #include <string>
 
-std::string encrypt(std::string s) {
-    std::string result = "";
+string encrypt(string s) {
+    string result = "";
     for (char c : s) {
         if (c >= 'a' && c <= 'z') {
             int pos = c - 'a';
