@@ -1,30 +1,28 @@
-```
-#include <iostream>
 #include <string>
+#include <iostream>
 
-using namespace std;
-
-string solve(string s){
-    string result = "";
-    for(int i=0; i<s.length(); i++){
-        if(isalpha(s[i])){
-            result += (s[i] >= 'a' && s[i] <= 'z') ? toupper(s[i]) : tolower(s[i]);
-        }else{
-            result += s[i];
+std::string solve(std::string input) {
+    int upper = 0;
+    int lower = 0;
+    for (char c : input) {
+        if (isupper(c)) {
+            upper++;
+        } else if (islower(c)) {
+            lower++;
         }
     }
-    return result;
+    return "Uppercase: " + std::to_string(upper) + ", Lowercase: " + std::to_string(lower);
 }
 
-int main 
-{ 
-    string input; 
-    cout << "Enter a string: "; 
-    getline(cin, input); 
-    if(input.empty()){
-        cout << "Error! Please enter a valid input." << endl;
+int main() {
+    std::string input;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, input);
+    if (input.empty()) {
+        std::cout << "Error! Please enter a valid input." << std::endl;
     } else {
-        string output = solve(input);
-        cout << "Output: " << output << endl;
+        std::string output = solve(input);
+        std::cout << "Output: " << output << std::endl;
     }
     return 0;
+}
