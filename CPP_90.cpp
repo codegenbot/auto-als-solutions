@@ -1,18 +1,13 @@
 #include <vector>
-#include <algorithm>
+#include <limits>
 
-int next_smallest(vector<int> numbers); 
-
-int next_smallest(vector<int> numbers) {
-    if (numbers.empty()) {
-        return 0;
-    }
-    
-    int smallest = *min_element(numbers.begin(), numbers.end());
-    for (int num : numbers) {
-        if (num > smallest) {
-            return num;
+int next_smallest(std::vector<int> lst) {
+    if (lst.empty()) return 0; 
+    int result = lst[0];
+    for (int i = 1; i < lst.size(); i++) {
+        if (lst[i] < lst[0]) {
+            result = std::min(result, lst[i]);
         }
     }
-    return -1; // or any other value to indicate that the next smallest number does not exist
+    return result;
 }
