@@ -1,16 +1,24 @@
-bool is_multiply_prime(int a){
-    bool prime[100] = {false};
-    for(int i=2; i<100; i++){
-        if(!prime[i]){
-            for(int j=i*2; j<100; j+=i){
-                prime[j] = true;
+#include <vector>
+
+bool is_multiply_prime(int a) {
+    for (int i = 2; i <= 100; ++i) {
+        for (int j = i; j <= 100; ++j) {
+            for (int k = j; k <= 100; ++k) {
+                if (i * j * k == a) {
+                    vector<int> primes = {i, j, k};
+                    bool is_prime = true;
+                    for (int prime : primes) {
+                        for (int p = 2; p * p <= prime; ++p) {
+                            if (prime % p == 0) {
+                                is_prime = false;
+                                break;
+                            }
+                        }
+                    }
+                    return is_prime;
+                }
             }
         }
     }
-    for(int i=2; a > 1; ){
-        if(a%i == 0 && !prime[i]) return false;
-        while(a % i == 0) a /= i;
-        i++;
-    }
-    return true;
+    return false;
 }
