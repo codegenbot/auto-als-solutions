@@ -1,3 +1,7 @@
-```python
 def solution(lst):
-    return sum([x for x in lst if isinstance(x, int) and x % 2 != 0])
+    return sum(i for i in lst[1::2] if i % 2 != 0)
+
+lst = input("Enter a list of numbers separated by space: ")
+lst = [int(x) for x in lst.split()]
+
+print(solution(lst))
