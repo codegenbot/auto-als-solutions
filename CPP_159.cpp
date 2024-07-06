@@ -20,32 +20,33 @@ vector<int> eat(int number, int need, int remaining) {
 }
 
 int main() {
-    vector<int> output;
-
-    output = eat(5, 6, 10);
+    cout << "Case 1: ";
+    vector<int> output = eat(5, 6, 10);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
+
+    cout << "Case 2: ";
     output = eat(4, 8, 9);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
+
+    cout << "Case 3: ";
     output = eat(1, 10, 10);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
-    // remove this to fix the error
-    // output = eat(2, 11, 5);
-    // for (int i : output) {
-    //     cout << i << " ";
-    // } 
-    // cout << endl;
+
+    cout << "Case 4: ";
+    output = eat(2, 11, 5);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
     
     return 0;
 }
