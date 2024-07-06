@@ -1,3 +1,4 @@
+#include <vector>
 #include <string>
 
 string longest(vector<string> strings){
@@ -11,3 +12,4 @@ string longest(vector<string> strings){
             longest = str;
     }
     return longest;
+}
