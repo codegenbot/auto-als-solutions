@@ -1,30 +1,16 @@
-#include <iostream>
-#include <algorithm>
-#include <string>
-
-using namespace std;
-
 string encode(string message) {
     string result = "";
     for (char c : message) {
         if (isalpha(c)) {
-            char baseChar = tolower(c);
-            if (baseChar == 'a' || baseChar == 'e' || baseChar == 'i' || baseChar == 'o' || baseChar == 'u') {
-                result += static_cast<char>(baseChar + 2);
+            char base = isupper(c) ? 'A' : 'a';
+            if (c == base) {
+                c = (isupper(c)) ? 'Z' : 'z';
             } else {
-                result += (c == toupper(c)) ? tolower(c) : toupper(c);
+                int diff = (int)(c - base);
+                c = (char)((diff + 2) % 26 + base);
             }
-        } else {
-            result += c;
         }
+        result += c;
     }
     return result;
-}
-
-int main() {
-    string message;
-    cout << "Enter a message: ";
-    getline(cin, message);
-    cout << "Encoded message: " << encode(message) << endl;
-    return 0;
 }
