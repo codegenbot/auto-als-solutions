@@ -1,8 +1,4 @@
-```cpp
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
+using namespace std;
 
 string words_in_sentence(string sentence) {
     vector<string> words = split(sentence, ' ');
@@ -36,4 +32,3 @@ vector<string> split(const string& str, char c) {
     }
     tokens.push_back(str);
     return tokens;
-}
