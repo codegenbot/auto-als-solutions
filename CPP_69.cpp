@@ -1,15 +1,19 @@
-int search(vector<int> lst){
-    unordered_map<int, int> freqMap;
-    for(int i : lst) {
-        if(freqMap.find(i) == freqMap.end())
-            freqMap[i] = 1;
-        else
-            freqMap[i]++;
+#include <vector>
+using namespace std;
+
+int search(vector<int> lst) {
+    map<int, int> freq;
+    for (auto x : lst) {
+        if (freq.find(x) != freq.end()) {
+            freq[x]++;
+        } else {
+            freq[x] = 1;
+        }
     }
-    int res = -1;
-    for(auto p: freqMap) {
-        if(p.second >= p.first && p.first > 0)
-            res = p.first;
+    for (auto p : freq) {
+        if (p.second >= p.first) {
+            return p.first;
+        }
     }
-    return res;
+    return -1;
 }

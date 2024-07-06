@@ -6,7 +6,7 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 std::vector<int> strange_sort_list(std::vector<int> lst) {
-    vector<int> result;
+    std::vector<int> result;
     while (!lst.empty()) {
         int min_val = *min_element(lst.begin(), lst.end());
         int max_val = *max_element(lst.begin(), lst.end());
@@ -17,4 +17,20 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         lst.erase(std::remove(lst.begin(), lst.end(), max_val), lst.end());
     }
     return result;
+}
+
+int main() {
+    std::vector<int> test_list = {1, 2, 3, 4, 5};
+    std::cout << "Original List: ";
+    for (auto i : test_list) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+
+    test_list = strange_sort_list(test_list);
+    std::cout << "Sorted List: ";
+    for (auto i : test_list) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
 }
