@@ -1,8 +1,8 @@
 #include <string>
 #include <cctype>
 
-std::string flip_case(std::string str){
-    std::string result = "";
+string flip_case(string str){
+    string result = "";
     for (int i = 0; i < str.length(); i++) {
         char c = str[i];
         if (islower(c)) 
@@ -13,3 +13,11 @@ std::string flip_case(std::string str){
             result += c;
     }
     return result;
+}
+
+int main(){
+    string s;
+    cout << "Enter a sentence: ";
+    getline(cin, s);
+    cout << flip_case(s) << endl;
+}
