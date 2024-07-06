@@ -4,15 +4,22 @@
 #include <cmath>
 using namespace std;
 
-int findMaximumSum(vector<vector<int>>& v) {
-    int max_sum = 0;
-    for (const auto& row : v) {
-        int current_sum = 0;
-        for (int num : row) {
-            current_sum += abs(num);
-        }
-        if (current_sum > max_sum)
-            max_sum = current_sum;
+int findMax(vector<int> l) {
+    return *max_element(l.begin(), l.end());
+}
+
+int main() {
+    int n;
+    vector<int> l;
+    
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        int x;
+        cin >> x;
+        l.push_back(x);
     }
-    return max_sum;
+    
+    cout << findMax(l) << endl;
+
+    return 0;
 }
