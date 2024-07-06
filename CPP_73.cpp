@@ -1,6 +1,6 @@
 #include <vector>
 #include <cstdint>
-#include <stdexcept>
+#include <initializer_list>
 
 int smallest_change(vector<int> arr) {
     int n = arr.size();
