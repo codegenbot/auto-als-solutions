@@ -1,4 +1,3 @@
-```cpp
 #include <map>
 #include <string>
 #include <cassert>
@@ -18,8 +17,9 @@ bool check_dict_case(map<string,string> dict){
     return allLower || allUpper;
 }
 
-int main() {
+int main 
+{
     map<string, string> dict = {{"Hello", "hello"}, {"WORLD", "world"}};
     cout << (check_dict_case(dict) ? "True" : "False") << endl;
-    assert(check_dict_case({}) == false);
+    assert((check_dict_case({}) == false));
     return 0;
