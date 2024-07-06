@@ -2,16 +2,12 @@
 string string_sequence(int n);
 int main() {
     int n;
-    cout << "Enter a number: ";
+    cout << "Enter a positive integer: ";
     cin >> n;
-    cout << "The sequence of numbers is: " << string_sequence(n) << endl;
-    return 0;
-}
-
-string string_sequence(int n) {
     string result = "";
-    for (int i = 1; i <= n; i++) {
+    for (int i = 0; i <= n; i++) {
         result += to_string(i) + " ";
     }
-    return result;
+    cout << result << endl;
+    return 0;
 }
