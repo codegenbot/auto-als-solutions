@@ -10,6 +10,7 @@ vector<int> common(vector<int> a, vector<int> b){
         if(find(b.begin(),b.end(),a[i])!=b.end())result.emplace_back(a[i]);
     }
     return result;
+}
 
 int main(){
     vector<int> a = {4, 3, 2, 8};
