@@ -1,12 +1,11 @@
-```Python
 def add(x: int, y: int) -> int:
-    got_valid_input = False
-
-    while not got_valid_input:
+    while True:
         try:
             x = int(input("Enter the first number: "))
             y = int(input("Enter the second number: "))
-            got_valid_input = True
-            return x + y
+            if input("Do you want to add another pair? (yes/no): ").lower() != 'no':
+                return x + y
+            else:
+                break
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
