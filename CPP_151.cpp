@@ -1,4 +1,3 @@
-```cpp
 long long double_the_difference(vector<float> lst){
     long long sum = 0;
     for(float n : lst){
@@ -19,7 +18,7 @@ int main() {
             sum += pow(int(n), 2); 
         }
     }
-    long long output = double_the_difference(inputList); 
+    int output = double_the_difference(inputList); 
     assert (output == sum );
     return 0;
 }
