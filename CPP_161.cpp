@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -19,7 +18,7 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    std::getline(std::cin, input);
+    getline(cin, input);
     if(input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
