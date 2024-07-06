@@ -9,24 +9,17 @@ boost::any compare_one(boost::any a, boost::any b) {
         return (float)boost::any_cast<int>(b) > (float)boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(string) && b.type() == typeid(string)) {
-        string s1 = boost::any_cast<string>(a);
-        string s2 = boost::any_cast<string>(b);
-        if ((s1 == "None" || s2 == "None") && s1 != s2)
-            return s1 > s2 ? a : b;
-        else
-            return "None";
+        string s1 = boost::any_cast<string>(a), s2 = boost::any_cast<string>(b);
+        return s1 > s2 ? a : b;
     }
     else if (a.type() == typeid(string)) {
         string s = boost::any_cast<string>(a);
-        if (s == "None" || boost::any_cast<string>(b) == "None")
-            return "None";
-        else
-            return s > boost::any_cast<string>(b) ? a : b;
+        return (s == "None" || boost::any_cast<string>(b) == "None") ? "None" : (s > boost::any_cast<string>(b) ? a : b);
     }
-    else if (boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") {
+    else if (boost::any_cast<string>(a) == "None") {
         return "None";
     }
     else {
-        return boost::any_cast<string>(a) > boost::any_cast<string>(b) ? a : b;
+        return a;
     }
 }
