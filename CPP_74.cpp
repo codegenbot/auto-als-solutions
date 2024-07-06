@@ -3,12 +3,15 @@
 #include <string>
 #include <random>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(vector<string>, vector<string>);
+vector<string> total_match(vector<string>, vector<string>);
+
+bool issame(vector<string> a, vector<string> b) {
     return a == b;
 }
 
-std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
-    if (issame(lst1, lst2)) {
+vector<string> total_match(vector<string> lst1, vector<string> b) {
+    if (issame(lst1, b)) {
         return lst1;
     } else {
         int sum1 = 0;
@@ -17,24 +20,23 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         }
         
         int sum2 = 0;
-        for (const auto& str : lst2) {
+        for (const auto& str : b) {
             sum2 += str.length();
         }
         
         if (sum1 < sum2) {
             return lst1;
         } else if (sum1 > sum2) {
-            return lst2;
+            return b;
         } else {
-            std::random_device rd;  // obtain a random number from hardware
-            std::mt19937 eng(rd()); // seed the generator
- 
-            std::bernoulli_distribution dist(0.5); // probability of true
-
-            if (dist(eng)) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dis(0, 1);
+            
+            if (dis(gen)) {
                 return lst1;
             } else {
-                return lst2;
+                return b;
             }
         }
     }
