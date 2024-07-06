@@ -35,6 +35,6 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 int main() {
     std::vector<std::string> lst = {"aaaa", "bbbb", "dd", "cc"};
     std::vector<std::string> expected = {"cc", "dd", "aaaa", "bbbb"};
-    std::vector<std::string> actual = sorted_list_sum(lst);
-    assert(issame(actual, expected));
+    assert(issame(sorted_list_sum(lst), expected));
     return 0;
+}
