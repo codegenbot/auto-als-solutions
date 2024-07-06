@@ -7,7 +7,7 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
 }
 
 std::vector<std::string> split_words(string txt) {
-    vector<string> result = {};
+    vector<string> result;
     size_t pos = 0;
     while ((pos = txt.find(' ')) != string::npos) {
         result.push_back(txt.substr(0, pos));
