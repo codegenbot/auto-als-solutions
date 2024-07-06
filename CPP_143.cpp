@@ -32,3 +32,11 @@ string words_in_sentence(string sentence){
     }
     return result.substr(0, result.size() - 1);
 }
+
+int main(){
+    string s;
+    cout << "Enter a sentence: ";
+    getline(cin,s);
+    cout << words_in_sentence(s) << endl;
+    return 0;
+}
