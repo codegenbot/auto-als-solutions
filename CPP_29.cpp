@@ -1,5 +1,10 @@
-bool issame(string s1, string s2){
-    return s1 == s2;
+```cpp
+bool issame(string a, string b) {
+    for(int i = 0; i < min(a.length(), b.length()); i++) {
+        if(a[i] != b[i])
+            return false;
+    }
+    return true;
 }
 
 vector<string> filter_by_prefix(vector<string> strings, string prefix){
