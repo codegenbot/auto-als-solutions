@@ -1,15 +1,15 @@
-from typing import List
-import math
-
+Here is the solution:
 
 def factorize(n: int) -> List[int]:
+    i = 2
     factors = []
     while n > 1:
-        for i in range(2, math.isqrt(n) + 1):
-            if n % i == 0:
-                count = 0
-                while n % i == 0:
-                    n //= i
-                    count += 1
-                factors.extend([i] * count)
+        if n % i:
+            i += 1
+        else:
+            count = 0
+            while n % i == 0:
+                count += 1
+                n //= i
+            factors.append(i for _ in range(count))
     return factors
