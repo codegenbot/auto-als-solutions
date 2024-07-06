@@ -20,15 +20,14 @@ std::vector<int> pluck(std::vector<int> arr) {
     std::sort(nodes.begin(), nodes.end());
     
     for (int i = 1; i < nodes.size(); i++) {
-        if (!issame({nodes[i-1].first, {nodes[i-1].second}}, {nodes[i].first, {nodes[i].second}))) {
+        if (!issame({nodes[i-1].first, {nodes[i-1].second}}, {nodes[i].first, {nodes[i].second}})) {
             return {};
         }
     }
     
-    return {};
+    return {nodes[0].first};
 }
 
-#include <cassert>
 int main() {
     assert(pluck({7, 9, 7, 1}) == std::vector<int>{}); 
     return 0;
