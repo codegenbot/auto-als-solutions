@@ -1,2 +1,5 @@
-def average_rounding_score(scores):
-    return sum(map(round, scores)) / len(scores) if scores else -1
+def rounded_avg(n, m):
+    if n > m:
+        return -1
+    avg = (n + m) // 2
+    return bin(round(avg))[2:]
