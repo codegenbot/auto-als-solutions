@@ -5,5 +5,4 @@ def rounded_avg():
     avg = (n + m) / 2
     return bin(int(round(avg)))[2:]
 
-
 print(rounded_avg())
