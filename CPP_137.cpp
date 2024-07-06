@@ -1,20 +1,30 @@
+#include <boost/any.hpp>
+#include <string>
+
 boost::any compare_one(boost::any a, boost::any b) {
-    if (is_any_of<string>(a)) {
-        string str_a = any_cast<string>(a);
-        if (is_any_of<string>(b)) {
-            string str_b = any_cast<string>(b);
-            return (stod(str_a) > stod(str_b)) ? a : ((stod(str_a) < stod(str_b)) ? b : boost::any("None"));
-        } else {
-            double num_b = any_cast<double>(b);
-            return (stod(str_a) > num_b) ? a : ((stod(str_a) < num_b) ? b : boost::any("None"));
-        }
-    } else if (is_any_of<string>(b)) {
-        string str_b = any_cast<string>(b);
-        double num_a = any_cast<double>(a);
-        return (num_a > stod(str_b)) ? a : ((num_a < stod(str_b)) ? b : boost::any("None"));
-    } else {
-        double num_a = any_cast<double>(a);
-        double num_b = any_cast<double>(b);
-        return (num_a > num_b) ? a : ((num_a < num_b) ? b : boost::any("None"));
+    if (a.type() == typeid(int) && b.type() == typeid(float)) {
+        return (int)boost::any_cast<float>(b) > (int)a ? b : a;
+    }
+    else if (a.type() == typeid(float) && b.type() == typeid(int)) {
+        return (float)boost::any_cast<int>(a) > (float)b ? a : b;
+    }
+    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
+        string s1 = boost::any_cast<string>(a);
+        string s2 = boost::any_cast<string>(b);
+        if ((s1 == "None" || s2 == "None") && s1 != s2)
+            return s1 > s2 ? a : b;
+        else
+            return "None";
+    }
+    else if (a.type() == typeid(string)) {
+        string s = boost::any_cast<string>(a);
+        return (s == "None" || boost::any_cast<string>(b) == "None") ?
+               "None" : (s > boost::any_cast<string>(b) ? a : b);
+    }
+    else if (boost::any_cast<string>(a) == "None" || boost::any_cast<string>(b) == "None") {
+        return "None";
+    }
+    else {
+        return (float)boost::any_cast<int>(a) > (float)boost::any_cast<int>(b) ? a : b;
     }
 }
