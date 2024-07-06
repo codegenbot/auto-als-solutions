@@ -38,4 +38,3 @@ int main() {
     std::vector<std::string> actual = sorted_list_sum(lst);
     assert(issame(actual, expected));
     return 0;
-}
