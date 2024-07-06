@@ -1,22 +1,23 @@
 string words_in_sentence(string sentence){
     string result = "";
-    int primeCount = 0;
-    
-    for(int i=2; i<=sentence.size(); i++){
-        bool isPrime = true;
-        for(int j=2; j*j <= i; j++){
-            if(i % j == 0){
-                isPrime = false;
-                break;
-            }
+    for(int i=0; i<sentence.size(); i++){
+        if(i > 0) result += " ";
+        int len = 0;
+        while(i < sentence.size() && isalpha(sentence[i])){
+            i++;
+            len++;
         }
-        if(isPrime) primeCount++;
-        
-        if(primeCount > 0 && (sentence.size() - primeCount < i || primeCount == sentence.size())){
-            result += sentence + " ";
-            primeCount--;
+        if(len > 0){
+            string word = sentence.substr(0, len);
+            int prime = true;
+            for(int j=2; j*j <= len; j++){
+                if(len % j == 0) {
+                    prime = false;
+                    break;
+                }
+            }
+            if(prime) result += word + " ";
         }
     }
-    
-    return result.substr(0, result.find(" "));
+    return result;
 }
