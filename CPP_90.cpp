@@ -1,10 +1,13 @@
+#include <vector>
+#include <algorithm>
+
 int next_smallest(vector<int> lst) {
-    if (lst.size() < 2) return -1; // Return None
-    sort(lst.begin(), lst.end());
-    for (int i = 0; i < lst.size()-1; i++) {
-        if (lst[i] != lst[i+1]) {
-            return lst[i+1];
+    if (lst.empty()) return 0; 
+    int result = INT_MAX;
+    for (int i = 1; i < lst.size(); i++) {
+        if (lst[i] > lst[0]) {
+            result = min(result, lst[i]);
         }
     }
-    return -1; // Return None
+    return result == INT_MAX ? 0 : result;
 }
