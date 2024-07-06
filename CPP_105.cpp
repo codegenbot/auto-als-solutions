@@ -1,9 +1,6 @@
-Here is the modified code:
-
-```cpp
+```
 #include <vector>
 #include <algorithm>
-#include <initializer_list> // include this line
 using namespace std;
 
 bool issame(vector<string> v1, vector<string> v2) {
@@ -16,7 +13,7 @@ bool issame(vector<string> v1, vector<string> v2) {
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<pair<int, int>> temp;
+    vector<pair<int, int>> temp = {{}};
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
             temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
