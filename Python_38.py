@@ -1,22 +1,12 @@
-```
 def decode_cyclic(s: str):
     result = ""
-    n = len(s)
-    i = 0
-    while i < n:
-        if s[i] == '(':
-            count = 1
-            j = i + 1
-            for c in s[j:]:
-                if c == '(':
-                    count += 1
-                elif c == ')':
-                    count -= 1
-                if count == 0:
-                    break
-            result += s[i+1:j]
-            i = j
+    while len(s) > 0:
+        if len(s) >= 2:
+            result += s[1] + s[0]
+            s = s[2:]
         else:
-            result += s[i]
-            i += 1
+            result += s[0]
+            s = ''
+    if len(s) > 0:
+        result += s
     return result
