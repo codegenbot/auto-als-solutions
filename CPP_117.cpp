@@ -6,17 +6,23 @@
 using namespace std;
 
 vector<string> select_words(string s, int n) {
-    vector<string> result;
-    string word;
+    vector<char> word;
     int consonants = 0;
+    vector<string> result;
 
     for (char c : s) {
         if (c == ' ') {
             if (consonants == n) {
-                result.push_back(word);
+                string tempWord(word.begin(), word.end());
+                result.push_back(tempWord);
+                word.clear();
+                consonants = 0;
+            } else if (!word.empty()) {
+                string tempWord(word.begin(), word.end());
+                result.push_back(tempWord);
+                word.clear();
+                consonants = 0;
             }
-            word.clear();
-            consonants = 0;
         } else {
             bool isVowel = false;
             switch (tolower(c)) {
@@ -31,48 +37,14 @@ vector<string> select_words(string s, int n) {
             if (!isVowel) {
                 consonants++;
             }
-            word += c;
+            word.push_back(c);
         }
     }
 
-    if (consonants == n) {
-        result.push_back(word);
+    if (!word.empty()) {
+        string tempWord(word.begin(), word.end());
+        result.push_back(tempWord);
     }
 
     return result;
-}
-
-int main() {
-    // Test cases
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("simple white space", 2)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Hello world", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Uncle sam", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-    
-    return 0;
 }
