@@ -1,7 +1,6 @@
 #include <vector>
-#include <climits>
 
-std::vector<int> pluck(std::vector<int> arr){
+std::vector<int> findMinEvenIndex(const std::vector<int>& arr) {
     std::vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
