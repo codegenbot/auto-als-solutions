@@ -1,8 +1,6 @@
-```
 def split_words(txt):
     words = txt.split()
-    if any(char in words[0] for char in ',.!'):
-        return [words[0]]
+    if not any(char in word for word in words for char in ",.!?"):
+        return [word for word in words if word[0].islower()]
     else:
-        odd_count = sum(1 for c in txt.lower() if ord(c) % 2 != 0)
-        return odd_count
+        return words
