@@ -1,20 +1,21 @@
-#include<iostream>
-using namespace std;
+#include <iostream>
+#include <string>
 
 int main(){
+    std::string str;
+    std::cin >> str;
     int i = 0;
-    string str,filp_case(string str){
-        while(i < str.length()){
-            if(str[i] >= 'a' && str[i] <= 'z'){
-                str[i] = toupper((char)str[i]); // Convert lowercase to uppercase
-            }else if(str[i] >= 'A' && str[i] <= 'Z'){
-                str[i] = tolower((char)str[i]); // Convert uppercase to lowercase
+    string filp_case(std::string s){
+        while(i < s.length()){
+            if(s[i] >= 'a' && s[i] <= 'z'){
+                s[i] -= 32; // Convert lowercase to uppercase
+            }else if(s[i] >= 'A' && s[i] <= 'Z'){
+                s[i] += 32; // Convert uppercase to lowercase
             }
             i++;
         }
-        return str;
+        return s;
     }
-    cin >> str;
-    cout << filp_case(str) << endl;
+    std::cout << filp_case(str) << std::endl;
     return 0;
 }
