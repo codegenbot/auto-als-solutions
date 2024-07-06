@@ -1,30 +1,11 @@
-bool issame(vector<string> a, vector<string> b) {
-    return a == b;
+bool issame(vector<string> a, vector<string>b) {
+    return (a == b);
 }
 
-int main() {
-    vector<int> arr;
-    int n;
-    cin >> n;
-    for(int i=0; i<n; i++) {
-        int num;
-        cin >> num;
-        arr.push_back(num);
-    }
-    
-    vector<string> by_length(vector<int> arr) {
-        vector<int> numbers;
-        for (int num : arr) {
-            if (num >= 1 && num <= 9) {
-                numbers.push_back(num);
-            }
-        }
-
-        sort(numbers.begin(), numbers.end());
-        reverse(numbers.begin(), numbers.end());
-
-        vector<string> result;
-        for (int num : numbers) {
+vector<string> by_length(vector<int> arr) {
+    vector<string> result;
+    for (int num : arr) {
+        if (num >= 1 && num <= 9) {
             string str = "";
             switch (num) {
                 case 1:
@@ -57,17 +38,12 @@ int main() {
             }
             result.push_back(str);
         }
-
-        return result;
     }
     
-    vector<string> res = by_length(arr);
-    
-    bool b;
-    cin >> b;
-    
-    int x = sizeof(b) / sizeof(b[0]);
-    
-    cout << issame(res, res); 
-    return 0;
+    return result;
+}
+
+int main() {
+    assert(issame(by_length({9, 4, 8}), {"Nine", "Four", "Eight"}));
+    // Rest of your main function...
 }
