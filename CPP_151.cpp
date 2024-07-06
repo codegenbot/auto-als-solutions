@@ -1,19 +1,12 @@
 #include <vector>
 #include <cmath>
 
-long long double_the_difference(std::vector<float> lst) {
+long long double_the_difference(vector<double> lst){
     long long sum = 0;
-    for(float n : lst){
-        if(int(n) > 0 && int(n) % 2 != 0){ 
-            sum += pow(int(n), 2); 
+    for(auto x : lst){
+        if(x > 0 && x == int(x)){
+            sum += pow(int(x), 2);
         }
     }
     return sum;
-}
-
-int main() {
-    std::vector<float> lst; 
-    // ... populate the vector ...
-    assert(double_the_difference(lst) == 0 );
-    return 0;
 }
