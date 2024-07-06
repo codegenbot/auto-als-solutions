@@ -1,19 +1,29 @@
-vector<int> strange_sort_list(vector<int> lst){
+#include <algorithm>
+
+bool issame(vector<int> a, vector<int> b) {
+    if (a.size() != b.size()) 
+        return false;
+    for (int i = 0; i < a.size(); i++) 
+        if (a[i] != b[i]) 
+            return false;
+    return true;
+}
+
+vector<int> strange_sort_list(vector<int> lst) {
     vector<int> result;
-    while(!lst.empty()){
+    while (!lst.empty()) {
         int min_val = *min_element(lst.begin(), lst.end());
         int max_val = *max_element(lst.begin(), lst.end());
-        
-        auto it_min = std::find(lst.begin(), lst.end(), min_val);
-        auto it_max = std::find(lst.begin(), lst.end(), max_val);
-        
-        result.push_back(*it_min);
-        lst.erase(it_min);
-        if(!lst.empty()){
-            result.push_back(*it_max);
-            lst.erase(it_max);
-        }
+        result.push_back(min_val);
+        lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
+        if (!lst.empty())
+            result.push_back(max_val);
+        lst.erase(std::remove(lst.begin(), lst.end(), max_val), lst.end());
     }
-    
     return result;
+}
+
+int main() {
+    assert (issame(strange_sort_list({11111}), {11111}));
+    return 0;
 }
