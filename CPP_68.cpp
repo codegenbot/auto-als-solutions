@@ -1,17 +1,19 @@
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
-    if(arr.empty()) return result;
-
-    int smallest_even = INT_MAX;
-    int index = 0;
+vector<int> pluck(vector<int> arr) {
+    vector<int> result;
+    if(arr.empty()) return result; // if array is empty, return an empty array
     
-    for(int i = 0; i < arr.size(); i++) {
+    int smallest_even = INT_MAX; // initialize with max value
+    int index_of_smallest_even = 0;
+    
+    for(int i=0; i<arr.size(); i++) {
         if(arr[i] % 2 == 0 && arr[i] < smallest_even) {
             smallest_even = arr[i];
-            index = i;
+            index_of_smallest_even = i;
         }
     }
-
-    result.push_back({smallest_even, index});
+    
+    result.push_back(smallest_even);
+    result.push_back(index_of_smallest_even);
+    
     return result;
 }
