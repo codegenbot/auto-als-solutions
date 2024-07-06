@@ -1,11 +1,8 @@
 #include <vector>
-#include <algorithm>
+#include <string>
 
-bool issame(int x, int y) {
-    if (x == y)
-        return true;
-    else
-        return false;
+bool issame(int x1, int y1, int z1, int x2, int y2, int z2) {
+    return (x1 == x2 && y1 == y2 && z1 == z2);
 }
 
 std::vector<std::string> by_length(std::vector<int> arr) {
