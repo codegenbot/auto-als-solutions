@@ -1,37 +1,41 @@
-#include <vector>
 #include <algorithm>
-
 using namespace std;
 
 string sort_numbers(string numbers) {
     map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
                                 {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
                                 {"eight", 8}, {"nine", 9}};
-    vector<string> numVector;
-    string temp;
+    vector<string> nums;
+    string num;
 
-    for (int i = 0; i < numbers.length(); i++) {
-        if (i == 0 || numbers[i] == ' ') {
-            continue;
-        }
-        temp += numbers[i];
-        if (numbers[i + 1] == ' ' || i == numbers.length() - 1) {
-            numVector.push_back(temp);
-            temp = "";
+    for (string s : split(numbers, " ")) {
+        if (numMap.count(s)) {
+            nums.push_back(s);
         }
     }
 
-    sort(numVector.begin(), numVector.end(), [&](const string& a, const string& b) {
-        return to_string(numMap.at(a)) < to_string(numMap.at(b));
-    });
+    sort(nums.begin(), nums.end());
+    return join(nums, " ");
+}
 
+vector<string> split(const string& str, char c) {
+    vector<string> tokens;
+    size_t pos = 0;
+    while ((pos = str.find(c)) != string::npos) {
+        tokens.push_back(str.substr(0, pos));
+        str.erase(0, pos + 1);
+    }
+    tokens.push_back(str);
+    return tokens;
+}
+
+string join(vector<string> nums, char c) {
     string result;
-    for (auto &num : numVector) {
-        result += num + " ";
+    for (int i = 0; i < nums.size(); i++) {
+        if (i > 0) {
+            result += c;
+        }
+        result += nums[i];
     }
-    if (!result.empty()) {
-        result.pop_back();
-    }
-
     return result;
 }
