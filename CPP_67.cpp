@@ -1,8 +1,4 @@
-#include <iostream>
-#include <string>
-
-using namespace std;
-
+```cpp
 int fruit_distribution(string s) {
     int n = stoi(s);
     size_t pos = 0;
