@@ -16,6 +16,7 @@ public:
 
     int main() {
         assert(exchange({100, 200}, {200, 200}) == "YES");
+        // Add more test cases here
         cout << "Test cases passed." << endl;
         return 0;
     }
