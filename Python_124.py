@@ -1,23 +1,21 @@
 ```
 def valid_date(date):
-    day, month, year = date.split('-')
-    if len(day) == 1:
-        day = '0' + day
-    if len(month) == 1:
-        month = '0' + month
-    if not (day.isdigit() and month.isdigit() and year.isdigit()):
+    parts = date.split('-')
+    if len(parts) != 3:
         return False
-    if int(year) < 1000 or int(year) > 9999:
+    month, day, year = map(int, parts)
+    if month < 1 or month > 12:
         return False
-    if int(month) < 1 or int(month) > 12:
+    days_in_month = [31,28,31,30,31,30,31,31,30,31,30,31]
+    if (month == 2 and day > days_in_month[1]):
         return False
-    if int(month) in [4,6,9,11]:
-        if int(day) < 1 or int(day) > 30:
+    elif ((month % 2 != 0) and month < 8):
+        if day > days_in_month[month-1]:
             return False
-    elif int(month) == 2:
-        if not (int(day) >= 1 and int(day) <= 29):
+    elif ((month % 2 == 0) and month < 12):
+        if day > days_in_month[month-1]:
             return False
-    elif int(month) in [1,3,5,7,8,10,12]:
-        if int(day) < 1 or int(day) > 31:
+    elif (month == 12):
+        if day > days_in_month[month-1]:
             return False
     return True
