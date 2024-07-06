@@ -1,55 +1,48 @@
-#include<string>
-#include<boost/any.hpp>
+Here is the completed code:
+
+```cpp
+#include <boost/any.hpp>
+#include <string>
+#include <algorithm>
+
 using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(double)) {
-        return b;
+        return max(a.convert_to<int>(), b.convert_to<double>());
     }
     else if (a.type() == typeid(double) && b.type() == typeid(int)) {
-        return a;
-    }
-    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
-        string str_a = boost::any_cast<string>(a);
-        string str_b = boost::any_cast<string>(b);
-        if (str_a > str_b) {
-            return a;
-        }
-        else if (str_a < str_b) {
-            return b;
-        }
-        else {
-            return boost::any("None");
-        }
+        return max(a, boost::any(b.convert_to<int>()));
     }
     else if (a.type() == typeid(string) && b.type() == typeid(double)) {
-        string str_a = boost::any_cast<string>(a);
-        double num_b = boost::any_cast<double>(b);
-        if (stod(str_a) > num_b) {
-            return a;
-        }
-        else if (stod(str_a) < num_b) {
-            return b;
-        }
-        else {
-            return boost::any("None");
-        }
+        return (boost::any(max((stoi(get<string>(a)).convert_to<double>(), b.convert_to<double>()))));
     }
     else if (a.type() == typeid(double) && b.type() == typeid(string)) {
-        double num_a = boost::any_cast<double>(a);
-        string str_b = boost::any_cast<string>(b);
-        if (num_a > stod(str_b)) {
+        return (boost::any(max(a, boost::any(stoi(get<string>(b))))));
+    }
+    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
+        if (get<string>(a) > get<string>(b))
             return a;
-        }
-        else if (num_a < stod(str_b)) {
+        else if (get<string>(a) < get<string>(b))
             return b;
-        }
-        else {
+        else
             return boost::any("None");
-        }
     }
-    else {
-        // This line should never be reached, but it's here for completeness
-        return boost::any("None");
+    else if (a.type() == typeid(int) && b.type() == typeid(string)) {
+        if (stoi(get<string>(b)) > a.convert_to<int>())
+            return boost::any(stoi(get<string>(b)));
+        else if (stoi(get<string>(b)) < a)
+            return a;
+        else
+            return boost::any("None");
     }
+    else if (a.type() == typeid(string) && b.type() == typeid(int)) {
+        if (stoi(get<string>(a)) > b.convert_to<int>())
+            return a;
+        else if (stoi(get<string>(a)) < b)
+            return boost::any(b);
+        else
+            return boost::any("None");
+    }
+    return boost::any("None");
 }

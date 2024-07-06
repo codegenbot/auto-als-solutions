@@ -6,10 +6,9 @@ int solutions(vector<int> lst) {
         }
     }
     return sum;
-
 }
 
 int main() {
     assert(solutions({3, 13, 2, 9}) == 3);
-    return solutions({1, 2, 3, 4});
+    // Rest of your code
 }
