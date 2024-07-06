@@ -1,8 +1,9 @@
-int count_upper(string s){
+#include <string>
+
+int count_upper(std::string s) {
     int count = 0;
-    for(int i = 1; i < s.length(); i += 2) {
-        string c = s.substr(i, 1);
-        if(toupper(c[0]) == 'A' || toupper(c[0]) == 'E' || toupper(c[0]) == 'I' || toupper(c[0]) == 'O' || toupper(c[0]) == 'U') {
+    for(int i = 0; i < s.length(); i++) {
+        if(i % 2 == 0 && (s[i] >= 'A' && s[i] <= 'E') || (s[i] >= 'A' && s[i] <= 'U')) {
             count++;
         }
     }
