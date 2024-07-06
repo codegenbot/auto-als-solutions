@@ -2,13 +2,13 @@
 #include <vector>
 using namespace std;
 
-vector<int> eat(double number, double need, double remaining) {
+vector<int> eat(int number, int need, int remaining) {
     vector<int> result;
     
-    int total = (int)(number + need);
-    int left = min((int)((total - 1000)), (int)(remaining));
+    int total = number + need;
+    int left = min(total - 1000, remaining);
     
-    if ((int)(total - left) < 0) {
+    if (left < 0) {
         total -= left;
         left = 0;
     }
@@ -20,28 +20,30 @@ vector<int> eat(double number, double need, double remaining) {
 }
 
 int main() {
-    vector<int> output;
-    
-    output = eat(5.0, 6.0, 10.0);
-    for (int i : output) {
+    cout << "Eating..." << endl;
+    vector<int> output1 = eat(5, 6, 10);
+    for (int i : output1) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(4.0, 8.0, 9.0);
-    for (int i : output) {
+    cout << "Eating..." << endl;
+    vector<int> output2 = eat(4, 8, 9);
+    for (int i : output2) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(1.0, 10.0, 10.0);
-    for (int i : output) {
+    cout << "Eating..." << endl;
+    vector<int> output3 = eat(1, 10, 10);
+    for (int i : output3) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(2.0, 11.0, 5.0);
-    for (int i : output) {
+    cout << "Eating..." << endl;
+    vector<int> output4 = eat(2, 11, 5);
+    for (int i : output4) {
         cout << i << " ";
     }
     cout << endl;
