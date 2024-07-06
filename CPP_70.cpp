@@ -35,8 +35,11 @@ void strange_sort_list(std::vector<int>& lst) {
 int main() {
     int vec[] = {111111};
     std::vector<int> vecVec(vec, vec + sizeof(vec)/sizeof(vec[0]));
+    
     std::vector<int> inputCopy = vecVec;
     strange_sort_list(inputCopy);
+    
     assert(issame(inputCopy , vecVec));
+    
     return 0;
 }
