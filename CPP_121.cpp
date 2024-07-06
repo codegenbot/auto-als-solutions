@@ -1,7 +1,16 @@
 int main() {
     vector<int> lst;
+    int n;
+    cout << "Enter the size of the list: ";
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cout << "Enter element " << i + 1 << ": ";
+        cin >> x;
+        lst.push_back(x);
+    }
     int result = solution(lst);
-    cout << "The sum of the odd numbers at even positions is: " << result << endl;
+    cout << "Sum of odd elements at even positions: " << result << endl;
     return 0;
 }
 
