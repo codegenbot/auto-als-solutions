@@ -1,3 +1,4 @@
+```c++
 #include <iostream>
 #include <string>
 
@@ -10,20 +11,19 @@ bool is_happy(string s){
         bool unique = true;
         for(char c : str){
             int count = 0;
-            bool found = false;
             for(int j = i; j <= i+2; j++){
-                if(s[j] == c){
-                    found = true;
+                if(s[j] == c) count++;
+            }
+            for(int j = i; j <= i+2; j++){
+                if(s[j] == c && s.count(c) > 1) {
+                    unique = false;
                     break;
                 }
             }
-            count = found ? 1 : 0;
-            if(count > 1) {
-                unique = false;
-                break;
+            if(!unique) {
+                return false;
             }
         }
-        if(!unique) return false;
     }
     return true;
 
