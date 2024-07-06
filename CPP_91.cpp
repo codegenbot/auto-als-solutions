@@ -1,4 +1,5 @@
-```c++
+```cpp
+#include <iostream>
 #include <string>
 
 int is_bored(std::string S) {
@@ -6,17 +7,20 @@ int is_bored(std::string S) {
     size_t pos = 0;
     while ((pos = S.find("I", pos)) != std::string::npos) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
-            count++;
-        pos = S.find(".", pos) + 1;
+            S.erase(pos, 1);
+        else
+            pos = S.find(".", pos) + 1;
     }
     return count;
-}
 
 int main() {
     std::string input;
-    std::cin >> input; // Read the string
-    std::cin.ignore(); // Consume the newline character
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, input);
     int result = is_bored(input);
-    std::cout << "Count: " << result << std::endl;
+    if (result == 0)
+        std::cout << "The number of 'I's without punctuation in the given string is 0." << "\n";
+    else
+        std::cout << "The number of 'I's without punctuation in the given string is " << result << "." << "\n";
     return 0;
 }
