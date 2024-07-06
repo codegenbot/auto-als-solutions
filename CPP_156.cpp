@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 
 std::vector<std::string> romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
@@ -14,6 +15,6 @@ std::string miniRom(int number) {
 }
 
 int main() {
-    std::cout << miniRom(2023) << std::endl; // Note: '<< std::endl' to print a new line
+    std::cout << miniRom(2023) << std::endl;
     return 0;
 }
