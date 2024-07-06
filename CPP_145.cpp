@@ -1,15 +1,21 @@
-vector<int> order_by_points(vector<int> nums) {
-    sort(nums.begin(), nums.end(), [](int a, int int b) {
-        return tie(getSum(a), make_tuple(a)) < tie(getSum(b), make_tuple(b)));
-    });
-    return nums;
-}
+#include <vector>
+#include <algorithm>
 
-int getSum(int n) {
-    int sum = 0;
-    while (n != 0) {
-        sum += abs(n % 10);
-        n /= 10;
+vector<int> order_by_points(vector<int> nums) {
+    vector<pair<int, int>> pairs;
+    for (int i = 0; i < nums.size(); ++i) {
+        int sumOfDigits = 0;
+        int num = nums[i];
+        while (num > 0) {
+            sumOfDigits += num % 10;
+            num /= 10;
+        }
+        pairs.emplace_back(sumOfDigits, i);
     }
-    return sum;
+    sort(pairs.begin(), pairs.end());
+    vector<int> result;
+    for (const auto& pair : pairs) {
+        result.push_back(nums[pair.second]);
+    }
+    return result;
 }
