@@ -1,19 +1,24 @@
-Here's the completed code:
+Here is the completed code:
 
 string exchange(vector<int> lst1, vector<int> lst2) {
-    bool isEven = false;
+    bool allEven = true;
     for (int num : lst1) {
         if (num % 2 != 0) {
-            isEven = true;
+            allEven = false;
             break;
         }
     }
-    if (!isEven) return "YES";
-    
-    int oddCount = 0;
-    for (int num : lst2) {
-        if (num % 2 != 0) oddCount++;
+    if (!allEven) {
+        for (auto& num : lst2) {
+            int found = false;
+            for (int& n : lst1) {
+                if (n == num) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return "NO";
+        }
     }
-    
-    return oddCount > 0 ? "NO" : "YES";
+    return allEven ? "YES" : "NO";
 }
