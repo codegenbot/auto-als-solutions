@@ -18,7 +18,7 @@ def minPath(grid, k):
         visited[i][j] = False
         return min_path
 
-    result = []
+    result = None
     for i in range(n):
         for j in range(n):
             if not visited[i][j]:
