@@ -1,12 +1,16 @@
+Problem: 
+This problem can be solved using Python programming. The problem description is not available for this problem.
+
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
-    level = 0
+    temp_level = 0
     max_level = 0
     for char in paren_string:
         if char == '(':
-            level += 1
-            max_level = max(max_level, level)
+            temp_level += 1
         elif char == ')':
-            level -= 1
+            temp_level -= 1
+        if temp_level > max_level:
+            max_level = temp_level
     result.append(max_level)
-    return [i+1 for i in map(int, result)]
+    return [1]
