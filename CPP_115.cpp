@@ -17,9 +17,9 @@ int main() {
     }
 
     std::vector<std::vector<int>> grid = {{1,1,1,1}, {1,1,1,1}};
-    int result = max_fill(grid, 9);
-    
-    std::cout << "Buckets needed: " << result << std::endl;
+    int capacity = 9;
+    int result = max_fill(grid, capacity);
+    std::cout << "The minimum number of buckets needed is: " << result << std::endl;
 
     return 0;
 }
