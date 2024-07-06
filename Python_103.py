@@ -1,5 +1,5 @@
 ```
 def rounded_avg(n, m):
     import math
-    avg = math.ceil((n + m) / 2)
-    return bin(avg)[2:]
+    avg = (n + m) / 2
+    return bin(int(math.ceil(avg)))[2:]

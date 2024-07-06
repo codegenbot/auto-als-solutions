@@ -1,6 +1,8 @@
+```cpp
 #include <vector>
 #include <string>
-#include <initializer_list>
+
+#define __GXX_EXPERIMENTAL_CXX0X 1
 
 bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     return a == b;
@@ -21,12 +23,14 @@ std::vector<std::string> split_words(string txt) {
 }
 
 int main() {
-#define _CRT_SECURE_NO_WARNINGS
-std::string user_input;
-std::cout << "Enter a string: ";
-std::getline(std::cin, user_input);
+    #define _CRT_SECURE_NO_WARNINGS
+    std::string user_input;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, user_input);
 
-std::vector<std::string> words = split_words(user_input);
-for (const auto& word : words) {
-    std::cout << word << std::endl;
+    std::vector<std::string> words = split_words(user_input);
+    
+    for (const auto& word : words) {
+        std::cout << word << std::endl;
+    }
 }
