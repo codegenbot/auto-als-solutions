@@ -1,18 +1,18 @@
+```c++
 #include <vector>
 #include <string>
 
-namespace {
-    bool issame(vector<string> a, vector<string> b) {
-        if (a.size() != b.size()) return false;
-        for (int i = 0; i < a.size(); ++i)
-            if (a[i] != b[i]) return false;
-        return true;
-    }
+using namespace std;
+
+bool issame(vector<string> a, vector<string> b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i)
+        if (a[i] != b[i]) return false;
+    return true;
 }
 
-vector<vector<string>> by_length(vector<int> arr) {
+vector<vector<string>> group_by_length(vector<int> arr) {
     vector<vector<string>> result;
-    
     for (int num : arr) {
         string str = "";
         switch (num) {
@@ -44,8 +44,20 @@ vector<vector<string>> by_length(vector<int> arr) {
                 str = "Nine";
                 break;
         }
-        
-        result.push_back({str});
+        for (int i = 0; i < num; ++i) {
+            result.back().push_back(str);
+        }
+    }
+
+    vector<string> temp;
+    for (vector<string>& vec : result) {
+        if (!issame(vec, temp)) {
+            temp = vec;
+            result.push_back(temp);
+            temp.clear();
+        } else {
+            temp.insert(temp.end(), vec.begin(), vec.end());
+        }
     }
 
     return result;
