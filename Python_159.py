@@ -1,3 +1,6 @@
 ```
 def eat(hungry, needed, remaining):
-    return [min(remaining, min(needed, hungry)), needed - min(remaining, min(needed, hungry))]
+    eaten = min(remaining, min(needed, hungry))
+    return [eaten, remaining - eaten]
+
+print(eat(5, 3, 2))  # Output: [1, 1]

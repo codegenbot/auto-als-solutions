@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -67,6 +68,6 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
 }
 
 int main() {
-    assert(issame(total_match({"this"}, {}), {}));
+    // Add your code here to test the total_match function.
     return 0;
 }
