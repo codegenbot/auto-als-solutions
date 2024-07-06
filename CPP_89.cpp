@@ -1,19 +1,15 @@
-string encrypt(string s){
-    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+#include <cctype>
+using namespace std;
+
+string encrypt(string s) {
     string result = "";
-    
-    for(int i=0; i<s.length(); i++){
-        char c = tolower(s[i]);
-        int pos = alphabet.find(c);
-        
-        if(pos != -1){
-            pos = (pos + 2*2) % 26;
-            result += alphabet[pos];
-        }
-        else{
-            result += s[i];
+    for (char c : s) {
+        if (isalpha(c)) {
+            char base = isupper(c) ? 'A' : 'a';
+            result += (char)((c - base + 2 * 26) % 26 + base);
+        } else {
+            result += c;
         }
     }
-    
     return result;
 }
