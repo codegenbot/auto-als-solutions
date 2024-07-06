@@ -2,12 +2,12 @@
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, std::string b) {
-    if (a.size() != 1 || a[0] != b)
+bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+    if (a.size() != b.size())
         return false;
 
-    for (int i = 1; i < a.size(); i++) {
-        if (a[i] != b)
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i])
             return false;
     }
 
@@ -35,6 +35,6 @@ std::vector<std::string> sortedListSum(std::vector<std::string> lst) {
 int main(int argc, char** argv) {
     std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
     std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
-    assert(issame(sortedListSum(vec1), (std::string)vec2));
+    assert(issame(sortedListSum(vec1), vec2));
     return 0;
 }
