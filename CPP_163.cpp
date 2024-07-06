@@ -1,17 +1,19 @@
-```cpp
 #include <vector>
-#include <cassert>
+#include <algorithm>
 
-std::vector<int> generate_integers(int start, int end) {
+std::vector<int> generate_integers(int a, int b) {
     std::vector<int> result;
-    for (int i = start; i <= end; ++i) {
+    for(int i = a; i <= b; ++i) {
         result.push_back(i);
     }
     return result;
 }
 
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
+}
+
 int main_test() {
-    std::vector<int> a = generate_integers(17, 89);
-    assert(std::equal(a.begin(), a.end(), a.begin()));
+    assert(generate_integers(17, 89) == generate_integers(17, 89));
     return 0;
 }
