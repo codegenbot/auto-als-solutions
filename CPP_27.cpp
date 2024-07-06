@@ -5,16 +5,15 @@ int main(){
     std::string str;
     std::cout << "Enter a string: ";
     std::cin >> str;
-    
+
     for(int i = 0; i < str.length(); i++){
         if(str[i] >= 'a' && str[i] <= 'z'){
-            str[i] = (char)(str[i] - 32); // Convert lowercase to uppercase
+            str[i] = (char)(str[i]-32);
         }else if(str[i] >= 'A' && str[i] <= 'Z'){
-            str[i] = (char)(str[i] + 32); // Convert uppercase to lowercase
+            str[i] = (char)(str[i]+32);
         }
     }
-    
-    std::cout << "Flipped case string: " << str << std::endl;
-    
+
+    std::cout << "Flipped case: " << str << std::endl;
     return 0;
 }
