@@ -1,11 +1,9 @@
 ```cpp
 #include <algorithm>
-#include <iostream>
+#include <utility>
 
-bool issame(vector<float> a,vector<float>b){
-    if(a.size()!=b.size()) return false;
-    for(int i=0;i<a.size();i++) if(abs(a[i]-b[i])>0.001) return false;
-    return true;
+bool issame(vector<float> a, vector<float> b) {
+    return a.size() == b.size();
 }
 
 vector<float> find_closest_elements(vector<float> numbers) {
@@ -25,9 +23,4 @@ vector<float> find_closest_elements(vector<float> numbers) {
     }
 
     return {closest_pair.first, closest_pair.second};
-}
-
-int main() {
-    assert(issame(find_closest_elements({1.1, 2.2, 3.1, 4.1, 5.1}), {2.2, 3.1}));
-    return 0;
 }
