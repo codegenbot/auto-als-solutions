@@ -1,43 +1,35 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
-bool same(const std::vector<int>& a, const std::vector<int>& b) {
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     return a == b;
 }
 
-std::vector<int> extract(std::vector<int> arr) {
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<std::pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 != 0) {
+        if (arr[i] % 2 == 0) {
+            nodes.push_back({arr[i], i});
+        }
+    }
+    
+    if (nodes.empty()) {
+        return {};
+    }
+    
+    std::sort(nodes.begin(), nodes.end());
+    
+    for (int i = 1; i < nodes.size(); i++) {
+        if (!issame({nodes[i-1].first, {nodes[i-1].second}}, {nodes[i].first, {nodes[i].second}))) {
             return {};
         }
     }
     
-    int result = arr[0];
-    for (int i = 1; i < arr.size(); i++) {
-        if ((arr[i]%2) != (result%2)) {
-            return {};
-        }
-    }
-    
-    std::vector<int> resultVec;
-    resultVec.push_back(result);
-    
-    return resultVec;
+    return {};
 }
 
+#include <cassert>
 int main() {
-    int n;
-    std::cin >> n;
-    std::vector<int> arr(n);
-    for (auto &i : arr)
-        std::cin >> i;
-
-    std::vector<int> result = extract(arr);
-
-    if(result.empty())
-        std::cout << "empty" << std::endl;
-    else
-        for(int i: result) 
-            std::cout << i << " ";
+    assert(pluck({7, 9, 7, 1}) == std::vector<int>{}); 
+    return 0;
 }
