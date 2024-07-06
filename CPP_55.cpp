@@ -1,23 +1,22 @@
-```
-#include <stdio.h>
-
-using namespace std;
-
 int fib(int n) {
-    if (n <= 1)
-        return n;
-    int a = 0, b = 1, result = 1;
+    if (n <= 1) return n;
+    int a = 0, b = 1;
     for (int i = 2; i <= n; i++) {
-        result = a + b;
+        int temp = a + b;
         a = b;
-        b = result;
+        b = temp;
     }
-    return result;
+    return b;
 }
 
 int main() {
-    int n;
-    printf("Enter the value of n: ");
-    scanf("%d", &n);
-    printf("The %d-th Fibonacci number is: %d\n", n, fib(n));
+    if (fib(30) > 268934816) {
+        std::cout << "Error: Fibonacci number exceeded maximum limit!" << std::endl;
+    } else {
+        int n;
+        std::cout << "Enter a positive integer: ";
+        std::cin >> n;
+        std::cout << "Fibonacci of " << n << ": " << fib(n) << std::endl;
+    }
     return 0;
+}
