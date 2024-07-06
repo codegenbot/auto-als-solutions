@@ -19,3 +19,13 @@ bool isPalindrome(string s) {
     reverse(rev.begin(), rev.end());
     return s == rev;
 }
+
+int main() {
+    vector<int> q;
+    int w;
+    // get input here
+    // process the input and pass it to your function calls
+    
+    // print output here
+    return 0;
+}
