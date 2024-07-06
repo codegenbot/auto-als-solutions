@@ -1,9 +1,5 @@
-Here is the corrected code:
-
-```cpp
 #include <vector>
 #include <algorithm>
-#include <bits/initializer_list_base.h>
 
 bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
@@ -18,8 +14,16 @@ int main() {
     std::vector<int> array2 = {23, 21, 14, 11};
     assert (issame(array1, array2));
     
-    int sort_array(std::vector<int> array) { 
+    int sort_array(std::vector<int>& array) {
         std::sort(array.begin(), array.end());
         return 0;
     }
+    
+    std::vector<int> array3 = array1;
+    sort_array(array3);
+    
+    for(int i = 0; i < array3.size(); i++) {
+        std::cout << array3[i] << " ";
+    }
+    std::cout << std::endl;
 }
