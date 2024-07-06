@@ -4,4 +4,4 @@ def fix_spaces(text):
         text = text.replace("--", "-")
         text = text.replace("---", "-")
         text = text.replace("----", "-")
-    return text.strip().replace("-", "-_").lower()
+    return text.strip()
