@@ -7,6 +7,15 @@ int findMaxValue(std::vector<int> numbers) {
 }
 
 int main() {
-    assert(std::search({3, 10, 10, 9, 2}, {3, 10, 10, 9, 2}) == -1);
+    std::vector<int> numbers;
+    int num;
+    while (true) {
+        std::cout << "Enter a number (or -1 to stop): ";
+        std::cin >> num;
+        if (num == -1) break;
+        numbers.push_back(num);
+    }
+    int maxValue = findMaxValue(numbers);
+    std::cout << "The maximum value is: " << maxValue << std::endl;
     return 0;
 }
