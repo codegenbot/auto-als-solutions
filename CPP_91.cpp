@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -9,15 +8,22 @@ int is_bored(std::string S) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
             count++;
         else
-            pos = S.find(".|?!", pos) + 1;
+            pos = S.find('.', pos);
     }
     return count;
 
 int main() {
     std::string input;
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, input);
-    int result = is_bored(input);
-    std::cout << "Number of 'I' without punctuation: " << result << "\n";
+    try {
+        std::cout << "Enter a string: ";
+        std::getline(std::cin, input);
+        if (input.empty()) {
+            throw std::runtime_error("Input string cannot be empty");
+        }
+        int result = is_bored(input);
+        std::cout << "Number of 'I' without punctuation: " << result << "\n";
+    } catch (std::exception &e) {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
     return 0;
 }
