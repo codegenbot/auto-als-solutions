@@ -1,10 +1,13 @@
-```cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
 
 int findElement(const vector<int>& vec, int target) {
-    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
+    auto it = find(vec.begin(), vec.end(), target);
+    if (it == vec.end()) {
+        return -1;
+    }
+    return distance(it, vec.end());
 }
 
 int main() {
@@ -18,8 +21,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    int result = findElement(vec, 10);
-    cout << "The element 10 is at position: " << result << endl;
-    
+    assert(find(vec.begin(), vec.end(), 10) == vec.end() ? -1 : -1, );
     return 0;
 }
