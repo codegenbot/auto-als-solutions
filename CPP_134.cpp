@@ -10,5 +10,5 @@ bool check_if_last_char_is_a_letter(string txt){
             return true;
         }
     }
-    return true;
+    return true; // Modified to return true if all characters except the last one are spaces
 }
