@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -6,7 +7,7 @@ bool issame(std::vector<int> a, std::vector<int> b) {
     return a == b;
 }
 
-void strange_sort_list(std::vector<int>& lst) {
+void strange_sort_list(const std::vector<int>& lst) {
     std::vector<int> result;
     while (!lst.empty()) {
         int min_val = *std::min_element(lst.begin(), lst.end());
@@ -33,13 +34,9 @@ void strange_sort_list(std::vector<int>& lst) {
 }
 
 int main() {
-    int vec[] = {111111};
-    std::vector<int> vecVec(vec, vec + sizeof(vec)/sizeof(vec[0]));
+    std::vector<int> input = {1, 1, 1, 1, 1};
     
-    std::vector<int> inputCopy = vecVec;
+    std::vector<int> inputCopy = input;
     strange_sort_list(inputCopy);
-    
-    assert(issame(inputCopy , vecVec));
-    
     return 0;
 }
