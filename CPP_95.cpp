@@ -1,5 +1,5 @@
-#include <iostream>
 #include <map>
+#include <string>
 #include <cctype>
 
 bool check_dict_case(std::map<std::string, std::string> dict) {
@@ -17,9 +17,6 @@ bool check_dict_case(std::map<std::string, std::string> dict) {
 }
 
 int main() {
-    std::map<std::string, std::string> dict;
-    // Add code to read input from the user and store it in the dictionary
-    // Then call check_dict_case(dict) and print the result
-
+    // add your code here
     return 0;
 }
