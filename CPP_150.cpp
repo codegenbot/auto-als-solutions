@@ -1,3 +1,4 @@
+```cpp
 #include <cmath>
 int x_or_y(int n, int x, int y) {
     bool isPrime = true;
