@@ -11,21 +11,21 @@ def separate_paren_groups(paren_string: str) -> list:
                 current_group += char
             else:
                 stack.append(char)
-                current_group += char
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()
-            current_group += char
-            while stack and stack[-1] != "(":
-                stack.pop()
-            if not stack or stack[-1] == "(":
-                groups.append("(" + current_group + ")")
-                current_group = ""
+                if not stack:
+                    groups.append(current_group + ")")
+                    current_group = ""
+            else:
+                if current_group:
+                    groups.append("(" + current_group + ")")
+                    current_group = ""
 
         elif char.isalpha() or (char.isspace() and stack):
             pass
 
-    if stack:
-        groups.append("(" + current_group + ")")
-
+    while stack:
+        stack.pop()
+    groups.append("(" + current_group + ")")
     return [g for g in groups if g]
