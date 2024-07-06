@@ -13,15 +13,6 @@ string make_palindrome(string str){
         i++;
         j--;
     }
-    string prefix = str.substr(0, i);
-    string suffix = str.substr(j+1);
-    return prefix + str.substr(i) + strimplify(suffix);
-}
-
-int main(){
-    // Your test cases here
-    cout << make_palindrome("") << endl;
-    cout << make_palindrome("cat") << endl;
-    cout << make_palindrome("cata") << endl;
-    return 0;
+    string palindrome = str.substr(0, i) + str.substr(j+1);
+    return str + string(str.rbegin(), str.rend()).substr(palindrome.length());
 }
