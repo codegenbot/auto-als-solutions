@@ -1,8 +1,4 @@
 ```cpp
-bool issame(vector<int> a, vector<int> b) {
-    return a == b;
-}
-
 vector<int> minPath(vector<vector<int>> grid, int k) {
     int n = grid.size();
     vector<vector<bool>> visited(n, vector<bool>(n));
@@ -12,13 +8,17 @@ vector<int> minPath(vector<vector<int>> grid, int k) {
             if (!visited[i][j]) {
                 vector<int> path;
                 dfs(grid, visited, i, j, k, &path);
-                if (res.empty() || path.size() < res.size()) {
+                if (res.empty() || !issame(res, path)) {
                     res = path;
                 }
             }
         }
     }
     return res;
+}
+
+bool issame(vector<int> a, vector<int> b) {
+    return a == b;
 }
 
 vector<int> dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int x, int y, int k, vector<int>* path) {
