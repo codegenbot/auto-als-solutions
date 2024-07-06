@@ -1,3 +1,4 @@
+```cpp
 int fruit_distribution(string s, int n) {
     size_t pos = 0;
     int apples = 0, oranges = 0;
