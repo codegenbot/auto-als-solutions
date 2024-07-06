@@ -1,3 +1,4 @@
+```Python
 def encrypt(s):
     result = ""
     shift = 3
