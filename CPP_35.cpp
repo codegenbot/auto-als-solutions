@@ -1,7 +1,14 @@
-```cpp
 #include <algorithm>
 #include <cmath>
 
-int maxAbsSum(vector<int> l) {
-    return std::abs(*std::max_element(l.begin(), l.end()));
+int findMax(int n) {
+    std::vector<int> l;
+    for (int i = 0; i <= n; i++) {
+        int num;
+        std::cout << "Enter number: ";
+        std::cin >> num;
+        l.push_back(num);
+    }
+    
+    return *std::max_element(l.begin(), l.end());
 }
