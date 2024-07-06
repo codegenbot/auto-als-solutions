@@ -1,18 +1,17 @@
-Here's the completed code:
-
-```cpp
 int is_bored(string S) {
-    int boredom_count = 0;
-    string sentence;
-    for (char c : S) {
-        if (c == '.' || c == '?' || c == '!') {
-            if (!sentence.empty() && sentence[0] == 'I') {
-                boredom_count++;
+    int count = 0;
+    string boredom = "I";
+    size_t found;
+    
+    for (size_t i = 0; i < S.length(); i++) {
+        if (S[i] == '.' || S[i] == '?' || S[i] == '!') {
+            found = S.find(boredom, i);
+            if (found != string::npos) {
+                count++;
+                i = found + boredom.length() - 1;
             }
-            sentence.clear();
-        } else {
-            sentence += c;
         }
     }
-    return boredom_count;
+    
+    return count;
 }
