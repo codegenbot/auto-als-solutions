@@ -1,3 +1,4 @@
+```
 #include <map>
 #include <string>
 #include <cassert>
@@ -23,3 +24,4 @@ int main
     cout << (check_dict_case(dict) ? "True" : "False") << endl;
     assert(check_dict_case({}) == false);
     return 0;
+}
