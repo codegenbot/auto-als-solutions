@@ -30,7 +30,7 @@ string file_name_check(string file_name){
             dot_pos=i; 
             break; 
         } 
-    } 
+    }
     string after_dot = file_name.substr(dot_pos+1);
     string allowed_extensions[]={"txt","exe","dll"};
     bool found=false;
