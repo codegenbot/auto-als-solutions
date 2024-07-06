@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include<string>
 #include <cmath>
@@ -24,8 +25,9 @@ string rounded_avg(int n,int m){
 }
 
 int main() {
-    cout << rounded_avg(7,5) << endl; // "11"
+    cout << rounded_avg(7,5) << endl; // "-1"
     cout << rounded_avg(10,20) << endl; // "1111"
     cout << rounded_avg(20,33) << endl; // "11010"
+    cout << rounded_avg(2,9) << endl; // "1010"
     return 0;
 }
