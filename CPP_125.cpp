@@ -1,5 +1,7 @@
+```cpp
 #include <vector>
 #include <string>
+#include <initializer_list>
 
 bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     if (a.size() != b.size()) return false;
@@ -29,8 +31,6 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        if (!issame(word, user_input)) {
-            std::cout << word << std::endl;
-        }
+        std::cout << word << std::endl;
     }
 }
