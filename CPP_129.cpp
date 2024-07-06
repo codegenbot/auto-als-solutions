@@ -1,50 +1,61 @@
+#include <iostream>
 #include <vector>
-#include <cmath>
-#include <random>
+#include <array>
 
-bool issame(int a, int b) { return abs(a - b) == 1; }
+using namespace std;
 
-std::vector<int> minPath(const std::vector<std::vector<int>>& grid, int k) {
-    std::vector<int> result;
-    for (int i = 0; i < pow(grid.size(), 2); ++i) {
-        bool found = false;
-        for (int j = 0; j < grid.size(); ++j) {
-            for (int l = 0; l < grid.size(); ++l) {
-                if (grid[j][l] == i + 1) {
-                    int x = j, y = l;
-                    found = true;
-                    break;
-                }
-            }
-            if (found)
-                break;
-        }
-        for (int t = 0; t < k; ++t) {
-            std::vector<int> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_int_distribution<> dis(0, 3);
-            int dx = dis(gen);
-            int nx = x + directions[dx][0], ny = y + directions[dx][1];
-            if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid.size()) {
-                for (int i = 0; i < grid.size(); ++i) {
-                    if (grid[i][ny] == result.size())
-                        x = i, y = ny;
-                }
-            }
-        }
-        int val = grid[x][y];
-        while (!issame(val, i + 1)) {
-            for (int t = 0; t < k; ++t) {
-                dx = dis(gen);
-                nx = x + directions[dx][0], ny = y + directions[dx][1];
-                if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid.size()) {
-                    val = grid[nx][ny];
-                    x = nx, y = ny;
-                }
-            }
-        }
-        result.push_back(val);
+bool isSame(const pair<int, int>& p1, const pair<int, int>& p2) {
+    return p1.first == p2.first && p1.second == p2.second;
+}
+
+int minPath(vector<vector<char>>& grid, int x, int y, vector<pair<int, int>>& path) {
+    if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size() || grid[x][y] == 'X') {
+        return -1;
     }
-    return result;
+
+    if (!isSame({x, y}, {0, 0})) {
+        path.push_back({x, y});
+    }
+
+    grid[x][y] = 'X';
+
+    if (x == 0 && y == 0) {
+        return 1;
+    }
+
+    int minDist = -1;
+    for (const auto& dir : {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}) {
+        int newX = x + dir.first;
+        int newY = y + dir.second;
+        if (minPath(grid, newX, newY, path) != -1) {
+            if (minDist == -1 || minPath(grid, newX, newY, path) < minDist) {
+                minDist = minPath(grid, newX, newY, path);
+            }
+        }
+    }
+
+    return minDist;
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<char>> grid(n, vector<char>(m));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            char c;
+            cin >> c;
+            grid[i][j] = c;
+        }
+    }
+
+    int res = minPath(grid, n - 1, m - 1, vector<pair<int, int>>());
+    if (res != -1) {
+        cout << "The shortest path length is: " << res << endl;
+    } else {
+        cout << "No path exists" << endl;
+    }
+
+    return 0;
 }
