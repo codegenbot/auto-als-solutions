@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -6,18 +5,46 @@ using namespace std;
 vector<int> eat(int number, int need, int remaining) {
     vector<int> result;
     
-    if (number + need > remaining) {
-        result = {(number + remaining), 0};
-    } else {
-        result = {(number + need), remaining - need};
+    int total = number + need;
+    int left = min(min(total - 1000, remaining), 0);
+    
+    if (left < 0) {
+        total -= left;
+        left = 0;
     }
+    
+    result.push_back(total);
+    result.push_back(left);
     
     return result;
 }
 
 int main() {
-    cout << "eat(5, 6, 10): " << eat(5, 6, 10)[0] << ", " << eat(5, 6, 10)[1] << endl;
-    cout << "eat(4, 8, 9): " << eat(4, 8, 9)[0] << ", " << eat(4, 8, 9)[1] << endl;
-    cout << "eat(1, 10, 10): " << eat(1, 10, 10)[0] << ", " << eat(1, 10, 10)[1] << endl;
-    cout << "eat(2, 11, 5): " << eat(2, 11, 5)[0] << ", " << eat(2, 11, 5)[1] << endl;
+    vector<int> output;
+    
+    output = eat(5, 6, 10);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+    
+    output = eat(4, 8, 9);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+    
+    output = eat(1, 10, 10);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+    
+    output = eat(2, 11, 5);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+    
+    return 0;
 }
