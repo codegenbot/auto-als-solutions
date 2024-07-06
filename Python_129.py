@@ -26,5 +26,5 @@ def minPath(grid, k):
         for j in range(n):
             dfs(i, j, [], 0)
 
-    return min_path
+    return min_path if min_sum != float('inf') else None
 ```
