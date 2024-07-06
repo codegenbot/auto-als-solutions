@@ -12,11 +12,11 @@ int sum_squares(const std::vector<double>& lst) {
 }
 
 int main() {
-    std::vector<double> lst(100);  
+    std::vector<double> lst;
     double num;
 
-    while (std::cin >> num) {
-        lst.push_back(num);
+    while (std::cin >> static_cast<double>(num)) {
+        lst.push_back(static_cast<double>(num));
     }
 
     int sum = sum_squares(lst);

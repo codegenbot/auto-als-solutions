@@ -1,6 +1,5 @@
-```cpp
+```
 #include <vector>
-#include <utility>
 
 int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<std::pair<int, int>>& path) {
     if (grid.empty() || grid[0].empty()) return -1;
