@@ -1,29 +1,14 @@
-#include <iostream>
-
-using namespace std;
-
 int starts_one_ends(int n) {
     int count = 0;
     for (int i = 1; i <= 9; i++) {
-        if (i == 1 || i % 10 == 1)
+        if ((i == 1) || (i * pow(10, n - 1) + i > 10*n)) {
             count++;
-        if (n > 1) {
-            for (int j = 1; j < pow(10, n - 1); j++) {
-                long long num = i * pow(10, n - 1) + j;
-                if (num >= 1 && num <= 9)
-                    count++;
-                else if (num % 10 == 1 || to_string(num).back() == '1')
-                    count++;
+        }
+        for (int j = 1; j < i; j++) {
+            if ((j == 1) || (j * pow(10, n - 1) + i <= 10*n)) {
+                count++;
             }
         }
     }
     return count;
-}
-
-int main() {
-    int n;
-    cout << "Enter the number of digits: ";
-    cin >> n;
-    cout << "The count of numbers that start or end with 1 is: " << starts_one_ends(n) << endl;
-    return 0;
 }
