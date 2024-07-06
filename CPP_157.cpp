@@ -4,8 +4,5 @@ bool right_angle_triangle(float a, float b, float c) {
     else
         return false;
 
-}
-
 int main() {
     assert(right_angle_triangle(2, 2, 10) == false);
-}
