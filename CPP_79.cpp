@@ -1,8 +1,6 @@
-Here is the modified code:
-
+```cpp
 #include <string>
 #include <iostream>
-
 using namespace std;
 
 string decimal_to_binary(int decimal){
@@ -24,3 +22,4 @@ int main() {
     string binary = decimal_to_binary(decimal);
     cout << "The binary representation of the entered decimal number is: " << binary << endl;
     return 0;
+}
