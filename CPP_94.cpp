@@ -1,23 +1,32 @@
-Here is the completed code:
+#include<stdio.h>
+#include<vector>
+#include<string>
+using namespace std;
 
 int skjkasdkd(vector<int> lst){
     int max_prime = 0;
     for(int i : lst){
-        if(isPrime(i) && i > max_prime)
+        if(i > 1 && isPrime(i)){
             max_prime = i;
+            break;
+        }
     }
-    int sum = 0;
+
+    int sum_of_digits = 0;
     while(max_prime > 0){
-        sum += max_prime % 10;
+        sum_of_digits += max_prime % 10;
         max_prime /= 10;
     }
-    return sum;
+
+    return sum_of_digits;
 }
 
-bool isPrime(int num) {
-    if (num <= 1) return false;
-    for (int i = 2; i * i <= num; i++) {
-        if (num % i == 0) return false;
+bool isPrime(int n) {
+    if (n <= 1)
+        return false;
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0)
+            return false;
     }
     return true;
 }
