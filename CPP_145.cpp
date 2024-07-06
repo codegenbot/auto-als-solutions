@@ -1,20 +1,20 @@
 #include <algorithm>
 
 vector<int> order_by_points(vector<int> nums) {
-    vector<pair<int, int>> pairs;
-    for (int i = 0; i < nums.size(); i++) {
-        int sum = 0;
-        int num = abs(nums[i]);
-        while (num > 0) {
-            sum += num % 10;
-            num /= 10;
+    sort(nums.begin(), nums.end(), [&] (int a, int b) {
+        if (getSum(a) == getSum(b)) {
+            return a > b;
         }
-        pairs.push_back({sum, i});
+        return getSum(a) < getSum(b);
+    });
+    return nums;
+}
+
+int getSum(int n) {
+    int sum = 0;
+    while (n) {
+        sum += n % 10;
+        n /= 10;
     }
-    sort(pairs.begin(), pairs.end());
-    vector<int> result;
-    for (const auto& pair : pairs) {
-        result.push_back(nums[pair.second]);
-    }
-    return result;
+    return sum;
 }
