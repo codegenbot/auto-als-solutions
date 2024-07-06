@@ -1,5 +1,5 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
 
 int sum_squares(std::vector<int> lst) {
     int sum = 0;
