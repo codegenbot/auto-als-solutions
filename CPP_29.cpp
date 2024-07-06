@@ -1,3 +1,4 @@
+```cpp
 bool issame(string a, string b) {
     if(a.length() != b.length())
         return false;
