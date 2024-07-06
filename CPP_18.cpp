@@ -13,16 +13,13 @@ int main() {
     }
 
     int main() {
-        std::string str;
+        std::string s1, s2;
         std::cout << "Enter the string: ";
-        std::getline(std::cin, str);
-
-        std::string substring;
+        std::cin >> s1;
         std::cout << "Enter the substring: ";
-        std::getline(std::cin, substring);
+        std::cin >> s2;
 
-        int result = how_many_times(str, substring);
-        std::cout << "The substring appears " << result << " times in the string." << std::endl;
+        std::cout << "The number of times the substring appears in the string is: " << how_many_times(s1, s2) << std::endl;
 
         return 0;
     }
