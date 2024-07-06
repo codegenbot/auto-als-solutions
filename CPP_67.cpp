@@ -3,19 +3,20 @@
 using namespace std;
 
 int fruit_distribution(string s, int n) {
-    int total_apples = 0;
-    int total_oranges = 0;
-    
     size_t pos = 0;
-    while ((pos = s.find(" apples")) != string::npos) {
-        total_apples += (stoi(s.substr(0, pos).erase(0, 1)) + stoi(s.substr(pos + 9)));
-        break;
+    int apples = 0, oranges = 0;
+
+    // Count number of apples and oranges in string
+    while ((pos = s.find(" apples", pos)) != string::npos) {
+        apples +=stoi(s.substr(pos-std::to_string(0).size(),pos-(pos-std::to_string(0).size())).c_str());
+        pos = s.find(" ", pos);
     }
-    
-    if (s.find(" oranges") != string::npos) {
-        size_t pos2 = s.find(" oranges");
-        total_oranges = stoi(s.substr(0, pos2).erase(0, 3));
+
+    // Count number of oranges in string
+    while ((pos = s.find(" oranges", pos)) != string::npos) {
+        oranges +=stoi(s.substr(pos-std::to_string(0).size(),pos-(pos-std::to_string(0).size())).c_str());
+        pos = s.find(" ", pos);
     }
-    
-    return n - total_apples - total_oranges;
+
+    return n - apples - oranges;
 }
