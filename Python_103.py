@@ -1,6 +1,11 @@
-```
-def rounded_avg(n, m):
+def rounded_avg():
+    n = int(input("Enter first number: "))
+    m = int(input("Enter second number: "))
+    
     if n > m:
         return -1
-    avg = (n + m) / 2
-    return bin(int(avg))[2:]
+    
+    avg = (n + m) // 2
+    return bin(round(avg)).replace("0b", "")
+
+print(rounded_avg())
