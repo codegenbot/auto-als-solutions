@@ -16,7 +16,7 @@ std::string string_to_md5(const std::string& text) {
     }
     MD5_Final(result, &mdContext);
     
-    std::ostringstream oss;
+    std::stringstream oss;
     for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
         oss << setfill('0') << setw(2) << hex << (int)result[i];
     }
