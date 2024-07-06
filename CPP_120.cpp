@@ -1,7 +1,7 @@
-#include <iostream>
-using namespace std;
+#include <vector>
+#include <algorithm>
 
-bool areEqual(vector<int> a, vector<int> b) {
+bool areEqual(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -9,30 +9,17 @@ bool areEqual(vector<int> a, vector<int> b) {
     return true;
 }
 
-vector<int> maximum(vector<int> arr, int k) {
-    vector<int> result;
+std::vector<int> maximum(std::vector<int> arr, int k) {
+    std::vector<int> result;
     for (int i = 0; i < k; i++) {
-        auto it = max_element(arr.begin(), arr.end());
+        auto it = std::max_element(arr.begin(), arr.end());
         result.push_back(*it);
         arr.erase(it);
     }
     return result;
 }
 
-int main() {
-    int n, k;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-    }
-    cout << "Enter k: ";
-    cin >> k;
-    vector<int> result = maximum(arr, k);
-    if(areEqual(result, vector<int>(k, 243))) {
-        cout << "Maximum values are equal.\n";
-    } else {
-        cout << "Maximum values are not equal.\n";
-    }
+void driver() {
+    assert(areEqual(maximum({1, 2, 3, -23, 243, -400, 0}, 3), {243, 243, 243}));  
+    return;
 }
