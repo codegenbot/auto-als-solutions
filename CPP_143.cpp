@@ -1,32 +1,20 @@
-vector<int> primeNumbers(int n) {
-    vector<int> primes;
-    for (int i = 2; i <= n; ++i) {
+string words_in_sentence(string sentence){
+    string result = "";
+    for (int i = 0; i < sentence.size(); ++i) {
+        if (sentence[i] == ' ') continue;
+        int len = 1;
+        for (int j = i+1; j <= sentence.size() && j != i; ++j) {
+            if (sentence[j] != ' ') len++;
+            else break;
+        }
         bool isPrime = true;
-        for (int j = 2; j * j <= i; ++j) {
-            if (i % j == 0) {
+        for (int k = 2; k * k <= len; ++k) {
+            if (len % k == 0) {
                 isPrime = false;
                 break;
             }
         }
-        if (isPrime) {
-            primes.push_back(i);
-        }
+        if (isPrime) result += sentence.substr(i, len) + " ";
     }
-    return primes;
-}
-
-string words_in_sentence(string sentence){
-    vector<string> words;
-    split(sentence, " ", words);
-
-    string result = "";
-    for (const auto &word : words) {
-        int length = word.length();
-        if (any_of(primeNumbers(length).begin(), primeNumbers(length).end(),
-            [&length](int i) { return i == length; })) {
-            result += word + " ";
-        }
-    }
-
-    return result.substr(0, result.size() - 1);
+    return result;
 }
