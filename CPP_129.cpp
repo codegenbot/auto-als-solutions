@@ -1,3 +1,7 @@
+```cpp
+#ifdef __GXX_EXPERIMENTAL__
+#define _SCL_SECURE_NO_WARNINGS
+#endif
 #include <vector>
 #include <utility>
 
@@ -8,7 +12,12 @@ int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<s
     if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size())
         return -2;
 
-    return 0;
+    if (grid[x][y] == 'O') {
+        path.push_back({x, y});
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
