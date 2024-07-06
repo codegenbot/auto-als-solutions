@@ -1,44 +1,49 @@
-vector<string> by_length(vector<int> arr) {
-    vector<int> temp;
-    for (int num : arr) {
-        if (num >= 1 && num <= 9)
-            temp.push_back(num);
-    }
-    sort(temp.begin(), temp.end());
-    vector<string> result;
-    for (int num : temp) {
-        string str = "";
-        switch (num) {
-            case 1:
-                str = "One";
-                break;
-            case 2:
-                str = "Two";
-                break;
-            case 3:
-                str = "Three";
-                break;
-            case 4:
-                str = "Four";
-                break;
-            case 5:
-                str = "Five";
-                break;
-            case 6:
-                str = "Six";
-                break;
-            case 7:
-                str = "Seven";
-                break;
-            case 8:
-                str = "Eight";
-                break;
-            case 9:
-                str = "Nine";
-                break;
+vector<string> by_length(vector<int> arr){
+    vector<int> digits; // store digits between 1 and 9
+    for (int i : arr) {
+        if (i >= 1 && i <= 9) {
+            digits.push_back(i);
         }
-        result.push_back(str);
     }
-    reverse(result.begin(), result.end());
-    return result;
+
+    sort(digits.begin(), digits.end()); // sort the digits
+
+    reverse(digits.begin(), digits.end()); // reverse the sorted digits
+
+    vector<string> names;
+    for (int digit : digits) {
+        if (digit >= 1 && digit <= 9) {
+            switch (digit) {
+                case 1:
+                    names.push_back("One");
+                    break;
+                case 2:
+                    names.push_back("Two");
+                    break;
+                case 3:
+                    names.push_back("Three");
+                    break;
+                case 4:
+                    names.push_back("Four");
+                    break;
+                case 5:
+                    names.push_back("Five");
+                    break;
+                case 6:
+                    names.push_back("Six");
+                    break;
+                case 7:
+                    names.push_back("Seven");
+                    break;
+                case 8:
+                    names.push_back("Eight");
+                    break;
+                case 9:
+                    names.push_back("Nine");
+                    break;
+            }
+        }
+    }
+
+    return names;
 }
