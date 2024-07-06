@@ -34,9 +34,11 @@ int main() {
     cin >> k;
     if(k > n) k = n;
     vector<int> result = maximum(arr, k);
-    if(same(result, vector<int>(k, 243))) {
+    bool maxEqual = same(result, vector<int>(k, 243));
+    if(maxEqual) {
         cout << "Maximum values are equal.\n";
     } else {
         cout << "Maximum values are not equal.\n";
     }
+    return 0;
 }
