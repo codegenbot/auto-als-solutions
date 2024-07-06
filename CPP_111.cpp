@@ -1,30 +1,23 @@
-#include <string>
-#include <map>
-using namespace std;
-
 map<char, int> histogram(string test) {
     map<char, int> result;
-    int maxCount = 0;
-    
-    for (char c : test) {
-        if (c != ' ') {
-            if (result.find(c) == result.end()) {
-                result[c] = 1;
-            } else {
-                result[c]++;
-            }
-            
-            if (result[c] > maxCount) {
-                maxCount = result[c];
-            }
-        }
+    if (test.empty()) return result;
+
+    size_t pos = 0;
+    char letter;
+    int count = 0;
+
+    while ((pos = test.find(' ')) != string::npos) {
+        letter = test[0];
+        count++;
+        test.erase(0, pos + 1);
     }
-    
-    for (auto it = result.begin(); it != result.end(); ++it) {
-        if (it->second == maxCount) {
-            cout << "{" << it->first << ", " << it->second << "}" << endl;
-        }
+
+    if (!test.empty()) {
+        letter = test[0];
+        count++;
     }
-    
+
+    result[letter] = count;
+
     return result;
 }
