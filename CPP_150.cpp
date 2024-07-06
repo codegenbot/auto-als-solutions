@@ -1,14 +1,15 @@
-#include <cmath>
+Here is the completed code:
 
-int x_or_y(int n, int x, int y) {
-    bool isPrime = true;
-    if (n <= 1)
-        isPrime = false;
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) {
-            isPrime = false;
-            break;
-        }
+```cpp
+bool isPrime(int num){
+    if(num <= 1) return false;
+    for(int i = 2; i * i <= num; i++){
+        if(num % i == 0) return false;
     }
-    return isPrime ? y : x;
+    return true;
+}
+
+int x_or_y(int n,int x,int y){
+    if(isPrime(n)) return y;
+    else return x;
 }
