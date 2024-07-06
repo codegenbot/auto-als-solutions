@@ -11,4 +11,3 @@ std::string encrypt(std::string s){
         result += c;
     }
     return result;
-}
