@@ -1,30 +1,23 @@
-Here is the modified code:
-
-```cpp
+#include <iostream>
 #include <vector>
-bool issame(vector<int> a, vector<int> b) {
-    return a == b;
-}
 
-vector<int> pluck(vector<int> arr) {
-    vector<pair<int, int>> nodes;
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<int> result;
+    if (arr.empty()) {
+        return result;
+    }
+    
+    int smallest_even = INT_MAX;
+    int index = -1;
     for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0) {
-            nodes.push_back({arr[i], i});
+        if (arr[i] % 2 == 0 && arr[i] < smallest_even) {
+            smallest_even = arr[i];
+            index = i;
         }
     }
     
-    if (nodes.empty()) {
-        return {};
-    }
-    
-    sort(nodes.begin(), nodes.end());
-    vector<int> result;
-    for (int i = 1; i < nodes.size(); i++) {
-        if (!issame({nodes[0].first, nodes[i - 1].second}, {nodes[i].first, nodes[i].second})) {
-            result.push_back(nodes[i].first);
-        }
-    }
+    result.push_back(smallest_even);
+    result.push_back(index);
     
     return result;
 }
