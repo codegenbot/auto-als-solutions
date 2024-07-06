@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -6,15 +5,15 @@ using namespace std;
 vector<int> eat(double number, double need, double remaining) {
     vector<int> result;
     
-    double total = number + need;
-    int left = (int)min(total - 1000, (double)remaining);
+    int total = (int)(number + need);
+    int left = min((int)((total - 1000)), (int)(remaining));
     
-    if (left < 0) {
+    if ((int)(total - left) < 0) {
         total -= left;
         left = 0;
     }
     
-    result.push_back((int)total);
+    result.push_back(total);
     result.push_back(left);
     
     return result;
@@ -23,25 +22,25 @@ vector<int> eat(double number, double need, double remaining) {
 int main() {
     vector<int> output;
     
-    output = eat(5, 6, 10);
+    output = eat(5.0, 6.0, 10.0);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(4, 8, 9);
+    output = eat(4.0, 8.0, 9.0);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(1, 10, 10);
+    output = eat(1.0, 10.0, 10.0);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
     
-    output = eat(2, 11, 5);
+    output = eat(2.0, 11.0, 5.0);
     for (int i : output) {
         cout << i << " ";
     }
