@@ -13,10 +13,12 @@ std::vector<int> filter_integers(std::list<boost::any> values) {
     for (const auto& value : values) {
         if (value.type() == typeid(OInt)) {
             try {
-                int num = boost::any_cast<OInt>(value).get();
-                result.push_back(num);
-            } catch(boost::bad_any_cast const&) {
-                // Ignore non-integer values
+                OInt oint = boost::any_cast<OInt>(value);
+                if (oint.is_initialized()) {
+                    result.push_back(*oint);
+                }
+            } catch (boost::bad_any_cast&) {
+                // Ignore non-OInt values
             }
         }
     }
