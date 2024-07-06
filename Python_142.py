@@ -1,4 +1,3 @@
-```
 def sum_squares(numbers):
     lst = [int(i) for i in numbers.split()]
     total_sum = 0
