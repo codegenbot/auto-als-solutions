@@ -47,6 +47,6 @@ bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    assert(isSame({{"E"}, {"D-"}}, numerical_letter_grade({0.0f, 0.7f})));
+    assert(isSame({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})));
     return 0;
 }
