@@ -1,4 +1,3 @@
-````
 bool correct_bracketing(string brackets){
     int count = 0;
     for(int i=0; i<brackets.length(); i++){
@@ -13,4 +12,3 @@ bool correct_bracketing(string brackets){
         }
     }
     return count == 0;
-}
