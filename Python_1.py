@@ -1,4 +1,4 @@
-Here is the solution to the problem:
+Here is the corrected code:
 
 ```Python
 from typing import List
