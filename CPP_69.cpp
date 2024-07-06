@@ -14,7 +14,7 @@ int main() {
         cin >> vec[i];
     
     bool found = false;
-    for(auto it = vec.begin() + 1; it != vec.end(); ++it) {
+    for(auto it = vec.begin(); it != vec.end(); ++it) {
         if(*it == vec[0]) {
             found = true;
             break;
