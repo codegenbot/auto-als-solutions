@@ -1,8 +1,9 @@
+```cpp
 #include <string>
 #include <cctype>
 
-string flip_case(string str){
-    string result = "";
+std::string flip_case(std::string str){
+    std::string result = "";
     for (int i = 0; i < str.length(); i++) {
         char c = str[i];
         if (c >= 'a' && c <= 'z') 
@@ -16,7 +17,6 @@ string flip_case(string str){
 }
 
 int main(){
-    string s = flip_case("Hello World!");
-    cout << s << endl;
+    std::cout << flip_case("Hello World!") << std::endl;
     return 0;
 }
