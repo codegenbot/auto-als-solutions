@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -14,13 +15,15 @@ std::string get_closest_vowel(std::string str) {
             }
         }
     }
-    return std::string(1, closest_vowel); // This line can be removed because it's not needed
+    return std::string(1, closest_vowel);
 }
 
 int main() {
     std::string word;
     std::cout << "Enter a word: ";
-    std::getline(std::cin, word);
+    char buffer[256];
+    std::cin.get(buffer, 256);
+    word = buffer;
     std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
     return 0;
 }
