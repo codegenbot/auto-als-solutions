@@ -1,3 +1,4 @@
 bool is_simple_power(int x, int n) {
-    return pow(n, log(x)/log(n)) == x;
+    double temp = pow(n, round(log(x)/log(n)));
+    return temp == x;
 }
