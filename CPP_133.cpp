@@ -1,3 +1,4 @@
+```c++
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -19,9 +20,9 @@ int main() {
         lst.push_back(num);
     }
 
-    int sum = sum_squares(lst);
-
-    std::cout << "Sum of squares: " << sum << std::endl;
-
+    {  
+        int sum = sum_squares(lst);
+        std::cout << "Sum of squares: " << sum << std::endl;
+    } 
     return 0;
 }
