@@ -1,24 +1,9 @@
-```cpp
-#include <iostream>
-using namespace std;
-
-class Solution {
-public:
-    string exchange(vector<int> lst1, vector<int> lst2) {
-        int oddCount = 0;
-        for (int num : lst1) {
-            if (num % 2 != 0) {
-                oddCount++;
-            }
+string exchange(vector<int> lst1, vector<int> lst2) {
+    int oddCount = 0;
+    for (int num : lst1) {
+        if (num % 2 != 0) {
+            oddCount++;
         }
-        string result = oddCount == 0 ? "YES" : "NO";
-        return result;
     }
-
-    int main() {
-        assert(exchange({100, 200}, {200, 200}) == "YES");
-        // Add more test cases here
-        cout << "Test cases passed." << endl;
-        return 0;
-    }
-};
+    return (oddCount == 0 ? "YES" : "NO"); 
+}
