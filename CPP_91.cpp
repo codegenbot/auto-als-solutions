@@ -1,27 +1,28 @@
+```cpp
 #include <iostream>
 #include <string>
+
+int is_bored(std::string S) {
+    int count = 0;
+    size_t pos = 0;
+    while ((pos = S.find("I", pos)) != std::string::npos) {
+        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
+            pos = S.find("I", pos + 1);
+        else {
+            size_t start_pos = S.find("I");
+            while(start_pos != std::string::npos) {
+                S.erase(start_pos, 1); 
+                start_pos = S.find("I"); 
+            }
+            count++;
+        }
+    }
+    return count;
 
 int main() {
     std::string input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
-    int result = count_i(input);
+    int result = is_bored(input);
     std::cout << "Number of 'I' without punctuation: " << result << "\n";
-}
-
-int count_i(const std::string& str) {
-    int count = 0;
-    bool in_word = false;
-    for (char c : str) {
-        if (!in_word && !std::ispunct(c)) {
-            in_word = true;
-        }
-        else if (in_word && std::isdigit(c) || std::isspace(c) || std::ispunct(c)) {
-            in_word = false;
-        }
-        if (c == 'I' || c == 'i') {
-            count++;
-        }
-    }
-    return count;
 }
