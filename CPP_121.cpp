@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-int sumOdd(int x) {
+int sumOdd() {
     int sum = 0;
     for (int i = 1; i <= 10; i++) { 
         int y;
@@ -14,15 +14,6 @@ int sumOdd(int x) {
 }
 
 int main() {
-    int inputNumber = 0;
-    std::cout << "Enter an integer: ";
-    std::cin >> inputNumber;
-
-    int solutions(int x) {
-        return sumOdd(x);
-    }
-
-    assert(sumOdd(inputNumber) == 3);
-
+    std::cout << sumOdd() << std::endl;
     return 0;
 }

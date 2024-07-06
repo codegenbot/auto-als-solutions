@@ -1,28 +1,34 @@
 def minPath(grid, k):
     n = len(grid)
-    m = [[i * n + j for j in range(n)] for i in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j] == k:
+                start = (i, j)
+
     visited = set()
     min_paths = []
 
     def dfs(i, j, path, sum_path):
         if (i, j) in visited:
             return None
-        if 0 <= i < n and 0 <= j < n and grid[i][j] == k:
-            return ((path + [m[i][j]]), sum_path + k)
-        if 0 <= i < n and 0 <= j < n and grid[i][j] != k:
+        if 0 <= i < n and 0 <= j < n:
+            if (i, j) == start:
+                return ((path + [k]), sum_path)
             return None
         for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
-                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
-                min_paths.append(new_path)
+                new_path, new_sum = dfs(ni, nj, path + [k], sum_path + k)
+                if new_path:
+                    min_paths.append(new_path)
+        return (
+            min(
+                [p for p in set(tuple(x) for x in min_paths) if p], key=lambda x: len(x)
+            )
+            or []
+        )
 
-    def find_min_path(grid, k):
-        n = len(grid)
-        m = [[i * n + j for j in range(n)] for i in range(n)]
-        visited = set()
-        min_paths = []
-
+    def main():
         boundary_cells = (
             [(0, j) for j in range(n)]
             + [(n - 1, j) for j in range(n)]
@@ -32,12 +38,12 @@ def minPath(grid, k):
         min_path = []
         for i, j in boundary_cells:
             visited.add((i, j))
-            paths = [p for p in [dfs(i, j, [m[i][j]], k)] if p]
+            paths = [p for p in [dfs(i, j, [], 0)] if p]
             for path in set(tuple(x) for x in paths):
-                if not path: continue
-                if not min_path or len(path) < len(min_path):
-                    min_path = path
+                if path:
+                    min_path = min([path], key=lambda x: len(x))
+                    break
 
         return min_path if min_path else []
 
-    return find_min_path(grid, k)
+    print(main())
