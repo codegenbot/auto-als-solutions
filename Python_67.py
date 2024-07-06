@@ -1,6 +1,6 @@
-Here is the completed code:
-
+```
 def fruit_distribution(s,n):
-    s = s.lower()
-    x = int([i for i in map(str,filter(str.isdigit, s))][0])
-    return n - x
+    words = s.split()
+    apples = int(''.join(filter(str.isdigit, [word for word in words if 'apples' in word])))-1
+    oranges = int(''.join(filter(str.isdigit, [word for word in words if 'oranges' in word])))-1
+    return n - apples - oranges
