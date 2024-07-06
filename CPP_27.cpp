@@ -1,8 +1,10 @@
+```cpp
 #include <string>
 #include <cctype>
+#include <ostream>
 
 std::string flip_case(std::string str){
-    std::string result(str);
+    std::string result = "";
     for(char c: str){
         if(isalpha(c)){
             if(islower(c))
@@ -10,7 +12,7 @@ std::string flip_case(std::string str){
             else
                 result += tolower(c);
         }else{
-            result.push_back(c); 
+            result.append(1, c);
         }
     }
     return result;
