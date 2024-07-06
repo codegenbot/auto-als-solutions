@@ -1,6 +1,5 @@
-```cpp
 #include <vector>
-#include <cmath>
+#include <algorithm>
 
 int prod_signs(std::vector<int> arr) {
     int sign_product = 1;
@@ -14,5 +13,5 @@ int prod_signs(std::vector<int> arr) {
         sum_of_magnitudes += std::abs(num);
     }
 
-    return sign_product * sum_of_magnitudes;
+    return sign_product * static_cast<long long>(sum_of_magnitudes);
 }
