@@ -1,9 +1,10 @@
+```cpp
 #include <iostream>
 #include <cctype>
 #include <vector>
 #include <string>
 
-int countDigits(const string& str) {
+int countDigits(const std::string& str) {
     int count = 0;
     for (char c : str) {
         if (std::isdigit(c)) {
@@ -13,25 +14,25 @@ int countDigits(const string& str) {
     return count;
 }
 
-string file_name_check(string file_name) {
+std::string file_name_check(std::string file_name) {
     if (countDigits(file_name) > 3) {
         return "No";
     }
 
     size_t dotPos = file_name.find('.');
-    if (dotPos == string::npos || file_name.find('.') != dotPos) {
+    if (dotPos == std::string::npos || file_name.find('.') != dotPos) {
         return "No";
     }
 
-    string prefix = file_name.substr(0, dotPos);
-    string suffix = file_name.substr(dotPos + 1);
+    std::string prefix = file_name.substr(0, dotPos);
+    std::string suffix = file_name.substr(dotPos + 1);
 
     if (prefix.empty() || !isalpha(prefix[0])) {
         return "No";
     }
 
-    vector<string> validSuffixes = {"txt", "exe", "dll"};
-    if (find(validSuffixes.begin(), validSuffixes.end(), suffix) == validSuffixes.end()) {
+    std::vector<std::string> validSuffixes = {"txt", "exe", "dll"};
+    if (std::find(validSuffixes.begin(), validSuffixes.end(), suffix) == validSuffixes.end()) {
         return "No";
     }
 

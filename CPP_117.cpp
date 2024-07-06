@@ -1,21 +1,19 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-
+#include <memory>
 using namespace std;
 
 vector<string> select_words(string s, int n) {
-    vector<char> word;
     vector<string> result;
+    string word;
     int consonants = 0;
 
     for (char c : s) {
         if (c == ' ') {
             if (consonants == n) {
-                string tempStr(word.begin(), word.end());
-                result.push_back(tempStr);
+                result.push_back(word);
             }
             word.clear();
             consonants = 0;
@@ -33,13 +31,12 @@ vector<string> select_words(string s, int n) {
             if (!isVowel) {
                 consonants++;
             }
-            word.push_back(c);
+            word += c;
         }
     }
 
-    if (consonants > 0) {
-        string tempStr(word.begin(), word.end());
-        result.push_back(tempStr);
+    if (consonants == n) {
+        result.push_back(word);
     }
 
     return result;
