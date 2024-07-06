@@ -1,21 +1,22 @@
+#include <iostream>
 #include <string>
-#include <sstream>
+
 using namespace std;
 
 int fruit_distribution(string s) {
-    int total_fruits = 0;
+    int n = stoi(s);
+    size_t pos = 0;
+    string input = s;
     int apples = 0;
     int oranges = 0;
 
-    stringstream input(s);
-    string word;
-
-    while (input >> word) {
-        if (word == "apples")
-            apples = stoi(next(input).skipws().ignore());
-        else if (word == "oranges")
-            oranges = stoi(next(input).skipws().ignore());
+    while ((pos = input.find(" ")) != string::npos) {
+        if (input.substr(0, pos).find("apples") != string::npos)
+            apples = stoi(input.substr(0, pos).substr(input.find(" ") + 1));
+        else if (input.substr(0, pos).find("oranges") != string::npos)
+            oranges = stoi(input.substr(0, pos).substr(input.find(" ") + 1));
+        input.erase(0, pos + 1);
     }
 
-    return total_fruits - apples - oranges;
+    return n - apples - oranges;
 }
