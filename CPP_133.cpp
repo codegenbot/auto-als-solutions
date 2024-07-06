@@ -24,5 +24,4 @@ int main() {
     int sum = sum_squares(lst);
 
     std::cout << "Sum of squares: " << sum << std::endl;
-    return 0; // fixed here
 }
