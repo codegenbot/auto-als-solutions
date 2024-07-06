@@ -20,3 +20,4 @@ std::string string_to_md5(const char* text) {
     }
 
     return oss.str();
+}
