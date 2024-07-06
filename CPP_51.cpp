@@ -1,8 +1,9 @@
+#include<string>
+
 string remove_vowels(string text){
-    string result;
+    string result = "";
     for(char c : text){
-        if(c!='a'&&c!='e'&&c!='i'&&c!='o'&&c!='u'&&c<='Z'&&c>='A'||c<'a'||c>'z')
-            result+=c;
+        if(strchr("aeiouAEIOU",c) == NULL)
+            result += c;
     }
     return result;
-}
