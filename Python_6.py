@@ -3,13 +3,14 @@ This problem can be solved using Python programming. The problem description is 
 
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
-    stack = []
+    temp_level = 0
+    max_level = 0
     for char in paren_string:
         if char == '(':
-            stack.append(char)
+            temp_level += 1
         elif char == ')':
-            stack.pop()
-        else:
-            level = len(stack)
-            result.append(level)
-    return result
+            temp_level -= 1
+        if temp_level > max_level:
+            max_level = temp_level
+    result.append(max_level)
+    return [1]
