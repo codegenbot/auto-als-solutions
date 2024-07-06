@@ -1,6 +1,3 @@
-#include <string>
-#include <cctype>
-
 std::string file_name_check(std::string file_name) {
     int count = 0;
     bool has_dot = false;
@@ -21,9 +18,3 @@ std::string file_name_check(std::string file_name) {
     string ext = file_name.substr(pos+1);
     if(ext != "txt" && ext != "exe" && ext != "dll") return "No";
     return "Yes";
-}
-
-int main() {
-    assert(file_name_check("s.") == "No");
-    return 0;
-}
