@@ -1,19 +1,13 @@
-#include <boost/config.hpp>
-#include <boost/optional.hpp>
-#include <vector>
-#include <list>
-
-namespace boost {
-    using namespace std;
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
 }
-
-typedef boost::optional<int> OInt;
 
 std::vector<int> filter_integers(std::list<boost::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if (boost::any_cast<OInt>(value)) {
-            result.push_back(boost::any_cast<int>(value));
+        if(boost::holds_alternative<int>(value)) { 
+            int val = boost::get<int>(value); 
+            result.push_back(val);
         }
     }
     return result;
