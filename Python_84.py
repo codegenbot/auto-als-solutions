@@ -1,8 +1,8 @@
-def solve(N):
+```
+def solve():
+    N = int(input("Enter a number: "))
     if not isinstance(N, int):
         return "Error: Input must be an integer"
-    binary = ""
-    for i in range(1, N + 1):
-        if str(bin(i))[2:].count("1") % 2 == 0:
-            binary += str(i) + " "
-    return binary.strip()
+    return f"0b{bin(N)[2:]}"
+    
+print(solve())
