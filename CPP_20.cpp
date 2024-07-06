@@ -1,13 +1,17 @@
-```cpp
 #include <algorithm>
-#include <vector>
 #include <numeric>
-#include <limits>
+#include <vector>
 
-using namespace std;
-
-bool operator==(const vector<float>& a, const vector<float>& b) {
+bool operator==(const std::vector<float>& a, const std::vector<float>& b) {
     return a.size() == b.size() && equal(a.begin(), a.end(), b.begin());
+}
+
+int main() {
+    // Your code to test the function
+    vector<float> numbers = {0.5f, 0.8f, 1.2f, 1.5f};
+    pair<float, float> closest_pair = find_closest_elements(numbers);
+    
+    return 0;
 }
 
 vector<float> find_closest_elements(vector<float> numbers) {
