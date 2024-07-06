@@ -1,10 +1,9 @@
 #include <vector>
-#include <limits>
 
-std::vector<int> findMinEvenIndex(std::vector<int> arr) {
-    std::vector<int> result = {};
+vector<int> pluck(vector<int> arr) {
+    vector<int> result = {};
     int minEvenValueIndex = -1;
-    int minEvenValue = std::numeric_limits<int>::max();
+    int minEvenValue = INT_MAX;
 
     for(int i = 0; i < arr.size(); i++){
         if(arr[i] % 2 == 0 && arr[i] < minEvenValue){
@@ -13,7 +12,7 @@ std::vector<int> findMinEvenIndex(std::vector<int> arr) {
         }
     }
 
-    if(minEvenValue != std::numeric_limits<int>::max()){
+    if(minEvenValue != INT_MAX){
         result.push_back(minEvenValue);
         result.push_back(minEvenValueIndex);
     }
