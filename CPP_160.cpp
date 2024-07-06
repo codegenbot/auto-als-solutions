@@ -1,23 +1,25 @@
-int do_algebra(vector<string> operator_, vector<int> operand) {
+#include<stdio.h>
+#include<math.h>
+#include<vector>
+#include<string>
+using namespace std;
+#include<algorithm>
+#include<stdlib.h>
+
+int do_algebra(vector<string> operato, vector<int> operand){
     int result = operand[0];
-    string opstr = "";
-    for (int i = 1; i < operator_.size(); i++) {
-        opstr += operator_[i];
-        result = eval(result, opstr, &operand[i]);
-        opstr.clear();
+    for(int i=1; i<operand.size();i++){
+        if(operato[i-1] == "+")  result += operand[i];
+        else if(operato[i-1] == "-") result -= operand[i];
+        else if(operato[i-1] == "*") result *= operand[i];
+        else if(operato[i-1] == "//") {
+            if(result < 0) return -1;
+            result = result / static_cast<int>(operand[i]);
+        }
+        else{
+            if(result < 0) return -1;
+            result = pow(static_cast<double>(result), operand[i]);
+        }
     }
     return result;
-}
-
-long long eval(int a, const string& op, int b) {
-    if (op == "+")
-        return a + b;
-    else if (op == "-")
-        return a - b;
-    else if (op == "*")
-        return a * b;
-    else if (op == "//")
-        return a / b;
-    else
-        return pow(a, b);
 }
