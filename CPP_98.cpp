@@ -1,4 +1,4 @@
-using namespace std;
+```using namespace std;
 
 int count_upper(string s) {
     int count = 0;
@@ -9,4 +9,3 @@ int count_upper(string s) {
         }
     }
     return count;
-}
