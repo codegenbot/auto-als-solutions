@@ -9,6 +9,16 @@ int sumOfDigits(int num) {
     return sum;
 }
 
+int largestPrime(vector<int> lst) {
+    int maxPrime = -1;
+    for (int i : lst) {
+        if (isPrime(i) && i > maxPrime) {
+            maxPrime = i;
+        }
+    }
+    return maxPrime;
+}
+
 bool isPrime(int num) {
     if (num <= 1) {
         return false;
@@ -19,17 +29,6 @@ bool isPrime(int num) {
         }
     }
     return true;
-}
-
-int largestPrime(vector<int> lst) {
-    int max_prime = -1;
-    for (int i : lst) {
-        if (isPrime(i)) {
-            if (i > max_prime)
-                max_prime = i;
-        }
-    }
-    return max_prime;
 }
 
 int skjkasdkd(vector<int> lst) {
