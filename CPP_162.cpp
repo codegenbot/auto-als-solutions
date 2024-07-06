@@ -1,23 +1,21 @@
-```cpp
 #include <string>
-#include <iomanip>
-#include <sstream>
+#include <openssl/evp.h>
 
 using namespace std;
 
-string string_to_md5(const char* text) {
-    if (*text == '\0') return "";
+string string_to_md5(string text) {
+    if (text.empty()) return "";
 
-    unsigned char result[16];
+    unsigned char result[MD5_DIGEST_LENGTH];
     MD5_CTX mdContext;
     MD5_Init(&mdContext);
-    const char* ptr = text;
-    size_t len = strlen(text);
-    MD5_Update(&mdContext, ptr, len);
+    const char* ptr = (char*)text.c_str();
+    size_t len = text.size();
+    MD5_Update(&mdContext, (char*)ptr, len);
     MD5_Final(result, &mdContext);
 
     ostringstream oss;
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
         oss << setfill('0') << setw(2) << hex << (int)result[i];
     }
 
