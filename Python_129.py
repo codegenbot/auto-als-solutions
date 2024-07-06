@@ -1,28 +1,17 @@
-def minPath(grid, k):
+def 'Complete the following code given the task description and function signature..'(grid, k):
     n = len(grid)
-    visited = [[False] * n for _ in range(n)]
-
-    def dfs(i, j, path, count):
-        if count == k:
-            return [path]
-
-        visited[i][j] = True
-        paths = []
-        for ni, nj in [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]:
-            if 0 <= ni < n and 0 <= nj < n and not visited[ni][nj]:
-                new_path = path + [grid[ni][nj]]
-                new_paths = dfs(ni, nj, new_path, count + 1)
-                for p in new_paths:
-                    paths.append(p)
-        visited[i][j] = False
-        return sorted(paths)
-
-    min_paths = []
+    m = [[i * n + j for j in range(n)] for i in range(n)]
+    dp = [[[float('inf'), []] for _ in range(n * n)] for _ in range(n * n)]
+    dp[0][0][0] = 0
+    for i in range(1, n):
+        dp[i][0][0] = dp[i - 1][0][0] + grid[i][0]
+    for j in range(1, n):
+        dp[0][j][0] = dp[0][j - 1][0] + grid[0][j]
+    for i in range(1, n):
+        for j in range(1, n):
+            dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
     for i in range(n):
         for j in range(n):
-            if not visited[i][j]:
-                paths = dfs(i, j, [], 0)
-                if not min_paths or min_paths[0] > paths[0]:
-                    min_paths = [p for p in paths]
-
-    return min_paths[0]
+            if dp[i * n + j][(n - 1) * n + (n - 1)][0] == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k:
+                return [grid[x][y] for x, y in [(i, j)] + dp[i * n + j][(n - 1) * n + (n - 1)][1]]
+    return []
