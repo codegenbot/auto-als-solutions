@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 #include <string>
 
@@ -25,9 +25,9 @@ std::string file_name_check(std::string file_name){
 }
 
 int main(){
-    std::string file_name;
-    std::cout << "Enter the filename: ";
-    std::cin >> file_name;
-    std::cout << file_name_check(file_name) << std::endl;
+    std::cout << file_name_check("abc.txt") << std::endl;
+    std::cout << file_name_check("123.exe") << std::endl;
+    std::cout << file_name_check("xyz.dll") << std::endl;
+    std::cout << file_name_check("123.45") << std::endl;
     return 0;
 }
