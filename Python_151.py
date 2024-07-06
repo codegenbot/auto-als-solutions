@@ -1,3 +1,6 @@
+```Python
 def double_the_difference(lst):
-    odd_sum = sum(i for i in lst if isinstance(i, int) and i % 2 != 0)
-    return abs(sum(i**2 for i in lst if isinstance(i, int) and i > 0) - (2 * odd_sum))
+    lst.sort()
+    return (lst[0] + lst[-1]) * 2
+
+double_the_difference([5,6])
