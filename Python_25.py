@@ -1,14 +1,14 @@
-Here is the completed Python code:
+from typing import List
+import math
+
 
 def factorize(n: int) -> List[int]:
-    i = 2
     factors = []
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
+    for i in range(2, n + 1):
+        while n % i == 0:
+            if i > math.sqrt(n):
+                break
             n //= i
-            factors.append(i)
-    if n > 1:
-        factors.append(n)
-    return [factor ** (factors.count(factor)) for factor in set(factors)]
+            if i not in factors:
+                factors.append(i)
+    return factors
