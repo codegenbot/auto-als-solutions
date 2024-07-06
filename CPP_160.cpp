@@ -13,9 +13,12 @@ int do_algebra(std::vector<std::string> operator_, std::vector<int> operand) {
         } else if (operator_[i] == "*") {
             result *= operand[i + 1];
         } else if (operator_[i] == "//") {
-            result = result / static_cast<int>(operand[i + 1]);
+            if(operand[i+1]!=0)
+                result = result / operand[i + 1];
+            else
+                return -1; // error: division by zero
         } else if (operator_[i] == "**") {
-            result = pow(result, static_cast<double>(operand[i + 1]));
+            result = pow(result, operand[i + 1]);
         }
     }
     return result;
