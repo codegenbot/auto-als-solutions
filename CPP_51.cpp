@@ -1,3 +1,4 @@
+```
 #include<string>
 #include<algorithm>
 using namespace std;
@@ -13,5 +14,5 @@ string remove_vowels(string text){
 }
 
 bool isVowel(char c) {
-    return toupper(c) == 'A' || toupper(c) == 'E' || toupper(c) == 'I' || toupper(c) == 'O' || toupper(c) == 'U';
+    return tolower(c) == 'a' || tolower(c) == 'e' || tolower(c) == 'i' || tolower(c) == 'o' || tolower(c) == 'u';
 }
