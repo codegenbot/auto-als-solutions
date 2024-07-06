@@ -1,23 +1,26 @@
-using boost::any_cast;
+#include <boost/any_cast.hpp>
 
 boost::any compare_one(boost::any a, boost::any b) {
-    float fa = any_cast<float>(a);
-    float fb = any_cast<float>(b);
-
-    if (fa > fb) return a;
-    else if (fb > fa) return b;
-
-    bool sa = any_cast<bool>(a);
-    bool sb = any_cast<bool>(b);
-
-    if (sa > sb) return a;
-    else if (sb > sa) return b;
-
-    std::string s1 = any_cast<std::string>(a);
-    std::string s2 = any_cast<std::string>(b);
-
-    if (s1.compare(s2) > 0) return a;
-    else if (s2.compare(s1) > 0) return b;
-
+    if (!boost::any_cast<int>(&a)) {
+        if (!boost::any_cast<int>(&b)) {
+            if (std::to_string(std::stod(boost::any_cast<std::string>(a).c_str())) <
+                std::to_string(std::stod(boost::any_cast<std::string>(b).c_str()))) {
+                return b;
+            } else if (std::to_string(std::stod(boost::any_cast<std::string>(a).c_str())) >
+                        std::to_string(std::stod(boost::any_cast<std::string>(b).c_str()))) {
+                return a;
+            }
+            return "None";
+        } else if (a.convert_to<int>() > b.convert_to<int>()) {
+            return a;
+        } else if (a.convert_to<int>() < b.convert_to<int>()) {
+            return b;
+        }
+        return "None";
+    } else if (a.convert_to<int>() > b.convert_to<int>()) {
+        return a;
+    } else if (a.convert_to<int>() < b.convert_to<int>()) {
+        return b;
+    }
     return "None";
 }
