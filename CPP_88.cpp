@@ -11,5 +11,4 @@ bool issame(const std::vector<int>& a) {
 
 int main() {
     assert(issame({21, 14, 23, 11}));
-    // Test your function with different inputs.
 }
