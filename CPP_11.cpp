@@ -1,7 +1,7 @@
 #include <string>
 
-string string_xor(string a, string b) {
-    string result = "";
+std::string string_xor(std::string a, std::string b) {
+    std::string result = "";
     for(int i = 0; i < a.length(); i++) {
         char c1 = a[i];
         char c2 = (i < b.length()) ? b[i] : '0';
