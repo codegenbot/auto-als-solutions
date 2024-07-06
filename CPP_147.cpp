@@ -21,3 +21,10 @@ int get_matrix_triples(int n) {
     
     return count;
 }
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    printf("%d\n", get_matrix_triples(n));
+    return 0;
+}
