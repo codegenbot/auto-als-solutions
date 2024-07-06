@@ -1,10 +1,9 @@
 #include <vector>
 
 int main() {
-    std::vector<std::vector<int>> grid = {{1,0,0},{1,1,0},{0,0,0}};
+    vector<vector<int>> grid = {{0,0,1},{0,0,0},{0,1,0}};
     int capacity = 2;
     cout << max_fill(grid, capacity) << endl;
-    return 0;
 }
 
 int max_fill(vector<vector<int>> grid, int capacity) {
@@ -20,5 +19,5 @@ int max_fill(vector<vector<int>> grid, int capacity) {
         }
     }
 
-    return (total_water + capacity - 1) / capacity;
+    return total_water / capacity + (total_water % capacity != 0);
 }
