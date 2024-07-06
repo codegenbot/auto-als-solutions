@@ -1,9 +1,10 @@
-```cpp
+```
 #include <vector>
 #include <algorithm>
 
-bool issame(int a, int b) {
-    return a == b;
+bool issame(const std::vector<std::vector<int>>& a, const std::vector<std::vector<int>>& b) {
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin(),
+                                            [](const auto& x, const auto& y) {return (x == {0} && y == {0}) || (x.size() == 1 && y.size() == 1 && *x == *y);});
 }
 
 std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> guess) {
@@ -21,6 +22,6 @@ std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> gu
 int main_function() {
     std::vector<int> game = {1,2,3,5};
     std::vector<int> guess = {-1,2,3,4};
-    assert(std::equal(compare(game,guess).begin(), compare(game,guess).end(), {{0},{0},{0},{0}}));
+    assert(std::equal(compare(game,guess).begin(), compare(game,guess).end(), {0}));
     return 0;
 }
