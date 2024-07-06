@@ -1,3 +1,2 @@
-def double_the_difference(lst):
-    result = sum(i**2 for i in lst if isinstance(i, int) and i > 0)
-    return result * 2
+def check(lst, double_the_difference):
+    print(double_the_difference(lst))
