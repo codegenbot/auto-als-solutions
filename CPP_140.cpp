@@ -1,27 +1,25 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
-string fix_spaces(string text) {
-    string result = "";
-    for(int i = 0; i < text.length(); i++){
-        if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length()-1 || text[i+1] != ' ')){
+std::string fix_spaces(std::string text) {
+    std::string result = "";
+    for (int i = 0; i < text.length(); i++) {
+        if (text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length()-1 || text[i+1] != ' ')) {
             result += "_";
-        }else if(text[i] == ' '){
+        } else if (text[i] == ' ') {
             bool consecutive = true;
-            for(int j = i + 1; j < text.length() && j > 0; j++){
-                if(text[j] == ' '){
+            for (int j = i + 1; j < text.length() && j > 0; j++) {
+                if (text[j] == ' ') {
                     consecutive = false;
                     break;
                 }
             }
-            if(consecutive){
+            if (consecutive) {
                 result += "-";
-            }else{
+            } else {
                 result += "_";
             }
-        }else{
+        } else {
             result += text[i];
         }
     }
@@ -29,9 +27,9 @@ string fix_spaces(string text) {
 }
 
 int main() {
-    string input;
-    cout << "Enter a sentence: ";
-    getline(cin, input);
-    cout << "Fixed spaces: " << fix_spaces(input) << endl;
+    std::string text;
+    std::cout << "Enter your input: ";
+    std::getline(std::cin, text);
+    std::cout << "Output: " << fix_spaces(text) << std::endl;
     return 0;
 }
