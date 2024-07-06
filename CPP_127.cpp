@@ -1,9 +1,13 @@
+#include <iostream>
+using namespace std;
+
 string intersection(vector<int> interval1, vector<int> interval2) {
     int start = max(interval1[0], interval2[0]);
     int end = min(interval1[1], interval2[1]);
 
-    if (start > end)
+    if (start > end) {
         return "NO";
+    }
 
     int length = end - start + 1;
 
@@ -16,4 +20,18 @@ string intersection(vector<int> interval1, vector<int> interval2) {
     }
 
     return isPrime ? "YES" : "NO";
+}
+
+int main() {
+    vector<int> interval1 = {1, 2};
+    vector<int> interval2 = {2, 3};
+    cout << intersection(interval1, interval2) << endl;
+
+    interval1 = {-1, 1};
+    interval2 = {0, 4};
+    cout << intersection(interval1, interval2) << endl;
+
+    interval1 = {-3, -1};
+    interval2 = {-5, 5};
+    cout << intersection(interval1, interval2) << endl;
 }
