@@ -1,1 +1,1 @@
-return *max_element(l.begin(), l.end());
+vector<int>().max_element(l);
