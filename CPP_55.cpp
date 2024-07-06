@@ -1,4 +1,6 @@
+```cpp
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -14,11 +16,15 @@ int fib(int n) {
     return result;
 }
 
-int main() 
+main() 
 {
-    int n;
     cout << "Enter the value of n: ";
-    cin >> n;
+    int n;
+    while (!(cin >> n)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Please enter a number: ";
+    }
     cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
 }
