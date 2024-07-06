@@ -1,9 +1,8 @@
-bool is_nested(string str){
+bool is_nested(string str) {
     int open = 0, close = 0;
-    for(char c : str){
-        if(c == '[')open++;
-        else close++;
-        if(open < close) return true;
+    for (char c : str) {
+        if (c == '[') open++;
+        else if (c == ']') close++;
     }
-    return false;
+    return open > close && ((open + close) % 2 != 0);
 }
