@@ -1,10 +1,8 @@
 ```cpp
+#include <cassert>
+
 int multiply(int a, int b) {
-    int unitA = a % 10;
-    int unitB = b % 10;
-    return (unitA * unitB);
+    return (a % 10) * (b % 10);
 }
 
-int main() {
-    assert(multiply(0, 0) == 0);
-}
+assert(multiply(0, 0) == 0);
