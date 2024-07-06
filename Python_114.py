@@ -1,3 +1,5 @@
+Here is the corrected Python function:
+
 def minSubArraySum(nums):
     if not nums:
         return 0
