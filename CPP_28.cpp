@@ -1,5 +1,5 @@
-#include <vector>
 #include <string>
+#include <vector>
 
 string concatenate(vector<string> strings){
     string result = "";
@@ -7,4 +7,3 @@ string concatenate(vector<string> strings){
         result += str;
     }
     return result;
-}
