@@ -1,12 +1,19 @@
-bool is_happy(string s){
-    int len = s.length();
-    if(len < 3) return false;
-    for(int i=0; i<len-2; i++){
-        bool found[3] = {false};
-        for(int j=0; j<3; j++){
-            found[j] = (s[i+j] == s[(i+1)%len] || s[i+j] == s[(i+2)%len]);
+bool is_happy(string s) {
+    if (s.length() < 3) return false;
+    for (int i = 0; i <= s.length() - 3; i++) {
+        bool unique = true;
+        string substr = s.substr(i, 3);
+        for (char c : substr) {
+            int count = 0;
+            for (int j = i; j < i + 3 && j < s.length(); j++) {
+                if (s[j] == c) count++;
+            }
+            if (count > 1) {
+                unique = false;
+                break;
+            }
         }
-        if(!found[0] && !found[1] && !found[2]) return false;
+        if (!unique) return false;
     }
     return true;
 }
