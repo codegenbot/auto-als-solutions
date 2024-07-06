@@ -1,7 +1,6 @@
-```cpp
-#include <initializer_list>
 #include <vector>
 #include <cstdint>
+#include <stdexcept>
 
 int smallest_change(vector<int> arr) {
     int n = arr.size();
@@ -16,9 +15,11 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                dp[i][j].push_back(dp[i+1][j-1].size());
+                int count = dp[i+1][j-1].size();
+                dp[i][j].push_back(count);
             } else {
-                dp[i][j].push_back(1 + dp[i+1][j].size());
+                int count = 1 + dp[i+1][j].size();
+                dp[i][j].push_back(count);
             }
         }
     }
