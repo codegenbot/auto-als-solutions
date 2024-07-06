@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -22,9 +23,10 @@ vector<int> pluck(vector<int> arr) {
     vector<int> result;
     for (int i = 1; i < nodes.size(); i++) {
         if (issame({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
-            return {};
+            continue;
         }
+        result.push_back(nodes[i].first);
     }
     
-    return {nodes[0].first};
+    return result;
 }
