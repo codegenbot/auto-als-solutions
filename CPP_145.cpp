@@ -6,18 +6,17 @@ bool same(std::vector<int> a, std::vector<int> b) {
     return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
 }
 
-std::vector<int> sortByPoints(const std::initializer_list<int>& nums) {
+std::vector<int> sortByPoints(const std::vector<int>& nums) {
     auto comp = [&nums](int a, int b) {
         int sumA = 0, sumB = 0;
         for (char c : std::to_string(a)) sumA += c - '0';
         for (char c : std::to_string(b)) sumB += c - '0';
         if (sumA == sumB)
-            return nums.begin()[a] > nums.begin()[b];
+            return nums.find(a) > nums.find(b);
         return sumA < sumB;
     };
-    std::vector<int> result(nums);
-    std::sort(result.begin(), result.end(), comp);
-    return result;
+    std::sort(nums.begin(), nums.end(), comp);
+    return nums; // This line is incorrect, you should not return the input vector but a new one
 }
 
 int main() {
