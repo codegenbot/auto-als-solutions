@@ -1,9 +1,3 @@
-#include <boost/any.hpp>
-#include <boost/numeric/conversion/cast.hpp>
-#include <string>
-
-using namespace boost;
-
 boost::any compare_one(boost::any a, boost::any b) {
     if (is_any_of<string>(a)) {
         string str_a = any_cast<string>(a);
