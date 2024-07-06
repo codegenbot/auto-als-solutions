@@ -1,34 +1,43 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
-bool sameHelper(const std::vector<std::pair<int, int>>& a, const std::vector<stdstd::pair<int, int>>& b) {
-    if (a.size() != b.size()) return false;
-    for (size_t i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
-    }
-    return true;
+bool same(const std::vector<int>& a, const std::vector<int>& b) {
+    return a == b;
 }
 
 std::vector<int> extract(std::vector<int> arr) {
-    std::vector<std::pair<int, int>> nodes;
-    for (int i = 0; i < arr.size(); ++i) {
-        if (arr[i] % 2 == 0) {
-            nodes.push_back({arr[i], i});
-        }
-    }
-    
-    if (nodes.empty()) {
-        return {};
-    }
-    
-    std::sort(nodes.begin(), nodes.end());
-    
-    std::vector<int> result;
-    for (size_t i = 1; i < nodes.size(); ++i) {
-        if (sameHelper({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] % 2 != 0) {
             return {};
         }
     }
     
-    return {nodes[0].first};
+    int result = arr[0];
+    for (int i = 1; i < arr.size(); i++) {
+        if ((arr[i]%2) != (result%2)) {
+            return {};
+        }
+    }
+    
+    std::vector<int> resultVec;
+    resultVec.push_back(result);
+    
+    return resultVec;
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> arr(n);
+    for (auto &i : arr)
+        std::cin >> i;
+
+    std::vector<int> result = extract(arr);
+
+    if(result.empty())
+        std::cout << "empty" << std::endl;
+    else
+        for(int i: result) 
+            std::cout << i << " ";
 }

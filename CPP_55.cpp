@@ -1,16 +1,17 @@
+```cpp
 #include <iostream>
+
 using namespace std;
 
 int fib(int n) {
     if (n <= 1)
         return n;
-    int a = 0, b = 1, result = 1;
+    int a = 0, b = 1;
     for (int i = 2; i <= n; i++) {
-        result = a + b;
         a = b;
-        b = result;
+        b = a + b;
     }
-    return result;
+    return b;
 }
 
 int main() 
@@ -18,8 +19,6 @@ int main()
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
-    
-    for (int i = 0; i < n; ++i) {
-        cout << "The " << i + 1 << "-th Fibonacci number is: " << to_string(fib(i)) << endl;
-    }
+    cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
+}
