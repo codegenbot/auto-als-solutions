@@ -11,55 +11,54 @@ bool issame(vector<string> a, vector<string> b) {
 
 vector<string> by_length(vector<int> arr) {
     vector<std::vector<string>> result;
-    
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            vector<string> temp;
-            switch (num) {
-                case 1:
-                    temp.push_back("One");
-                    break;
-                case 2:
-                    temp.push_back("Two");
-                    break;
-                case 3:
-                    temp.push_back("Three");
-                    break;
-                case 4:
-                    temp.push_back("Four");
-                    break;
-                case 5:
-                    temp.push_back("Five");
-                    break;
-                case 6:
-                    temp.push_back("Six");
-                    break;
-                case 7:
-                    temp.push_back("Seven");
-                    break;
-                case 8:
-                    temp.push_back("Eight");
-                    break;
-                case 9:
-                    temp.push_back("Nine");
-                    break;
-            }
-            sort(temp.begin(), temp.end());
-            
-            reverse(temp.begin(), temp.end());
-            
-            bool found = false;
-            for (const auto& res : result) {
-                if (issame(res, temp)) {
-                    found = true;
-                    break;
+            vector<std::string> nums;
+            for (int i = 0; i < num; i++) {
+                switch (i % 10 + 1) {
+                    case 1:
+                        nums.push_back("One");
+                        break;
+                    case 2:
+                        nums.push_back("Two");
+                        break;
+                    case 3:
+                        nums.push_back("Three");
+                        break;
+                    case 4:
+                        nums.push_back("Four");
+                        break;
+                    case 5:
+                        nums.push_back("Five");
+                        break;
+                    case 6:
+                        nums.push_back("Six");
+                        break;
+                    case 7:
+                        nums.push_back("Seven");
+                        break;
+                    case 8:
+                        nums.push_back("Eight");
+                        break;
+                    case 9:
+                        nums.push_back("Nine");
+                        break;
                 }
             }
-            if (!found) {
-                result.push_back(temp);
+            if (issame(result, vector<std::string>({""}))) {
+                result = nums;
+            } else {
+                for (int i = 0; i < result.size(); i++) {
+                    if (!issame(result[i], nums)) {
+                        result.push_back(nums);
+                        break;
+                    }
+                }
+                if (result.size() == 0) {
+                    result.push_back(nums);
+                }
             }
         }
     }
-    
     return result;
 }
