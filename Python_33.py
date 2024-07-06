@@ -1,2 +1,3 @@
-def sort_third(lst): 
-    return sorted([x[2] for x in lst])
+def 'sort_third'(lst):
+    sorted_list = sorted(lst, key=lambda x: x[2])
+    return sorted_list
