@@ -2,15 +2,15 @@
 #include <map>
 #include <cctype>
 
-bool check_map_case(map<string, string> pair.first) {
+bool check_map_case(map<string, string> pair) {
     bool all_lower = true;
     bool all_upper = true;
 
-    for (auto& dict : pair.first) {
-        if (dict.empty()) {
+    for (auto& key_value : pair) {
+        if (pair.empty()) {
             return false;
         }
-        string key = dict.first;
+        string key = key_value.first;
         if (!(islower(key[0]) || isupper(key[0]))) {
             return false;
         }
