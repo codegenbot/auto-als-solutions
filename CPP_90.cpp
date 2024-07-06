@@ -1,4 +1,9 @@
-int findNextSmallest(vector<int> numbers) {
+#include <vector>
+#include <algorithm>
+
+int next_smallest(vector<int> numbers); 
+
+int next_smallest(vector<int> numbers) {
     if (numbers.empty()) {
         return 0;
     }
@@ -9,5 +14,5 @@ int findNextSmallest(vector<int> numbers) {
             return num;
         }
     }
-    return -1; 
+    return -1; // or any other value to indicate that the next smallest number does not exist
 }
