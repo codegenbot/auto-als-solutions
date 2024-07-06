@@ -1,5 +1,5 @@
-int findFirstDuplicate(vector<int> lst) {
-    map<int, int> freqMap;
+int search(std::vector<int> lst) {
+    std::map<int, int> freqMap;
     for (int num : lst) {
         if (freqMap.find(num) == freqMap.end()) {
             freqMap[num] = 1;
@@ -13,3 +13,4 @@ int findFirstDuplicate(vector<int> lst) {
         }
     }
     return -1;
+}
