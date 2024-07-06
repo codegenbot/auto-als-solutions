@@ -1,15 +1,14 @@
 vector<int> common(vector<int> l1, vector<int> l2) {
+    if (l1.empty() || l2.empty()) {
+        throw runtime_error("Error: Both input vectors must be non-empty.");
+    }
+
     set<int> s1(l1.begin(), l1.end());
     set<int> s2(l2.begin(), l2.end());
 
-    if (s1.empty() || s2.empty()) {
-        cout << "Error: Input lists cannot be empty." << endl;
-        return {};
-    }
-
     set<int> resultIntersection; 
-    set_difference(s1.begin(), s1.end(), s2.begin(), s2.end(),
-                    inserter(resultIntersection, resultIntersection.begin()));
+    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
+                      inserter(resultIntersection, resultIntersection.begin()));
 
     vector<int> result(resultIntersection.begin(), resultIntersection.end());
     return result;
