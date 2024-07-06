@@ -4,6 +4,7 @@ while True:
     if inp.lower() == 'stop':
         break
     for s in inp.split():
-        if not set(s).issuperset({'!', '?', ','}):
-            strings += [s.strip()]
+        if not set(s).issuperset({'!': 1, '?': 1, ',': 1}):
+            continue
+        strings += [s.strip()]
 print(' '.join(filter(None, strings)))
