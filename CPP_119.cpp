@@ -1,11 +1,11 @@
-int countOpen = 0, countClose = 0;
-
-for (auto s : lst) {
-    for (char c : s) {
-        if (c == '(') countOpen++;
-        else if (c == ')') countClose++;
+string match_parens(vector<string> lst){
+    int open = 0, close = 0;
+    for(int i=0; i<lst.size(); i++){
+        string s = lst[i];
+        for(int j=0; j<s.length(); j++){
+            if(s[j] == '(') open++;
+            else if(s[j] == ')') close++;
+        }
     }
+    return (open == close) ? "Yes" : "No";
 }
-
-if (countOpen > countClose) return "Yes";
-else return "No";
