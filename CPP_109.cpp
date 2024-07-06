@@ -5,6 +5,6 @@ bool move_one_ball(vector<int> arr){
         if(arr[i] <= arr[0]){
             break;
         }
-    }    
-    return (i >= n-1); 
+    }
+    return (i >= n-1);
 }
