@@ -1,19 +1,19 @@
 #include <iostream>
 #include <vector>
 
-std::vector<int> pluck(std::vector<int> arr) {
+std::vector<int> pluck(const std::vector<int>& arr) {
     std::vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
 
-    for(int i = 0; i < arr.size(); i++){
-        if(arr[i] % 2 == 0 && arr[i] < minEvenValue){
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] % 2 == 0 && arr[i] < minEvenValue) {
             minEvenValue = arr[i];
             minEvenValueIndex = i;
         }
     }
 
-    if(minEvenValue != INT_MAX){
+    if (minEvenValue != INT_MAX) {
         result.push_back(minEvenValue);
         result.push_back(minEvenValueIndex);
     }
@@ -22,24 +22,16 @@ std::vector<int> pluck(std::vector<int> arr) {
 }
 
 int main() {
-    // Add your code here
-    std::vector<int> input;
-    // Read input from user
-    int n;
-    cin >> n;
-    for(int i = 0; i < n; i++){
-        int val;
-        cin >> val;
-        input.push_back(val);
-    }
+    std::vector<int> inputArray = {1, 2, 3, 4, 5};
     
-    vector<int> output = pluck(input);
-    // Print the output
-    cout << "Output: ";
-    for(auto x : output) {
-        cout << x << " ";
+    std::vector<int> output = pluck(inputArray);
+
+    if (!output.empty()) {
+        std::cout << "Min even value: " << output[0] << "\n";
+        std::cout << "Index of min even value: " << output[1] << "\n";
+    } else {
+        std::cout << "No even values found.\n";
     }
-    cout << endl;
 
     return 0;
 }
