@@ -1,3 +1,4 @@
+```Python
 def minSubArraySum(nums):
     if not nums:
         return 0
