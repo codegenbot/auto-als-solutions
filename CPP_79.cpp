@@ -1,5 +1,5 @@
 #include <string>
-#include <assert>
+#include <cassert>
 using namespace std;
 
 string decimal_to_binary(int decimal){
@@ -15,10 +15,6 @@ string decimal_to_binary(int decimal){
 }
 
 int main() {
-    int decimal;
-    cout << "Enter a decimal number: ";
-    cin >> decimal;
-    string binary = decimal_to_binary(decimal);
-    cout << "The binary representation of the entered decimal number is: " << binary << endl;
+    cout << decimal_to_binary(15);
     return 0;
 }
