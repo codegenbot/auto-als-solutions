@@ -1,3 +1,4 @@
 float truncate_number(float number) {
-    return modf(number, &intPart)->rd;
+    int integer_part = (int)number;
+    return number - integer_part;
 }
