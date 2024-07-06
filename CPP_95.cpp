@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 
-bool check_dict_case(std::map<std::string, std::string> dict){
+bool check_dict_case(map<string,string> dict){
     if(dict.empty()) return false;
     bool allLower = true;
     bool allUpper = true;
@@ -18,8 +18,8 @@ bool check_dict_case(std::map<std::string, std::string> dict){
 }
 
 int main() {
-    std::map<std::string, std::string> dict;
+    map<string, string> dict;
     // Add elements to the dictionary here
-    std::cout << check_dict_case(dict) << std::endl; 
+    cout << check_dict_case(dict) << endl; 
     return 0;
 }
