@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 
@@ -29,8 +28,8 @@ bool isPrime(int n) {
         }
     }
     return true;
-
 }
+
 int main() {
     std::vector<int> numbers = {127, 97, 8192};
     int result = find_max_prime_sum(numbers);
