@@ -3,19 +3,16 @@ bool issame(vector<string> a, vector<string> b) {
 }
 
 int main() {
-    int b;
-    vector<int> arr;
-    cout << "Enter the numbers: ";
-    for (int i = 0; i < 9; i++) {
-        cin >> b;
-        arr.push_back(b);
-    }
+    int b; // Declare variable 'b'
     
+    vector<int> arr = {1, 2, 3, 4, 5};
     vector<string> result = by_length(arr);
     
-    cout << "The numbers in descending order with their names are: ";
-    for (string str : result) {
-        cout << str << " ";
+    if (issame(by_length({1, 2, 3}), result)) {
+        cout << "The vectors are the same";
+    } else {
+        cout << "The vectors are not the same";
     }
+    
     return 0;
 }
