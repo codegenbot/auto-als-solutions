@@ -1,3 +1,6 @@
+Problem: 
+This problem can be solved using Python programming. The problem description is not available for this problem.
+
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
     stack = []
@@ -9,4 +12,7 @@ def parse_nested_parens(paren_string: str) -> List[int]:
         elif char == ')':
             stack.pop()
             max_level -= 1
+        else:
+            continue
+    result.append(max_level)
     return [max_level]
