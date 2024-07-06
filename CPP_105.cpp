@@ -9,6 +9,8 @@ vector<string> by_length(vector<int> arr) {
     sort(numbers.begin(), numbers.end());
     reverse(numbers.begin(), numbers.end());
 
+    int b = 0; // declare and initialize variable b
+
     vector<string> result;
     for (int num : numbers) {
         string str = "";
@@ -43,11 +45,6 @@ vector<string> by_length(vector<int> arr) {
         }
         result.push_back(str);
     }
-
-    int b = 0; // declare variable b
-    vector<string> c = by_length(arr); // you can use the function here
-
-    bool same = issame(result, c); // check if vectors are equal
 
     return result;
 }
