@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 
 int vowels_count(std::string s) {
@@ -5,7 +6,7 @@ int vowels_count(std::string s) {
     for (char c : s) {
         if ((c == 'a') || (c == 'e') || (c == 'i') || (c == 'o') || (c == 'u')) {
             count++;
-        } else if (c == 'y' && std::find(s.begin(), s.end(), 'y') != s.end() && std::distance(std::next(std::find(s.begin(), s.end(), 'y'), 0), s.end()) > 1) {
+        } else if (c == 'y' && std::find(s.begin(), s.end(), 'y') != s.end() && std::find(s.begin(), s.end(), 'y') != s.end()) {
             count++;
         }
     }
@@ -13,6 +14,6 @@ int vowels_count(std::string s) {
 }
 
 int main() {
-    assert (vowels_count("ACEDY") == 3);
+    assert(vowels_count("ACEDY") == 3);
     return 0;
 }
