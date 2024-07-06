@@ -1,5 +1,4 @@
-pass  # Add this line at the top of the file
-
+```
 def bf(planet1, planet2):
     planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
     index1 = planets.index(planet1)
@@ -9,7 +8,11 @@ def bf(planet1, planet2):
         return ()
 
     result = []
-    for i in range(index1 + 1, index2):
+    for i in range(min(index1, index2), max(index1, index2)):
+        if i == index1:
+            continue
+        if i == index2 - 1:
+            continue
         result.append(planets[i])
 
     return tuple(result)
