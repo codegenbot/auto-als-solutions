@@ -1,6 +1,6 @@
 ```
 #include <vector>
-#include <algorithm>
+#include <iostream>
 
 int sumOfDigits(int n) {
     int sum = 0;
@@ -37,11 +37,11 @@ int largestPrime(vector<int> lst) {
 int main() {
     vector<int> lst;
     int n;
-    cin >> n;
+    std::cin >> n;
     while (n--) {
         cin >> n;
         lst.push_back(n);
     }
-    cout << largestPrime(lst) << endl;
+    std::cout << largestPrime(lst) << endl;
     return 0;
 }
