@@ -1,18 +1,12 @@
+```
 def add(x: int, y: int) -> int:
-    while True:
+    cont = input("Do you want to add numbers? (yes/no): ")
+    while cont.lower() == 'yes':
         try:
             x = int(input("Enter the first number: "))
-            if x != 0:
-                break
-        except ValueError:
-            print("Invalid input. Please enter a valid integer.")
-
-    while True:
-        try:
             y = int(input("Enter the second number: "))
-            if y != 0:
-                break
+            print(f"The sum of {x} and {y} is: {x + y}")
+            cont = input("Do you want to add again? (yes/no): ")
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
-    
-    return x + y
+    print("Goodbye!")
