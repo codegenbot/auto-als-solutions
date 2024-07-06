@@ -8,11 +8,9 @@ string change_base(int x, int base) {
     while (x > 0) {
         int rem = x % base;
         char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
-        s.push_back(c);
-        x /= base;
-        size++;
+        res[size++] = c;
     }
-    return s.substr(0, size);
+    return string(res, size);
 }
 
 int main() {
