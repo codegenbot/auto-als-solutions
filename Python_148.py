@@ -1,16 +1,19 @@
-```
 def bf(planet1, planet2):
-    planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
-    planet_order = {'Mercury': 0, 'Venus': 1, 'Earth': 2, 'Mars': 3, 'Jupiter': 4, 'Saturn': 5, 'Uranus': 6, 'Neptune': 7}
-    
+    planets = [
+        "Mercury",
+        "Venus",
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+    ]
     if planet1 not in planets or planet2 not in planets:
         return ()
-    
-    p1_index = planet_order[planet1]
-    p2_index = planet_order[planet2]
-    
-    result = []
-    for i in range(max(0, p1_index - 1), min(p2_index + 1, 7)):
-        result.append(planets[i])
-    
-    return tuple(result)
+    index1 = planets.index(planet1)
+    index2 = planets.index(planet2)
+    if index1 > index2:
+        index1, index2 = index2, index1
+    result = tuple(planets[i] for i in range(index1 + 1, index2))
+    return result
