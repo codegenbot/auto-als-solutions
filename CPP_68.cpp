@@ -1,25 +1,39 @@
 #include <vector>
+#include <pair>
 
-using namespace std;
+bool issame(vector<int> a,vector<int>b){
+    if(a.size()!=b.size())return false;
+    for(int i=0;i<a.size();i++){
+        if(a[i]!=b[i])return false;
+    }
+    return true;
+}
 
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
-    if(arr.empty()) return result;
-    
-    int minEvenValue = INT_MAX;
-    int minIndex = -1;
-    
-    for(int i = 0; i < arr.size(); i++) {
-        if(arr[i] % 2 == 0 && arr[i] < minEvenValue) {
-            minEvenValue = arr[i];
-            minIndex = i;
+vector<vector<int>> pluck(vector<vector<int>> arr) {
+    vector<pair<int, int>> evenNodes;
+    for (int i = 0; i < arr.size(); i++) {
+        for (int j = 0; j < arr[i].size(); j++) {
+            if (arr[i][j] % 2 == 0) {
+                evenNodes.emplace_back(arr[i][j], i);
+            }
         }
     }
     
-    if(minIndex != -1) {
-        result.push_back({minEvenValue, minIndex});
-    } else {
-        result.push_back({0, 0}); // default value
+    if (evenNodes.empty()) {
+        return {};
+    }
+    
+    sort(evenNodes.begin(), evenNodes.end());
+    
+    vector<vector<int>> result;
+    for(int i=0;i<arr.size();i++){
+        bool same = false;
+        for(int j=0;j<arr[i].size();j++){
+            if(find(evenNodes.begin(),evenNodes.end(),make_pair(arr[i][j],i))!=evenNodes.end()){
+                same=true;break;
+            }
+        }
+        if(same)result.push_back(arr[i]);
     }
     
     return result;
