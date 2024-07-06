@@ -1,4 +1,3 @@
-```c++
 #include <vector>
 #include <algorithm>
 
@@ -16,7 +15,7 @@ vector<int> order_by_points(vector<int> nums) {
             num /= 10;
         }
         pairs.push_back({sumOfDigits, i});
-    }
+   }
     
     sort(pairs.begin(), pairs.end());
     
