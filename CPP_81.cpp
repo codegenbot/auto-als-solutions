@@ -35,6 +35,11 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     return result;
 }
 
-bool is_same(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     return a == b;
+}
+
+int main() {
+    assert(numerical_letter_grade({0, 0.7}) == std::vector<std::string>({"E", "D" }));
+    return 0;
 }
