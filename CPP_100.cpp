@@ -15,6 +15,6 @@ std::vector<int> make_a_pile(int n) {
 
 int main() {
     { 
-        assert(same(make_a_pile(8), make_a_pile(8)));
+    assert(same(make_a_pile(8), make_a_pile(8)));
     }
     return 0;
