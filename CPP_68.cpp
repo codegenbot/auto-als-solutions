@@ -21,16 +21,14 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::sort(nodes.begin(), nodes.end(), compare);
     
-    int result = nodes[0].first;
-    
+    std::vector<int> result;
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (arr[nodes[i-1].second] != arr[nodes[i].second]) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
-        result = nodes[i].first;
     }
     
-    return {result};
+    return {nodes[0].first};
 }
 
 int main() {
@@ -44,10 +42,17 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    std::vector<int> result = pluck(arr);
-    if(result.size() > 0)
+    if(arr.size() > 0)
     {
-        std::cout << "The output is: " << *result.begin() << std::endl;
+        std::vector<int> result = pluck(arr);
+        if(result.size() > 0)
+        {
+            std::cout << "The output is: " << *result.begin() << std::endl;
+        }
+        else
+        {
+            std::cout << "No output" << std::endl;
+        }
     }
     else
     {
