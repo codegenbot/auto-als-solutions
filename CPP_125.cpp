@@ -1,11 +1,11 @@
 #include <vector>
 #include <string>
 
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>&) {
-    return a == a;
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
+    return a == b;
 }
 
-std::vector<std::string> split_words(std::basic_string<char> txt) {
+std::vector<std::string> split_words(std::basic_string<char>& txt) {
     std::vector<std::string> result;
     size_t pos = 0;
     while ((pos = txt.find(' ')) != std::string::npos) {
@@ -15,7 +15,7 @@ std::vector<std::string> split_words(std::basic_string<char> txt) {
     if (txt.empty()) {
         return result;
     }
-    result.push_back(std::to_string(txt));
+    result.push_back(txt);
     return result;
 }
 
