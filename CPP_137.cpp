@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
-#include <boost/any.hpp>
-
+#include "/usr/local/include/boost/any.hpp"
 using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
