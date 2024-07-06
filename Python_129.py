@@ -1,7 +1,4 @@
-Here is the modified code:
-
-```python
-def 'Complete the following code given the task description and function signature..'(grid, k):
+def 'Complete the following code given the task description and function signature..' minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
     dp = [[[float('inf'), []] for _ in range(n * n)] for _ in range(n * n)]
@@ -18,4 +15,3 @@ def 'Complete the following code given the task description and function signatu
             if dp[i * n + j][(n - 1) * n + (n - 1)][0] == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k:
                 return [grid[x][y] for x, y in [(i, j)] + dp[i * n + j][(n - 1) * n + (n - 1)][1]]
     return []
-'```
