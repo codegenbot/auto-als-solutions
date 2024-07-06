@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -7,7 +8,7 @@ int is_bored(std::string S) {
     while ((pos = S.find("I", pos)) != std::string::npos) {
         if (S.substr(pos, 1).find_first_of(".,!") == std::string::npos)
             count++; 
-        pos += 1; 
+        pos += 1;
     }
     return count; 
 
