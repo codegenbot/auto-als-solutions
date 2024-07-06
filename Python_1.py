@@ -4,12 +4,14 @@ def separate_paren_groups(paren_string: str) -> list:
     groups = []
     current_group = ""
 
-    for char in paren_string + ")":
+    for char in paren_string:
         if char == " ":
             continue
         elif char == "(":
-            stack.append(char)
-            current_group += char
+            if not stack or stack[-1] == ")":
+                current_group += char
+            else:
+                stack.append(char)
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()
@@ -22,7 +24,10 @@ def separate_paren_groups(paren_string: str) -> list:
                     current_group = ""
 
         elif char.isalpha() or (char.isspace() and stack):
-            if current_group:
-                groups.append("(" + current_group + ")")
-                current_group = ""
+            pass
+
+    while stack:
+        stack.pop()
+    groups.append("(" + current_group + ")")
+
     return [g for g in groups if g]
