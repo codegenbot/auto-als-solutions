@@ -1,10 +1,24 @@
-vector<double> coeffs(3); // Initialize coefficients array
-coeffs[0] = xs[1];
-coeffs[1] = (xs[2] - xs[0]) / 2;
-coeffs[2] = xs[0];
-
+vector<double> coeffs;
+int ncoeff;
 double poly(double x) {
-    return coeffs[2] + coeffs[1]*(x-0.5) + coeffs[0]*pow(x-0.5, 2);
+    double sum = 0;
+    for (int i = 0; i < ncoeff; i++) {
+        sum += coeffs[i] * pow(x, i);
+    }
+    return sum;
 }
-
-int ncoeff = coeffs.size();
+double find_zero(vector<double> xs){
+    double x = xs[1];
+    for (int i = 2; i < xs.size(); i+=2) {
+        while (true) {
+            if (poly(x) == 0) {
+                break;
+            } else if (poly(x) * poly(xs[i]) > 0) {
+                x -= 0.1;
+            } else {
+                x += 0.1;
+            }
+        }
+    }
+    return round(x, 10);
+}
