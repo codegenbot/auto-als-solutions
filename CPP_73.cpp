@@ -11,10 +11,8 @@ int smallest_change(vector<int> arr) {
             changes++;
             if (str[left] == str[right - 1]) {
                 right--;
-            } else if (str[right] == str[left + 1]) {
-                left++;
             } else {
-                break;
+                left++;
             }
         } else {
             left++;
