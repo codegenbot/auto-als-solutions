@@ -1,27 +1,17 @@
-```cpp
-#include <vector>
-#include <algorithm>
+int prod_signs(vector<int> arr) {
+    int sign_product = 1;
+    long long sum_of_magnitudes = 0;
 
-int prod_signs(const int arr[], int n) {
-    if (n == 0) {
-        return -32768; // If array is empty, return -32768
-    }
-    int product = 1;
-    long long sum = 0;
-
-    for (int i = 0; i < n; i++) {
-        if (arr[i] == 0) {
-            return 0; // If array contains zero, return 0
+    for (int num : arr) {
+        if (num == 0) {
+            return -1;
         }
-        product *= (arr[i] > 0 ? 1 : -1);
-        sum += std::abs(arr[i]); 
+        sign_product *= ((num > 0) ? 1 : ((num < 0) ? -1 : 0));
+        sum_of_magnitudes += abs(num);
     }
 
-    return product * sum;
-}
-
-int main() {
-    int arr[] = {-1, 1, 1, 0};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    assert(prod_signs(arr, n) == 0); 
+    if (sum_of_magnitudes == 0)
+        return sign_product;
+    else
+        return sign_product * sum_of_magnitudes;
 }

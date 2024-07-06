@@ -2,18 +2,18 @@
 #include <vector>
 #include <algorithm>
 
-struct pair {
+auto pair = struct {
     int first;
     int second;
 };
 
-bool compare(const struct pair& a, const struct pair& b) {
+bool compare(const auto& a, const auto& b) {
     if (a.first != b.first) return a.first < b.first;
     return a.second < b.second;
 }
 
 std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<struct pair> nodes;
+    std::vector<pair> nodes;
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
             nodes.push_back({arr[i], i});

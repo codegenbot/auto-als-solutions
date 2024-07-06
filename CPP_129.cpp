@@ -1,12 +1,13 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
 using namespace std;
 
-bool issame(vector<int> a,vector<int>b){
-    if(a.size() != b.size())
-        return false;
-    for(int i = 0; i < a.size(); i++)
-        if(a[i] != b[i])
-            return false;
+bool issame(vector<int>& a, vector<int>& b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) return false;
+    }
     return true;
 }
 
@@ -42,6 +43,7 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
 }
 
 int main() {
-    assert(issame(vector<int>(minPath({{1, 3}, {3, 2}}, 10)), vector<int>({1, 3, 1, 3, 1, 3, 1, 3, 1, 3})));
+    vector<vector<int>> grid = {{1, 3}, {3, 2}};
+    assert(issame(minPath(grid, 10), {1, 3, 1, 3, 1, 3, 1, 3, 1, 3}));
     return 0;
 }

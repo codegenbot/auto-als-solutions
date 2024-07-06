@@ -1,13 +1,9 @@
-Here's the corrected code:
-
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
-bool issame(vector<int> a, vector<int> b) {
+bool same(vector<int> a, vector<int> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -35,8 +31,9 @@ int main() {
     }
     cout << "Enter k: ";
     cin >> k;
+    if(k > n) k = n;
     vector<int> result = maximum(arr, k);
-    if(issame(result, vector<int>(k, 243))) {
+    if(same(result, vector<int>(k, 243))) {
         cout << "Maximum values are equal.\n";
     } else {
         cout << "Maximum values are not equal.\n";

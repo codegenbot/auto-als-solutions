@@ -1,28 +1,17 @@
 #include <iostream>
 #include <vector>
 
-int sumOdd(int x) {
+int sumOdd(std::string str) {
     int sum = 0;
-    for (int i = 1; i <= 10; i++) { 
-        int y;
-        std::cin >> y;
-        if (y % 2 != 0) {
-            sum += y;
+    for (char c : str) { 
+        if (static_cast<int>(c) % 2 != 0) {
+            sum += static_cast<int>(c);
         }
     }
     return sum;
 }
 
 int main() {
-    int inputNumber = 0;
-    std::cout << "Enter an integer: ";
-    std::cin >> inputNumber;
-
-    int solutions(int x) {
-        return sumOdd(x);
-    }
-
-    assert(sumOdd(inputNumber) == 3);
-
+    std::cout << sumOdd("Hello") << std::endl; 
     return 0;
 }
