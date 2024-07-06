@@ -1,10 +1,14 @@
 #include <vector>
 #include <pair>
 
-bool issame(vector<int> a,vector<int>b){
-    if(a.size()!=b.size())return false;
-    for(int i=0;i<a.size();i++){
-        if(a[i]!=b[i])return false;
+bool issame(vector<int> a, vector<int> b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
     }
     return true;
 }
@@ -24,8 +28,18 @@ vector<int> pluck(vector<int> arr) {
     sort(evenNodes.begin(), evenNodes.end());
     
     vector<int> result;
-    for(auto node : evenNodes){
-        result.push_back(node.second);
+    for (int i = 0; i < arr.size(); i++) {
+        bool found = false;
+        for (auto& node : evenNodes) {
+            if (node.second == i) {
+                result.push_back(node.first);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            result.push_back(arr[i]);
+        }
     }
     
     return result;
