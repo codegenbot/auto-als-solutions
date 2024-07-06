@@ -1,8 +1,7 @@
-```cpp
-bool issame(string a, string b) {
-    for (int i = 0; i < min(a.size(), b.size()); ++i) {
-        if (a[i] != b[i])
-            return false;
+bool issame(string a, string b){
+    if(a.size() != b.size()) return false;
+    for(int i=0; i<a.size(); i++){
+        if(a[i] != b[i]) return false;
     }
     return true;
 }
