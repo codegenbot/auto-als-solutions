@@ -1,8 +1,7 @@
-Here is the solution:
-
 def find_zero(xs: list):
-    n = len(xs)
-    if n % 2 != 0:
-        return "Error: The polynomial should have an even number of coefficients."
-    x = -xs[1] / (2 * xs[0])
-    return round(x, 2)
+    if len(xs) % 2 != 0:
+        raise ValueError("xs must have even number of coefficients")
+    a = xs[-1]
+    for x in (-a / xs[1],):  # Start from here
+        if round(poly(xs, x), 10) == 0:
+            return round(x, 2)
