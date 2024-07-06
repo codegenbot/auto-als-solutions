@@ -22,12 +22,12 @@ bool issame(vector<string> a, const vector<string>& b) {
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
-        sum1 += str.length();
+        sum1 += std::size_t(str.length());
     }
     
     int sum2 = 0;
     for (const auto& str : lst2) {
-        sum2 += str.length();
+        sum2 += std::size_t(str.length());
     }
 
     if (issame(lst1, lst2)) {
@@ -40,14 +40,14 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     
     int sum1lst = 0, sum2lst = 0;
     for (const auto& str : lst1) {
-        sum1lst += str.length();
+        sum1lst += std::size_t(str.length());
         for (char c : str) {
             sum1lst += 1;
         }
     }
 
     for (const auto& str : lst2) {
-        sum2lst += str.length();
+        sum2lst += std::size_t(str.length());
         for (char c : str) {
             sum2lst += 1;
         }

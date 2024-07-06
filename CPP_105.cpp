@@ -62,6 +62,8 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    assert(issame({vector<string> {result} }, {"One", "Four", "Eight"}));
+    if (!issame(vector<string>({"One"}), vector<string>({"Four", "Eight"}), vector<string>(result))) {
+        return 1; 
+    }
     return 0;
 }
