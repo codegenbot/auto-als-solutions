@@ -1,20 +1,14 @@
-#include <string>
 #include <iostream>
 
-std::string solve(std::string str) {
-    // implement your logic here
-    return str;
+void solve(const char* input) {
 }
 
 int main() {
-    std::string input;
     std::cout << "Enter a string: ";
-    std::getline(std::cin, input);
-    
-    if(input.empty()) {
+    getline(std::cin, std::string(input));
+    if (input.empty()) {
         std::cout << "Error! Please enter a valid input." << std::endl;
     } else {
-        std::string output = solve(input);
-        std::cout << "Output: " << output << std::endl;
+        solve(input.c_str());
     }
 }
