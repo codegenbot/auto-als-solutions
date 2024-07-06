@@ -1,4 +1,3 @@
-````
 #include <iostream>
 #include <vector>
 
@@ -13,17 +12,8 @@ int specialFilter(std::vector<int> nums) {
 }
 
 int main() {
-    int n, num;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-    std::vector<int> nums(n);
-    for (int i = 0; i < n; ++i) {
-        std::cout << "Enter element " << i + 1 << ": ";
-        std::cin >> num;
-        nums[i] = num;
-    }
-    int result = specialFilter(nums);
-    std::cout << "Number of elements that satisfy the condition: " << result << std::endl;
+    std::vector<int> numbers = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    int result = specialFilter(numbers);
+    std::cout << "The number of integers that meet the condition is: " << result << std::endl;
     return 0;
 }
-```
