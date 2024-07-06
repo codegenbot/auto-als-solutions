@@ -1,10 +1,8 @@
+```cpp
 #include <map>
 #include <string>
 #include <cctype>
 #include <iostream>
-#include <cassert>
-
-using std::size_type;
 
 bool check_dict_case(std::map<std::string, std::string> dict) {
     if(dict.empty()) return false;
@@ -26,3 +24,4 @@ int main() {
     std::cout << (check_dict_case(dict) ? "True" : "False") << std::endl;
     assert(check_dict_case(std::map<std::string, std::string>()) == false);
     return 0;
+}
