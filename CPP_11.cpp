@@ -1,21 +1,19 @@
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-std::string string_xor(string a, string b) {
-    std::string result;
-    for (int i = 0; i < a.length(); i++) {
-        if ((a[i] - '0') ^ (b[i] - '0')) {
-            result.push_back('1');
-        } else {
-            result.push_back('0');
-        }
-    }
-    return result;
+```cpp
+int main() {
+    string a = "0101";
+    string b = "0000";
+    string result = string_xor(a, b);
+    return 0;
 }
 
-int main() {
-    assert(string_xor("0101", "0000") == "0101");
-    return 0;
+string string_xor(string a, string b) {
+    string result = "";
+    for (int i = 0; i < a.size(); i++) {
+        int val1 = a[i] - '0';
+        int val2 = b[i] - '0';
+        int xorVal = val1 ^ val2;
+        char c = xorVal + '0';
+        result += c;
+    }
+    return result;
 }
