@@ -1,3 +1,4 @@
+```cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -18,11 +19,7 @@ int main() {
         cin >> vec[i];
     
     int result = findElement(vec, 10);
-    if(result != -1) {
-        cout << "The element 10 is at position: " << result << endl;
-    } else {
-        cout << "The element 10 does not exist in the vector." << endl;
-    }
+    cout << "The element 10 is at position: " << result << endl;
     
     return 0;
 }
