@@ -1,20 +1,9 @@
-#include <iostream>
-#include <vector>
+```cpp
 #include <algorithm>
+#include <vector>
 
-using namespace std;
-
-vector<int> unique(vector<int> l) {
-    vector<int> result(l.begin(), unique_copy(l.begin(), l.end()));
-    return result;
-}
-
-int main() {
-    vector<int> input = {5, 3, 5, 2, 3, 3, 9, 0, 123};
-    vector<int> output = unique(input);
-    
-    for (int i : output) {
-        cout << i << " ";
-    }
-    return 0;
+std::vector<int> unique(std::vector<int> l) {
+    std::sort(l.begin(), l.end());
+    l.erase(std::unique(l.begin(), l.end()), l.end());
+    return l;
 }
