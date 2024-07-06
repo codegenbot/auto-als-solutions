@@ -12,20 +12,26 @@ bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
 }
 
 std::vector<std::string> by_length(std::vector<int> arr) {
-    std::vector<std::pair<int, int>> temp;
-    for (int i : arr) {
-        if (i >= 1 && i <= 9) {
-            temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
+    std::vector<int> temp;
+    for (int num : arr) {
+        switch(num){
+            case 1:
+            case 2:
+            case 3:
+                temp.push_back(num);
+                break;
+            default: 
+                continue; 
         }
     }
 
-    std::sort(temp.begin(), temp.end());
-    std::reverse(temp.begin(), temp.end());
+    sort(temp.begin(), temp.end());
+    reverse(temp.begin(), temp.end());
 
     std::vector<std::string> result;
-    for (auto& t : temp) {
-        switch(t.first) {
-            case 1:
+    for (int num : temp) {
+        switch(num){
+            case 1: 
                 result.push_back("One");
                 break;
             case 2:
@@ -34,24 +40,8 @@ std::vector<std::string> by_length(std::vector<int> arr) {
             case 3:
                 result.push_back("Three");
                 break;
-            case 4:
-                result.push_back("Four");
-                break;
-            case 5:
-                result.push_back("Five");
-                break;
-            case 6:
-                result.push_back("Six");
-                break;
-            case 7:
-                result.push_back("Seven");
-                break;
-            case 8:
-                result.push_back("Eight");
-                break;
-            case 9:
-                result.push_back("Nine");
-                break;
+            default:
+                continue; 
         }
     }
 
