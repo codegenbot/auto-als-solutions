@@ -1,11 +1,11 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    for (size_t i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) {
+bool issame(std::vector<std::string> a) {
+    size_t len = a[0].length();
+    for (const auto& str : a) {
+        if (str.length() != len) {
             return false;
         }
     }
