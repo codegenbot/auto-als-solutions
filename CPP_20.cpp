@@ -1,5 +1,1 @@
-using namespace std;
-
-bool issame(std::vector<float> a, std::vector<float> b) {
-    return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
-}
+std::vector<float> a, std::vector<float> b) {
