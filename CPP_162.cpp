@@ -1,4 +1,6 @@
-#include <string>
+#include <sstream>
+#include <cstring>
+#include "md5.h"
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
@@ -13,7 +15,7 @@ std::string string_to_md5(const char* text) {
 
     std::ostringstream oss;
     for (int i = 0; i < 16; ++i) {
-        oss << std::setfill('0') << std::setw(2) << std::hex << (int)result[i];
+        oss << std::hex << std::setfill('0') << std::setw(2) << (int)result[i];
     }
 
     return oss.str();
