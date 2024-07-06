@@ -1,42 +1,31 @@
-#include<string>
-#include<map>
-using namespace std;
+map<string,int> numberMap = {{ "zero",0 }, { "one",1 }, { "two",2 }, 
+                              { "three",3 }, { "four",4 }, {"five",5 }, 
+                              { "six",6 }, { "seven",7 }, {"eight",8 }, {"nine",9 }};
 
-string sort_numbers(string numbers) {
-    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
-                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
-                                {"eight", 8}, {"nine", 9}};
-
+string sort_numbers(string numbers){
     vector<string> numVec;
-    string numStr;
-
-    for (int i = 0; i < numbers.length(); i++) {
-        while (i < numbers.length() && !isdigit(numbers[i])) {
-            i++;
+    string temp;
+    for(int i=0; i<numbers.size();i++){
+        if(numbers[i] == ' '){
+            numVec.push_back(temp);
+            temp = "";
         }
-        if (i >= numbers.length()) break;
-        int j = i + 1;
-        while (j < numbers.length() && isdigit(numbers[j])) {
-            j++;
+        else{
+            temp += numbers[i];
         }
-        numStr = numbers.substr(i, j - i);
-        numVec.push_back(numMap[numStr]);
     }
+    numVec.push_back(temp);
 
-    sort(numVec.begin(), numVec.end());
+    sort(numVec.begin(),numVec.end());
     string result;
-
-    for (int i = 0; i < numVec.size(); i++) {
-        for (auto it = numMap.begin(); it != numMap.end(); ++it) {
-            if (it->second == numVec[i]) {
-                result += it->first;
+    for(int i=0; i<numVec.size();i++){
+        for(auto it = numberMap.begin(); it != numberMap.end(); ++it){
+            if(it->first == numVec[i]){
+                result += it->first + " ";
                 break;
             }
         }
-        if (i < numVec.size() - 1) {
-            result += " ";
-        }
     }
 
-    return result;
+    return result.substr(0,result.length()-1);
 }
