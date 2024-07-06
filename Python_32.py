@@ -20,8 +20,9 @@ def main():
         xs += [int(coeff) for coeff in new_coeff.split()]
 
     if len(xs) < 3:
-        print("Not enough coefficients to find a root.")
-        return
+        print("Not enough coefficients to calculate any roots.")
+    elif len(xs) % 2 == 1:
+        raise ValueError("Number of coefficients must be even.")
 
     try:
         print(find_zero(xs))
@@ -30,36 +31,22 @@ def main():
 
 
 def find_zero(coeffs):
+    if len(coeffs) < 3:
+        return "Not enough coefficients to calculate any roots."
+
+    a, b, c = coeffs[:3]
+    d = coeffs[3:]
+
     roots = []
-    i = 0
-    while i < len(coeffs) - 1:
-        if i + 2 > len(coeffs) - 1:
-            break
-        a, b, c = coeffs[i], coeffs[i + 1], coeffs[i + 2]
-        d = coeffs[i + 3 :]
-        if not d:
-            temp = [a, 2 * a * b, c]
-            try:
-                root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * c)) / (
-                    2 * temp[0]
-                )
-                roots.append(-b / root)
-            except (ZeroDivisionError, ValueError) as e:
-                print(f"Failed to calculate a root: {e}")
-        else:
-            while len(d) % 2 != 0:
-                new_coeff = input(f"Add more coefficients for degree {len(d)+3}: ")
-                d += [int(coeff) for coeff in new_coeff.split()]
-            for j in range(0, len(d), 2):
-                temp = [a, 2 * a * d[j], c - (d[j + 1]) ** 2]
-                try:
-                    root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * c)) / (
-                        2 * temp[0]
-                    )
-                    roots.append(-d[j] / root)
-                except (ZeroDivisionError, ValueError) as e:
-                    print(f"Failed to calculate a root: {e}")
-        i += 3
+    for i in range(0, len(d), 2):
+        temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
+        try:
+            root = (-temp[1] + math.sqrt((temp[1]) ** 2 - 4 * temp[0] * temp[2])) / (
+                2 * temp[0]
+            )
+            roots.append(-d[i] / root)
+        except (ZeroDivisionError, ValueError) as e:
+            print(f"Failed to calculate a root: {e}")
     return roots
 
 
