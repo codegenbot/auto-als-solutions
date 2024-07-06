@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cmath>
 
-int findMax(int arr[], int n) {
-    vector<int> l(arr, arr+n);
+int maxAbsoluteValue(vector<int> l) {
     return *max_element(l.begin(), l.end());
 }
