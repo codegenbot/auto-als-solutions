@@ -1,8 +1,7 @@
-```cpp
 #include <string>
 #include <assert.h>
 
-std::string decimal_to_binary(int decimal){
+std::string decimal_to_binary(int decimal) {
     std::string binary = "";
     while(decimal > 0) {
         if (decimal % 2 == 1)
