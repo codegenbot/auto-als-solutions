@@ -1,10 +1,17 @@
+```Python
 def decode_cyclic(s: str):
+    min_len = len(s)
     result = ""
-    i = 0
-    while i < len(s):
-        if i + 1 >= len(s):
-            result += s[i:]
+
+    for i in range(min_len):
+        temp_s = s[i:] + s[:i]
+
+        j = 1
+        while j < len(temp_s) and temp_s[j-1] != temp_s[0]:
+            j += 1
+
+        if j == len(temp_s):
+            result = temp_s
             break
-        result += s[i+1] + s[i]
-        i += 2
+
     return result
