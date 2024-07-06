@@ -1,4 +1,8 @@
-std::string file_name_check(std::string file_name) {
+```
+#include <iostream>
+#include <string>
+
+std::string file_name_check(std::string file_name){
     int count = 0;
     bool has_dot = false;
     for(int i=0; i<file_name.length(); i++){
@@ -15,6 +19,15 @@ std::string file_name_check(std::string file_name) {
     }
     if(!has_dot) return "No";
     size_t pos = file_name.find('.');
-    string ext = file_name.substr(pos+1);
+    std::string ext = file_name.substr(pos+1);
     if(ext != "txt" && ext != "exe" && ext != "dll") return "No";
     return "Yes";
+}
+
+int main(){
+    std::string file_name;
+    std::cout << "Enter the filename: ";
+    std::cin >> file_name;
+    std::cout << file_name_check(file_name) << std::endl;
+    return 0;
+}
