@@ -4,9 +4,9 @@
 using namespace std;
 
 vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, pair<int,int>>> result;
+    vector<pair<int, int>> result;
     
-    if(arr.empty()) return result; // If array is empty
+    if(arr.empty()) return result; 
     
     int smallestEven = INT_MAX; 
     int smallestIndex = 0;
@@ -18,7 +18,7 @@ vector<pair<int, int>> pluck(vector<int> arr) {
         }
     }
     
-    result.push_back({{smallestEven, smallestIndex}});
+    result.push_back({smallestEven, smallestIndex});
     
-    return result;
+    return vector<pair<int, int>>({make_pair(smallestEven, smallestIndex)});
 }
