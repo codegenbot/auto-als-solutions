@@ -1,4 +1,4 @@
-#include <initializer_list>
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -28,7 +28,18 @@ std::vector<int> pluck(std::vector<int> arr) {
         }
     }
     
-    return {nodes[0].first};
+    if(nodes.size() > 0)
+    {
+        for(int i = 0; i < arr.size(); ++i){
+            if(arr[i] == nodes[0].first){
+                return {arr[i]};
+            }
+        }
+    }
+    else
+    {
+        return {};
+    }
 }
 
 int main() {
