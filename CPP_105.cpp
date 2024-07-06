@@ -5,16 +5,16 @@
 bool issame(std::vector<std::string> v1, std::vector<std::string> v2) {
     if(v1.size() != v2.size())
         return false;
-    for(auto i = v1.begin(); i != v1.end(); i++)
-        if(*i != *std::next(v2.begin(), (i - v1.begin())))
+    for(int i = 0; i < v1.size(); i++)
+        if(v1[i] != v2[i])
             return false;
     return true;
 }
 
 std::vector<std::string> by_length(std::vector<int> arr) {
     std::vector<int> temp;
-    for(auto i : arr) {
-        if(i >= 1 && i <= 9) {
+    for (int i : arr) {
+        if (i >= 1 && i <= 9) {
             temp.push_back(i);
         }
     }
@@ -23,8 +23,8 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     reverse(temp.begin(), temp.end());
 
     std::vector<std::string> result;
-    for(auto i : temp) {
-        switch(i) {
+    for (int i : temp) {
+        switch (i) {
             case 1:
                 result.push_back("One");
                 break;
@@ -59,6 +59,6 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 }
 
 int main() {
-    assert(issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
+    assert (issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
     return 0;
 }
