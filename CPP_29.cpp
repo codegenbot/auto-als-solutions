@@ -15,13 +15,16 @@ vector<string> filter_by_prefix(vector<string> strings, string prefix){
     return result;
 }
 
-vector<string> split(string s, string prefix) {
-    vector<string> res;
-    size_t found = 0;
-    while((found = s.find(prefix)) != string::npos) {
-        res.push_back(s.substr(0, found));
-        s.erase(0, found + prefix.length());
+std::vector<std::string> split(const std::string& str, const std::string& delimitingString) {
+    size_t pos = 0, lastPos = 0;
+    std::vector<std::string> res;
+
+    while ((pos = str.find(delimitingString, lastPos)) != std::string::npos) {
+        res.push_back(str.substr(lastPos, pos - lastPos));
+        lastPos = pos + delimitingString.size();
     }
-    res.push_back(s);
+
+    res.push_back(str.substr(lastPos));
+
     return res;
 }
