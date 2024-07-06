@@ -1,11 +1,12 @@
+```
 def add(x: int, y: int) -> int:
     while True:
-        choice = input("Enter 'A' to add and 'Q' to quit: ")
-        if choice.upper() == 'Q':
-            break
         try:
             x = int(input("Enter the first number: "))
             y = int(input("Enter the second number: "))
-            return x + y
+            print(f"The sum of {x} and {y} is: {x + y}")
+            cont = input("Do you want to add again? (yes/no): ")
+            if cont.lower() != 'yes':
+                break
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
