@@ -1,14 +1,14 @@
-int is_bored(string S) {
-    int count = 0;
-    string boredom = "I";
-    size_t pos = 0;
-
-    while ((pos = S.find("I", pos)) != string::npos) {
-        if (S.substr(pos, boredom.size()).compare(boredom) == 0) {
-            count++;
+int is_bored(string S){
+    int boredom_count = 0;
+    string sentence;
+    for(int i=0; i<S.length(); i++){
+        if(S[i] == '.' || S[i] == '?' || S[i] == '!'){
+            if(sentence.length() > 2 && sentence.substr(0,3) == "I ")
+                boredom_count++;
+            sentence = "";
+        }else{
+            sentence += S[i];
         }
-        pos += boredom.size();
     }
-
-    return count;
+    return boredom_count;
 }
