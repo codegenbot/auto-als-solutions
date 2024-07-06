@@ -15,11 +15,11 @@ int minPath(vector<vector<int>>& grid, vector<pair<int,int>>& minPath) {
                     if (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == val - 1) {
                         vector<pair<int,int>> path = minPath;
                         path.push_back({x,y});
-                        return minPathPath(grid, path);
+                        return minPath(path, val);
                     }
                 }
             }
         }
     }
-    return minPath;
+    return minPath; 
 }
