@@ -1,8 +1,10 @@
-#include <algorithm>
+```cpp
+#include <iostream>
 #include <vector>
+#include <algorithm>
 
-bool issame(int x, int y) {
-    return x == y;
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
 }
 
 std::vector<int> strange_sort_list(std::vector<int> lst) {
@@ -14,12 +16,34 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
         
         if (!lst.empty()) {
             int max_val = *max_element(lst.begin(), lst.end());
-            auto it = std::remove_if(lst.begin(), lst.end(), [max_val](int x) { return x == max_val; });
-            lst.erase(it, lst.end());
+            for (int i : lst) {
+                if (i == max_val) {
+                    lst.erase(remove(lst.begin(), lst.end(), i), lst.end());
+                    break;
+                }
+            }
             result.push_back(max_val);
         } else {
-            result.push_back(*min_element(lst.begin(), lst.end()));
+            int min_val2 = *min_element(lst.begin(), lst.end());
+            result.push_back(min_val2);
         }
     }
     return result;
+}
+
+int main() {
+    std::vector<int> input;  // get your input here
+    std::cout << "Enter elements of the vector separated by space: ";
+    for (int i = 0; i < 5; ++i) {
+        int num;
+        std::cin >> num;
+        input.push_back(num);
+    }
+    
+    std::vector<int> result = strange_sort_list(input);
+    std::cout << "The sorted list is: ";
+    for (int i : result) {
+        std::cout << i << " ";
+    }
+    return 0;
 }
