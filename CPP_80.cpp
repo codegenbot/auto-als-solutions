@@ -1,23 +1,39 @@
-bool is_happy(string s) {
-    if (s.length() <= 2)
+#include <iostream>
+#include <string>
+
+bool is_happy(std::string s) {
+    if (s.length() < 3)
         return false;
+
     for (int i = 0; i <= s.length() - 3; i++) {
-        string t = s.substr(i, 3);
-        bool duplicate = false;
-        for (char c : t) {
+        std::string substr = s.substr(i, 3);
+        bool unique = true;
+        for (char c : substr) {
             int count = 0;
-            for (int j = i; j < i + 3 && j < s.length(); j++) {
-                if (s[j] == c) {
+            for (int j = 0; j < s.length(); j++) {
+                if (s[j] == c)
                     count++;
-                }
             }
             if (count > 1) {
-                duplicate = true;
+                unique = false;
                 break;
             }
         }
-        if (!duplicate)
+        if (!unique)
             return false;
     }
+
     return true;
+}
+
+int main() {
+    std::string s;
+    std::cout << "Enter a string: ";
+    std::cin >> s;
+    if (is_happy(s))
+        std::cout << "The string is happy.\n";
+    else
+        std::cout << "The string is not happy.\n";
+
+    return 0;
 }
