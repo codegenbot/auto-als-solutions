@@ -1,7 +1,3 @@
-```cpp
-#include <string>
-using namespace std;
-
 int exchange(vector<int> lst1, vector<int> lst2) {
     int oddCount = 0;
     for (int num : lst1) {
