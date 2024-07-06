@@ -1,13 +1,20 @@
-#include <iostream>
+```cpp
 #include <vector>
-
-int main(std::vector<int> lst) {
-    int sum = 0;
+int main() {
+    int solutions = 0;
+    std::vector<int> lst;
+    int input;
+    while (true) {
+        std::cout << "Enter an integer (-1 to finish): ";
+        std::cin >> input;
+        if (input == -1) break;
+        lst.push_back(input);
+    }
     for (int i = 1; i < lst.size(); i++) {
         if (lst[i] % 2 != 0) {
-            sum += lst[i];
+            solutions += lst[i];
         }
     }
-    std::cout << "Error: Please enter valid input." << std::endl;
-    return -1;
+    std::cout << "Sum of odd integers: " << solutions << std::endl;
+    return 0;
 }
