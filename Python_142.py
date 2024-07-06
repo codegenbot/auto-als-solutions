@@ -1,9 +1,9 @@
-```Python
+```
 def sum_squares(numbers):
     try:
-        lst = [int(i) for i in numbers.split() if i.isdigit()]
+        lst = [float(i) for i in numbers.split()]
     except ValueError:
-        print("Invalid input. Please enter only numbers and spaces.")
+        print("Invalid input. Please enter only numbers.")
         return None
 
     total_sum = 0
