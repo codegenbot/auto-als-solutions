@@ -4,7 +4,9 @@
 using namespace std;
 
 vector<int> unique(vector<int> l){
-    l.erase(unique(l.begin(), l.end()), l.end());
+    sort(l.begin(), l.end());
+    auto it = unique(l.begin(), l.end());
+    l.erase(it, l.end());
     return l;
 }
 
