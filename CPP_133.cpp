@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -15,7 +16,7 @@ int main() {
     std::vector<double> lst;
     double num;
 
-    while (std::cin >> num) {
+    while (std::cin >> std::fixed >> num) {
         lst.push_back(num);
     }
 
