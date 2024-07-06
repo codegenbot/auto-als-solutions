@@ -1,11 +1,3 @@
 def decode_shift(s: str):
-    return "".join(
-        [
-            chr(
-                (ord(ch) - 3 if "n" <= ch <= "z" else ord(ch) - 3 + 26) % 26 + 97
-                if ch.islower()
-                else ord(ch) - 32
-            )
-            for ch in s
-        ]
-    )
+    key = len(s) - s.count(' ')
+    return "".join([chr((('abcdefghijklmnopqrstuvwxyz'.index(ch.lower())) - 0 + 26 - key) % 26 + 97).upper() if ch.isalpha() and ch.islower() else ch for ch in s])
