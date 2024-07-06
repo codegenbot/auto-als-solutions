@@ -1,7 +1,6 @@
+```Python
 def decode_cyclic(s: str):
     result = ""
-    if len(s) % 3 == 0:
-        group += s[len(s)-3:]
     group = ""
     for char in s:
         group += char
