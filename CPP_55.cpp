@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stringstream>
 
 using namespace std;
 
@@ -15,10 +14,10 @@ int fib(int n) {
     return result;
 }
 
-int main() {
+int main() 
+{
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
     cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
-}
