@@ -1,4 +1,3 @@
-```
 #include <string>
 
 int hex_key(string num) {
@@ -11,4 +10,3 @@ int hex_key(string num) {
         }
     }
     return count;
-}
