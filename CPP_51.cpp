@@ -15,3 +15,12 @@ bool isvowel(char c) {
     c = tolower(c);
     return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
+
+int main() {
+    string text;
+    cout << "Enter a sentence: ";
+    getline(cin, text);
+    string result = remove_vowels(text);
+    cout << "Sentence without vowels: " << result << endl;
+    return 0;
+}
