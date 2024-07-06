@@ -1,18 +1,26 @@
-vector<int> strange_sort_vector(vector<int> lst) {
-    vector<int> result;
-    if(lst.empty()) return result;
+#include <algorithm>
+#include <vector>
 
-    std::sort(lst.begin(), lst.end());
-    bool first = true;
-    for(int val : lst) {
-        if(first) {
-            result.push_back(*min_element(lst.begin(), lst.end()));
-            lst.erase(remove(lst.begin(), lst.end(), *min_element(lst.begin(), lst.end())), lst.end());
-        } else {
-            result.push_back(*max_element(lst.begin(), lst.end()));
-            lst.erase(remove(lst.begin(), lst.end(), *max_element(lst.begin(), lst.end())), lst.end());
+std::vector<int> strange_sort_vector(const std::vector<int>& lst) {
+    if (lst.empty()) {
+        return {};
+    }
+
+    std::vector<int> result;
+
+    while (!lst.empty()) {
+        int minVal = *min_element(lst.begin(), lst.end());
+        result.push_back(minVal);
+
+        auto it = lst.begin();
+        advance(it, distance(lst.begin(), find(it, lst.end(), minVal)) - 1);
+        lst.erase(it);
+
+        if (!lst.empty()) {
+            int maxVal = *max_element(lst.begin(), lst.end());
+            result.push_back(maxVal);
+            lst.erase(find(lst.begin(), lst.end(), maxVal) - lst.begin());
         }
-        first = !first;
     }
 
     return result;
