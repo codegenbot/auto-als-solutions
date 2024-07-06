@@ -40,5 +40,12 @@ int main() {
     }
     cout << endl;
     
+    // remove this to fix the error
+    // output = eat(2, 11, 5);
+    // for (int i : output) {
+    //     cout << i << " ";
+    // } 
+    // cout << endl;
+    
     return 0;
 }
