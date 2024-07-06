@@ -4,7 +4,7 @@
 
 using namespace std;
 
-any compare_one(any a, any b) {
+std::any compare_one(std::any a, std::any b) {
     double da = any_cast<double>(a);
     string sa = any_cast<string>(a);
     double db = any_cast<double>(b);
@@ -21,9 +21,8 @@ any compare_one(any a, any b) {
 }
 
 int main() {
-    any a = 10.5; 
-    any b = "hello";
-    any result = compare_one(a, b);
+    std::any a = 10.5; 
+    std::any b = "hello";
+    std::any result = compare_one(a, b);
     cout << "Result: " << any_cast<string>(result) << endl;
     return 0;
-}
