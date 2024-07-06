@@ -1,7 +1,8 @@
 #include <vector>
 #include <algorithm>
+#include <bits/initializer_list_base.h>
 
-bool check_arrays(const std::vector<int>& a, const std::vector<int>& b) {
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
     for(int i = 0; i < a.size(); i++) {
         if (a[i] != b[b.size()-1-i]) return false;
@@ -9,12 +10,12 @@ bool check_arrays(const std::vector<int>& a, const std::vector<int>& b) {
     return true;
 }
 
-std::vector<int> sort_array(std::vector<int> array) { 
-    std::sort(array.begin(), array.end());
-    return array;
-}
-
 int main() {
-    assert(check_arrays(sort_array({21, 14, 23, 11}), {23, 21, 14, 11}));
-    return 0;
+    std::vector<int> array1 = {21, 14, 23, 11};
+    std::vector<int> array2 = {23, 21, 14, 11};
+    assert (issame(array1, array2));
+    // Sort and compare
+    void sort_array(std::vector<int>& array) { 
+        std::sort(array.begin(), array.end());
+    }
 }
