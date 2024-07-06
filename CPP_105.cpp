@@ -1,3 +1,4 @@
+```
 #include <vector>
 #include <string>
 
@@ -6,10 +7,10 @@ bool issame(vector<string> a, vector<string> b) {
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<string> nums;
+    vector<int> nums;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            nums.push_back(to_string(num));
+            nums.push_back(num);
         }
     }
     
@@ -17,9 +18,9 @@ vector<string> by_length(vector<int> arr) {
     reverse(nums.begin(), nums.end());
     
     vector<string> result;
-    for (string num : nums) {
+    for (int num : nums) {
         string str = "";
-        switch (stoi(num)) {
+        switch (num) {
             case 1:
                 str = "One";
                 break;
