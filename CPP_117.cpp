@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,17 +7,22 @@ using namespace std;
 
 vector<string> select_words(string s, int n) {
     vector<char> word;
-    vector<string> result;
     int consonants = 0;
+    vector<string> result;
 
     for (char c : s) {
         if (c == ' ') {
             if (consonants == n) {
-                string tempStr(string(word.begin(), word.end()));
-                result.push_back(tempStr);
+                string tempWord(word.begin(), word.end());
+                result.push_back(tempWord);
+                word.clear();
+                consonants = 0;
+            } else if (!word.empty()) {
+                string tempWord(word.begin(), word.end());
+                result.push_back(tempWord);
+                word.clear();
+                consonants = 0;
             }
-            word.clear();
-            consonants = 0;
         } else {
             bool isVowel = false;
             switch (tolower(c)) {
@@ -37,20 +41,10 @@ vector<string> select_words(string s, int n) {
         }
     }
 
-    if (consonants > 0) {
-        string tempStr(string(word.begin(), word.end()));
-        result.push_back(tempStr);
+    if (!word.empty()) {
+        string tempWord(word.begin(), word.end());
+        result.push_back(tempWord);
     }
 
     return result;
-}
-
-int main() {
-    cout << "{";
-    vector<string> result = select_words("Mary had a little lamb", 4);
-    for (const string& s : result) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-    return 0;
 }
