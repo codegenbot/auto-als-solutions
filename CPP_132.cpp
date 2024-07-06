@@ -1,22 +1,19 @@
-int main() {
-    string str;
-    cin >> str;
+Here is the completed code:
 
-    bool is_nested = false;
-    int count_open = 0;
-    for (char c : str) {
-        if (c == '[') {
-            count_open++;
-        } else if (c == ']') {
-            if (count_open > 1) {
-                is_nested = true;
-                break;
-            }
+```cpp
+int count_open = 0, count_close = 0;
+
+for (char c : str) {
+    if (c == '[') {
+        count_open++;
+    } else if (c == ']') {
+        if (count_open > 0) {
             count_open--;
+            count_close++;
+        } else {
+            return false;
         }
     }
-
-    cout << (is_nested ? "true" : "false") << endl;
-
-    return 0;
 }
+
+return count_close >= 1;
