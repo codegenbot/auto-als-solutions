@@ -1,10 +1,5 @@
-def binary_average(n1, n2):
-    if n1 < 0 or n2 < 0:
-        return "Error: Numbers should be non-negative."
-    elif n1 > n2:
+def rounded_avg(n, m):
+    if n > m:
         return -1
-    else:
-        total = n1 + n2
-        avg = round(total / 2)
-        binary_avg = bin(avg)[2:]
-        return binary_avg
+    avg = (n + m) // 2
+    return bin(round(avg)).replace("0b", "")
