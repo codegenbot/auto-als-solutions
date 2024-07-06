@@ -1,7 +1,6 @@
-```cpp
+```c++
 #include <iostream>
 #include <string>
-#include <map>
 
 using namespace std;
 
@@ -9,10 +8,13 @@ bool is_happy(string s){
     if(s.length() < 3) return false;
     for(int i = 0; i <= s.length()-3; i++){
         string str = s.substr(i, 3);
-        map<char, int> freqMap;
         bool unique = true;
         for(char c : str){
-            if(freqMap[c]++) {
+            int count = 0;
+            for(char d : s){ 
+                if(d == c) count++;
+            }
+            if(count > 1) {
                 unique = false;
                 break;
             }
