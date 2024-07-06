@@ -1,9 +1,10 @@
 ```
 def split_words(txt):
     words = txt.split()
-    if len(words) > 0 and words[0].endswith(','):
-        return [word.strip(',') for word in words]
-    elif ',' not in txt:
-        return sum(1 for char in txt if 'a' <= char <= 'z' and ord(char) % 2 == 1)
-    else:
+    if any(char.isalnum() for char in txt) and any(char.isdigit() or char.isalpha() for char in txt):
         return words
+    elif ',' in txt:
+        return txt.split(',')
+    else:
+        odd_count = sum(1 for i, c in enumerate(txt.lower()) if 'a' <= c <= 'z' and (i+ord('a')) % 2 == 1)
+        return odd_count
