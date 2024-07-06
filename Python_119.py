@@ -1,3 +1,6 @@
+Here is the corrected code:
+
+```
 def match_parens(lst):
     for string in lst:
         open_count = 0
@@ -8,12 +11,11 @@ def match_parens(lst):
             if char == '(':
                 open_count += 1
             elif char == ')':
-                close_count += 1
-                
-        if open_count != close_count:
-            matching = False
-            
-    if not any(matching):
-        return "No"
-    else:
-        return "Yes"
+                if open_count > 0:
+                    open_count -= 1
+                else:
+                    matching = False
+        
+        if not matching:
+            return "No"
+    return "Yes"
