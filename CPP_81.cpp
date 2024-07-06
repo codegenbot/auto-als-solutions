@@ -35,7 +35,7 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
 }
 
 int main() {
-    if (!({"E", "D-"}) == numerical_letter_grade({0.0f, 0.7f}))
+    if (!({"E", "D-"} == numerical_letter_grade({0.0f, 0.7f})))
         return 1;
     return 0;
 }
