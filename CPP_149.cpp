@@ -1,4 +1,16 @@
-vector<string> issame(vector<string> lst) {
+bool isSame(string a, string b) {
+    if (a.length() != b.length()) {
+        return false;
+    }
+    for (int i = 0; i < a.length(); i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
     for (const auto& str : lst) {
         if (str.length() % 2 == 0) {
