@@ -1,23 +1,14 @@
-bool hasOdd(vector<int>& vec) {
-    for (int num : vec) {
-        if (num % 2 != 0)
-            return true;
-    }
-    return false;
-}
+#include <string>
+#include <vector>
 
-string exchange(vector<int> lst1, vector<int> lst2) {
-    while (!hasOdd(lst1)) {
-        bool found = false;
-        for (int i = 0; i < lst2.size(); i++) {
-            if (lst2[i] % 2 != 0) {
-                swap(lst1.back(), lst2[i]);
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-            return "NO";
+std::string exchange(std::vector<int> lst1, std::vector<int> lst2) {
+    int even = 0;
+    for (int x : lst1) {
+        if (x % 2 == 0)
+            even++;
     }
-    return "YES";
+    if (even == lst1.size())
+        return "YES";
+    else
+        return "NO";
 }
