@@ -1,4 +1,6 @@
-int hex_key(string num) {
+#include <string>
+
+int hex_key(std::string num) {
     int count = 0;
     for (char c : num) {
         if (c >= '2' && c <= '7') {
@@ -8,4 +10,5 @@ int hex_key(string num) {
         }
     }
     return count;
+
 }
