@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -27,25 +28,18 @@ int main() {
         cout << i << " ";
     }
     cout << endl;
-    
+
     output = eat(4, 8, 9);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
+
     output = eat(1, 10, 10);
     for (int i : output) {
         cout << i << " ";
     }
     cout << endl;
-    
-    // remove this to fix the error
-    // output = eat(2, 11, 5);
-    // for (int i : output) {
-    //     cout << i << " ";
-    // } 
-    // cout << endl;
     
     return 0;
 }
