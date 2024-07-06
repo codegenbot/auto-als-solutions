@@ -7,10 +7,8 @@ def separate_paren_groups(paren_string: str) -> list:
         if char == " ":
             continue
         elif char == "(":
-            if not stack or stack[-1] == ")":
-                current_group += char
-            else:
-                stack.append(char)
+            stack.append(char)
+            current_group += char
         elif char == ")":
             if stack and stack[-1] == "(":
                 stack.pop()

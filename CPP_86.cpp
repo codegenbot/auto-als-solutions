@@ -15,8 +15,10 @@ string anti_shuffle(string s){
             word += s[j];
         }
         i = j - 1;
-        sort(word.begin(), word.end(), std::ptr_fun<int(*)(char, char)>(std::less<char>()));
-        result += word;
+        char temp[word.size()+1]; 
+        strcpy(temp,word.c_str());
+        sort(temp, temp+word.size());
+        result += temp;
     }
     return result;
 }
