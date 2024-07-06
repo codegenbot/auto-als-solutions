@@ -1,20 +1,23 @@
 #include <algorithm>
+#include <sstream>
+
 using namespace std;
 
 string anti_shuffle(string s) {
+    stringstream ss(s);
+    string word;
     string result = "";
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ') {
-            result += " ";
-            continue;
+
+    while (getline(ss, word, ' ')) {
+        result += "#";
+        for (char c : word) {
+            if (!result.empty() && result.back() == '#') {
+                result.pop_back();
+            }
+            result += (char)tolower(c);
         }
-        char temp = s[i];
-        while (i + 1 < s.size() && s[i + 1] <= temp) {
-            i++;
-        }
-        for (char c = temp; c <= s[i]; c++) {
-            result += c;
-        }
+        result += " ";
     }
-    return result;
+
+    return result.substr(0, result.size() - 1); // Remove the last space
 }
