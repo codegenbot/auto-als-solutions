@@ -13,22 +13,17 @@ char* rounded_avg(int n, int m) {
     
     double avg = round(sum / (m - n + 1));
     
-    char* binary = new char[64]; // Allocate space for the binary string
-    int pos = 0; // Initialize a pointer to keep track of the position in the array
+    char* binary = new char[log2(abs(avg)) + 1];
+    binary[0] = '\0';
     while (avg > 0) {
         if (avg >= 2) {
             avg -= 2;
-            binary[pos] = '1';
-            pos++;
+            strcat(binary, "1");
         } else {
             avg = 0;
-            binary[pos] = '0';
-            pos++;
+            strcat(binary, "0");
         }
     }
-    
-    // Add a null terminator at the end of the array
-    binary[pos] = '\0';
     
     return binary;
 }
