@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <list>
 #include <boost/any.hpp>
@@ -19,10 +20,10 @@ vector<int> filter_integers(list<boost::any> values) {
 int main() {
     list<boost::any> values = {'1', '2', '3'};
     vector<int> output = filter_integers(values);
-    if (issame(output, vector<int>({1, 2, 3}))) {
-        cout << "The vectors are the same." << endl;
+    if (issame({1, 2, 3}, output)) {
+        cout << "Vectors are same";
     } else {
-        cout << "The vectors are not the same." << endl;
+        cout << "Vectors are not same";
     }
     return 0;
 }
