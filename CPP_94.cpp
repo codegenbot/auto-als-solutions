@@ -1,3 +1,6 @@
+#include <vector>
+using namespace std;
+
 int sumOfDigits(int n) {
     int sum = 0;
     while (n > 0) {
@@ -8,6 +11,7 @@ int sumOfDigits(int n) {
 }
 
 int largestPrime(vector<int> lst) {
+    int maxPrime = -1;
     for (int i = 2; i <= 100000; i++) {
         bool isPrime = true;
         for (int j = 2; j * j <= i; j++) {
@@ -22,9 +26,11 @@ int largestPrime(vector<int> lst) {
                     return sumOfDigits(i);
                 }
             }
+        } else {
+            maxPrime = i;
         }
     }
-    return -1; // no prime found
+    return maxPrime;
 }
 
 int skjkasdkd(vector<int> lst) {
