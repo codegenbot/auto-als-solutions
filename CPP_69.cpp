@@ -1,8 +1,3 @@
-// Your code should return the count of smallest number that has same frequency as any other number.
-
-#include <iostream>
-using namespace std;
-
 int search(vector<int> lst) {
     map<int, int> freq;
     for (int num : lst) {
@@ -18,10 +13,8 @@ int search(vector<int> lst) {
         }
     }
     return -1;
-}
 
+}
 int main() {
-    vector<int> lst = {3, 10, 10, 9, 2};
-    cout << search(lst);
-    return 0;
+    assert(search({3, 10, 10, 9, 2}) == -1);
 }

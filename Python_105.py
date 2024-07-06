@@ -1,8 +1,8 @@
-```Python
 def by_length(arr):
     result = sorted([i for i in arr if 1 <= i <= 9])
     return [
         name
+        for num in result
         for name in [
             "One",
             "Two",
@@ -14,5 +14,5 @@ def by_length(arr):
             "Eight",
             "Nine",
         ]
-        if str(result[0]) == str(name)[0]
-    ][:len(result)] or []
+        if str(num) == str(name[:1]).lower()
+    ]
