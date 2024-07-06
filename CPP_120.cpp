@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -34,9 +35,9 @@ int main() {
     cin >> k;
     if(k > n) k = n;
     vector<int> result = maximum(arr, k);
-    bool equal = same(result, vector<int>(k, 243));
-    if(equal)
+    if(same(result, vector<int>(k, 243))) {
         cout << "Maximum values are equal.\n";
-    else
+    } else {
         cout << "Maximum values are not equal.\n";
+    }
 }
