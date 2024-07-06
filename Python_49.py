@@ -1,6 +1,4 @@
-def modp(*args):
-    n = args[0]
-    p = args[1]
+def modp(n, p):
     if n < 0:
         n += p
     
