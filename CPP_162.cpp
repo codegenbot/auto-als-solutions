@@ -6,7 +6,7 @@
 std::string string_to_md5(const std::string& text) {
     if (text.empty()) return "None";
     
-    unsigned char result[MD5_DIGEST_LENGTH];
+    unsigned char result[16];
     MD5_CTX mdContext;
     MD5_Init(&mdContext);
     const char* ptr = text.c_str();
@@ -17,7 +17,7 @@ std::string string_to_md5(const std::string& text) {
     MD5_Final(result, &mdContext);
     
     std::ostringstream oss;
-    for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
+    for (int i = 0; i < 16; i++) {
         oss << setfill('0') << setw(2) << hex << (int)result[i];
     }
     
