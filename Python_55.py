@@ -1,4 +1,3 @@
-```
 def find_fibonacci():
     n = int(input("Enter a number: "))
     if n <= 0:
@@ -7,6 +6,8 @@ def find_fibonacci():
         print("The Fibonacci sequence for", n, "is", 1)
     else:
         a, b = 1, 1
-        for _ in range(2, n):
+        fib_sequence = [1]
+        while len(fib_sequence) < n:
             a, b = b, a + b
-        print("The Fibonacci sequence for", n, "is", b)
+            fib_sequence.append(a)
+        print("The Fibonacci sequence for", n, "is", fib_sequence)
