@@ -1,20 +1,15 @@
+```cpp
 #include <algorithm>
-#include <numeric>
 #include <vector>
+#include <numeric>
 
-bool operator==(const std::vector<float>& a, const std::vector<float>& b) {
-    return a.size() == b.size() && equal(a.begin(), a.end(), b.begin());
+namespace {
+    bool operator==(const std::vector<float>& a, const std::vector<float>& b) {
+        return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+    }
 }
 
-int main() {
-    // Your code to test the function
-    vector<float> numbers = {0.5f, 0.8f, 1.2f, 1.5f};
-    pair<float, float> closest_pair = find_closest_elements(numbers);
-    
-    return 0;
-}
-
-vector<float> find_closest_elements(vector<float> numbers) {
+std::vector<float> find_closest_elements(std::vector<float> numbers) {
     sort(numbers.begin(), numbers.end());
     float min_diff = numeric_limits<float>::max();
     pair<float, float> closest_pair;
