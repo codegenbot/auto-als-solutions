@@ -17,9 +17,11 @@ std::string flip_case(std::string str){
 }
 
 int main(){
-    std::string s;
+    std::string input;
     std::cout << "Enter a string: ";
-    std::cin >> s;
-    std::cout << "Case Flipped String: " << flip_case(s) << std::endl;
+    std::getline(std::cin, input);
+
+    std::cout << "Flipped case of the string: " << flip_case(input) << std::endl;
+
     return 0;
 }
