@@ -1,7 +1,15 @@
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cassert>
 
 using namespace std;
+
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
 
 bool will_it_fly(vector<int> q, int w) {
     string str = "";
@@ -16,16 +24,7 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-bool isPalindrome(string s) {
-    string rev = s;
-    reverse(rev.begin(), rev.end());
-    return s == rev;
+int main() {
+    assert(will_it_fly({5}, 5) == true);
+    return 0;
 }
-
-cin >> w;
-vector<int> q(3);
-for(int i=0; i<3; i++) cin >> q[i];
-if(will_it_fly(q, w))
-    cout << "YES";
-else
-    cout << "NO";
