@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -15,7 +16,8 @@ string solve(string s){
     return result;
 }
 
-int main() {
+int main
+{
     string input;
     cout << "Enter a string: ";
     getline(cin, input); 
@@ -26,3 +28,4 @@ int main() {
         cout << "Output: " << output << endl;
     }
     return 0;
+}
