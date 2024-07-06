@@ -1,33 +1,27 @@
-string sort_numbers(string numbers) {
-    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
-                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
-                                {"eight", 8}, {"nine", 9}};
+map<string,int> numMap;
+numMap["zero"] = 0; numMap["one"] = 1; numMap["two"] = 2; 
+numMap["three"] = 3; numMap["four"] = 4; numMap["five"] = 5; 
+numMap["six"] = 6; numMap["seven"] = 7; numMap["eight"] = 8;
+numMap["nine"] = 9;
+
+string sort_numbers(string numbers){
     vector<string> nums;
-    string num;
-
-    // split the input string into individual numbers
-    for (int i = 0; i < numbers.length(); i++) {
-        while (i + 1 <= numbers.length() && !ispunct(numbers[i])) {
-            i++;
+    string temp;
+    for(int i=0;i<numbers.size();i++){
+        if(numbers[i] == ' ')
+            continue;
+        else{
+            temp += numbers[i];
+            if(i==numbers.size()-1)
+                nums.push_back(temp);
+            else
+                while(i+1<numbers.size()&&numbers[i+1]!=' ')
+                    i++;
         }
-        num += numbers.substr(i - (numbers[i] == ' ') ? 0 : i - 1, 4);
     }
-
-    // sort the numbers based on their integer value
-    sort(nums.begin(), nums.end(), [&numMap](string a, string b) {
-        return to_string(numMap[a]) > to_string(numMap[b]);
-    });
-
-    // join the sorted numbers into a single string
-    return join(nums, " ");
-}
-
-string join(vector<string>& vec, string sep) {
+    sort(nums.begin(),nums.end());
     string result = "";
-    for (int i = 0; i < vec.size(); ++i) {
-        result += vec[i];
-        if (i != vec.size() - 1)
-            result += sep;
-    }
+    for(int i=0;i<nums.size();i++)
+        result += nums[i] + " ";
     return result;
 }
