@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <string>
 
@@ -13,7 +12,7 @@ int main() {
         return count;
     }
 
-    std::cout << how_many_times("Hello world hello", "hello") << std::endl;
-
-    return 0;
-}
+    int main() {
+        std::cout << how_many_times("Hello World, Hello Universe!", "Hello") << std::endl;
+        return 0;
+    }
