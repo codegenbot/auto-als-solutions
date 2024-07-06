@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 
@@ -23,12 +22,24 @@ std::vector<int> pluck(std::vector<int> arr) {
 }
 
 int main() {
-    std::vector<int> arr = {1, 2, 3, 4};
-    std::vector<int> output = pluck(arr);
-
-    for(int i : output) {
-        std::cout << i << " ";
+    // Add your code here
+    std::vector<int> input;
+    // Read input from user
+    int n;
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        int val;
+        cin >> val;
+        input.push_back(val);
     }
     
+    vector<int> output = pluck(input);
+    // Print the output
+    cout << "Output: ";
+    for(auto x : output) {
+        cout << x << " ";
+    }
+    cout << endl;
+
     return 0;
 }
