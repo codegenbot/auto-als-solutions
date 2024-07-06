@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -37,9 +36,7 @@ vector<int> pluck(vector<int> arr) {
     int result = nodes[0].first;
     for(int i = 0; i < arr.size(); ++i){
         if(arr[i] == result){
-            vector<int> output;
-            output.push_back(result);
-            return output;
+            return {result};
         }
     }
 }
@@ -58,11 +55,7 @@ int main() {
     vector<int> output = pluck(arr);
     if(output.size() > 0)
     {
-        cout << "The output is: ";
-        for(int i = 0; i < output.size(); ++i){
-            cout << output[i] << " ";
-        }
-        cout << endl;
+        cout << "The output is: " << output[0] << endl;
     }
     else
     {
