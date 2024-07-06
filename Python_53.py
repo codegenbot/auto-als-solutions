@@ -6,3 +6,4 @@ def add(x: int, y: int) -> int:
             return x + y
         except (ValueError, EOFError):
             print("Invalid input. Please enter a valid integer.")
+            break
