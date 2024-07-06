@@ -1,6 +1,7 @@
-Here is the solution:
+Here is the completed code:
 
+```cpp
 bool iscuber(int a){
-    int c = round(cbrt(a));
-    return (c*c*c == a);
+    int i = cbrt(a);
+    return (i*i*i == a);
 }
