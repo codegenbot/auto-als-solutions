@@ -14,7 +14,7 @@ std::string get_closest_vowel(std::string str) {
             }
         }
     }
-    return std::string(1, closest_vowel); // This line can be removed because it's not needed
+    return std::string(1, closest_vowel);
 }
 
 int main() {
