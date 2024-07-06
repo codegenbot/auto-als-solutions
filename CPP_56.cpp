@@ -1,16 +1,13 @@
 bool correct_bracketing(string brackets){
-    int count = 0;
-    for(int i=0; i<brackets.length(); i++){
-        if(brackets[i] == '<'){
-            count++;
-        }
-        else if(brackets[i] == '>'){
-            if(count <= 0)
+    int opening = 0;
+    for (char c : brackets) {
+        if (c == '<') {
+            opening++;
+        } else if (c == '>') {
+            if (opening == 0)
                 return false;
-            count--;
+            opening--;
         }
     }
-    if(count > 0)
-        return false;
-    return true;
+    return opening == 0;
 }
