@@ -1,8 +1,14 @@
 ```cpp
-#include <bits/stdc++.h>
-using namespace std;
+bool issame(vector<string> a,vector<string>b){
+    return a==b;
+}
 
-bool issame(vector<string>, vector<string>);
+int main() {
+    assert(issame({{"aaaa", "bbbb", "dd", "cc"}}, {{"cc", "dd", "aaaa", "bbbb"}}));
+    // Call the function here
+    vector<string> result = sorted_list_sum({"aaaa", "bbbb", "dd", "cc"});
+    return 0;
+}
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
@@ -25,8 +31,4 @@ vector<string> sorted_list_sum(vector<string> lst) {
          });
 
     return result;
-}
-
-int main() {
-    // Your code here
 }
