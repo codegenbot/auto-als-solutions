@@ -1,17 +1,39 @@
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 
-vector<int> strange_sort_list(vector<int> lst) {
+using namespace std;
+
+vector<int> strange_sort_vector(vector<int> lst) {
     vector<int> result;
+    if (lst.empty()) return result;
+
+    int minVal = *min_element(lst.begin(), lst.end());
+    int maxVal = *max_element(lst.begin(), lst.end());
+
     while (!lst.empty()) {
-        int min_val = *min_element(lst.begin(), lst.end());
-        result.push_back(min_val);
-        lst.erase(remove(lst.begin(), lst.end(), min_val), lst.end());
-        if (!lst.empty()) {
-            int max_val = *max_element(lst.begin(), lst.end());
-            result.push_back(max_val);
-            lst.erase(remove(lst.begin(), lst.end(), max_val), lst.end());
+        auto itMin = std::find_if(lst.begin(), lst.end(),
+            [minVal](int val) { return val == minVal; });
+        if (itMin != lst.end()) {
+            result.push_back(*itMin);
+            lst.erase(itMin);
+        }
+
+        auto itMax = std::find_if(lst.begin(), lst.end(),
+            [maxVal](int val) { return val == maxVal; });
+        if (itMax != lst.end()) {
+            result.push_back(*itMax);
+            lst.erase(itMax);
         }
     }
+
     return result;
+}
+
+int main() {
+    vector<int> numbers = {3, 1, 2, 7, 4};
+    vector<int> sortedNumbers = strange_sort_vector(numbers);
+    for (int num : sortedNumbers) {
+        cout << num << " ";
+    }
+    return 0;
 }

@@ -1,3 +1,4 @@
+```
 from typing import List
 
 def separate_paren_groups(paren_string: str) -> List[str]:
@@ -15,16 +16,10 @@ def separate_paren_groups(paren_string: str) -> List[str]:
             if stack and stack[-1] == '(':
                 stack.pop()
                 if not stack:  
-                    groups.append(current_group)
+                    groups.append(current_group + ')')
                     current_group = ''
             else:
-                if stack:  # Unmatched opening parenthesis, add to group
-                    current_group += ')'
-                else:      # Unmatched closing parenthesis, treat as new group
-                    groups.append('('+current_group+')')
-                    current_group = ''
-
-    if stack and current_group:  # Last unmatched opening parenthesis
-        groups.append('('+current_group+')')
+                groups.append('('+current_group+')')  
+                current_group = ''
 
     return [g for g in groups if g]
