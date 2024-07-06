@@ -21,3 +21,28 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     return result;
 }
+
+int main() {
+    std::vector<int> input;
+    // Use the function
+    std::cout << "Enter some numbers (separated by spaces): ";
+    int n;
+    while (std::cin >> n) {
+        input.push_back(n);
+        if (std::cin.peek() != ' ') {
+            break;
+        }
+        std::cin.ignore();
+    }
+    
+    std::vector<int> output = pluck(input);
+    
+    if (!output.empty()) {
+        std::cout << "Smallest even number: " << output[0] << std::endl;
+        std::cout << "Index of smallest even number: " << output[1] << std::endl;
+    } else {
+        std::cout << "No even numbers in the array." << std::endl;
+    }
+    
+    return 0;
+}
