@@ -16,13 +16,10 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                dp[i][j] = dp[i+1][j-1];
+                dp[i][j].resize(dp[i+1][j-1].size() + 1, 0);
             } else {
-                if (dp[i+1][j-1].empty() || dp[i+1][j-1].back() > 1) {
-                    dp[i][j] = min(size_t(1), size_t(dp[i+1][j-1].size())) + 1;
-                } else {
-                    dp[i][j] = dp[i+1][j-1];
-                }
+                dp[i][j].resize(min(size_t(1), size_t(dp[i+1][j-1].size())) + 1);
+                dp[i][j][0] = min(size_t(1), size_t(dp[i+1][j-1].size())) + 1;
             }
         }
     }
