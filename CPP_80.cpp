@@ -10,9 +10,14 @@ bool is_happy(string s){
         bool unique = true;
         for(char c : str){
             int count = 0;
-            for(char d : s){ 
-                if(d == c) count++;
+            bool found = false;
+            for(int j = i; j <= i+2; j++){
+                if(s[j] == c){
+                    found = true;
+                    break;
+                }
             }
+            count = found ? 1 : 0;
             if(count > 1) {
                 unique = false;
                 break;
