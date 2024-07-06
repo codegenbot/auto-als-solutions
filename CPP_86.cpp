@@ -14,7 +14,9 @@ string anti_shuffle(string s) {
             for (int j = 0; j < word.length(); j++) {
                 result += word[j];
             }
-            i--;
+            if(i<s.length()) {
+                result += " ";
+            }
         }
     }
     return result;
