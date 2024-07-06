@@ -1,4 +1,3 @@
-```
 def find_max(words):
     max_word = ""
     max_length = 0
