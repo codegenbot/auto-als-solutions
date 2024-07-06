@@ -4,19 +4,18 @@
 using namespace std;
 
 char* decimal_to_binary(int decimal){
-    char* binary = new char[32];
-    int i = 31;
+    string binary = "";
     while(decimal > 0){
         if((decimal & 1) == 1)
-            binary[i--] = '1';
+            binary = "1" + binary;
         else
-            binary[i--] = '0';
+            binary = "0" + binary;
         decimal >>= 1;
     }
-    for(int j = i+1; j < 32; j++){
-        binary[j] = '\0';
-    }
-    return binary;
+    char* str = new char[binary.length() + 3];
+    strcpy(str, "0b");
+    strcat(str, binary.c_str());
+    return str;
 }
 
 int main() {
