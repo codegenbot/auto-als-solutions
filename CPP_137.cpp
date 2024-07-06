@@ -1,63 +1,23 @@
-#include <string>
-#include <boost/any.hpp>
+using boost::any_cast;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    bool is_number_a = false;
-    bool is_number_b = false;
+    float fa = any_cast<float>(a);
+    float fb = any_cast<float>(b);
 
-    if (a.type() == typeid(int)) {
-        is_number_a = true;
-    } else if (a.type() == typeid(float) || a.type() == typeid(double) || a.type() == typeid(long double)) {
-        is_number_a = true;
-    } else {
-        try {
-            boost::any_cast<double>(a);
-            is_number_a = true;
-        } catch (...) {
-            // a is not a number
-        }
-    }
+    if (fa > fb) return a;
+    else if (fb > fa) return b;
 
-    if (b.type() == typeid(int)) {
-        is_number_b = true;
-    } else if (b.type() == typeid(float) || b.type() == typeid(double) || b.type() == typeid(long double)) {
-        is_number_b = true;
-    } else {
-        try {
-            boost::any_cast<double>(b);
-            is_number_b = true;
-        } catch (...) {
-            // b is not a number
-        }
-    }
+    bool sa = any_cast<bool>(a);
+    bool sb = any_cast<bool>(b);
 
-    if (is_number_a && is_number_b) {
-        if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
-            return a;
-        } else if (boost::any_cast<double>(a) < boost::any_cast<double>(b)) {
-            return b;
-        } else {
-            return boost::any("None");
-        }
-    }
+    if (sa > sb) return a;
+    else if (sb > sa) return b;
 
-    // one of them is not a number, compare the other
-    if (!is_number_a && !is_number_b) {
-        if (boost::any_cast<std::string>(a) > boost::any_cast<std::string>(b)) {
-            return a;
-        } else if (boost::any_cast<std::string>(a) < boost::any_cast<std::string>(b)) {
-            return b;
-        } else {
-            return boost::any("None");
-        }
-    }
+    std::string s1 = any_cast<std::string>(a);
+    std::string s2 = any_cast<std::string>(b);
 
-    // one of them is a number, the other is not
-    if (!is_number_a && is_number_b) {
-        return b;
-    } else if (is_number_a && !is_number_b) {
-        return a;
-    }
+    if (s1.compare(s2) > 0) return a;
+    else if (s2.compare(s1) > 0) return b;
 
-    return boost::any("None");
+    return "None";
 }
