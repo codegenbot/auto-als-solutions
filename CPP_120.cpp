@@ -1,8 +1,7 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
-bool isEqual(std::vector<int> a, std::vector<int> b) {
+bool areEqual(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -21,5 +20,6 @@ std::vector<int> maximum(std::vector<int> arr, int k) {
 }
 
 void driver() {
-    assert(isEqual(maximum({1, 2, 3, -23, 243, -400, 0}, 3), {243, 243, 243}));
+    assert(areEqual(maximum({1, 2, 3, -23, 243, -400, 0}, 3), {243, 243, 243}));  
+    return;
 }
