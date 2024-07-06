@@ -1,25 +1,20 @@
-#include <algorithm>
 #include <vector>
-#include <initializer_list>
+#include <algorithm>
+#include <set>
 
-bool same(std::vector<int> a, std::vector<int> b) {
-    return (a.size() == b.size()) && (std::equal(a.begin(), a.end(), b.begin()));
-}
-
-std::vector<int> sortByDigitSum(std::vector<int> nums) {
-    auto comp = [&nums](int a, int b) {
-        int sumA = 0, sumB = 0;
-        for (char c : std::to_string(a)) sumA += c - '0';
-        for (char c : std::to_string(b)) sumB += c - '0';
-        if (sumA == sumB)
-            return nums.find(a) > nums.find(b);
-        return sumA < sumB;
-    };
-    std::sort(nums.begin(), nums.end(), comp);
-    return nums;
-}
-
-int main() {
-    assert(same(sortByDigitSum({0,6,6,-76,-21,23,4}), {-76, -21, 0, 4, 23, 6, 6}));
-    return 0;
+std::vector<int> sortByDigitSum(std::vector<int> arr) {
+    std::vector<int> res = arr;
+    sort(res.begin(), res.end(), [](int a, int b)->bool{
+        long long sum1 = 0, sum2 = 0;
+        while(a > 0){
+            sum1 += a % 10;
+            a /= 10;
+        }
+        while(b > 0){
+            sum2 += b % 10;
+            b /= 10;
+        }
+        return sum1 < sum2;
+    });
+    return res;
 }
