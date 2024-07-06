@@ -21,7 +21,7 @@ std::vector<std::string> split_words(string txt) {
 }
 
 int main() {
-    #define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
     std::string user_input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, user_input);
