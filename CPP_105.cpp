@@ -1,10 +1,9 @@
-```
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
 using namespace std;
 
-bool issame(vector<string> v1, vector<string> v2) {
+bool issame(const vector<string>& v1, const vector<string>& v2) {
     if(v1.size() != v2.size())
         return false;
     for(int i = 0; i < v1.size(); i++)
@@ -63,8 +62,6 @@ vector<string> by_length(vector<int> arr) {
 int main() {
     vector<int> arr = {9, 4, 8};
     vector<string> result = by_length(arr);
-    if (!issame({ "One" }, { "Four", "Eight" }, {result})) {
-        return 1; 
-    }
+    assert(issame(vector<string>(by_length({9, 4, 8})), vector<string>({"Nine", "Four", "Eight"})));
     return 0;
 }

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <vector>
-#include <numeric>
 
 int findMaxValue(std::vector<int> numbers) {
     int maxVal = -1;
