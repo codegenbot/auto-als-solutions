@@ -1,14 +1,12 @@
-Here is the modified code:
-
-```cpp
-#include <climits>
 #include <iostream>
 #include <vector>
+#include <cassert>
+#include <climits>
 
 using namespace std;
 
 long long minSubArraySum(vector<long long> nums) {
-    long long min_sum = LONG_MAX;
+    long long min_sum = LLONG_MAX;
     long long current_sum = 0;
 
     for (int i = 0; i < nums.size(); i++) {
@@ -22,4 +20,9 @@ long long minSubArraySum(vector<long long> nums) {
     }
 
     return min_sum;
+}
+
+int main() {
+    assert(minSubArraySum({1, -1}) == -1);
+    return 0;
 }
