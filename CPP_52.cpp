@@ -1,4 +1,3 @@
-```
 bool below_threshold(vector<int> l, int t) {
     for (int i : l) {
         if (i >= t) {
@@ -6,4 +5,3 @@ bool below_threshold(vector<int> l, int t) {
         }
     }
     return true;
-}
