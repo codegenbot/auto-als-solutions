@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <set>
@@ -7,7 +6,7 @@ using namespace std;
 
 bool issame(vector<int> v1, vector<int> v2) {
     if(v1.size() != v2.size()) return false;
-    for(int i = 0; i < v1.size(); i++) {
+    for(int i=0; i<v1.size(); i++) {
         if(find(v2.begin(), v2.end(), v1[i]) == v2.end())
             return false;
     }
@@ -27,26 +26,20 @@ vector<int> common(vector<int> l1, vector<int> l2) {
 }
 
 int main() {
-    int n1, m1, n2, m2;
-    cin >> n1 >> m1;
-    vector<int> l1(n1);
-    for(int i = 0; i < n1; i++) 
-        cin >> l1[i];
-    cin >> n2 >> m2;
-    vector<int> l2(n2);
-    for(int i = 0; i < n2; i++) 
-        cin >> l2[i];
+    vector<int> v1 = {1, 2, 3};
+    vector<int> v2 = {3, 4, 5};
     
-    if(issame(l1, l2))
-        cout << "The lists are same." << endl;
-    else
-        cout << "The lists are not same." << endl;
+    if(issame(v1, v2)) {
+        cout << "The vectors are same." << endl;
+    } else {
+        cout << "The vectors are not same." << endl;
         
-    vector<int> commonList = common(l1, l2);
-    cout << "Common elements: ";
-    for(int i = 0; i < commonList.size(); i++) 
-        cout << commonList[i] << " ";
-    cout << endl;
+        vector<int> common_elements = common(v1, v2);
+        for(int i=0; i<common_elements.size(); i++) {
+            cout << common_elements[i] << " ";
+        }
+        cout << endl;
+    }
     
     return 0;
 }
