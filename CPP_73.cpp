@@ -1,7 +1,5 @@
 ```cpp
 #include <vector>
-#include <cstdint>
-
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
     std::vector<std::vector<uint64_t>> dp(n, std::vector<uint64_t>(n-1));
