@@ -20,4 +20,3 @@ int main() {
     scanf("%d", &n);
     printf("The %d-th Fibonacci number is: %d\n", n, fib(n));
     return 0;
-}
