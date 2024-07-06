@@ -1,18 +1,8 @@
+```
 def by_length(arr):
-    result = sorted([i for i in arr if 1 <= i <= 9])
+    result = sorted([str(i) for i in arr])
     return [
-        name
-        for num in result
-        for name in [
-            "One",
-            "Two",
-            "Three",
-            "Four",
-            "Five",
-            "Six",
-            "Seven",
-            "Eight",
-            "Nine",
-        ]
-        if str(num) == str(name[:1]).lower()
+        word
+        for word in ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"]
+        if word[0].lower() == str(num)[0].lower()
     ]
