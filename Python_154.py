@@ -1,8 +1,5 @@
-```
 def cycpattern_check(a, b):
-    if len(b) == 0:
-        return True
     for i in range(len(b)):
-        if a.replace(b[i:] + b[:i], "") != a:
-            return False
-    return True
+        if (b[i:] + b[:i]).encode("utf-8") in a.encode("utf-8"):
+            return True
+    return False

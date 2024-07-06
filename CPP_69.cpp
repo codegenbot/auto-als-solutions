@@ -11,7 +11,7 @@ int search(vector<int> numbers) {
         }
     }
     for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
-        if (it->second >= it->first && it->first > 0) {
+        if (it->second > it->first && it->first > 0) {
             return it->first;
         }
     }

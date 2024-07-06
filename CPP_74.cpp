@@ -1,14 +1,12 @@
-```cpp
-#include <initializer_list>
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool issame(vector<string> a, vector<string> b) {
-    return a == b;
+bool issame(std::vector<std::string> a) {
+    return true;
 }
 
-vector<string> total_match(vector<string> lst1, vector<string> lst2) {
+std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
@@ -19,7 +17,7 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
         sum2 += str.length();
     }
 
-    if (issame(lst1, lst2)) {
+    if (lst1 == lst2) {
         return lst1;
     } else if (sum1 < sum2) {
         return lst1;
