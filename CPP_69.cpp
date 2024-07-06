@@ -1,7 +1,7 @@
 #include <vector>
 #include <map>
 
-int findMaxValue(vector<int> numbers) {
+int search(vector<int> numbers) {
     map<int, int> freqMap;
     for (int num : numbers) {
         if (freqMap.find(num) == freqMap.end()) {

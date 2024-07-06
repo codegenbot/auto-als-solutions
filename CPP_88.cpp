@@ -9,7 +9,7 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     return true;
 }
 
-int sort_array(std::vector<int> array) { 
+int sort_array(std::vector<int>& array) {
     std::sort(array.begin(), array.end());
-    return 0;
+    return array.size();
 }
