@@ -12,12 +12,17 @@ bool is_happy(string s){
         for(char c : str){
             int count = 0;
             for(int j = i; j <= i+2; j++){
+                if(s[j] == c) count++;
+            }
+            for(int j = i; j <= i+2; j++){
                 if(s[j] == c && s.count(c) > 1) {
                     unique = false;
                     break;
                 }
             }
-            if(!unique) return false;
+            if(!unique) {
+                return false;
+            }
         }
     }
     return true;
