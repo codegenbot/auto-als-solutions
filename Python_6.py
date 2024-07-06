@@ -1,22 +1,16 @@
-Here is the completed code:
-
 ```
 from typing import List
-from collections import deque
-
 
 def parse_nested_parens(paren_string: str) -> List[int]:
     result = []
     for group in paren_string.split():
         level = 0
-        queue = deque()
+        max_level = 0
         for char in group:
             if char == '(':
-                queue.append(char)
+                level += 1
+                max_level = max(max_level, level)
             elif char == ')':
-                if queue and queue[-1] == '(':
-                    queue.pop()
-                else:
-                    level += 1
-        result.append(level)
+                level -= 1
+        result.append(max_level)
     return result
