@@ -31,7 +31,7 @@ int main() {
     for (const auto& word : words) {
         std::cout << word << std::endl;
     }
-    
+
     bool same = issame(split_words(user_input), split_words("example string"));
     if (same) {
         std::cout << "Words are the same." << std::endl;
