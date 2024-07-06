@@ -1,4 +1,3 @@
-```c++
 #include <iostream>
 #include <string>
 
@@ -33,4 +32,3 @@ int main() {
     std::getline(std::cin, word);
     std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
     return 0;
-}
