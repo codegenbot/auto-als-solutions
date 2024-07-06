@@ -1,11 +1,19 @@
-```cpp
 #include <algorithm>
 #include <cmath>
 
-int myMaximumNumber(int n) {
-    int l[n];
+int findMaxAndMin(int n) {
+    int max = std::numeric_limits<int>::min();
+    int min = std::numeric_limits<int>::max();
+
     for (int i = 0; i < n; i++) {
-        cin >> l[i];
+        int temp;
+        std::cin >> temp;
+
+        if (std::abs(temp) > max)
+            max = std::abs(temp);
+        if (std::abs(temp) < min)
+            min = std::abs(temp);
     }
-    return std::abs(*std::max_element(std::begin(l), std::end(l)));
+
+    return *std::max_element(std::vector<int>({min, max}));
 }
