@@ -17,6 +17,6 @@ bool check_dict_case(map<string, string> dict) {
 }
 
 int main() {
-    // Add your code here
+    // Your code here
     return 0;
 }
