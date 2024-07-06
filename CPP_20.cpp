@@ -1,23 +1,27 @@
-#include <vector>
 #include <algorithm>
 
-std::pair<float, float> find_closest_elements(std::vector<float> numbers) {
-    if (numbers.size() < 2) {
-        return {0.0f, 0.0f}; // or throw an exception if you prefer
-    }
-
-    std::pair<float, float> closest_pair = {numbers[0], numbers[1]};
-    float min_diff = abs(numbers[0] - numbers[1]);
-
-    for (int i = 0; i < numbers.size() - 1; ++i) {
-        for (int j = i + 1; j < numbers.size(); ++j) {
-            float diff = abs(numbers[i] - numbers[j]);
-            if (diff < min_diff) {
-                min_diff = diff;
-                closest_pair = {numbers[i], numbers[j]};
-            }
+vector<float> find_closest_elements(vector<float> numbers) {
+    if (numbers.size() < 2) return {};
+    vector<pair<float, float>> pairs;
+    for (int i = 0; i < numbers.size(); i++) {
+        for (int j = i + 1; j <= numbers.size(); j++) {
+            pairs.push_back({numbers[i], numbers[j]});
         }
     }
 
-    return closest_pair;
+    sort(pairs.begin(), pairs.end(),
+         [](const pair<float, float>& a, const pair<float, float>& b) {
+             return abs(a.first - a.second) <
+                    abs(b.first - b.second);
+         });
+
+    vector<float> result = {pairs[0].first, pairs[0].second};
+    if (result[1] == result[0]) {
+        for (int i = 1; i < numbers.size(); i++) {
+            if (numbers[i] != result[0])
+                return {result[0], numbers[i]};
+        }
+    }
+
+    return result;
 }
