@@ -18,7 +18,7 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    getline(cin, input);
+    getline(cin, input); 
     if(input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
@@ -26,3 +26,4 @@ int main(){
         cout << "Output: " << output << endl;
     }
     return 0;
+}
