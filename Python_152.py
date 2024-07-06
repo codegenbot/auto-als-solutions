@@ -1,4 +1,2 @@
-Here is the completed code:
-
-def compare(game,guess):
-    return [abs(guess[i]-game[i]) for i in range(len(game))]
+def compare(game, guess):
+    return [abs(x - y) for x, y in zip(game, guess)]
