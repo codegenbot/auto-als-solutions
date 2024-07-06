@@ -2,14 +2,15 @@
 using namespace std;
 
 bool correct_bracketing(string brackets) {
-    int count = 0;
+    int opening = 0;
     for (char bracket : brackets) {
         if (bracket == '<') {
-            count++;
+            opening++;
         } else if (bracket == '>') {
-            if (count <= 0) return false;
-            count--;
+            if (opening == 0)
+                return false;
+            opening--;
         }
     }
-    return count == 0;
+    return opening == 0;
 }
