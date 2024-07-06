@@ -15,9 +15,8 @@ int main() {
         return (open == close) ? 1 : 0;
     }
 
-    vector<string> lst = {"(abc)", "def(", "(ghi)"};
-    int result = match_parens(lst);
-    cout << (result == 1 ? "Yes" : "No") << endl;
-
-    return 0;
-}
+    int main() {
+        vector<string> lst = {"(a)", "(b)", "((c))"};
+        cout << match_parens(lst) << endl;
+        return 0;
+    }
