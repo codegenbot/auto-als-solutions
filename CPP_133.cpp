@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -16,7 +17,7 @@ int main() {
     double num;
 
     while (std::cin >> static_cast<double>(num)) {
-        lst.push_back(static_cast<double>(num));
+        lst.push_back(num);
     }
 
     int sum = sum_squares(lst);
