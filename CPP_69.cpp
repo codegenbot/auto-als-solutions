@@ -12,14 +12,8 @@ int search(vector<int> lst) {
             freq[num]++;
         }
     }
-    int min_freq = INT_MAX;
     for (auto p : freq) {
-        if (p.second < min_freq) {
-            min_freq = p.second;
-        }
-    }
-    for (auto p : freq) {
-        if (p.second == min_freq && p.first > 0) {
+        if (p.second >= p.first && p.first > 0) {
             return p.first;
         }
     }
