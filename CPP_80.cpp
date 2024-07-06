@@ -1,4 +1,3 @@
-```c++
 #include <iostream>
 #include <string>
 
@@ -7,23 +6,16 @@ using namespace std;
 bool is_happy(string s){
     if(s.length() < 3) return false;
     for(int i = 0; i <= s.length()-3; i++){
-        string str = s.substr(i, 3);
+        char cstr[4] = {0};
+        memcpy(cstr, s.substr(i, 3).c_str(), 3);
         bool unique = true;
-        for(char c : str){
-            int count = 0;
-            for(int j = i; j <= i+2; j++){
-                if(s[j] == c) count++;
-            }
-            for(int j = i; j <= i+2; j++){
-                if(s[j] == c && s.count(c) > 1) {
-                    unique = false;
-                    break;
-                }
-            }
-            if(!unique) {
-                return false;
+        for(char c : s){ 
+            if(std::count(&cstr[0], &cstr[3], c) > 1) {
+                unique = false;
+                break;
             }
         }
+        if(!unique) return false;
     }
     return true;
 

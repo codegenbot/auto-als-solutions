@@ -1,11 +1,4 @@
-#include <iostream>
-
 int smallest_change(std::vector<int> arr) {
-    if (arr.empty()) {
-        std::cerr << "Error: Input array is empty!" << std::endl;
-        return -1; 
-    }
-    
     int n = arr.size();
     std::vector<std::vector<uint64_t>> dp(n, std::vector<uint64_t>(n-1));
     
@@ -18,18 +11,13 @@ int smallest_change(std::vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                dp[i][j].push_back(dp[i+1][j-1].size());
+                int min_len = dp[i+1][j-1].size();
             } else {
-                dp[i][j].push_back(1 + dp[i+1][j].size());
+                int min_len = 1 + dp[i+1][j].size();
             }
+            dp[i][j].push_back(min_len);
         }
     }
     
-    return dp[0][n-1].size();
-}
-
-int main() {
-    std::vector<int> arr = {0, 1};
-    assert(smallest_change(arr) == 1);
-    return 0;
+    return dp[0][n-1].back();
 }
