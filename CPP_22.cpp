@@ -1,18 +1,20 @@
 #include <vector>
 #include <list>
 
-typedef struct {
-    bool isPresent;
-    int value;
-} IntWrapper;
+using namespace std;
 
-std::vector<int> filter_integers(std::list<int> values) {
-    std::vector<int> result;
+typedef pair<string, int> Pair;
+typedef vector<Pair> VecPair;
+
+vector<int> filter_integers(list<any> values) {
+    vector<int> result;
     for (const auto& value : values) {
-        IntWrapper wrapper;
-        wrapper.isPresent = true;
-        wrapper.value = value;
-        result.push_back(wrapper.value);
+        any_cast<map<string, int>>(value).insert({{"key", 0}});
+
+        map<string, int> m = any_cast<map<string, int>>(value);
+        if(m.find("key") != m.end()) {
+            result.push_back(m.at("key"));
+        }
     }
     return result;
 }
