@@ -1,4 +1,4 @@
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -17,6 +17,6 @@ std::string miniRom(int number) {
 }
 
 int main() {
-    std::cout << miniRom(2023);
+    std::cout << miniRom(2023) << std::endl;
     return 0;
 }
