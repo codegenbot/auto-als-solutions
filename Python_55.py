@@ -1,15 +1,12 @@
-def print_fibonacci():
-    n = int(input("Enter a number: "))
+```
+def find_fibonacci():
+    n = int(input("Enter a positive integer: "))
     if n <= 0:
         print("Please enter a positive integer.")
     elif n == 1 or n == 2:
-        print("Fibonacci sequence up to", n, ":", 1)
+        print(f"Fibonacci number at position {n} is 1")
     else:
-        a, b = 1, 1
-        for _ in range(2, n):
-            a, b = b, a + b
-        print("Fibonacci sequence up to", n, ":", 1, end=" ")
-        while a <= n:
-            print(a, end=" ")
-            a, b = b, a + b
-        print()
+        fib_num = [1, 1]
+        for i in range(2, n):
+            fib_num.append(fib_num[i-1] + fib_num[i-2])
+        print(f"Fibonacci number at position {n} is {fib_num[-1]}")
