@@ -1,29 +1,27 @@
-#include <climits>
+#include <iostream>
 #include <vector>
 
-using namespace std;
+std::vector<int> pluck(const std::vector<int>& arr) {
+    std::vector<int> result = {};
+    int minEvenValueIndex = -1;
+    int minEvenValue = INT_MAX;
 
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
-    
-    if(arr.empty()) return result; // If array is empty
-    
-    int smallestEven = INT_MAX;
-    int smallestIndex = 0;
-    
-    for(int i = 0; i < arr.size(); i++) {
-        if(arr[i] % 2 == 0 && arr[i] < smallestEven) {
-            smallestEven = arr[i];
-            smallestIndex = i;
+    for(int i = 0; i < arr.size(); i++){
+        if(arr[i] % 2 == 0 && arr[i] < minEvenValue){
+            minEvenValue = arr[i];
+            minEvenValueIndex = i;
         }
     }
-    
-    result.push_back({smallestEven, smallestIndex});
-    
+
+    if(minEvenValue != INT_MAX){
+        result.push_back(minEvenValue);
+        result.push_back(minEvenValueIndex);
+    }
+
     return result;
 }
 
 int main() {
-    vector<int> arr = {7, 9, 7, 1};
-    assert(pluck(arr).empty()); 
+    // Your code here
+    return 0;
 }
