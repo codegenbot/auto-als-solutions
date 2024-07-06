@@ -1,6 +1,5 @@
-````````````````````
+```python
 from typing import List
-
 
 def separate_paren_groups(paren_string: str) -> List[str]:
     stack = []
@@ -36,4 +35,3 @@ def separate_paren_groups(paren_string: str) -> List[str]:
         groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]
-```````````````````
