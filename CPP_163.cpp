@@ -1,16 +1,6 @@
-```
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-bool issame(int a, int b) {
-    if (a == b)
-        return true;
-    else
-        return false;
+bool issame(vector<int> a) {
+    return a.empty();
 }
-
 vector<int> generate_integers(int a, int b) {
     vector<int> result;
     for (int i = a; i <= b; ++i) {
