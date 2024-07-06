@@ -1,6 +1,8 @@
+```
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -41,36 +43,32 @@ vector<string> select_words(string s, int n) {
     return result;
 }
 
-int main() {
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("simple white space", 2)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Hello world", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Uncle sam", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-    
-    return 0;
+cout << "{";
+for (const string& s : select_words("Mary had a little lamb", 4)) {
+    cout << "\"" << s << "\", ";
 }
+cout << "}" << endl;
+
+cout << "{";
+for (const string& s : select_words("Mary had a little lamb", 3)) {
+    cout << "\"" << s << "\", ";
+}
+cout << "}" << endl;
+
+cout << "{";
+for (const string& s : select_words("simple white space", 2)) {
+    cout << "\"" << s << "\", ";
+}
+cout << "}" << endl;
+
+cout << "{";
+for (const string& s : select_words("Hello world", 4)) {
+    cout << "\"" << s << "\", ";
+}
+cout << "}" << endl;
+
+cout << "{";
+for (const string& s : select_words("Uncle sam", 3)) {
+    cout << "\"" << s << "\", ";
+}
+cout << "}" << endl;
