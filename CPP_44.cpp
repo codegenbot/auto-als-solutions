@@ -1,4 +1,3 @@
-```c++
 string change_base(int x, int base) {
     string result = "";
     while (x > 0) {
