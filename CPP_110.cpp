@@ -1,22 +1,13 @@
-```cpp
 #include <iostream>
-using namespace std;
+#include <vector>
+#include <string>
 
-class Solution {
-public:
-    void exchange(vector<int> lst1, vector<int> lst2) {
-        int oddCount = 0;
-        for (int num : lst1) {
-            if (num % 2 != 0) {
-                oddCount++;
-            }
+std::string exchange(std::vector<int> lst1, std::vector<int> lst2) {
+    int oddCount = 0;
+    for (int num : lst1) {
+        if (num % 2 != 0) {
+            oddCount++;
         }
-        bool result = oddCount == 0;
-        cout << (result ? "YES" : "NO") << endl;
     }
-
-    int main() {
-        exchange({100, 200}, {200, 200});
-        return 0;
-    }
-};
+    return (oddCount > (lst2.size() / 2) ? "NO" : "YES");
+}
