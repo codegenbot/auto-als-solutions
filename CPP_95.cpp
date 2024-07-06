@@ -1,22 +1,22 @@
+```
 #include <map>
 #include <string>
 #include <cctype>
 #include <iostream>
 #include <cassert>
-#include <initializer_list>
 
 bool check_dict_case(std::map<std::string, std::string> dict) {
     if(dict.empty()) return false;
     bool allLower = true;
     bool allUpper = true;
-    
+
     for(auto& pair : dict) {
         std::string key = pair.first;
         if(!allLower && !allUpper) break;
         if(allLower && !std::islower(key[0])) allLower = false;
         if(allUpper && !std::isupper(key[0])) allUpper = false;
     }
-    
+
     return allLower || allUpper;
 }
 
