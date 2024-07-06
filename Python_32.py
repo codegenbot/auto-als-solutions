@@ -1,3 +1,15 @@
+def find_zero(xs: list):
+    if len(xs) < 2:
+        raise ValueError("xs must have at least two coefficients")
+    n = len(xs)
+    if n % 2 != 0:
+        raise ValueError("xs must have even number of coefficients")
+    x = -sum(coeff for i, coeff in enumerate(xs) if i % 2 == 1) / sum(
+        coeff for i, coeff in enumerate(xs) if i % 2 == 0
+    )
+    return round(x, 2)
+
+
 def main():
     while True:
         try:
@@ -17,19 +29,8 @@ def main():
         raise ValueError("xs must have even number of coefficients")
 
     while True:
-        response = input("Do you want to find the zero? (y/n): ")
-        if response.lower() == "y":
-            try:
-                print(find_zero(xs))
-                break
-            except ValueError as e:
-                print(e)
-        elif response.lower() == "n":
-            print("Program ended.")
-            exit()
-        else:
-            print("Invalid input. Try again.")
-
-
-if __name__ == "__main__":
-    main()
+        try:
+            print(find_zero(xs))
+            break
+        except ValueError as e:
+            print(e)
