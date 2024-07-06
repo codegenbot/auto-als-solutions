@@ -1,5 +1,6 @@
+```cpp
 bool issame(float a, float b) {
-    return (a == b);
+    return (a - 0.5f < b && b - 0.5f < a);
 }
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
@@ -23,4 +24,11 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     }
 
     return closest_pairs;
+}
+
+int main() {
+    float[] numbers = {1.1, 2.2, 3.1, 4.1, 5.1};
+    std::vector<float> vec(numbers, numbers + sizeof(float) / sizeof(float));
+    std::vector<std::pair<float, float>> closest = find_closest_elements(vec);
+    return 0;
 }
