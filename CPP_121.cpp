@@ -19,19 +19,10 @@ int main() {
     std::cin >> inputNumber;
 
     int solutions(int x) {
-        int sum = 0;
-        for (int i = 1; i <= 10; i++) { 
-            int y;
-            std::cin >> y;
-            if (y % 2 != 0) {
-                sum += y;
-            }
-        }
-        return sum;
+        return sumOdd(x);
     }
 
-    // Call your function with an example set of numbers
-    assert(solutions(inputNumber) == sumOdd(inputNumber));
+    assert(sumOdd(inputNumber) == 3);
 
     return 0;
 }
