@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <sstream>
 
@@ -23,4 +22,3 @@ int main()
     cin >> n;
     cout << "The " << std::to_string(n) << "-th Fibonacci number is: " << std::to_string(fib(n)) << endl;
     return 0;
-}
