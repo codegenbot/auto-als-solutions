@@ -12,7 +12,7 @@ int fruit_distribution(string s, int n) {
     }
     
     while ((pos = s.find(" oranges")) != string::npos) {
-        total_oranges = stoi(s.substr(0, pos).erase(0, 7));
+        total_oranges += stoi(s.substr(0, pos).erase(0, 7));
         s.erase(0, pos + 7);
     }
     
