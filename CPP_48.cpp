@@ -1,4 +1,3 @@
-```cpp
 #include <string>
 
 bool is_palindrome(string text){
@@ -6,7 +5,10 @@ bool is_palindrome(string text){
     int j = text.length() - 1;
 
     while(i < j){
-        if(tolower(text[i]) != tolower(text[j]))
+        char left = tolower(text[i]);
+        char right = tolower(text[j]);
+
+        if(left != right)
             return false;
         i++;
         j--;
