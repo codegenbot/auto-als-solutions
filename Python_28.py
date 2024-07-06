@@ -7,5 +7,4 @@ while True:
         break
     except ValueError:
         print("Invalid input. Please enter strings only.")
-
 print(' '.join(filter(None, strings)))
