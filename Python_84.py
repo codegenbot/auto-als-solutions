@@ -1,5 +1,4 @@
-```
 def solve(N):
-    total = sum(int(x) for x in str(bin(N)[2:]))
-    max_bin_len = bin((1 << N.bit_length()) - 1).count('1') + 1
-    return ('0' * (max_bin_len - len(str(bin(total))[2:]))) + str(bin(total))[2:]
+    return bin(
+        sum(int(x) for x in str((1 << len(bin(N)[2:]) - 1) ^ int(str(bin(N)[2:]), 2)))
+    )[2:]
