@@ -1,13 +1,13 @@
-def minSubArraySum(nums): 
-    if not nums: 
-        return 0 
-    min_sum = float('inf') 
-    current_sum = 0 
-    left = 0 
-    for right in range(len(nums)): 
-        current_sum += nums[right] 
-        while current_sum < 0 and left <= right: 
-            min_sum = min(min_sum, -current_sum) 
-            current_sum -= nums[left] 
-            left += 1 
-    return min(0, min_sum)
+def minSubArraySum(nums):
+    if not nums:
+        return 0
+    min_sum = float("inf")
+    current_sum = 0
+    left = 0
+    for right in range(len(nums)):
+        current_sum += nums[right]
+        while current_sum > 0 and left <= right:
+            min_sum = min(min_sum, current_sum)
+            current_sum -= nums[left]
+            left += 1
+    return -1 if sum(nums) < 0 and min_sum < 0 else min(0, min_sum)
