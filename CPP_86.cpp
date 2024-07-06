@@ -1,5 +1,5 @@
-#include <string>
-#include <algorithm>
+```cpp
+#include <vector>
 using namespace std;
 
 string anti_shuffle(string s){
@@ -15,12 +15,9 @@ string anti_shuffle(string s){
         for(;j<s.size() && s[j] != ''; j++){
             
         }
-        string word = s.substr(i, j - i);
-        for(int k=0; k<word.size(); k++){
-            result += word[k];
-        }
-        std::sort(&word[0], &word[0] + word.size());
-        result += word;
+        vector<char> word(s.begin() + i, s.begin() + j);
+        sort(word.begin(), word.end());
+        result += string(word.begin(), word.end());
         i = j;
     }
     return result;
