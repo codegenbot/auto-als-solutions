@@ -1,20 +1,10 @@
-#include <cmath>
 #include <vector>
-#include <assert.h>
-
 long long double_the_difference(std::vector<float> lst) {
-    long long sum = 0;
+    long long odd_sum = 0;
     for (float num : lst) {
-        if (num > 0 && floor(num) == num) {
-            sum += pow(num, 2);
+        if (num > 0 && modf(num, &num) == 0.0) {
+            odd_sum += pow(num, 2);
         }
     }
-    return sum;
-}
-
-int main() {
-    std::vector<float> lst = {1.5f, 3.25f, 4.7f};
-    long long odd_sum = double_the_difference(lst);
-    assert(double_the_difference(lst) == odd_sum); 
-    return 0;
+    return odd_sum;
 }

@@ -1,9 +1,8 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <memory>
+
 using namespace std;
 
 vector<string> select_words(string s, int n) {

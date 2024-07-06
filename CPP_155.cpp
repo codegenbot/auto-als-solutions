@@ -1,6 +1,9 @@
-Here is the solution:
+#include <iostream>
+#include <vector>
 
-vector<int> even_odd_count(int num) {
+bool issame(std::vector<int> a, std::vector<int> b);
+
+std::vector<int> even_odd_count(int num) {
     vector<int> result(2, 0);
     while (num != 0) {
         int digit = num % 10;
@@ -11,4 +14,8 @@ vector<int> even_odd_count(int num) {
         num /= 10;
     }
     return result;
+}
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return (a == b);
 }
