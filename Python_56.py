@@ -5,7 +5,8 @@ def correct_bracketing(brackets: str):
         if bracket == "<":
             stack.append("<")
         elif bracket == ">":
-            if len(stack) == 0:
+            while len(stack) > 0 and stack[0] != "<":
+                stack.pop()
+            if len(stack) == 0 or stack.pop() != "<":
                 return False
-            stack.pop()
     return len(stack) == 0
