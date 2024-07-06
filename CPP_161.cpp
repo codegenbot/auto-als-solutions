@@ -1,7 +1,6 @@
 ```cpp
 #include <iostream>
 #include <string>
-
 using namespace std;
 
 string solve(string s){
@@ -17,10 +16,9 @@ string solve(string s){
 }
 
 int main(){
-    string input;
+    string str;
     cout << "Enter a string: ";
-    getline(cin, input);
-    string output = solve(input);
-    cout << "Output: " << output << endl;
+    getline(cin, str);
+    cout << solve(str) << endl;
     return 0;
 }
