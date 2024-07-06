@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 #include <string>
 #include <cctype>
@@ -24,3 +24,4 @@ int main() {
     std::cin >> word;
     std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
     return 0;
+}
