@@ -21,8 +21,7 @@ int main(){
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
 
-    std::string output = flip_case(input);
-    std::cout << "Flipped case: " << output << std::endl;
+    std::cout << "Flipped case of the string: " << flip_case(input) << std::endl;
 
     return 0;
 }
