@@ -1,14 +1,10 @@
 ```
-def max_rolling_sum(numbers: list[int]) -> int:
-    if not numbers:
+def max_rolling_sum(lst):
+    if len(lst) == 0:
         return 0
+    current_max = max_window = sum(lst[:1])
+    for window in zip(*[iter(lst)]*2):
+        current_max = max(current_max, sum(window))
+    return current_max
 
-    start = end = current_sum = numbers[0]
-    max_sum = numbers[0]
-
-    for num in numbers[1:]:
-        current_sum = max(num, current_sum + num)
-        max_sum = max(max_sum, current_sum)
-        start = min(start, current_sum - num)
-
-    return max_sum
+print(max_rolling_sum([1, 2, 3, 4, 5]))
