@@ -1,8 +1,7 @@
-#include <cstring>
 #include <string>
+#include <sstream>
 #include <iomanip>
-
-#include "digest.h"
+#include "md5.h"
 
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
@@ -21,4 +20,3 @@ std::string string_to_md5(const char* text) {
     }
 
     return oss.str();
-}
