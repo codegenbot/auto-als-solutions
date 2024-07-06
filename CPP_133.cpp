@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -21,9 +22,6 @@ int main() {
 
     int sum = sum_squares(lst);
 
-    std::cout << "Sum of squares: ";
-    for (float x : lst)
-        std::cout << floor(x)*floor(x) << " ";
-    std::cout << std::endl;
+    std::cout << "Sum of squares: " << sum << std::endl;
 
 }
