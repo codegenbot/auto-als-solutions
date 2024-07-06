@@ -1,8 +1,8 @@
-```cpp
+```c++
 #include <vector>
 #include <algorithm>
 
-bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+bool std::issame(const std::vector<int>& a, const std::vector<int>& b) {
     return a == b;
 }
 
@@ -12,7 +12,12 @@ std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
         if (game[i] == guess[i]) {
             result.push_back(0);
         } else {
-            result.push_back(std::abs(game[i] - guess[i]));
+            int diff = abs(game[i] - guess[i]);
+            if (diff > 5) {
+                result.push_back(-1);
+            } else {
+                result.push_back(diff);
+            }
         }
     }
     return result;
