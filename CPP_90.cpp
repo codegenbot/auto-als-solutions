@@ -14,5 +14,5 @@ int next_smallest(vector<int> numbers) {
             return num;
         }
     }
-    return -1; // or any other value to indicate that the next smallest number does not exist
+    return -1; 
 }
