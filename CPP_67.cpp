@@ -1,4 +1,4 @@
-#include <string>
+#include <iostream>
 #include <sstream>
 using namespace std;
 
@@ -12,7 +12,7 @@ int fruit_distribution(string s) {
 
     while (input >> word) {
         if (word == "apples")
-            apples = stoi(next(input).skipws().ignore());
+            apples =stoi(next(input).skipws().ignore());
         else if (word == "oranges")
             oranges = stoi(next(input).skipws().ignore());
     }
