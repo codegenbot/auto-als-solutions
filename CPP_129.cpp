@@ -1,4 +1,3 @@
-```
 vector<int> minPath(vector<vector<int>>& grid, int k) {
     int n = grid.size();
     vector<int> res;
