@@ -15,9 +15,9 @@ bool has_close_elements(std::vector<float> numbers, float threshold) {
 
 int main() {
     std::vector<float> a={1.0, 2.0, 3.9, 4.0, 5.0, 2.2};
-    if (has_close_elements(a, 0.1)) {
-        std::cout << "The list contains close elements." << std::endl;
+    if (has_close_elements(a, 0.5)) {
+        std::cout << "There are two close elements." << std::endl;
     } else {
-        std::cout << "The list does not contain close elements." << std::endl;
+        std::cout << "No close elements found." << std::endl;
     }
 }
