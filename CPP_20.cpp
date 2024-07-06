@@ -21,6 +21,6 @@ int find_closest_elements(const std::vector<float>& elements, const float& targe
 }
 
 int main() {
-    assert(issame({1.1f, 2.2f, 3.1f, 4.1f, 5.1f}, {2.2f, 3.1f}));
+    assert(issame({1.1, 2.2, 3.1, 4.1, 5.1}, {2.2, 3.1}));
     return 0;
 }
