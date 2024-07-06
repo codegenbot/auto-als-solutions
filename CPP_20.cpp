@@ -1,8 +1,34 @@
-#include <vector>
+```cpp
+bool issame(float a, float b) {
+    return (a - 0.5f < b && b - 0.5f < a);
+}
 
-bool issame(float* a, int la, float* b, int lb) {
-    for(int i = 0; i < la || i < lb; i++) {
-        if(i < la && i < lb && (a[i] != b[i])) return false;
+std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
+    std::vector<std::pair<float, float>> closest_pairs;
+
+    for (int i = 0; i < numbers.size() - 1; ++i) {
+        for (int j = i + 1; j < numbers.size(); ++j) {
+            float diff = abs(numbers[i] - numbers[j]);
+            if (diff == 0.0f) continue;
+            bool found = false;
+            for (auto &pair : closest_pairs) {
+                if (abs(pair.first - pair.second) <= diff) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
+            }
+        }
     }
-    return true;
+
+    return closest_pairs;
+}
+
+int main() {
+    float[] numbers = {1.1, 2.2, 3.1, 4.1, 5.1};
+    std::vector<float> vec(numbers, numbers + sizeof(float) / sizeof(float));
+    std::vector<std::pair<float, float>> closest = find_closest_elements(vec);
+    return 0;
 }
