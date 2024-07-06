@@ -1,20 +1,16 @@
+#include<stdio.h>
+#include<string>
+#include<algorithm>
+using namespace std;
+
 string get_closest_vowel(string word) {
-    for (int i = word.length() - 1; i > 0; --i) {
-        if (isvowel(word[i])) {
-            int j;
-            for (j = i - 1; j >= 0 && !isconsonant(word[j]); --j);
-            return j >= 0 ? word.substr(j + 1, i - j - 1) : "";
-        }
+    string vowels = "aeiouAEIOU";
+    int left = 0;
+    for(int i=word.size()-1; i>=0; i--) {
+        if(vowels.find(word[i]) != -1)
+            return word.substr(left, i-left+1);
+        else
+            left = i + 1;
     }
     return "";
-}
-
-bool isvowel(char c) {
-    c = tolower(c);
-    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
-}
-
-bool isconsonant(char c) {
-    c = tolower(c);
-    return !isvowel(c) && c >= 'b' && c <= 'z';
 }

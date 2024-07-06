@@ -1,13 +1,18 @@
-bool check_dict_case(map<string, string> dict) {
-    if (dict.empty()) return false;
+#include <string>
+#include <map>
+#include <cctype>
 
-    bool allLower = true;
-    bool allUpper = true;
-
-    for (auto& pair : dict) {
-        if (!islower(pair.first[0])) allLower = false;
-        if (!isupper(pair.first[0])) allUpper = false;
+bool check_dict_case(std::map<std::string, std::string> dict) {
+    for (const auto &pair : dict) {
+        if (!pair.first.empty() && !isupper(pair.first[0]) && !islower(pair.first[0])) 
+            return false;
     }
+    return true;
+}
 
-    return allLower || allUpper;
+int main() {
+    std::map<std::string, std::string> myDict;
+    // ... populate the dictionary ...
+    assert(check_dict_case(myDict) == false);
+    return 0;
 }
