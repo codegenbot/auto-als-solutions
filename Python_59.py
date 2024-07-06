@@ -13,4 +13,4 @@ def largest_prime_factor(n: int):
             if is_prime:
                 return i
         i -= 1
-    return None
+    return n
