@@ -1,1 +1,1 @@
-int minPath(std::vector<std::vector<char>> grid, int x, int y, std::vector<std::pair<int,int>>& path) {
+int minPath(int grid[][], int x, int y) {
