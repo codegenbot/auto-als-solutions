@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 #include <string>
@@ -41,7 +40,6 @@ vector<string> select_words(string s, int n) {
     }
 
     return result;
-
 }
 
 int main() {
