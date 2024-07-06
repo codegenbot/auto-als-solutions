@@ -1,8 +1,15 @@
 #include <iostream>
 #include <string>
 
-std::string decimal_to_binary(int decimal){
-    std::string binary = "";
+string decimal_to_binary(int decimal);
+int main() {
+    string result = decimal_to_binary(15);
+    assert(result == "db11111db");
+    return 0;
+}
+
+string decimal_to_binary(int decimal){
+    string binary = "";
     while(decimal > 0){
         if(decimal % 2 == 1)
             binary.insert(0,"1");
@@ -11,9 +18,4 @@ std::string decimal_to_binary(int decimal){
         decimal /= 2;
     }
     return "db" + binary + "db";
-}
-
-int main(){
-    assert (decimal_to_binary(15) == "db1111db");
-    return 0;
 }
