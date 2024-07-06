@@ -1,31 +1,31 @@
-#include <algorithm>
-using namespace std;
+map<string,int> numberMap = {{ "zero",0 }, { "one",1 }, { "two",2 }, 
+                              { "three",3 }, { "four",4 }, {"five",5 }, 
+                              { "six",6 }, { "seven",7 }, {"eight",8 }, {"nine",9 }};
 
-string sort_numbers(string numbers) {
-    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
-                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
-                                {"eight", 8}, {"nine", 9}};
+string sort_numbers(string numbers){
     vector<string> numVec;
     string temp;
-
-    for (int i = 0; i < numbers.length(); i++) {
-        if (numbers[i] == ' ') {
-            continue;
-        }
-        temp += numbers[i];
-        if (i + 1 >= numbers.length() || numbers[i + 1] != ' ') {
+    for(int i=0; i<numbers.size();i++){
+        if(numbers[i] == ' '){
             numVec.push_back(temp);
             temp = "";
         }
+        else{
+            temp += numbers[i];
+        }
     }
+    numVec.push_back(temp);
 
-    sort(numVec.begin(), numVec.end(), [&numMap](string a, string b) {
-        return to_string(numMap[a]) < to_string(numMap[b]);
-    });
-
+    sort(numVec.begin(),numVec.end());
     string result;
-    for (const auto &str : numVec) {
-        result += str + " ";
+    for(int i=0; i<numVec.size();i++){
+        for(auto it = numberMap.begin(); it != numberMap.end(); ++it){
+            if(it->first == numVec[i]){
+                result += it->first + " ";
+                break;
+            }
+        }
     }
-    return result.substr(0, result.length() - 1);
+
+    return result.substr(0,result.length()-1);
 }
