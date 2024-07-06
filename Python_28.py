@@ -4,9 +4,8 @@ while True:
     if inp.lower() == 'stop':
         break
     for s in inp.split():
-        while len(s) > 1 and not set(s).issubset({'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '}):
-            s = input("Invalid string. Please enter a single alphabet character (or 'stop' to finish): ")
-            if s.lower() == 'stop':
-                break
-        strings += [s.strip()]
+        if set(s).issubset({'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '}):
+            strings += [s.strip()]
+        else:
+            raise ValueError
 print(' '.join(filter(None, strings)))

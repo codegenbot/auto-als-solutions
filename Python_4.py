@@ -1,9 +1,10 @@
+```
 from typing import List
 
 
 def mean_absolute_deviation(numbers: List[float]) -> float:
-    if not numbers:
-        raise ValueError("No numbers were provided")
+    if len(numbers) == 0:
+        return 0
     numeric_numbers = [num for num in numbers if isinstance(num, (int, float))]
     if not numeric_numbers:
         return 0
