@@ -1,21 +1,29 @@
-#include <string>
-#include <algorithm>
-
-using namespace std;
-
 string get_closest_vowel(string word) {
-    int left = 0;
-    for (int right = word.size() - 1; right >= 0 && !isVowel(word[right]); right--) {
-        left = right + 1;
-    }
-    if (!isVowel(word[left])) return "";
-    for (int i = left - 1; i > 0; i--) {
-        if (isVowel(word[i])) return string(1, word[i]);
+    int n = word.size();
+    for(int i=n-1; i>=0; i--) {
+        if(word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || 
+           word[i] == 'o' || word[i] == 'u' || word[i] == 'A' || 
+           word[i] == 'E' || word[i] == 'I' || word[i] == 'O' || 
+           word[i] == 'U') {
+            int j = i-1;
+            while(j>=0 && (word[j] == 'a' || word[j] == 'e' || 
+                           word[j] == 'i' || word[j] == 'o' || 
+                           word[j] == 'u' || word[j] == 'A' || 
+                           word[j] == 'E' || word[j] == 'I' || 
+                           word[j] == 'O' || word[j] == 'U')) {
+                j--;
+            }
+            if(j<0) return string(1,word[i]);
+            int k = i+1;
+            while(k<n && (word[k] != 'a' && word[k] != 'e' &&
+                           word[k] != 'i' && word[k] != 'o' &&
+                           word[k] != 'u' && word[k] != 'A' &&
+                           word[k] != 'E' && word[k] != 'I' &&
+                           word[k] != 'O' && word[k] != 'U')) {
+                k++;
+            }
+            if(k<n) return string(1,word[i]);
+        }
     }
     return "";
-}
-
-bool isVowel(char c) {
-    c = tolower(c);
-    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
