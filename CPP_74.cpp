@@ -1,19 +1,14 @@
-namespace std;
+```c++
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cstddef>
 
 bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    if (a.size() != b.size()) {
-        return false;
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) return false;
     }
-    
-    for (size_t i = 0; i < a.size(); ++i) {
-        if (a[i].compare(b[i]) != 0) {
-            return false;
-        }
-    }
-
     return true;
 }
 
@@ -40,14 +35,14 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     for (const auto& str : lst1) {
         sum1lst += str.length();
         for (char c : str) {
-            sum1lst += 1;
+            sum1lst++;
         }
     }
 
     for (const auto& str : lst2) {
         sum2lst += str.length();
         for (char c : str) {
-            sum2lst += 1;
+            sum2lst++;
         }
     }
 
