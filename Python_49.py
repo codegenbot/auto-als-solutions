@@ -13,5 +13,4 @@ def modp(n: int, p: int):
     if g != 1:
         return None 
     else:
-        result = pow(x, -(p-2), p)
-        return result
+        return pow(x, -(p-2), p)
