@@ -4,25 +4,32 @@
 using namespace std;
 
 string anti_shuffle(string s) {
-    stringstream ss(s);
-    string word;
     string result = "";
-
-    while (ss >> word) {
+    istringstream iss(s);
+    string word;
+    
+    while (iss >> word) {
         for (char c : word) {
             result += c;
         }
+        
         for (int i = 0; i < word.length(); ++i) {
-            char c = word[i];
-            for (int j = i + 1; j < word.length(); ++j) {
-                if (c > word[j]) {
-                    swap(c, word[j]);
+            if (i > 0) {
+                result += ' ';
+            }
+            char minC = word[0];
+            int minIndex = 0;
+            
+            for (int j = 1; j <= word.length() - i; ++j) {
+                if (word[j] < minC) {
+                    minC = word[j];
+                    minIndex = j;
                 }
             }
-            result += c;
+            
+            result += minC;
         }
-        result += " ";
     }
-
-    return result.substr(0, result.length() - 1);
+    
+    return result;
 }
