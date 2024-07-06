@@ -33,14 +33,14 @@ int skjkasdkd(vector<int> lst) {
 }
 
 int main() {
-    vector<int> input;
+    vector<int> lst;
     cout << "Enter the numbers separated by space: ";
     int num;
-    while (cin >> num) {
-        input.push_back(num);
+    while ((cin >> num) && (num != -1)) {
+        lst.push_back(num);
     }
-    if (!input.empty()) {
-        cout << "Sum of digits of largest prime number is: " << skjkasdkd(input) << endl;
+    if (!lst.empty()) {
+        cout << "Sum of digits for largest prime number is " << skjkasdkd(lst) << endl;
     } else {
         cout << "No numbers entered." << endl;
     }

@@ -1,15 +1,9 @@
-Here is the completed code:
+#include<stdio.h>
+#include<math.h>
+#include<string>
+using namespace std;
 
-```cpp
-#include <cmath>
-
-int closest_integer(string value) {
+int closest_integer(string value){
     double num = stod(value);
-    int integerPart = (int)num;
-    if (fabs(num - integerPart) < 0.5)
-        return integerPart;
-    else if (num > integerPart)
-        return integerPart + 1;
-    else
-        return integerPart - 1;
+    return (num > 0)? ceil(num) : floor(num);
 }

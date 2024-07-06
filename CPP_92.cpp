@@ -1,8 +1,10 @@
-Here is the completed code:
-
 bool any_int(float a, float b, float c) {
-    if (abs(a - round(a)) < 0.001 && abs(b - round(b)) < 0.001 && abs(c - round(c)) < 0.001) {
-        return (a == b + c || a == c + b || a == b - c || a == c - b);
-    }
-    return false;
+    int ai = (int)a, bi = (int)b, ci = (int)c;
+    return ai == bi + ci || bi == ai + ci || ci == ai + bi;
+}
+
+int main() {
+    assert(any_int(3.01, 4, 7) == false);
+    // your code here
+    return 0;
 }
