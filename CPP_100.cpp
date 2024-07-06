@@ -1,6 +1,9 @@
+#include <vector>
+#include <cassert>
+
 std::vector<int> make_a_pile(int n) {
     std::vector<int> pile;
-    for (int i = n*2 -8; i <= n*2; i += 2) {
+    for (int i = 8; i <= 22 + (n - 1) * 2; i += 2) {
         pile.push_back(i);
     }
     return pile;
