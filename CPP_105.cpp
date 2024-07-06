@@ -1,13 +1,11 @@
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
-bool issame(const std::vector<std::string>& v1, const std::vector<std::string>& v2) {
-    if (v1.size() != v2.size()) return false;
-    for (int i = 0; i < v1.size(); ++i) {
-        if (v1[i] != v2[i]) return false;
-    }
-    return true;
+bool issame(int x, int y) {
+    if (x == y)
+        return true;
+    else
+        return false;
 }
 
 std::vector<std::string> by_length(std::vector<int> arr) {
@@ -55,16 +53,4 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     }
 
     return result;
-}
-
-int main() {
-    std::vector<int> arr = {1, 2, 3, 4, 5};
-    std::vector<std::string> res = by_length(arr);
-
-    for (const auto& str : res) {
-        std::cout << str << " ";
-    }
-    std::cout << std::endl;
-
-    return 0;
 }

@@ -1,29 +1,18 @@
-Here is the modified code:
-
 #include <vector>
-#include <cassert>
+#include <algorithm>
 
-bool same(vector<int> a, vector<int> b) {
-    if (a.size() != b.size())
-        return false;
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i])
-            return false;
-    }
-    return true;
-}
+bool same(vector<int> a, vector<int> b) { 
+    return a.size() == b.size() && all_of(a.begin(), a.end(), [b](int x) { 
+        return find(b.begin(), b.end(), x) != b.end(); 
+    }); 
+} 
 
-vector<int> make_a_pile(int n) {
-    vector<int> pile;
-    for (int i = 1; i <= n; i++) {
-        if (i % 2 == 0)
-            pile.push_back(i * 2 - 1);
-        else
-            pile.push_back(i * 2);
-    }
-    return pile;
-}
+vector<int> make_a_pile(int n) { 
+    vector<int> pile; 
+    for (int i = 1; i <= n; i++) 
+        pile.push_back(i % 2 ? i * 2 - 1 : i * 2); 
+    return pile; } 
 
 int main() {
     assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
-    return 0;
+}
