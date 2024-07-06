@@ -5,4 +5,4 @@ def fix_spaces(text):
             new_text += '_'
         else:
             new_text += char
-    return new_text.replace(' ', '-')
+    return new_text.replace(' ', '-').replace('_', ' ')
