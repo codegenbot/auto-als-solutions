@@ -1,11 +1,17 @@
-from typing import List, Union
+from typing import List
 
 
-def concatenate(strings: Union[List[str], str]) -> str:
+def concatenate() -> str:
+    num_strings = int(input("Enter number of strings: "))
+    strings = []
+    
+    for _ in range(num_strings):
+        s = input("Enter string: ")
+        strings.append(s)
+        
     result = ""
-    if isinstance(strings, list):
-        for s in strings:
-            result += s
-    else:
-        result = strings
+    for s in strings:
+        result += s
     return result
+
+print(concatenate())
