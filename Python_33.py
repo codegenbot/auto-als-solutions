@@ -1,2 +1,5 @@
 def sort_third(lst):
-    return sorted([i for i in lst], key=lambda x: (3 if isinstance(x, int) else x[2]))
+    return sorted(
+        [(x // 10000, x % 10000, x % 10000) if isinstance(x, int) else x for x in lst],
+        key=lambda x: x[2],
+    )
