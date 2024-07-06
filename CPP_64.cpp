@@ -1,12 +1,11 @@
 #include <string>
-using namespace std;
 
-int vowels_count(string s) {
+int vowels_count(std::string s) {
     int count = 0;
     for (char c : s) {
         if ((c == 'a') || (c == 'e') || (c == 'i') || (c == 'o') || (c == 'u')) {
             count++;
-        } else if (c == 'y' && (s.length() - 1) > s.find('y')) {
+        } else if (c == 'y' && (s.find('y') == 0 || s.find('y') < s.length() - 1)) {
             count++;
         }
     }
@@ -14,6 +13,6 @@ int vowels_count(string s) {
 }
 
 int main() {
-    assert(vowels_count("ACEDY") == 3);
+    assert (vowels_count("ACEDY") == 3);
     return 0;
 }
