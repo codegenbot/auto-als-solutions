@@ -1,20 +1,28 @@
-#include <vector>
-#include <string>
-
-namespace {
 bool issame(vector<string> a, vector<string> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i)
-        if (a[i] != b[i]) return false;
-    return true;
+    return a == b;
 }
+
+int main() {
+    int b;
+    cin >> b;
+
+    vector<int> arr;
+    for(int i = 0; i < b; ++i) {
+        int num;
+        cin >> num;
+        arr.push_back(num);
+    }
+
+    vector<string> result = by_length(arr);
+
+    return 0;
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<string> numbers;
+    vector<int> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(to_string(num));
+            numbers.push_back(num);
         }
     }
 
@@ -22,38 +30,38 @@ vector<string> by_length(vector<int> arr) {
     reverse(numbers.begin(), numbers.end());
 
     vector<string> result;
-    for (string str : numbers) {
-        string newstr = "";
-        switch (stoi(str)) {
+    for (int num : numbers) {
+        string str = "";
+        switch (num) {
             case 1:
-                newstr = "One";
+                str = "One";
                 break;
             case 2:
-                newstr = "Two";
+                str = "Two";
                 break;
             case 3:
-                newstr = "Three";
+                str = "Three";
                 break;
             case 4:
-                newstr = "Four";
+                str = "Four";
                 break;
             case 5:
-                newstr = "Five";
+                str = "Five";
                 break;
             case 6:
-                newstr = "Six";
+                str = "Six";
                 break;
             case 7:
-                newstr = "Seven";
+                str = "Seven";
                 break;
             case 8:
-                newstr = "Eight";
+                str = "Eight";
                 break;
             case 9:
-                newstr = "Nine";
+                str = "Nine";
                 break;
         }
-        result.push_back(newstr);
+        result.push_back(str);
     }
 
     return result;
