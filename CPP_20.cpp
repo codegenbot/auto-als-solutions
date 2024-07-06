@@ -1,28 +1,13 @@
+```cpp
 #include <algorithm>
-#include <numeric>
 #include <vector>
+#include <numeric>
+#include <limits>
 
-bool operator==(const std::vector<float>& a, const std::vector<float>& b) {
+using namespace std;
+
+bool operator==(const vector<float>& a, const vector<float>& b) {
     return a.size() == b.size() && equal(a.begin(), a.end(), b.begin());
-}
-
-int main() {
-    std::vector<float> numbers;
-    // Read input from user
-    int n;
-    cin >> n;
-    for(int i = 0; i < n; ++i) {
-        float num;
-        cin >> num;
-        numbers.push_back(num);
-    }
-    
-    std::vector<float> result = find_closest_elements(numbers);
-    
-    // Print output
-    cout << "Closest pair: (" << result[0] << ", " << result[1] << ")" << endl;
-
-    return 0;
 }
 
 vector<float> find_closest_elements(vector<float> numbers) {
