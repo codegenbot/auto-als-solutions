@@ -28,6 +28,7 @@ def separate_paren_groups(paren_string: str) -> List[str]:
     if stack:
         while stack and stack[-1] == "(":
             stack.pop()
-        groups.append("(" + current_group + ")")
+        if stack:  
+            groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]
