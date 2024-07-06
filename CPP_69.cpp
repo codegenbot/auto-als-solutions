@@ -1,15 +1,13 @@
 #include <algorithm>
 #include <vector>
+#include <numeric>
 
-int search(const std::vector<int>& numbers, int target) {
-    for (const auto& num : numbers) {
-        if (num == target)
-            return -1; 
+int findMaxValue(std::vector<int> numbers) {
+    int maxVal = -1;
+    for (int num : numbers) {
+        if (num > maxVal) {
+            maxVal = num;
+        }
     }
-    return 0;
-}
-
-int main() {
-    assert(search({3, 10, 10, 9, 2}, 12) == -1); 
-    return 0;
+    return maxVal;
 }
