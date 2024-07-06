@@ -1,3 +1,10 @@
+```cpp
+#include <string>
+#include <iomanip>
+#include <sstream>
+
+using namespace std;
+
 string string_to_md5(const string& text) {
     if (text.empty()) return "";
 
