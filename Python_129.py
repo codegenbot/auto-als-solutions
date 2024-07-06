@@ -4,15 +4,8 @@ def minPath(grid, k):
     queue = [(0, 0, [grid[0][0]])]
     result = []
 
-    k_count = 0
     while queue:
         x, y, path = queue.pop(0)
-        for p in path[1:]:
-            k_count += grid[x][y] == int(p)
-        if k_count > k:
-            return []
-        k_count = 0
-
         if len(path) > k:
             continue
         if len(path) == k:
