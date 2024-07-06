@@ -1,10 +1,10 @@
+```c++
 #include <algorithm>
 #include <vector>
 using namespace std;
 
 int search(const vector<int>& vec, int target) {
-    auto it = find(vec.begin(), vec.end(), target);
-    return it == vec.end() ? -1 : distance(it, vec.end());
+    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
 }
 
 int main() {
@@ -18,6 +18,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(search(vec, vec[0]) == -1);
+    assert(search(vector<int>({3, 10, 10, 9, 2}), 10) == distance(vec.begin(), vec.end()));
     return 0;
 }
