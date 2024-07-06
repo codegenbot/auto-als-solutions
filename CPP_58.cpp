@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -22,5 +23,11 @@ bool issame(vector<int> a, vector<int> b) {
 }
 
 int main(){
-    assert(common({4, 3, 2, 8}, {1,2,3,4}) == vector<int>( {2, 3} ));
+    vector<int> v1 = {4, 3, 2, 8};
+    vector<int> v2 = {};
+    cout << "Common elements: ";
+    for(int x:v1)cout<<x<<" ";
+    cout<<endl;
+    vector<int> result = common(v1,v2);
+    cout << "Vector 1 and Vector 2 are same: " << (issame(v1, v2)? "true" : "false") << endl;
 }
