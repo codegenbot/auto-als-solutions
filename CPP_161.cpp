@@ -18,9 +18,10 @@ string solve(string s){
 }
 
 int main(){
-    string s;
+    string input;
     cout << "Enter a string: ";
-    cin >> s;
-    cout << solve(s) << endl;
+    getline(cin, input);
+    string output = solve(input);
+    cout << "Output: " << output << endl;
     return 0;
 }
