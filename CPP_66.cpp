@@ -1,13 +1,11 @@
-#include <string>
-
+#include<string>
 using namespace std;
 
-int digitSum(string s) {
+int digitSum(string s){
     int sum = 0;
-    for (char c : s) {
-        if (isupper(c)) {
-            sum += c;
-        }
+    for(char c : s){
+        if(isdigit(c) || isupper(c))
+            sum += (isdigit(c))? c - '0' : tolower(c);
     }
     return sum;
 }
