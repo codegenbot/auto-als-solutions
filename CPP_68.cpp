@@ -1,24 +1,16 @@
-#include <iostream>
 #include <vector>
 
-std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<int> result;
-    if (arr.empty()) {
-        return result;
+bool isSame(const std::vector<int>& vec) {
+    if (vec.size() == 0) {
+        return true;
     }
     
-    int smallest_even = INT_MAX;
-    int index = -1;
-    
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0 && arr[i] < smallest_even) {
-            smallest_even = arr[i];
-            index = i;
+    int first = vec[0];
+    for (int i = 1; i < vec.size(); i++) {
+        if (vec[i] != first) {
+            return false;
         }
     }
     
-    result.push_back(smallest_even);
-    result.push_back(index);
-    
-    return result;
+    return true;
 }
