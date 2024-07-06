@@ -1,38 +1,15 @@
 #include <vector>
-#include <algorithm>
 
-bool issame(vector<int> a, vector<int> b) {
-    return a == b;
-}
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<int> result = {};
+    int minEvenValue = INT_MAX;
 
-vector<int> pluck(vector<int> arr) {
-    vector<pair<int, int>> evenNodes;
     for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0) {
-            evenNodes.emplace_back(arr[i], i);
+        if (arr[i] % 2 == 0 && arr[i] < minEvenValue) {
+            minEvenValue = arr[i];
+            result = {minEvenValue, i};
         }
     }
-    
-    if (evenNodes.empty()) {
-        return {};
-    }
-    
-    sort(evenNodes.begin(), evenNodes.end());
-    
-    vector<int> result;
-    for (int i = 0; i < arr.size(); i++) {
-        bool found = false;
-        for (const auto& node : evenNodes) {
-            if (node.second == i) {
-                result.push_back(node.first);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            result.push_back(arr[i]);
-        }
-    }
-    
+
     return result;
 }
