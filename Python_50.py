@@ -10,16 +10,15 @@ def decode_shift(s: str):
             shift = 1
         elif 'a' <= ch <= 'z':
             if shift:
-                decoded_str += chr((ord(ch)-97+26-key)%26 + 97)
-            else:
-                decoded_str += chr(ord(ch))
-            shift = 0
-        elif 'A' <= ch <= 'Z':
-            if shift:
-                decoded_str += chr((ord(ch)-65+26-key)%26 + 65)
+                if ch.islower():
+                    decoded_str += chr((ord(ch)-97+26-key)%26 + 97)
+                else:
+                    decoded_str += chr(((ord(ch)-65+(ord('z')-ord('a')+1))%26) + 65)
             else:
                 decoded_str += ch
             shift = 0
+        else: 
+            decoded_str += ch
     
     return decoded_str
 
