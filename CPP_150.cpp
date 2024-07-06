@@ -1,6 +1,5 @@
+```
 #include <cmath>
-#include <math.h>
-
 using namespace std;
 
 bool isPrime(int num) {
