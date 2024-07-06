@@ -1,16 +1,6 @@
 #include <iostream>
 #include <vector>
 
-int totalOddSum(std::vector<int> lst) {
-    int sum = 0;
-    for (int i = 1; i < lst.size(); i++) {
-        if (lst[i] % 2 != 0) {
-            sum += lst[i];
-        }
-    }
-    return sum;
-}
-
 int main() {
     std::vector<int> lst;
     int sum = 0;
@@ -19,6 +9,10 @@ int main() {
         std::cin >> x;
         lst.push_back(x);
     }
-    sum = totalOddSum(lst);
+    for (int i = 1; i < lst.size(); i++) {
+        if (lst[i] % 2 != 0) {
+            sum += lst[i];
+        }
+    }
     return sum;
 }
