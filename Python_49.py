@@ -1,4 +1,3 @@
-```
 def modp(n: int, p: int):
     if n < 0:
         n += p
@@ -13,4 +12,4 @@ def modp(n: int, p: int):
     if g != 1:
         return None 
     else:
-        return pow(x, -(p-2), p)
+        return x % p
