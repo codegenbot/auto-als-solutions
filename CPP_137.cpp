@@ -1,11 +1,10 @@
-```cpp
 #include <iostream>
 #include <string>
-#include <boost/any.hpp>
+#include <any>
 
 using namespace std;
 
-boost::any compare_one(boost::any a, boost::any b) {
+std::any compare_one(std::any a, std::any b) {
     double da = any_cast<double>(a);
     string sa = any_cast<string>(a);
     double db = any_cast<double>(b);
@@ -18,13 +17,12 @@ boost::any compare_one(boost::any a, boost::any b) {
     else if (db > da)
         return b;
     else
-        return boost::any("None");
+        return "None";
 }
 
 int main() {
-    boost::any a = 10.5; 
-    boost::any b = "hello";
-    boost::any result = compare_one(a, b);
+    std::any a = 10.5; 
+    std::any b = "hello";
+    std::any result = compare_one(a, b);
     cout << "Result: " << any_cast<string>(result) << endl;
     return 0;
-}

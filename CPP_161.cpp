@@ -1,11 +1,14 @@
+```cpp
 #include <iostream>
 #include <string>
 
-std::string solve(std::string s){
-    std::string result = "";
+using namespace std;
+
+string solve(string s){
+    string result = "";
     for(int i=0; i<s.length(); i++){
         if(isalpha(s[i])){
-            result += (isupper(s[i])) ? tolower(s[i]) : toupper(s[i]);
+            result += (s[i] >= 'a' && s[i] <= 'z') ? toupper(s[i]) : tolower(s[i]);
         }else{
             result += s[i];
         }
@@ -14,13 +17,14 @@ std::string solve(std::string s){
 }
 
 int main(){
-    std::string str;
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, str);
-    if(str.empty()){
-        std::cout << "Error: Please enter a non-empty string." << std::endl;
-    }else{
-        std::cout << solve(str) << std::endl;
+    string input;
+    cout << "Enter a string: ";
+    std::getline(std::cin, input);
+    if(input.empty()){
+        cout << "Error! Please enter a valid input." << endl;
+    } else {
+        string output = solve(input);
+        cout << "Output: " << output << endl;
     }
     return 0;
 }
