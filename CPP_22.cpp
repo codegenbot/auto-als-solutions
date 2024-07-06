@@ -1,8 +1,17 @@
 #include <vector>
 #include <boost/any.hpp>
+#include <algorithm>
 
 bool issame(const vector<int>& a, const vector<int>& b) {
-    return a.size() == b.size() && all_of(a.begin(), a.end(), [&](int x) { return count(b.begin(), b.end(), x) > 0; });
+    if (a.size() != b.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 int main() {
