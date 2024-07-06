@@ -1,10 +1,9 @@
-```
 def split_words(txt):
     words = txt.split()
-    if len(words) > 0 and any(char.isalnum() for char in words[0]):
-        return words
-    elif ',' in txt:
-        return txt.split(',')
+    if len(words) > 0 and all(char.isalnum() for char in words[0]):
+        return [word for word in words]
     else:
-        odd_count = sum(1 for c in txt.lower() if ord(c)-ord('a')%2==1)
-        return odd_count
+        try:
+            return words
+        except ValueError:
+            return sum(1 for char in txt.lower() if ord(char) % 2 == 1)
