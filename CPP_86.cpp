@@ -4,25 +4,17 @@
 using namespace std;
 
 string anti_shuffle(string s) {
-    stringstream ss(s);
+    istringstream iss(s);
     string word;
     string result = "";
 
-    while (ss >> word) {
+    while (iss >> word) {
+        string temp = "";
         for (char c : word) {
-            result += c;
+            temp += (temp.empty() ? "" : " ") + c;
         }
-        for (int i = 0; i < word.length(); ++i) {
-            char c = word[i];
-            for (int j = i + 1; j < word.length(); ++j) {
-                if (c > word[j]) {
-                    swap(c, word[j]);
-                }
-            }
-            result += c;
-        }
-        result += " ";
+        result += temp;
     }
 
-    return result.substr(0, result.length() - 1);
+    return result;
 }
