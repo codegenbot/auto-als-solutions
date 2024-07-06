@@ -1,6 +1,5 @@
-```
 def count_up_to(n):
-    result = []
+    primes = []
     for i in range(2, n):
         is_prime = True
         for j in range(2, int(i**0.5) + 1):
@@ -8,5 +7,5 @@ def count_up_to(n):
                 is_prime = False
                 break
         if is_prime:
-            result.append(i)
-    return result
+            primes.append(i)
+    return primes
