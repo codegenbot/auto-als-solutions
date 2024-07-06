@@ -1,16 +1,15 @@
+#include <vector>
+#include <algorithm>
+
 bool pairs_sum_to_zero(std::vector<int> l) {
     std::sort(l.begin(), l.end());
     for (int i = 0; i < l.size() - 1; ++i) {
-        if (std::abs(l[i]) + l[i] == 0) return true;
-        int j = i + 1;
-        while (j < l.size() && l[j] <= std::abs(l[i])) {
+        j = l.size() - 1;
+        while (j > i) {
             if (l[i] + l[j] == 0) return true;
-            ++j;
+            if (l[i] < l[j]) --j;
+            else j--;
         }
-    }
-    for(int i=0; i<l.size(); i++){
-        if(std::find(l.begin(), l.end(), -std::abs(l[i])) != l.end())
-            return true;
     }
     return false;
 }
