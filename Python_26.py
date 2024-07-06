@@ -1,4 +1,5 @@
-def remove_duplicates(numbers: list[int]) -> list[int]: 
+```
+def remove_duplicates(numbers: list[int]) -> list[int]:
     seen = {}
     result = []
     for num in numbers:
