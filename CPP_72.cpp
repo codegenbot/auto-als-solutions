@@ -1,15 +1,11 @@
-Here is the completed code:
-
 bool will_it_fly(vector<int> q, int w) {
-    string str = "";
+    string s = "";
     for (int i : q) {
-        str += to_string(i);
+        s += to_string(i);
     }
-    
-    bool balanced = true;
-    if (!str.equals(str.reverse())) {
-        balanced = false;
+    if (!s.compare(to_string(s))) {
+        return accumulate(q.begin(), q.end(), 0) <= w;
+    } else {
+        return false;
     }
-
-    return balanced &&accumulate(q.begin(), q.end(), 0) <= w;
 }
