@@ -1,15 +1,28 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+bool issame(std::vector<int> a, std::vector<int> b) {
+    return a == b;
+}
+
 void strange_sort_list(std::vector<int>& lst) {
-    std::vector<int> result = lst;
+    std::vector<int> result;
     int min_val = 0;
-    while (!result.empty()) {
-        min_val = *std::min_element(result.begin(), result.end());
-        for (int i : result) {
+    while (!lst.empty()) {
+        min_val = *std::min_element(lst.begin(), lst.end());
+        for (int i : lst) {
             if (i == min_val) {
-                result.erase(std::remove(result.begin(), result.end(), i), result.end());
+                lst.erase(std::remove(lst.begin(), lst.end(), i), lst.end());
                 break;
             }
         }
-        std::cout << min_val << " ";
+        result.push_back(min_val);
     }
-    std::cout << "\n";
+}
+
+int main() {
+    int v[] = {1, 1, 1, 1, 1};
+    assert(issame(strange_sort_list(std::vector<int>(v, v + 1)) , std::vector<int>(v, v + 1)));
+    return 0;
 }
