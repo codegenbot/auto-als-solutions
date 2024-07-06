@@ -1,27 +1,29 @@
 #include <algorithm>
+#include <vector>
+#include <utility>
 
-vector<int> order_by_points(vector<int> nums) {
-    vector<pair<int, int>> numWithIndex;
-    
-    for (int i = 0; i < nums.size(); ++i) {
-        numWithIndex.push_back({getDigitSum(nums[i]), i});
-    }
-    
-    sort(numWithIndex.begin(), numWithIndex.end());
-    
-    vector<int> result;
-    for (const auto& pair : numWithIndex) {
-        result.push_back(nums[pair.second]);
-    }
-    
-    return result;
+bool issame(vector<int> a, vector<int>b){
+    return a == b;
 }
 
-int getDigitSum(int n) {
-    int sum = 0;
-    while (n != 0) {
-        sum += n % 10;
-        n /= 10;
+vector<int> order_by_points(vector<int> nums) {
+    vector<pair<int, int>> points;
+    for (int i = 0; i < nums.size(); i++) {
+        int sumOfDigits = 0;
+        int num = nums[i];
+        while (num != 0) {
+            sumOfDigits += num % 10;
+            num /= 10;
+        }
+        points.emplace_back(sumOfDigits, i);
     }
-    return sum;
+
+    sort(points.begin(), points.end());
+
+    vector<int> result;
+    for (int i = 0; i < points.size(); i++) {
+        result.push_back(nums[points[i].second]);
+    }
+
+    return result;
 }
