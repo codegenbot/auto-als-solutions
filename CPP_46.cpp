@@ -1,13 +1,24 @@
-Here is the completed code:
+#include <stdio.h>
+
+using namespace std;
 
 int fib4(int n) {
-    if (n < 0) return -1; // Return error for negative input
-    int fib4[5] = {0, 0, 2, 0, 0}; // Base cases
-    for (int i = 5; i <= n; ++i) {
-        int sum = fib4[i-1] + fib4[i-2] + fib4[i-3] + fib4[i-4];
-        for (int j = 4; j > 0; --j)
-            fib4[j] = fib4[j-1];
-        fib4[0] = sum;
+    if (n <= 3) return 0;
+    int a = 2, b = 0, c = 0, d = 0;
+    for (int i = 4; i <= n; ++i) {
+        int temp = a + b + c;
+        d = c;
+        c = b;
+        b = a;
+        a = temp;
     }
-    return fib4[n];
+    return a;
+}
+
+int main() {
+    int n;
+    printf("Enter the value of n: ");
+    scanf("%d", &n);
+    printf("The %d-th element of the fib4 sequence is: %d\n", n, fib4(n));
+    return 0;
 }
