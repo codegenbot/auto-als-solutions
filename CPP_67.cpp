@@ -1,18 +1,37 @@
 int fruit_distribution(string s, int n) {
     size_t pos = 0;
-    string word;
-    int apples = 0, oranges = 0;
+    int apples = 0;
+    int oranges = 0;
 
-    while ((pos = s.find(" and ")) != string::npos) {
-        word = s.substr(0, pos);
-        if (word.find("apples") != string::npos)
-            apples = stoi(word.substr(0, word.find(" ")));
-        else if (word.find("oranges") != string::npos)
-            oranges = stoi(word.substr(0, word.find(" ")));
-
-        s.erase(0, pos + 5);
+    // Find the position of "apples" and count the number of apples.
+    while ((pos = s.find(" apples", pos)) != string::npos) {
+        if (pos + 8 <= s.length()) {
+            int start = pos;
+            while (s[start] >= '0' && s[start] <= '9') start++;
+            int end = start;
+            while (end < s.length() && s[end] >= '0' && s[end] <= '9') end++;
+            apples = stoi(s.substr(start, end - start));
+        }
+        pos += 8;
     }
 
-    int mangoes = n - apples - oranges;
-    return mangoes;
+    // Find the position of "oranges" and count the number of oranges.
+    while ((pos = s.find(" oranges", pos)) != string::npos) {
+        if (pos + 8 <= s.length()) {
+            int start = pos;
+            while (s[start] >= '0' && s[start] <= '9') start++;
+            int end = start;
+            while (end < s.length() && s[end] >= '0' && s[end] <= '9') end++;
+            oranges = stoi(s.substr(start, end - start));
+        }
+        pos += 8;
+    }
+
+    // Calculate the total number of fruits and return the difference.
+    int totalFruits = n;
+    if (totalFruits > apples + oranges) {
+        return totalFruits - apples - oranges;
+    } else {
+        return 0;
+    }
 }

@@ -6,10 +6,13 @@ vector<int> common(vector<int> l1, vector<int> l2) {
     set<int> s1(l1.begin(), l1.end());
     set<int> s2(l2.begin(), l2.end());
 
-    set<int> result;
+    set<int> resultIntersection;
+    if(s1.empty() || s2.empty()) {
+        return vector<int>();
+    }
     set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
-                      back_inserter(result));
+                      inserter(resultIntersection, resultIntersection.begin()));
 
-    vector<int> r(result.begin(), result.end());
-    return r;
+    vector<int> result(resultIntersection.begin(), resultIntersection.end());
+    return result;
 }

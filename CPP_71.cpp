@@ -1,12 +1,9 @@
-#include<stdio.h>
-#include<math.h>
-using namespace std;
+Here is the completed code:
 
 float triangle_area(float a, float b, float c) {
     if ((a + b > c) && (a + c > b) && (b + c > a)) {
-        float s = (a + b + c) / 2.0;
-        return round((sqrt(s*(s-a)*(s-b)*(s-c))) * 100.0) / 100.0;
+        return (sqrt((a * (b + c - a)) * ((b + c - a) * 2))) / 2;
     } else {
-        return -1.0;
+        return -1.0f;
     }
 }
