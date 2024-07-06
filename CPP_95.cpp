@@ -1,13 +1,17 @@
-bool check_map_case(map<string, string> dict) {
+#include <string>
+#include <map>
+#include <cctype>
+
+bool check_map_case(map<string, string> pair.first) {
     bool all_lower = true;
     bool all_upper = true;
 
-    for (auto& pair : dict) {
+    for (auto& dict : pair.first) {
         if (dict.empty()) {
             return false;
         }
-        string key = pair.first;
-        if (!islower(key[0]) && !isupper(key[0])) {
+        string key = dict.first;
+        if (!(islower(key[0]) || isupper(key[0]))) {
             return false;
         }
         if (!all_lower) all_upper = true;
