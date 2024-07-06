@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <string>
 
@@ -23,18 +24,4 @@ string exchange(vector<int> lst1, vector<int> lst2) {
             return "NO";
     }
     return "YES";
-}
-
-int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<int> lst1(n), lst2(m);
-    for (int i = 0; i < n; i++) {
-        cin >> lst1[i];
-    }
-    for (int i = 0; i < m; i++) {
-        cin >> lst2[i];
-    }
-    cout << exchange(lst1, lst2) << endl;
-    return 0;
 }
