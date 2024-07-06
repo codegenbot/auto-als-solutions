@@ -1,8 +1,12 @@
 bool will_it_fly(vector<int> q, int w) {
-    vector<int> rev = q;
-    reverse(rev.begin(), rev.end());
-    if (q == rev) {  // balanced palindromic vector
-        return accumulate(q.begin(), q.end(), 0) <= w;  // sum of elements less than or equal to maximum possible weight
+    string str = "";
+    for(int i : q) {
+        str += to_string(i);
     }
-    return false;
+    
+    if(str != reverse(string(str)).substr(0, str.length())) {
+        return false;
+    } else {
+        return std::accumulate(q.begin(), q.end(), 0) <= w;
+    }
 }
