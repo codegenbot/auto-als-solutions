@@ -22,7 +22,7 @@ def separate_paren_groups(paren_string: str) -> list:
                     groups.append("(" + current_group + ")")
                     current_group = ""
 
-                stack.pop()
+            stack.pop()
 
         elif char.isalpha() or (char.isspace() and stack):
             pass
