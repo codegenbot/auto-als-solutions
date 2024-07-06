@@ -1,7 +1,5 @@
 ```
-def modp(*args):
-    n = int(args[0])
-    p = int(args[1])
+def modp(n: int, p: int):
     if n < 0:
         n += p
     def egcd(a, b):
@@ -10,10 +8,8 @@ def modp(*args):
         else:
             gcd, y, x = egcd(b, a % b)
             return gcd, y - (a // b) * x, x
-
     g, y, x = egcd(n, p)
     if g != 1:
-        result = None 
+        return None 
     else:
-        result = pow(x, -(p-2), p)
-    return result
+        return pow(x, -(p-2), p)
