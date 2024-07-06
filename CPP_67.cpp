@@ -5,13 +5,13 @@ int fruit_distribution(string s, int n) {
     int total_apples = 0;
     int total_oranges = 0;
     
-    while ((s.find(" apples")) != string::npos) {
-        size_t pos = s.find(" apples");
+    size_t pos = 0;
+    while ((pos = s.find(" apples")) != string::npos) {
         total_apples += stoi(s.substr(pos + 8));
         s.erase(0, pos + 8);
     }
     
-    while ((s.find(" oranges")) != string::npos) {
+    if (s.find(" oranges") != string::npos) {
         size_t pos2 = s.find(" oranges");
         total_oranges = stoi(s.substr(0, pos2).erase(0, 7));
         s.erase(0, pos2 + 7);
