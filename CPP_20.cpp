@@ -27,4 +27,3 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     }
 
     return closest_pairs;
-}
