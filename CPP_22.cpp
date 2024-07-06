@@ -1,3 +1,4 @@
+```cpp
 #include <boost/optional.hpp>
 #include <vector>
 #include <list>
@@ -11,9 +12,8 @@ typedef boost::optional<int> OInt;
 std::vector<int> filter_integers(std::list<boost::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if(boost::any_cast<OInt>(value)) {
-            int num = boost::any_cast<int>(value.get());
-            result.push_back(num);
+        if(auto opt = boost::any_cast<OInt>(value)) {
+            result.push_back(opt.get());
         }
     }
     return result;
