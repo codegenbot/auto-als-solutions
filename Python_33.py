@@ -1,2 +1,2 @@
-def sort_third(l: list):
-    return [i if isinstance(i, int) else i[-1] for i in l]
+def sort_third(lst):
+    return [i if isinstance(i, list) else [i] for i in lst]
