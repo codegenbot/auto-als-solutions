@@ -2,18 +2,20 @@
 #include <vector>
 #include <string>
 
-bool isMatch(const std::string& s) {
+bool isMatch(const std::vector<std::string>& lst) {
     int open = 0, close = 0;
-    for (char c : s) {
-        if (c == '(') open++;
-        else if (c == ')') close++;
+    for (const auto& s : lst) {
+        for (char c : s) {
+            if (c == '(') open++;
+            else if (c == ')') close++;
+        }
     }
     return open == close;
 }
 
-std::string match_parens(std::vector<std::string> lst) {
-    for (const std::string& s : lst) {
-        if (!isMatch(s)) return "No";
-    }
-    return "Yes";
+int main() {
+    std::vector<std::string> lst = {"(abc)", "(def)"};
+    bool result = isMatch(lst);
+    std::cout << (result ? "Yes" : "No") << std::endl;
+    return 0;
 }
