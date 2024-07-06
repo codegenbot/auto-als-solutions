@@ -1,10 +1,4 @@
-int x_or_y(int n, int x, int y) {
-    if (isPrime(n))
-        return x;
-    else
-        return y;
-}
-
+```cpp
 bool isPrime(int num) {
     if (num <= 1)
         return false;
@@ -12,4 +6,11 @@ bool isPrime(int num) {
         if (num % i == 0)
             return false;
     return true;
+}
+
+int x_or_y(int n, int x, int y) {
+    if (isPrime(n))
+        return x;
+    else
+        return y;
 }
