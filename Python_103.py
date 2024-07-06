@@ -1,5 +1,5 @@
-def rounded_avg():
-    n = int(input("Enter the first number: "))
-    m = int(input("Enter the second number: "))
+```
+def rounded_avg(n, m):
+    from math import ceil
     avg = (n + m) / 2
-    return str(int(round(avg)))
+    return bin(int(ceil(avg)))[2:]

@@ -1,3 +1,4 @@
+#include <initializer_list>
 #include <vector>
 #include <string>
 
@@ -12,8 +13,9 @@ std::vector<std::string> split_words(std::string txt) {
         result.push_back(txt.substr(0, pos));
         txt.erase(0, pos + 1);
     }
-    if (!txt.empty()) {
-        result.push_back(txt);
+    if (txt.empty()) {
+        return result;
     }
+    result.push_back(txt);
     return result;
 }
