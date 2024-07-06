@@ -1,18 +1,8 @@
-#include <vector>
-#include <string>
-
 bool issame(string a, string b) {
-    for (int i = 0; i < min(a.size(), b.size()); i++) {
-        if (a[i] != b[i]) return false;
-    }
-    return true;
-}
-
-vector<string> filter_by_prefix(vector<string> strings, string prefix){
     vector<string> result;
-    for(string s : strings){
+    for(string s : {a, b}) {
         if(s.find(prefix) == 0)
             result.push_back(s);
     }
-    return result;
+    return !result.empty();
 }
