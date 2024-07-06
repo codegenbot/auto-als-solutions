@@ -38,17 +38,14 @@ int main() {
     std::cin >> n;
     for (int i = 0; i < n; ++i) {
         int x;
-        while(true){
-            std::cout << "Enter element " << i+1 << ": ";
+        std::cout << "Enter element " << i+1 << ": ";
+        while (!(std::cin >> x)) {
+            std::cout << "Invalid input. Please enter a positive integer: ";
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
             std::cin >> x;
-            if(x>0){
-                arr.push_back(x);
-                break;
-            }
-            else{
-                std::cout << "Invalid input. Please enter a positive integer.\n";
-            }
         }
+        arr.push_back(x);
     }
     std::vector<int> result = pluck(arr);
     if(result.size() > 0)
