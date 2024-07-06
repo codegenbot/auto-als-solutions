@@ -1,14 +1,25 @@
+```cpp
 #include <vector>
 using namespace std;
 
-vector<int> findCommon(vector<int>a,vector<int>b){
-    vector<int> result;
-    for(int i=0; i<min(a.size(),b.size());i++){
-        if(a[i] == b[i])result.push_back(a[i]);
+bool issame(vector<int> a,vector<int>b){
+    if(a.size() != b.size()) return false;
+    for(int i=0; i<a.size();i++){
+        if(a[i] != b[i])return false;
     }
-    return result;
+    return true;
+}
+
+int common(vector<int> a, vector<int> b) {
+    vector<int> result;
+    for (int num : a) {
+        if (find(b.begin(), b.end(), num) != b.end()) {
+            result.push_back(num);
+        }
+    }
+    return 0;
 }
 
 int main(){
-    assert(issame(findCommon({4, 3, 2, 8}, {}),{}));
+    assert(issame(common({4, 3, 2, 8}, {4, 1, 2}),{2, 3, 4}));
 }
