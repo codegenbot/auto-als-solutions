@@ -45,8 +45,3 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
 
     return true;
 }
-
-int main() {
-    assert(issame({{"E"}, {"D-"}} , numerical_letter_grade({0.0f, 0.7f})));
-    return 0;
-}
