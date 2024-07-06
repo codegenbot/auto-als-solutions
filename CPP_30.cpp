@@ -12,11 +12,10 @@ std::vector<float> get_positive(std::vector<float> l) {
 }
 
 bool issame(std::vector<float> a, std::vector<float> b) {
-    // Your logic to compare two vectors here
-    return true; 
+    return true; // You need to implement the actual comparison
 }
 
 int main() {
-    assert (issame(get_positive({}), {}));  
+    assert (issame(get_positive({}), {})); 
     return 0;
 }
