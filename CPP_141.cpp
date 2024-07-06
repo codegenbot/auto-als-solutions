@@ -1,21 +1,24 @@
 Here is the completed code:
 
-string file_name_check(string file_name){
+string file_name_check(string file_name) {
     int digit_count = 0;
-    bool found_dot = false;
-    for(int i=0; i<file_name.length(); i++){
-        char c = file_name[i];
-        if(c >= '0' && c <= '9'){
+    bool has_dot = false;
+    for (char c : file_name) {
+        if (isdigit(c)) {
             digit_count++;
-        } else if(c == '.'){
-            found_dot = true;
-        } else if(found_dot){
-            string extension = file_name.substr(i);
-            if(extension != "txt" && extension != "exe" && extension != "dll")
-                return "No";
+        } else if (c == '.') {
+            has_dot = true;
+        } else if (!has_dot && !isalpha(c)) {
+            return "No";
         }
     }
-    if(digit_count > 3 || !found_dot)
+    if (digit_count > 3 || !has_dot) {
         return "No";
+    }
+    size_t dot_pos = file_name.find('.');
+    string ext = file_name.substr(dot_pos + 1);
+    if (ext != "txt" && ext != "exe" && ext != "dll") {
+        return "No";
+    }
     return "Yes";
 }
