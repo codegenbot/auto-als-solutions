@@ -1,20 +1,25 @@
+Here is the completed code:
+
 vector<string> sorted_list_sum(vector<string> lst) {
-    vector<string> result;
-    
-    for (const string& str : lst) {
-        if (str.length() % 2 == 0) {
-            result.push_back(str);
+    auto it = lst.begin();
+    while (it != lst.end()) {
+        if (it->length() % 2 == 1) {
+            lst.erase(it);
+            if (it == lst.begin())
+                it = lst.begin();
+            else
+                it--;
+        } else {
+            it++;
         }
     }
-    
-    sort(result.begin(), result.end(), 
+    sort(lst.begin(), lst.end(),
          [](const string& a, const string& b) {
-             if (a.length() == b.length()) {
-                 return a < b;
-             } else {
+             if (a.length() != b.length()) {
                  return a.length() < b.length();
+             } else {
+                 return a < b;
              }
          });
-    
-    return result;
+    return lst;
 }
