@@ -3,8 +3,7 @@ bool issame(vector<string> a,vector<string>b){
 }
 
 int main() {
-    assert(issame({{"aaaa", "bbbb", "dd", "cc"}}, {{"cc", "dd", "aaaa", "bbbb"}}));
-    // Call the function here
+    assert(issame({{"aaaa", "bbbb", "dd", "cc"}}, sort({{"cc", "dd", "aaaa", "bbbb"}})));
     vector<string> result = sorted_list_sum({"aaaa", "bbbb", "dd", "cc"});
     return 0;
 }
