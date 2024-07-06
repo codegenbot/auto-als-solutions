@@ -1,19 +1,15 @@
-Here is the completed code:
+#include <algorithm>
+using namespace std;
 
-vector<float> sort_even(vector<float> l){
-    vector<float> result(l.size());
-    for(int i = 0; i < l.size(); i++){
-        if(i % 2 == 0){
-            vector<float> evenVals;
-            for(int j = 0; j < l.size(); j++){
-                if(j % 2 == 0){
-                    evenVals.push_back(l[j]);
-                }
-            }
+vector<float> sort_even(vector<float> l) {
+    vector<float> result;
+    for(int i = 0; i < l.size(); i++) {
+        if(i % 2 == 0) {
+            vector<float> evenVals(l.begin() + i, l.begin() + i+1);
             sort(evenVals.begin(), evenVals.end());
-            result[i] = evenVals[0];
+            result.push_back(evenVals[0]);
         } else {
-            result[i] = l[i];
+            result.push_back(l[i]);
         }
     }
     return result;
