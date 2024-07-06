@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -39,4 +40,5 @@ int main() {
     } else {
         cout << "Maximum values are not equal.\n";
     }
+    return 0;
 }
