@@ -5,10 +5,6 @@ using namespace std;
 
 string decimal_to_binary(int decimal){
     string binary = "";
-    if (decimal < 0) {
-        binary = "-" + decimal_to_binary(-decimal);
-        return binary;
-    }
     while(decimal > 0){
         if((decimal & 1) == 1)
             binary = "1" + binary;
@@ -16,8 +12,11 @@ string decimal_to_binary(int decimal){
             binary = "0" + binary;
         decimal >>= 1;
     }
-    string binary = "0b" + binary;
-    return binary;
+    if (decimal < 0) {
+        binary = "-" + binary;
+        decimal = -decimal;
+    }
+    return "0b" + binary;
 }
 
 int main() {
