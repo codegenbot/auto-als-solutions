@@ -1,4 +1,3 @@
-```cpp
 #include <string>
 
 int strLen(const std::string& str) {
