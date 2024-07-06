@@ -1,6 +1,4 @@
-```cpp
 #include <string>
-#include <algorithm>
 using namespace std;
 
 string anti_shuffle(string s){
@@ -19,13 +17,3 @@ string anti_shuffle(string s){
         result += word;
     }
     return result;
-}
-
-int main(){
-    string str;
-    cout << "Enter a sentence: ";
-    getline(cin, str);
-    string output = anti_shuffle(str);
-    cout << "Antishuffled sentence: " << output << endl;
-    return 0;
-}
