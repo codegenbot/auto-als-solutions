@@ -2,15 +2,22 @@
 #include <string>
 
 std::string fix_spaces(std::string str) {
-    size_t start = 0;
-    while (start < str.size() && isspace(str[start])) {
-        start++;
+    if (str.empty()) {
+        return str;
     }
-    size_t end = str.size() - 1;
-    while (end >= 0 && isspace(str[end])) {
-        end--;
+    
+    // Remove leading spaces
+    while (!str.empty() && str[0] == ' ') {
+        str = str.substr(1);
     }
-    return str.substr(start, end - start + 1);
+    
+    // Remove trailing spaces
+    int pos = str.find_last_of(' ');
+    if (~pos) {
+        str = str.substr(0, pos + 1);
+    }
+    
+    return str;
 }
 
 int main() {
