@@ -32,4 +32,4 @@ std::vector<std::string> words = split_words(user_input);
 for (const auto& word : words) {
     std::cout << word << std::endl;
 }
-}.
+}

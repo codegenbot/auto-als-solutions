@@ -1,15 +1,19 @@
+```cpp
 #include <string>
+#include <vector>
 
 using namespace std;
 
-string words_in_sentence(string sentence) {
-    string result = "";
-    for (const auto& word : split(sentence, " ")) {
-        if (is_prime(word.length())) {
-            result += word + " ";
+bool is_prime(int n) {
+    if (n <= 1) {
+        return false;
+    }
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            return false;
         }
     }
-    return result.trim();
+    return true;
 }
 
 string trim(const string& str) {
@@ -24,18 +28,6 @@ string trim(const string& str) {
     return str.substr(start, end - start + 1);
 }
 
-bool is_prime(int n) {
-    if (n <= 1) {
-        return false;
-    }
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
 vector<string> split(const string& str, const string& delimiter) {
     vector<string> result;
     size_t pos = 0;
@@ -45,4 +37,14 @@ vector<string> split(const string& str, const string& delimiter) {
     }
     result.push_back(str);
     return result;
+}
+
+string words_in_sentence(string sentence) {
+    string result = "";
+    for (const auto& word : split(sentence, " ")) {
+        if (is_prime(word.length())) {
+            result += word + " ";
+        }
+    }
+    return trim(result);
 }
