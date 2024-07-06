@@ -1,3 +1,9 @@
+```cpp
+#include <vector>
+#include <list>
+#include <optional>
+#include <typeinfo>
+
 std::vector<int> filter_integers(std::list<std::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
@@ -11,4 +17,9 @@ std::vector<int> filter_integers(std::list<std::any> values) {
         }
     }
     return result;
+}
+
+int main() {
+    assert(filter_integers({3, 3, 3}) == {3});
+    return 0;
 }
