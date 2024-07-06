@@ -1,52 +1,42 @@
+```
 def minPath(grid, k):
     n = len(grid)
+    m = [[i * n + j for j in range(n)] for i in range(n)]
     visited = set()
-    min_paths = []
+    res = []
 
     def dfs(i, j, path, sum_path):
         if (i, j) in visited:
             return None
-        visited.add((i, j))
-        if 0 <= i < n and 0 <= j < n:
-            if grid[i][j] == k:
-                return ((path + [(i, j)]), sum_path + k)
-            if 0 <= i < n - 1:
-                new_path = dfs(i + 1, j, path + [(i, j)], sum_path + k)
+        if 0 <= i < n and 0 <= j < n and grid[i][j] == k:
+            new_sum = sum_path + k
+            new_path = path + [m[i][j]]
+            return ((new_path), new_sum)
+        if 0 <= i < n and 0 <= j < n and grid[i][j] != k:
+            return None
+        for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            ni, nj = i + x, j + y
+            if 0 <= ni < n and 0 <= nj < n:
+                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
                 if new_path:
-                    min_paths.append(new_path[0])
-            if i > 0:
-                new_path = dfs(i - 1, j, path + [(i, j)], sum_path + k)
-                if new_path:
-                    min_paths.append(new_path[0])
-            if 0 <= j < n - 1:
-                new_path = dfs(i, j + 1, path + [(i, j)], sum_path + k)
-                if new_path:
-                    min_paths.append(new_path[0])
-            if j > 0:
-                new_path = dfs(i, j - 1, path + [(i, j)], sum_path + k)
-                if new_path:
-                    min_paths.append(new_path[0])
+                    res.append(new_path[0])
         return (
-            min(
-                [p for p in set(tuple(x) for x in min_paths) if p], key=lambda x: len(x)
-            )
+            min([p for p in set(tuple(x) for x in res) if p], key=lambda x: len(x))
             or []
         )
 
+    boundary_cells = [
+        [(0, j) for j in range(n)],
+        [(n - 1, j) for j in range(n)],
+        [(i, 0) for i in range(n)],
+        [(i, n - 1) for i in range(n)]
+    ]
     min_path = []
-    for i in range(n):
-        visited.add((i, 0))
-        paths = [p for p in [dfs(i, 0, [(i, 0)], k)] if p]
-        for path in set(tuple(x) for x in paths):
-            if path:
-                min_path = min([path], key=lambda x: len(x))
-                break
-    for j in range(n):
-        visited.add((0, j))
-        paths = [p for p in [dfs(0, j, [(0, j)], k)] if p]
-        for path in set(tuple(x) for x in paths):
-            if path:
-                min_path = min([path], key=lambda x: len(x))
-                break
+    for i, j in boundary_cells:
+        visited.add((i, j))
+        res = dfs(i, j, [], k)
+        if res[0]:
+            min_path = res[0]
+            break
 
     return min_path if min_path else []
