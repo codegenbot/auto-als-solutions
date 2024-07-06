@@ -1,9 +1,7 @@
-```
-#include <iostream>
 #include <vector>
 
-std::vector<int> pluck(const std::vector<int>& arr) {
-    std::vector<int> result = {};
+vector<int> pluck(vector<int> arr) {
+    vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
 
@@ -20,8 +18,4 @@ std::vector<int> pluck(const std::vector<int>& arr) {
     }
 
     return result;
-}
-
-int main() {
-    
 }
