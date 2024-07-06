@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -11,7 +12,6 @@ bool compareVectors(std::vector<int> a, std::vector<int> b) {
         }
     }
     return true;
-
 }
 
 std::vector<int> maximum(std::vector<int> arr, int k) {
@@ -22,6 +22,7 @@ std::vector<int> maximum(std::vector<int> arr, int k) {
         arr.erase(it);
     }
     return result;
+
 }
 
 int main() {
