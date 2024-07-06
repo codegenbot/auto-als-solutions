@@ -1,3 +1,6 @@
 def by_length(arr):
-    result = sorted([i for i in arr if 1 <= i <= 9])
-    return [str(num) + " " + ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][num-1] for num in result]
+    return [
+        name
+        for num, name in zip(map(str, arr), {str(i): i for i in range(1, 10)})
+        if set(name[0]) == {"1"}
+    ]
