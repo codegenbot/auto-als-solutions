@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -50,7 +51,6 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
         sum2lst += str.length();
         for (char c : str) {
             sum2lst += 1;
-        }
     }
 
     if (sum1lst < sum2lst) {
