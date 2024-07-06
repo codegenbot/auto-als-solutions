@@ -1,4 +1,7 @@
+```cpp
 #include <iostream>
+#include <sstream>
+
 using namespace std;
 
 int fib(int n) {
@@ -13,11 +16,10 @@ int fib(int n) {
     return result;
 }
 
-int main() {
+int main() 
+{
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
-    string result = "The " + to_string(n) + "-th Fibonacci number is: " + to_string(fib(n));
-    cout << result << endl;
+    cout << "The " << to_string(n) << "-th Fibonacci number is: " << to_string(fib(n)) << endl;
     return 0;
-}
