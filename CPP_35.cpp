@@ -1,5 +1,4 @@
 #include <algorithm>
-
-int maxVal(vector<int> &l) {
+int maxElement(vector<int> l) {
     return *std::max_element(l.begin(), l.end());
 }
