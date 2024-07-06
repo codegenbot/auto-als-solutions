@@ -2,8 +2,7 @@
 def fizz_buzz(n: int):
     count = 0
     for i in range(n):
-        if i % 11 == 0 or i % 13 == 0:
-            str_i = str(i)
-            if '7' in str_i:
-                count += 1
+        if (i+1) % 11 == 0 or (i+1) % 13 == 0:
+            str_num = str(i+1)
+            count += str_num.count('7')
     return count
