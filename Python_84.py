@@ -1,6 +1,2 @@
 def solve(N):
-    result = []
-    while N:
-        result.append(str(N % 2))
-        N //= 2
-    return "".join(result[::-1])
+    return bin(N)[2:].zfill(len(bin(N)[2:]) * 2 - 2)
