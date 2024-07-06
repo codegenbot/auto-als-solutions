@@ -1,18 +1,29 @@
+#include <string>
+#include <sstream>
+
+using namespace std;
+
 int fruit_distribution(string s, int n) {
-    size_t pos = 0;
-    string word;
-    int apples = 0, oranges = 0;
-
-    while ((pos = s.find(" and ")) != string::npos) {
-        word = s.substr(0, pos);
-        if (word.find("apples") != string::npos)
-            apples = stoi(word.substr(0, word.find(" ")));
-        else if (word.find("oranges") != string::npos)
-            oranges = stoi(word.substr(0, word.find(" ")));
-
-        s.erase(0, pos + 5);
+    stringstream ss(s);
+    int apples = 0;
+    int oranges = 0;
+    
+    string token;
+    while (getline(ss, token, ' ') && !token.empty()) {
+        if (token.find("apples") != string::npos || token.find("AppleS") != string::npos) {
+            if (token.find("and") == string::npos) {
+                apples = stoi(token.substr(0, token.length() - 8));
+            } else {
+                apples = stoi(token.substr(0, token.find("and")));
+            }
+        } else if (token.find("oranges") != string::npos || token.find("OrangeS") != string::npos) {
+            if (token.find("and") == string::npos) {
+                oranges = stoi(token.substr(0, token.length() - 7));
+            } else {
+                oranges = stoi(token.substr(0, token.find("and")));
+            }
+        }
     }
 
-    int mangoes = n - apples - oranges;
-    return mangoes;
+    return n - apples - oranges;
 }
