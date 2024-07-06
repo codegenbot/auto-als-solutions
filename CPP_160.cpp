@@ -1,40 +1,31 @@
-```cpp
+#include <vector>
+#include <string>
+#include <cctype>
+#include <cstdlib>
+#include <stdexcept>
+
 int do_algebra(vector<string> operato, vector<int> operand) {
-    int result = 0;
-    stack<int> opStack;
-    for(int i=0; i<operato.size();i++){
-        if(operato[i] == "(") opStack.push(i);
-        else if(operato[i] == ")"){
-            while(opStack.top() != (int)operand[0]) {
-                if(operato[opStack.top()] == "+")  result += operand[opStack.pop()];
-                else if(operato[opStack.top()] == "-") result -= operand[opStack.pop()];
-                else if(operato[opStack.top()] == "*") result *= operand[opStack.pop()];
-                else{
-                    if(result < 0) return -1;
-                    result = pow(static_cast<double>(result), operand[opStack.pop()]);
-                }
-            }
-            opStack.pop();
-        }else{
-            if(opStack.size() > 0 && operato[opStack.top()] == "("){
-                while(operato[opStack.top()] != ")"){
-                    opStack.pop();
-                }
-                opStack.pop(); //pop the '('
-            }
-            if(operato[i] == "+")  result += operand[i];
-            else if(operato[i] == "-") result -= operand[i];
-            else if(operato[i] == "*") result *= operand[i];
-            else if(operato[i] == "//"){
-                if(result < 0) return -1;
-                if(operand[i] == 0) return -1; // prevent division by zero
-                result = result / static_cast<int>(operand[i]);
-            }
-            else{
-                if(result < 0) return -1;
-                result = pow(static_cast<double>(result), operand[i]);
-            }
-        }
+    string expression = "";
+    for (int i = 0; i < operato.size(); i++) {
+        expression += to_string(operand[i]);
+        expression += operato[i];
+    }
+    expression += to_string(operand.back());
+    int result;
+    try {
+        result = eval(expression.c_str());
+    } catch(const std::runtime_error& e) {
+        std::cout << "Invalid input: " << e.what() << std::endl;
     }
     return result;
+}
+
+long long eval(const char* pExpr) {
+    const char* pEnd = NULL;
+    long long v = strtoll(pExpr, &pEnd, 10);
+    if (*pEnd == '\0') {
+        return v;
+    } else {
+        throw std::runtime_error("Invalid input");
+    }
 }
