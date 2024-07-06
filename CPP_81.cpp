@@ -28,7 +28,7 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
         else if (grade > 0.7)
             letterGrade = "D";
         else
-            letterGrade = "F";
+            letterGrade = "E";
         result.push_back(letterGrade);
     }
     return result;
@@ -40,6 +40,5 @@ bool std::issame(std::vector<std::string> a, std::vector<std::string> b) {
 
 int main() {
     if (!std::issame({{"E"}, {"D-" }}, numerical_letter_grade({0.0f, 0.7f})))
-        return 1; // assertion failed
+        return 1; 
     return 0;
-}
