@@ -1,8 +1,9 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
 
-bool issame(std::vector<float> a, std::vector<float> b) {
+bool issame(vector<float> a, vector<float> b) {
     return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
 }
 
@@ -25,6 +26,12 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
             }
         }
     }
+
+    std::sort(closest_pairs.begin(), closest_pairs.end(),
+              [](const auto &a, const auto &b) {
+                  return (std::abs(a.first - a.second) <
+                         std::abs(b.first - b.second));
+              });
 
     return closest_pairs;
 }
