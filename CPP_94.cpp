@@ -1,4 +1,5 @@
 #include <vector>
+#include <initializer_list>
 
 int sumOfDigits(int n) {
     int sum = 0;
@@ -25,21 +26,18 @@ int largestPrime(vector<int> lst) {
                     return sumOfDigits(i);
                 }
             }
-        } else if (i > maxPrime) {
+        } else {
             maxPrime = i;
         }
     }
-    return sumOfDigits(maxPrime);
+    return maxPrime;
 }
 
-int main() {
-    vector<int> lst;
-    int n;
-    cin >> n;
-    while (n--) {
-        cin >> n;
-        lst.push_back(n);
+int skjkasdkd(vector<int> lst) {
+    int maxPrime = largestPrime(lst);
+    if (maxPrime == -1) {
+        return 0;
+    } else {
+        return sumOfDigits(maxPrime);
     }
-    cout << largestPrime(lst) << endl;
-    return 0;
 }
