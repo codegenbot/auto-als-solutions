@@ -25,33 +25,54 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     for (auto& t : temp) {
         switch(t.first) {
             case 1:
-                result.push_back("One");
+                result.push_back({"One"});
                 break;
             case 2:
-                result.push_back("Two");
+                result.push_back({"Two"});
                 break;
             case 3:
-                result.push_back("Three");
+                result.push_back({"Three"});
                 break;
             case 4:
-                result.push_back("Four");
+                result.push_back({"Four"});
                 break;
             case 5:
-                result.push_back("Five");
+                result.push_back({"Five"});
                 break;
             case 6:
-                result.push_back("Six");
+                result.push_back({"Six"});
                 break;
             case 7:
-                result.push_back("Seven");
+                result.push_back({"Seven"});
                 break;
             case 8:
-                result.push_back("Eight");
+                result.push_back({"Eight"});
                 break;
             case 9:
-                result.push_back("Nine");
+                result.push_back({"Nine"});
                 break;
         }
+    }
+
+    for (auto& str : result) {
+        if(str == "One")
+            str = "One";
+        else if(str == "Two")
+            str = "Two";
+        else if(str == "Three")
+            str = "Three";
+        else if(str == "Four")
+            str = "Four";
+        else if(str == "Five")
+            str = "Five";
+        else if(str == "Six")
+            str = "Six";
+        else if(str == "Seven")
+            str = "Seven";
+        else if(str == "Eight")
+            str = "Eight";
+        else if(str == "Nine")
+            str = "Nine";
     }
 
     return result;
@@ -60,7 +81,7 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 int main() {
     std::vector<int> arr = {9, 4, 8};
     std::vector<std::string> result = by_length(arr);
-    if (!issame({{"One"}}, {"Four"}, {"Eight"}} , {result})) {
+    if (!issame({{"One"}, {"Four"}, {"Eight"}} , {result})) {
         return 1; 
     }
     return 0;
