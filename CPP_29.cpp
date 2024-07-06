@@ -1,5 +1,11 @@
+#include <vector>
+#include <string>
+
 bool issame(string a, string b) {
-    return a == b;
+    for (int i = 0; i < min(a.size(), b.size()); i++) {
+        if (a[i] != b[i]) return false;
+    }
+    return true;
 }
 
 vector<string> filter_by_prefix(vector<string> strings, string prefix){
