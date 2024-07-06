@@ -1,26 +1,20 @@
-#include <iostream>
+```cpp
 #include <string>
+#include <iostream>
 
-std::string fix_spaces(std::string str) {
-    if (str.empty()) {
-        return str;
+std::string fix_spaces(const std::string& str) {
+    std::string result = " ";
+    for (char c : str) {
+        if (c == ' ') {
+            if (!result.empty() && result.back() == ' ')
+                continue;
+        }
+        result += c;
     }
-    
-    // Remove leading spaces
-    while (!str.empty() && str[0] == ' ') {
-        str = str.substr(1);
-    }
-    
-    // Remove trailing spaces
-    int pos = str.find_last_of(' ');
-    if (~pos) {
-        str = str.substr(0, pos + 1);
-    }
-    
-    return str;
+    return result;
 }
 
 int main() {
     std::string str = " Example   3";
-    std::cout << fix_spaces(str) << std::endl;
+    cout << fix_spaces(str) << endl;
 }
