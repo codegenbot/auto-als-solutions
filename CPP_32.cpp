@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <cmath>
 
@@ -11,15 +10,14 @@ double poly(const std::vector<double>& coeffs, double x) {
 }
 
 double find_zero(std::vector<double> coeffs, double solution){
-    double left = 0;
-    double right = 1e9;
-    while (right - left > 1e-6) {
-        double mid = (left + right) / 2;
-        if (poly(coeffs, mid) * poly(coeffs, solution) > 0) {
-            left = mid;
+    double left = 1e9;
+    double right = -1e9;
+    for (int i = 0; i < coeffs.size(); ++i) {
+        if (coeffs[i] > 0) {
+            right = min(right, pow(solution, i));
         } else {
-            right = mid;
+            left = max(left, pow(solution, i));
         }
     }
-    return (-solution / poly(coeffs, solution));
+    return (-left + right) / (2 * abs(left - right));
 }
