@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cstddef>
 
 bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size())
@@ -15,7 +16,7 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     return true;
 }
 
-std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
+std::vector<std::string> sorted_list_sum(std::initializer_list<std::string> lst) {
     std::vector<std::string> result;
     for (const auto& str : lst) {
         if (std::stoi(str) % 2 == 0) {
@@ -34,8 +35,8 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 
 int main() {
-    std::vector<std::string> vec1 = std::vector<std::string>({"aaaa", "bbbb", "dd", "cc"});
-    std::vector<std::string> vec2 = std::vector<std::string>({"cc", "dd", "aaaa", "bbbb"});
+    std::initializer_list<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
+    std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
     assert(issame(sorted_list_sum(vec1), vec2));
     return 0;
 }
