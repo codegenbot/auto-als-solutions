@@ -1,18 +1,18 @@
+````
 #include <string>
 using namespace std;
 
 bool correct_bracketing(string brackets){
     int opening = 0;
     for(char c : brackets) {
-        if(c == '<') {
+        if(c == '<' || c == '[') {
             opening++;
-        } else if(c == '>') {
+        } else if(c == '>' || c == ']') {
             if(opening <= 0)
                 return false;
             opening--;
         }
     }
-    if(opening > 0)
-        return false;
-    return true;
+    return opening == 0;
 }
+```
