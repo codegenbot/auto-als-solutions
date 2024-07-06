@@ -1,3 +1,3 @@
-int length(const std::string& str){
+int length(const string& str){
     return str.length();
 }
