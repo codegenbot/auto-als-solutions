@@ -1,17 +1,28 @@
-string fix_spaces(string text){
-    string result = "";
-    for(int i=0; i < text.length(); i++){
-        if(text[i] == ' ' && (i==0 || text[i-1] != ' ')){
-            result += '_';
-        } else if(text[i] == ' ' && (result.length() > 0) && (result[result.length()-1] != '_')){
-            result = result.substr(0, result.length()-1);
-            while(result.length() > 0 && result.back() == '_'){
-                result.pop_back();
+Here is the completed code:
+
+```cpp
+#include <string>
+using namespace std;
+
+string fix_spaces(string text) {
+    for (int i = 0; i < text.length(); i++) {
+        if (text[i] == ' ') {
+            int count = 1;
+            while (i + count < text.length() && text[i + count] == ' ') {
+                count++;
             }
-            result += '-';
-        } else {
-            result += text[i];
+            string temp = "";
+            temp += text.substr(0, i);
+            if (count > 2) {
+                temp += "-";
+            } else {
+                for (int j = 1; j < count; j++) {
+                    temp += "_";
+                }
+            }
+            temp += text.substr(i + count);
+            return temp;
         }
     }
-    return result;
+    return text;
 }
