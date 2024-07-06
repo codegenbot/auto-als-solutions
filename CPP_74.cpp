@@ -1,9 +1,8 @@
-```
 #include <vector>
-#include <algorithm>
+#include <string>
 
-bool issame(vector<string> a,vector<string>b){
-    return a == b;
+bool issame(vector<string> a, vector<string> b) {
+    return (a.size() == b.size()) && (total_match(a, b).empty());
 }
 
 vector<string> total_match(vector<string> lst1, vector<string> lst2) {
@@ -21,4 +20,12 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
         return lst1;
     } else if (sum1 > sum2) {
         return lst2;
+    } else {
+        return lst1;
     }
+}
+
+int main() {
+    assert(issame(total_match({"this"}, {}), {}));
+    return 0;
+}
