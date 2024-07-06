@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -13,7 +12,7 @@ bool compare(const auto& a, const auto& b) {
 }
 
 std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<pair> nodes;
+    std::vector<auto> nodes;
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
             nodes.push_back({arr[i], i});
