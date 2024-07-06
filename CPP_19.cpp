@@ -1,42 +1,33 @@
-```c++
-map<string,int> num_map;
-num_map["zero"] = 0; num_map["one"] = 1; num_map["two"] = 2; 
-num_map["three"] = 3; num_map["four"] = 4; num_map["five"] = 5;
-num_map["six"] = 6; num_map["seven"] = 7; num_map["eight"] = 8; 
-num_map["nine"] = 9;
+string sort_numbers(string numbers) {
+    map<string, int> numMap = {{"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
+                                {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
+                                {"eight", 8}, {"nine", 9}};
+    vector<string> nums;
+    string num;
 
-string result = "";
-for(string s : split(numbers,' ')) {
-    for(map<string,int>::iterator it = num_map.begin(); it != num_map.end();++it) {
-        if(it->first == s) {
-            result += s + " ";
-            break;
+    // split the input string into individual numbers
+    for (int i = 0; i < numbers.length(); i++) {
+        while (i + 1 <= numbers.length() && !ispunct(numbers[i])) {
+            i++;
         }
+        num += numbers.substr(i - (numbers[i] == ' ') ? 0 : i - 1, 4);
     }
-}
-return result.substr(0,result.length()-1);
+
+    // sort the numbers based on their integer value
+    sort(nums.begin(), nums.end(), [&numMap](string a, string b) {
+        return to_string(numMap[a]) > to_string(numMap[b]);
+    });
+
+    // join the sorted numbers into a single string
+    return join(nums, " ");
 }
 
-string split(const string& str,char delim)
-{
-    vector<string> tokens;
-    size_t prev = 0, readPos = 0; 
-    do {
-        readPos = str.find(delim, prev);
-        if (readPos == string::npos) readPos = str.length();
-        string token = str.substr(prev, readPos - prev);
-        if(token.length() > 0)
-            tokens.push_back(token);
-        prev = readPos + 1;
-    } while (readPos < str.length());
-    return join(tokens," ");
-}
-
-string join(const vector<string>& vec,char delim) {
-    string s;
-    for(auto& e : vec) {
-        if(!s.empty())
-            s += delim;
-        s+=e;
+string join(vector<string>& vec, string sep) {
+    string result = "";
+    for (int i = 0; i < vec.size(); ++i) {
+        result += vec[i];
+        if (i != vec.size() - 1)
+            result += sep;
     }
-    return s;
+    return result;
+}
