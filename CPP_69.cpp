@@ -5,20 +5,12 @@ using namespace std;
 
 int search(vector<int> lst) {
     map<int, int> freq;
-    for (int i : lst) {
-        if (freq.find(i) == freq.end()) {
-            freq[i] = 1;
-        } else {
-            freq[i]++;
-        }
+    for (int x : lst) {
+        if (freq.find(x) == freq.end())
+            freq[x] = 0;
+        else if (++freq[x] >= 2)
+            return x;
     }
-
-    int max_freq = -1;
-    for (auto p : freq) {
-        if (p.second >= p.first && p.first > 0) {
-            max_freq = p.first;
-        }
-    }
-
-    return max_freq;
+    
+    return -1;
 }
