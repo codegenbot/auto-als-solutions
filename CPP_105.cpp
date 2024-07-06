@@ -1,7 +1,12 @@
 #include <vector>
 
-bool issame(int x, int y) {
-    return (x == y);
+bool issame(int a, int b) {
+    if (a == b) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 vector<string> by_length(vector<int> arr) {
