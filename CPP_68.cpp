@@ -1,4 +1,4 @@
-```cpp
+#include <initializer_list>
 #include <vector>
 #include <algorithm>
 
@@ -28,18 +28,7 @@ std::vector<int> pluck(std::vector<int> arr) {
         }
     }
     
-    if(nodes.size() > 0)
-    {
-        for(int i = 0; i < arr.size(); ++i){
-            if(arr[i] == nodes[0].first){
-                return {arr[i]};
-            }
-        }
-    }
-    else
-    {
-        return {};
-    }
+    return {nodes[0].first};
 }
 
 int main() {
@@ -49,9 +38,17 @@ int main() {
     std::cin >> n;
     for (int i = 0; i < n; ++i) {
         int x;
-        std::cout << "Enter element " << i+1 << ": ";
-        std::cin >> x;
-        arr.push_back(x);
+        while(true){
+            std::cout << "Enter element " << i+1 << ": ";
+            std::cin >> x;
+            if(x>0){
+                arr.push_back(x);
+                break;
+            }
+            else{
+                std::cout << "Invalid input. Please enter a positive integer.\n";
+            }
+        }
     }
     std::vector<int> result = pluck(arr);
     if(result.size() > 0)

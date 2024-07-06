@@ -1,5 +1,8 @@
-def eat(hungry, needed, remaining):
-    eaten = min(needed, min(hungry, remaining))
-    return [eaten, needed - eaten]
-
-assert eat(4, 5, 1) == [1, 0]
+def eat(number, need, remaining):
+    if number < remaining:
+        eaten = remaining
+    elif number >= need:
+        eaten = need
+    else:
+        eaten = min(number, need)
+    return [eaten, max(0, need - eaten)]

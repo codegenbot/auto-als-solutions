@@ -9,8 +9,13 @@ def sum_squares(numbers):
             total_sum += lst[i] ** 3
     return total_sum
 
-try:
+while True:
     numbers = input("Enter numbers separated by space: ")
-    print(sum_squares(numbers))
-except ValueError:
-    print("Invalid input! Please enter numbers separated by spaces.")
+    try:
+        if sum_squares(numbers) > 0:
+            print(sum_squares(numbers))
+            break
+        else:
+            print("Invalid input. Please enter at least one number.")
+    except ValueError:
+        print("Invalid input. Please enter numbers separated by spaces.")
