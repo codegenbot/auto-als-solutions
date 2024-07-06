@@ -5,27 +5,27 @@ bool issame(const std::vector<float>& a, const std::vector<float>& b) {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-vector<vector<float>> get_positive(vector<vector<float>> l) {
+vector<vector<float>> split(vector<float> l) {
     vector<vector<float>> result;
-    for (auto& nums : l) {
-        vector<float> new_nums = get_positive(nums);
-        if (!new_nums.empty()) {
-            result.push_back(new_nums);
+    float current = 0.0f;
+    for (float num : l) {
+        if (num > current) {
+            result.push_back({current});
+            current = num;
         }
     }
+    result.push_back({current});
     return result;
 }
 
 int main() {
-    vector<vector<float>> input = {{1.0, -2.0, 3.0}, {-4.0, 5.0, -6.0}};
-    vector<vector<float>> output = get_positive(input);
-
-    for (const auto& nums : output) {
-        for (float num : nums) {
+    vector<float> input = {1, -2, 3, 4, -5, 6};
+    vector<vector<float>> output = split(input);
+    for (const auto& segment : output) {
+        for (float num : segment) {
             std::cout << num << " ";
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     }
-
     return 0;
 }
