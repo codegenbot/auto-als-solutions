@@ -1,3 +1,14 @@
+#include <cmath>
+
+bool isPrime(int n) {
+    for (int i = 2; i <= sqrt(n); i++) {
+        if (n % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool is_multiply_prime(int a) {
     for (int i = 2; i <= 100; i++) {
         int count = 0;
@@ -15,13 +26,4 @@ bool is_multiply_prime(int a) {
         }
     }
     return false;
-}
-
-bool isPrime(int n) {
-    for (int i = 2; i <= sqrt(n); i++) {
-        if (n % i == 0) {
-            return false;
-        }
-    }
-    return true;
 }
