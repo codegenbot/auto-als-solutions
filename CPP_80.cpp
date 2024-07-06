@@ -1,6 +1,4 @@
 #include <iostream>
-#include <string>
-
 using namespace std;
 
 bool is_happy(string s){
@@ -21,6 +19,7 @@ bool is_happy(string s){
         if(!unique) return false;
     }
     return true;
+
 }
 
 int main(){
@@ -32,4 +31,3 @@ int main(){
     else
         cout << "The given string is not happy." << endl;
     return 0;
-}
