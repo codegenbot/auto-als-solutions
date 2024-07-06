@@ -1,4 +1,3 @@
-```
 def is_multiply_prime(a):
     def is_prime(n):
         if n < 2:
@@ -8,10 +7,14 @@ def is_multiply_prime(a):
                 return False
         return True
 
-    primes = [i for i in range(2, a) if is_prime(i)]
-    for i in range(len(primes)):
-        for j in range(i+1, len(primes)):
-            for k in range(j+1, len(primes)):
-                if primes[i] * primes[j] * primes[k] == a:
-                    return True
-    return False
+    prime_factors = set()
+    i = 2
+    while a > 1:
+        if a % i:
+            i += 1
+        else:
+            a //= i
+            prime_factors.add(i)
+            if len(prime_factors) >= 3:
+                break
+    return all(is_prime(x) for x in prime_factors)
