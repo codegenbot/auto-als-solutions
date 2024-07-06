@@ -1,13 +1,13 @@
-```cpp
+```
 #include <iostream>
 using namespace std;
 
 string change_base(int x, int base) {
-    string res;
+    string res = "";
     while (x > 0) {
         int rem = x % base;
-        if(rem >= 10) res.insert(0, 1, (char)(rem - 55));
-        else res.insert(0, "01"[rem]);
+        if(rem >= 10) res = char('A' + rem - 10) + res;
+        else res = char('0' + rem) + res;
         x /= base;
     }
     return res;
