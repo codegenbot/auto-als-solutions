@@ -1,39 +1,33 @@
-#include <vector>
-using namespace std;
-
 vector<int> minPath(vector<vector<int>> grid, int k) {
-    int n = grid.size();
-    vector<vector<bool>> visited(n, vector<bool>(n));
-    vector<int> res;
+    vector<pair<vector<int>, int>> memo(grid.size() * grid[0].size(), make_pair(vector<int>(), 0));
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(visited[i][j]) continue;
-            vector<int> path = dfs(grid, i, j, k, visited);
-            if(path.size() > 0 && (res.empty() || path < res)){
-                res = path;
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[0].size(); j++) {
+            int val = grid[i][j];
+            if (k == 1) {
+                memo[i * grid[0].size() + j] = make_pair(vector<int>(1, val), 0);
+            } else {
+                vector<pair<vector<int>, int>> newMemo;
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        if (i + x >= 0 && i + x < grid.size() && j + y >= 0 && j + y < grid[0].size()) {
+                            int val2 = grid[i + x][j + y];
+                            if (k > 1) {
+                                for (auto &p : memo[(i * grid[0].size() + j) % (grid.size() * grid[0].size())]) {
+                                    p.first.push_back(val2);
+                                    p.second++;
+                                    newMemo.emplace_back(move(p));
+                                }
+                            } else {
+                                newMemo.emplace_back(make_pair(vector<int>(1, val2), 1));
+                            }
+                        }
+                    }
+                }
+                memo[(i * grid[0].size() + j) % (grid.size() * grid[0].size())] = min_element(newMemo.begin(), newMemo.end());
             }
         }
     }
     
-    return res;
-}
-
-vector<int> dfs(vector<vector<int>>& grid, int x, int y, int k, vector<vector<bool>>& visited) {
-    vector<int> path;
-    for(int i=0; i<k; i++){
-        path.push_back(grid[x][y]);
-        if(i == k-1) return path;
-        vector<pair<int, int>> neighbors = {{x-1, y}, {x+1, y}, {x, y-1}, {x, y+1}};
-        for(auto& neighbor : neighbors){
-            int nx = neighbor.first, ny = neighbor.second;
-            if(nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && !visited[nx][ny]){
-                visited[nx][ny] = true;
-                x = nx; y = ny;
-                break;
-            }
-        }
-    }
-    
-    return path;
+    return memo[0].first;
 }
