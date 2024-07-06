@@ -1,4 +1,3 @@
-#include <initializer_list>
 #include <vector>
 
 int count_nums(std::vector<int> nums) {
@@ -21,6 +20,3 @@ int count_nums(std::vector<int> nums) {
         }
     }
     return count;
-
-std::size_t _M_len;
-constexpr std::size_t size() const { return _M_len; }
