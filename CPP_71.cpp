@@ -1,6 +1,3 @@
-#include<stdio.h>
-#include<math.h>
-#include<iostream>
 using namespace std;
 
 float triangle_area(float a, float b, float c) {
@@ -10,16 +7,4 @@ float triangle_area(float a, float b, float c) {
     } else {
         return -1.0;
     }
-}
-
-int main() {
-    float a, b, c;
-    cout << "Enter the sides of the triangle: ";
-    cin >> a >> b >> c;
-    float area = triangle_area(a, b, c);
-    if (area == -1.0)
-        cout << "Not a valid triangle";
-    else
-        cout << "The area of the triangle is: " << area;
-    return 0;
 }
