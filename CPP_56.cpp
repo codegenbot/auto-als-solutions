@@ -1,15 +1,16 @@
-Here is the solution:
+int stackSize = 0;
+char top;
 
-bool correct_bracketing(string brackets) {
-    int open_count = 0;
-    for (char bracket : brackets) {
-        if (bracket == '<') {
-            open_count++;
-        } else if (bracket == '>') {
-            if (open_count == 0)
-                return false;
-            open_count--;
-        }
+for(int i = 0; i < brackets.length(); i++) {
+    if(brackets[i] == '<') {
+        stackSize++;
+        if(stackSize > 1) return false;
+        top = '<';
+    } else if(brackets[i] == '>') {
+        if(stackSize == 0) return false;
+        if(top != '<') return false;
+        stackSize--;
     }
-    return open_count == 0;
 }
+
+return (stackSize == 0);
