@@ -1,12 +1,15 @@
 ```
-def print_fibonacci():
-    n = int(input("Enter a number: "))
-    if n <= 0:
-        print("Please enter a positive integer.")
-    elif n == 1 or n == 2:
-        print(1)
-    else:
-        a, b = 1, 1
-        for _ in range(2, n):
-            a, b = b, a + b
-        print(b)
+def find_max_value():
+    max_value = float('-inf')
+    while True:
+        user_input = input("Enter a number (or 'stop' to finish): ")
+        if user_input.lower() == 'stop':
+            break
+        try:
+            num = int(user_input)
+        except ValueError:
+            print("Invalid input. Please enter an integer.")
+            continue
+        if num > max_value:
+            max_value = num
+    return max_value
