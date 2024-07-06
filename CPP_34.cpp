@@ -4,7 +4,8 @@
 using namespace std;
 
 vector<int> unique(vector<int> l) {
-    vector<int> result(l.begin(), l.end());
+    vector<int> result(l.size());
+    copy(cbegin(l), cend(l), result.begin());
     sort(result.begin(), result.end());
     return result;
 }
@@ -15,7 +16,7 @@ int main() {
         cout << x << " ";
     }
     cout << endl;
-    
+
     vector<int> unique_v = unique(v);
     for (int x : unique_v) {
         cout << x << " ";
