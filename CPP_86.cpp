@@ -1,5 +1,4 @@
 #include <string>
-#include <algorithm>
 
 std::string anti_shuffle(std::string s){
     std::string result = "";
@@ -13,7 +12,7 @@ std::string anti_shuffle(std::string s){
             word += s[j];
         }
         i = j - 1;
-        std::sort(word.begin(), word.end());
+        sort(word.begin(), word.end());
         result += word;
     }
     return result;
