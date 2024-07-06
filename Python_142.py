@@ -14,5 +14,4 @@ def sum_squares(numbers):
             total_sum += num ** 3
     return total_sum
 
-numbers = input("Enter numbers separated by space: ")
 print(sum_squares("1 2 3 4 5"))
