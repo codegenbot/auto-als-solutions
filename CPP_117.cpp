@@ -67,11 +67,11 @@ int main() {
     }
     cout << "}" << endl;
 
-    //cout << "{";
-    //for (const string& s : select_words("Uncle sam", 3)) {
-    //    cout << "\"" << s << "\", ";
-    //}
-    //cout << "}" << endl;
+    cout << "{";
+    for (const string& s : select_words("Uncle sam", 3)) {
+        cout << "\"" << s << "\", ";
+    }
+    cout << "}" << endl;
     
     return 0;
 }

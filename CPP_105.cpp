@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -16,7 +17,6 @@ std::vector<std::string> by_length(std::vector<int> arr) {
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
             temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
-        }
     }
 
     std::sort(temp.begin(), temp.end());
