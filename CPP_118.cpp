@@ -1,14 +1,5 @@
-```cpp
 #include <iostream>
 #include <string>
-
-int main() {
-    std::string word;
-    std::cout << "Enter a word: ";
-    std::getline(std::cin, word);
-    std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
-    return 0;
-}
 
 std::string get_closest_vowel(std::string str) {
     int min_dist = std::numeric_limits<int>::max();
@@ -24,4 +15,12 @@ std::string get_closest_vowel(std::string str) {
         }
     }
     return std::string(1, closest_vowel);
+}
+
+int main() {
+    std::string word;
+    std::cout << "Enter a word: ";
+    std::getline(std::cin, word);
+    std::cout << "The closest vowel is: " << get_closest_vowel(word) << std::endl;
+    return 0;
 }
