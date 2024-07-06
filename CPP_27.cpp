@@ -1,17 +1,23 @@
+```cpp
 #include <iostream>
 #include <string>
 
 int main(){
     std::string str;
+    int i = 0;
+    
     std::cout << "Enter a string: ";
     std::cin >> str;
-    for(int i = 0; i < str.length(); i++){
+    
+    for(i = 0; i < str.length(); i++){
         if(str[i] >= 'a' && str[i] <= 'z'){
-            str[i] = (char)toupper((int)str[i]);
+            str[i] = toupper(str[i]);
         }else if(str[i] >= 'A' && str[i] <= 'Z'){
-            str[i] = (char)tolower((int)str[i]);
+            str[i] = tolower(str[i]);
         }
     }
-    std::cout << "Flipped case string: " << str << std::endl;
+    
+    std::cout << "The flipped case of the string is: " << str << std::endl;
+    
     return 0;
 }
