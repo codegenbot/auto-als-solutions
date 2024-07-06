@@ -1,7 +1,8 @@
-input_str = "_2818_"
-output_str = "-2818_"
-
-for i in range(2800, 2911):
-    input_str = input_str.replace(f"_{i:04d_}", f"-{i:04d_}")
-
-print(input_str)
+def fix_spaces(text):
+    new_text = ''
+    for char in text:
+        if char == ' ' and (new_text[-1] != ' ' or len(new_text) == 0):
+            new_text += '_'
+        else:
+            new_text += char
+    return new_text.replace(' ', '-').replace('_', ' ')
