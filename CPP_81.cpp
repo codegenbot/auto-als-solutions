@@ -2,47 +2,46 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
-    std::vector<std::string> result;
-    for (float grade : grades) {
-        std::string letterGrade;
-        if (grade >= 4.0)
-            letterGrade = "A+";
-        else if (grade > 3.7)
-            letterGrade = "A";
-        else if (grade > 3.3)
-            letterGrade = "A-";
-        else if (grade > 3.0)
-            letterGrade = "B+";
-        else if (grade > 2.7)
-            letterGrade = "B";
-        else if (grade > 2.3)
-            letterGrade = "B-";
-        else if (grade > 2.0)
-            letterGrade = "C+";
-        else if (grade > 1.7)
-            letterGrade = "C";
-        else if (grade > 1.3)
-            letterGrade = "C-";
-        else if (grade > 1.0)
-            letterGrade = "D+";
-        else if (grade > 0.7)
-            letterGrade = "D";
-        else
-            letterGrade = "E";
-        result.push_back(letterGrade);
+bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+    if (a.size() != b.size()) {
+        return false;
     }
-    return result;
+    
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
-bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
-    if (a.size() != b.size())
-        return false;
-
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i])
-            return false;
+int main() {
+    std::vector<std::string> a, b;
+    
+    int n;
+    std::cout << "Enter the number of strings: ";
+    std::cin >> n;
+    
+    for (int i = 0; i < n; i++) {
+        std::string s;
+        std::cout << "Enter string " << i + 1 << ": ";
+        std::getline(std::cin, s);
+        
+        if (i == 0) {
+            a.push_back(s);
+        } else {
+            b.push_back(s);
+        }
     }
-
-    return true;
+    
+    bool result = issame(a, b);
+    
+    if (result) {
+        std::cout << "The two lists of strings are the same." << std::endl;
+    } else {
+        std::cout << "The two lists of strings are not the same." << std::endl;
+    }
+    
+    return 0;
 }
