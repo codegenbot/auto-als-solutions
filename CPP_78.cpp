@@ -6,4 +6,3 @@ int hex_key(string num) {
             count++;
     }
     return count;
-}
