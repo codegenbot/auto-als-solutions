@@ -1,13 +1,8 @@
-bool is_divisible = false;
-
-if(n <= 1) return false;
-if(n == 2) return true;
-
-for(int i=2; i*i<=n; i++){
-    if(n%i==0){
-        is_divisible = true;
+bool is_divisor = false;
+for (long long i = 2; i * i <= n; i++) {
+    if (n % i == 0) {
+        is_divisor = true;
         break;
     }
 }
-
-return !is_divisible;
+return !is_divisor;
