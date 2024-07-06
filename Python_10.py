@@ -1,3 +1,4 @@
+```python
 def make_palindrome(string: str) -> str:
     for i in range(len(string)):
         for j in range(i+1):
