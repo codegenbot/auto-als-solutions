@@ -1,8 +1,8 @@
-#include <iostream>
 #include <vector>
+#include <algorithm>
 #include <string>
 
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
+bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
     if (a.size() != b.size()) {
         return false;
     }
@@ -65,9 +65,4 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
 
         return lst1.size() < lst2.size() ? lst1 : lst2;
     }
-}
-
-int main() {
-    // Add your code here to test the total_match function.
-    return 0;
 }
