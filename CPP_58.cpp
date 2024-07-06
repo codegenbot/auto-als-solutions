@@ -21,7 +21,6 @@ bool issame(vector<int> a, vector<int> b) {
             return false;
     }
     return true;
-}
 
 int main(){
     vector<int> a = {4, 3, 2, 8};
