@@ -1,3 +1,2 @@
 def decode_shift(s: str):
-    key = len(s) - s.count(' ')
-    return "".join([chr((ord(ch.lower()) - 97 + 26 - key) % 26 + 97) if ch.isalpha() else ch for ch in s])
+    return "".join([chr(((ord(ch) - 97 if ch.islower() else 97 + ((ord(ch) - 64) % 26))) for ch in s])
