@@ -15,6 +15,5 @@ string flip_case(string str) {
         }
     }
     return result;
-}
 
 assert(flip_case("These violent delights have violent ends") == "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS");
