@@ -1,4 +1,4 @@
-#include<vector>
+#include <vector>
 
 bool isPrime(int n) {
     if (n <= 1) return false;
@@ -8,7 +8,7 @@ bool isPrime(int n) {
     return true;
 }
 
-int findMaxPrime(vector<int> lst){
+int skjkasdkd(vector<int> lst){
     int maxPrime = 0;
     for(int i = 0; i < lst.size(); i++){
         if(isPrime(lst[i])){
@@ -23,4 +23,10 @@ int findMaxPrime(vector<int> lst){
         maxPrime /= 10;
     }
     return sumOfDigits;
+}
+
+int main() {
+    vector<int> numbers = {127, 97, 8192};
+    cout << "The output is: " << skjkasdkd(numbers) << endl;
+    return 0;
 }

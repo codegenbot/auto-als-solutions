@@ -1,3 +1,17 @@
-```
-input_list = [input("Enter string {}: ".format(i+1)) for i in range(int(input("Number of strings: ")))]
-print(match_parens([s.strip() for s in input_list]))
+def match_parens(lst):
+    stack = []
+    for s in lst:
+        for c in s:
+            if c == '(':
+                stack.append(c)
+            elif c == ')':
+                if len(stack) == 0:
+                    return 'No'
+                stack.pop()
+    if len(stack) == 0:
+        return 'Yes'
+    else:
+        return 'No'
+
+input_list = input("Enter your strings separated by space: ").split(' ')
+print(match_parens(input_list))
