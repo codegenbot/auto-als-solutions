@@ -1,9 +1,9 @@
 int smallest_change(vector<int> arr) {
     int n = arr.size();
-    vector<size_t> dp(n);
+    vector<vector<size_t>> dp(n, vector<size_t>(n));
     
     for (int i = 0; i < n; i++) {
-        dp[i] = 0;
+        dp[i][i] = 0;
     }
     
     for (int length = 2; length <= n; length++) {
@@ -11,12 +11,12 @@ int smallest_change(vector<int> arr) {
             int j = i + length - 1;
             
             if (arr[i] == arr[j]) {
-                dp[j - i + 1] = min(size_t(1), dp[j - i].size() + 1);
+                dp[i][j] = dp[i+1][j-1];
             } else {
-                dp[j - i + 1] = min(dp[j - i + 1].size(), dp[j - i].size()) + 1;
+                dp[i][j] = min(size_t(1), dp[i+1][j-1]) + 1;
             }
         }
     }
     
-    return dp.back();
+    return *max_element(dp[0].begin(), dp[0].end());
 }
