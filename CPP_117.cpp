@@ -1,14 +1,14 @@
-```
-#include <iostream>
+```c++
 #include <vector>
 #include <string>
-#include <algorithm>
 
-using namespace std;
+bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+    return a == b;
+}
 
-vector<string> select_words(string s, int n) {
-    vector<string> result;
-    string word;
+std::vector<std::string> select_words(std::string s, int n) {
+    std::vector<std::string> result;
+    std::string word = "";
     int consonants = 0;
 
     for (char c : s) {
@@ -16,18 +16,13 @@ vector<string> select_words(string s, int n) {
             if (consonants == n) {
                 result.push_back(word);
             }
-            word.clear();
+            word = "";
             consonants = 0;
         } else {
             bool isVowel = false;
-            switch (tolower(c)) {
-                case 'a':
-                case 'e':
-                case 'i':
-                case 'o':
-                case 'u': 
-                    isVowel = true;
-                    break;
+            if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+                || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+                isVowel = true;
             }
             if (!isVowel) {
                 consonants++;
@@ -44,35 +39,7 @@ vector<string> select_words(string s, int n) {
 }
 
 int main() {
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Mary had a little lamb", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("simple white space", 2)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Hello world", 4)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-
-    cout << "{";
-    for (const string& s : select_words("Uncle sam", 3)) {
-        cout << "\"" << s << "\", ";
-    }
-    cout << "}" << endl;
-    
-    return 0;
+    assert(!select_words("a b c d e f", 1).empty());
+    assert(issame(select_words("a b c d e f", 1), {"b", "c", "d", "f"}));
+    //...
 }
