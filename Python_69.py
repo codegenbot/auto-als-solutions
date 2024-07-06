@@ -1,4 +1,5 @@
-def most_frequent(lst):
+```
+def search(lst):
     frequency_dict = {}
     for num in lst:
         if num in frequency_dict:
@@ -6,9 +7,9 @@ def most_frequent(lst):
         else:
             frequency_dict[num] = 1
     max_freq_num = -1
-    max_freq = -1
+    max_freq_count = 0
     for key, value in frequency_dict.items():
-        if value > max_freq:
-            max_freq = value
+        if value > max_freq_count:
             max_freq_num = key
+            max_freq_count = value
     return max_freq_num
