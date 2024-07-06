@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include<string>
 #include<algorithm>
 using namespace std;
@@ -6,9 +5,13 @@ using namespace std;
 string remove_vowels(string text){
     string result = "";
     for (char c : text) {
-        if (!("aeiouAEIOU").find(std::tolower(c))) {
+        if (!isVowel(c)) {
             result += c;
         }
     }
     return result;
+}
+
+bool isVowel(char c) {
+    return toupper(c) == 'A' || toupper(c) == 'E' || toupper(c) == 'I' || toupper(c) == 'O' || toupper(c) == 'U';
 }
