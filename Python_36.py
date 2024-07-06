@@ -9,3 +9,4 @@ def fizz_buzz(n: int):
             print("Buzz")
         else:
             print(i)
+    return count
