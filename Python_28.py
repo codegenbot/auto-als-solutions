@@ -1,11 +1,10 @@
-```
 from typing import List
 
 
 def concatenate(strings: List[str]) -> str:
-    result = ''.join(filter(None, strings))
+    result = ''.join(strings)
     return result
 
 
-strings = input("Enter strings separated by space : ").split()
+strings = input("Enter strings (comma or space-separated) : ").split()
 print(concatenate(strings))
