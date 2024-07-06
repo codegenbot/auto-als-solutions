@@ -1,9 +1,4 @@
 def sort_even(l: list):
-    return [
-        (
-            x
-            if i % 2 != 0
-            else (y for y in sorted([y for y in l if (i - 1) // 2 == (l.index(y)) // 2])).__next__()
-        )
-        for i, x in enumerate(l)
-    ]
+    even_nums = [i for i in l if i % 2 == 0]
+    odd_nums = [j for j in l if j % 2 != 0]
+    return sorted(even_nums) + odd_nums
