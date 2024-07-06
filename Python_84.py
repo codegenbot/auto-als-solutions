@@ -1,3 +1,5 @@
 ```
 def solve(N):
-    return bin(sum(int(i) for i in str(bin(N)[2:]))) if N > 0 else ""
+    s = bin(sum(int(x) for x in str(bin(N)[2:])))
+    max_len = len(format(1 << N.bit_length(), "b"))
+    return s[2:].zfill(max_len)
