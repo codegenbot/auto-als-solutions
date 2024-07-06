@@ -1,32 +1,29 @@
-#include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
 int fruit_distribution(string s, int n) {
-    size_t apple_count = 0, orange_count = 0;
-    for (size_t i = 0; i < s.size(); ++i) {
-        if (s[i] == 'a' && s[i+1] == 'p') {
-            while (i + 3 <= s.size() && s.substr(i + 3, 2) != "and" 
-                   && s.substr(i + 3, 5) != "apples") {
-                ++apple_count;
-                i += (s.substr(i + 3, 1) == ' ') ? 4 : 6;
+    stringstream ss(s);
+    int apples = 0;
+    int oranges = 0;
+    
+    string token;
+    while (getline(ss, token, ' ') && !token.empty()) {
+        if (token.find("apples") != string::npos || token.find("AppleS") != string::npos) {
+            if (token.find("and") == string::npos) {
+                apples = stoi(token.substr(0, token.length() - 8));
+            } else {
+                apples = stoi(token.substr(0, token.find("and")));
             }
-        } else if (s[i] == 'o' && s[i+1] == 'r') {
-            while (i + 3 <= s.size() && s.substr(i + 3, 2) != "and" 
-                   && s.substr(i + 3, 5) != "oranges") {
-                ++orange_count;
-                i += (s.substr(i + 3, 1) == ' ') ? 4 : 6;
+        } else if (token.find("oranges") != string::npos || token.find("OrangeS") != string::npos) {
+            if (token.find("and") == string::npos) {
+                oranges = stoi(token.substr(0, token.length() - 7));
+            } else {
+                oranges = stoi(token.substr(0, token.find("and")));
             }
         }
     }
-    
-    return n - apple_count - orange_count;
-}
 
-int main() {
-    string s = "5 apples and 6 oranges";
-    int n = 19;
-    cout << fruit_distribution(s, n);
-    return 0;
+    return n - apples - oranges;
 }
