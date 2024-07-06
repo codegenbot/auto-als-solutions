@@ -1,15 +1,13 @@
-Here is the solution:
+#include <string>
+using namespace std;
 
-```cpp
 bool cycpattern_check(string a, string b) {
-    int n = a.length();
-    int m = b.length();
-    
-    for(int i=0; i<n-m+1; i++) {
-        if(a.substr(i,m).compare(b) == 0 || a.substr(0,m).compare(b) == 0) {
+    int n = a.length(), m = b.length();
+    for (int i = 0; i < n - m + 1; i++) {
+        string substr = a.substr(i, m);
+        if (substr == b || substr.rotate(1) == b ||
+            substr.rotate(2) == b || substr.rotate(3) == b)
             return true;
-        }
     }
-    
     return false;
 }
