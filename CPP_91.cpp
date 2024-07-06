@@ -1,11 +1,17 @@
-```cpp
-int count = 0;
-size_t start = 0;
-while ((start = S.find("I", start)) != string::npos) {
-    size_t end = S.find_first_of(".!? ", start);
-    if (end == string::npos || end == S.size() - 1)
-        break;
-    ++count;
-    start = end + 1;
+int is_bored(string S) {
+    int boredoms = 0;
+    string word;
+    for (char c : S + ".") {
+        if (c == '.') {
+            word.clear();
+        } else if (c == '!' || c == '?') {
+            if (!word.empty() && word[0] == 'I') {
+                boredoms++;
+            }
+            word.clear();
+        } else {
+            word += c;
+        }
+    }
+    return boredoms;
 }
-return count;
