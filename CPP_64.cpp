@@ -3,9 +3,8 @@
 int vowels_count(std::string s) {
     int count = 0;
     for (char c : s) {
-        if ((c == 'a') || (c == 'e') || (c == 'i') || (c == 'o') || (c == 'u')) {
-            count++;
-        } else if (c == 'y' && (s.find('y') == 0 || s.find('y') < s.length() - 1)) {
+        if ((c == 'a') || (c == 'e') || (c == 'i') || (c == 'o') || (c == 'u') ||
+            (c == 'y' && (s.find('y')+1 == s.length()|| std::next(std::find(c, s.end()), 0) != s.end()))) {
             count++;
         }
     }
@@ -13,6 +12,6 @@ int vowels_count(std::string s) {
 }
 
 int main() {
-    assert (vowels_count("ACEDY") == 3);
+    assert(vowels_count("ACEDY") == 3);
     return 0;
 }
