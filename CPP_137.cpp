@@ -5,17 +5,12 @@
 using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    double da = any_cast<double>(a);
-    string sa = any_cast<string>(a);
-    double db = any_cast<double>(b);
-    string sb = any_cast<string>(b);
-
-    if (da > db)
+    if (any_cast<double>(a) > any_cast<double>(b))
         return a;
-    else if (sa > sb)
+    else if (!boost::any_empty(any_cast<boost::any>(b)) && any_cast<string>(a) > any_cast<string>(b))
         return a;
-    else if (sb > sa)
+    else if (!boost::any_empty(any_cast<boost::any>(a)) && any_cast<string>(b) > any_cast<string>(a))
         return b;
     else
-        return "None";
+        return boost::any("None");
 }

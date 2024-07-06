@@ -1,9 +1,8 @@
-```cpp
+#include <iostream>
 #include <string>
-using namespace std;
 
-string fix_spaces(string text) {
-    string result = "";
+std::string fix_spaces(std::string text){
+    std::string result = "";
     bool spaceFound = false;
 
     for(int i = 0; i < text.length(); i++){
