@@ -1,5 +1,5 @@
-```
-def `minPath`(grid, k):
+```python
+def `minPath(grid, k):
     N = len(grid)
     visited = [[False]*N for _ in range(N)]
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -23,4 +23,4 @@ def `minPath`(grid, k):
         for j in range(N):
             dfs(i, j, [])
     
-    return res
+    return res`
