@@ -1,15 +1,11 @@
-#include<string>
-using namespace std;
-
 bool simplify(string x, string n) {
-    int a = stoi(strtok(x.substr(1).c_str(), "/"));
-    int b = stoi(strtok(NULL, "/"));
-    int c = stoi(strtok(n.substr(1).c_str(), "/"));
-    int d = stoi(strtok(NULL, "/"));
+    int a = 0, b = 1, c = 0, d = 1;
+    stringstream s(x);
+    s >> a >> b;
 
-    long long m = (long long) a * d;
-    long long n2 = (long long) b * c;
+    stringstream t(n);
+    t >> c >> d;
 
-    if(m%n2==0) return true;
-    else return false;
+    if (b*d == a*c) return true;
+    return false;
 }
