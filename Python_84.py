@@ -1,3 +1,4 @@
-```
 def solve(N):
-    return bin((1 << len(bin(N)[2:])) + N)[2:]
+    total = sum(int(x) for x in str(bin(N)[2:]))
+    max_bin_len = len(bin(N)[2:])
+    return ('0' * (max_bin_len - len(str(bin(total))[2:]))) + str(bin(total))[2:]
