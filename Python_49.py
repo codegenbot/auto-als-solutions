@@ -1,4 +1,7 @@
-def modp(n, p):
+```
+def modp(*args):
+    n = args[0]
+    p = args[1]
     if n < 0:
         n += p
     
@@ -15,6 +18,6 @@ def modp(n, p):
     if g != 1:
         result = None
     else:
-        result = pow(x, -(p-2), p)
+        result = pow(x % p, -1, p) if x % p != 0 else None
 
     return result
