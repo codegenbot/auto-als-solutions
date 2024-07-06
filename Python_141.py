@@ -1,14 +1,11 @@
 ```
 def file_name_check(file_name):
-    if len(file_name.split('.')) != 2:
+    if len([c for c in file_name if c.isdigit()]) > 3:
         return 'No'
-    before_dot = file_name.split('.')[0]
-    after_dot = file_name.split('.')[1].lower()
-    if not before_dot[0].isalpha():
+    if file_name.count('.') != 1:
         return 'No'
-    if not (after_dot in ['txt', 'exe', 'dll']):
+    if not file_name[:file_name.index('.').lstrip().isalpha():
         return 'No'
-    digits_count = sum(c.isdigit() for c in file_name)
-    if digits_count > 3:
+    if file_name[file_name.index('.'):].lower() not in ['txt', 'exe', 'dll']:
         return 'No'
     return 'Yes'
