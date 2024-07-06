@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 std::string fix_spaces(std::string text) {
@@ -23,4 +24,12 @@ std::string fix_spaces(std::string text) {
         }
     }
     return result;
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter your string: ";
+    std::getline(std::cin, input);
+    std::cout << "Fixed string: " << fix_spaces(input) << std::endl;
+    return 0;
 }
