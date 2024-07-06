@@ -1,5 +1,7 @@
-vector<int>::iterator it = min_element(lst.begin(), lst.end());
-if(it != lst.end() && ++it != lst.end()) {
-    return *it;
+```
+int next_smallest(vector<int> lst){
+    if(lst.empty()) return -1;  // Return None which is equivalent to -1 in this case
+    sort(lst.begin(), lst.end());
+    if (lst.size() < 2) return -1;
+    return lst[1];
 }
-return -1; // or return None if that's what you want
