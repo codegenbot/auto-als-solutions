@@ -1,3 +1,4 @@
+```cpp
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
