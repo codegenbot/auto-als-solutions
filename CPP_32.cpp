@@ -1,6 +1,3 @@
-#include <cmath>
-#include <vector>
-
 double abs(double num) {
     return num > 0 ? num : -num;
 }
