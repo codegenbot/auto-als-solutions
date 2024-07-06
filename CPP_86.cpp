@@ -1,4 +1,4 @@
-#include <string>
+using namespace std;
 
 string anti_shuffle(string s){
     string result = "";
