@@ -19,7 +19,8 @@ string decimal_to_binary(int decimal){
     return "0b" + binary;
 }
 
-int main() {
+int main() 
+{
     int decimal;
     cout << "Enter a decimal number: ";
     cin >> decimal;
