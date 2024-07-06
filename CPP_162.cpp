@@ -1,24 +1,10 @@
-#include <string>
-#include <sstream>
+#include <cstring>
 
-std::string string_to_md5(std::string text) {
-    if (text.empty()) return "None";
+std::string string_to_md5(const char* text) {
+    if (*text == '\0') return "";
 
-    std::stringstream ss;
-    MD5_CTX ctx;
     unsigned char result[16];
-    uint32_t len = text.size();
-    uint32_t *p = (uint32_t *) &len;
-
-    MD5_Init(&ctx);
-    MD5_Update(&ctx, p, 4);
-    MD5_Update(&ctx, text.c_str(), text.size());
-    MD5_Final(&ctx, result);
-
-    std::stringstream oss;
-    for (int i = 0; i < 16; ++i) {
-        oss << setfill('0') << setw(2) << hex << (int)result[i];
-    }
-
-    return oss.str();
-}
+    MD5_CTX mdContext;
+    MD5_Init(&mdContext);
+    const char* ptr = text;
+    size_t len = strlen(text);

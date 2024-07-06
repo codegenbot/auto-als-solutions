@@ -1,4 +1,3 @@
-```c++
 #include <iostream>
 #include <string>
 #include <boost/any.hpp>
@@ -11,14 +10,14 @@ boost::any compare_one(boost::any a, boost::any b) {
     double db = any_cast<double>(b);
     string sb = any_cast<string>(b);
 
-    if (da > db || (!sa.empty() && !sb.empty()))
+    if (da > db || (sa.empty() && !sb.empty()))
         return a;
     else if (!sa.empty() && sb.empty())
         return a;
     else if (db > da)
         return b;
     else
-        return boost::any("Both numbers are equal");
+        return boost::any("None");
 }
 
 int main() {
@@ -27,4 +26,3 @@ int main() {
     boost::any result = compare_one(a, b);
     cout << "Result: " << any_cast<string>(result) << endl;
     return 0;
-}
