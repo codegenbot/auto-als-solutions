@@ -18,19 +18,3 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
     }
     return result;
 }
-
-int main() {
-    std::vector<int> test_list = {1, 2, 3, 4, 5};
-    std::cout << "Original List: ";
-    for (auto i : test_list) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-
-    test_list = strange_sort_list(test_list);
-    std::cout << "Sorted List: ";
-    for (auto i : test_list) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-}
