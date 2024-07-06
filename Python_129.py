@@ -1,5 +1,5 @@
-```
-def minPath(grid, k):
+def minPath():
+    grid = [[int(x) for x in input().split(',')] for _ in range(int(input()))]
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
     visited = set()
@@ -25,12 +25,12 @@ def minPath(grid, k):
 
     boundary_cells = [(0, j) for j in range(n)] + [(n - 1, j) for j in range(n)] + [(i, 0) for i in range(n)] + [(i, n - 1) for i in range(n)]
     min_path = []
-    for i, j in boundary_cells:
-        visited.add((i, j))
-        paths = [p for p in [dfs(i, j, [m[i][j]], k)] if p] 
-        for path in set(tuple(x) for x in paths):
-            if path:
-                min_path = min([path], key=lambda x: len(x))
-                break
+    k = int(input("Enter a number: "))
+    visited.add((0, 0))
+    paths = [p for p in [dfs(0, 0, [m[0][0]], k)] if p] 
+    for path in set(tuple(x) for x in paths):
+        if path:
+            min_path = min([path], key=lambda x: len(x))
+            break
 
     return min_path if min_path else []
