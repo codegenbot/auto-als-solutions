@@ -1,17 +1,23 @@
+```cpp
 #include <vector>
 #include <string>
 
-vector<string> romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
-int numerals[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
-string int_to_mini_roman(int number) {
-    string roman = "";
-    for (int i = 0; i < sizeof(numerals)/sizeof(int); i++) {
-        while (number >= numerals[i]) {
-            roman += romanNumerals[i];
-            number -= numerals[i];
+std::vector<std::pair<int, std::string>> roman = {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
+                                                 {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
+                                                 {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}};
+
+std::string int_to_mini_roman(int number) {
+    std::string result = "";
+    for (const auto& pair : roman) {
+        while (number >= pair.first) {
+            number -= pair.first;
+            result += pair.second.substr(0, 1);
         }
     }
-    return roman;
+    return result;
 }
 
-assert (int_to_mini_roman(1000) == "M");
+int main() {
+    assert(int_to_mini_roman(1000) == "M");
+    return 0;
+}
