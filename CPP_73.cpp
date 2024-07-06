@@ -1,10 +1,9 @@
 #include <vector>
 #include <algorithm>
-#include <cstddef>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<unsigned long>> dp(n+1, std::vector<unsigned long>(n));
+    std::vector<std::vector<size_t>> dp(n+1, std::vector<size_t>(n));
 
     for (int i = 0; i <= n; i++) {
         dp[i][i] = 0;
@@ -15,10 +14,12 @@ int smallest_change(std::vector<int> arr) {
             int j = i + length - 1;
 
             if (arr[i] == arr[j]) {
-                dp[i][j].push_back(dp[i+1][j-1].size());
-                dp[i][j].push_back(1 + dp[i+1][j].size());
+                size_t temp = dp[i+1][j-1].size() + 1;
+                size_t min_len = dp[i+1][j].size();
+                dp[i][j] = std::min(temp, min_len);
             } else {
-                *std::min_element(dp[i+1].begin(), dp[j].end()) += 1;
+                size_t min_len = *std::min_element(dp[i+1].begin(), dp[j].end()) + 1;
+                dp[i][j] = min_len;
             }
         }
     }
