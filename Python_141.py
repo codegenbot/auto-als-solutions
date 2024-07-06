@@ -1,5 +1,3 @@
-Here is the corrected code with the initial three lines of indentation and the function signature:
-
 ```
 def file_name_check(file_name):
     if len([c for c in file_name if c.isdigit()]) > 3:
