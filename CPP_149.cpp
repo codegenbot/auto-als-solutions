@@ -1,6 +1,4 @@
-```
-#include <vector>
-#include <algorithm>
+#include <initializer_list/>
 
 bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size())
@@ -37,4 +35,3 @@ int main() {
     std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
     assert(issame(sorted_list_sum(vec1), vec2));
     return 0;
-}
