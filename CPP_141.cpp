@@ -1,6 +1,8 @@
+```
 #include <string>
 #include <cctype>
 #include <vector>
+#include <algorithm>
 
 int countDigits(const std::string& str) {
     int count = 0;
@@ -30,7 +32,7 @@ std::string file_name_check(std::string file_name) {
     }
 
     std::vector<std::string> validSuffixes = {"txt", "exe", "dll"};
-    if (find(validSuffixes.begin(), validSuffixes.end(), suffix) == validSuffixes.end()) {
+    if (std::find(validSuffixes.begin(), std::end(validSuffixes), suffix) == std::end(validSuffixes)) {
         return "No";
     }
 
