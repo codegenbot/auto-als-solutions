@@ -1,6 +1,7 @@
 Here is the modified code:
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -16,8 +17,7 @@ int fib(int n) {
     return result;
 }
 
-int main() 
-{
+int main() {
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
