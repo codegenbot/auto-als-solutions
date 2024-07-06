@@ -5,7 +5,9 @@ bool will_it_fly(vector<int> q, int w) {
     for (int i : q) {
         str += to_string(i);
     }
-    if (str != reverse(str).s) return false;
+    if (str != string(reverse(str)).substr(1, str.length() - 2)) {
+        return false;
+    }
     int sum = 0;
     for (int i : q) {
         sum += i;
