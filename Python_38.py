@@ -1,4 +1,3 @@
-```python
 def decode_cyclic(s: str):
     min_len = len(s)
     result = ""
