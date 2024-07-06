@@ -1,21 +1,19 @@
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
+#include <vector>
+using namespace std;
 
-    if (arr.empty()) return {};
-
-    int minEvenVal = INT_MAX;
-    int minEvenIndex = -1;
-
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0 && arr[i] < minEvenVal) {
-            minEvenVal = arr[i];
-            minEvenIndex = i;
+vector<vector<int>> pluck(vector<int> arr) {
+    vector<int> result;
+    if(arr.empty()) return {{}};
+    int minEvenValue = INT_MAX;
+    int minIndex = -1;
+    for(int i=0; i<arr.size(); i++){
+        if(arr[i]%2==0 && arr[i]<minEvenValue){
+            minEvenValue = arr[i];
+            minIndex = i;
         }
     }
-
-    if (minEvenVal != INT_MAX) {
-        result.push_back({minEvenVal, minEvenIndex});
-    }
-
-    return result;
+    if(minEvenValue == INT_MAX) return {{}};
+    result.push_back(minEvenValue);
+    result.push_back(minIndex);
+    return {result};
 }
