@@ -58,7 +58,18 @@ std::vector<std::string> by_length(std::vector<int> arr) {
 }
 
 int main() {
-    std::vector<int> arr = {1, 2, 3, 4, 5};
+    std::vector<int> arr;
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        std::cout << "Enter element " << i + 1 << ": ";
+        int x;
+        std::cin >> x;
+        arr.push_back(x);
+    }
+
     std::vector<std::string> res = by_length(arr);
 
     for (const auto& str : res) {
