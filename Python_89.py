@@ -1,3 +1,4 @@
+```
 def encrypt(s):
     result = ""
     for char in s:
@@ -6,3 +7,4 @@ def encrypt(s):
             result += chr((ord(char) - ascii_offset + 3) % 26 + ascii_offset)
         else:
             result += char
+    return result
