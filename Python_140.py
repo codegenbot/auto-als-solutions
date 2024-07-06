@@ -1,4 +1,1 @@
-```
-input6 = "your input string"
-output = input6.replace("_", "-")
-print(output)
+input_str = "input6_","_-2816_").replace("_", "-")
