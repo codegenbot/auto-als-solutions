@@ -9,4 +9,6 @@ def valid_date(date):
        (month in [4,6,9,11] and day > 30) or \
        (month == 2 and day > 29):
         return False
+    if year < 1:
+        return False
     return True
