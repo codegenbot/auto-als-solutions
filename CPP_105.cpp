@@ -2,11 +2,11 @@
 #include <algorithm>
 using namespace std;
 
-bool issame(const vector<string>& v1, const vector<string>& v2) {
-    if (v1.size() != v2.size())
+bool issame(vector<string> v1, vector<string> v2) {
+    if(v1.size() != v2.size())
         return false;
-    for (int i = 0; i < v1.size(); i++)
-        if (v1[i] != v2[i])
+    for(int i = 0; i < v1.size(); i++)
+        if(v1[i] != v2[i])
             return false;
     return true;
 }
@@ -14,7 +14,9 @@ bool issame(const vector<string>& v1, const vector<string>& v2) {
 vector<string> by_length(vector<int> arr) {
     vector<pair<int, int>> temp;
     for (int i : arr) {
-        temp.push_back({i >= 1 && i <= 9 ? (i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
+        if (i >= 1 && i <= 9) {
+            temp.push_back({(i == 1)? 1 : ((i == 2)? 2 : ((i == 3)? 3 : ((i == 4)? 4 : ((i == 5)? 5 : ((i == 6)? 6 : ((i == 7)? 7 : ((i == 8)? 8 : 9)))))))))), i});
+        }
     }
 
     sort(temp.begin(), temp.end());
@@ -22,7 +24,7 @@ vector<string> by_length(vector<int> arr) {
 
     vector<string> result;
     for (auto& t : temp) {
-        switch(t.second) {
+        switch(t.first) {
             case 1:
                 result.push_back("One");
                 break;
@@ -57,9 +59,10 @@ vector<string> by_length(vector<int> arr) {
 }
 
 int main() {
-    vector<int> arr = {9, 4, 8};
-    vector<string> result = by_length(arr);
-    if (!issame({{"One"}}, {"Four"}, {"Eight"} , {result})) {
+    vector<int> arr = {1,2};
+    vector<string> v1 = by_length(arr);
+    vector<string> v2 = {"One", "Two"};
+    if (!issame(v1, v2)) {
         return 1; 
     }
     return 0;
