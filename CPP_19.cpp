@@ -1,31 +1,42 @@
-map<string,int> numberMap = {{ "zero",0 }, { "one",1 }, { "two",2 }, 
-                              { "three",3 }, { "four",4 }, {"five",5 }, 
-                              { "six",6 }, { "seven",7 }, {"eight",8 }, {"nine",9 }};
+```c++
+map<string,int> num_map;
+num_map["zero"] = 0; num_map["one"] = 1; num_map["two"] = 2; 
+num_map["three"] = 3; num_map["four"] = 4; num_map["five"] = 5;
+num_map["six"] = 6; num_map["seven"] = 7; num_map["eight"] = 8; 
+num_map["nine"] = 9;
 
-string sort_numbers(string numbers){
-    vector<string> numVec;
-    string temp;
-    for(int i=0; i<numbers.size();i++){
-        if(numbers[i] == ' '){
-            numVec.push_back(temp);
-            temp = "";
-        }
-        else{
-            temp += numbers[i];
-        }
-    }
-    numVec.push_back(temp);
-
-    sort(numVec.begin(),numVec.end());
-    string result;
-    for(int i=0; i<numVec.size();i++){
-        for(auto it = numberMap.begin(); it != numberMap.end(); ++it){
-            if(it->first == numVec[i]){
-                result += it->first + " ";
-                break;
-            }
+string result = "";
+for(string s : split(numbers,' ')) {
+    for(map<string,int>::iterator it = num_map.begin(); it != num_map.end();++it) {
+        if(it->first == s) {
+            result += s + " ";
+            break;
         }
     }
-
-    return result.substr(0,result.length()-1);
 }
+return result.substr(0,result.length()-1);
+}
+
+string split(const string& str,char delim)
+{
+    vector<string> tokens;
+    size_t prev = 0, readPos = 0; 
+    do {
+        readPos = str.find(delim, prev);
+        if (readPos == string::npos) readPos = str.length();
+        string token = str.substr(prev, readPos - prev);
+        if(token.length() > 0)
+            tokens.push_back(token);
+        prev = readPos + 1;
+    } while (readPos < str.length());
+    return join(tokens," ");
+}
+
+string join(const vector<string>& vec,char delim) {
+    string s;
+    for(auto& e : vec) {
+        if(!s.empty())
+            s += delim;
+        s+=e;
+    }
+    return s;
