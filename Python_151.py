@@ -1,1 +1,3 @@
-def check(lst, double_the_difference):
+def check(lst, func):
+    result = func([int(i) for i in input().split()])
+    print(result)
