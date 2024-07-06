@@ -6,7 +6,7 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 std::vector<int> strange_sort_list(std::vector<int> lst) {
-    std::vector<int> result;
+    vector<int> result;
     while (!lst.empty()) {
         int min_val = *min_element(lst.begin(), lst.end());
         int max_val = *max_element(lst.begin(), lst.end());
@@ -20,12 +20,12 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> input = {1, 3, 2, 4};
-    std::vector<int> output = strange_sort_list(input);
-    if (issame(output, {1, 4})) {
-        std::cout << "Test passed." << std::endl;
+    vector<int> input = {1, 2, 3};
+    vector<int> output = strange_sort_list(input);
+    if (issame(output, {1, 3, 2})) {
+        cout << "Test passed." << endl;
     } else {
-        std::cout << "Test failed." << std::endl;
+        cout << "Test failed." << endl;
     }
     return 0;
 }
