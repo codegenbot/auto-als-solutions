@@ -1,15 +1,11 @@
 ```
-def find_max_value():
-    max_value = float('-inf')
-    while True:
-        user_input = input("Enter a number (or 'stop' to finish): ")
-        if user_input.lower() == 'stop':
-            break
-        try:
-            num = int(user_input)
-        except ValueError:
-            print("Invalid input. Please enter an integer.")
-            continue
-        if num > max_value:
-            max_value = num
-    return max_value
+def fib(n: int):
+    if n <= 0:
+        return None
+    elif n == 1 or n == 2:
+        return 1
+    else:
+        a, b = 1, 1
+        for _ in range(2, n):
+            a, b = b, a + b
+        return b
