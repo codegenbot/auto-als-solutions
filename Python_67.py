@@ -1,5 +1,6 @@
+```
 def fruit_distribution(s, n):
     s = s.replace("apples", "a").replace("oranges", "o")
-    digit_count = len("".join(filter(str.isdigit, s)))
-    a_o_count = s.count('a') + s.count('o')
-    return n - digit_count - a_o_count
+    a_count = s.count('a')
+    o_count = s.count('o')
+    return max(0, n - (int("".join(filter(str.isdigit, s))) + a_count + o_count))
