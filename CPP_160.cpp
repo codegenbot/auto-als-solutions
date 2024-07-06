@@ -3,21 +3,22 @@
 #include <string>
 #include <cmath>
 
-using namespace std;
-
-int do_algebra(const vector<string>& operators, const vector<int>& operands) {
-    int result = operands[0];
-    for (int i = 0; i < operators.size(); i++) {
-        if (operators[i] == "+") {
-            result += operands[i + 1];
-        } else if (operators[i] == "-") {
-            result -= operands[i + 1];
-        } else if (operators[i] == "*") {
-            result *= operands[i + 1];
-        } else if (operators[i] == "//") {
-            result = result / operands[i + 1];
-        } else if (operators[i] == "**") {
-            result = pow(result, operands[i + 1]);
+int do_algebra(std::vector<std::string> operator_, std::vector<int> operand) {
+    int result = operand[0];
+    for (int i = 0; i < operator_.size(); i++) {
+        if (operator_[i] == "+") {
+            result += operand[i + 1];
+        } else if (operator_[i] == "-") {
+            result -= operand[i + 1];
+        } else if (operator_[i] == "*") {
+            result *= operand[i + 1];
+        } else if (operator_[i] == "//") {
+            if(operand[i+1]!=0)
+                result = result / operand[i + 1];
+            else
+                return -1; // error: division by zero
+        } else if (operator_[i] == "**") {
+            result = pow(result, operand[i + 1]);
         }
     }
     return result;
@@ -25,4 +26,5 @@ int do_algebra(const vector<string>& operators, const vector<int>& operands) {
 
 int main() {
     assert (do_algebra({"//", "*"}, {7, 3, 4}) == 8);
+    return 0;
 }

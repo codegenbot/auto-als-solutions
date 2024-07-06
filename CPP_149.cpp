@@ -1,4 +1,4 @@
-```
+```cpp
 std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
     std::vector<std::string> result;
     for (const auto& str : lst) {
@@ -15,4 +15,3 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
              }
          });
     return result;
-}

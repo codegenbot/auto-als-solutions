@@ -1,5 +1,5 @@
 ```cpp
-#include <iostream>
+#include<iostream>
 using namespace std;
 
 bool right_angle_triangle(float a, float b, float c) {
@@ -11,13 +11,11 @@ bool right_angle_triangle(float a, float b, float c) {
 
 int main() {
     float side1, side2, side3;
-    cout << "Enter the sides of triangle: ";
+    cout << "Enter three sides of a triangle: ";
     cin >> side1 >> side2 >> side3;
-    
-    if (side1 + side2 > side3 && right_angle_triangle(side1, side2, side3)) 
-        cout << "This is a valid Right Angle Triangle." << endl;
+    if (side1 + side2 > side3 && right_angle_triangle(side1, side2, side3))
+        cout << "It's a valid right-angled triangle.";
     else
-        cout << "This is not a valid Right Angle Triangle." << endl;
-
+        cout << "It's not a valid right-angled triangle.";
     return 0;
 }
