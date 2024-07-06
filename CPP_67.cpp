@@ -1,20 +1,27 @@
+Here is the completed code:
+
 #include <stdio.h>
 #include <string>
 using namespace std;
 
 int fruit_distribution(string s, int n) {
-    size_t pos = 0;
-    int apples = 0, oranges = 0;
+    size_t appleCount = 0;
+    size_t orangeCount = 0;
     
-    while ((pos = s.find(" apples", pos)) != string::npos) {
-        apples = stoi(s.substr(0, pos).erase().substr(1).erase());
-        break;
+    // Count the number of apples and oranges in the string
+    for (size_t i = 0; i < s.length(); i++) {
+        if (s[i] == 'a' && i + 7 <= s.length() && s.substr(i, 8) == "apples and") {
+            appleCount = stol(s.substr(i + 9, s.find(' ', i + 9) - i - 10));
+            break;
+        }
     }
     
-    if (s.find(" oranges") != string::npos) {
-        pos = s.find(" oranges");
-        oranges = stoi(s.substr(pos + 8).erase());
+    for (size_t i = 0; i < s.length(); i++) {
+        if (s[i] == 'o' && i + 8 <= s.length() && s.substr(i, 7) == "oranges") {
+            orangeCount = stol(s.substr(i + 9, s.find(' ', i + 9) - i - 10));
+            break;
+        }
     }
     
-    return n - apples - oranges;
+    return n - appleCount - orangeCount;
 }
