@@ -1,0 +1,14 @@
+#include <algorithm>
+
+vector<int> order_by_points(vector<int> nums) {
+    auto comp = [&nums](int a, int b) {
+        int sumA = 0, sumB = 0;
+        for (char c : to_string(a)) sumA += c - '0';
+        for (char c : to_string(b)) sumB += c - '0';
+        if (sumA == sumB)
+            return nums.find(a) > nums.find(b);
+        return sumA < sumB;
+    };
+    sort(nums.begin(), nums.end(), comp);
+    return nums;
+}
