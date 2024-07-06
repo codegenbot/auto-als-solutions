@@ -1,9 +1,4 @@
-#include <iostream>
-#include <string>
-#include "md5.h" 
-
-using namespace std;
-
+```cpp
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
@@ -25,9 +20,4 @@ std::string string_to_md5(const char* text) {
     }
 
     return output;
-}
-
-int main() {
-    assert(string_to_md5("password") == "5f4dcc3b5aa765d61d8327deb882cf99");
-    return 0;
 }
