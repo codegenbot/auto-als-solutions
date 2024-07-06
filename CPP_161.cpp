@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cctype>
 
 using namespace std;
 
@@ -19,8 +20,9 @@ int main(){
     string input;
     cout << "Enter a string: ";
     getline(cin, input);
+    
     if(input.empty()){
-        cout << "Error! Please enter a valid input." << endl;
+        cout << "Error! You must enter a valid string." << endl;
     } else {
         string output = solve(input);
         cout << "Output: " << output << endl;

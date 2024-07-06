@@ -1,3 +1,1 @@
-int minPath(vector<vector<char>>& grid, int x, int y, vector<pair<int, int>>& path) {
-    // ...
-}
+int res = minPath(vector<vector<char>>(grid), n - 1, m - 1, vector<pair<int, int>>());
