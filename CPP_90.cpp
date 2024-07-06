@@ -1,15 +1,11 @@
-Here is the solution:
-
-vector<int> next_smallest(vector<int> lst) {
-    if (lst.empty()) return {};
+int next_smallest(vector<int> lst) {
+    if (lst.empty()) return -1; // None in Python equivalent
     vector<int> sorted = lst;
     sort(sorted.begin(), sorted.end());
-    int count = 0;
-    for (int i = 1; i < sorted.size(); i++) {
-        if (sorted[i] != sorted[0]) {
-            if (count == 1) return sorted[i];
-            count++;
+    for (int i = 0; i < sorted.size() - 1; i++) {
+        if (sorted[i] != sorted[i + 1]) {
+            return sorted[i + 1];
         }
     }
-    return {};
+    return -1; // None in Python equivalent
 }
