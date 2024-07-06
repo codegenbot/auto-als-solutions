@@ -1,7 +1,4 @@
-#include<stdio.h>
-#include<math.h>
-#include<vector>
-using namespace std;
+#include <vector>
 
 vector<float> rescale_to_unit(vector<float> numbers) {
     float minVal = *min_element(numbers.begin(), numbers.end());
@@ -11,6 +8,5 @@ vector<float> rescale_to_unit(vector<float> numbers) {
     for (float num : numbers) {
         result.push_back((num - minVal) / (maxVal - minVal));
     }
-
     return result;
 }
