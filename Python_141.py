@@ -1,15 +1,8 @@
-Here is the corrected code with the initial three lines of indentation and the function signature:
+Write a function named `file_name_check` which takes a string as an argument and returns 'Yes' if it meets certain conditions for a file name and 'No' otherwise.
 
-```
-def file_name_check(file_name):
-    if len([c for c in file_name if c.isdigit()]) > 3:
-        return 'No'
-    if file_name.count('.') != 1:
-        return 'No'
-    dot_index = file_name.index('.')
-    if not file_name[:dot_index].isalpha():
-        return 'No'
-    extension = file_name[dot_index + 1:]
-    if extension not in ['txt', 'exe', 'dll']:
-        return 'No'
-    return 'Yes'
+The conditions are:
+
+- The file name should not have more than three digits.
+- It should have exactly one dot (.) in the middle.
+- Everything before the dot should consist of letters only.
+- The part after the dot should be either 'txt', 'exe', or 'dll'.
