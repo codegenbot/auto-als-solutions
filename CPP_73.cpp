@@ -1,5 +1,7 @@
+```cpp
 #include <vector>
 #include <cstdint>
+#include <cassert>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
