@@ -20,5 +20,5 @@ int main() {
     cin >> num;
     cout << "Enter the base: ";
     cin >> base;
-    cout << "The conversion result is: " << change_base(num, base);
+    cout << "The conversion result is: " << change_base(num, base) << endl;
 }
