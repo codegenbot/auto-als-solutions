@@ -11,11 +11,11 @@ vector<string> numerical_letter_grade(vector<float> grades) {
             result.push_back("A+");
         else if (g >= 3.7)
             result.push_back("A");
-        else if (g >= 3.4)
+        else if (g >= 3.3)
             result.push_back("A-");
         else if (g >= 3.0)
             result.push_back("B+");
-        else if (g >= 2.8)
+        else if (g >= 2.7)
             result.push_back("B");
         else if (g >= 2.3)
             result.push_back("B-");
