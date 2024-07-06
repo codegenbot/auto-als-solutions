@@ -1,34 +1,24 @@
-#include <cmath>
+Here is the completed code:
 
-bool is_multiply_prime(int a) {
-    for (int i = 2; i <= sqrt(a); i++) {
-        int temp = a;
+bool is_multiply_prime(int a){
+    for(int i=2; i<=a/3; i++){
         bool prime = true;
-        for (int j = 2; j <= sqrt(i); j++) {
-            if (i % j == 0) {
-                prime = false;
-                break;
-            }
+        for(int j=2; j*j <= i; j++){
+            if(i%j == 0) prime = false;
         }
-        if (prime) {
-            for (int k = i; temp > 1; k++) {
-                if (temp % k == 0) {
-                    int multiple = 1;
-                    for (int l = 2; l <= sqrt(k); l++) {
-                        if (k % l == 0) {
-                            multiple++;
-                            break;
-                        }
-                    }
-                    if (multiple > 1) {
-                        return true;
-                    }
-                    temp /= k;
-                } else {
-                    temp /= k;
-                }
-            }
+        if(prime) {
+            int b = a/i;
+            int c = a/b;
+            if(c*b==a && is_prime(b) && is_prime(c)) return true;
         }
     }
     return false;
+}
+
+bool is_prime(int n){
+    if(n<=1) return false;
+    for(int i=2; i*i <= n; i++){
+        if(n%i == 0) return false;
+    }
+    return true;
 }
