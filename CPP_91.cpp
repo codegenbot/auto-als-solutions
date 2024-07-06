@@ -1,15 +1,23 @@
+```cpp
 #include <iostream>
 #include <string>
 
-int is_bored(std::string input) {
+int is_bored(std::string S) {
     int count = 0;
-    for (char c : input) {
-        if (c == 'I' && !isalpha(c + 1)) {
+    size_t pos = 0;
+    while ((pos = S.find("I", pos)) != std::string::npos) {
+        if (pos == S.find(".", pos) || pos == S.find("?", pos) || pos == S.find("!", pos))
+            pos = S.find("I", pos + 1);
+        else {
+            size_t start_pos = S.find("I");
+            while(start_pos != std::string::npos) {
+                S.erase(start_pos, 1); // erase the found "I"
+                start_pos = S.find("I"); // find next "I" to erase
+            }
             count++;
         }
     }
     return count;
-}
 
 int main() {
     std::string input;
