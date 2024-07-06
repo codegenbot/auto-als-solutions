@@ -1,16 +1,14 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
-int main() {
-    int n;
-    std::cin >> n;
-
-    std::vector<int> l(n);
-
-    for(int i = 0; i < n; i++) {
-        std::cin >> l[i];
+int max_abs(int n) {
+    std::vector<int> l;
+    for (int i = 0; i < n; i++) {
+        int input;
+        std::cin >> input;
+        l.push_back(input);
     }
-
+    
     return *std::max_element(l.begin(), l.end());
 }
