@@ -1,15 +1,15 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
-bool issame(const std::vector<int>& a) {
-    for(int i = 1; i < a.size(); i++) {
-        if (a[i-1] > a[i]) return false;
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    if (a.size() != b.size()) return false;
+    for(int i = 0; i < a.size(); i++) {
+        if (a[i] != b[b.size()-1-i]) return false;
     }
     return true;
 }
 
-int main() {
-    assert(issame({21, 14, 23, 11}));
-    // Test your function with different inputs.
+int sort_array(std::vector<int> array) { 
+    std::sort(array.begin(), array.end());
+    return 0;
 }
