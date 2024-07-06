@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,7 +17,7 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
         sum2 += s.size();
     }
     
-    if (sum1 < sum2) return {""};
+    if (sum1 < sum2) return {"", };
     else if (sum1 > sum2) return {"", };
     else return {"", };
 }
