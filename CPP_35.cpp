@@ -2,12 +2,12 @@
 #include <cmath>
 #include <vector>
 
-int findMax(int n) {
+int max_abs(int n) {
     std::vector<int> l;
-    for (int i = 0; i < n; ++i) {
-        int num;
-        std::cin >> num;
-        l.push_back(num);
+    for (int i = 0; i < n; i++) {
+        int input;
+        std::cin >> input;
+        l.push_back(input);
     }
     
     return *std::max_element(l.begin(), l.end());
