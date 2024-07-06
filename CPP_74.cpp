@@ -14,10 +14,16 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     }
 
     if (count1 < count2) {
-        return lst1;
+        result = lst1;
     } else if (count1 > count2) {
-        return lst2;
+        result = lst2;
     } else {
-        return lst1;
+        if (lst1.size() <= lst2.size()) {
+            result = lst1;
+        } else {
+            result = lst2;
+        }
     }
+
+    return result;
 }
