@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -12,11 +11,11 @@ std::vector<int> generate_integers(int a, int b) {
     return result;
 }
 
-bool operator==(const std::vector<int>& a,const std::vector<int>&b){
+bool isSame(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
 int main() {
-    assert(std::equal(generate_integers(1,20).begin(), generate_integers(1,20).end()));
+    assert(std::equal(generate_integers(17,89).begin(), generate_integers(17,89).end(), {}));
     return 0;
 }

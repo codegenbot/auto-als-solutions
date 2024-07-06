@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -23,9 +22,12 @@ vector<int> eat(int number, int need, int remaining) {
 int main() {
     vector<int> output;
 
-    for(int i=0; i<5; ++i){
-        int number, need, remaining;
-        cin >> number >> need >> remaining;
+    int numCases; 
+    cin >> numCases; 
+
+    for(int i=0;i<numCases;++i) {
+        int number, need, remaining; 
+        cin >> number >> need >> remaining; 
         output = eat(number, need, remaining);
         for (int i : output) {
             cout << i << " ";
