@@ -6,7 +6,7 @@ int main(){
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     std::cout << flip_case(input) << std::endl;
-    return 0;
+}
 
 std::string flip_case(std::string str){
     std::string result = "";
