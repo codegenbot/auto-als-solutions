@@ -1,4 +1,3 @@
-```cpp
 int search(vector<int> numbers) {
     map<int, int> freqMap;
     for (int num : numbers) {
