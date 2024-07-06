@@ -1,4 +1,4 @@
-```
+```cpp
 #include <iostream>
 using namespace std;
 
@@ -11,11 +11,12 @@ public:
                 oddCount++;
             }
         }
-        return oddCount == 0 ? 1 : 0;
+        return oddCount == 0 ? 0 : 1;
     }
 
     int main() {
-        cout << exchange({100, 200}, {200, 200}) << endl;
+        assert(exchange({100, 200}, {200, 200}) == 0);
+        cout << "Test cases passed." << endl;
         return 0;
     }
 };
