@@ -12,10 +12,10 @@ bool same(vector<int> a, vector<int> b) {
 }
 
 vector<int> maximum(vector<int> arr, int k) {
-    vector<int> result;
+    vector<int> result(k);
     for (int i = 0; i < k; i++) {
         auto it = max_element(arr.begin(), arr.end());
-        result.push_back(*it);
+        result[i] = *it;
         arr.erase(it);
     }
     return result;
@@ -25,7 +25,7 @@ int main() {
     int n, k;
     cout << "Enter the number of elements: ";
     cin >> n;
-    vector<int> arr(n); // Initialize with default values
+    vector<int> arr(n);
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
