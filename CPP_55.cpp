@@ -1,4 +1,5 @@
-#include <stdio.h>
+```cpp
+#include <iostream>
 
 using namespace std;
 
@@ -14,9 +15,11 @@ int fib(int n) {
     return result;
 }
 
-int main() {
+main() 
+{
+    cout << "Enter the value of n: ";
     int n;
-    printf("Enter the value of n: ");
-    scanf("%d", &n);
-    printf("The %d-th Fibonacci number is: %d\n", n, fib(n));
+    cin >> n;
+    cout << "The " << n << "-th Fibonacci number is: " << fib(n) << endl;
     return 0;
+}
