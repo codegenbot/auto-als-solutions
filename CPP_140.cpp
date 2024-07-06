@@ -1,9 +1,10 @@
+```cpp
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-string fix_spaces(string text){
+string fix_spaces(string text) {
     string result = "";
     for(int i = 0; i < text.length(); i++){
         if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length()-1 || text[i+1] != ' ')){
@@ -28,10 +29,11 @@ string fix_spaces(string text){
     return result;
 }
 
-int main(){
-    string input;
+int main() {
+    string text;
     cout << "Enter a sentence: ";
-    getline(cin, input);
-    cout << "Fixed spaces: " << fix_spaces(input) << endl;
+    getline(cin, text);
+    string fixed = fix_spaces(text);
+    cout << "Fixed sentence: " << fixed << endl;
     return 0;
 }
