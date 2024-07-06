@@ -1,3 +1,4 @@
+```cpp
 int do_algebra(vector<string> operato, vector<int> operand) {
     int result = 0;
     stack<int> opStack;
