@@ -1,8 +1,8 @@
-```
+Here is the modified code:
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
 bool same(vector<int> a, vector<int> b) {
