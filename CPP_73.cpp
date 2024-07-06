@@ -10,7 +10,6 @@ int smallest_change(vector<int> arr) {
             left++;
             right--;
         } else {
-            changes++;
             break;
         }
     }
