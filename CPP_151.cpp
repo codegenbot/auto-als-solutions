@@ -27,3 +27,4 @@ int main() {
     long long odd_sum = double_the_difference(lst);
     cout << "The sum of squares of odd elements is: " << odd_sum;
     return 0;
+}
