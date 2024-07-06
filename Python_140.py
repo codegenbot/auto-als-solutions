@@ -1,2 +1,4 @@
 ```
-input6_","_-2816_").replace("_", "-")
+input6 = "your input string"
+output = input6.replace("_", "-")
+print(output)
