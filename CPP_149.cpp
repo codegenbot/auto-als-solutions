@@ -1,10 +1,8 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <initializer_list>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size())
         return false;
 
@@ -37,6 +35,6 @@ std::vector<std::string> sortedListSum(std::vector<std::string> lst) {
 int main() {
     std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
     std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
-    assert(issame(sortedListSum(vec1), vec2));
+    assert(isSame(sortedListSum(vec1), vec2));
     return 0;
 }
