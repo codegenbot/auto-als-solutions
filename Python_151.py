@@ -1,1 +1,6 @@
-double_the_difference([i - 1 for i in range(2, 11)])
+```Python
+def double_the_difference(lst):
+    lst.sort()
+    return (lst[0] + lst[-1]) * 2
+
+double_the_difference([5,6])
