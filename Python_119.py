@@ -13,5 +13,5 @@ def match_parens(lst):
     else:
         return 'No'
 
-input_list = input("Enter your strings separated by space: ").split(' ')
-print(match_parens(input_list))
+input_list = input("Enter your string: ").split(',')
+print(match_parens(list(map(str, input_list))))

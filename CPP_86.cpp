@@ -1,16 +1,29 @@
-string anti_shuffle(string s){
+#include <algorithm>
+using namespace std;
+
+string anti_shuffle(string s) {
     string result = "";
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
             result += ' ';
             continue;
         }
-        string word = "";
+        vector<char> word;
         for(int j=i; j<s.size() && s[j] != ' '; j++){
-            word += s[j];
+            word.push_back(s[j]);
         }
         i = j - 1;
-        result += word + " ";
+        sort(word.begin(), word.end());
+        result += string(word.begin(), word.end());
     }
-    return result.substr(0, result.size()-1); 
+    return result;
+}
+
+int main(){
+    string str;
+    cout << "Enter a sentence: ";
+    getline(cin, str);
+    string output = anti_shuffle(str);
+    cout << "Antishuffled sentence: " << output << endl;
+    return 0;
 }
