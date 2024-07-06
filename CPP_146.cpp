@@ -1,10 +1,18 @@
-#include<vector>
+#include <vector>
+using namespace std;
 
-int specialFilter(std::vector<int> nums){ 
-    int count = 0; 
-    for(int num : nums){ 
-        if(abs(num) > 10 && (num % 10) % 2 != 0 && (abs(num) / 10) % 2 != 0){ 
-            count++; 
-        } 
-    } 
+int specialFilter(vector<int> nums){
+    int count = 0;
+    for(int num : nums){
+        if(abs(num) > 10 && (num % 10) % 2 != 0 && (abs(num) / 10) % 2 != 0){
+            count++;
+        }
+    }
     return count;
+}
+
+int main(){
+    vector<int> nums = {123, 456, 789};
+    cout << specialFilter(nums);
+    return 0;
+}

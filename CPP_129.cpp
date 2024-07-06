@@ -1,13 +1,6 @@
+```cpp
 bool issame(vector<int> a, vector<int> b) {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i]) {
-            return false;
-        }
-    }
-    return true;
+    return a == b;
 }
 
 vector<int> minPath(vector<vector<int>> grid, int k) {
@@ -19,7 +12,7 @@ vector<int> minPath(vector<vector<int>> grid, int k) {
             if (!visited[i][j]) {
                 vector<int> path;
                 dfs(grid, visited, i, j, k, &path);
-                if (res.empty() || !issame(res, path)) {
+                if (res.empty() || issame(path, res)) {
                     res = path;
                 }
             }

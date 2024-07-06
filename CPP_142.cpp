@@ -7,7 +7,7 @@ int sum_squares(vector<int> lst) {
         if (i % 3 == 0 && i % 4 != 0)
             result += lst[i] * lst[i];
         else if (i % 4 == 0 && i % 3 != 0)
-            result += (lst[i] * lst[i] * lst[i]);
+            result += pow(lst[i], 3);
     }
     return result;
 }
