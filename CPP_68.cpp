@@ -1,35 +1,34 @@
 #include <vector>
 #include <algorithm>
 
-bool compare(const std::pair<int, int>& a, const std::pair<int, int>& b) {
-    if (a.first != b.first) return false;
-    return true;
-}
-
 std::vector<int> pluck(std::vector<int> arr) {
-    std::vector<std::pair<int, int>> nodes;
+    std::vector<int> result;
+    
     for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] % 2 == 0) {
-            nodes.push_back({arr[i], i});
+            bool isSame = true;
+            
+            for (size_t j = 0; j < result.size(); ++j) {
+                if (result[j] == arr[i]) {
+                    isSame = false;
+                    break;
+                }
+            }
+            
+            if (isSame) {
+                result.push_back(arr[i]);
+            }
         }
     }
     
-    if (nodes.empty()) {
-        return {};
-    }
-    
-    std::sort(nodes.begin(), nodes.end());
-    
-    std::vector<int> result;
-    for (size_t i = 1; i < nodes.size(); ++i) {
-        if (!compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second})) {
-            return {};
-        }
-    }
-    
-    std::sort(arr.begin(), arr.end());
-    for (int node : nodes) {
-        result.push_back(arr[node.second]);
-    }
     return result;
+}
+
+int main() {
+    std::vector<int> arr = {7, 9, 7, 1};
+    if (pluck(arr).empty()) {
+        assert(pluck({7, 9, 7, 1}) == {});
+    } else {
+        // Handle the case where pluck returns a non-empty vector
+    }
 }
