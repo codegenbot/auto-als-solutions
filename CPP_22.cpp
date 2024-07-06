@@ -1,10 +1,9 @@
-```cpp
 #include <boost/optional.hpp>
 #include <vector>
 #include <list>
 
 namespace boost {
-    using namespace std;
+using namespace std;
 }
 
 typedef boost::optional<int> OInt;
