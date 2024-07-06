@@ -1,10 +1,7 @@
-```cpp
-#include <iostream>
 #include <vector>
+#include <algorithm>
 
-using namespace std;
-
-bool issame(const vector<vector<int>>& vec1, const vector<vector<int>>& vec2) {
+bool issame(const std::vector<std::vector<int>>& vec1, const std::vector<std::vector<int>>& vec2) {
     if (vec1.size() != vec2.size()) return false;
     for (int i = 0; i < vec1.size(); i++) {
         if (vec1[i].size() != vec2[i].size()) return false;
@@ -15,21 +12,23 @@ bool issame(const vector<vector<int>>& vec1, const vector<vector<int>>& vec2) {
     return true;
 }
 
-vector<vector<int>> compare(vector<int> game, vector<int> guess) {
-    vector<vector<int>> result(game.size());
+std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> guess) {
+    std::vector<std::vector<int>> result(game.size());
     for (int i = 0; i < game.size(); i++) {
         if (game[i] == guess[i]) {
             result[i] = {{0}};
         } else {
-            result[i] = {{abs(game[i] - guess[i])}};
+            int diff = std::abs(game[i] - guess[i]);
+            result[i].push_back(diff);
         }
     }
     return result;
 }
 
 int main_function() {
-    vector<int> game = {0, 1, 2, 4};
-    vector<int> guess = {-1, 2, 3, 4};
-    assert(issame(compare(game,guess), {{0},{0},{0,{0}}})); 
+    std::vector<int> game = {1,2,3,5};
+    std::vector<int> guess = {1,2,3,4};
+    std::vector<std::vector<int>> output = compare(game, guess);
+    assert(std::equal(output.begin(), output.end(), {{0},{0},{0,{1}}}));
     return 0;
 }
