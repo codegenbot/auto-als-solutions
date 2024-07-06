@@ -10,7 +10,4 @@ while True:
     except ValueError:
         print("Invalid input. Please enter strings only.")
 
-if not strings:  
-    print("No valid inputs provided.")
-else:
-    print(' '.join(filter(None, strings)))
+print(' '.join(filter(None, strings)))
