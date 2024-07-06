@@ -1,8 +1,7 @@
-#include <iostream>
-#include <algorithm>
 #include <string>
+#include <algorithm>
 
-std::string anti_shuffle(std::string s) {
+std::string anti_shuffle(std::string s){
     std::string result = "";
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
@@ -14,8 +13,7 @@ std::string anti_shuffle(std::string s) {
             word += s[j];
         }
         i = j - 1;
-        sort(word.begin(), word.end());
+        std::sort(word.begin(), word.end());
         result += word;
     }
     return result;
-}
