@@ -1,32 +1,13 @@
-def main():
-    while True:
-        try:
-            num_coefficients = int(input("Enter number of coefficients: "))
-            if num_coefficients % 2 != 0:
-                print("Number of coefficients must be even. Try again.")
-                continue
-            coefficients = input("Enter coefficients (space separated): ")
-            xs = [int(coeff) for coeff in coefficients.split()]
-            break
-        except ValueError as e:
-            print(e)
-
-    if len(xs) < 2:
-        raise ValueError("xs must have at least two coefficients")
-    if len(xs) % 2 != 0:
-        raise ValueError("xs must have even number of coefficients")
-
-    try:
-        roots = find_zero(xs)
-        for root in roots:
-            print(root)
-    except Exception as e:
-        print(f"Program did not receive expected input: {e}")
-
+```
+import math
 
 def find_zero(coeffs):
+    if len(coeffs) != 5 or not all(isinstance(x, (int, float)) for x in coeffs):
+        return "Invalid input"
+    
     a, b, c = coeffs[:3]
     d = coeffs[3:]
+    
     roots = []
     for i in range(0, len(d), 2):
         temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
@@ -38,7 +19,3 @@ def find_zero(coeffs):
         except (ZeroDivisionError, ValueError) as e:
             print(f"Failed to calculate a root: {e}")
     return roots
-
-
-if __name__ == "__main__":
-    main()
