@@ -1,22 +1,16 @@
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
-vector<int> unique(vector<int> l) {
-    vector<int> result(l.begin(), unique_element(l.begin(), l.end()));
-    return result;
-}
-
-vector<int>::iterator unique_element(vector<int>::iterator start, vector<int>::iterator end) {
-    sort(start, end);
-    auto it = start;
-    while (it != end) {
-        auto next = it + 1;
-        while (next != end && *next == *it) {
-            ++next;
-        }
-        it = next;
+int main() {
+    vector<int> input = {5, 3, 5, 2, 3, 3, 9, 0, 123};
+    vector<int> output(input.begin(), unique_copy(input.begin(), unique_copy(input.end())));
+    sort(output.begin(), output.end());
+    
+    for (int i : output) {
+        cout << i << " ";
     }
-    return it;
+    return 0;
 }
