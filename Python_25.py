@@ -1,9 +1,13 @@
-```
+```Python
 from typing import List
 import math
 
 
 def factorize(n: int) -> List[int]:
+    if n <= 0:
+        raise ValueError("n should be greater than zero")
+    if n == 1:
+        return [1]
     factors = []
     i = 2
     while i * i <= n:
@@ -20,7 +24,3 @@ def factorize(n: int) -> List[int]:
     if n > 1:
         factors.append(n)
     return factors
-
-
-n = int(input("Enter a number: "))
-print(factorize(n))
