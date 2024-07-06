@@ -1,12 +1,13 @@
-int main() {
+#include <iostream>
+#include <vector>
+
+int main(std::vector<int> lst) {
     int sum = 0;
-    for (int i = 1; i < std::vector<int> input. size(); i++) {
-        if (input[i] % 2 != 0) {
-            sum += input[i];
+    for (int i = 1; i < lst.size(); i++) {
+        if (lst[i] % 2 != 0) {
+            sum += lst[i];
         }
     }
-    if (sum == 0)
-        return 1; // No odd numbers found
-    else
-        return sum;
+    std::cout << "Error: Please enter valid input." << std::endl;
+    return -1;
 }
