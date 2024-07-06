@@ -1,16 +1,18 @@
-```cpp
 #include <vector>
 #include <set>
+#include <algorithm>
 
-bool issame(const std::vector<int>& v1, const std::vector<int>& v2) {
-    if (v1.size() != v2.size()) return false;
-    for (int i = 0; i < v1.size(); ++i) {
-        if (v1[i] != v2[i]) return false;
+bool issame(vector<int> v1, vector<int> v2) {
+    if(v1.size() != v2.size()) 
+        return false;
+    for(int i = 0; i < v1.size(); i++) {
+        if(v1[i] != v2[i])
+            return false;
     }
     return true;
 }
 
-std::vector<int> common(std::vector<int> l1, std::vector<int> l2) {
+vector<int> common(vector<int> l1, vector<int> l2) {
     set<int> s1(l1.begin(), l1.end());
     set<int> s2(l2.begin(), l2.end());
     set<int> intersection;
