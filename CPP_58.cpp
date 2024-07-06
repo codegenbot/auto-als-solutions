@@ -1,6 +1,6 @@
-```cpp
+#include <iostream>
 #include <vector>
-#include <cassert>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,7 +22,5 @@ bool issame(vector<int> a, vector<int> b) {
 }
 
 int main(){
-    vector<int> v1={4, 3, 2, 8};
-    vector<int> v2={};
-    assert(common(v1,v2) == v2);
+    assert(issame({4, 3, 2, 8}, common({4, 3, 2, 8}, {1, 7})));
 }

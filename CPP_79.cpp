@@ -1,3 +1,4 @@
+```
 #include <string>
 #include <cassert>
 using namespace std;
@@ -15,6 +16,6 @@ string decimal_to_binary(int decimal){
 }
 
 int main() {
-    cout << decimal_to_binary(15);
+    cout << decimal_to_binary(15) << endl;
     return 0;
 }
