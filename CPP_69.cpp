@@ -3,11 +3,11 @@
 using namespace std;
 
 int findElement(const vector<int>& vec, int target) {
-    auto it = find(vec.begin(), vec.end(), target);
-    if(it == vec.end()) 
-        return -1; // element not found
+    auto result = find(vec.begin(), vec.end(), target);
+    if(result == vec.end()) 
+        return -1;
     else
-        return distance(vec.begin(), it); // index of the first occurrence
+        return distance(vec.begin(), result);
 }
 
 int main() {
@@ -21,10 +21,10 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    auto result = std::find(vec.begin(), vec.end(), 10);
-    if(result == vec.end()) 
+    int result = findElement(vec, 10);
+    if(result == -1) 
         cout << "Element not found.\n";
     else
-        cout << "Element found at index: " << distance(vec.begin(), result) << ".\n";
+        cout << "Element found at index: " << result << ".\n";
     return 0;
 }
