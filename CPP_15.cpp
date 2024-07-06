@@ -1,6 +1,12 @@
-string string_sequence(int n) {
+Here is the completed code:
+
+```cpp
+#include<string>
+using namespace std;
+
+string string_sequence(int n){
     ostringstream oss;
-    for (int i = 0; i <= n; ++i) {
+    for(int i=0; i<=n; i++){
         oss << i << " ";
     }
     return oss.str();
