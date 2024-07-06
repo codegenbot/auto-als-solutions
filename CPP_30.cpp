@@ -5,11 +5,11 @@ bool issame(const std::vector<float>& a, const std::vector<float>& b) {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-vector<float> get_positive(vector<float> l) {
-    vector<float> result;
-    for (float num : l) {
-        if (num > 0) {
-            result.push_back(num);
+vector<vector<float>> get_positive(vector<vector<float>> l) {
+    vector<vector<float>> result;
+    for (auto &num : l) {
+        if (std::all_of(num.begin(), num.end(), [](float x){ return x > 0; })) {
+            result.push_back(get_positive(num));
         }
     }
     return result;
