@@ -1,5 +1,3 @@
-```
-from typing import List
 def has_close_elements(numbers: list[float], threshold: float) -> bool:
     numbers.sort()
     for i in range(1, len(numbers)):
