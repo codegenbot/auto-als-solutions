@@ -1,17 +1,19 @@
 int search(vector<int> lst) {
-    map<int, int> freqMap;
+    map<int, int> countMap;
     for (int num : lst) {
-        if (!freqMap.count(num)) {
-            freqMap[num] = 1;
+        if (countMap.find(num) == countMap.end()) {
+            countMap[num] = 1;
         } else {
-            freqMap[num]++;
+            countMap[num]++;
         }
     }
 
-    for (auto it = freqMap.begin(); it != freqMap.end(); ++it) {
+    int result = -1;
+    for (auto it = countMap.begin(); it != countMap.end(); ++it) {
         if (it->second >= it->first && it->first > 0) {
-            return it->first;
+            result = it->first;
+            break;
         }
     }
-    return -1;
+    return result;
 }
