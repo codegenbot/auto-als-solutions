@@ -1,10 +1,5 @@
-```cpp
 #include <iostream>
 #include <vector>
-
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return a.size() == b.size();
-}
 
 std::vector<int> pluck(std::vector<int> arr) {
     std::vector<int> result;
@@ -26,9 +21,4 @@ std::vector<int> pluck(std::vector<int> arr) {
     result.push_back(index);
     
     return result;
-}
-
-int main() {
-    assert(is_same(pluck({7, 9, 7, 1}) , {}));
-    return 0;
 }
