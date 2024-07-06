@@ -1,7 +1,7 @@
-```cpp
 #include <vector>
 #include <cmath>
 #include <random>
+#include <initializer_list>
 
 bool issame(int a, int b) {
     if (abs(a - b) == 1)
@@ -9,9 +9,9 @@ bool issame(int a, int b) {
     return false;
 }
 
-std::vector<int> minPath(std::vector<std::vector<int>>& grid, int k) {
-    std::vector<int> result;
-    for (int i = 0; i < grid.size() * grid.size(); ++i) {
+vector<int> minPath(vector<vector<int>>& grid, int k) {
+    vector<int> result;
+    for (int i = 0; i < pow(grid.size(), 2); ++i) {
         bool found = false;
         for (int j = 0; j < grid.size(); ++j) {
             for (int l = 0; l < grid.size(); ++l) {
@@ -25,7 +25,7 @@ std::vector<int> minPath(std::vector<std::vector<int>>& grid, int k) {
                 break;
         }
         for (int t = 0; t < k; ++t) {
-            std::vector<std::array<int, 2>> directions = {std::array<int, 2>{{-1, 0}}, std::array<int, 2>{{1, 0}}, std::array<int, 2>{{0, -1}}, std::array<int, 2>{{0, 1}}};
+            vector<int> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dis(0, 3);

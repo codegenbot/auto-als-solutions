@@ -1,12 +1,13 @@
 ```cpp
 #include <vector>
 #include <algorithm>
+#include <cstddef>
 
 int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    std::vector<std::vector<size_t>> dp(n, std::vector<size_t>(n));
+    std::vector<std::vector<int>> dp(n+1, std::vector<int>(n));
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i <= n; i++) {
         dp[i][i] = 0;
     }
 
@@ -16,18 +17,12 @@ int smallest_change(std::vector<int> arr) {
 
             if (arr[i] == arr[j]) {
                 dp[i][j].push_back(dp[i+1][j-1].size());
+                dp[i][j].push_back(1 + dp[i+1][j].size());
             } else {
-                size_t min_ops = INT_MAX;
-                for (int k = i; k <= j; k++) {
-                    size_t ops = 1 + (k-1 < 0 || i > 0 ? 0 : dp[i-1][k-1]) + (j >= n || j < n-1 ? 0 : dp[k+1][j]);
-                    if (ops < min_ops) {
-                        min_ops = ops;
-                    }
-                }
-                dp[i][j].push_back(min_ops);
+                *std::min_element(dp[i+1].begin(), dp[j].end()) += 1;
             }
         }
     }
 
-    return *std::max_element(dp[0].begin(), dp[0].end());
+    return dp[0][n-1].size();
 }
