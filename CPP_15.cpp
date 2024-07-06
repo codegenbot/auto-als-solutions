@@ -6,4 +6,4 @@ std::string string_sequence(int n) {
         oss << i;
     }
     oss << std::endl; 
-    return oss.stream();
+    return oss;
