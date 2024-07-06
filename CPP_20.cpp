@@ -1,25 +1,23 @@
 #include <algorithm>
-#include <vector>
 #include <numeric>
-#include <limits>
 
-bool operator==(const std::vector<float>& a, const std::vector<float>& b) {
-    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+bool operator==(const vector<float>& a, const vector<float>& b) {
+    return a.size() == b.size() && equal(a.begin(), a.end(), b.begin());
 }
 
-std::vector<float> find_closest_elements(std::vector<float> numbers) {
-    std::sort(numbers.begin(), numbers.end());
-    float min_diff = std::numeric_limits<float>::max();
-    std::pair<float, float> closest_pair;
+vector<pair<float, float>> find_closest_elements(vector<vector<float>>& numbers) {
+    sort(numbers.begin(), numbers.end());
+    float min_diff = numeric_limits<float>::max();
+    pair<float, float> closest_pair;
     
     for(int i = 0; i < numbers.size() - 1; ++i) {
-        float diff = numbers[i + 1] - numbers[i];
+        float diff = numbers[i + 1][1] - numbers[i][1];
         if(diff < min_diff) {
             min_diff = diff;
-            closest_pair.first = numbers[i];
-            closest_pair.second = numbers[i + 1];
+            closest_pair.first = numbers[i][0];
+            closest_pair.second = numbers[i + 1][1];
         }
     }
     
-    return {closest_pair.first, closest_pair.second};
+    return {closest_pair};
 }
