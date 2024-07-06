@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <string>
 
@@ -35,8 +36,12 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        if (issame(words, {word})) {
-            std::cout << word << std::endl;
-        }
+        std::cout << word << std::endl;
+    }
+    bool is_same = issame(words, words);
+    if(is_same){
+        std::cout<<"The strings are the same."<<std::endl;
+    }else{
+        std::cout<<"The strings are not the same."<<std::endl;
     }
 }
