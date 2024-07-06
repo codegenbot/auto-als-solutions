@@ -5,7 +5,7 @@
 int is_bored(std::string S) {
     int count = 0;
     size_t pos = 0;
-    while ((pos = S.find("I", pos)) != std::string::npos) {
+    while ((pos = static_cast<size_t>(S.find("I", pos))) != std::string::npos) {
         if (S.find(".", pos) == std::string::npos && S.find("?", pos) == std::string::npos && S.find("!", pos) == std::string::npos)
             count++;
         else
