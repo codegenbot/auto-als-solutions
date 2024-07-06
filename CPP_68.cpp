@@ -1,8 +1,8 @@
+#include <iostream>
 #include <vector>
-using namespace std;
 
-vector<int> pluck(vector<int> arr) {
-    vector<int> result = {};
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
 
@@ -19,4 +19,28 @@ vector<int> pluck(vector<int> arr) {
     }
 
     return result;
+}
+
+int main() {
+    std::vector<int> arr;
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    for(int i = 0; i < n; i++){
+        int x;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> x;
+        arr.push_back(x);
+    }
+    
+    // call the function
+    auto output = pluck(arr);
+
+    if(output.size() > 0) {
+        std::cout << "The smallest even value is " << output[0] << " at index " << output[1];
+    } else {
+        std::cout << "No even values found";
+    }
+    
+    return 0;
 }
