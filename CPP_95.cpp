@@ -1,10 +1,10 @@
+```cpp
 #include <string>
 #include <map>
-#include <cctype>
 
 bool check_dict_case(std::map<std::string, std::string> dict) {
-    for (const auto &pair : dict) {
-        if (!pair.first.empty() && !isupper(pair.first[0]) && !islower(pair.first[0])) 
+    for(auto &pair : dict) {
+        if(pair.first.length() > 0 && (!isupper(pair.first[0]) || !islower(pair.first))) 
             return false;
     }
     return true;
