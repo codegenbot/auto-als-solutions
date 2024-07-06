@@ -1,17 +1,26 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
 string anti_shuffle(string s){
     string result = "";
-    for(int i=0; i<s.size(); i++){
+    int i = 0;
+    while(i<s.size()){
         if(s[i] == ' '){
             result += ' ';
+            i++;
             continue;
         }
-        string word = "";
-        for(int j=i; j<s.size() && s[j] != ' '; j++){
-            word += s[j];
+        int j = i + 1;
+        for(;j<s.size() && s[j] != '\0'; j++){
+            
         }
-        i = j - 1;
+        string word = s.substr(i, j - i);
+        result.append(word);
         sort(word.begin(), word.end());
         result += word;
+        i = j;
     }
     return result;
 }
