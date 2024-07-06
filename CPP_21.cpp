@@ -1,5 +1,4 @@
 #include <vector>
-
 using namespace std;
 
 vector<float> rescale_to_unit(vector<float> numbers) {
@@ -10,5 +9,6 @@ vector<float> rescale_to_unit(vector<float> numbers) {
     for (float num : numbers) {
         result.push_back((num - min_val) / (max_val - min_val));
     }
+
     return result;
 }
