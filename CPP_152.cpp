@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 
 bool isSame(const std::vector<int>& a, const std::vector<int>& b) {
