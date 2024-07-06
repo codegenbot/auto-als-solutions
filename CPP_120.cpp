@@ -1,7 +1,7 @@
 #include <vector>
 #include <algorithm>
 
-bool areSame(const std::vector<int>& a, const std::vector<int>& b) {
+bool same(const std::vector<int>& a, const std::vector<int>& b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -17,15 +17,3 @@ std::vector<int> maximum(std::vector<int> arr, int k) {
         arr.erase(it);
     }
     return result;
-
-}
-
-void driver() {
-    assert(std::areSame(maximum({1, 2, 3, -23, 243, -400, 0}, 0), {}));
-}
-
-int main()
-{
-   driver();
-   return 0;
-}

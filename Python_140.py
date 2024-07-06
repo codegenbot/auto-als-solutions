@@ -1,4 +1,4 @@
-```'
+```
 import re
 
 def fix_spaces(text):
@@ -9,4 +9,3 @@ def fix_spaces(text):
 
 text = input("Enter your text: ")
 print(fix_spaces(text))
-'```
