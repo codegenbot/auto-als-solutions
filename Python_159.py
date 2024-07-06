@@ -1,4 +1,3 @@
-```Python
 def eat(number, need, remaining):
-    eaten = min(min(number, remaining), need)
+    eaten = number
     return [eaten, max(0, need - eaten)]
