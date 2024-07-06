@@ -1,6 +1,6 @@
 #include <map>
 #include <string>
-#include <cassert>
+#include <algorithm>
 #include <cctype>
 #include <iostream>
 
@@ -24,3 +24,4 @@ int main() {
     cout << (check_dict_case(dict) ? "True" : "False") << endl;
     assert(check_dict_case(map<string, string>()) == false);
     return 0;
+}
