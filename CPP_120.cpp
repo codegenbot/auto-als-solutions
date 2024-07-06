@@ -1,6 +1,12 @@
 vector<int> maximum(vector<int> arr, int k) {
-    vector<int> res(k);
-    partial_sort(arr.begin(), arr.begin() + k, arr.end());
-    copy_n(arr.begin() + (arr.size() - k), k, res.begin());
-    return res;
+    priority_queue<int> pq;
+    for (int num : arr) {
+        pq.push(num);
+    }
+    vector<int> result(k);
+    for (int i = 0; i < k; i++) {
+        result[i] = pq.top();
+        pq.pop();
+    }
+    return result;
 }
