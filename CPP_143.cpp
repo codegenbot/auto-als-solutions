@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 string words_in_sentence(string sentence){
@@ -27,4 +31,9 @@ vector<string> split(const string& str, const string& delimiter) {
     }
     tokens.push_back(str);
     return tokens;
+}
+
+int main() {
+    cout << words_in_sentence("Hello world") << endl;
+    return 0;
 }
