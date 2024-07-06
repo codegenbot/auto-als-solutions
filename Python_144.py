@@ -1,8 +1,12 @@
+```
 def simplify(x, n):
-    def lcm(a, b):
-        return a * b // math.gcd(int(a.split('/')[0]), int(b.split('/')[0])) * int(b.split('/')[1]) // math.gcd(int(a.split('/')[0]), int(b.split('/')[1]))
-
     x_num, x_den = map(int, x.split('/'))
     n_num, n_den = map(int, n.split('/'))
-
-    return (x_num*n_num) % lcm(x_den, n_den) == 0
+    
+    denominator = x_den * n_den
+    numerator = x_num * n_num
+    
+    gcd = lambda a, b: a if not b else gcd(b, a % b)
+    common_divisor = gcd(numerator, denominator)
+    
+    return bool(denominator // common_divisor)
