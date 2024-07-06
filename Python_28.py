@@ -1,14 +1,11 @@
-from typing import List
+```
+strings = []
+while True:
+    try:
+        inp = input("Enter strings separated by space : ")
+        strings = [s.strip() for s in inp.split()]
+        break
+    except ValueError:
+        print("Invalid input. Please enter strings only.")
 
-
-def concatenate(strings: List[str]) -> str:
-    result = "".join(strings)
-    return result
-
-
-strings = input("Enter strings separated by space : ")
-try:
-    strings = strings.split()
-except ValueError as e:
-    print(f"Error: {str(e)}")
-print(concatenate(strings))
+print(' '.join(filter(None, strings)))
