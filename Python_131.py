@@ -6,4 +6,4 @@ def digits(n):
         if digit != 0 and digit % 2 != 0:
             product *= digit
         n //= 10
-    return product if product > 1 else 1
+    return product if product else 1
