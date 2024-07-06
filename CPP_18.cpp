@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <string>
 
@@ -14,13 +13,17 @@ int main() {
     }
 
     int main() {
-        std::string inputStr, subStr;
-        std::cout << "Enter a string: ";
-        std::getline(std::cin, inputStr);
-        std::cout << "Enter a substring: ";
-        std::getline(std::cin, subStr);
+        std::string str;
+        std::string substring;
 
-        int result = how_many_times(inputStr, subStr);
-        std::cout << "The substring appears " << result << " times.\n";
+        std::cout << "Enter the string: ";
+        std::getline(std::cin, str);
+
+        std::cout << "Enter the substring: ";
+        std::getline(std::cin, substring);
+
+        int count = how_many_times(str, substring);
+        std::cout << "The substring appears " << count << " times." << std::endl;
+
+        return 0;
     }
-}
