@@ -1,13 +1,18 @@
 #include <iostream>
 #include <vector>
 
-int main(std::vector<int> lst) {
+int sumOdd(int x) {
     int sum = 0;
-    for (int i = 1; i < lst.size(); i++) {
-        if (lst[i] % 2 != 0) {
-            sum += lst[i];
+    for (int i = 1; i <= 10; i++) { 
+        int y;
+        std::cin >> y;
+        if (y % 2 != 0) {
+            sum += y;
         }
     }
-    std::cout << "Error: Please enter valid input." << std::endl;
-    return -1;
+    return sum;
+}
+
+int main() {
+    std::cout << sumOdd(0) << std::endl;
 }
