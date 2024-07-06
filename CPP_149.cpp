@@ -1,21 +1,24 @@
 ```cpp
-#include <vector>
 #include <algorithm>
 #include <string>
+#include <vector>
 
 bool issame(vector<string>, vector<string>);
+vector<string> sorted_list_sum(vector<string>);
+
+int main() {
+    // your code here
+}
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
 
-    // Remove strings with odd lengths from the list
     for (const string& str : lst) {
         if (str.length() % 2 == 0) {
             result.push_back(str);
         }
     }
 
-    // Sort the resulting list by length and then alphabetically
     sort(result.begin(), result.end(),
          [](const string& a, const string& b) {
              if (a.length() != b.length()) {
@@ -26,8 +29,4 @@ vector<string> sorted_list_sum(vector<string> lst) {
          });
 
     return result;
-}
-
-int main() {
-    // usage of issame and sorted_list_sum
 }
