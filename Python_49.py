@@ -1,6 +1,5 @@
-def modp():
-    n = int(input("Enter the first number: "))
-    p = int(input("Enter the second number: "))
+```
+def modp(n: int, p: int):
     if n < 0:
         n += p
     def egcd(a, b):
@@ -12,7 +11,6 @@ def modp():
 
     g, y, x = egcd(n, p)
     if g != 1:
-        result = None 
+        return None 
     else:
-        result = pow(x, -(p-2), p)
-    return result
+        return pow(x, -(p-2), p)
