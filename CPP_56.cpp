@@ -1,16 +1,11 @@
-#include <string>
-using namespace std;
-
 bool correct_bracketing(string brackets){
-    int opening = 0;
-    for(char c : brackets) {
-        if(c == '<') {
-            opening++;
-        } else if(c == '>') {
-            if(opening <= 0)
-                return false;
-            opening--;
+    int count = 0;
+    for(char c : brackets){
+        if(c == '<') count++;
+        else if(c == '>') {
+            if(count <= 0) return false;
+            count--;
         }
     }
-    return opening == 0;
+    return count == 0;
 }
