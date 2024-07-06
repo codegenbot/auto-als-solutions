@@ -1,4 +1,4 @@
-Here is the solution:
+Here is the completed code:
 
 bool iscuber(int a){
     int c = round(cbrt(a));
