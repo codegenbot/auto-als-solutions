@@ -15,7 +15,7 @@ boost::any compare_one(boost::any a, boost::any b) {
         return a;
     else if (sa > sb)
         return a;
-    else if (sb > sa)
+    else if (db > da || sb > sa)
         return b;
     else
         return boost::any("None");
