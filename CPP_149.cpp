@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -33,19 +32,9 @@ std::vector<std::string> sortedListSum(std::vector<std::string> lst) {
     return result;
 }
 
-int runTests() {
-    int testResult = 1;
-    
-    std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
-    std::vector<std::string> vec2 = sortedListSum(vec1);
-    if (!isSame(sortedListSum({"aaaa", "bbbb", "dd", "cc"}), vec2)) {
-        testResult = 0;
-    }
-
-    return testResult;
-}
-
 int main() {
-    int runTests();
+    std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
+    std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
+    assert(isSame(sortedListSum({vec1}), {vec2}));
     return 0;
 }
