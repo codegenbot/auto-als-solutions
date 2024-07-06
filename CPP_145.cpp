@@ -1,23 +1,24 @@
 #include <algorithm>
+using namespace std;
 
 vector<int> order_by_points(vector<int> nums) {
-    vector<pair<int, int>> points;
+    vector<pair<int, int>> numPairs;
     for (int i = 0; i < nums.size(); i++) {
-        int sumOfDigits = 0;
-        int num = nums[i];
-        while (num != 0) {
-            sumOfDigits += num % 10;
-            num /= 10;
-        }
-        points.emplace_back(sumOfDigits, i);
+        numPairs.push_back({getDigitSum(nums[i]), i});
     }
-
-    sort(points.begin(), points.end());
-
+    sort(numPairs.begin(), numPairs.end());
     vector<int> result;
-    for (int i = 0; i < points.size(); i++) {
-        result.push_back(nums[points[i].second]);
+    for (const auto& pair : numPairs) {
+        result.push_back(nums[pair.second]);
     }
-
     return result;
+}
+
+int getDigitSum(int n) {
+    int sum = 0;
+    while (n) {
+        sum += n % 10;
+        n /= 10;
+    }
+    return sum;
 }

@@ -1,20 +1,7 @@
 int main() {
     vector<int> lst;
-    int input;
-    
-    while (true) {
-        cout << "Enter a number (-1 to finish): ";
-        cin >> input;
-        
-        if (input == -1) break;
-        
-        lst.push_back(input);
-    }
-    
     int result = solution(lst);
-    
-    cout << "Sum: " << result << endl;
-    
+    cout << "The sum of the odd elements is: " << result << endl;
     return 0;
 }
 
