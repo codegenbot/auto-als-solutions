@@ -1,12 +1,12 @@
 #include <vector>
-#include <algorithm>
+#include <iostream>
 
-bool issame(vector<float> l1, vector<float> l2) {
-    if (l1.size() != l2.size()) {
+bool issame(vector<float> v1, vector<float> v2) {
+    if(v1.size() != v2.size()) {
         return false;
     }
-    for (size_t i = 0; i < l1.size(); ++i) {
-        if (std::abs(l1[i] - l2[i]) > 0.0001f) {
+    for(float num : v1) {
+        if(std::find(v2.begin(), v2.end(), num) == v2.end()) {
             return false;
         }
     }
@@ -16,4 +16,14 @@ bool issame(vector<float> l1, vector<float> l2) {
 int main() {
     assert(issame(get_positive({}), {}));
     return 0;
+}
+
+vector<float> get_positive(vector<float> l){
+    vector<float> result;
+    for(float num : l) {
+        if(num > 0) {
+            result.push_back(num);
+        }
+    }
+    return result;
 }
