@@ -1,3 +1,4 @@
+```cpp
 int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<std::pair<int, int>>& path) {
     if (grid.empty() || grid[0].empty()) return -1;
     
@@ -5,9 +6,7 @@ int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<s
     if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size())
         return -2;
 
-    // Your implementation here
-    path.push_back({x, y});
-    return 1;
+    return 0;
 }
 
 bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
@@ -18,3 +17,14 @@ bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
             return false;
     return true;
 }
+
+std::vector<int> minPath(std::vector<std::pair<int, int>>& path, int totalSteps) {
+    std::vector<int> res;
+    for(int i = 0; i < totalSteps; i++) {
+        res.push_back(path[i].first);
+        res.push_back(path[i].second);
+    }
+    return res;
+}
+
+assert(isEqual(minPath({{1, 3}, {3, 2}}, 10) , {1, 3, 1, 3, 1, 3, 1, 3, 1, 3}));
