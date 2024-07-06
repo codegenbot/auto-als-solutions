@@ -9,4 +9,3 @@ bool is_palindrome(string text){
         j--;
     }
     return true;
-}
