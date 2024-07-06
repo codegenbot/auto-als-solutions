@@ -11,12 +11,15 @@ def separate_paren_groups(paren_string: str) -> List[str]:
             continue
         if char == '(':
             stack.append(char)
-            current_group += char
+            current_group += '('
         elif char == ')':
-            if stack and stack[-1] == '(':
+            if stack:
                 stack.pop()
-                current_group += char
-                groups.append(current_group)
-                current_group = ''
+                current_group += ')'
+                if not stack:
+                    groups.append(current_group)
+                    current_group = ''
+            else:
+                raise ValueError("Unbalanced parentheses")
     
     return groups
