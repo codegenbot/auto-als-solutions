@@ -1,4 +1,4 @@
-Here is the modified code for the given task description and function signature.
+Here is the modified code that completes the given function signature and solves the task:
 
 ```Python
 def encode(message):
@@ -11,9 +11,8 @@ def encode(message):
                 new_char = chr((index + 2) % 26 + 97)
                 result += new_char.upper() if char.isupper() else new_char
             else:
-                index = ord('a' if char.islower() else 'A') + (ord(char) - ord('a')) 
-                new_index = (index + 3) % 26 
-                result += chr(new_index + ord('a')) if char.islower() else chr(new_index + ord('A'))
+                result += chr(ord('a') + ((ord(char.lower()) - ord('a')) % 26) if char.islower() 
+                          else chr(ord('A') + ((ord(char.upper()) - ord('A')) % 26))
         else:
             result += char
     return result
