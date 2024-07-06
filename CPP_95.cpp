@@ -1,7 +1,7 @@
-```c++
+```cpp
 #include <map>
 #include <string>
-#include <algorithm>
+#include <assert>
 #include <cctype>
 #include <iostream>
 

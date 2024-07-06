@@ -1,3 +1,4 @@
+```cpp
 #include <initializer_list>
 #include <vector>
 #include <algorithm>
@@ -23,7 +24,7 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::vector<int> result;
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) != false) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
     }
