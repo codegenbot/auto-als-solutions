@@ -1,18 +1,13 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
 using namespace std;
 
-vector<string> split(const string& str, const string& delimiter) {
-    vector<string> tokens;
-    size_t pos = 0;
-    while ((pos = str.find(delimiter)) != string::npos) {
-        tokens.push_back(str.substr(0, pos));
-        str.erase(0, pos + delimiter.length());
+string words_in_sentence(string sentence){
+    string result = "";
+    for (const auto& word : split(sentence, " ")) {
+        if (is_prime(to_string(word.length()))) {
+            result += word + " ";
+        }
     }
-    tokens.push_back(str);
-    return tokens;
+    return result.substr(0, result.size() - 1);
 }
 
 bool is_prime(int n) {
@@ -23,12 +18,13 @@ bool is_prime(int n) {
     return true;
 }
 
-string words_in_sentence(string sentence){
-    string result = "";
-    for (const auto& word : split(sentence, " ")) {
-        if (is_prime(word.length())) {
-            result += word + " ";
-        }
+vector<string> split(const string& str, const string& delimiter) {
+    vector<string> tokens;
+    size_t pos = 0;
+    while ((pos = str.find(delimiter)) != std::string::npos) {
+        tokens.push_back(str.substr(0, pos));
+        str.erase(0, pos + delimiter.length());
     }
-    return result.substr(0, result.size() - 1);
+    tokens.push_back(str);
+    return tokens;
 }
