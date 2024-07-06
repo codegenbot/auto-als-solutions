@@ -9,7 +9,7 @@ def decode_cyclic(s: str):
             result += s[i:i+3]  
             i += 3
         else:                  
-            if i > 0:         
+            if i > 0:          
                 result += s[i-1:i+2]
             else:
                 result = s[:i+2]
