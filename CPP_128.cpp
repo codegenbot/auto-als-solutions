@@ -1,20 +1,11 @@
-#include <vector>
+int prod_signs(vector<int> arr) {
+    long long product = 1;
+    int sum = 0;
 
-int prod_signs(std::vector<int> arr) {
-    int sign_product = 1;
-    long long sum_magnitude = 0;
-
-    if (arr.empty()) {
-        return -32768;
+    for (int x : arr) {
+        product *= ((x > 0) ? 1 : ((x < 0) ? -1 : 0));
+        sum += abs(x);
     }
 
-    for (int num : arr) {
-        if (num == 0) {
-            return 0;
-        }
-        sign_product *= (num > 0 ? 1 : -1);
-        sum_magnitude += abs(num);
-    }
-
-    return static_cast<int>(sum_magnitude * sign_product);
+    return product * sum > INT_MAX ? -32768 : product * sum;
 }
