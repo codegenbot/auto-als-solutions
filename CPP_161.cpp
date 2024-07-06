@@ -20,12 +20,7 @@ int main(){
     string input;
     cout << "Enter a string: ";
     getline(cin, input);
-    
-    if(input.empty()){
-        cout << "Error! You must enter a valid string." << endl;
-    } else {
-        string output = solve(input);
-        cout << "Output: " << output << endl;
-    }
+    string output = solve(input);
+    cout << "Output: " << output << endl;
     return 0;
 }
