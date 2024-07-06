@@ -1,6 +1,5 @@
-#include <string>
+#include <iostream>
 #include <sstream>
-
 using namespace std;
 
 int fruit_distribution(string s) {
