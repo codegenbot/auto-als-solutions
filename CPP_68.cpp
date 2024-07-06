@@ -20,9 +20,17 @@ vector<int> pluck(vector<int> arr) {
     sort(evenNodes.begin(), evenNodes.end());
     
     vector<int> result;
-    for (int i = 1; i < evenNodes.size(); i++) {
-        if (evenNodes[i].first != evenNodes[i-1].first) {
-            result.push_back(evenNodes[i].second);
+    for (int i = 0; i < arr.size(); i++) {
+        bool found = false;
+        for (auto& node : evenNodes) {
+            if (node.second == i) {
+                result.push_back(node.first);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            result.push_back(arr[i]);
         }
     }
     
