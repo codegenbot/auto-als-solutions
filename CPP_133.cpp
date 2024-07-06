@@ -6,7 +6,7 @@
 int sum_squares(const std::vector<double>& lst) {
     int result = 0;
     for (double x : lst) {
-        double ceil_x = ceil(x);
+        int ceil_x = ceil(x);
         result += pow(ceil_x, 2);
     }
     return result;
