@@ -1,19 +1,24 @@
 ```cpp
-#include <string>
 #include <vector>
+#include <string>
 
-bool check(char c) {
-    if (c == '(') return true;
-    else return false;
-}
-
-string match_parens(vector<string> lst) {
+bool matchParens(const std::vector<std::string>& lst) {
     int open = 0, close = 0;
-    for (const string& s : lst) {
-        for (char c : s) {
-            if (check(c)) open++;
+    for (const auto& s : lst) {
+        for (auto c : s) {
+            if (c == '(') open++;
             else close++;
         }
     }
-    return (open == close) ? "Yes" : "No";
+    return open == close;
+}
+
+int main() {
+    std::vector<std::string> lst = {"(a)", "(b)", "((c))", "(d)"};
+    if (matchParens(lst))
+        std::cout << "Yes" << std::endl;
+    else
+        std::cout << "No" << std::endl;
+
+    return 0;
 }
