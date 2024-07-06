@@ -1,9 +1,27 @@
-bool correct_bracketing(string brackets){
-    int opening = 0;
-    for(int i=0; i<brackets.length(); i++){
-        if(brackets[i] == '<') opening++;
-        else if(opening > 0) opening--;
-        if(opening < 0) return false;
+int main() {
+    string brackets;
+    cin >> brackets;
+
+    bool result = true;
+    int count = 0;
+    
+    for(int i=0; i<brackets.length(); i++) {
+        if(brackets[i] == '<') {
+            count++;
+        } else if(brackets[i] == '>') {
+            if(count == 0) {
+                result = false;
+                break;
+            }
+            count--;
+        }
     }
-    return opening == 0;
+
+    if(count != 0) {
+        result = false;
+    }
+
+    cout << result << endl;
+
+    return 0;
 }
