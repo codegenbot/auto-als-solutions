@@ -1,9 +1,9 @@
-```cpp
+```
 #include <vector>
 #include <algorithm>
 #include <string>
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     if (a.size() != b.size())
         return false;
 
@@ -15,17 +15,17 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
     return true;
 }
 
-std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
+std::vector<std::string> sorted_list_sum(const std::vector<std::string>& lst) {
     std::vector<std::string> result;
     for (const auto& str : lst) {
-        if (std::stoi(str) % 2 == 0) {
+        if (stoi(str) % 2 == 0) {
             result.push_back(str);
         }
     }
-    std::sort(result.begin(), result.end(),
+    sort(result.begin(), result.end(),
          [&](const std::string& a, const std::string& b) {
-             if (std::stoi(a) != std::stoi(b)) {
-                 return std::stoi(a) < std::stoi(b);
+             if (stoi(a) != stoi(b)) {
+                 return stoi(a) < stoi(b);
              } else {
                  return a < b;
              }
@@ -34,8 +34,8 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 
 int main() {
-    std::vector<std::string> vec1({"aaaa", "bbbb", "dd", "cc"});
-    std::vector<std::string> vec2({"cc", "dd", "aaaa", "bbbb"});
+    std::vector<std::string> vec1 = {"aaaa", "bbbb", "dd", "cc"};
+    std::vector<std::string> vec2 = {"cc", "dd", "aaaa", "bbbb"};
     assert(issame(sorted_list_sum(vec1), vec2));
     return 0;
 }
