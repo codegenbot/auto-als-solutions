@@ -13,14 +13,7 @@ int main() {
         return count;
     }
 
-    int main() {
-        std::string inputStr, subStr;
-        std::cout << "Enter a string: ";
-        std::getline(std::cin, inputStr);
-        std::cout << "Enter a substring: ";
-        std::getline(std::cin, subStr);
+    std::cout << how_many_times("Hello, world! Hello, universe!", "Hello") << std::endl;
 
-        int result = how_many_times(inputStr, subStr);
-        std::cout << "The substring appears " << result << " times.\n";
-    }
+    return 0;
 }
