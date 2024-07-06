@@ -1,4 +1,3 @@
-```cpp
 vector<int> minPath(vector<vector<int>>& grid, int k) {
     int n = grid.size();
     vector<int> res;
@@ -11,11 +10,4 @@ vector<int> minPath(vector<vector<int>>& grid, int k) {
         }
     }
     return res;
-}
-bool isSame(vector<int> a, vector<int> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
-    }
-    return true;
 }
