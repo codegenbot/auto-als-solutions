@@ -1,17 +1,16 @@
 ```python
 def parse_music(music_string: str) -> List[int]:
-    notes = {'o': 4, 'o|': 2, '.|': 1}
+    notes = {'o': [4], 'o|': [2, 0], '.|': [1, 0]}
     result = []
     i = 0
     while i < len(music_string):
         if music_string[i] == '.':
-            result.append(0)
             i += 1
         note = ''
         while i < len(music_string) and (music_string[i] in 'o|.' or music_string[i] == '|'):
             note += music_string[i]
             i += 1
-        if note not in notes:
-            return []
-        result.append(notes[note])
+        durations = notes[note]
+        for duration in durations:
+            result.append(duration)
     return result
