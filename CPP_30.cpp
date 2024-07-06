@@ -1,15 +1,17 @@
 #include <vector>
-#include <iostream>
+#include <algorithm>
 
 bool issame(vector<float> v1, vector<float> v2) {
     if(v1.size() != v2.size()) {
         return false;
     }
-    for(float num : v1) {
-        if(std::find(v2.begin(), v2.end(), num) == v2.end()) {
+    
+    for(int i = 0; i < v1.size(); i++) {
+        if(std::abs(v1[i] - v2[i]) > 0.00001f) {
             return false;
         }
     }
+    
     return true;
 }
 
