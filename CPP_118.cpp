@@ -1,5 +1,4 @@
-int main 
-{
+int main() {
     std::string word;
     std::cout << "Enter a word: ";
     std::getline(std::cin, word);
