@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <string>
 
@@ -31,10 +30,11 @@ int main() {
     std::string s;
     std::cout << "Enter a string: ";
     std::cin >> s;
+
     if (is_happy(s))
-        std::cout << "The string is happy." << std::endl;
+        std::cout << "The string is happy.\n";
     else
-        std::cout << "The string is not happy." << std::endl;
+        std::cout << "The string is not happy.\n";
 
     return 0;
 }
