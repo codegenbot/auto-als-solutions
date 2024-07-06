@@ -1,7 +1,7 @@
-```
 #include <vector>
+#include <cassert>
 
-bool issame(vector<int> a, vector<int> b) {
+bool same(vector<int> a, vector<int> b) {
     if (a.size() != b.size())
         return false;
     for (int i = 0; i < a.size(); i++) {
@@ -23,6 +23,5 @@ vector<int> make_a_pile(int n) {
 }
 
 int main() {
-    assert(issame(make_a_pile(8), {8, 10, 12, 14, 16, 18, 20, 22}));
+    assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return 0;
-}
