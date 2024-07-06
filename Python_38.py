@@ -10,4 +10,7 @@ def decode_cyclic(s: str):
             s = s[1:]
         else:
             break
-    return result
+    while len(s) > 1 and s[:2] == "00":
+        result += "a"
+        s = s[2:]
+    return result + s
