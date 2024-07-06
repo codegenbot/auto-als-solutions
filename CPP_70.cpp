@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -31,7 +32,7 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> input; 
+    std::vector<int> input; // get your input here
     std::cout << "Enter elements separated by spaces: ";
     for (int i = 0; i < 5; ++i) {
         int num;
