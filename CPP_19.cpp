@@ -1,5 +1,4 @@
-#include<string>
-#include<map>
+#include <algorithm>
 using namespace std;
 
 string sort_numbers(string numbers) {
@@ -7,25 +6,36 @@ string sort_numbers(string numbers) {
                                 {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
                                 {"eight", 8}, {"nine", 9}};
     vector<string> numVec;
-    string temp;
+    string num;
 
+    // Split the input string into individual numbers
     for (int i = 0; i < numbers.length(); i++) {
         if (numbers[i] == ' ') {
             continue;
         }
-        temp = "";
-        while (i < numbers.length() && numbers[i] != ' ') {
-            temp += numbers[i];
-            i++;
+        bool found = false;
+        for (auto it : numMap) {
+            if (it.first.length() <= i - numVec.size() && numbers.substr(i - it.first.length(), it.first.length()) == it.first) {
+                num = it.first;
+                found = true;
+                break;
+            }
         }
-        numVec.push_back(temp);
+        if (found) {
+            numVec.push_back(num);
+            i += num.length() - 1;
+        } else {
+            num += numbers[i];
+        }
     }
 
+    // Sort the vector of numbers
     sort(numVec.begin(), numVec.end());
 
+    // Join the sorted numbers back into a string
     string result = "";
-    for (string s : numVec) {
-        result += s + " ";
+    for (auto it : numVec) {
+        result += it + " ";
     }
     return result;
 }
