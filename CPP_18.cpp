@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <string>
 
@@ -13,16 +12,7 @@ int main() {
         return count;
     }
 
-    std::cout << "Enter a string: ";
-    std::string input;
-    std::cin >> input;
-
-    std::cout << "Enter a substring: ";
-    std::string subinput;
-    std::cin >> subinput;
-
-    int result = how_many_times(input, subinput);
-    std::cout << "The substring appears " << result << " times." << std::endl;
-
-    return 0;
-}
+    int main() {
+        std::cout << how_many_times("Hello, Hello, World!", "Hello") << std::endl;
+        return 0;
+    }
