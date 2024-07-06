@@ -8,7 +8,7 @@ for char in paren_string:
         if stack:
             if stack[-1] == '(':
                 stack.pop()
-                if not stack:  
+                if not stack:  # Check if stack is empty
                     groups.append(current_group)
                     current_group = ''
             else:
