@@ -6,7 +6,7 @@ using namespace std;
 bool is_happy(string s){
     if(s.length() < 3) return false;
     for(int i = 0; i <= s.length()-3; i++){
-        string str = s.substr(i, 1) + s[i+1] + s[i+2];
+        string str = s.substr(i, 1) + s.substr(i+1, 1) + s.substr(i+2, 1);
         bool unique = true;
         for(char c : str){
             int count = 0;
