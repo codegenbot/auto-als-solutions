@@ -4,9 +4,20 @@ def encode(message):
     for char in message:
         if char.isalpha():
             if char.lower() in 'aeiou':
-                result += chr((ord(char.lower()) - ord('a') + 2) % 26 + ord('a'))
+                if char.lower() == 'a':
+                    result += 'c'
+                elif char.lower() == 'e':
+                    result += 'g'
+                elif char.lower() == 'i':
+                    result += 'k'
+                elif char.lower() == 'o':
+                    result += 'q'
+                else:
+                    result += 'u'
+            elif char.isupper():
+                result += char.lower()
             else:
-                result += char.swapcase()
+                result += char.upper()
         else:
             result += char
     return result
