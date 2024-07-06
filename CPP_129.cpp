@@ -1,6 +1,5 @@
 #include <vector>
 #include <utility>
-#include <initializer_list>
 
 int pathFinder(std::vector<std::vector<char>>& grid, int x, int y, std::vector<std::pair<int, int>>& path) {
     if (grid.empty() || grid[0].empty()) return -1;
@@ -19,3 +18,4 @@ bool isEqual(const std::vector<int>& a, const std::vector<int>& b) {
         if (a[i] != b[i])
             return false;
     return true;
+}
