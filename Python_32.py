@@ -1,10 +1,10 @@
 ```
-def find_zero(xs: list):
+def find_zero(xs):
     if len(xs) % 2 != 0:
         raise ValueError("xs must have an even number of coefficients")
     max_coeff = abs(max(xs))
     min_coeff = abs(min(xs))
     for x in range(-max(abs(x) for x in xs), max(abs(x) for x in xs)+1):
-        if round(sum(coeff*x**power for coeff, power in zip(xs, range(len(xs)))) , 10) == 0:
+        if round(sum(c*x**i for i,c in enumerate(reversed(xs))), 10) == 0:
             return round(x, 2)
     return None
