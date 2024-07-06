@@ -1,21 +1,20 @@
-#include <vector>
-#include <map>
+Here is the completed code:
 
+```cpp
+#include <vector>
 using namespace std;
 
 int search(vector<int> lst) {
     map<int, int> freq;
-    for (int x : lst) {
-        if (freq.find(x) == freq.end())
-            freq[x] = 1;
+    for (int i : lst) {
+        if (freq.find(i) == freq.end())
+            freq[i] = 1;
         else
-            freq[x]++;
+            freq[i]++;
     }
-    
-    for (pair<int, int> p : freq) {
+    for (auto p : freq) {
         if (p.second >= p.first)
             return p.first;
     }
-    
     return -1;
 }
