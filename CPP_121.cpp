@@ -6,8 +6,8 @@ int sumOdd(const char* str) {
     int sum = 0;
     std::string s(str); 
     for (char c : s) { 
-        if (static_cast<int>(c) % 2 != 0) {
-            sum += static_cast<int>(c);
+        if ((int)c % 2 != 0) {
+            sum += (int)c;
         }
     }
     return sum;
