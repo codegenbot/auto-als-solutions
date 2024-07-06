@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <string>
 
@@ -28,9 +27,9 @@ int main() {
     std::getline(std::cin, user_input);
 
     std::vector<std::string> words = split_words(user_input);
-    
+
     for (const auto& word : words) {
-        if (!issame({word}, {user_input})) { 
+        if (!issame({word}, split_words(word))) {
             std::cout << word << std::endl;
         }
     }
