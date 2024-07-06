@@ -1,12 +1,19 @@
-#include <vector>
-using namespace std;
-
 int search(vector<int> lst) {
-    int max = -1;
-    for (auto x : lst) {
-        if (x > 0 && x <= count(lst.begin(), lst.end(), x)) {
-            max = x;
+    map<int, int> countMap;
+    for (int num : lst) {
+        if (countMap.find(num) == countMap.end()) {
+            countMap[num] = 1;
+        } else {
+            countMap[num]++;
         }
     }
-    return max;
+
+    int result = -1;
+    for (auto it = countMap.begin(); it != countMap.end(); ++it) {
+        if (it->second >= it->first && it->first > 0) {
+            result = it->first;
+            break;
+        }
+    }
+    return result;
 }
