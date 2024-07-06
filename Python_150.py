@@ -1,4 +1,3 @@
-```
 def x_or_y(n, x, y):
     def is_prime(num):
         if num < 2:
@@ -12,3 +11,5 @@ def x_or_y(n, x, y):
         return x
     else:
         return y
+
+print(x_or_y(int(input("Enter a number: ")), input("Enter x: "), input("Enter y: ")))
