@@ -1,25 +1,17 @@
-#include <algorithm>
-
-string anti_shuffle(string s) {
+string anti_shuffle(string s){
     string result = "";
-    for (int i = 0; i < s.length(); i++) {
-        if (s[i] == ' ') {
-            result += " ";
-        } else {
-            string word;
-            bool firstChar = true;
-            for (int j = i; j < s.length() && s[j] != ' '; j++) {
-                if (!firstChar) {
-                    result += to_string((int)s[j]) + "";
-                }
-                firstChar = false;
-                word += s[j];
-            }
-            i = j - 1;
-            for (char c : word) {
-                result += c;
-            }
+    for(int i=0; i<s.size(); i++){
+        if(s[i] == ' '){
+            result += ' ';
+            continue;
         }
+        string word = "";
+        for(int j=i; j<=s.find(' ',i); j++){
+            word += s[j];
+        }
+        sort(word.begin(),word.end());
+        result += word;
+        i = s.find(' ',i);
     }
     return result;
 }
