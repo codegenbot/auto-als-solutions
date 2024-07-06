@@ -1,5 +1,3 @@
-#include <algorithm>
-
 vector<int> strange_sort_vector(vector<int> lst) {
     vector<int> result;
 
@@ -7,17 +5,14 @@ vector<int> strange_sort_vector(vector<int> lst) {
         int min_val = *min_element(lst.begin(), lst.end());
         int max_val = *max_element(lst.begin(), lst.end());
 
-        if (min_val == max_val) {
-            result.push_back(min_val);
-            lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
-        } else {
-            result.push_back(min_val);
-            auto it = std::remove(lst.begin(), lst.end(), min_val);
-            lst.erase(it, lst.end());
-            result.push_back(max_val);
-            it = std::remove(lst.begin(), lst.end(), max_val);
-            lst.erase(it, lst.end());
-        }
+        auto it_min = find(lst.begin(), lst.end(), min_val);
+        auto it_max = find(it_min, lst.end(), max_val);
+
+        result.push_back(*it_min);
+        lst.erase(it_min);
+        if (lst.empty()) break;
+        result.push_back(*it_max);
+        lst.erase(it_max);
     }
 
     return result;
