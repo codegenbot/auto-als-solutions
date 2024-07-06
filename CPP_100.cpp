@@ -1,4 +1,18 @@
+Here is the corrected code:
+
+```c++
 #include <vector>
+#include <cassert>
+
+bool same(vector<int> a, vector<int> b) {
+    if (a.size() != b.size())
+        return false;
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] != b[i])
+            return false;
+    }
+    return true;
+}
 
 vector<int> make_a_pile(int n) {
     vector<int> pile;
@@ -11,15 +25,8 @@ vector<int> make_a_pile(int n) {
     return pile;
 }
 
-bool issame(vector<int> a, vector<int> b) {
-    if(a.size() != b.size())
-        return false;
-    for(int i=0;i<a.size();i++){
-        if(a[i] != b[i])
-            return false;
-    }
-    return true;
-
-int main() {
-    assert(issame(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
+int main() 
+{
+    assert(same(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return 0;
+}
