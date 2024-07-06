@@ -1,6 +1,7 @@
-#include <algorithm>
 #include <vector>
 #include <string>
+#include <algorithm>
+
 using namespace std;
 
 bool will_it_fly(vector<int> q, int w) {
@@ -8,7 +9,9 @@ bool will_it_fly(vector<int> q, int w) {
     for (int i : q) {
         s += to_string(i);
     }
-    if (s != reverse(s).str()) return false;
+    if (!isPalindrome(s)) {
+        return false;
+    }
     int sum = 0;
     for (int i : q) {
         sum += i;
@@ -16,6 +19,8 @@ bool will_it_fly(vector<int> q, int w) {
     return sum <= w;
 }
 
-int main() {
-   assert(will_it_fly({5}, 5) == true);
+bool isPalindrome(string s) {
+    string t = s;
+    reverse(t.begin(), t.end());
+    return s == t;
 }
