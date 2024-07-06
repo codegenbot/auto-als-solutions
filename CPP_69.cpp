@@ -17,6 +17,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? findElement(vec, 10) : -1, 0);
+    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? findElement(vec, 10) : -1,  );
     return 0;
 }
