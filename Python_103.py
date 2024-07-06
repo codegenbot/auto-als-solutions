@@ -1,3 +1,4 @@
+```
 def rounded_avg():
     n, m = map(int, input("Enter two numbers: ").split())
     if n > m:
