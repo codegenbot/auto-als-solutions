@@ -1,3 +1,4 @@
+```cpp
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
@@ -19,4 +20,10 @@ std::string string_to_md5(const char* text) {
     }
 
     return output;
+
+}
+
+int main() {
+    std::cout << string_to_md5("password") << std::endl;
+    return 0;
 }
