@@ -1,25 +1,44 @@
-Here is the completed code:
-
 vector<string> by_length(vector<int> arr) {
-    vector<int> numbers;
-    for (int i : arr) {
-        if (i >= 1 && i <= 9)
-            numbers.push_back(i);
+    vector<int> temp;
+    for (int num : arr) {
+        if (num >= 1 && num <= 9)
+            temp.push_back(num);
     }
-    sort(numbers.begin(), numbers.end());
-    reverse(numbers.begin(), numbers.end());
+    sort(temp.begin(), temp.end());
     vector<string> result;
-    for (int num : numbers) {
-        result.push_back(to_string(num) == "1" ? "One"
-                          : to_string(num) == "2" ? "Two"
-                          : to_string(num) == "3" ? "Three"
-                          : to_string(num) == "4" ? "Four"
-                          : to_string(num) == "5" ? "Five"
-                          : to_string(num) == "6" ? "Six"
-                          : to_string(num) == "7" ? "Seven"
-                          : to_string(num) == "8" ? "Eight"
-                          : to_string(num) == "9" ? "Nine"
-                          : "");
+    for (int num : temp) {
+        string str = "";
+        switch (num) {
+            case 1:
+                str = "One";
+                break;
+            case 2:
+                str = "Two";
+                break;
+            case 3:
+                str = "Three";
+                break;
+            case 4:
+                str = "Four";
+                break;
+            case 5:
+                str = "Five";
+                break;
+            case 6:
+                str = "Six";
+                break;
+            case 7:
+                str = "Seven";
+                break;
+            case 8:
+                str = "Eight";
+                break;
+            case 9:
+                str = "Nine";
+                break;
+        }
+        result.push_back(str);
     }
+    reverse(result.begin(), result.end());
     return result;
 }
