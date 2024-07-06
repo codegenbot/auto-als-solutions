@@ -1,15 +1,8 @@
-```
-n = int(input("Enter the first number: "))
-m = int(input("Enter the second number: "))
-
-
 def rounded_avg(n, m):
     if n == m == 0:
-        return "0"
-    if n == 0 and m != 0 or n != 0 and m == 0:
-        return str(max(abs(n), abs(m)))
+        return str(0)
     avg = (n + m) / 2
-    print("0" if avg == 0 else bin(int(round(avg)))[2:])
-
-
-print(rounded_avg(n, m))
+    if avg.is_integer():
+        return bin(int(avg))[2:]
+    else:
+        return "Error: Average is not an integer."
