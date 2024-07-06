@@ -1,3 +1,7 @@
+#include <algorithm>
+#include <vector>
+#include <string>
+
 bool will_it_fly(vector<int> q, int w) {
     string str = "";
     for (int i : q) {
@@ -9,3 +13,9 @@ bool will_it_fly(vector<int> q, int w) {
         sum += i;
     }
     return sum <= w;
+}
+
+int main() {
+    assert(will_it_fly({5}, 5) == true);
+    return 0;
+}

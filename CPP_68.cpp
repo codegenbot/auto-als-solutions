@@ -1,14 +1,12 @@
-#include <vector>
 #include <climits>
-
 using namespace std;
 
 vector<pair<int, int>> pluck(vector<int> arr) {
     vector<pair<int, int>> result;
     
-    if(arr.empty()) return result; 
+    if(arr.empty()) return result; // If array is empty
     
-    int smallestEven = INT_MAX; 
+    int smallestEven = INT_MAX;
     int smallestIndex = 0;
     
     for(int i = 0; i < arr.size(); i++) {
@@ -20,5 +18,10 @@ vector<pair<int, int>> pluck(vector<int> arr) {
     
     result.push_back({smallestEven, smallestIndex});
     
-    return vector<pair<int, int>>({make_pair(smallestEven, smallestIndex)});
+    return result;
+}
+
+int main() {
+    vector<int> arr = {7, 9, 7, 1};
+    assert(pluck(arr).empty()); 
 }
