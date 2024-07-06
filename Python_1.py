@@ -1,8 +1,5 @@
-"""
-from typing import List
-
-
-def separate_paren_groups(paren_string: str) -> List[str]:
+```
+def separate_paren_groups(paren_string: str) -> list:
     stack = []
     groups = []
     current_group = ""
@@ -20,11 +17,11 @@ def separate_paren_groups(paren_string: str) -> List[str]:
                     groups.append(current_group + ")")
                     current_group = ""
             else:
-                if current_group:  
+                if current_group:
                     groups.append("(" + current_group + ")")
                     current_group = ""
 
-        elif char.isalpha() or (char.isspace() and stack): 
+        elif char.isalpha() or (char.isspace() and stack):
             pass
 
     while stack and stack[-1] == "(":
@@ -36,4 +33,3 @@ def separate_paren_groups(paren_string: str) -> List[str]:
         groups.append("(" + current_group + ")")
 
     return [g for g in groups if g]
-"""

@@ -3,28 +3,28 @@
 
 using namespace std;
 
-char* decimal_to_binary(int decimal){
-    char* binary = new char[32];
-    int i = 31;
+string decimal_to_binary(int decimal){
+    string binary = "";
     while(decimal > 0){
         if((decimal & 1) == 1)
-            binary[i--] = '1';
+            binary = "1" + binary;
         else
-            binary[i--] = '0';
+            binary = "0" + binary;
         decimal >>= 1;
     }
-    for(int j = i+1; j < 32; j++){
-        binary[j] = '\0';
+    if (decimal < 0) {
+        binary = "-" + binary;
+        decimal = -decimal;
     }
-    return binary;
+    return "0b" + binary;
 }
 
-int main() {
+int main() 
+{
     int decimal;
     cout << "Enter a decimal number: ";
     cin >> decimal;
-    char* binary = decimal_to_binary(decimal);
+    string binary = decimal_to_binary(decimal);
     cout << "The binary representation of the entered decimal number is: " << binary << endl;
-    delete[] binary;
     return 0;
 }

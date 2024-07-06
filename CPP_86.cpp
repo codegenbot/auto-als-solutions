@@ -1,7 +1,6 @@
 ```cpp
-#include <iostream>
-#include <algorithm>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 string anti_shuffle(string s){
@@ -16,16 +15,18 @@ string anti_shuffle(string s){
             word += s[j];
         }
         i = j - 1;
-        sort(word.begin(), word.end());
-        result += word;
+        string temp = word;
+        sort(temp.begin(), temp.end());
+        result += temp;
     }
     return result;
 }
 
 int main(){
-    string input;
+    string str;
     cout << "Enter a sentence: ";
-    cin >> input;
-    cout << "Anti-shuffled sentence: " << anti_shuffle(input) << endl;
+    getline(cin, str);
+    string output = anti_shuffle(str);
+    cout << "Antishuffled sentence: " << output << endl;
     return 0;
 }
