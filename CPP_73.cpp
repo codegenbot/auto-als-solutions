@@ -1,11 +1,9 @@
-```cpp
-#include <iostream>
 #include <vector>
-using namespace std;
+#include <size_t>
 
-int smallest_change(vector<int> arr) {
+int smallest_change(std::vector<int> arr) {
     int n = arr.size();
-    vector<vector<size_t>> dp(n, vector<size_t>(n-1));
+    std::vector<std::vector<size_t>> dp(n, std::vector<size_t>(n-1));
     
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -18,16 +16,16 @@ int smallest_change(vector<int> arr) {
             if (arr[i] == arr[j]) {
                 dp[i][j].push_back(dp[i+1][j-1].size());
             } else {
-                dp[i][j].push_back(1 + dp[i+1][j].size());
+                size_t min = dp[i+1][j].size() + 1;
+                for (int k = i; k <= j; k++) {
+                    if (k == i || k == j || arr[k] != arr[i]) {
+                        min = std::min(min, dp[i][k-1].size() + dp[k+1][j].size() + 1);
+                    }
+                }
+                dp[i][j].push_back(min);
             }
         }
     }
     
     return dp[0][n-1].size();
-}
-
-int main() {
-    vector<int> arr = {0, 1};
-    cout << smallest_change(arr) << endl;
-    return 0;
 }

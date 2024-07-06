@@ -1,3 +1,5 @@
+Here is the modified code:
+
 ```cpp
 #include <vector>
 #include <algorithm>
@@ -17,7 +19,7 @@ bool issame(std::vector<std::string> a, const std::vector<std::string>& b) {
     return true;
 }
 
-std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string>& lst2) {
+std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
     int sum1 = 0;
     for (const auto& str : lst1) {
         sum1 += str.length();
@@ -40,14 +42,14 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     for (const auto& str : lst1) {
         sum1lst += str.length();
         for (char c : str) {
-            sum1lst += 1;
+            sum1lst++;
         }
     }
 
     for (const auto& str : lst2) {
         sum2lst += str.length();
         for (char c : str) {
-            sum2lst += 1;
+            sum2lst++;
         }
     }
 
