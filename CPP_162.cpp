@@ -1,6 +1,6 @@
 #include <iostream>
-#include <sstream>
-#include <iomanip>
+#include <string>
+#include "md5.h" 
 
 using namespace std;
 
@@ -18,10 +18,16 @@ std::string string_to_md5(const char* text) {
     unsigned char result[16];
     MD5_Final(&mdContext, result);
 
-    std::stringstream stream;
-    for (int i = 0; i < 16; ++i) { 
-        stream << setfill('0') << setw(2) << hex << static_cast<int>(result[i]);
+    std::string output;
+    for (int i = 0; i < 32; ++i) { 
+        char temp[3] = {(char)(result[i >> 2]), (char)((i & 2) ? 0 : ((result[(i >> 2)] >> ((3 - i % 4) * 8)) & 0xFF)), '\0'};
+        output += std::string(temp);
     }
 
-    return stream.str();
+    return output;
+}
+
+int main() {
+    assert(string_to_md5("password") == "5f4dcc3b5aa765d61d8327deb882cf99");
+    return 0;
 }
