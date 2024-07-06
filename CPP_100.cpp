@@ -1,5 +1,14 @@
-```cpp
+```
+#include <iostream>
 #include <vector>
+using namespace std;
+
+bool issame(int a, int b) {
+    if (a == b)
+        return true;
+    else
+        return false;
+}
 
 std::vector<int> make_a_pile(int n) {
     vector<int> pile;
@@ -12,4 +21,20 @@ std::vector<int> make_a_pile(int n) {
         pile.push_back(stones);
     }
     return pile;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of piles: ";
+    cin >> n;
+    std::vector<int> pile = make_a_pile(n);
+
+    for (auto i : pile) {
+        if (issame(i, 1))
+            cout << "The " << (pile.size() - i + 1) << "th pile has one stone.\n";
+        else
+            cout << "The " << (pile.size() - i + 1) << "th pile has " << i << " stones.\n";
+    }
+
+    return 0;
 }
