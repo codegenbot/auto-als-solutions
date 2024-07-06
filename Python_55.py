@@ -1,5 +1,5 @@
 ```
-def fib(n: int):
+def nth_fibonacci(n: int) -> int:
     if n <= 0:
         return None
     elif n == 1 or n == 2:
