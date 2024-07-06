@@ -20,11 +20,6 @@ bool pairs_sum_to_zero(std::vector<int> l) {
 }
 
 int main() {
-    std::vector<int> l = {-3, 9, -1, 4, 2, 31};
-    if(pairs_sum_to_zero(l)) {
-        std::cout << "There are pairs that sum to zero." << std::endl;
-    } else {
-        std::cout << "No such pairs exist." << std::endl;
-    }
+    assert (pairs_sum_to_zero({-3, 9, -1, 4, 2, 31}) == false);
     return 0;
 }
