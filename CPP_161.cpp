@@ -19,11 +19,10 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    std::getline(std::cin, input);
+    input = std::getline(std::cin, input);  // Initialize the variable before using it.
     if(input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
-        input.erase(input.size() - 1); 
         string output = solve(input);
         cout << "Output: " << output << endl;
     }
