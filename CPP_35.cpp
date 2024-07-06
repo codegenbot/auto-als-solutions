@@ -6,12 +6,16 @@
 using namespace std;
 
 int main() {
+    vector<int> l;
     int n;
     cin >> n;
-    vector<int> l(n);
     for (int i = 0; i < n; i++) {
-        cin >> l[i];
+        int x;
+        cin >> x;
+        l.push_back(x);
     }
+    
     cout << *max_element(l.begin(), l.end()) << endl;
+
     return 0;
 }
