@@ -5,19 +5,21 @@ using namespace std;
 
 string anti_shuffle(string s){
     string result = "";
-    for(int i=0; i<s.size(); i++){
+    int i = 0;
+    while(i<s.size()){
         if(s[i] == ' '){
             result += ' ';
+            i++;
             continue;
         }
         string word = "";
         for(int j=i; j<s.size() && s[j] != ' '; j++){
             word += s[j];
         }
-        i = j - 1;
-        string temp = word;
-        sort(temp.begin(), temp.end());
-        result += temp;
+        i = j;
+        sort(word.begin(), word.end());
+        result += s.substr(i, j - i);
+        i = j;
     }
     return result;
 }
