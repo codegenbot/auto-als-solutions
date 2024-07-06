@@ -15,7 +15,7 @@ bool issame(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
-int main() {
+int main_test() { 
     assert(std::equal(generate_integers(17,89).begin(), generate_integers(17,89).end(), {}));
     return 0;
 }
