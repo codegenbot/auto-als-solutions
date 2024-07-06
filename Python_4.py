@@ -1,20 +1,13 @@
-```
 from typing import List
 
 
 def mean_absolute_deviation(numbers: List[float]) -> float:
     if len(numbers) == 0:
         return 0
-    total = 0.0
-    count = 0
-    for num in numbers:
-        if isinstance(num, (int, float)):
-            total += num
-            count += 1
-        else:
-            raise ValueError("Invalid input: non-numeric value found")
-    mean = total / count if count > 0 else 0
-
-    mad = sum(abs(num - mean) for num in numbers)
-    
-    return mad / count if count > 0 else 0
+    numeric_numbers = [num for num in numbers if isinstance(num, (int, float))]
+    if not numeric_numbers:
+        return 0
+    total = sum(numeric_numbers)
+    count = len(numeric_numbers)
+    mean = total / count
+    return sum(abs(num - mean) for num in numeric_numbers) / count
