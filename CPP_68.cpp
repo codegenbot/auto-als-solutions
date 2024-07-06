@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-std::vector<int> pluck(const std::vector<int>& arr) {
+std::vector<int> pluck(std::vector<int> arr) {
     std::vector<int> result = {};
     int minEvenValueIndex = -1;
     int minEvenValue = INT_MAX;
@@ -23,13 +23,25 @@ std::vector<int> pluck(const std::vector<int>& arr) {
 
 int main() {
     std::vector<int> input;
-    // add code to read from user and store in 'input'
-    
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+
+    for(int i = 0; i < n; i++){
+        int val;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> val;
+        input.push_back(val);
+    }
+
     std::vector<int> output = pluck(input);
 
-    // print the output
-    for(int i : output) {
-        std::cout << i << " ";
+    if(output.size() > 0) {
+        std::cout << "The minimum even value is: " << output[0] << "\n";
+        std::cout << "The index of the minimum even value is: " << output[1] << "\n";
+    } else {
+        std::cout << "No even values found.\n";
     }
+
     return 0;
 }
