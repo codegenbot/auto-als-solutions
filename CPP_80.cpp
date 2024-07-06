@@ -28,13 +28,13 @@ bool is_happy(std::string s) {
 }
 
 int main() {
-    std::string input;
+    std::string str;
     std::cout << "Enter a string: ";
-    std::cin >> input;
-    if (is_happy(input)) {
-        std::cout << "The string is happy.\n";
-    } else {
-        std::cout << "The string is not happy.\n";
-    }
+    std::getline(std::cin, str);
+    if (is_happy(str))
+        std::cout << "The string is happy." << std::endl;
+    else
+        std::cout << "The string is not happy." << std::endl;
+
     return 0;
 }
