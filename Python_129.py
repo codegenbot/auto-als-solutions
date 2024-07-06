@@ -18,8 +18,4 @@ def minPath(grid, k):
                 visited[nx][ny] = True
                 queue.append((nx, ny, path + [grid[nx][ny]]))
 
-    for i in range(N):
-        for j in range(N):
-            if grid[i][j] == 0:
-                return []
-    return result
+    return []
