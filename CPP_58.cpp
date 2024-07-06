@@ -7,11 +7,8 @@ vector<int> common(vector<int> l1, vector<int> l2) {
     set<int> s2(l2.begin(), l2.end());
 
     set<int> resultIntersection;
-    if(s1.empty() || s2.empty()) {
-        cout << "Error: One of the sets is empty." << endl;
-        vector<int> result;
-        return result;
-    }
+    if(s1.size() < 1 || s2.size() < 1)
+        return {"Error: At least one list is empty."}.push_back(0);
 
     set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
                       inserter(resultIntersection, resultIntersection.begin()));
