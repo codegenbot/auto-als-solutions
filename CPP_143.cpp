@@ -1,7 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
 using namespace std;
 
 string words_in_sentence(string sentence){
@@ -31,12 +27,4 @@ vector<string> split(const string& str, const string& delimiter) {
     }
     tokens.push_back(str);
     return tokens;
-}
-
-int main() {
-    string input;
-    cout << "Enter a sentence: ";
-    getline(cin, input);
-    cout << words_in_sentence(input) << endl;
-    return 0;
 }
