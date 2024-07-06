@@ -1,14 +1,14 @@
-```
 from typing import List
 
 
 def concatenate(strings: List[str]) -> str:
-    result = ''.join(strings)
+    result = "".join(strings)
     return result
 
 
-strings = input("Enter strings separated by space : ").split()
+strings = input("Enter strings separated by space : ")
 try:
-    print(concatenate(strings))
+    strings = strings.split()
 except ValueError as e:
-    print("Invalid input. Please enter strings separated by spaces.")
+    print(f"Error: {str(e)}")
+print(concatenate(strings))

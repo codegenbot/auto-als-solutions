@@ -1,4 +1,3 @@
-```
 def decode_shift(s: str):
     key = len(s) - s.count(' ')
     decoded_s = ""
