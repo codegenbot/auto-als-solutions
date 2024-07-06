@@ -1,4 +1,5 @@
-Here is the completed code:
+#include <string>
+using namespace std;
 
 bool prime_length(string str){
     int len = str.length();
@@ -10,4 +11,10 @@ bool prime_length(string str){
             is_prime = false;
     }
     return is_prime;
+
+}
+
+int main(){
+    assert (prime_length("0") == false);
+    return 0;
 }
