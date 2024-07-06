@@ -6,7 +6,7 @@ vector<int> eat(int number, int need, int remaining) {
     vector<int> result;
     
     int total = number + need;
-    int left = min(total - 1000, remaining);
+    int left = min(min(total - 1000, remaining), 0);
     
     if (left < 0) {
         total -= left;
