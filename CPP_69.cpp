@@ -1,7 +1,3 @@
-#include <algorithm>
-#include <vector>
-using namespace std;
-
 int search(const vector<int>& vec, int target) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), target));
 }
