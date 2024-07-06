@@ -1,11 +1,11 @@
 ```python
 def sum_squares(lst):
     total = 0
-    for num in lst:
-        if (lst.index(num) + 1) % 3 == 0:
-            total += num ** 2
-        elif (lst.index(num) + 1) % 4 == 0 and not (lst.index(num) + 1) % 3 == 0:
-            total += num ** 3
+    for i in range(len(lst)):
+        if (i+1) % 3 == 0:
+            total += lst[i] ** 2
+        elif (i+1) % 4 == 0 and not (i+1) % 3 == 0:
+            total += lst[i] ** 3
     return total
 
 if __name__ == "__main__":
