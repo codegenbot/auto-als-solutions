@@ -1,5 +1,4 @@
 #include <string>
-#include <assert>
 using namespace std;
 
 string decimal_to_binary(int decimal){
