@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -46,6 +45,7 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
     } else if (sum1lst > sum2lst) {
         return lst2;
     } else {
+        // check if any strings in one list are substrings of the other
         for (const auto& str : lst1) {
             for (const auto& sub_str : lst2) {
                 if (str.find(sub_str) != std::string::npos || sub_str.find(str) != std::string::npos) {
@@ -54,6 +54,7 @@ vector<string> total_match(vector<string> lst1, vector<string> lst2) {
             }
         }
 
+        // If none of the above conditions are met, return the shorter list
         return lst1.size() < lst2.size() ? lst1 : lst2;
     }
 }

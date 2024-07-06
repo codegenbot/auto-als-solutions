@@ -1,6 +1,4 @@
-Here is the corrected code:
-
-```cpp
+```
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -32,8 +30,7 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     return closest_pairs;
 }
 
-int main {
+int main { 
     std::vector<float> numbers = {1.0f, 2.0f, 3.0f, 4.0f};
     auto closest_pairs = find_closest_elements(numbers);
-    // Process the result
 }

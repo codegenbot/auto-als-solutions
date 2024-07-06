@@ -1,5 +1,6 @@
-def by_length(lst):
-    num_to_word = {
+def by_length(arr):
+    mapping = {
+        "0": "Zero",
         "1": "One",
         "2": "Two",
         "3": "Three",
@@ -10,4 +11,4 @@ def by_length(lst):
         "8": "Eight",
         "9": "Nine",
     }
-    return [num_to_word[str(i)] for i in lst if str(i).startswith("1")]
+    return [mapping[str(i + 1)] for i in arr if mapping[str(i + 1)].startswith("One")]
