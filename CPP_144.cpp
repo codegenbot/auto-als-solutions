@@ -1,15 +1,34 @@
 #include<string>
 using namespace std;
 
-bool simplify(string x, string n) {
-    int a = stoi(strtok(x.substr(1).c_str(), "/"));
-    int b = stoi(strtok(NULL, "/"));
-    int c = stoi(strtok(n.substr(1).c_str(), "/"));
-    int d = stoi(strtok(NULL, "/"));
+bool simplify(string x,string n){
+    int numerator1 = 0, denominator1 = 0;
+    int numerator2 = 0, denominator2 = 0;
 
-    long long m = (long long) a * d;
-    long long n2 = (long long) b * c;
+    size_t pos1 = x.find('/');
+    size_t pos2 = n.find('/');
 
-    if(m%n2==0) return true;
-    else return false;
+    string num1 = x.substr(0, pos1);
+    string den1 = x.substr(pos1 + 1);
+    string num2 = n.substr(0, pos2);
+    string den2 = n.substr(pos2 + 1);
+
+    numerator1 = stoi(num1) * stoi(den2);
+    denominator1 = stoi(den1) * stoi(num2);
+
+    numerator2 = stoi(num1) * stoi(num2);
+    denominator2 = stoi(den1) * stoi(den2);
+
+    if (gcd(numerator1, denominator1) == 1)
+        return true;
+    else
+        return false;
+
+}
+
+int gcd(int a, int b){
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
 }
