@@ -6,7 +6,12 @@ def tri(n):
     elif n == 2:
         return [3, 2]
     else:
-        t = [3, 2]
+        sequence = [3, 2]
         for i in range(2, n):
-            t.append(t[i - 1] + t[i - 2] + t[i - 3])
-        return t
+            if i % 2 == 0:
+                sequence.append(int((i + 1) / 2))
+            else:
+                last_two = sequence[-2:]
+                next_value = sum(last_two)
+                sequence.append(next_value)
+        return sequence
