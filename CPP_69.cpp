@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-int search(const vector<int>& vec, int target) {
+int findElement(const vector<int>& vec, int target) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), target));
 }
 
@@ -17,6 +17,10 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? distance(vec.begin(), find(vec.end(), 10)) : -1, "Element not found");
+    int result = find(vec.begin(), vec.end(), 10);
+    if(result == vec.end()) 
+        cout << "Element not found.\n";
+    else
+        cout << "Element found at index: " << distance(vec.begin(), result) << ".\n";
     return 0;
 }
