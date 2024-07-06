@@ -1,11 +1,13 @@
 ```
 def decode_cyclic(s: str):
-    """This function takes an input string and returns the decoded cyclic string."""
+    if len(s) == 0:
+        return s
+    
     result = ""
-    while len(s) > 0:
-        if len(s) >= 2:
-            result += s[1] + s[0]
-            s = s[2:]
-        result += s[0]
-        s = s[1:]
+    i = 1
+    while len(s) >= i:
+        result += s[i - 1]
+        s = s[i:]
+        i += 2
+    
     return result
