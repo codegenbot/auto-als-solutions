@@ -3,8 +3,10 @@ int add(int x, int y) {
 }
 
 int main() {
-    int a, b;
-    cout << "Enter two numbers: ";
-    cin >> a >> b;
-    cout << "Sum: " << add(a, b);
+    int num1, num2;
+    std::cout << "Enter first number: ";
+    std::cin >> num1;
+    std::cout << "Enter second number: ";
+    std::cin >> num2;
+    std::cout << "Sum of numbers is: " << add(num1, num2) << std::endl;
 }
