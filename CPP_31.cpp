@@ -1,21 +1,7 @@
-bool is_divisible(long long i) {
-    return i * i > n;
-}
-
-bool is_prime(long long n) {
-    if (n <= 1)
-        return false;
-
-    if (n == 2 || n == 3)
-        return true;
-
-    if (n % 2 == 0)
-        return false;
-
-    for (long long i = 3; !is_divisible(i); i += 2) {
-        if (n % i == 0)
-            return false;
+bool is_divisor = false;
+for (long long i = 2; i*i <= n && !is_divisor; ++i) {
+    if (n % i == 0) {
+        is_divisor = true;
     }
-
-    return true;
 }
+return !is_divisor;
