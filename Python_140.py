@@ -1,1 +1,1 @@
-input6 = f"_{input()}_"
+input_str = "input6_","_-2816_").replace("_", "-")
