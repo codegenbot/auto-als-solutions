@@ -1,10 +1,9 @@
-int stack_size = 0;
-for(char c : brackets){
-    if(c == '<'){
-        stack_size++;
-    }else if(c == '>'){
-        if(stack_size <= 0) return false;
-        stack_size--;
+bool correct_bracketing(string brackets){
+    int opening = 0;
+    for(int i=0; i<brackets.length(); i++){
+        if(brackets[i] == '<') opening++;
+        else if(opening > 0) opening--;
+        if(opening < 0) return false;
     }
+    return opening == 0;
 }
-return stack_size == 0;
