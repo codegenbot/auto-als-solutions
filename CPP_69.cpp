@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <map>
@@ -20,6 +21,5 @@ int findMaxValue(std::vector<int> numbers) {
 }
 
 int main() {
-    std::cout << findMaxValue({3, 10, 10, 9, 2}) << std::endl;
-    return 0;
+    std::cout << findMaxValue({3, 10, 10, 9, 2}) << std::endl; 
 }
