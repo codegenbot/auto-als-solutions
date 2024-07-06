@@ -10,3 +10,4 @@ int sum_squares(vector<int> lst) {
             result += (lst[i] * lst[i] * lst[i]);
     }
     return result;
+}
