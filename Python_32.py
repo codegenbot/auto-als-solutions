@@ -1,12 +1,8 @@
-import math
-
 def find_zero(coeffs):
-    if len(coeffs) != 5 or not all(isinstance(x, (int, float)) for x in coeffs):
-        return "Invalid input"
-    
+    if len(coeffs) < 4:
+        raise ValueError("Expected at least 4 coefficients")
     a, b, c = coeffs[:3]
     d = coeffs[3:]
-    
     roots = []
     for i in range(0, len(d), 2):
         temp = [a, 2 * a * d[i], c - (d[i + 1]) ** 2]
