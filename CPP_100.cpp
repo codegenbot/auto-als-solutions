@@ -1,3 +1,4 @@
+```
 #include <vector>
 
 bool issame(vector<int> a, vector<int> b) {
@@ -22,6 +23,6 @@ vector<int> make_a_pile(int n) {
 }
 
 int main() {
-    assert(issame(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
+    assert(issame(make_a_pile(8), {8, 10, 12, 14, 16, 18, 20, 22}));
     return 0;
 }
