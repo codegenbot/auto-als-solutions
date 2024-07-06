@@ -1,8 +1,7 @@
-```cpp
 #include <vector>
 #include <string>
 
-bool issame(const std::vector<std::string>& a, const std::vector<std::string>& std::vector<std::string> b) {
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     return a == b;
 }
 
@@ -20,7 +19,7 @@ std::vector<std::string> split_words(std::string txt) {
     return result;
 }
 
-int mainFunc() {
+int main() {
     std::string user_input;
     std::cout << "Enter a string: ";
     std::getline(std::cin, user_input);
