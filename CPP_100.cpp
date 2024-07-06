@@ -1,3 +1,4 @@
+#define _MSC_VER 1800
 #include <vector>
 #include <algorithm>
 
