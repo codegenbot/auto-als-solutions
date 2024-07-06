@@ -1,7 +1,3 @@
-```
-if __name__ == "__main__":
-    main()
-
 def main():
     while True:
         try:
@@ -34,6 +30,7 @@ def main():
     else: 
         print("Not enough coefficients to calculate a root") 
 
+
 def find_zero(coeffs):
     a, b, c = coeffs[:3]
     d = coeffs[3:]
@@ -48,3 +45,7 @@ def find_zero(coeffs):
         except (ZeroDivisionError, ValueError) as e:
             print(f"Failed to calculate a root: {e}")
     return roots
+
+
+if __name__ == "__main__":
+    main()
