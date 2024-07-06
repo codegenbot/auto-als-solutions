@@ -1,8 +1,9 @@
-#include <vector>
+#include <iostream>
 #include <map>
+#include <vector>
 
-int search(vector<int> lst) {
-    map<int, int> freqMap;
+int search(std::vector<int> lst) {
+    std::map<int, int> freqMap;
     for (int num : lst) {
         if (freqMap.find(num) == freqMap.end()) {
             freqMap[num] = 1;
@@ -16,4 +17,14 @@ int search(vector<int> lst) {
         }
     }
     return -1;
+}
+
+int main() {
+    std::vector<int> lst = {3, 10, 10, 9, 2};
+    int result = search(lst);
+    if (result != -1)
+        std::cout << "First element greater than or equal to its frequency is: " << result << std::endl;
+    else
+        std::cout << "No such element found." << std::endl;
+    return 0;
 }
