@@ -25,7 +25,8 @@ bool is_happy(string s){
 
 }
 
-cin.getline(s, 256);
+cout << "Enter a string: ";
+getline(cin, s);
 if(is_happy(s))
     cout << "The given string is happy." << endl;
 else
