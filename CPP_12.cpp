@@ -1,6 +1,6 @@
 #include <string>
 
-string longest(vector<string> strings){
+string longest(vector<string> strings) {
     if(strings.empty()) return "";
     string longest = strings[0];
     for(auto str : strings){
@@ -11,3 +11,4 @@ string longest(vector<string> strings){
             longest = str;
     }
     return longest;
+}
