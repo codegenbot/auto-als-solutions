@@ -1,19 +1,29 @@
+```
 #include <vector>
 #include <list>
-#include <optional>
 
-std::vector<int> filter_integers(std::list<std::any> values) {
+class Optional {
+public:
+    bool has_value;
+    int value;
+
+    Optional(int val = 0) : has_value(true), value(val) {}
+    Optional() : has_value(false) {}
+
+    template<typename T>
+    T get() {
+        if (!has_value)
+            throw std::runtime_error("Optional does not have a value");
+        return value;
+    }
+};
+
+std::vector<int> filter_integers(std::list<Optional> values) {
     std::vector<int> result;
     for (const auto& value : values) {
-        if (value.type() == typeid(int)) {
-            try {
-                int num = std::any_cast<int>(value);
-                result.push_back(num);
-            } catch(const std::bad_any_cast& e) {
-                // Handle the case when the value is not an integer
-                // For example, print an error message or ignore it
-                std::cerr << "Error: " << e.what() << '\n';
-            }
+        if (value.has_value) {
+            result.push_back(value.get());
         }
     }
     return result;
+}
