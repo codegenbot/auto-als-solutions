@@ -16,4 +16,3 @@ int count_nums(std::vector<int> nums) {
         if (has_positive_sum) count++;
     }
     return count;
-}
