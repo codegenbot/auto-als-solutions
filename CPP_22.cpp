@@ -1,6 +1,4 @@
 #include <boost/optional.hpp>
-#include <vector>
-#include <list>
 
 namespace boost {
     using namespace std;
@@ -12,9 +10,7 @@ std::vector<int> filter_integers(std::list<boost::any> values) {
     std::vector<int> result;
     for (const auto& value : values) {
         if (value.type() == typeid(OInt)) {
-            if (value.any()) {
-                result.push_back(boost::any_cast<OInt>(value).get());
-            }
+            result.push_back(boost::any_cast<OInt>(value).get());
         }
     }
     return result;
