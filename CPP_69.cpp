@@ -2,10 +2,6 @@
 #include <vector>
 using namespace std;
 
-int search(const vector<int>& vec, int target) {
-    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
-}
-
 int main() {
     vector<int> vec;
     int n;
@@ -17,6 +13,14 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(search(vec, vec[0]) == distance(vec.begin(), vec.end()));
+    bool found = false;
+    for(auto it = vec.begin() + 1; it != vec.end(); ++it) {
+        if(*it == vec[0]) {
+            found = true;
+            break;
+        }
+    }
+
+    assert(found);
     return 0;
 }
