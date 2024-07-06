@@ -1,2 +1,2 @@
 def car_race_collision(n: int):
-    return sum((i * (2 * n - i)) for i in range(1, 2 * n + 1))
+    return sum((i - 1) * i for i in range(2, 2 * n))
