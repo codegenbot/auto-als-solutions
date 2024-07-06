@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <string>
 
@@ -5,7 +6,7 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
     return a == b;
 }
 
-std::vector<std::string> split_words(std::basic_string<char>& txt) {
+std::vector<std::string> split_words(std::string& txt) {
     std::vector<std::string> result;
     size_t pos = 0;
     while ((pos = txt.find(' ')) != std::string::npos) {
