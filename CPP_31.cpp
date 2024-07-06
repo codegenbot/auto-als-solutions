@@ -1,4 +1,4 @@
-#include <iostream>
+#include <math.h>
 using namespace std;
 
 bool is_prime(long long n) {
@@ -9,17 +9,4 @@ bool is_prime(long long n) {
             return false;
     }
     return true;
-}
-
-int main() {
-    long long num;
-    cout << "Enter a number: ";
-    cin >> num;
-
-    if(is_prime(num))
-        cout << num << " is a prime number." << endl;
-    else
-        cout << num << " is not a prime number." << endl;
-
-    return 0;
 }
