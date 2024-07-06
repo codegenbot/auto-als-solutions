@@ -1,12 +1,14 @@
 ```
-def correct_bracketing(brackets: str):
+def correct_bracketing(s: str) -> bool:
+    open_brackets = set(['(', '[', '<'])
+    close_brackets = {')': '(', ']': '[', '>': '<'}
     stack = []
-    for bracket in brackets:
-        if bracket == "<":
-            stack.append("<")
-        elif bracket == ">":
-            while len(stack) > 0 and stack[0] != "<":
-                stack.pop()
-            if len(stack) == 0 or stack.pop() != "<":
+    
+    for char in s:
+        if char in open_brackets:
+            stack.append(char)
+        elif char in close_brackets:
+            if not stack or close_brackets[char] != stack.pop():
                 return False
-    return len(stack) == 0
+    
+    return not stack
