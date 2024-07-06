@@ -13,6 +13,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    assert(std::find(vec.begin(), vec.end(), vec[0]) == vec.end());
+    assert(std::search(vec.begin(), vec.end(), std::next(vec.begin()), vec.end()) == vec.end());
     return 0;
 }
