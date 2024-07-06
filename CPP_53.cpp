@@ -8,5 +8,6 @@ int main() {
     std::cin >> num1;
     std::cout << "Enter second number: ";
     std::cin >> num2;
-    std::cout << "Sum of numbers is: " << add(num1, num2) << std::endl;
+    int result = add(num1, num2);
+    std::cout << "Sum of the numbers is: " << result << std::endl;
 }
