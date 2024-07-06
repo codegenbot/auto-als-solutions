@@ -3,7 +3,7 @@
 
 using namespace std;
 
-string compareOne(string a, string b) {
+string compare_one(string a, string b) {
     if (a > b)
         return a;
     else if (b > a)
@@ -13,8 +13,11 @@ string compareOne(string a, string b) {
 }
 
 int main() {
-    cout << compareOne("apple", "banana") << endl; // output: None
-    cout << compareOne("banana", "apple") << endl; // output: apple
-    cout << compareOne("orange", "grape") << endl; // output: orange
+    string a, b;
+    cout << "Enter the first string: ";
+    cin >> a;
+    cout << "Enter the second string: ";
+    cin >> b;
+    cout << compare_one(a, b);
     return 0;
 }
