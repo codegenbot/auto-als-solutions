@@ -1,12 +1,9 @@
 vector<int> maximum(vector<int> arr, int k) {
-    priority_queue<int> pq;
-    for (int num : arr) {
-        pq.push(num);
-    }
-    vector<int> result(k);
-    for (int i = 0; i < k; i++) {
-        result[i] = pq.top();
-        pq.pop();
+    vector<int> result;
+    for(int i = 0; i < k; i++){
+        auto it = std::max_element(arr.begin(), arr.end());
+        result.push_back(*it);
+        arr.erase(it);
     }
     return result;
 }
