@@ -1,12 +1,12 @@
-Here is the modified code:
-
 ```cpp
 #include <vector>
+#include <algorithm>
+
 bool issame(vector<int> a, vector<int> b) {
     return a == b;
 }
 
-vector<int> pluck(vector<int> arr) {
+vector<vector<int>> pluck(vector<int> arr) {
     vector<pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i] % 2 == 0) {
@@ -15,15 +15,23 @@ vector<int> pluck(vector<int> arr) {
     }
     
     if (nodes.empty()) {
-        return {};
+        return {{}};
     }
     
     sort(nodes.begin(), nodes.end());
-    vector<int> result;
-    for (int i = 1; i < nodes.size(); i++) {
-        if (!issame({nodes[0].first, nodes[i - 1].second}, {nodes[i].first, nodes[i].second})) {
-            result.push_back(nodes[i].first);
+    
+    vector<vector<int>> result;
+    int prev = -1;
+    for (int i = 0; i < nodes.size(); i++) {
+        if (prev == nodes[i].second) continue;
+        
+        vector<int> temp;
+        for (int j = max(0, nodes[i].second - 10); j <= min(arr.size() - 1, nodes[i].second + 11); j++) {
+            temp.push_back(arr[j]);
         }
+        
+        result.push_back(temp);
+        prev = nodes[i].second;
     }
     
     return result;
