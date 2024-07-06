@@ -1,22 +1,20 @@
-#include<vector>
-using namespace std;
-
 int count_nums(vector<int> nums) {
     int count = 0;
     for (int num : nums) {
-        if (num >= 0) {
-            int sum = 0;
-            bool sign = false;
-            for (long long temp = abs(num); temp > 0; temp /= 10) {
-                if (sign)
-                    sum -= temp % 10;
-                else
-                    sum += temp % 10;
-                sign = !sign;
+        if (num < 0) {
+            num = -num;
+        }
+        bool has_nonzero_sum = false;
+        while (num > 0) {
+            int digit = num % 10;
+            if (digit != 0 || (num / 10 == 0 && digit == -1)) {
+                has_nonzero_sum = true;
+                break;
             }
-            if (sum > 0) {
-                count++;
-            }
+            num /= 10;
+        }
+        if (has_nonzero_sum) {
+            count++;
         }
     }
     return count;
