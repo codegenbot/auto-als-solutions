@@ -1,4 +1,3 @@
-```
 #include <cassert>
 
 bool right_angle_triangle(float a, float b, float c) {
