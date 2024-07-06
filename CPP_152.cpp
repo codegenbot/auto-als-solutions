@@ -1,56 +1,23 @@
-#include <iostream>
 #include <vector>
+#include <algorithm>
 
-using namespace std;
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a == b;
+}
 
-vector<int> compare(vector<int> game, vector<int> guess) {
-    vector<int> result;
+std::vector<int> compare(std::vector<int> game, std::vector<int> guess) {
+    std::vector<int> result;
     for (int i = 0; i < game.size(); i++) {
         if (game[i] == guess[i]) {
             result.push_back(0);
         } else {
-            result.push_back(abs(guess[i] - game[i]));
+            result.push_back(abs(game[i] - guess[i]));
         }
     }
     return result;
 }
 
-vector<int> issame(vector<int> game, vector<int> guess) {
-    vector<int> res;
-    for (int i = 0; i < game.size(); i++) {
-        if (game[i] == guess[i])
-            res.push_back(1);
-        else
-            res.push_back(2);
-    }
-    return res;
-}
-
-int main() {
-    int n, m;
-    cin >> n >> m;
-    
-    vector<int> g, gu;
-    for(int i=0; i<n; i++){
-        int x;
-        cin>>x;
-        g.push_back(x);
-    }
-    
-    for(int i=0; i<m; i++){
-        int y;
-        cin>>y;
-        gu.push_back(y);
-    }
-    
-    vector<int> ans = compare(g,gu);
-    
-    // Write your code here.
-    if (ans == issame(g, gu)) {
-        cout << "Yes";
-    } else {
-        cout << "No";
-    }
-    
+int main_function() {
+    assert(std::issame(compare({1,2,3,5},{-1,2,3,4}),{2,0,0,1}));
     return 0;
 }
