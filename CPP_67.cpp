@@ -1,29 +1,43 @@
-#include <iostream>
-#include <string>
-using namespace std;
-
 int fruit_distribution(string s, int n) {
-    int apples = 0, oranges = 0;
-    string temp;
-    for (int i = 0; i < s.length(); i++) {
-        if (s[i] == ' ') {
-            if (temp.find("apples") != string::npos)
-                apples = stoi(temp.substr(0, temp.find("and")));
-            else if (temp.find("oranges") != string::npos)
-                oranges = stoi(temp.substr(0, temp.find("and")));
-            temp.clear();
-        } else {
-            temp += s[i];
+    size_t pos = 0;
+    string numStr;
+    int totalApplesAndOranges = 0;
+
+    // Find the number of apples and oranges in the string
+    while ((pos = s.find(" and ")) != string::npos) {
+        numStr = s.substr(0, pos);
+        if (numStr.find("apples") != string::npos || numStr.find("oranges") != string::npos) {
+            size_t start = 0;
+            if (numStr.find("apples") == 0)
+                start = numStr.find(" ") + 1;
+            else
+                start = numStr.find(" ") + 5; // "and" is 3 characters long
+
+            string temp = numStr.substr(start, pos - start);
+            int count = stoi(temp);
+            if (numStr.find("apples") != string::npos)
+                totalApplesAndOranges += count;
+            else
+                totalApplesAndOranges -= count; // subtract oranges
         }
+        s.erase(0, pos + 5); // erase " and "
     }
 
-    return n - apples - oranges;
-}
+    // Check the remaining part of the string for any apples or oranges
+    if (s.find("apples") != string::npos || s.find("oranges") != string::npos) {
+        size_t start = 0;
+        if (s.find("apples") == 0)
+            start = s.find(" ") + 1;
+        else
+            start = s.find(" ") + 5; // "and" is 3 characters long
 
-int main() {
-    cout << fruit_distribution("5 apples and 6 oranges", 19) << endl;
-    cout << fruit_distribution("0 apples and 1 oranges", 3) << endl;
-    cout << fruit_distribution("2 apples and 3 oranges", 100) << endl;
-    cout << fruit_distribution("100 apples and 1 oranges", 120) << endl;
-    return 0;
+        string temp = s.substr(start);
+        int count = stoi(temp);
+        if (s.find("apples") != string::npos)
+            totalApplesAndOranges += count;
+        else
+            totalApplesAndOranges -= count; // subtract oranges
+    }
+
+    return n - totalApplesAndOranges;
 }
