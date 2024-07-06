@@ -1,10 +1,14 @@
-```cpp
+int add(int x, int y) {
+    return x + y;
+}
+
 int main() {
-    int x, y;
-    std::cout << "Enter first number: ";
-    std::cin >> x;
-    std::cout << "Enter second number: ";
-    std::cin >> y;
-    std::cout << "Sum of the numbers is: " << add(x, y) << std::endl;
+    int num1, num2;
+    std::cout << "Enter the first number: ";
+    std::cin >> num1;
+    std::cout << "Enter the second number: ";
+    std::cin >> num2;
+    int sum = add(num1, num2);
+    std::cout << "The sum is: " << sum << std::endl;
     return 0;
 }
