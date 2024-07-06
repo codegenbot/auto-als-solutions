@@ -1,21 +1,21 @@
-#include <iostream>
-#include <algorithm>
+```cpp
 #include <string>
 
-std::string anti_shuffle(std::string s){
+std::string anti_shuffle(std::string s) {
     std::string result = "";
-    for(int i=0; i<s.size(); i++){
-        if(s[i] == ' '){
-            result += ' ';
-            continue;
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == ' ') {
+            result += " ";
+        } else {
+            std::string word = "";
+            while (i < s.length() && s[i] != ' ') {
+                word += s[i];
+                i++;
+            }
+            for (int j = 0; j < word.length(); j++) {
+                result += word[j];
+            }
         }
-        std::string word = "";
-        for(int j=i; j<s.size() && s[j] != ' '; j++){
-            word += s[j];
-        }
-        i = j - 1;
-        std::sort(word.begin(), word.end());
-        result += word;
     }
     return result;
 }
