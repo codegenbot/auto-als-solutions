@@ -33,22 +33,16 @@ int skjkasdkd(vector<int> lst) {
 }
 
 int main() {
-    vector<int> input;
-    cout << "Enter the numbers (space separated): ";
-    string str;
-    getline(cin, str);
-    size_t pos = 0;
-    while ((pos = str.find(" ")) != string::npos) {
-        input.push_back(stoi(str.substr(0, pos)));
-        str.erase(0, pos + 1);
+    vector<int> numbers;
+    cout << "Enter the number of elements: ";
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cout << "Enter element " << i+1 << ": ";
+        int num;
+        cin >> num;
+        numbers.push_back(num);
     }
-    if (!str.empty()) {
-        input.push_back(stoi(str));
-    }
-
-    int output = skjkasdkd(input);
-
-    cout << "The sum of digits is: " << output << endl;
-
+    cout << "The sum of digits is: " << skjkasdkd(numbers) << endl;
     return 0;
 }
