@@ -1,13 +1,11 @@
-from typing import List, Tuple
-
+Here is the solution:
 
 def sum_product(numbers: List[int]) -> Tuple[int, int]:
-    if len(numbers) == 0:
-        return 0, 1
-    else:
-        total_sum = 0
-        product = numbers[0]
-        for num in numbers:
-            total_sum += num
-            product *= num
-        return total_sum, product
+    total_sum = 0
+    product = 1
+    
+    for num in numbers:
+        total_sum += num
+        product *= num
+    
+    return total_sum, product
