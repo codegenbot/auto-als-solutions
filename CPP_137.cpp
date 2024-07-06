@@ -5,11 +5,11 @@
 using namespace boost;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (is_any_of<std::string>(a)) {
+    if (is_any_of<string>(a)) {
         std::string str_a = any_cast<std::string>(a);
         if (is_any_of<std::string>(b)) {
             std::string str_b = any_cast<std::string>(b);
-            return (stod(str_a) > stod(str_b)) ? a : ((stod(str_a) < stod(str_b)) ? b : boost::any("None"));
+            return (stdstod(str_a) > stod(str_b)) ? a : ((stod(str_a) < stod(str_b)) ? b : boost::any("None"));
         } else {
             double num_b = any_cast<double>(b);
             return (stod(str_a) > num_b) ? a : ((stod(str_a) < num_b) ? b : boost::any("None"));
