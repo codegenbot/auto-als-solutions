@@ -1,7 +1,10 @@
-```cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
+
+int search(const vector<int>& vec, int target) {
+    return distance(vec.begin(), find(vec.begin(), vec.end(), target));
+}
 
 int main() {
     vector<int> vec;
@@ -14,7 +17,6 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> vec[i];
     
-    int result = std::distance(vec.begin(), std::find(vec.begin(), vec.end(), vec[0]));
-    assert(result == vec.size());
+    assert(find(vec.begin(), vec.end(), 10) != vec.end() ? distance(vec.begin(), find(vec.end(), 10)) : -1, "Element not found");
     return 0;
 }
