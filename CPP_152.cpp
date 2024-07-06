@@ -1,10 +1,13 @@
 #include <vector>
 #include <algorithm>
 
-bool issame(const std::vector<std::vector<int>>& v1, const std::vector<std::vector<int>>& v2) {
-    if(v1.size()!=v2.size()) return false;
-    for(size_t i=0; i<v1.size(); i++){
-        if(v1[i].size()!=v2[i].size() || v1[i][0]!=v2[i][0]) return false;
+bool issame(const std::vector<std::vector<int>>& vec1, const std::vector<std::vector<int>>& vec2) {
+    if (vec1.size() != vec2.size()) return false;
+    for (int i = 0; i < vec1.size(); i++) {
+        if (vec1[i].size() != vec2[i].size()) return false;
+        for (int j = 0; j < vec1[i].size(); j++) {
+            if (vec1[i][j] != vec2[i][j]) return false;
+        }
     }
     return true;
 }
