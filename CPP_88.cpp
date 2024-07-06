@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -10,6 +11,6 @@ bool issame(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 int main() {
-    assert(issame(std::vector<int>({-1, -1, 1, 2}), std::vector<int>({1, 2, -1, -1})));
+    assert(issame(std::vector<int>({21, 14, 23, 11}), std::vector<int>({23, 21, 14, 11})) );
     return 0;
 }
