@@ -33,3 +33,4 @@ bool isPrime(int num) {
 int skjkasdkd(vector<int> lst) {
     int largestPrimeNumber = largestPrime(lst);
     return sumOfDigits(largestPrimeNumber);
+}
