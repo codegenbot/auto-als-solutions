@@ -1,19 +1,29 @@
-vector<double> coeffs;
-int ncoeff;
-double poly(double x) {
-    double sum = 0;
-    for (int i = 0; i < ncoeff; i++) {
-        sum += coeffs[i] * pow(x, i);
-    }
-    return sum;
+#include <cmath>
+#include <vector>
+
+double abs(double num) {
+    return num > 0 ? num : -num;
 }
 
-double find_zero(vector<double> xs){
-    int ncoeff = xs.size();
-    coeffs = xs;
-    double x = 1.0;
-    for (int i = 2; i < ncoeff; i+=2) {
-        x = -poly(x) / poly(1);
+double poly(const vector<double>& coeffs, double solution) {
+    double result = 0.0;
+    for (int i = 0; i < coeffs.size(); i++) {
+        result += coeffs[i] * pow(solution, i);
     }
-    return round(x, 10);
+    return result;
+}
+
+double find_zero(vector<double> xs) {
+    double a = xs[0], b = 0;
+    vector<double> coeffs;
+    for (int i = 1; i < xs.size(); i++) {
+        if (i % 2 == 0) {
+            coeffs.push_back(xs[i]);
+        } else {
+            coeffs.push_back(-xs[i]);
+        }
+    }
+    double solution = -b / a;
+    assert(abs(poly(coeffs, solution)) < 1e-3);
+    return solution;
 }
