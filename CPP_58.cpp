@@ -7,10 +7,9 @@ using namespace std;
 vector<int> common(vector<int> a, vector<int> b){
     vector<int> result;
     for(auto x : a){
-        if(std::find(b.begin(), b.end(), x) != b.end()) result.push_back(x);
+        if(find(b.begin(), b.end(), x) != b.end()) result.push_back(x);
     }
     return result;
-
 }
 
 int main(){
