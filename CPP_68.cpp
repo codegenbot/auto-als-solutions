@@ -1,13 +1,6 @@
 #include <iostream>
 #include <vector>
 
-bool issame(int a, int b) {
-    if (a == b)
-        return true;
-    else
-        return false;
-}
-
 std::vector<int> pluck(std::vector<int> arr) {
     std::vector<int> result;
     if (arr.empty()) {
@@ -28,13 +21,4 @@ std::vector<int> pluck(std::vector<int> arr) {
     result.push_back(index);
     
     return result;
-}
-
-int main() {
-    std::vector<int> numbers = {1, 2, 3, 4, 5};
-    std::vector<int> output = pluck(numbers);
-    for (int i : output) {
-        std::cout << i << " ";
-    }
-    return 0;
 }
