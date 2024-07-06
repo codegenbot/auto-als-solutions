@@ -12,4 +12,3 @@ string flip_case(string str){
             result += str[i];
     }
     return result;
-}
