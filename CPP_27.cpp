@@ -1,18 +1,19 @@
-```cpp
 #include <iostream>
 #include <string>
 
 int main(){
     std::string str;
-    std::cin >> str;
-    int i = 0;
-    for(i = 0; i < str.length(); i++){
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, str);
+    
+    for(int i = 0; i < str.length(); ++i){
         if(str[i] >= 'a' && str[i] <= 'z'){
-            str[i] = toupper(str[i]); // Convert lowercase to uppercase
+            str[i] -= 32; 
         }else if(str[i] >= 'A' && str[i] <= 'Z'){
-            str[i] = tolower(str[i]); // Convert uppercase to lowercase
+            str[i] += 32;
         }
     }
-    std::cout << str;
+    
+    std::cout << "Flipped case string: " << str << std::endl;
     return 0;
 }
