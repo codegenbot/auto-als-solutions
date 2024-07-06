@@ -1,27 +1,35 @@
-map<string, int> numMap = {
-    {"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
-    {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
-    {"eight", 8}, {"nine", 9}
-};
+#include<stdio.h>
+#include<string>
+#include<map>
+using namespace std;
 
 string sort_numbers(string numbers) {
-    vector<string> numVec;
-    size_t pos = 0;
-    while ((pos = numbers.find(" ")) != string::npos) {
-        string num = numbers.substr(0, pos);
-        numbers.erase(0, pos + 1);
-        numVec.push_back(num);
-    }
-    numVec.push_back(numbers);
+    map<string,int> num_map;
+    string temp;
 
-    sort(numVec.begin(), numVec.end(),
-         [&numMap](const string& a, const string& b) {
-             return numMap.at(a) < numMap.at(b);
-         });
-
-    string result;
-    for (const auto& num : numVec) {
-        result += num + " ";
+    for(int i = 0; i < numbers.length(); i++) {
+        if(numbers[i] == ' ') {
+            continue;
+        } else {
+            temp = "";
+            while(i < numbers.length() && numbers[i] != ' ') {
+                temp += numbers[i];
+                i++;
+            }
+            num_map[temp]++;
+            i--;
+        }
     }
+
+    string result = "";
+    for(auto it = num_map.begin(); it != num_map.end(); it++) {
+        if(result.length() > 0) {
+            result += " ";
+        }
+        for(int i = 0; i < it->second; i++) {
+            result += it->first;
+        }
+    }
+
     return result;
 }
