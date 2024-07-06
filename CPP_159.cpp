@@ -22,18 +22,29 @@ vector<int> eat(int number, int need, int remaining) {
 int main() {
     vector<int> output;
 
-    int numCases; 
-    cin >> numCases; 
-
-    for(int i=0;i<numCases;++i) {
-        int number, need, remaining; 
-        cin >> number >> need >> remaining; 
-        output = eat(number, need, remaining);
-        for (int i : output) {
-            cout << i << " ";
-        }
-        cout << endl;
+    output = eat(5, 6, 10);
+    for (int i : output) {
+        cout << i << " ";
     }
+    cout << endl;
 
+    output = eat(4, 8, 9);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    output = eat(1, 10, 10);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    output = eat(2, 11, 5);
+    for (int i : output) {
+        cout << i << " ";
+    }
+    cout << endl;
+    
     return 0;
 }
