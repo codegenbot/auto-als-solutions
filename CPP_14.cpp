@@ -18,6 +18,6 @@ vector<string> all_prefixes(string str) {
 }
 
 int main() {
-    assert(isame(all_prefixes("WWW"), vector<string>({"W", "WW", "WWW"})));
+    assert(isame(all_prefixes("WWW"), {"W", "WW", "WWW"}));  
     return 0;
 }
