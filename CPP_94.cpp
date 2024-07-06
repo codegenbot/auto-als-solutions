@@ -1,5 +1,4 @@
 #include <vector>
-using namespace std;
 
 int sumOfDigits(int n) {
     int sum = 0;
