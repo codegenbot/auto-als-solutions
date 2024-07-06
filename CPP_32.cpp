@@ -1,12 +1,21 @@
-```cpp
-#include <vector>
-using namespace std;
+vector<double> coeffs = xs;
+double poly(vector<double> coeffs, double x) {
+    double res = 0;
+    for(int i=0; i<coeffs.size(); i++) {
+        res += coeffs[i] * pow(x, i);
+    }
+    return res;
+}
 
 double find_zero(vector<double> xs){
-    double a = xs[0], b = 0;
-    for (int i = 1; i < xs.size(); i++) {
-        if(i % 2 == 0) b += xs[i];
-        else a -= xs[i];
+    int n = xs.size();
+    double a = xs[0];
+    for(int i=1; i<n; i++){
+        a = 0;
+        for(int j=0; j<i; j++)
+            a += xs[j] * pow(1.0, i-j);
+        if(a == 0) return 1.0;
     }
-    return -b / a;
+    double x = -xs[1]/2*xs[2];
+    return poly(coeffs, x);
 }
