@@ -1,5 +1,7 @@
+```cpp
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 int sum_squares(const std::vector<float>& lst) {
     int result = 0;
