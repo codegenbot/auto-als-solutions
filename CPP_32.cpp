@@ -8,17 +8,11 @@ double poly(double x) {
     return sum;
 }
 double find_zero(vector<double> xs){
-    double x = xs[1];
-    for (int i = 2; i < xs.size(); i+=2) {
-        while (true) {
-            if (poly(x) == 0) {
-                break;
-            } else if (poly(x) * poly(xs[i]) > 0) {
-                x -= 0.1;
-            } else {
-                x += 0.1;
-            }
-        }
+    coeffs = xs;
+    ncoeff = xs.size();
+    double sum = 0;
+    for (int i = 2; i < ncoeff; i+=2) {
+        sum += xs[i] * pow(-sum / poly(xs[i-1]), i);
     }
-    return round(x, 10);
+    return round(sum, 10);
 }
