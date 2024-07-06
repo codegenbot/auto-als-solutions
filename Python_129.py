@@ -13,9 +13,12 @@ def minPath(grid, k):
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
                 new_path = dfs(ni, nj, path + [m[ni][nj]])
-                if new_path:
-                    res.append(new_path)
-        return min([p for p in res if p is not None], key=lambda x: sum(x))
+                res.append(new_path)
+        return (
+            min([p for p in res if p is not None], key=lambda x: sum(x))
+            if res
+            else None
+        )
 
     min_sum = float("inf")
     boundary_cells = (
@@ -26,7 +29,7 @@ def minPath(grid, k):
     )
     for i, j in boundary_cells:
         visited.add((i, j))
-        res = [dfs(i, j, [m[i][j]])]
-        if sum(res[0]) == k:
-            return res[0]
+        path = dfs(i, j, [m[i][j]])
+        if sum(path) == k and sum(path) < min_sum:
+            return path
     return []

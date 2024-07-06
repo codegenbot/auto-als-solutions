@@ -1,4 +1,3 @@
-```
 def separate_paren_groups(paren_string: str) -> list:
     stack = []
     groups = []
@@ -24,7 +23,7 @@ def separate_paren_groups(paren_string: str) -> list:
                     current_group = ""
 
         elif char.isalpha() or (char.isspace() and stack):
-            current_group += char
+            pass
 
     while stack:
         stack.pop()
