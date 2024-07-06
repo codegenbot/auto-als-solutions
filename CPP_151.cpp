@@ -14,8 +14,17 @@ long long double_the_difference(vector<double> lst) {
 }
 
 int main() {
-    vector<double> vec({1.5, 2.5, -3.4, 4.7});
+    vector<double> vec;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        double num;
+        cout << "Enter element " << i+1 << ": ";
+        cin >> num;
+        vec.push_back(num);
+    }
     long long odd_sum = double_the_difference(vec);
-    cout << odd_sum;
+    cout << "The sum is: " << odd_sum;
     return 0;
 }
