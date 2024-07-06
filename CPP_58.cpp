@@ -1,5 +1,5 @@
-```
 #include <vector>
+#include <initializer_list>
 using namespace std;
 
 bool issame(vector<int> a,vector<int>b){
@@ -10,16 +10,6 @@ bool issame(vector<int> a,vector<int>b){
     return true;
 }
 
-vector<int> common(vector<int> a, vector<int> b) {
-    vector<int> result;
-    for (int num : a) {
-        if (find(b.begin(), b.end(), num) != b.end()) {
-            result.push_back(num);
-        }
-    }
-    return result;
-}
-
 int main(){
-    assert(issame(common({4, 3, 2, 8}, {}),{}));
+    assert(issame({4, 3, 2, 8},{}));
 }
