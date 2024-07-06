@@ -1,5 +1,7 @@
+```cpp
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 string decimal_to_binary(int decimal){
@@ -14,10 +16,8 @@ string decimal_to_binary(int decimal){
     return "db" + binary + "db";
 }
 
-int main() {
-    int num;
-    cout << "Enter an integer: ";
-    cin >> num;
-    cout << "Binary representation: " << decimal_to_binary(num) << endl;
-    return 0;
-}
+cout << "Enter a decimal number: ";
+cin >> decimal;
+string binary = decimal_to_binary(decimal);
+cout << "The binary representation of the entered decimal number is: " << binary << endl;
+return 0;

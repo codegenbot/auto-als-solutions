@@ -1,3 +1,12 @@
-def solve():
-    N = int(input())  
-    return "1" + ("0" * (N.bit_length() - 1)) + bin(N)[2:] if N % 2 == 0 else "0"
+```
+def solve(N):
+    fib = [0, 1]
+    total = 0
+    while True:
+        next_fib = fib[-1] + fib[-2]
+        if len(str(next_fib)) > N:
+            break
+        if next_fib % 3 != 0:
+            total += next_fib
+        fib.append(next_fib)
+    return total
