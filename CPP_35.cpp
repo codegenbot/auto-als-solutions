@@ -3,11 +3,25 @@
 #include <algorithm>
 
 int main() {
+    std::vector<int> l;
+    // Ask user for input
     int n;
+    std::cout << "Enter the number of elements: ";
     std::cin >> n;
-    std::vector<int> l(n);
-    for(int i = 0; i < n; ++i){
-        std::cin >> l[i];
+
+    // Add 'n' number of elements to the vector
+    for(int i = 0; i < n; i++) {
+        int x;
+        std::cout << "Element #"<<i+1<<": ";
+        std::cin >> x;
+        l.push_back(x);
     }
-    return *std::max_element(l.begin(), l.end());
+
+    // Find and return the maximum element from the vector
+    if(!l.empty())
+        return *max_element(l.begin(), l.end());
+    else
+        return -1; // or handle this case as you like
+
+    return 0;
 }
