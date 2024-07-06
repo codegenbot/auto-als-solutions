@@ -1,3 +1,9 @@
+```cpp
+#include <cmath>
 bool iscuber(int a){
-    return cbrt(a) == round(cbrt(a));
+    int x = round(cbrt(a));
+    return (x*x*x == a);
+}
+int main(){
+    assert(iscuber(1729) == false);
 }
