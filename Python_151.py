@@ -1,5 +1,6 @@
-def double_the_difference(lst, target):
+```python
+def double_the_difference(lst):
     odd_sum = sum(i for i in lst if isinstance(i, int) and i % 2 != 0)
-    return abs(sum(i**2 for i in lst if isinstance(i, int) and i > 0) - (2 * odd_sum))
+    return abs(sum(i**2 for i in lst if isinstance(i, int) and i > 0) - (2 * odd_sum)) if len([i for i in lst if isinstance(i, int)]) else None
 
-print(double_the_difference([1, 2, 3, 4, 5], 3))
+print(double_the_difference([1, 2, 3, 4, 5]))
