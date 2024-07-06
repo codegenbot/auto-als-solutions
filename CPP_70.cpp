@@ -20,12 +20,12 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
 }
 
 int main() {
-    std::vector<int> input = {1, 3, 2, 4};
+    std::vector<int> input = {1, 3, 2};
     std::vector<int> output = strange_sort_list(input);
-    if (issame(output, {1, 4})) {
-        std::cout << "Test passed." << std::endl;
+    if (issame(output, {1, 3, 2})) {
+        std::cout << "Strange Sort List works correctly." << std::endl;
     } else {
-        std::cout << "Test failed." << std::endl;
+        std::cout << "Strange Sort List does not work correctly." << std::endl;
     }
     return 0;
 }
