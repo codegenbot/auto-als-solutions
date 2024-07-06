@@ -6,11 +6,11 @@ using namespace std;
 bool is_happy(string s){
     if(s.length() < 3) return false;
     for(int i = 0; i <= s.length()-3; i++){
-        char cstr[4] = {0}; 
+        char cstr[4] = {0};
         memcpy(cstr, s.substr(i, 3).c_str(), 3);
         bool unique = true;
-        for(char d : s){ 
-            if(strchr(cstr, d) != NULL) {
+        for(char c : s){ 
+            if(std::count(&cstr[0], &cstr[3], c) > 1) {
                 unique = false;
                 break;
             }
