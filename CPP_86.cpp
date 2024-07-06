@@ -1,3 +1,8 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
 string anti_shuffle(string s){
     string result = "";
     int i = 0;
@@ -12,9 +17,11 @@ string anti_shuffle(string s){
             
         }
         string word = s.substr(i, j - i);
-        for(int k=word.size()-1; k>=0; k--){
-            result += word[k];
+        for(int k=0; k<word.size(); k++){
+            result.append(1, word[k]);
         }
+        sort(word.begin(), word.end());
+        result += word;
         i = j;
     }
     return result;
