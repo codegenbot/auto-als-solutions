@@ -1,14 +1,11 @@
-#include <vector>
-
-using namespace std;
-
 int prod_signs(vector<int> arr) {
-    if (arr.empty()) return -32768;
-    int sign = 1;
-    long long sum = 0;
-    for (int num : arr) {
-        sign *= (num > 0 ? 1 : (num < 0 ? -1 : 0));
-        sum += abs(num);
+    long long product = 1;
+    int sum = 0;
+
+    for (int x : arr) {
+        product *= ((x > 0) ? 1 : ((x < 0) ? -1 : 0));
+        sum += abs(x);
     }
-    return sign * sum;
+
+    return product * sum > INT_MAX ? -32768 : product * sum;
 }

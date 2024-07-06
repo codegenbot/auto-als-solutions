@@ -1,39 +1,27 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
 vector<int> minPath(vector<vector<int>> grid, int k) {
-    int n = grid.size();
-    vector<vector<bool>> visited(n, vector<bool>(n));
     vector<int> res;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (!visited[i][j]) {
-                vector<int> path;
-                dfs(grid, visited, i, j, k, &path);
-                if (res.empty() || path < res) {
-                    res = path;
-                }
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[0].size(); j++) {
+            if (res.empty() || res.back() != grid[i][j]) {
+                res.push_back(grid[i][j]);
+                k--;
+                if (k == 0) return res;
             }
         }
     }
     return res;
 }
 
-vector<int> dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int x, int y, int k, vector<int>* path) {
-    (*path).push_back(grid[x][y]);
-    visited[x][y] = true;
-    if (k == 0) {
-        return *path;
+int main() {
+    vector<vector<int>> grid = {{1,2,3}, {4,5,6}, {7,8,9}};
+    int k = 3;
+    vector<int> result = minPath(grid, k);
+    for (int i : result) {
+        cout << i << " ";
     }
-    vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    random_shuffle(directions.begin(), directions.end());
-    for (auto& dir : directions) {
-        int nx = x + dir.first;
-        int ny = y + dir.second;
-        if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && !visited[nx][ny]) {
-            vector<int> p = dfs(grid, visited, nx, ny, k - 1, path);
-            if (!p.empty()) {
-                return p;
-            }
-        }
-    }
-    (*path).pop_back();
-    return {};
+    return 0;
 }

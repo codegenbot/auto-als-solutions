@@ -16,7 +16,7 @@ int largestPrime(vector<int> lst) {
             return i;
         }
     }
-    return -1; // or some default value
+    return -1;
 }
 
 bool isPrime(int num) {
