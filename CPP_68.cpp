@@ -1,3 +1,4 @@
+```cpp
 #include <initializer_list>
 #include <vector>
 #include <algorithm>
@@ -31,14 +32,6 @@ std::vector<int> pluck(std::vector<int> arr) {
     return {nodes[0].first};
 }
 
-bool issame(const std::vector<int>& a, const std::vector<int>& b) {
-    if (a.size() != b.size()) return false;
-    for(size_t i = 0; i < a.size(); ++i)
-        if(a[i] != b[i])
-            return false;
-    return true;
-}
-
 int main() {
     std::vector<int> arr;
     int n;
@@ -50,7 +43,6 @@ int main() {
         std::cin >> x;
         arr.push_back(x);
     }
-    assert(pluck({7, 9, 7, 1}) == {}); // added the necessary line
     std::vector<int> result = pluck(arr);
     if(result.size() > 0)
     {

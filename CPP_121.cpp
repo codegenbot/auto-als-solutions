@@ -1,4 +1,7 @@
-int solution(vector<int> lst) {
+#include <vector>
+#include <iostream>
+
+int solution(std::vector<int> lst) {
     int sum = 0;
     for (int i = 0; i < lst.size(); i++) {
         if ((i % 2 == 0 && lst[i] % 2 != 0)) {
@@ -6,4 +9,9 @@ int solution(vector<int> lst) {
         }
     }
     return sum;
+}
+
+int main() {
+    assert(solution({3, 13, 2, 9}) == 16);
+    std::cout << solution({1, 3, 5, 7, 9}) << std::endl;
 }
