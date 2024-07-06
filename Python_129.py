@@ -1,18 +1,22 @@
-```
 def minPath(grid, k):
     n = len(grid)
-    m = [[i * n + j for j in range(n)] for i in range(n)]
-    dp = [[[float('inf'), []] for _ in range(n * n)] for _ in range(n * n)]
-    dp[0][0][0] = 0
-    for i in range(1, n):
-        dp[i][0][0] = dp[i - 1][0][0] + grid[i][0]
-    for j in range(1, n):
-        dp[0][j][0] = dp[0][j - 1][0] + grid[0][j]
-    for i in range(1, n):
-        for j in range(1, n):
-            dp[i * n + j][(i - 1) * n + j][0] = min(dp[(i - 1) * n + j][j - 1][0], dp[i * n + (j - 1)][i - 1][0]) + grid[i][j]
+    res = []
     for i in range(n):
         for j in range(n):
-            if dp[i * n + j][(n - 1) * n + (n - 1)][0] == dp[(n - 1) * n + (n - 1)][(n - 1)][0] + k:
-                return [grid[x][y] for x, y in [(i, j)] + dp[i * n + j][(n - 1) * n + (n - 1)][1]]
-    return []
+            if grid[i][j] == 1:
+                dfs(grid, i, j, k, [grid[i][j]], res)
+    return res
+
+
+def dfs(grid, x, y, k, path, res):
+    n = len(grid)
+    if k == 0:
+        res.append(path[:])
+        return
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in path:
+                grid[nx][ny], grid[x][y] = grid[x][y], grid[nx][ny]
+                dfs(grid, nx, ny, k - 1, path + [(nx, ny)], res)
+                grid[nx][ny], grid[x][y] = grid[x][y], grid[nx][ny]
