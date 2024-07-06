@@ -1,3 +1,4 @@
+```
 import math
 
 
@@ -13,8 +14,8 @@ def main():
             print(e)
 
     xs = []
-    while len(xs) < num_coefficients:
-        new_coeff = input(f"Enter coefficients (space separated): ")
+    while len(xs) % 2 != 0 and len(xs) < 2:
+        new_coeff = input("Enter coefficients (space separated): ")
         xs += [int(coeff) for coeff in new_coeff.split()]
 
     if len(xs) < 2:
