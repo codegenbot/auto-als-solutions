@@ -11,10 +11,9 @@ vector<int> sort_third(vector<int> l) {
             for (int j = i; j < l.size() && j % 3 == 0; j++)
                 temp.push_back(l[j]);
             sort(temp.begin(), temp.end());
-            for (int j = 0; j < temp.size(); j++) {
-                result.push_back(temp[j]);
-                if (j < l.size() - 1 && i + j % 3 != l.size() - 1)
-                    result.push_back(l[i + j % 3]);
+            for (int k = 0; k < temp.size(); k++) {
+                result.push_back(temp[k]);
+                i++;
             }
         } else
             result.push_back(l[i]);
