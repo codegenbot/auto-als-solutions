@@ -1,15 +1,18 @@
-```
 def tri(n):
     if n == 0:
         return [3]
     elif n == 1:
-        return [3, 1]
+        return [3]
+    elif n == 2:
+        return [3, 2]
     else:
-        sequence = [3, 1]
-        for _ in range(2, n + 1):
-            if _ % 2 == 0:
-                sequence.append(1 + _ // 2)
+        tribonacci_sequence = [3, 2]
+        for i in range(2, n):
+            if i % 2 == 0:
+                tribonacci_sequence.append(1 + i / 2)
             else:
-                a, b = sequence[-2], sequence[-1]
-                sequence.append(a + b + (sequence[0] if _ > 0 else 3))
-        return sequence
+                a, b = tribonacci_sequence[-2], tribonacci_sequence[-3]
+                tribonacci_sequence.append(
+                    a + b + (tribonacci_sequence[0] if i > 0 else 3)
+                )
+        return tribonacci_sequence
