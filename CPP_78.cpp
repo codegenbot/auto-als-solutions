@@ -1,12 +1,13 @@
-#include<string>
-#include<algorithm>
-using namespace std;
+#include <string>
 
-int hex_key(string num) {
+int hex_key(std::string num) {
     int count = 0;
     for (char c : num) {
-        if ((c >= '2' && c <= '7') || c == 'B' || c == 'D' || c == 'F')
+        if (c >= '2' && c <= '7') {
             count++;
+        } else if ((c >= 'A' && c <= 'B') || (c >= 'D' && c <= 'F')) {
+            count++;
+        }
     }
     return count;
 }
