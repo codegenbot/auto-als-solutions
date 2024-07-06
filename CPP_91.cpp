@@ -11,8 +11,8 @@ int is_bored(std::string S) {
         else {
             size_t start_pos = S.find("I");
             while(start_pos != std::string::npos) {
-                S.erase(start_pos, 1); 
-                start_pos = S.find("I"); 
+                S.erase(start_pos, 1); // erase the found "I"
+                start_pos = S.find("I"); // find next "I" to erase
             }
             count++;
         }
