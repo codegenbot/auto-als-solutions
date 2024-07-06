@@ -1,12 +1,16 @@
-Here is the completed code:
+#include <string>
 
-```cpp
-int count = 0;
-for(char bracket : brackets){
-    if(bracket == '(') count++;
-    else if(bracket == ')') {
-        if(count <= 0) return false;
-        count--;
+using namespace std;
+
+bool correct_bracketing(string brackets) {
+    int count = 0;
+    for (char bracket : brackets) {
+        if (bracket == '(')
+            count++;
+        else if (bracket == ')')
+            count--;
+        if (count < 0)
+            return false;
     }
+    return count == 0;
 }
-return count == 0;
