@@ -1,7 +1,9 @@
+```
+from typing import List
+import math
+
+
 def factorize(n: int) -> List[int]:
-    if not isinstance(n, int):
-        return ["Invalid Input"]
-    
     factors = []
     i = 2
     while i * i <= n:
@@ -12,8 +14,12 @@ def factorize(n: int) -> List[int]:
             while n % i == 0:
                 n //= i
                 count += 1
-            factors.extend([i] * count)
+            factors.append(i for _ in range(count))
             i = 2
     if n > 1:
         factors.append(n)
     return [factor for factor in factors if isinstance(factor, int)] or [n]
+
+
+num = int(input("Enter a number: "))
+print(factorize(num))
