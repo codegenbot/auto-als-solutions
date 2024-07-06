@@ -1,6 +1,6 @@
-Here is the completed code:
-
 def eat(number, need, remaining):
-    total_eaten = number + (need - remaining) if remaining >= need else number + remaining
-    carrots_left = max(0, remaining - (need - remaining)) if remaining >= need else 0
-    return [total_eaten, carrots_left]
+    if number < need:
+        total_eaten = need
+    else:
+        total_eaten = number
+    return [total_eaten, remaining - total_eaten]
