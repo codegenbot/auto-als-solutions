@@ -1,37 +1,40 @@
 #include <vector>
 #include <algorithm>
-#include <initializer_list>
-using namespace std;
 
-bool issame(vector<float> a, vector<float> b) {
-    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
+// Your existing function
+bool issame(float a, float b) {
+    return (a == b);
 }
 
-std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
-    std::vector<std::pair<float, float>> closest_pairs;
-
-    for (int i = 0; i < numbers.size() - 1; ++i) {
-        for (int j = i + 1; j < numbers.size(); ++j) {
-            float diff = abs(numbers[i] - numbers[j]);
-            if (diff == 0.0f) continue;
-            bool found = false;
-            for (auto &pair : closest_pairs) {
-                if (abs(pair.first - pair.second) <= diff) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                closest_pairs.push_back(make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
-            }
+// Function to find the closest pair of elements
+int find_closest_elements(std::vector<int> vec) {
+    int min_diff = INT_MAX;
+    for(int i = 0; i < vec.size(); ++i) {
+        for(int j = i+1; j < vec.size(); ++j) {
+            if(abs(vec[i] - vec[j]) < min_diff)
+                min_diff = abs(vec[i] - vec[j]);
         }
     }
+    return min_diff;
+}
 
-    sort(closest_pairs.begin(), closest_pairs.end(),
-         [](const auto &a, const auto &b) {
-             return (abs(a.first - a.second) <
-                    abs(b.first - b.second));
-         });
+int main() {
+    std::vector<int> vec;
+    
+    // Read input from user
+    int n;
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    for(int i = 0; i < n; ++i) {
+        int x;
+        std::cout << "Enter element " << (i+1) << ": ";
+        std::cin >> x;
+        vec.push_back(x);
+    }
+    
+    // Find and print the closest pair of elements
+    int min_diff = find_closest_elements(vec);
+    std::cout << "The closest pair has a difference of: " << min_diff << std::endl;
 
-    return closest_pairs;
+    return 0;
 }
