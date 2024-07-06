@@ -1,21 +1,25 @@
+```cpp
 #include <iostream>
 using namespace std;
 
 class Solution {
 public:
-    string exchange(vector<int> lst1, vector<int> lst2) {
+    string exchange(vector<int> lst1, vector<int> int2) {
         int oddCount = 0;
         for (int num : lst1) {
             if (num % 2 != 0) {
                 oddCount++;
             }
         }
-        return oddCount == 0 ? "YES" : "NO";
+        if (oddCount == 0) {
+            return "YES";
+        } else {
+            return "NO";
+        }
     }
 
     int main() {
         assert(exchange({100, 200}, {200, 200}) == "YES");
-        // Add more test cases here
         cout << "Test cases passed." << endl;
         return 0;
     }
