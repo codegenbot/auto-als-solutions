@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 #include <cctype>
 
@@ -16,7 +17,6 @@ std::string flip_case(std::string str){
 }
 
 int main() {
-    std::string str = "These violent delights have violent ends";
-    std::cout << flip_case(str) << std::endl;
+    assert(flip_case("These violent delights have violent ends") == "tHEse ViOlent DeLiGhTs HaVe ViOlEnT eNdS");
     return 0;
 }
