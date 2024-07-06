@@ -1,5 +1,5 @@
-bool issame(string a, string b) {
-    return (a.size() == b.size()) && (a.compare(b) == 0);
+bool issame(string s1, string s2){
+    return s1 == s2;
 }
 
 vector<string> filter_by_prefix(vector<string> strings, string prefix){
