@@ -17,5 +17,10 @@ def minPath(grid, k):
             if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny]:
                 visited[nx][ny] = True
                 queue.append((nx, ny, path + [grid[nx][ny]]))
-        if queue:
-            queue.sort(key=lambda x: abs(x[0] - 0) + abs(x[1] - 0))
+
+    for i in range(N):
+        for j in range(N):
+            if grid[i][j] == 1:
+                return [i, j]
+
+    return []
