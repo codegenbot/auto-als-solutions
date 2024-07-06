@@ -1,22 +1,55 @@
 ```
 def minPath(grid, k):
-    N = len(grid)
-    visited = [[False for _ in range(N)] for _ in range(N)]
-    queue = [(0, 0, [grid[0][0]])]
-    res = []
+    n = len(grid)
+    m = [[i * j for j in range(1, n + 1)] for i in range(1, n + 1)]
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j] != m[i][j]:
+                m[i][j] = -grid[i][j]
     
-    while queue:
-        x, y, path = queue.pop(0)
-        
-        if len(path) == k + 1:
-            res = path
-            break
+    visited = [[False for _ in range(n)] for _ in range(n)]
+    path = []
+    min_path = float('inf')
+    min_index = None
+    
+    def dfs(i, j):
+        nonlocal min_path, min_index
+        if len(path) == k:
+            if path < min_path:
+                min_path = path[:]
+                min_index = (i, j)
+            return
         
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-            nx, ny = x + dx, y + dy
-            
-            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny]:
-                visited[nx][ny] = True
-                queue.append((nx, ny, path + [grid[nx][ny]]))
-                
-    return res
+            x, y = i + dx, j + dy
+            if 0 <= x < n and 0 <= y < n and not visited[x][y]:
+                if m[x][y] > 0:
+                    path.append(m[x][y])
+                    visited[x][y] = True
+                    dfs(x, y)
+                    path.pop()
+                    visited[x][y] = False
+        
+        if len(path) == k:
+            return
+        
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            x, y = i + dx, j + dy
+            if 0 <= x < n and 0 <= y < n and not visited[x][y]:
+                if m[x][y] > 0:
+                    path.append(m[x][y])
+                    visited[x][y] = True
+                    dfs(x, y)
+                    path.pop()
+                    visited[x][y] = False
+    
+    for i in range(n):
+        for j in range(n):
+            if not visited[i][j]:
+                path.clear()
+                path.append(m[i][j])
+                visited[i][j] = True
+                dfs(i, j)
+                visited[i][j] = False
+    
+    return min_path
