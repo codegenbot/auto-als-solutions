@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <string>
 
@@ -16,14 +17,19 @@ string solve(string s){
 }
 
 int main(){
-    string input;
+    string input;  // Initialize input
     cout << "Enter a string: ";
-    std::getline(std::cin, input);
-    if(input == "\n" || input.empty()){
-        cout << "Error! Please enter a valid input." << endl;
-    } else {
-        string output = solve(input);
-        cout << "Output: " << output << endl;
+    cin >> input;
+    while(input[input.size()-1] != '\n'){
+        if(input.empty()){
+            cout << "Error! Please enter a valid input." << endl;
+        } else {
+            string output = solve(input);
+            cout << "Output: " << output << endl;
+        }
+        cin.ignore();
+        cout << "Enter a string: ";
+        cin >> input;
     }
     return 0;
 }

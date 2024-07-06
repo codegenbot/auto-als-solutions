@@ -1,11 +1,9 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
-vector<int> generate_integers(int a, int b) {
-    vector<int> result;
-    for (int i = min(a, b); i <= max(a, b); i++) {
+std::vector<int> generate_integers(int a, int b) {
+    std::vector<int> result;
+    for (int i = std::min(a, b); i <= std::max(a, b); i++) {
         if (i % 2 == 0) {
             result.push_back(i);
         }
@@ -13,11 +11,11 @@ vector<int> generate_integers(int a, int b) {
     return result;
 }
 
-bool issame(const vector<int>& a,const vector<int>&b){
+bool issame(const std::vector<int>& a,const std::vector<int>&b){
     return (a==b);
 }
 
-int main() {
-    generate_integers(17,89);
+int main_test() { 
+    assert(std::equal(generate_integers(17,89).begin(), generate_integers(17,89).end(), {}));
     return 0;
 }
