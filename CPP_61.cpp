@@ -7,4 +7,3 @@ bool correct_bracketing(string brackets) {
         else if(c == ')')if(count > 0)count--;else return false;
     }
     return count == 0;
-}
