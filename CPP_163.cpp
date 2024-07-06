@@ -22,5 +22,5 @@ int main_test() {
     int a = 17;
     int b = 89;
     assert(issame(generate_integers(a,b), generate_integers(a,b)));
-    return 0;
+    //assert (issame(generate_integers(a,b) , generate_integers(a,b)));
 }
