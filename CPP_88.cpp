@@ -1,5 +1,4 @@
-#include <initializer_list>
-
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -16,8 +15,10 @@ void sort_array(std::vector<int>& array) {
 }
 
 int main() {
-    std::vector<int> array1 = {21, 14, 23, 11};
-    std::vector<int> array2 = {23, 21, 14, 11};
+    std::vector<int> array1;
+    for(int x: (int[]){21, 14, 23, 11}) array1.push_back(x);
+    std::vector<int> array2;
+    for(int x: (int[]){23, 21, 14, 11}) array2.push_back(x);
     assert (issame(array1, array2));
     sort_array(array1);
 }
