@@ -1,12 +1,12 @@
 ```cpp
-#include <string>
 #include <openssl/evp.h>
+#include <string>
 
 std::string string_to_md5(const std::string& text) {
     if (text.empty()) return "";
 
     unsigned char md[16];
-    const char* str = text.c_str();
+    unsigned char* str = reinterpret_cast<unsigned char*>(text.c_str());
     int len = text.length();
     EVP_MD_CTX ctx;
     EVP_MD_CTX_init(&ctx);
