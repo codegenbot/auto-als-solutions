@@ -18,3 +18,14 @@ std::vector<int> strange_sort_list(std::vector<int> lst) {
     }
     return result;
 }
+
+int main() {
+    vector<int> input = {1, 2, 3};
+    vector<int> output = strange_sort_list(input);
+    if (issame(output, {1, 3, 2})) {
+        cout << "Test passed." << endl;
+    } else {
+        cout << "Test failed." << endl;
+    }
+    return 0;
+}
