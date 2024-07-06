@@ -7,10 +7,12 @@ int solutions(vector<int> lst) {
         }
     }
     return sum;
-
 }
 
 int main() {
     assert(solutions({3, 13, 2, 9}) == 3);
+    int lst[] = {1, 2, 3, 4, 5};
+    vector<int> vec(lst, lst + sizeof(lst) / sizeof(lst[0]));
+    cout << solutions(vec) << endl;
     return 0;
 }
