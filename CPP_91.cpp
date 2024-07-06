@@ -1,11 +1,10 @@
-```c++
 #include <iostream>
 #include <string>
 
 int is_bored(std::string input) {
     int count = 0;
-    for(int i=0; i<input.length();i++) {
-        if(input[i] == 'I' && !ispunct(input[i+1])) {
+    for (char c : input) {
+        if (c == 'I' && !isalpha(c + 1)) {
             count++;
         }
     }
