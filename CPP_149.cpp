@@ -1,8 +1,35 @@
 ```cpp
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 bool issame(vector<string>, vector<string>);
+vector<string> sorted_list_sum(vector<string>);
+
+int main() {
+    std::vector<std::string> lst1 = {"abc", "pqr", "def", "xyz"};
+    std::vector<std::string> lst2 = {"xyz", "pqr", "abc", "def"};
+
+    if (issame(lst1, lst2)) {
+        std::cout << sorted_list_sum(lst1) << std::endl;
+    }
+
+    return 0;
+}
+
+bool issame(vector<string> v1, vector<string> v2) {
+    if (v1.size() != v2.size()) {
+        return false;
+    }
+    
+    for (int i = 0; i < v1.size(); i++) {
+        if (v1[i] != v2[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
@@ -25,8 +52,4 @@ vector<string> sorted_list_sum(vector<string> lst) {
          });
 
     return result;
-}
-
-int main() {
-    // Your code here
 }
