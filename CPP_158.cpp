@@ -1,15 +1,4 @@
-Here is the solution:
-
-vector<string> max_words;
-
-for (auto &word : words) {
-    set<char> s(word.begin(), word.end());
-    if (s.size() > max_words.size()) {
-        max_words = {word};
-    } else if (s.size() == max_words.size())
-        max_words.push_back(word);
+string find_max(vector<string> words){
+    string max_word = *max_element(words.begin(),words.end(),[&](const string &a,const string &b){return (int)unique(a.begin(),a.end()) < (int)unique(b.begin(),b.end());});
+    return max_word;
 }
-
-sort(max_words.begin(), max_words.end());
-
-return *max_words.begin();
