@@ -20,3 +20,4 @@ bool is_happy(string s) {
             return false;
     }
     return true;
+}
