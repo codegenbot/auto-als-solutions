@@ -1,5 +1,4 @@
 #include <vector>
-#include <algorithm>
 
 bool issame(int a, int b) {
     if (a == b)
@@ -10,6 +9,7 @@ bool issame(int a, int b) {
 
 vector<string> by_length(vector<int> arr) {
     vector<string> result;
+    
     for (int i : arr) {
         string s = "";
         switch (i) {
