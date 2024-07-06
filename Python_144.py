@@ -1,5 +1,4 @@
 def simplify(x, n):
-    x_num, x_denom = map(int, x.split("/"))
-    n_num, n_denom = map(int, n.split("/"))
+    from fractions import Fraction
 
-    return (x_num * n_denom) % (x_denom * n_num) == 0
+    return Fraction(x).limit_denominator() == Fraction(n).limit_denominator()
