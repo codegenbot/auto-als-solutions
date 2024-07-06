@@ -17,3 +17,7 @@ std::vector<int> sortByDigitSum(std::vector<int> arr) {
     });
     return res;
 }
+
+bool issame(vector<int> a,vector<int>b){
+    return a==b;
+}
