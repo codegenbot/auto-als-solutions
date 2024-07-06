@@ -2,20 +2,19 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> by_length(std::vector<int> arr) {
-    std::vector<int> numbers;
+using namespace std;
+
+bool issame(vector<string> a, vector<string> b) {
+    if (a.size() != b.size()) return false;
+    for (int i = 0; i < a.size(); ++i)
+        if (a[i] != b[i]) return false;
+    return true;
+}
+
+vector<vector<string>> group_by_length(vector<int> arr) {
+    vector<vector<string>> result;
     for (int num : arr) {
-        if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
-        }
-    }
-
-    std::sort(numbers.begin(), numbers.end());
-    std::reverse(numbers.begin(), numbers.end());
-
-    std::vector<std::string> result;
-    for (int num : numbers) {
-        std::string str = "";
+        string str = "";
         switch (num) {
             case 1:
                 str = "One";
@@ -45,15 +44,21 @@ std::vector<std::string> by_length(std::vector<int> arr) {
                 str = "Nine";
                 break;
         }
-        result.push_back(str);
+        for (int i = 0; i < num; ++i) {
+            result.back().push_back(str);
+        }
+    }
+
+    vector<string> temp;
+    for (vector<string>& vec : result) {
+        if (!issame(vec, temp)) {
+            temp = vec;
+            result.push_back(temp);
+            temp.clear();
+        } else {
+            temp.insert(temp.end(), vec.begin(), vec.end());
+        }
     }
 
     return result;
-}
-
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i)
-        if (a[i] != b[i]) return false;
-    return true;
 }
