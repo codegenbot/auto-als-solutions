@@ -1,22 +1,25 @@
 #include <algorithm>
+#include <vector>
 
-vector<int> strange_sort_vector(vector<int> lst) {
-    vector<int> result;
+std::vector<int> strange_sort_vector(const std::vector<int>& lst) {
+    if (lst.empty()) {
+        return {};
+    }
+
+    std::vector<int> result;
 
     while (!lst.empty()) {
-        int min_val = *min_element(lst.begin(), lst.end());
-        int max_val = *max_element(lst.begin(), lst.end());
+        int minVal = *min_element(lst.begin(), lst.end());
+        result.push_back(minVal);
 
-        if (min_val == max_val) {
-            result.push_back(min_val);
-            lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
-        } else {
-            result.push_back(min_val);
-            auto it = std::remove(lst.begin(), lst.end(), min_val);
-            lst.erase(it, lst.end());
-            result.push_back(max_val);
-            it = std::remove(lst.begin(), lst.end(), max_val);
-            lst.erase(it, lst.end());
+        auto it = lst.begin();
+        advance(it, distance(lst.begin(), find(it, lst.end(), minVal)) - 1);
+        lst.erase(it);
+
+        if (!lst.empty()) {
+            int maxVal = *max_element(lst.begin(), lst.end());
+            result.push_back(maxVal);
+            lst.erase(find(lst.begin(), lst.end(), maxVal) - lst.begin());
         }
     }
 
