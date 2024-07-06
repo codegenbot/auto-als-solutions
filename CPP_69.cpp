@@ -1,12 +1,10 @@
+```cpp
 #include <algorithm>
 #include <vector>
+using namespace std;
 
-int findMaxValue(std::vector<int> numbers) {
-    int maxVal = -1;
-    for (int num : numbers) {
-        if (num > maxVal) {
-            maxVal = num;
-        }
-    }
-    return maxVal;
+int main() {
+    vector<int> vec = {3, 10, 10, 9, 2};
+    assert(std::search(vec.begin(), vec.end(), vec.begin(), vec.end()) == vec.end());
+    return 0;
 }

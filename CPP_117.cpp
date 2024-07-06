@@ -6,17 +6,18 @@
 using namespace std;
 
 vector<string> select_words(string s, int n) {
-    vector<string> result;
-    string word;
+    vector<char> word;
     int consonants = 0;
+    vector<string> result;
 
     for (char c : s) {
         if (c == ' ') {
             if (consonants == n) {
-                result.push_back(word);
+                string tempWord(word.begin(), word.end());
+                result.push_back(tempWord);
+                word.clear();
+                consonants = 0;
             }
-            word.clear();
-            consonants = 0;
         } else {
             bool isVowel = false;
             switch (tolower(c)) {
@@ -31,23 +32,23 @@ vector<string> select_words(string s, int n) {
             if (!isVowel) {
                 consonants++;
             }
-            word += c;
+            word.push_back(c);
         }
     }
 
-    if (consonants == n) {
-        result.push_back(word);
+    if (consonants > 0) {
+        string tempWord(word.begin(), word.end());
+        result.push_back(tempWord);
     }
 
     return result;
 }
 
 int main() {
-    string s = "Mary had a little lamb";
-    int n = 4;
     cout << "{";
-    for (const auto& str : select_words(s, n)) {
-        cout << "\"" << str << "\", ";
+    vector<string> result = select_words("Mary had a little lamb", 4);
+    for (const string& s : result) {
+        cout << "\"" << s << "\", ";
     }
     cout << "}" << endl;
     return 0;

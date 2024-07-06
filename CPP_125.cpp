@@ -1,35 +1,33 @@
+```c++
 #include <vector>
 #include <string>
 
-using namespace std;
-
-bool issame(const vector<string>& a, const vector<string>& b) {
+bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
     return a == b;
 }
 
-vector<vector<string>> split_words(string txt) { 
-    vector<vector<string>> result;
+std::vector<std::string> split_words(std::string txt) {
+    std::vector<std::string> result;
     size_t pos = 0;
-    while ((pos = txt.find(' ')) != string::npos) {
-        result.push_back(vector<string>{txt.substr(0, pos)});
+    while ((pos = txt.find(' ')) != std::string::npos) {
+        result.push_back(txt.substr(0, pos));
         txt.erase(0, pos + 1);
     }
     if (txt.empty()) {
         return result;
     }
-    result.push_back(vector<string>{txt});
+    result.push_back(txt);
     return result;
 }
 
 int main() {
-    string user_input;
-    cout << "Enter a string: ";
-    getline(cin, user_input);
+    std::string user_input;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, user_input);
 
-    vector<string> words = split_words(user_input);
+    std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        cout << word << endl;
+        std::cout << word << std::endl;
     }
-    assert(issame(split_words(""), {""})); 
 }
