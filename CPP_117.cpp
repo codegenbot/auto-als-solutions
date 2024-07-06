@@ -1,8 +1,6 @@
-```
 #include <iostream>
 #include <vector>
 #include <string>
-#include <algorithm>
 
 using namespace std;
 
@@ -13,7 +11,7 @@ vector<string> select_words(string s, int n) {
 
     for (char c : s) {
         if (c == ' ') {
-            if (consonants >= n) {
+            if (consonants == n) {
                 result.push_back(word);
             }
             word.clear();
@@ -36,7 +34,7 @@ vector<string> select_words(string s, int n) {
         }
     }
 
-    if (consonants >= n) {
+    if (consonants == n) {
         result.push_back(word);
     }
 
