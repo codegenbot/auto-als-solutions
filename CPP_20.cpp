@@ -1,18 +1,10 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
-float find_closest_elements(float a, float b) {
-    return std::abs(a - b);
-}
-
-bool issame(const std::vector<float>& a, const std::vector<float>& b) {
-    int la = a.size();
-    int lb = b.size();
-    
-    for(int i = 0; i < la && i < lb; i++) {
-        if(find_closest_elements(a[i], b[i]) > 0.0001) return false;
+bool issame(std::vector<float> a, std::vector<float> b) {
+    if (a.size() != b.size()) return false;
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] != b[i]) return false;
     }
-    
     return true;
 }
