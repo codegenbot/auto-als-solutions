@@ -1,32 +1,43 @@
 #include <vector>
+#include <initializer_list>
 
-bool isPrime(int n) {
-    if (n <= 1) return false;
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) return false;
+int sumOfDigits(int n) {
+    int sum = 0;
+    while (n > 0) {
+        sum += n % 10;
+        n /= 10;
     }
-    return true;
+    return sum;
 }
 
-int skjkasdkd(vector<int> lst){
-    int maxPrime = 0;
-    for(int i = 0; i < lst.size(); i++){
-        if(isPrime(lst[i])){
-            if(maxPrime < lst[i]){
-                maxPrime = lst[i];
+int largestPrime(vector<int> lst) {
+    int maxPrime = -1;
+    for (int i = 2; i <= 100000; i++) {
+        bool isPrime = true;
+        for (int j = 2; j * j <= i; j++) {
+            if (i % j == 0) {
+                isPrime = false;
+                break;
             }
         }
+        if (isPrime) {
+            for (int num : lst) {
+                if (num > i) {
+                    return sumOfDigits(i);
+                }
+            }
+        } else {
+            maxPrime = i;
+        }
     }
-    int sumOfDigits = 0;
-    while(maxPrime > 0){
-        sumOfDigits += maxPrime % 10;
-        maxPrime /= 10;
-    }
-    return sumOfDigits;
+    return maxPrime;
 }
 
-int main() {
-    vector<int> numbers = {127, 97, 8192};
-    cout << "The output is: " << skjkasdkd(numbers) << endl;
-    return 0;
+int skjkasdkd(vector<int> lst) {
+    int maxPrime = largestPrime(lst);
+    if (maxPrime == -1) {
+        return 0;
+    } else {
+        return sumOfDigits(maxPrime);
+    }
 }
