@@ -16,6 +16,6 @@ def minPath(grid, k):
             if 0 <= ni < n and 0 <= nj < n:
                 new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
                 min_paths.append(new_path)
-        return (min_paths, min(min_paths, key=lambda x:sum(x)))
+        return (min_paths, min(min_paths, key=lambda x: sum(x)))
 
-    dfs(0,0,[], 0)
+    min_paths, _ = dfs(0, 0, [], 0)
