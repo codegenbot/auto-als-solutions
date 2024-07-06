@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -9,8 +10,7 @@ std::string string_sequence(int n) {
             oss << " ";
         oss << i;
     }
-    oss << std::endl; 
-    return oss.str();
+    return std::string(oss.str());
 }
 
 int main() {
