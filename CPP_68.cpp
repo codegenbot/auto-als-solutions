@@ -33,6 +33,12 @@ std::vector<int> extractEvenNodes(std::vector<int> arr) {
 }
 
 int main() {
-    assert(extractEvenNodes({7, 9, 7, 1}) == {});
-    //...
+    std::vector<int> arr = {7, 9, 7, 1};
+    std::cout << extractEvenNodes(arr).size() << " ";
+    if(extractEvenNodes(arr).empty()) 
+        std::cout << -1;
+    else
+        for(int i: extractEvenNodes(arr)) {
+            std::cout << i << " ";
+        }
 }
