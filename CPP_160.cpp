@@ -1,24 +1,22 @@
-#include<stdio.h>
-#include<math.h>
-#include<vector>
-#include<string>
-using namespace std;
-#include<algorithm>
-#include<stdlib.h>
+#include <vector>
+#include <string>
 
-int do_algebra(vector<string> operato, vector<int> operand){
-    int result = operand[0];
-    for(int i=1; i<operand.size();i++){
-        if(operato[i-1] == "+")  result += operand[i];
-        else if(operato[i-1] == "-") result -= operand[i];
-        else if(operato[i-1] == "*") result *= operand[i];
-        else if(operato[i-1] == "//") {
-            if(result < 0) return -1;
-            result = result / static_cast<int>(operand[i]);
-        }
-        else{
-            if(result < 0) return -1;
-            result = pow(static_cast<double>(result), operand[i]);
+using namespace std;
+
+int do_algebra(vector<string> operator_, vector<int> operands) {
+    int result = operands[0];
+    for (int i = 0; i < operator_.size(); i++) {
+        string op = operator_[i];
+        if (op == "+") {
+            result += operands[i + 1];
+        } else if (op == "-") {
+            result -= operands[i + 1];
+        } else if (op == "*") {
+            result *= operands[i + 1];
+        } else if (op == "//") {
+            result /= operands[i + 1];
+        } else if (op == "**") {
+            result = pow(result, operands[i + 1]);
         }
     }
     return result;
