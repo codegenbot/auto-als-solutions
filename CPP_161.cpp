@@ -19,7 +19,7 @@ std::string solve(std::string s) {
     }
 
     if (!foundLetter) {
-        std::reverse(result.begin(), result.end());
+        reverse(result.begin(), result.end());
     }
 
     return result;
