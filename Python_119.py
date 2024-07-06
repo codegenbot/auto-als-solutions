@@ -11,5 +11,3 @@ def match_parens(lst):
                     stack.pop()
     if len(stack) == 0:
         return 'Yes'
-    else:
-        return 'No'
