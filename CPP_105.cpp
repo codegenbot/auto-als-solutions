@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
@@ -61,9 +62,8 @@ vector<string> by_length(vector<int> arr) {
 
 int main() {
     vector<int> arr = {9, 4, 8};
-    vector<string> result = by_length(arr);
-    if (!issame(vector<string>({"One"}), vector<string>({"Four", "Eight"}), vector<string>(result))) {
-        return 1; 
-    }
+    vector<string> result1 = by_length(arr);
+    vector<string> result2={"Nine", "Four", "Eight"};
+    assert(issame(result1, result2)); 
     return 0;
 }
