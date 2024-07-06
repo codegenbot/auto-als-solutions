@@ -1,5 +1,5 @@
 #include <vector>
-using namespace std;
+#include <algorithm>
 
 int skjkasdkd(vector<int> lst) {
     int max_prime = 0;
@@ -30,4 +30,3 @@ int sumOfDigits(int n) {
         n /= 10;
     }
     return sum;
-}
