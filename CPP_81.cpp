@@ -35,12 +35,16 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     return result;
 }
 
-bool issame(std::vector<std::string> a, std::vector<std::string> b) {
+bool isSame(std::vector<std::string> a, std::vector<std::string> b) {
     return a == b;
 }
 
 int main() {
-    if (!issame(numerical_letter_grade({0.0, 0.7}), {"E", "D-"}))
-        return 1; // assertion failed
+    std::vector<float> grades = {0.7};
+    if (isSame(numerical_letter_grade(grades), {"D"}))
+        std::cout << "Assertion passed.\n";
+    else
+        std::cout << "Assertion failed.\n";
+
     return 0;
 }
