@@ -13,10 +13,17 @@ long long double_the_difference(vector<double> lst) {
     return sum;
 }
 
+int programEntry() {
+    vector<double> lst;
+    for (double num : {1.5, 2.5, -3.4, 4.7}) {
+        lst.push_back(num);
+    }
+    long long odd_sum = 0; 
+    assert(double_the_difference(lst) == odd_sum); 
+    return 0;
+}
+
 int main() {
-    vector<double> lst({1.5, 2.5, -3.4, 4.7});
-    long long odd_sum; 
-    odd_sum = double_the_difference(lst); 
-    assert(odd_sum == 0); 
+    programEntry();
     return 0;
 }
