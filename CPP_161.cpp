@@ -1,13 +1,12 @@
-````
-string solve(string s){
-    string result = "";
-    for(int i=0; i<s.length(); i++){
-        if(isalpha(s[i])){
-            result += (s[i] >= 'a' && s[i] <= 'z') ? toupper(s[i]) : tolower(s[i]);
-        }else{
-            result += s[i];
+#include <string>
+#include <iostream>
+
+std::string solve(std::string input) {
+    int count = 0;
+    for (char c : input) {
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            count++;
         }
     }
-    return result;
+    return std::to_string(count);
 }
-```
