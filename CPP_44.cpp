@@ -5,26 +5,26 @@ string change_base(int x, int base) {
         if (remainder >= 10) {
             switch (remainder) {
                 case 10:
-                    result = "A" + result;
+                    result += "A";
                     break;
                 case 11:
-                    result = "B" + result;
+                    result += "B";
                     break;
                 case 12:
-                    result = "C" + result;
+                    result += "C";
                     break;
                 case 13:
-                    result = "D" + result;
+                    result += "D";
                     break;
                 case 14:
-                    result = "E" + result;
+                    result += "E";
                     break;
                 case 15:
-                    result = "F" + result;
+                    result += "F";
                     break;
             }
         } else {
-            result = to_string(remainder) + result;
+            result += to_string(remainder);
         }
         x /= base;
     }
