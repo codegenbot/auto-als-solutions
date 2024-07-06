@@ -1,9 +1,24 @@
-```cpp
+#include <iostream>
 #include <vector>
 #include <algorithm>
-#include <string>
 
 bool issame(vector<string>, vector<string>);
+vector<string> sorted_list_sum(vector<string>);
+
+int main() {
+    std::vector<std::string> lst = {"hello", "world", "abc", "def"};
+    std::vector<std::string> result = sorted_list_sum(lst);
+    
+    for (const auto& str : result) {
+        std::cout << str << std::endl;
+    }
+    return 0;
+}
+
+bool issame(vector<string>, vector<string>) {
+    // Your code here
+    return true; 
+}
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
@@ -26,8 +41,4 @@ vector<string> sorted_list_sum(vector<string> lst) {
          });
 
     return result;
-}
-
-int main() {
-    // usage of issame and sorted_list_sum
 }
