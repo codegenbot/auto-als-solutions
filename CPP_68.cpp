@@ -1,4 +1,6 @@
 #include <climits>
+#include <vector>
+
 using namespace std;
 
 vector<pair<int, int>> pluck(vector<int> arr) {
@@ -23,6 +25,5 @@ vector<pair<int, int>> pluck(vector<int> arr) {
 
 int main() {
     vector<int> arr = {7, 9, 7, 1};
-    vector<pair<int, int>> output = pluck(arr);
-    assert(output.empty());
+    assert(pluck(arr).empty()); 
 }
