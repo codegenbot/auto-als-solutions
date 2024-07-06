@@ -1,2 +1,1 @@
-```
-input6_","_-2816_").replace("_", "-")
+input6 = f"_{input()}_"
