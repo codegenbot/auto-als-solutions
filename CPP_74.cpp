@@ -22,3 +22,4 @@ std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<
     } else if (sum1 > sum2) {
         return lst2;
     }
+}
