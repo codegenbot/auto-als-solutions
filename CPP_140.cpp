@@ -3,15 +3,18 @@
 #include <iostream>
 
 std::string fix_spaces(const std::string& str) {
-    std::string result = " ";
-    for (char c : str) {
-        if (c == ' ') {
-            if (!result.empty() && result.back() == ' ')
-                continue;
+    int i = 0;
+    int j = 0;
+
+    while (j < str.length()) {
+        if ((str[j] == ' ') && (i > 0) && (str[i-1] == ' ')) {
+            j++;
+        } else {
+            str[i++] = str[j++];
         }
-        result += c;
     }
-    return result;
+
+    return str.substr(0, i);
 }
 
 int main() {
