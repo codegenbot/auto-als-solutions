@@ -1,16 +1,4 @@
-def prime_fib(n: int):
-    a, b = 2, 3
-    if n == 1:
-        return a
-    if n == 2:
-        return b
-    for _ in range(2, n):
-        a, b = b, 4 * b + a
-        while not is_prime(b):
-            b += 1
-    return b
-
-
+```
 def is_prime(num: int):
     if num < 2:
         return False
@@ -18,3 +6,13 @@ def is_prime(num: int):
         if num % i == 0:
             return False
     return True
+
+def prime_fib(n: int):
+    a, b = 1, 1
+    i = 1
+    while True:
+        if is_prime(b):
+            if i == n:
+                return b
+            i += 1
+        a, b = b, a + b
