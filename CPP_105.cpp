@@ -1,33 +1,3 @@
-bool issame(vector<string> a, vector<string> b) {
-    return a == b;
-}
-
-int main() {
-    int b = 0;
-    vector<int> arr;
-    cout << "Enter the numbers (space separated): ";
-    for (int i; cin >> i;) {
-        arr.push_back(i);
-        if (cin.peek() != ' ') {
-            cin.ignore();
-        } else {
-            cin.ignore(1);
-            if (i == b) {
-                vector<string> result = by_length(arr);
-                cout << "The numbers in descending order with their names are: ";
-                for (int i = 0; i < result.size(); i++) {
-                    cout << result[i] << " ";
-                }
-                cout << endl;
-            } else {
-                arr.clear();
-                b++;
-            }
-        }
-    }
-    return 0;
-}
-
 vector<string> by_length(vector<int> arr) {
     vector<int> numbers;
     for (int num : arr) {
@@ -74,5 +44,14 @@ vector<string> by_length(vector<int> arr) {
         result.push_back(str);
     }
 
+    int b = 0; // declare variable b
+    vector<string> c = by_length(arr); // you can use the function here
+
+    bool same = issame(result, c); // check if vectors are equal
+
     return result;
+}
+
+bool issame(vector<string> a, vector<string> b) {
+    return a == b;
 }
