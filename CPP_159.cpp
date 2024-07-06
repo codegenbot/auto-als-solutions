@@ -20,28 +20,30 @@ vector<int> eat(int number, int need, int remaining) {
 }
 
 int main() {
-    vector<int> output;
-
-    output = eat(5, 6, 10);
-    for (int i : output) {
+    cout << "Eating..." << endl;
+    vector<int> output1 = eat(5, 6, 10);
+    for (int i : output1) {
         cout << i << " ";
     }
     cout << endl;
-
-    output = eat(4, 8, 9);
-    for (int i : output) {
+    
+    cout << "Eating..." << endl;
+    vector<int> output2 = eat(4, 8, 9);
+    for (int i : output2) {
         cout << i << " ";
     }
     cout << endl;
-
-    output = eat(1, 10, 10);
-    for (int i : output) {
+    
+    cout << "Eating..." << endl;
+    vector<int> output3 = eat(1, 10, 10);
+    for (int i : output3) {
         cout << i << " ";
     }
     cout << endl;
-
-    output = eat(2, 11, 5);
-    for (int i : output) {
+    
+    cout << "Eating..." << endl;
+    vector<int> output4 = eat(2, 11, 5);
+    for (int i : output4) {
         cout << i << " ";
     }
     cout << endl;
