@@ -1,4 +1,3 @@
-```cpp
 #include <cassert>
 
 int multiply(int a, int b) {
