@@ -9,3 +9,4 @@ long long double_the_difference(vector<double> lst){
         }
     }
     return sum;
+}
