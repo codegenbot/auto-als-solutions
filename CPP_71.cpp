@@ -1,4 +1,3 @@
-```cpp
 #include<stdio.h>
 #include<math.h>
 #include<iostream>
@@ -23,4 +22,3 @@ int main() {
     else
         cout << "The area of the triangle is: " << area;
     return 0;
-}
