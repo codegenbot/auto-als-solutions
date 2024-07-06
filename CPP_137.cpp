@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 #include <boost/any.hpp>
@@ -5,12 +6,21 @@
 using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
-    if (any_cast<double>(a) > any_cast<double>(b))
+    double va = any_cast<double>(a);
+    double vb = any_cast<double>(b);
+
+    if (va > vb)
         return a;
-    else if (any_cast<string>(a).compare(any_cast<string>(b)) > 0)
-        return a;
-    else if (any_cast<string>(b).compare(any_cast<string>(a)) > 0)
+    else if (vb > va)
         return b;
-    else
-        return boost::any("None");
+
+    string sa = any_cast<string>(a);
+    string sb = any_cast<string>(b);
+
+    if (sa > sb)
+        return a;
+    else if (sb > sa)
+        return b;
+
+    return boost::any("None");
 }
