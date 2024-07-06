@@ -1,18 +1,20 @@
 #include <vector>
 #include <string>
 
+namespace {
 bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); ++i)
         if (a[i] != b[i]) return false;
     return true;
 }
+}
 
 vector<string> by_length(vector<int> arr) {
-    vector<int> numbers;
+    vector<string> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
+            numbers.push_back(to_string(num));
         }
     }
 
@@ -20,38 +22,38 @@ vector<string> by_length(vector<int> arr) {
     reverse(numbers.begin(), numbers.end());
 
     vector<string> result;
-    for (int num : numbers) {
-        string str = "";
-        switch (num) {
+    for (string str : numbers) {
+        string newstr = "";
+        switch (stoi(str)) {
             case 1:
-                str = "One";
+                newstr = "One";
                 break;
             case 2:
-                str = "Two";
+                newstr = "Two";
                 break;
             case 3:
-                str = "Three";
+                newstr = "Three";
                 break;
             case 4:
-                str = "Four";
+                newstr = "Four";
                 break;
             case 5:
-                str = "Five";
+                newstr = "Five";
                 break;
             case 6:
-                str = "Six";
+                newstr = "Six";
                 break;
             case 7:
-                str = "Seven";
+                newstr = "Seven";
                 break;
             case 8:
-                str = "Eight";
+                newstr = "Eight";
                 break;
             case 9:
-                str = "Nine";
+                newstr = "Nine";
                 break;
         }
-        result.push_back(str);
+        result.push_back(newstr);
     }
 
     return result;
