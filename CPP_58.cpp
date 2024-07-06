@@ -26,10 +26,5 @@ bool issame(vector<int> a, vector<int> b) {
 int main(){
     vector<int> a = {4, 3, 2, 8};
     vector<int> b = {1,2,3,4};
-    vector<int> result = common(a, b);
-    for (auto x : result) {
-        cout << x << " ";
-    }
-    cout << endl;
     assert(common(a, b) == vector<int>{2, 3});
 }
