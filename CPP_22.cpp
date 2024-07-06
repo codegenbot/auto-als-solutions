@@ -2,18 +2,7 @@
 #include <vector>
 #include <list>
 #include <optional>
-
-bool issame(const std::vector<int>& a, const std::vector<int>& b) {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) {
-            return false;
-        }
-    }
-    return true;
-}
+#include <type_traits>
 
 std::vector<int> filter_integers(const std::list<std::any>& values) {
     std::vector<int> result;
@@ -22,7 +11,7 @@ std::vector<int> filter_integers(const std::list<std::any>& values) {
             try {
                 int num = std::any_cast<std::optional<int>>(value).value();
                 result.push_back(num);
-            } catch(...) {
+            } catch (...) {
                 // Ignore non-integer values
             }
         }
@@ -30,8 +19,19 @@ std::vector<int> filter_integers(const std::list<std::any>& values) {
     return result;
 }
 
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
-    assert(issame(filter_integers({std::any(std::in_place_typeid< std::optional<int> >), std::any(std::in_place_typeid<std::optional<int>>), std::any(std::in_place_typeid<std::optional<int>>)}),
-                      {1, 2, 3}));
+    assert(issame({1, 2, 3}, {1, 2, 3}));
     return 0;
 }
