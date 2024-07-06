@@ -24,11 +24,7 @@ def main():
             raise ValueError("xs must have at least two coefficients")
         if len(xs) % 2 != 0:
             raise ValueError("xs must have even number of coefficients")
-        if len(xs) == 2:
-            x = -sum(xs) / sum(1 for _ in xs)
-            print(round(x, 2))
-        else:
-            print(find_zero(xs))
+        print(find_zero(xs))
     except ValueError as e:
         print(e)
 
