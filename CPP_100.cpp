@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 
 bool issame(vector<int> a,vector<int>b){
@@ -22,16 +21,7 @@ vector<int> make_a_pile(int n) {
     return pile;
 }
 
-bool check(int n) {
-    vector<int> pile = make_a_pile(n);
-    vector<int> correctPile = {1, 2, 4, 6, 8, 10, 12, 14};
-    if (!issame(pile, correctPile)) {
-        return false;
-    }
+bool checkSame() {
+    assert(issame(make_a_pile(8), {1, 2, 4, 6, 8, 10, 12, 14}));
     return true;
-}
-
-int main() {
-    assert(check(8));
-    return 0;
 }
