@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 using namespace std;
 
@@ -11,4 +10,3 @@ int sum_squares(vector<int> lst){
             result += pow(lst[i], 3);
     }
     return result;
-}
