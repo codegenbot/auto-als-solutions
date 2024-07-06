@@ -12,14 +12,14 @@ string anti_shuffle(string s){
             continue;
         }
         int j = i + 1;
-        for(;j<=s.size() && s[j-1] != ' '; j++){
+        for(;j<s.size() && s[j] != ''; j++){
             
         }
         string word = s.substr(i, j - i);
         for(int k=0; k<word.size(); k++){
             result += word[k];
         }
-        sort(word.rbegin(), word.rend());
+        sort(word.begin(), word.end());
         result += word;
         i = j;
     }
