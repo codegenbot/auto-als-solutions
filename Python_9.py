@@ -1,4 +1,4 @@
-```Python
+```
 def max_rolling_sum(lst):
     if len(lst) == 0:
         return 0
