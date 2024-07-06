@@ -1,21 +1,41 @@
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 #include <string>
 
-using namespace std;
-
-string anti_shuffle(string s){
-    string result = "";
+std::string anti_shuffle(std::string s) {
+    std::stringstream result;
+    bool inWord = false;
     for(int i=0; i<s.size(); i++){
         if(s[i] == ' '){
-            result += ' ';
-            continue;
+            if(inWord){
+                sort(word.begin(), word.end());
+                result << word << " ";
+                inWord = false;
+            }
+            else{
+                result << s[i];
+            }
         }
-        string word = "";
-        for(int j=i; j<s.size() && s[j] != ' '; j++){
-            word += s[j];
+        else{
+            if(!inWord){
+                inWord = true;
+                word += s[i];
+            }
+            else{
+                word += s[i];
+            }
         }
-        i = j - 1;
-        sort(word.begin(), word.end());
-        result += word;
     }
-    return result;
+    if(inWord){
+        sort(word.begin(), word.end());
+        result << word;
+    }
+    return result.str();
+}
+
+int main() {
+    std::string str = "Hi. My name is Mister Robot. How are you?";
+    assert(anti_shuffle(str) == ".Hi My aemn is Meirst .Rboot How aer ?ouy");
+    return 0;
+}
