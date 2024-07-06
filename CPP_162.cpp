@@ -1,5 +1,3 @@
-Here is the corrected code:
-
 std::string string_to_md5(const char* text) {
     if (*text == '\0') return "";
 
@@ -15,9 +13,9 @@ std::string string_to_md5(const char* text) {
     MD5_Final(&mdContext, result);
 
     std::string output;
-    for (int i = 0; i < 32; ++i) { 
-        char temp[3] = {(char)(result[i >> 2]), (char)((i & 2) ? 0 : ((result[(i >> 2)] >> ((3 - i % 4) * 8)) & 0xFF)), '\0'};
-        output += std::string(temp);
+    for (int i = 0; i < 16; ++i) { 
+        char temp[3] = {(char)(result[i]), (char)((i < 14 ? (result[(i)] >> ((3 - i % 4) * 8)) & 0xFF) : result[i] >> ((24 - i * 8) & 7)), '\0'};
+        output += std::string(temp); 
     }
 
     return output;
