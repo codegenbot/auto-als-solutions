@@ -3,6 +3,6 @@ int next_smallest(vector<int> lst) {
     vector<int> sorted = lst;
     sort(sorted.begin(), sorted.end());
     auto it = upper_bound(sorted.begin(), sorted.end(), sorted[0]);
-    if (it == sorted.end()) return -1;
+    if (it == sorted.end()) return -1; 
     return *prev(it);
 }
