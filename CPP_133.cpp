@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 
 int sum_squares(const std::vector<double>& lst) {
     int sum = 0;
