@@ -12,13 +12,13 @@ def main():
         except ValueError as e:
             print(e)
 
-    xs = [
-        int(coeff)
-        for coeff in (input("Enter coefficients (space separated): ") + " ").split()
-    ]
+    xs = []
+    while len(xs) < num_coefficients:
+        new_coeff = input(f"Enter coefficients (space separated): ")
+        xs += [int(coeff) for coeff in new_coeff.split()]
 
-    if len(xs) != num_coefficients:
-        raise ValueError("Invalid number of coefficients. Try again.")
+    if len(xs) < 2:
+        raise ValueError("xs must have at least two coefficients")
 
     try:
         print(find_zero(xs))
