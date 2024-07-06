@@ -1,15 +1,31 @@
+```cpp
+#include <string>
+#include <iostream>
+
+using namespace std;
+
 string decimal_to_binary(int decimal){
-    string binary = "";
+    string bin = "";
+    if (decimal < 0) {
+        bin = "-" + decimal_to_binary(-decimal);
+        return bin;
+    }
     while(decimal > 0){
         if((decimal & 1) == 1)
-            binary = "1" + binary;
+            bin = "1" + bin;
         else
-            binary = "0" + binary;
+            bin = "0" + bin;
         decimal >>= 1;
     }
-    return "0b" + binary;
+    string resultBinary = "0b" + bin;
+    return resultBinary;
 }
 
 int main() {
-    cout << decimal_to_binary(15);
+    int decimal;
+    cout << "Enter a decimal number: ";
+    cin >> decimal;
+    string binary = decimal_to_binary(decimal);
+    cout << "The binary representation of the entered decimal number is: " << binary << endl;
+    return 0;
 }
