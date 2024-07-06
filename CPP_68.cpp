@@ -1,7 +1,7 @@
 #include <vector>
 #include <algorithm>
 
-bool sameHelper(const std::vector<std::pair<int, int>>& a, const std::vector<std::pair<int, int>>& b) {
+bool sameHelper(const std::vector<std::pair<int, int>>& a, const std::vector<stdstd::pair<int, int>>& b) {
     if (a.size() != b.size()) return false;
     for (size_t i = 0; i < a.size(); ++i) {
         if (a[i] != b[i]) return false;
