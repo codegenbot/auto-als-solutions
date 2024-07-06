@@ -1,3 +1,4 @@
+```cpp
 #include <string>
 
 int correct_bracketing(string brackets) {
@@ -7,11 +8,12 @@ int correct_bracketing(string brackets) {
             count++;
         } else if (c == ')') {
             if (count == 0)
-                return 0; // Wrong bracketing
+                return 0; // incorrect bracketing
             count--;
         }
     }
-    if(count != 0)
-        return 0; // Wrong bracketing
-    return 1; // Correct bracketing
+    if(count == 0) 
+        return 1; // correct bracketing
+    else
+        return 2; // incomplete bracketing
 }
