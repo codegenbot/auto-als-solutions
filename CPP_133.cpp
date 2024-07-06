@@ -1,3 +1,8 @@
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
 int sum_squares(const std::vector<double>& lst) {
     int result = 0;
     for (double x : lst) {
@@ -18,3 +23,5 @@ int main() {
     int sum = sum_squares(lst);
 
     std::cout << "Sum of squares: " << sum << std::endl;
+
+}
