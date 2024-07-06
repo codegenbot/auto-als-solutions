@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <string>
 
 int sumOdd(int x) {
     int sum = 0;
@@ -9,12 +7,10 @@ int sumOdd(int x) {
             sum += i;
         }
     }
-    std::string output = "The sum of odd numbers is: ";
-    output += std::to_string(sum);
-    return output;
+    return sum;
 }
 
 int main() {
-    std::cout << sumOdd(0) << std::endl;
+    std::cout << "Sum of odd numbers: " << sumOdd(0) << std::endl;
     return 0;
 }
