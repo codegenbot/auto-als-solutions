@@ -1,14 +1,14 @@
 ```
-def minPath(grid, k):
+def `minPath`(grid, k):
     N = len(grid)
     visited = [[False]*N for _ in range(N)]
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-    res = None
+    res = []
     
     def dfs(x, y, path):
         nonlocal res
-        if sum(path) == k:
-            if not res or len(path) < len(res):
+        if len(path) == k:
+            if not res or path < res:
                 res = path
             return
         
