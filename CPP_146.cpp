@@ -1,5 +1,5 @@
-```cpp
 #include <vector>
+#include <iostream>
 
 int specialFilter(std::vector<int> nums){
     int count = 0;
@@ -9,3 +9,11 @@ int specialFilter(std::vector<int> nums){
         }
     }
     return count;
+
+}
+
+int main(){
+    std::vector<int> nums = {1, 11, 101};
+    int result = specialFilter(nums);
+    std::cout << "Result: " << result << std::endl;
+}
