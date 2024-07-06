@@ -1,10 +1,8 @@
-Here is the completed code:
+Here is the solution:
 
 bool below_threshold(vector<int> l, int t) {
-    for (int i : l) {
-        if (i >= t) {
-            return false;
-        }
+    for (int x : l) {
+        if (x >= t) return false;
     }
     return true;
 }
