@@ -23,7 +23,7 @@ std::vector<int> pluck(std::vector<int> arr) {
     
     std::vector<int> result;
     for (size_t i = 1; i < nodes.size(); ++i) {
-        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false || nodes[i].first != nodes[i-1].first + 2) {
+        if (compare({nodes[i-1].first, nodes[i-1].second}, {nodes[i].first, nodes[i].second}) == false) {
             return {};
         }
     }
@@ -49,7 +49,7 @@ int main() {
     }
     else
     {
-        std::cout << "No result" << std::endl;
+        std::cout << "No output" << std::endl;
     }
     
     return 0;
