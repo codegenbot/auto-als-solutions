@@ -1,4 +1,4 @@
-```Python
+```python
 problem = """def digitSum(s):
-    return sum(ord(c) - 64 for c in s if 'A' <= c <= 'Z')
+    return str(sum(ord(c) - 55 for c in s.upper() if 'A' <= c <= 'Z'))
 """
