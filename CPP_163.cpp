@@ -1,12 +1,12 @@
+```cpp
 #include <vector>
-#include <algorithm>
 
-std::vector<int> generate_integers(int a, int b) {
-    std::vector<int> integers;
-    for (int i = a; i <= b; i++) {
-        integers.push_back(i);
+std::vector<int> generate_integers(int start, int end) {
+    std::vector<int> result;
+    for (int i = start; i <= end; ++i) {
+        result.push_back(i);
     }
-    return integers;
+    return result;
 }
 
 bool issame(std::vector<int> a, std::vector<int> b) {
@@ -14,6 +14,6 @@ bool issame(std::vector<int> a, std::vector<int> b) {
 }
 
 int main_test() {
-    assert(generate_integers(17, 89) == generate_integers(17, 89));
+    assert(issame(generate_integers(17, 89), generate_integers(17, 89)));
     return 0;
 }
