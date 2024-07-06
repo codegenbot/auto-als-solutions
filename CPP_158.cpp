@@ -1,9 +1,14 @@
-string findMax(vector<string> words){
-    string result = *max_element(words.begin(), words.end(),
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int main() {
+    string result = *max_element({"play", "play", "play"},
         [](const string& a, const string& b) {
-            int unique_a = a.size() - unique(cout << a, (int)set<char>());
-            int unique_b = b.size() - unique(cout << b, (int)set<char>());
+            int unique_a = a.size() - (set<char>(a.begin(), a.end())).size();
+            int unique_b = b.size() - (set<char>(b.begin(), b.end())).size();
             return unique_a > unique_b;
         });
-    return result;
+    cout << result << endl; 
+    return 0;
 }
