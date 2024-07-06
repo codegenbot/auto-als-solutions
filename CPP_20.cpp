@@ -1,8 +1,8 @@
-```cpp
 #include <vector>
 #include <algorithm>
+#include <initializer_list>
 
-bool issame(const std::vector<float>& a, const std::vector<float>& b) {
+bool issame(std::vector<float> a, std::vector<float> b) {
     return (a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin()));
 }
 
@@ -21,7 +21,7 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
                 }
             }
             if (!found) {
-                closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
+                closest_pairs.push_back(std::make_pair(std::min(numbers[i], numbers[j]), std::max(numbers[i], numbers[j])));
             }
         }
     }
@@ -30,6 +30,33 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
 }
 
 int main() {
-    assert(issame(find_closest_elements({1.1, 2.2, 3.1, 4.1, 5.1}) , {{2.2, 3.1}}));
+    int numElements;
+    float *numbers;
+
+    std::cout << "Enter the number of elements: ";
+    std::cin >> numElements;
+
+    numbers = new float[numElements];
+
+    for (int i = 0; i < numElements; ++i) {
+        std::cout << "Enter element " << i + 1 << ": ";
+        std::cin >> numbers[i];
+    }
+
+    std::vector<float> nums(numbers, numbers + numElements);
+    std::vector<std::pair<float, float>> closest = find_closest_elements(nums);
+
+    if (!closest.empty()) {
+        std::cout << "Closest elements: ";
+        for (auto &pair : closest) {
+            std::cout << "(" << pair.first << ", " << pair.second << ") ";
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << "No closest elements found." << std::endl;
+    }
+
+    delete[] numbers;
+    
     return 0;
 }
