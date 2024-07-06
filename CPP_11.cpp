@@ -1,3 +1,6 @@
+```cpp
+#include <string>
+
 std::string string_xor(std::string a, std::string b) {
     std::string result = "";
     for (int i = 0; i < a.length(); i++) {
