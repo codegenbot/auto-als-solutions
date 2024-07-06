@@ -1,6 +1,6 @@
 #include <string>
 #include <sstream>
-#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
