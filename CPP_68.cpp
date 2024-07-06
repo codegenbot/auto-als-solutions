@@ -1,6 +1,5 @@
 Here is the completed code:
 
-```cpp
 vector<int> pluck(vector<int> arr) {
     vector<pair<int, int>> evenNodes;
     for (int i = 0; i < arr.size(); i++) {
@@ -8,12 +7,10 @@ vector<int> pluck(vector<int> arr) {
             evenNodes.push_back({arr[i], i});
         }
     }
-    
     if (evenNodes.empty()) {
         return {};
     }
-    
-    sort(evenNodes.begin(), evenNodes.end());
-    
-    return {{evenNodes[0].first, evenNodes[0].second}};
+    auto smallest = *min_element(evenNodes.begin(), evenNodes.end());
+    vector<int> result = {smallest.first, smallest.second};
+    return result;
 }
