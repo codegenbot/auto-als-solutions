@@ -12,7 +12,7 @@ int specialFilter(vector<int> nums){
 }
 
 int main(){
-    vector<int> numbers = {123, 456, 789};
+    vector<int> numbers = {11, -12, 13, -14, 15};
     cout << specialFilter(numbers);
     return 0;
 }
