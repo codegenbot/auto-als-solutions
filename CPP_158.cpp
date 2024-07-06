@@ -12,7 +12,7 @@ string find_max(vector<string> words){
     return result;
 }
 
-int main(){
+int main() {
     string result = find_max({"play", "play", "play"});
     cout << result << endl; // Use this if you want to print the result
     return 0;
