@@ -1,9 +1,10 @@
-bool will_it_fly(vector<int> q, int w){
+```cpp
+bool will_it_fly(vector<int> q,int w){
     string str = "";
     for(int i=0; i<q.size(); i++){
         str += to_string(q[i]);
     }
-    if(str != reverse(str).str()){
+    if(str != reverse(string(str)).str()){
         return false;
     }
     int sum = 0;
@@ -12,3 +13,4 @@ bool will_it_fly(vector<int> q, int w){
     }
     return sum <= w;
 }
+Here is the completed code:
