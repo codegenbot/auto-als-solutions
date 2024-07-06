@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -10,6 +11,7 @@ vector<int> common(vector<int> a, vector<int> b){
         if(std::find(b.begin(), b.end(), x) != b.end()) result.push_back(x);
     }
     return result;
+
 }
 
 int main(){
