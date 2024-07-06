@@ -1,4 +1,3 @@
-```
 strings = []
 while True:
     try:
