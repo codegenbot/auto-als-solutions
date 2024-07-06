@@ -1,4 +1,4 @@
-std::string longest(vector<std::string> strings){
+std::string longest(std::vector<std::string> strings){
     if(strings.empty()){
         return "";
     }
