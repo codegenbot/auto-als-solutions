@@ -1,13 +1,11 @@
-```cpp
 #include <string>
 
-bool is_palindrome(string text){
+bool is_palindrome(string text) {
     int i = 0, j = text.length() - 1;
     while(i < j) {
-        if(tolower(text[i]) != tolower(text[j]))
+        if(text[i] != text[j])
             return false;
         i++;
         j--;
     }
     return true;
-}
