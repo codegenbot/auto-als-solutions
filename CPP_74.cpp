@@ -1,9 +1,7 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <initializer_list>
-#include <bits/stdc++.h>
 
 bool issame(vector<string> a, vector<string> b) {
     return a == b;

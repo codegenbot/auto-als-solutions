@@ -6,9 +6,7 @@ def modp(*args):
         n += p
 
     def egcd(a, b):
-        if a == 0:
-            return b, 0, 1
-        elif b == 0:
+        if b == 0:
             return a, 1, 0
         else:
             gcd, y, x = egcd(b, a % b)
