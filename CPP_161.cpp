@@ -1,5 +1,4 @@
-#include <string>
-
+```
 std::string solve(std::string s) {
     std::string result = "";
     bool foundLetter = false;
@@ -19,7 +18,7 @@ std::string solve(std::string s) {
     }
 
     if (!foundLetter) {
-        std::reverse(result.begin(), result.end());
+        reverse(result.begin(), result.end());
     }
 
     return result;
