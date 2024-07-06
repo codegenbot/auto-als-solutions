@@ -1,7 +1,8 @@
+```python
 def find_zero(xs: list):
-    n = len(xs)
-    if n < 2:
+    if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
+    n = len(xs)
     if n % 2 != 0:
         raise ValueError("xs must have even number of coefficients")
 
@@ -9,6 +10,7 @@ def find_zero(xs: list):
         coeff for i, coeff in enumerate(xs) if i % 2 == 0
     )
     return round(x, 2)
+
 
 def main():
     while True:
@@ -26,6 +28,11 @@ def main():
             break
         except ValueError as e:
             print(e)
+
+    if len(xs) < 2:
+        raise ValueError("xs must have at least two coefficients")
+    if len(xs) % 2 != 0:
+        raise ValueError("xs must have even number of coefficients")
 
     try:
         print(find_zero(xs))
