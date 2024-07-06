@@ -1,16 +1,20 @@
-#include<stdio.h>
-using namespace std;
+Here is the completed code:
+
 long long special_factorial(int n){
-    long long result = 1;
-    for(int i=n; i>0; i--){
-        result *= fact(i);
+    if(n == 0)
+        return 1;
+    else{
+        long long result = 1;
+        for(int i = n; i > 0; --i){
+            result *= factorial(i);
+        }
+        return result;
     }
-    return result;
 }
-long long fact(int n){
+
+long long factorial(int n){
     long long result = 1;
-    for(int i=1; i<=n; i++){
+    for(int i = 2; i <= n; ++i)
         result *= i;
-    }
     return result;
 }
