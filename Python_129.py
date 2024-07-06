@@ -1,3 +1,4 @@
+```
 def minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
@@ -13,20 +14,14 @@ def minPath(grid, k):
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
                 new_path = dfs(ni, nj, path + [m[ni][nj]])
-                if new_path:
-                    res.append(new_path)
+                res.append(new_path)
         return min([p for p in res if p is not None], key=lambda x: sum(x))
 
-    min_sum = float("inf")
-    boundary_cells = (
-        [(0, j) for j in range(n)]
-        + [(n - 1, j) for j in range(n)]
-        + [(i, 0) for i in range(n)]
-        + [(i, n - 1) for i in range(n)]
-    )
+    min_sum = None
+    boundary_cells = ((0, j) for j in range(n)) + ((n - 1, j) for j in range(n)) + ((i, 0) for i in range(n)) + ((i, n - 1) for i in range(n))
     for i, j in boundary_cells:
         visited.add((i, j))
-        res = [dfs(i, j, [m[i][j]])]
-        if sum(res[0]) == k:
-            return res[0]
+        path = dfs(i, j, [m[i][j]])
+        if path is not None and sum(path) == k:
+            return path
     return []
