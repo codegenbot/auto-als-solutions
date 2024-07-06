@@ -23,8 +23,8 @@ bool is_happy(string s) {
     return true;
 
 int main() {
-    string s;
     cout << "Enter a string: ";
+    string s;
     getline(cin, s);
     if(is_happy(s)) {
         cout << "The given string is happy." << endl;
@@ -32,3 +32,4 @@ int main() {
         cout << "The given string is not happy." << endl;
     }
     return 0;
+}
