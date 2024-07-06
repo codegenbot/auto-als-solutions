@@ -1,6 +1,10 @@
-```cpp
 #include <vector>
 #include <limits>
+#include <cmath>
+
+bool isSame(std::vector<float> a, std::vector<float> b) {
+    // implementation
+}
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
     if (numbers.size() < 2) {
@@ -21,10 +25,6 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
     }
     
     return {closest_pair};
-}
-
-bool isSame(std::vector<float> a, std::vector<float> b) {
-    // implementation
 }
 
 int main() {
