@@ -1,4 +1,4 @@
-```
+````
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -23,7 +23,7 @@ bool is_happy(string s){
 
 }
 
-int main 
+int main
 {
     string s;
     cout << "Enter a string: ";
@@ -33,4 +33,3 @@ int main
     else
         cout << "The given string is not happy." << endl;
     return 0;
-}
