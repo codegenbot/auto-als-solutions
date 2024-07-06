@@ -1,24 +1,20 @@
-long long double_the_difference(vector<float> lst){
-    long long sum = 0;
-    for(float n : lst){
-        if(int(n) > 0 && int(n) % 2 != 0){ 
-            sum += pow(int(n), 2); 
-        }
-    }
-    return sum;
-}
+long long double_the_difference(vector<float> lst);
 
 int main() {
     vector<float> inputList;  
-    // Read your input data here
-
+    for(int i = 0 ; i < 3 ; i++){
+        float num;
+        cin >> num;
+        inputList.push_back(num);
+    }
+    
     long long sum = 0;
     for(float n : inputList){
         if(int(n) > 0 && int(n) % 2 != 0){ 
             sum += pow(int(n), 2); 
         }
     }
-    int output = double_the_difference(inputList); 
+    long long output = double_the_difference(inputList); 
     assert (output == sum );
     return 0;
 }
