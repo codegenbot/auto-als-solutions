@@ -1,16 +1,31 @@
-Here is the completed code:
+#include <string>
+using namespace std;
 
-bool will_it_fly(vector<int> q,int w){
+bool will_it_fly(vector<int> q, int w) {
     string str = "";
-    for(int i=0; i<q.size(); i++){
-        str += to_string(q[i]);
+    for (int i : q) {
+        str += to_string(i);
     }
-    if(str != reverse(str).str()){
-        return false;
-    }
+    if (!isPalindrome(str)) return false;
     int sum = 0;
-    for(int i=0; i<q.size(); i++){
-        sum += q[i];
+    for (int i : q) {
+        sum += i;
     }
     return sum <= w;
+}
+
+bool isPalindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
+
+int main() {
+    vector<int> q;
+    int w;
+    // get input here
+    // process the input and pass it to your function calls
+    
+    // print output here
+    return 0;
 }
