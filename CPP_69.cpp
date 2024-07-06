@@ -1,21 +1,11 @@
-#include <vector>
-#include <map>
-
-using namespace std;
+Here is the completed code:
 
 int search(vector<int> lst) {
-    map<int, int> frequency;
-    for (int num : lst) {
-        frequency[num]++;
-    }
-    
-    int result = -1;
-    for (auto& pair : frequency) {
-        if (pair.second >= pair.first && pair.first > 0) {
-            result = pair.first;
-            break;
+    int max = 0;
+    for (const auto &num : lst) {
+        if (num > 0 && num >= max) {
+            max = num;
         }
     }
-    
-    return result;
+    return max == 0 ? -1 : max;
 }
