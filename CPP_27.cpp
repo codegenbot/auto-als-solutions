@@ -1,8 +1,17 @@
-for(int i = 0; i < str.length(); i++){
-    if(str[i] >= 'a' && str[i] <= 'z'){
-        str[i] -= ('a' - 'A');
-    } else if(str[i] >= 'A' && str[i] <= 'Z'){
-        str[i] += ('a' - 'A');
+#include <string>
+
+using namespace std;
+
+string flip_case(string str) {
+    string result = "";
+    for (char c : str) {
+        if (islower(c)) {
+            result += toupper(c);
+        } else if (isupper(c)) {
+            result += tolower(c);
+        } else {
+            result += c;
+        }
     }
+    return result;
 }
-return str;
