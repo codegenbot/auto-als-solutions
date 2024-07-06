@@ -4,11 +4,13 @@
 int is_bored(std::string S) {
     int count = 0;
     std::string::iterator pos = S.begin();
-    while ((pos = S.find("I", pos)) != S.end()) {
-        if (S.find(".", pos) == S.end() && S.find("?", pos) == S.end() && S.find("!", pos) == S.end())
+    while ((pos = std::find(pos, S.end(), 'I')) != S.end()) {
+        if (std::find(pos, S.end(), '.') == S.end() && 
+            std::find(pos, S.end(), '?') == S.end() && 
+            std::find(pos, S.end(), '!') == S.end())
             count++;
         else
-            pos = ++std::find(pos, S.end(), '.');  // use iterator find
+            pos = std::find(pos + 1, S.end(), '.');
     }
     return count;
 

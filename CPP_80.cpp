@@ -1,4 +1,4 @@
-```c++
+```cpp
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -23,7 +23,7 @@ bool is_happy(string s){
 
 }
 
-int main(){
+int main() {
     string s;
     cout << "Enter a string: ";
     getline(cin, s);
