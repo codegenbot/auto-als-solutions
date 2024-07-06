@@ -1,8 +1,6 @@
-#include <boost/optional.hpp>
+#include <optional>
 #include <vector>
 #include <list>
-#include <any>
-#include <typeindex>
 
 namespace std {
     using namespace boost;
@@ -13,11 +11,11 @@ typedef optional<int> OInt;
 vector<int> filter_integers(list<any> values) {
     vector<int> result;
     for (const auto& value : values) {
-        if (value.type() == type_index(typeid(OInt))) {
+        if (value.type() == typeid(OInt)) {
             try {
                 OInt oint = any_cast<OInt>(value);
-                if (oint) {
-                    result.push_back(*oint);
+                if (oint.has_value()) {
+                    result.push_back(oint.value());
                 }
             } catch (bad_any_cast&) {
                 // Ignore non-OInt values
@@ -25,4 +23,3 @@ vector<int> filter_integers(list<any> values) {
         }
     }
     return result;
-}

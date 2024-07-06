@@ -1,10 +1,9 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <initializer_list>
 
-bool issame(vector<float> a, vector<float> b) {
-    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
+bool issame(std::vector<float> a, std::vector<float> b) {
+    return (a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin()));
 }
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
@@ -22,16 +21,42 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
                 }
             }
             if (!found) {
-                closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
+                closest_pairs.push_back(std::make_pair(std::min(numbers[i], numbers[j]), std::max(numbers[i], numbers[j])));
             }
         }
     }
 
-    std::sort(closest_pairs.begin(), closest_pairs.end(),
-              [](const auto &a, const auto &b) {
-                  return (std::abs(a.first - a.second) <
-                         std::abs(b.first - b.second));
-              });
-
     return closest_pairs;
+}
+
+int main() {
+    int numElements;
+    float *numbers;
+
+    std::cout << "Enter the number of elements: ";
+    std::cin >> numElements;
+
+    numbers = new float[numElements];
+
+    for (int i = 0; i < numElements; ++i) {
+        std::cout << "Enter element " << i + 1 << ": ";
+        std::cin >> numbers[i];
+    }
+
+    std::vector<float> nums(numbers, numbers + numElements);
+    std::vector<std::pair<float, float>> closest = find_closest_elements(nums);
+
+    if (!closest.empty()) {
+        std::cout << "Closest elements: ";
+        for (auto &pair : closest) {
+            std::cout << "(" << pair.first << ", " << pair.second << ") ";
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << "No closest elements found." << std::endl;
+    }
+
+    delete[] numbers;
+    
+    return 0;
 }

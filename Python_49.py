@@ -1,7 +1,23 @@
 ```
-def modp(m, p):
-    if m < 0:
-        m += p
-    gcd = lambda a, b: (b, a % b) if a else (a, 0)
-    _, x, _ = gcd(m, p)
-    return pow(x, -1*p.bit_length(), p)
+def modp(*args):
+    n = args[0]
+    p = args[1]
+    if n < 0:
+        n += p
+    
+    def egcd(a, b):
+        if a == 0:
+            return b, 0, 1
+        elif b == 0:
+            return a, 1, 0
+        else:
+            gcd, y, x = egcd(b, a % b)
+            return gcd, y - (a // b) * x, x
+
+    g, y, x = egcd(n, p)
+    if g != 1:
+        result = None
+    else:
+        result = pow(x, -(p-2), p)
+
+    return result
