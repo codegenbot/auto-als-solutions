@@ -18,7 +18,11 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    getline(cin, input); 
+    cin >> input; 
+    if (input.back() != '\n') { 
+        getline(cin, input);  
+    }
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
     if(input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
