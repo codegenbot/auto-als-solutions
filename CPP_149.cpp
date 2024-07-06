@@ -1,10 +1,11 @@
-```cpp
 #include <vector>
 #include <algorithm>
 #include <string>
+
+namespace std {
 using namespace std;
 
-bool same(std::vector<std::string> a, std::vector<std::string> b) {
+bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size())
         return false;
 
@@ -16,8 +17,8 @@ bool same(std::vector<std::string> a, std::vector<std::string> b) {
     return true;
 }
 
-std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
-    std::vector<std::string> result;
+vector<string> sorted_list_sum(vector<string> lst) {
+    vector<string> result;
     for (const auto& str : lst) {
         if (stoi(str) % 2 == 0) {
             result.push_back(str);
@@ -35,6 +36,6 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 
 int main() {
-    assert(same(sorted_list_sum({"aaaa", "bbbb", "dd", "cc"}), {"cc", "dd", "aaaa", "bbbb"}));
+    assert(issame(sorted_list_sum({"aaaa", "bbbb", "dd", "cc"}), {"cc", "dd", "aaaa", "bbbb"}));
     return 0;
 }
