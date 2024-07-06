@@ -1,8 +1,11 @@
 ```
-#include <string>
 #include <openssl/ssl.h>
 #include <openssl/x509v3.h>
 #include <openssl/evp.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <iomanip>
 
 std::string string_to_md5(std::string text) {
     if (text.empty()) return "";
