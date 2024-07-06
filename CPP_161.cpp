@@ -19,11 +19,8 @@ string solve(string s){
 int main(){
     string input;
     cout << "Enter a string: ";
-    cin >> input; // read till newline
-    if (input.back() != '\n') { 
-        getline(cin, input);  // handle remaining line
-    }
-    if(input.empty()){
+    std::getline(std::cin, input);
+    if(input == "\n" || input.empty()){
         cout << "Error! Please enter a valid input." << endl;
     } else {
         string output = solve(input);
