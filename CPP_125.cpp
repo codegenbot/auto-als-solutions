@@ -1,12 +1,14 @@
-```
 #include <vector>
 #include <string>
-#include <initializer_list>
 
 bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] != b[i]) return false;
+    if (a.size() != b.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) {
+            return false;
+        }
     }
     return true;
 }
@@ -18,7 +20,9 @@ std::vector<std::string> split_words(std::string txt) {
         result.push_back(txt.substr(0, pos));
         txt.erase(0, pos + 1);
     }
-    if (txt.empty()) return result;
+    if (txt.empty()) {
+        return result;
+    }
     result.push_back(txt);
     return result;
 }
@@ -31,6 +35,8 @@ int main() {
     std::vector<std::string> words = split_words(user_input);
     
     for (const auto& word : words) {
-        std::cout << word << std::endl;
+        if (issame(words, {word})) {
+            std::cout << word << std::endl;
+        }
     }
 }
