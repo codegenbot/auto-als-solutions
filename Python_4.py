@@ -1,8 +1,23 @@
-```
 from typing import List
 
 
-def mean_absolute_deviation(numbers: List[float]) -> float:
+def mean_absolute_deviation() -> float:
+    numbers = []
+    while True:
+        num_str = input("Enter a number (or 'done' to finish): ")
+        if num_str.lower() == "done":
+            break
+        try:
+            num = float(num_str)
+            numbers.append(num)
+        except ValueError:
+            print(
+                "Invalid input. Please enter a valid number or type 'done' to finish."
+            )
+    return calculate_mad(numbers)
+
+
+def calculate_mad(numbers: List[float]) -> float:
     if not isinstance(numbers, list):
         return "Error: Invalid input"
     if len(numbers) == 0:
