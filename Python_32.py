@@ -1,3 +1,6 @@
+import math
+
+
 def main():
     while True:
         try:
@@ -9,26 +12,18 @@ def main():
         except ValueError as e:
             print(e)
 
-    xs = [
-        int(coeff)
-        for coeff in (input("Enter coefficients (space separated): ") + " ").split()
-    ]
-    while len(xs) % 2 != 0:
-        if num_coefficients == len(xs):
-            raise ValueError("xs must have even number of coefficients")
-        new_coeff = input(f"Add more coefficients: ")
+    xs = []
+    while len(xs) < num_coefficients:
+        new_coeff = input(f"Enter coefficients (space separated): ")
         xs += [int(coeff) for coeff in new_coeff.split()]
 
     if len(xs) < 2:
         raise ValueError("xs must have at least two coefficients")
 
-    if len(xs) >= 3: 
-        try: 
-            print(find_zero(xs)) 
-        except ValueError as e: 
-            print(e) 
-    else: 
-        print("Not enough coefficients to calculate a root") 
+    try:
+        print(find_zero(xs))
+    except ValueError as e:
+        print(e)
 
 
 def find_zero(coeffs):
