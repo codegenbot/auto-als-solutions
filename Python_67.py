@@ -1,4 +1,3 @@
-```
 def fruit_distribution(s, n):
     s = s.replace("apples", "a").replace("oranges", "o")
     digit_count = len("".join(filter(str.isdigit, s)))
