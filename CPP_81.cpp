@@ -1,4 +1,4 @@
-```cpp
+```
 #include <vector>
 #include <string>
 
@@ -40,7 +40,7 @@ bool issame(std::vector<std::string> a, std::vector<std::string> b) {
 }
 
 int main() {
-    std::vector<float> grades(std::vector<float>({0.0, 0.7}));
+    std::vector<float> grades({0.0f, 0.7f});
     auto letterGrades = numerical_letter_grade(grades);
     if (issame(letterGrades, {"E", "D-" }))
         std::cout << "Test Passed\n";
