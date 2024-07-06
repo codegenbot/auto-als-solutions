@@ -1,15 +1,12 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-
 int fibfib(int n) {
-    if(n == 0 || n == 1)
+    if (n <= 1)
         return 0;
-    int a = 0, b = 1, c = 0;
-    for(int i=2; i<=n; ++i){
-        c = a+b+a;
-        a=b;
-        b=c;
+    int prev = 0;
+    int cur = 0;
+    for (int i = 2; i <= n; ++i) {
+        int temp = cur + prev + (cur > prev ? 0 : 1);
+        prev = cur;
+        cur = temp;
     }
-    return c;
+    return cur;
 }
