@@ -1,15 +1,14 @@
-```c++
-int length = s.length();
-if(length < 3) return false;
-for(int i = 0; i <= length - 3; i++){
-    string sub = s.substr(i, 3);
-    bool is_distinct = true;
-    for(char c : sub){
-        if(find(sub.begin(), sub.end(), c) == sub.end()){
-            is_distinct = false;
-            break;
+bool is_happy(string s){
+    if(s.length() < 3) return false;
+    for(int i=0; i<s.length()-2; i++){
+        bool distinct = true;
+        for(int j=i+1; j<i+4 && j<s.length(); j++){
+            if(s[j] == s[i]){
+                distinct = false;
+                break;
+            }
         }
+        if(!distinct) return false;
     }
-    if(!is_distinct) return false;
+    return true;
 }
-return true;
