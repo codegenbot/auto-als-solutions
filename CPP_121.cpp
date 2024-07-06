@@ -1,29 +1,21 @@
 int main() {
     vector<int> lst;
-    int input;
+    int sum = 0;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
     
-    while (true) {
-        cout << "Enter a number (-1 to finish): ";
-        cin >> input;
-        
-        if (input == -1) break;
-        
-        lst.push_back(input);
+    for (int i = 0; i < n; i++) {
+        cout << "Enter element " << i + 1 << ": ";
+        cin >> lst.push_back(i);
     }
     
-    int result = solution(lst);
-    
-    cout << "Sum: " << result << endl;
-    
-    return 0;
-}
-
-int solution(vector<int> lst) {
-    int sum = 0;
     for (int i = 0; i < lst.size(); i++) {
         if ((i % 2 == 0 && lst[i] % 2 != 0)) {
             sum += lst[i];
         }
     }
-    return sum;
+    
+    cout << "The sum of odd elements at even positions is: " << sum;
+    return 0;
 }
