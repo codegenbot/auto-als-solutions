@@ -1,6 +1,15 @@
 import math
 
 
+def find_zero(coeffs):
+    a, b, c = coeffs
+    discriminant = (b**2) - 4 * a * c
+    if discriminant < 0:
+        raise ValueError("Quadratic equation has no real roots")
+    x1 = (-b + math.sqrt(discriminant)) / (2 * a)
+    return round(x1, 6)
+
+
 def main():
     while True:
         try:
@@ -20,9 +29,10 @@ def main():
         raise ValueError("xs must have even number of coefficients")
 
     try:
-        a, b, c = xs[-2], xs[-1], sum(xs[:-2])
-        print(f"Zero: {(-b + math.sqrt(b**2 - 4*a*c)) / (2 * a)}")
-    except ZeroDivisionError as e:
+        zero = find_zero([int(x), -1, 0])
+        print(f"Zero of the quadratic equation is: {zero}")
+
+    except ValueError as e:
         print(e)
 
 
