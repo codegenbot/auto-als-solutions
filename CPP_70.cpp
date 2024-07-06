@@ -34,10 +34,8 @@ void strange_sort_list(std::vector<int>& lst) {
 }
 
 int main() {
-    std::vector<int> lst = {1, 2, 3};
+    std::vector<int> lst = {111111};
     strange_sort_list(lst);
-    std::vector<int> sortedList = {111111};
-    strange_sort_list(sortedList);
-    assert(issame(sortedList, {111111}));    
+    assert(issame(lst, {111111}));    
     return 0;
 }
