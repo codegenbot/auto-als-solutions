@@ -1,9 +1,13 @@
-string encrypt(string s){
+Here is the completed code:
+
+```cpp
+string encrypt(string s) {
     string result = "";
-    for(int i=0; i<s.size(); i++){
-        char c = (char)(s[i] + 2*2);
-        if(c>'z'){
-            c -=26;
+    for (char c : s) {
+        if (c >= 'a' && c <= 'z') {
+            c = ((c - 'a' + 2 * 26) % 26) + 'a';
+        } else if (c >= 'A' && c <= 'Z') {
+            c = ((c - 'A' + 2 * 26) % 26) + 'A';
         }
         result += c;
     }
