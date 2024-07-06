@@ -12,10 +12,4 @@ std::vector<int> make_a_pile(int n) {
     return pile;
 } 
 
-void test() {
-    assert(same(make_a_pile(8), make_a_pile(8)));
-}
-
-int main() {
-    test();
-}
+assert(same(make_a_pile(8), make_a_pile(10)));
