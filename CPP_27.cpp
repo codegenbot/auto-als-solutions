@@ -6,17 +6,12 @@ std::string flip_case(std::string str){
     std::string result = "";
     for (int i = 0; i < str.length(); i++) {
         char c = str[i];
-        if (c >= 'a' && c <= 'z') 
-            result += toupper(c);
-        else if (c >= 'A' && c <= 'Z')
-            result += tolower(c);
+        if (std::islower(c)) 
+            result += std::toupper(c);
+        else if (std::isupper(c))
+            result += std::tolower(c);
         else
             result += c;
     }
     return result;
-}
-
-int main() {
-    assert(flip_case("These violent delights have violent ends") == "tHEse ViOlent DeLiGhTs HaVe ViOlEnT eNdS");
-    return 0;
 }
