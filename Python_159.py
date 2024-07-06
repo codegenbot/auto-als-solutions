@@ -1,5 +1,7 @@
 def eat(number, need, remaining):
-    if number < remaining:
+    if number < need and number < remaining:
+        eaten = number
+    elif number >= need and number > remaining:
         eaten = remaining
     else:
         eaten = min(number, need)
