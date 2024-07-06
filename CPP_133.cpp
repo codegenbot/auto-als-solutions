@@ -3,10 +3,10 @@
 #include <vector>
 #include <cmath>
 
-int sum_squares(const std::vector<float>& lst) {
-    int result = 0;
+long long sum_squares(const std::vector<float>& lst) {
+    long long result = 0;
     for (float x : lst) {
-        int ceil_x = ceil(x);
+        long long ceil_x = std::lround(x);
         result += pow(ceil_x, 2);
     }
     return result;
@@ -17,11 +17,10 @@ int main() {
     float num;
 
     while (std::cin >> num) {
-        lst.push_back(static_cast<float>(num));
+        lst.push_back(num);
     }
 
-    int sum = sum_squares(lst);
+    long long sum = sum_squares(lst);
 
     std::cout << "Sum of squares: " << sum << std::endl;
-
 }
