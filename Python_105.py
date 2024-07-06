@@ -1,3 +1,2 @@
 def by_length(arr):
-    result = sorted([i for i in arr if 1 <= i <= 9])
-    return [names[int(i) - 1] for i in reversed(result)]
+    return [names[int(str(i).__len__()) - 1] for i in sorted(arr)]
