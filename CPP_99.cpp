@@ -1,12 +1,13 @@
 #include <iostream>
+#include <string>
 #include <cmath>
 
-double closest_integer(const std::string& value) {
+int closest_integer(std::string value) {
     double num = std::stod(value);
-    return (num >= 0) ? ceil(num) : floor(num);
+    return (num >= 0) ? static_cast<int>(std::ceil(num)) : static_cast<int>(std::floor(num));
 }
 
 int main() {
-    assert(closest_integer("0") == 0);
-    return 0;
+    assert(closest_integer("0.5") == 1);
+    // other code
 }
