@@ -26,15 +26,3 @@ vector<string> sorted_list_sum(vector<string> lst) {
 
     return result;
 }
-
-int main() {
-    // usage of issame and sorted_list_sum functions
-    vector<string> str1 = {"hello", "world"};
-    vector<string> str2 = {"hi", "bye"};
-
-    bool same = issame(str1, str2);
-    
-    vector<string> summed = sorted_list_sum({"one", "two", "three"});
-
-    return 0;
-}
