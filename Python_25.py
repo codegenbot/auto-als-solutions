@@ -1,11 +1,7 @@
-```Python
 from typing import List
 import math
 
-
 def factorize(n: int) -> List[int]:
-    if n <= 0:
-        raise ValueError("Input should be greater than zero.")
     if n < 2:
         return [n]
     factors = []
