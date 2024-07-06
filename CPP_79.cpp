@@ -1,5 +1,3 @@
-Here is the modified code:
-
 string decimal_to_binary(int decimal){
     string binary = "";
     while(decimal > 0){
