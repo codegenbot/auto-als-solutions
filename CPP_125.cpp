@@ -3,23 +3,27 @@ bool issame(const std::vector<std::string>& a, const std::vector<std::string>& b
 }
 
 std::vector<std::vector<std::string>> split_words(string txt) {
-    vector<vector<string>> result = {{}};
+    vector<vector<string>> result = {};
     size_t pos = 0;
     while ((pos = txt.find(' ')) != string::npos) {
         vector<string> temp = {};
-        temp.push_back(txt.substr(0, pos));
-        txt.erase(0, pos + 1);
-        if (!result.empty()) {
-            result.back().push_back(txt);
-            break;
+        for(int i = 0; i <= pos; i++) {
+            if(i < txt.length()) {
+                temp.push_back(txt.substr(0, i+1));
+                txt.erase(0, i+1);
+            }
         }
         result.push_back(temp);
     }
-    if (txt.empty()) {
-        return result;
+    if (!txt.empty()) {
+        vector<string> temp = {};
+        for(int i = 0; i <= txt.length(); i++) {
+            if(i < txt.length()) {
+                temp.push_back(txt.substr(0, i+1));
+                txt.erase(0, i+1);
+            }
+        }
+        result.push_back(temp);
     }
-    vector<string> temp = {};
-    temp.push_back(txt);
-    result.push_back(temp);
     return result;
 }
