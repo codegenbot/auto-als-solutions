@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -14,20 +13,14 @@ vector<int> strange_sort_vector(vector<int> lst) {
     vector<int> result;
     if (lst.empty()) return result;
 
-    sort(lst.begin(), lst.end()); // Sort the list in ascending order
+    sort(lst.begin(), lst.end()); 
 
     while (!lst.empty()) {
-        result.push_back(*lst.begin()); // Add the smallest element to the result
+        result.push_back(*lst.begin()); 
         lst.erase(lst.begin());
         if (!lst.empty())
-            sort(lst.begin(), lst.end()); // Sort the remaining elements
+            sort(lst.begin(), lst.end()); 
     }
 
     return result;
-}
-
-int main() {
-    vector<int> result = strange_sort_vector({111111});
-    assert(issame(result, vector<int>{111111}));
-    return 0;
 }
