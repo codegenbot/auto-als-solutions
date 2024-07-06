@@ -1,33 +1,18 @@
+```cpp
 #include <iostream>
 #include <vector>
-#include <string>
 
-// Convert the given input integer to a string
-std::string intToString(int x) {
-    std::string str = std::to_string(x);
-    return str;
+int sumOdd(std::string str) {
+    int sum = 0;
+    for (char c : str) { 
+        if (static_cast<int>(c) % 2 != 0) {
+            sum += static_cast<int>(c);
+        }
+    }
+    return sum;
 }
 
 int main() {
-    // Read user input as an integer
-    int x; 
-    std::cout << "Enter an integer: ";
-    std::cin >> x;
-
-    // Convert the integer to a string and then convert it to uppercase or lowercase according to the problem description.
-    std::string str = intToString(x);
-    if(str.size() % 2 == 0) {
-        for(int i=0; i<str.size(); i++) {
-            str[i] = toupper((unsigned char)str[i]);
-        }
-    } else {
-        for(int i=0; i<str.size(); i++) {
-            str[i] = tolower((unsigned char)str[i]);
-        }
-    }
-
-    // Print the modified string
-    std::cout << "Modified string: " << str << std::endl;
-
+    std::cout << sumOdd("Hello") << std::endl; 
     return 0;
 }
