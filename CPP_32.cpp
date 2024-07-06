@@ -1,4 +1,18 @@
-vector<double> coeffs(xs.begin(), xs.end());
-poly = [this](double x) { double sum = 0; for (int i = 0; i < coeffs.size(); i++) sum += coeffs[i] * pow(x, i); return sum; };
-ncoeff = coeffs.size();
-return find_zero(coeffs);
+vector<double> coeffs;
+int ncoeff;
+double poly(double x) {
+    double sum = 0;
+    for (int i = 0; i < ncoeff; i++) {
+        sum += coeffs[i] * pow(x, i);
+    }
+    return sum;
+}
+double find_zero(vector<double> xs){
+    coeffs = xs;
+    ncoeff = xs.size();
+    double sum = 0;
+    for (int i = 2; i < ncoeff; i+=2) {
+        sum += xs[i] * pow(-sum / poly(xs[i-1]), i);
+    }
+    return round(sum, 10);
+}
