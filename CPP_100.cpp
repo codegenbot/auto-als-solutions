@@ -1,4 +1,3 @@
-#define _MSC_VER 1800
 #include <vector>
 #include <algorithm>
 
@@ -13,6 +12,10 @@ std::vector<int> make_a_pile(int n) {
     return pile;
 } 
 
-int main() {
+void test() {
     assert(same(make_a_pile(8), make_a_pile(8)));
+}
+
+int main() {
+    test();
 }
