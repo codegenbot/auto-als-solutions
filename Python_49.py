@@ -1,4 +1,3 @@
-```
 def modp(*args):
     n = int(args[0])
     p = int(args[1])
