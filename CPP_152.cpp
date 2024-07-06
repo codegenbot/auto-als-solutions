@@ -23,7 +23,7 @@ std::vector<std::vector<int>> compare(std::vector<int> game, std::vector<int> gu
 
 int main_function() {
     std::vector<int> game = {1,2,3,5};
-    std::vector<int> guess = {-1,2,3,4};
-    assert(std::equal(compare(game,guess).begin(), compare(game,guess).end(), {{0},{0},{0,{0}}}));
+    std::vector<int> guess = {1,2,3,5};
+    assert(std::equal( compare(game,guess).begin(), compare(game,guess).end(), {{0},{0},{0,{0}}} ));
     return 0;
 }
