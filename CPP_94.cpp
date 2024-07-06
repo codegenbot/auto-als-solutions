@@ -1,5 +1,5 @@
-```cpp
-#include<vector>
+#include <vector>
+#include <cassert>
 
 bool isPrime(int n) {
     if (n <= 1) return false;
@@ -9,7 +9,14 @@ bool isPrime(int n) {
     return true;
 }
 
-int findMaxPrime(vector<int> lst){
+int main() {
+    vector<int> lst = {127, 97, 8192};
+    int result = skjkasdkd(lst);
+    assert(result == 10);
+    return 0;
+}
+
+int skjkasdkd(vector<int> lst){
     int maxPrime = 0;
     for(int i = 0; i < lst.size(); i++){
         if(isPrime(lst[i])){
