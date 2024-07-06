@@ -1,40 +1,32 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-
-using namespace std;
-
-vector<int> minPath(vector<vector<int>>& grid, int k) {
-    vector<pair<int, pair<int, int>>> directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-    vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size()));
-    priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>, greater<pair<int, vector<int>>>> pq;
-    for (int i = 0; i < grid.size(); ++i) {
-        for (int j = 0; j < grid[i].size(); ++j) {
-            if (!visited[i][j]) {
-                visited[i][j] = true;
-                pq.push({grid[i][j], {grid[i][j]}});
-            }
-        }
-    }
-
+vector<int> minPath(vector<vector<int>> grid, int k) {
+    int n = grid.size();
+    vector<vector<bool>> visited(n, vector<bool>(n));
     vector<int> res;
-    while (!pq.empty()) {
-        int val = pq.top().first;
-        res = pq.top().second;
-        pq.pop();
-        if (res.size() == k) {
-            break;
-        }
-        for (auto& dir : directions) {
-            int ni = res.back() + dir.first;
-            int nj = res.back() + dir.second;
-            if (ni >= 0 && ni < grid.size() && nj >= 0 && nj < grid[0].size() && !visited[ni][nj]) {
-                visited[ni][nj] = true;
-                pq.push({grid[ni][nj], res});
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (!visited[i][j]) {
+                dfs(grid, i, j, k, visited, res);
             }
         }
     }
-
     return res;
+}
+
+void dfs(vector<vector<int>>& grid, int x, int y, int k, vector<vector<bool>>& visited, vector<int>& res) {
+    if (k == 0) {
+        return;
+    }
+    visited[x][y] = true;
+    res.push_back(grid[x][y]);
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == 0 && j == 0) continue;
+            int nx = x + i;
+            int ny = y + j;
+            if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && !visited[nx][ny]) {
+                dfs(grid, nx, ny, k - 1, visited, res);
+                return;
+            }
+        }
+    }
 }
