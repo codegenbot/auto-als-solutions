@@ -1,20 +1,12 @@
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-bool issame(std::vector<std::string>, std::vector<std::string>);
-std::vector<std::string> sorted_list_sum(std::vector<std::string> lst);
-
-int main() {
-    // Your code here
+bool issame(vector<string>, vector<string>) {
+    // function implementation
 }
 
 vector<string> sorted_list_sum(vector<string> lst) {
     vector<string> result;
 
     for (const string& str : lst) {
-        if (str.length() % 2 == 0) {
+        if (issame(lst, {"hello", "world"})) {
             result.push_back(str);
         }
     }
