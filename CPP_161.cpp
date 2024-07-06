@@ -1,4 +1,5 @@
-int main {
+int main; 
+{
     string input;
     cout << "Enter a string: ";
     getline(cin, input); 
@@ -8,4 +9,4 @@ int main {
         string output = solve(input);
         cout << "Output: " << output << endl;
     }
-}
+    return 0;
