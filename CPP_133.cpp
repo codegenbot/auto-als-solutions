@@ -6,17 +6,17 @@
 int sum_squares(const std::vector<double>& lst) {
     int result = 0;
     for (double x : lst) {
-        double ceil_x = ceil(x);
+        int ceil_x = ceil(x);
         result += pow(ceil_x, 2);
     }
     return result;
 }
 
 int main() {
-    std::vector<double> lst;
+    std::vector<double> lst(100);  
     double num;
 
-    while (std::cin >> std::fixed >> num) {
+    while (std::cin >> num) {
         lst.push_back(num);
     }
 
