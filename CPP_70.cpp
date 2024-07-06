@@ -31,11 +31,11 @@ std::vector<int> strange_sort_list(std::vector<int>& lst) {
             result.push_back(min_val2);
         }
     }
-    return result;
 }
 
 int main() {
     std::vector<int> lst = {1, 2, 3};
-    assert(issame(strange_sort_list(lst), {111111}));
+    std::vector<int> sorted_lst = strange_sort_list(lst);
+    assert(issame(sorted_lst, {111111}));
     return 0;
 }
