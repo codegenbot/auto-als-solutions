@@ -1,4 +1,3 @@
-```
 #include <iostream>
 using namespace std;
 
@@ -9,9 +8,11 @@ string change_base(int x, int base) {
     while (x > 0) {
         int rem = x % base;
         char c = rem < 10 ? '0' + rem : rem > 9 ? 'A' + rem - 10 : '-';
-        res[size++] = c;
+        s.push_back(c);
+        x /= base;
+        size++;
     }
-    return string(res, size);
+    return s.substr(0, size);
 }
 
 int main() {
