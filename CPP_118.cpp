@@ -11,7 +11,7 @@ std::string get_closest_vowel(std::string word) {
             if (ispunct(word[j]) || !islower(word[j])) break;
             if (word[j] == 'y' && (j == 0 || !isalpha(word[j-1]))) break;
             if (strchr("aeiouAEIOU", tolower(word[j])) != NULL) {
-                return word.substr(j, 1);
+                return word.substr(j, i-j+1);
             }
         }
     }
