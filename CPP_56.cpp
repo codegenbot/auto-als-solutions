@@ -1,11 +1,15 @@
-bool correct_bracketing(string brackets){
-    int openCount = 0;
-    for(int i=0; i<brackets.length(); i++){
-        if(brackets[i] == '<') openCount++;
-        else if(brackets[i] == '>'){
-            if(openCount <= 0) return false;
-            openCount--;
+Here is the solution:
+
+bool correct_bracketing(string brackets) {
+    int open_count = 0;
+    for (char bracket : brackets) {
+        if (bracket == '<') {
+            open_count++;
+        } else if (bracket == '>') {
+            if (open_count == 0)
+                return false;
+            open_count--;
         }
     }
-    return openCount == 0;
+    return open_count == 0;
 }
