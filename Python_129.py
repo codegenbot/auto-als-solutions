@@ -1,4 +1,3 @@
-```
 def minPath(grid, k):
     n = len(grid)
     m = [[i * n + j for j in range(n)] for i in range(n)]
@@ -19,11 +18,18 @@ def minPath(grid, k):
                 if new_path:
                     min_paths.append(new_path)
         return (
-            min([p for p in set(tuple(x) for x in min_paths) if p], key=lambda x: len(x))
+            min(
+                [p for p in set(tuple(x) for x in min_paths) if p], key=lambda x: len(x)
+            )
             or []
         )
 
-    boundary_cells = [(0, j) for j in range(n)] + [(n - 1, j) for j in range(n)] + [(i, 0) for i in range(n)] + [(i, n - 1) for i in range(n)]
+    boundary_cells = (
+        [(0, j) for j in range(n)]
+        + [(n - 1, j) for j in range(n)]
+        + [(i, 0) for i in range(n)]
+        + [(i, n - 1) for i in range(n)]
+    )
     min_path = []
     for i, j in boundary_cells:
         visited.add((i, j))
@@ -32,4 +38,5 @@ def minPath(grid, k):
             if path:
                 min_path = min([path], key=lambda x: len(x))
                 break
-    return    min_path if min_path else []
+
+    return min_path if min_path else []
