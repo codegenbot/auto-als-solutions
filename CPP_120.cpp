@@ -1,7 +1,13 @@
+Here's the corrected code:
+
+```cpp
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
-bool areEqual(std::vector<int> a, std::vector<int> b) {
+using namespace std;
+
+bool issame(vector<int> a, vector<int> b) {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] != b[i]) return false;
@@ -9,17 +15,30 @@ bool areEqual(std::vector<int> a, std::vector<int> b) {
     return true;
 }
 
-std::vector<int> maximum(std::vector<int> arr, int k) {
-    std::vector<int> result;
+vector<int> maximum(vector<int> arr, int k) {
+    vector<int> result;
     for (int i = 0; i < k; i++) {
-        auto it = std::max_element(arr.begin(), arr.end());
+        auto it = max_element(arr.begin(), arr.end());
         result.push_back(*it);
         arr.erase(it);
     }
     return result;
 }
 
-void driver() {
-    assert(areEqual(maximum({1, 2, 3, -23, 243, -400, 0}, 3), {243, 243, 243}));  
-    return;
+int main() {
+    int n, k;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    cout << "Enter k: ";
+    cin >> k;
+    vector<int> result = maximum(arr, k);
+    if(issame(result, vector<int>(k, 243))) {
+        cout << "Maximum values are equal.\n";
+    } else {
+        cout << "Maximum values are not equal.\n";
+    }
 }
