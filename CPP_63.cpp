@@ -1,6 +1,4 @@
-```
 #include <iostream>
-
 using namespace std;
 
 int fibfib(int n) {
@@ -24,6 +22,5 @@ int main() {
     int n;
     cout << "Enter the value of n: ";
     cin >> n;
-    cout << "FibFib number at position " << n << " is " << fibfib(n) << endl;
+    cout << "FibFib number at position " << n << " is " << fibfib(n) << "\n";
     return 0;
-}
