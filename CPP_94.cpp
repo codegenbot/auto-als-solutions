@@ -1,4 +1,6 @@
+```
 #include <vector>
+#include <algorithm>
 
 int sumOfDigits(int n) {
     int sum = 0;
@@ -10,6 +12,7 @@ int sumOfDigits(int n) {
 }
 
 int largestPrime(vector<int> lst) {
+    int maxPrime = -1;
     for (int i = 2; i <= 100000; i++) {
         bool isPrime = true;
         for (int j = 2; j * j <= i; j++) {
@@ -24,16 +27,21 @@ int largestPrime(vector<int> lst) {
                     return sumOfDigits(i);
                 }
             }
+        } else if (i > maxPrime) {
+            maxPrime = i;
         }
     }
-    return -1; // no prime found
+    return sumOfDigits(maxPrime);
 }
 
-int skjkasdkd(vector<int> lst) {
-    int maxPrime = largestPrime(lst);
-    if (maxPrime == -1) {
-        return 0;
-    } else {
-        return sumOfDigits(maxPrime);
+int main() {
+    vector<int> lst;
+    int n;
+    cin >> n;
+    while (n--) {
+        cin >> n;
+        lst.push_back(n);
     }
+    cout << largestPrime(lst) << endl;
+    return 0;
 }

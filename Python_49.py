@@ -4,13 +4,13 @@ def modp(*args):
     p = args[1]
     if n < 0:
         n += p
-    
+
     def egcd(a, b):
-        if a == 0:
-            return (b, 0, 1)
+        if b == 0:
+            return (a, 1, 0)
         else:
-            gcd, x, y = egcd(b, a % b)
-            return (gcd, y, x)
+            gcd, y, x = egcd(b, a % b)
+            return (gcd, x, y - (a // b) * x)
 
     g, _, _ = egcd(n, p)
     if g != 1:

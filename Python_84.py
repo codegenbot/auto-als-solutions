@@ -1,6 +1,8 @@
 ```
-def solve(N):
+def solve():
+    N = int(input("Enter a number: "))
     if not isinstance(N, int):
         return "Error: Input must be an integer"
-    binary = bin(N)[2:]
-    return binary
+    return f"0b{bin(N)[2:]}"
+
+print(solve())

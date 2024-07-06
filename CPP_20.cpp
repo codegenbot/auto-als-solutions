@@ -1,6 +1,10 @@
-```cpp
-bool issame(float a, float b) {
-    return (a == b);
+#include <vector>
+#include <algorithm>
+#include <initializer_list>
+using namespace std;
+
+bool issame(vector<float> a, vector<float> b) {
+    return (a.size() == b.size() && equal(a.begin(), a.end(), b.begin()));
 }
 
 std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> numbers) {
@@ -18,10 +22,16 @@ std::vector<std::pair<float, float>> find_closest_elements(std::vector<float> nu
                 }
             }
             if (!found) {
-                closest_pairs.push_back(std::make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
+                closest_pairs.push_back(make_pair(min(numbers[i], numbers[j]), max(numbers[i], numbers[j])));
             }
         }
     }
+
+    sort(closest_pairs.begin(), closest_pairs.end(),
+         [](const auto &a, const auto &b) {
+             return (abs(a.first - a.second) <
+                    abs(b.first - b.second));
+         });
 
     return closest_pairs;
 }
