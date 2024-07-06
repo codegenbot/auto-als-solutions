@@ -1,38 +1,30 @@
 def minPath(grid, k):
     n = len(grid)
+    m = [[i * n + j for j in range(n)] for i in range(n)]
+    visited = set()
     res = []
-    
-    def dfs(i, j, path):
-        if i < 0 or i >= n or j < 0 or j >= n:
+
+    def dfs(i, j, path, sum_path):
+        if (i, j) in visited:
             return None
-        if grid[i][j] == k and (i == 0 or j == 0 or i == n-1 or j == n-1):
-            return path + [k]
+        if (0 <= i < n and 0 <= j < n) and grid[i][j] == k:
+            return (path + [m[i][j]], sum_path + k)
         for x, y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             ni, nj = i + x, j + y
             if 0 <= ni < n and 0 <= nj < n:
-                new_path = dfs(ni, nj, path + [k])
-                if new_path is not None:
+                new_path, new_sum = dfs(ni, nj, path + [m[ni][nj]], sum_path + k)
+                if new_path:
                     res.append(new_path)
         return min([p for p in res if p is not None], key=lambda x: len(x))
-    
-    min_sum = float('inf')
-    for i in range(n):
-        visited = set()
-        visited.add((0, i))
-        temp_res = [dfs(0, i, [k])]
-        if sum(temp_res[0]) == k:
-            return temp_res[0]
-        visited.add((n-1, i))
-        temp_res = [dfs(n-1, i, [k])]
-        if sum(temp_res[0]) == k:
-            return temp_res[0]
-    for j in range(n):
-        visited = set()
-        visited.add((i, 0))
-        temp_res = [dfs(i, 0, [k])]
-        if sum(temp_res[0]) == k:
-            return temp_res[0]
-        visited.add((i, n-1))
-        temp_res = [dfs(i, n-1, [k])]
-        if sum(temp_res[0]) == k:
-            return temp_res[0]
+
+    min_sum = float("inf")
+    boundary_cells = (
+        [(0, j) for j in range(n)]
+        + [(n - 1, j) for j in range(n)]
+        + [(i, 0) for i in range(n)]
+        + [(i, n - 1) for i in range(n)]
+    )
+    for i, j in boundary_cells:
+        visited.add((i, j))
+        res = [dfs(i, j, [m[i][j]], k)]
+        return min([p for p in set(tuple(x) for x in res)], key=lambda x: len(x))
