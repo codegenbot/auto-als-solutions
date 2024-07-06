@@ -1,16 +1,8 @@
-int stackSize = 0;
-char top;
-
-for(int i = 0; i < brackets.length(); i++) {
-    if(brackets[i] == '<') {
-        stackSize++;
-        if(stackSize > 1) return false;
-        top = '<';
-    } else if(brackets[i] == '>') {
-        if(stackSize == 0) return false;
-        if(top != '<') return false;
-        stackSize--;
+bool correct_bracketing(string brackets){
+    int open = 0, close = 0;
+    for(int i = 0; i < brackets.length(); i++){
+        if(brackets[i] == '<') open++;
+        else if(brackets[i] == '>') close++;
     }
+    return open == close;
 }
-
-return (stackSize == 0);
