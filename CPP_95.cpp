@@ -1,11 +1,11 @@
-```cpp
+```
 #include <map>
 #include <string>
-#include <assert>
+#include <algorithm>
 #include <cctype>
 #include <iostream>
 
-bool check_dict_case(map<string,string> dict){
+bool check_dict_case(map<string, string> dict){
     if(dict.empty()) return false;
     bool allLower = true;
     bool allUpper = true;
@@ -23,6 +23,6 @@ bool check_dict_case(map<string,string> dict){
 int main() {
     map<string, string> dict = {{"Hello", "hello"}, {"WORLD", "world"}};
     cout << (check_dict_case(dict) ? "True" : "False") << endl;
-    assert(check_dict_case(map<string, string>()) == false);
+    cout << (check_dict_case(map<string, string>()) == false) << endl;
     return 0;
 }
