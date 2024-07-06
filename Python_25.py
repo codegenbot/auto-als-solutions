@@ -1,20 +1,10 @@
-```
-from typing import List
+def find_largest_palindrome(limit: int) -> int:
+    def is_palindrome(n: int) -> bool:
+        return str(n) == str(n)[::-1]
 
-
-def factorize(n: int) -> List[int]:
-    factors = []
-    i = 2
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            count = 0
-            while n % i == 0:
-                count += 1
-                n //= i
-            for _ in range(count):
-                factors.append(i)
-    if n > 1:
-        factors.append(n)
-    return factors
+    largest_palindrome = 0
+    for i in range(2, limit):
+        if is_palindrome(i):
+            if i > largest_palindrome:
+                largest_palindrome = i
+    return largest_palindrome
