@@ -1,12 +1,10 @@
 #include <vector>
 #include <algorithm>
+#include <functional>
 
-bool issame(std::vector<int> a, std::vector<int> b) {
-    return (a.size() == b.size()) && (a == b);
-}
-
-std::vector<int> sortByDigitSum(std::vector<int> &arr) {
-    std::sort(arr.begin(), arr.end(), [&](int a, int b)->bool{
+std::vector<int> sumByDigitSort(std::vector<int> arr) {
+    std::vector<int> res = arr;
+    sort(res.begin(), res.end(), [](int a, int b)->bool{
         long long sum1 = 0, sum2 = 0;
         while(a > 0){
             sum1 += a % 10;
@@ -18,5 +16,10 @@ std::vector<int> sortByDigitSum(std::vector<int> &arr) {
         }
         return sum1 < sum2;
     });
-    return arr;
+    return res;
+}
+
+int main() {
+    std::vector<int> order_by_points = {0,6,6,-76,-21,23,4};
+    return 0;
 }
