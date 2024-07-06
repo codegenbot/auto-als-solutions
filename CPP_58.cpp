@@ -13,28 +13,8 @@ vector<int> common(vector<int> a, vector<int> b){
 }
 
 int main(){
-    vector<int> a; 
-    int n;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-    cout << "Enter the elements: ";
-    for(int i=0; i<n; i++){
-        int temp;
-        cin >> temp;
-        a.push_back(temp);
-    }
-    
-    vector<int> b; 
-    int m;
-    cout << "Enter the number of elements: ";
-    cin >> m;
-    cout << "Enter the elements: ";
-    for(int j=0; j<m; j++){
-        int temp;
-        cin >> temp;
-        b.push_back(temp);
-    }
-    
+    vector<int> a = {4, 3, 2, 8};
+    vector<int> b = {1,2,3,4};
     vector<int> result = common(a, b);
     for (auto x : result) {
         cout << x << " ";
