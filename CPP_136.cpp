@@ -1,17 +1,12 @@
-Here is the solution:
-
 vector<int> largest_smallest_integers(vector<int> lst){
-    int maxNeg = 0;
-    int minPos = INT_MAX;
-
-    for(int num : lst){
-        if(num < 0 && abs(num) > maxNeg){
-            maxNeg = num;
+    int a = 0, b = 0;
+    for (int i : lst) {
+        if (i < 0 && a == 0 || i > a) {
+            a = i;
         }
-        else if(num > 0 && num < minPos){
-            minPos = num;
+        else if (i > 0 && b == 0 || i < b) {
+            b = i;
         }
     }
-
-    return {(maxNeg>0)?0:maxNeg, (minPos<1)?0:minPos};
+    return {a, b};
 }
