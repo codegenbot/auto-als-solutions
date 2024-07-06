@@ -1,10 +1,10 @@
-Here is the solution:
+Here is the completed code:
 
-long long double_the_difference(vector<float> lst){
+long long double_the_difference(vector<float> lst) {
     long long sum = 0;
-    for(float n : lst){
-        if(int(n) > 0 && int(n) % 2 != 0){ // Check if number is positive and odd
-            sum += pow(int(n), 2); // Add the square of the number to the sum
+    for (float num : lst) {
+        if (num > 0 && floor(num) == num) { // check if number is positive and integer
+            sum += pow(num, 2); // calculate square of the number
         }
     }
     return sum;
