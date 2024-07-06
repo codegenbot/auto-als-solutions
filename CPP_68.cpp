@@ -19,12 +19,19 @@ vector<int> pluck(vector<int> arr) {
     
     sort(evenNodes.begin(), evenNodes.end());
     
-    vector<int> result = {evenNodes[0].first};
-    for (int i = 1; i < evenNodes.size(); i++) {
-        if (issame(result, vector<int>(result.begin() + 1, result.end()))) {
-            break;
+    vector<int> result;
+    for (int i = 0; i < arr.size(); i++) {
+        bool found = false;
+        for (const auto& node : evenNodes) {
+            if (i == node.second) {
+                result.push_back(node.first);
+                found = true;
+                break;
+            }
         }
-        result.push_back(evenNodes[i].first);
+        if (!found) {
+            result.push_back(arr[i]);
+        }
     }
     
     return result;
