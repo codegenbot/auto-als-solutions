@@ -1,4 +1,3 @@
-```
 def find_primes():
     num = int(input("Enter a number: "))
 
@@ -11,9 +10,9 @@ def find_primes():
         return True
 
     factors = [i for i in range(1, num + 1) if num % i == 0]
+
     prime_factors = [factor for factor in set(factors) if is_prime(factor)]
 
     return prime_factors
-
 
 print(find_primes())
