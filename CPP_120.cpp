@@ -1,17 +1,12 @@
-Here is the completed code:
-
 vector<int> maximum(vector<int> arr, int k) {
     priority_queue<int> pq;
     for (int i : arr) {
         pq.push(i);
-        if (pq.size() > k) {
-            pq.pop();
-        }
     }
-    vector<int> result;
-    while (!pq.empty()) {
-        result.push_back(pq.top());
+    vector<int> res;
+    while (!pq.empty() && res.size() < k) {
+        res.push_back(pq.top());
         pq.pop();
     }
-    return result;
+    return res;
 }
