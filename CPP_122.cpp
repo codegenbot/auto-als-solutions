@@ -13,7 +13,7 @@ int add_elements(const vector<int>& arr, int k) {
 }
 
 int main() {
-    vector<int> arr = {1, 12, 123, 4};
+    vector<int> arr = {1, 23, 456, 7};
     int k = 3;
     cout << add_elements(arr, k);
     return 0;
