@@ -1,14 +1,20 @@
-#include <cassert>
-
+```
 bool any_int(float a, float b, float c) {
-    if (a == static_cast<int>(a)) return (a == b + c || a == c + b);
-    if (b == static_cast<int>(b)) return (b == a + c || b == c + a);
-    if (c == static_cast<int>(c)) return (c == a + b || c == b + a);
-    return false;
+    int ai = (int)a;
+    int bi = (int)b;
+    int ci = (int)c;
+
+    return ((a == ai + bi + ci) || (b == ai + bi + ci) || (c == ai + bi + ci));
 }
 
 int main() {
-    assert(any_int(3.01, 4, 7) == false);
-    // Other test cases
+    float a, b, c;
+    std::cout << "Enter three floats: ";
+    std::cin >> a >> b >> c;
+    if(any_int(a, b, c)) {
+        std::cout << "At least one of the inputs is an integer." << std::endl;
+    } else {
+        std::cout << "None of the inputs are integers." << std::endl;
+    }
     return 0;
 }
