@@ -10,3 +10,4 @@ int solutions(vector<int> lst) {
         }
     }
     return sum;
+}
