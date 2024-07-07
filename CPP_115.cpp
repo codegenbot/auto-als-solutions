@@ -1,12 +1,13 @@
-int max_fill(vector<vector<int>> grid, int capacity) {
-    int total_water = 0;
-    for (const auto& row : grid) {
-        for (int water : row) {
-            if (water == 1) {
-                total_water += water;
-            }
-        }
-    }
+Here is the completed code:
 
-    return (total_water + capacity - 1) / capacity;
+int max_fill(vector<vector<int>> grid, int capacity) {
+    int n = grid.size();
+    int total_water = 0;
+    for (auto& row : grid) {
+        total_water += accumulate(row.begin(), row.end(), 0);
+    }
+    
+    int steps = -(-total_water / capacity); // ceiling division
+    
+    return steps;
 }
