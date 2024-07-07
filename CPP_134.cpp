@@ -1,12 +1,5 @@
-bool check_if_last_char_is_a_letter(string txt){
-    if(txt.empty()) return false;
-    int last_index = txt.length() - 1;
-    char last_char = txt[last_index];
-    for(int i=0; i<last_index; i++){
-        if(txt[i] == ' ' && txt.substr(i+1, last_index-i).find(last_char) != string::npos){
-            return false;
-        }
-    }
-    if(isalpha(last_char)) return true;
-    return false;
+bool check_if_last_char_is_a_letter(string txt) {
+    if(txt.empty()) return false; // If string is empty, return false
+    char lastChar = txt.back();  // Get the last character of the string
+    return (isalpha(lastChar)) && (!isspace(lastChar)); // Check if it's an alphabetical character and not a space
 }
