@@ -1,11 +1,17 @@
 def coin_sums():
     cents = int(input())
     coins = [25, 10, 5, 1]
-    result = []
+    pennies = cents
+    quarters = pennies // 25
+    pennies %= 25
+    dimes = pennies // 10
+    pennies %= 10
+    nickles = pennies // 5
+    pennies %= 5
+    print(quarters)
+    print(nickles)
+    print(dimes)
+    print(pennies)
 
-    for coin in coins:
-        count = cents // coin
-        result.append(count)
-        cents %= coin
 
-    return " ".join(map(str, result))
+coin_sums()
