@@ -1,1 +1,1 @@
-vector<pair<int, int>>({smallest});
+return vector<pair<int, int>>({smallest});
