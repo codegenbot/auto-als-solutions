@@ -3,36 +3,28 @@ using namespace std;
 
 vector<int> indicesOfSubstring(string text, string target) {
     vector<int> result;
-    size_t pos = 0;
-    
-    while ((pos = text.find(target, pos)) != string::npos) {
-        result.push_back(pos);
-        pos += target.length();
+    for (int i = 0; i <= text.size() - target.size(); ++i) {
+        bool match = true;
+        for (int j = 0; j < target.size(); ++j) {
+            if (text[i + j] != target[j]) {
+                match = false;
+                break;
+            }
+        }
+        if (match) {
+            result.push_back(i);
+        }
     }
-    
     return result;
 }
 
 int main() {
-    int n;
-    cin >> n;
-    string text;
-    for (int i = 0; i < n; ++i) {
-        string str;
-        cin >> str;
-        if (i == 0)
-            text = str;
-        else
-            text += "\n" + str;
+    string text, target;
+    cin >> text >> target;
+    vector<int> res = indicesOfSubstring(text, target);
+    for(int i:res){
+        cout << i << " ";
     }
-    
-    string target;
-    cin >> target;
-    vector<int> indices = indicesOfSubstring(text, target);
-    
-    for (int i: indices) {
-        cout << i << endl;
-    }
-
+    cout << endl;
     return 0;
 }
