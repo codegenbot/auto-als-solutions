@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 int fix_spaces(std::string text){
@@ -23,5 +24,5 @@ int fix_spaces(std::string text){
             result += text[i];
         }
     }
-    return 0; // Return type is now int, not string
+    return 0;
 }
