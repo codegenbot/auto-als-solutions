@@ -7,6 +7,5 @@ def luhn(card):
             if digit > 9:
                 digit -= 9
         else:
-            digit
+            total += digit
         total += digit
-    return total
