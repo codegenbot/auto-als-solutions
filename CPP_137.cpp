@@ -1,26 +1,44 @@
+#include <boost/any.hpp>
+#include <string>
+
+using namespace std;
+
 boost::any compare_one(boost::any a, boost::any b) {
-    if (a.type() == typeid(int) && b.type() == typeid(float)) {
-        return (int)b > (int)a ? b : a;
+    if (a.type() == typeid(int) && b.type() == typeid(double)) {
+        return b;
     }
-    else if (a.type() == typeid(int) && b.type() == typeid(double)) {
-        return (int)b > (int)a ? b : a;
+    if (a.type() == typeid(double) && b.type() == typeid(int)) {
+        return b;
     }
-    else if (a.type() == typeid(int) && b.type() == typeid(string)) {
-        double val = stod(b.convert<string>().c_str());
-        return val > (double)a ? b : a;
+    if (a.type() == typeid(string) && b.type() == typeid(string)) {
+        string s1 = boost::any_cast<string>(a);
+        string s2 = boost::any_cast<string>(b);
+        if (stod(s1) > stod(s2))
+            return a;
+        else if (stod(s1) < stod(s2))
+            return b;
+        else
+            return boost::any("None");
     }
-    else if (a.type() == typeid(float) && b.type() == typeid(double)) {
-        return (double)b > (float)a ? b : a;
+    if (a.type() == typeid(int) && b.type() == typeid(string)) {
+        int i = boost::any_cast<int>(a);
+        string s = boost::any_cast<string>(b);
+        if (stod(s) > i)
+            return b;
+        else if (i > stod(s))
+            return a;
+        else
+            return boost::any("None");
     }
-    else if (a.type() == typeid(string) && b.type() == typeid(double)) {
-        double val = stod(b.convert<string>().c_str());
-        return val > stod(a.convert<string>().c_str()) ? b : a;
+    if (a.type() == typeid(string) && b.type() == typeid(int)) {
+        string s = boost::any_cast<string>(a);
+        int i = boost::any_cast<int>(b);
+        if (stod(s) > i)
+            return a;
+        else if (i > stod(s))
+            return b;
+        else
+            return boost::any("None");
     }
-    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
-        double val1 = stod(a.convert<string>().c_str()), val2 = stod(b.convert<string>().c_str());
-        return val2 > val1 ? b : a;
-    }
-    else {
-        return boost::any("None");
-    }
+    return b;
 }
