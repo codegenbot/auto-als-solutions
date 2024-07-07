@@ -1,16 +1,11 @@
-def factorize(n: int) -> List[int]:
-    factors = []
-    i = 2
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            n //= i
-            count = 0
-            while n % i == 0:
-                n //= i
-                count += 1
-            factors.append([i] * count)
-    if n > 1:
-        factors.append([n])
-    return factors
+```
+def find_primes():
+    num = int(input("Enter a number: "))
+    factors = [i for i in range(1, num + 1) if num % i == 0]
+    prime_factors = [
+        factor for factor in set(factors) if all(num % i > 0 for j in range(2, int(i ** 0.5) + 1))
+    ]
+    return prime_factors
+
+
+print(find_primes())
