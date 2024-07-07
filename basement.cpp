@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 using namespace std;
 
@@ -13,7 +12,8 @@ int basement(vector<int>& nums) {
 }
 
 int main() {
-    vector<int> testVec = {-3, 2, 3, -4};
-    cout << "The basement is at index " << basement(testVec) << endl;
+    vector<int> nums = {-2,2,-5,3,-1};
+    int result = basement(nums);
+    cout << "Result: " << result << endl;
     return 0;
 }
