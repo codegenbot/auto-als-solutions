@@ -17,8 +17,6 @@ int is_bored(string S) {
     }
     return count;
 
-}
-
 int main() {
     string S;
     cout << "Enter a string: ";
