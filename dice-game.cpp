@@ -1,15 +1,18 @@
-Here is the solution:
+#include <iostream>
+using namespace std;
 
-double calculateProbability(int n, int m) {
-    double sum = 0;
-    for (int i = 1; i <= n; ++i) {
-        sum += 1.0 / m;
+double solve(int n, int m) {
+    double sum = 0.0;
+    for (int i = n + 1; i <= m; i++) {
+        sum += 1.0 / (n * 1.0);
     }
-    return sum - (n > m ? 1.0 : 0);
+    return sum;
 }
+
 int main() {
     int n, m;
     cin >> n >> m;
-    cout << setprecision(5) << fixed << calculateProbability(n, m) << endl;
+    double result = solve(n, m);
+    cout << fixed << setprecision(1) << result << endl;
     return 0;
 }
