@@ -1,29 +1,36 @@
-vector<string> split(const string& str) {
-    vector<string> tokens;
-    size_t pos = 0, last_pos = 0;
-    while ((pos = str.find(" ")) != string::npos) {
-        tokens.push_back(str.substr(last_pos, pos - last_pos));
-        last_pos = pos + 1;
-    }
-    tokens.push_back(str.substr(last_pos));
-    return tokens;
-}
+#include <vector>
+#include <algorithm>
+
+using namespace std;
 
 string words_in_sentence(string sentence) {
-    vector<string> words = split(sentence);
-    ostringstream result;
-    for (const string& word : words) {
-        if (isPrime(word.length())) {
-            result << word << " ";
+    vector<string> words;
+    size_t start = 0;
+    while (start < sentence.size()) {
+        size_t end = start;
+        while (end + 1 <= sentence.size() && !isalpha(sentence[end])) {
+            end++;
+        }
+        if (end > start) {
+            words.push_back(sentence.substr(start, end - start));
+        }
+        start = end + 1;
+    }
+
+    string result;
+    for (const auto& word : words) {
+        size_t length = word.size();
+        bool is_prime = false;
+        for (size_t i = 2; i * i <= length; i++) {
+            if (length % i == 0) {
+                is_prime = false;
+                break;
+            }
+        }
+        if (is_prime) {
+            result += word + " ";
         }
     }
-    return result.str();
-}
 
-bool isPrime(int n) {
-    if (n <= 1) return false;
-    for (int i = 2; i * i <= n; ++i) {
-        if (n % i == 0) return false;
-    }
-    return true;
+    return result.substr(0, result.find(" "));
 }
