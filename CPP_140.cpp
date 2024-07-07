@@ -2,19 +2,33 @@
 #include <string>
 
 std::string fix_spaces(std::string text) {
-    for (int i = 0; i < text.length(); i++) {
-        if (text[i] == ' ') {
-            if ((i == 0 || text[i-1] != ' ') && (i == text.length() - 1 || text[i+1] != ' ')) {
-                result += '_';
-            } else if ((i > 0 && text[i-1] == ' ') && (i < text.length() - 1 && text[i+1] == ' ')) {
+    if(text.empty()) {
+        return text;
+    }
+    
+    std::string result = "";
+    bool in_space_sequence = false;
+    for(char c : text) {
+        if(c == ' ') {
+            if(in_space_sequence) {
                 result += '-';
+                in_space_sequence = false;
             } else {
-                result += '_';
+                if(result.size() > 0 && (result.back() != '_' || result.back() != '-')) {
+                    result += '_';
+                }
+                in_space_sequence = true;
             }
         } else {
-            result += text[i];
+            if(in_space_sequence) {
+                result += c;
+                in_space_sequence = false;
+            } else {
+                result += c;
+            }
         }
     }
+    
     return result;
 }
 
