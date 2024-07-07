@@ -7,9 +7,9 @@ using namespace std;
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(int)) {
-        return boost::any(max(boost::any_cast<int>(a), boost::any_cast<int>(b)));
+        return max(a, b);
     } else if (a.type() == typeid(float) && b.type() == typeid(float)) {
-        return boost::any(max(boost::any_cast<float>(a), boost::any_cast<float>(b)));
+        return max(a, b);
     } else if ((a.type() == typeid(string) || a.type() == typeid(double)) &&
                (b.type() == typeid(string) || b.type() == typeid(double))) {
         string strA = boost::any_cast<string>(a);
@@ -34,7 +34,7 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
 
     if (boost::any_cast<int>(a) == boost::any_cast<int>(b)) {
-        return boost::any("Equal");
+        return "Equal";
     } else if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
         return a;
     } else {
