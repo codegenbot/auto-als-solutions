@@ -1,14 +1,15 @@
+#include <stack>
 #include <string>
 
-bool evaluateBooleanExpression(string expression) {
-    stack<char> operators;
-    stack<string> operands;
+bool evaluateBooleanExpression(std::string expression) {
+    std::stack<char> operators;
+    std::stack<std::string> operands;
 
     for (int i = 0; i < expression.length(); i++) {
         if (expression[i] == '&') {
-            string operand1 = operands.top();
+            std::string operand1 = operands.top();
             operands.pop();
-            string operand2;
+            std::string operand2;
             while (!operators.empty() && operators.top() != '|') {
                 operators.pop();
             }
@@ -18,13 +19,13 @@ bool evaluateBooleanExpression(string expression) {
                 operand2 = operands.top();
                 operands.pop();
             }
-            string result = (operand1 == "T" && operand2 == "T") ? "T" : "F";
+            std::string result = (operand1 == "T" && operand2 == "T") ? "T" : "F";
             operands.push(result);
             operators.push('&');
         } else if (expression[i] == '|') {
-            string operand1 = operands.top();
+            std::string operand1 = operands.top();
             operands.pop();
-            string operand2;
+            std::string operand2;
             while (!operators.empty() && operators.top() != '&') {
                 operators.pop();
             }
@@ -34,7 +35,7 @@ bool evaluateBooleanExpression(string expression) {
                 operand2 = operands.top();
                 operands.pop();
             }
-            string result = (operand1 == "T" || operand2 == "T") ? "T" : "F";
+            std::string result = (operand1 == "T" || operand2 == "T") ? "T" : "F";
             operands.push(result);
             operators.push('|');
         } else if (expression[i] == 't' || expression[i] == 'T') {
