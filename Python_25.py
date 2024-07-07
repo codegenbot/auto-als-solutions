@@ -1,24 +1,16 @@
-```
-def find_primes():
+def find_prime_factors():
     num = int(input("Enter a number: "))
 
-    def is_prime(n):
-        if n < 2:
-            return False
-        for i in range(2, int(n**0.5) + 1):
-            if n % i == 0:
-                return False
-        return True
-
     factors = [i for i in range(1, num + 1) if num % i == 0]
-    
+
     prime_factors = [
         factor
         for factor in set(factors)
-        if is_prime(factor)
+        if all(num % i > 0 for i in range(2, int(factor**0.5) + 1))
     ]
 
     return prime_factors
 
 
-print(find_primes())
+prime_factors = find_prime_factors()
+print("Prime Factors: ", prime_factors)
