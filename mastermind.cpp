@@ -26,7 +26,6 @@ int blackPegs(string code, string guess) {
             if (guess[j] == codeVec[i] && guess[j] != ' ') {
                 found = true;
                 break;
-            }
         }
         if (!found) {
             count++;
@@ -41,4 +40,3 @@ int main() {
     cout << blackPegs(code, guess) << endl;
     cout << whitePegs(code, guess) << endl;
     return 0;
-}
