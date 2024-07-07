@@ -1,11 +1,2 @@
-def basement(arr):
-    total = 0
-    for i in range(len(arr)):
-        total += arr[i]
-        if total < 0:
-            return i
-print(basement([1])) 
-print(basement([-100, 1])) 
-print(basement([2, -1, 100])) 
-print(basement([2, -95, 100])) 
-print(basement([2, -30, 5]))
+```
+print(sum(i for i in ([1], [-100, 1], [2, -1, 100], [2, -95, 100], [2, -30, 5])[x]) <= 0 and print(x) or print(next((i for i in range(len([1], [-100, 1], [2, -1, 100], [2, -95, 100], [2, -30, 5])) if sum([1], [-100, 1], [2, -1, 100], [2, -95, 100], [2, -30, 5][i:i+1]) < 0 for i in range(len([1], [-100, 1], [2, -1, 100], [2, -95, 100], [2, -30, 5]))))
