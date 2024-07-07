@@ -1,10 +1,13 @@
-```cpp
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
-#include <iomanip> 
-#include "md5.h" 
 
 using namespace std;
+
+extern "C" {
+#include "md5.h"
+}
 
 string string_to_md5(string text) {
     if (text.empty()) return "";
