@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <climits>
 #include <cmath>
@@ -28,4 +27,3 @@ Result cutVector(vector<int>& nums) {
     result.right = vector<int>(nums.begin() + cutIndex, nums.end());
 
     return result;
-}
