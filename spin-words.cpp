@@ -1,4 +1,6 @@
-```cpp
+#include <iostream>
+#include <string>
+
 std::string spinWords(std::string sentence) {
     std::vector<std::string> words;
     std::istringstream iss(sentence);
