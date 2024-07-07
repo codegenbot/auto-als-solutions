@@ -17,8 +17,8 @@ std::string words_in_sentence(std::string sentence) {
     }
 
     std::vector<std::string> words = split(sentence, ' ');
-    for (const auto& word : words) {
-        if (std::find(primeNumbers.begin(), primeNumbers.end(), word.length()) != primeNumbers.end())
+    for (std::string word : words) {
+        if (find(primeNumbers.begin(), primeNumbers.end(), static_cast<int>(word.length())) != primeNumbers.end())
             result += word + " ";
     }
     return result.substr(0, result.size() - 1);
