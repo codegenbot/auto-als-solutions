@@ -1,19 +1,34 @@
+```
 def solve_boolean(expression):
-    if expression == "T":
-        return True
-    elif expression == "F":
-        return False
-    else:
-        i = expression.find("&")
-        if i != -1:
-            a = expression[:i]
-            b = expression[i + 1 :]
-            return solve_boolean(a) and solve_boolean(b)
+    def evaluate_operator(a, b, operator):
+        if operator == "&":
+            return a and b
+        elif operator == "|":
+            return a or b
         else:
-            i = expression.find("|")
-            if i != -1:
-                a = expression[:i]
-                b = expression[i + 1 :]
-                return solve_boolean(a) or solve_boolean(b)
-            else:
-                return True
+            raise ValueError("Invalid operator")
+
+    def evaluate_expression(expression):
+        stack = []
+        result = True
+        operators = ["&", "|"]
+        i = 0
+        while i < len(expression):
+            if expression[i] in "TF":
+                if not stack:
+                    result = expression[i] == "T"
+                else:
+                    a = stack.pop() == "T"
+                    operator = stack.pop()
+                    if operator == "&":
+                        result = result and a
+                    elif operator == "|":
+                        result = result or a
+            elif expression[i] in operators:
+                stack.append(expression[i])
+                stack.append(result)
+                result = True
+            i += 1
+        return result
+
+    return evaluate_expression(expression)
