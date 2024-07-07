@@ -1,4 +1,7 @@
+```cpp
 #include <iostream>
+#include <map>
+#include <string>
 using namespace std;
 
 int countBlackPegs(string code, string guess) {
@@ -20,9 +23,16 @@ int countWhitePegs(string code, string guess) {
 
     for (int i = 0; i < 4; ++i) {
         if (guess[i] != code[i]) {
-            if (codeCount[guess[i]] > 0) {
-                --whitePegs;
-                --codeCount[guess[i]];
+            bool isPresentInCode = false;
+            for (char c : code) {
+                if (c == guess[i]) {
+                    isPresentInCode = true;
+                    break;
+                }
+            }
+
+            if (isPresentInCode) {
+                ++whitePegs;
             }
         }
     }
