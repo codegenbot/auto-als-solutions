@@ -7,29 +7,35 @@ using namespace std;
 vector<string> split_words(string txt) {
     vector<string> result;
     string word = "";
-    
     for (char c : txt) {
-        if (!isspace(c)) { // Check if character is a whitespace
+        if (isspace(c)) {
+            if (!word.empty()) {
+                result.push_back(word);
+                word.clear();
+            }
+        } else if (c == ',') {
+            if (!word.empty()) {
+                result.push_back(word);
+                word.clear();
+            }
             word += c;
-        } else if (!word.empty()) {
-            result.push_back(word);
-            word = "";
+        } else {
+            word += c;
         }
     }
-    
-    if (!word.empty())
+    if (!word.empty()) {
         result.push_back(word);
-    
-    if (result.size() == 0) {
+    } else {
         int count = 0;
         for (char c : txt) {
-            if (c >= 'a' && c <= 'z') {
-                count += (int)(c - 'a');
-                if (count % 2 != 0)
-                    result.push_back(to_string(count));
+            if (islower(c)) {
+                count++;
+                if (count % 2 == 1) {
+                    break;
+                }
             }
         }
+        result.push_back(to_string(count));
     }
-    
     return result;
 }
