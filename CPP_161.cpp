@@ -1,13 +1,12 @@
-namespace std;
-
-string solve(string s) {
-    string result = "";
+```
+std::string solve(std::string s) {
+    std::string result = "";
     for (char c : s) {
-        if (isalpha(c)) {
+        if (std::isalpha(c)) {
             c = (c >= 'a' && c <= 'z') ? c + ('A' - 'a') : c - ('A' - 'a');
         } else {
             result += c;
         }
     }
-    return result.empty() ? string(s).reverse() : result;
+    return result.empty() ? std::string(s).reverse() : result;
 }
