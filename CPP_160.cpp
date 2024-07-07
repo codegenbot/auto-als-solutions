@@ -1,31 +1,42 @@
 #include <vector>
 #include <cmath>
 
-int do_algebra(vector<string> operator_, vector<int> operands_) {
+int do_algebra(vector<pair<char, int>> expressions) {
     int result = 0;
-    for (int i = 0; i < operator_.size(); i++) {
-        if (operator_[i] == "+") {
-            result += operands_[i];
-        } else if (operator_[i] == "-") {
-            result -= operands_[i];
-        } else if (operator_[i] == "*") {
-            int temp = 0;
-            for (int j = i; j < operands_.size(); j++) {
-                temp *= operands_[j];
-            }
-            result += temp;
-        } else if (operator_[i] == "/" || operator_[i] == "//" || operator_[i] == "**") {
+    for (const auto& expression : expressions) {
+        char operator_;
+        int operand_;
+
+        std::tie(operator_, operand_) = expression;
+
+        if (operator_ == '+') {
+            result += operand_;
+        } else if (operator_ == '-') {
+            result -= operand_;
+        } else if (operator_ == '*') {
             int temp = 1;
-            for (int j = i; j < operands_.size(); j++) {
-                if (operator_[j] == "/") {
-                    temp /= operands_[j];
-                } else if (operator_[j] == "//") {
-                    temp /= operands_[j];
-                } else if (operator_[j] == "**") {
-                    temp = pow(temp, operands_[j]);
+            for (int i = 0; i < expressions.size(); i++) {
+                if (expressions[i].first == '*') {
+                    temp *= expressions[i].second;
+                }
+            }
+            result += temp * operand_;
+        } else if (operator_ == "/") {
+            int temp = operand_;
+            for (int i = 0; i < expressions.size(); i++) {
+                if (expressions[i].first == '/') {
+                    temp /= expressions[i].second;
                 }
             }
             result += temp;
+        } else if (operator_ == "**") {
+            int temp = 1;
+            for (int i = 0; i < expressions.size(); i++) {
+                if (expressions[i].first == '**') {
+                    temp *= pow(expressions[i].second, 1.0);
+                }
+            }
+            result += temp * operand_;
         }
     }
     return result;
