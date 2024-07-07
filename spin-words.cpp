@@ -9,11 +9,13 @@ std::string spinWords(std::string sentence) {
         words.push_back(word);
     }
 
-    std::string result;
+    sentence = ""; 
     for (int i = 0; i < words.size(); ++i) {
-        result += words[i];
-        if (i < words.size() - 1)
-            result += " ";
+        sentence += words.back();
+        if (i != words.size() - 1)
+            sentence += " "; 
+        else
+            words.pop_back(); 
     }
-    return result;
+    return sentence;
 }
