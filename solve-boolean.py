@@ -1,11 +1,9 @@
 def solve_boolean(expression):
     def evaluate_expression(expression):
-        if not expression: return None  # base case: empty string
-
+        if not expression: return None  
         if expression[0] == "(":
             i = expression.index(")")
-            return evaluate_expression(expression[1:i])  # recursive call to evaluate sub-expression
-
+            return evaluate_expression(expression[1:i])  
         a = expression[0] == "T"
         operator = ""
         for i in range(1, len(expression)):
@@ -18,7 +16,7 @@ def solve_boolean(expression):
                     operator = expression[i]
                 break
 
-        b = evaluate_expression(expression[i+1:])  # recursive call to evaluate sub-expression
+        b = evaluate_expression(expression[i+1:])  
         if operator == "&": return a and b
         if operator == "|": return a or b
         raise ValueError("Invalid operator")
