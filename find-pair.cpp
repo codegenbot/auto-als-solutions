@@ -1,7 +1,6 @@
-```cpp
 #include <vector>
 #include <unordered_map>
-#include <iostream> 
+#include <iostream>
 
 using namespace std;
 
@@ -14,7 +13,7 @@ pair<int, int> findPair(vector<int>& arr, int target) {
         }
         map[arr[i]] = i;
     }
-    return {-1, -1}; 
+    return {-1, -1};
 }
 
 int main() {
