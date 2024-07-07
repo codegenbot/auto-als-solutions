@@ -1,3 +1,5 @@
+#include <cassert>
+
 bool any_int(float a, float b, float c) {
     int ai = (int)a;
     int bi = (int)b;
@@ -7,14 +9,6 @@ bool any_int(float a, float b, float c) {
 }
 
 int main() {
-    float a, b, c;
-    std::cout << "Enter three floating point numbers: ";
-    std::cin >> a >> b >> c;
-
-    if(any_int(a, b, c))
-        std::cout << "At least one integer.\n";
-    else
-        std::cout << "No integers.\n";
-
+    assert(any_int(3.01, 4, 7) == false);
     return 0;
 }
