@@ -1,4 +1,3 @@
-#include <vector>
 using namespace std;
 
 int do_algebra(vector<string> operato, vector<int> operand) {
