@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <algorithm>
 
@@ -13,8 +12,8 @@ int add_elements(const vector<int>& arr, int k) {
 }
 
 int main() {
-    vector<int> numbers = {1, 10, 5, 3};
-    int result = add_elements(numbers, 4);
-    cout << "Sum of elements with size of representation less than or equal to 2: " << result << endl;
+    vector<int> arr = {1, 23, 45, 12};
+    int k = 3;
+    cout << add_elements(arr, k) << endl;
     return 0;
 }
