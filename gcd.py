@@ -1,11 +1,9 @@
-```
 def gcd(a, b):
     if a == 0 or b == 0:
         return abs(a)
     while b != 0:
         a, b = b, a % b
     return abs(a)
-
 
 def indices_of_substring(text, target):
     result = []
