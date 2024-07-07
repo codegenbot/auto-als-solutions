@@ -1,4 +1,3 @@
-#include <stack>
 #include <string>
 
 bool evaluateBooleanExpression(std::string expression) {
@@ -22,8 +21,7 @@ bool evaluateBooleanExpression(std::string expression) {
             std::string result = (operand1 == "T" && operand2 == "T") ? "T" : "F";
             operands.push(result);
             operators.push('&');
-        } 
-        else if (expression[i] == '|') {
+        } else if (expression[i] == '|') {
             std::string operand1 = operands.top();
             operands.pop();
             std::string operand2;
@@ -39,11 +37,9 @@ bool evaluateBooleanExpression(std::string expression) {
             std::string result = (operand1 == "T" || operand2 == "T") ? "T" : "F";
             operands.push(result);
             operators.push('|');
-        } 
-        else if (expression[i] == 't' || expression[i] == 'T') {
+        } else if (expression[i] == 't' || expression[i] == 'T') {
             operands.push("T");
-        }
-        else if (expression[i] == 'f' || expression[i] == 'F') {
+        } else if (expression[i] == 'f' || expression[i] == 'F') {
             operands.push("F");
         }
     }
