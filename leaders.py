@@ -1,8 +1,10 @@
-def leaders(input):
-    output = []
-    max_right = input[-1]
-    for i in range(len(input) - 1, -1, -1):
-        if input[i] >= max_right:
-            output.append(input[i])
-            max_right = input[i]
-    return list(reversed(output))
+Here is the Python code to solve this problem:
+
+def leaders(a):
+    return [a[i] for i in range(len(a)-1,-1,-1) if all(x <= a[i] for x in a[i+1:])]
+
+print(leaders([0]))
+print(leaders([1, 0]))
+print(leaders([1, 451]))
+print(leaders([2, 1000, 0]))
+print(leaders([2, 0, 1000]))

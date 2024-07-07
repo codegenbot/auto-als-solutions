@@ -14,8 +14,7 @@ int main() {
     int nickles = remainingCents / 5;
     remainingCents %= 5;
 
-    int pennies = remainingCents;
-    remainingCents = 0; // reset remaining cents
+    int pennies = remainingCents / 1;
 
     cout << quarters << endl;
     cout << dimes << endl;
