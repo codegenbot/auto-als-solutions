@@ -2,19 +2,32 @@ int mastermind(string code, string guess) {
     int white = 0;
     int black = 0;
 
+    vector<int> codeCount(6, 0);
+    vector<int> guessCount(6, 0);
+
     for (int i = 0; i < 4; i++) {
         if (code[i] == guess[i]) {
             black++;
+            codeCount[code[i] - 'A']++;
+            guessCount[guess[i] - 'A']++;
         } else {
-            bool found = false;
-            for (int j = 0; j < 4; j++) {
-                if (guess[i] == code[j] && !found) {
-                    found = true;
+            int j;
+            for (j = 0; j < 6; j++) {
+                if (code[i] != guess[j] && codeCount[j] < guessCount[j]) {
+                    break;
                 }
             }
-            if (!found) white++;
+            if (j < 6) {
+                white++;
+                codeCount[code[i] - 'A']++;
+                guessCount[guess[j] - 'A']++;
+            } else {
+                black++;
+                codeCount[code[i] - 'A']++;
+                guessCount[guess[i] - 'A']++;
+            }
         }
     }
 
-    return black + white - 1;
+    return make_tuple(white, black);
 }
