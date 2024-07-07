@@ -30,22 +30,6 @@ boost::any compare_one(boost::any a, boost::any b) {
         string strA = boost::any_cast<string>(a);
 
         return (stod(strA) > numB) ? a : b;
-    } else if ((a.type() == typeid(string) || a.type() == typeid(double)) &&
-               (b.type() == typeid(int))) {
-        string strA = boost::any_cast<string>(a);
-        int numB = boost::any_cast<int>(b);
-
-        double numA = stod(strA);
-
-        return (numA > numB) ? a : b;
-    } else if ((a.type() == typeid(int)) &&
-               (b.type() == typeid(string) || b.type() == typeid(double))) {
-        int numA = boost::any_cast<int>(a);
-        string strB = boost::any_cast<string>(b);
-
-        double numB = stod(strB);
-
-        return (numA > numB) ? a : b;
     }
 
     if (boost::any_cast<int>(a) == boost::any_cast<int>(b)) {
