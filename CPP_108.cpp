@@ -1,17 +1,35 @@
-int count_nums(std::vector<int> n) {
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int count_nums(vector<int> v) {
     int count = 0;
-    for (int num : n) {
-        if (num < 0) {
+    for (int num : v) {
+        if (num >= 0) {
+            int sum = 0;
+            while (num > 0) {
+                sum += num % 10;
+                num /= 10;
+            }
+            if (sum > 0)
+                count++;
+        } else {
             num = -num;
-        }
-        int sum = 0;
-        while (num > 0) {
-            sum += num % 10;
-            num /= 10;
-        }
-        if (sum > 0) {
-            count++;
+            int sum = 0;
+            while (num > 0) {
+                sum += num % 10;
+                num /= 10;
+            }
+            if (sum > 0)
+                count++;
         }
     }
     return count;
+}
+
+int main() {
+    vector<int> v = {1};
+    cout << "Count: " << count_nums(v) << endl; 
+    return 0;
 }
