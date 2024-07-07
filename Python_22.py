@@ -1,4 +1,7 @@
-def filter_integers():
+```
+from typing import List
+
+def filter_integers() -> List[int]:
     values = []
     while True:
         user_input = input("Enter a value (or 'stop' to finish): ")
@@ -15,6 +18,9 @@ def filter_integers():
     else:
         print("Invalid filter choice! Returning all integers.")
         result = values
+    else:
+        print("Please enter 'even' or 'odd'.")
+        return filter_integers()
     return result
 
 print(filter_integers())
