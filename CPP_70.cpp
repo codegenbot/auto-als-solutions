@@ -1,4 +1,3 @@
-```
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -34,7 +33,7 @@ int main() {
 
     vector<int> result1 = strange_sort_vector(v1);
     vector<int> result2 = strange_sort_vector(v2);
-    vector<int> result3 = strange_sort_vector(v3);
+    //vector<int> result3 = strange_sort_vector(v3);
 
     cout << "Strange sorted Vector: ";
     for (int x : result1) {
@@ -47,4 +46,6 @@ int main() {
         cout << x << " ";
     }
     cout << endl;
+
+    return 0;
 }
