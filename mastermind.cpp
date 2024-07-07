@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <map>
 #include <string>
@@ -22,16 +23,10 @@ int countWhitePegs(string code, string guess) {
 
     for (int i = 0; i < 4; ++i) {
         if (guess[i] != code[i]) {
-            if (codeCount.find(guess[i]) != codeCount.end() && codeCount[guess[i]] > 0) {
+            if (codeCount.find(guess[i]) != codeCount.end()) {
                 --whitePegs;
                 --codeCount[guess[i]];
             }
-        }
-    }
-
-    for (char c : guess) {
-        if (c == code[3]) {
-            ++whitePegs;
         }
     }
 

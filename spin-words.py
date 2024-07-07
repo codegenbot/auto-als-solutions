@@ -1,5 +1,5 @@
-```
-"""def spin_words(sentence):
+"""
+def spin_words(sentence):
     words = sentence.split()
     result = []
     
@@ -9,4 +9,5 @@
         else:
             result.append(word)
             
-    return ' '.join(result)""```
+    return ' '.join(result)
+"""
