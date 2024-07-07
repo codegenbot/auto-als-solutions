@@ -1,6 +1,6 @@
-```
-#include <string>
 #include <vector>
+#include <algorithm>
+using namespace std;
 
 string words_in_sentence(string sentence) {
     vector<string> words = split(sentence, ' ');
@@ -32,10 +32,4 @@ vector<string> split(const string& str, char c) {
     }
     tokens.push_back(str);
     return tokens;
-}
-
-int main() {
-    string sentence = "Hello world";
-    cout << words_in_sentence(sentence) << endl;
-    return 0;
 }
