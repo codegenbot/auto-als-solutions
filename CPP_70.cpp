@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool issame(vector<int> a,vector<int> b){
+bool issame(vector<int> a,vector<int>b){
     if(a.size()!=b.size())
         return false;
     sort(a.begin(),a.end());
@@ -13,7 +13,6 @@ bool issame(vector<int> a,vector<int> b){
             return false;
     }
     return true;
-
 }
 
 vector<int> strange_sort_list(vector<int> lst) {
