@@ -12,18 +12,18 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
     else if (a.type() == typeid(int) && b.type() == typeid(std::string)) {
         double val = std::stod(b.convert<std::string>().c_str());
-        return boost::any(val > (double)a ? b : a);
+        return val > (double)a ? b : a;
     }
     else if (a.type() == typeid(float) && b.type() == typeid(double)) {
         return boost::any((double)b > (float)a ? b : a);
     }
     else if (a.type() == typeid(std::string) && b.type() == typeid(double)) {
         double val = std::stod(b.convert<std::string>().c_str());
-        return boost::any(val > std::stod(a.convert<std::string>().c_str()) ? b : a);
+        return val > std::stod(a.convert<std::string>().c_str()) ? b : a;
     }
     else if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
         double val1 = std::stod(a.convert<std::string>().c_str()), val2 = std::stod(b.convert<std::string>().c_str());
-        return boost::any(val2 > val1 ? b : a);
+        return val2 > val1 ? b : a;
     }
     else {
         return boost::any("None");
