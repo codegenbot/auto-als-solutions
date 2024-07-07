@@ -20,7 +20,7 @@ int countWhitePegs(string code, string guess) {
 
     for (int i = 0; i < 4; ++i) {
         if (guess[i] != code[i]) {
-            if (codeCount.find(guess[i]) != codeCount.end()) {
+            if (codeCount[guess[i]] > 0) {
                 --whitePegs;
                 --codeCount[guess[i]];
             }
