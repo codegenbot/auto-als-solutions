@@ -1,13 +1,13 @@
-#include <iostream>
-#include <iomanip>
 #include <string>
 #include <sstream>
-
-using namespace std;
+#include <iostream>
+#include <iomanip>
 
 extern "C" {
-#include "md5.h"
+    #include "md5.h"
 }
+
+using namespace std;
 
 string string_to_md5(string text) {
     if (text.empty()) return "";
