@@ -1,3 +1,5 @@
+```cpp
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -5,23 +7,46 @@ using namespace std;
 
 vector<int> strange_sort_vector(vector<int> lst) {
     vector<int> result;
-    
+    if (lst.empty()) return result;
+
+    sort(lst.begin(), lst.end());
+
     while (!lst.empty()) {
-        int min_val = *min_element(lst.begin(), lst.end());
-        int max_val = *max_element(lst.begin(), lst.end());
-        
-        result.push_back(min_val);
-        lst.erase(std::remove(lst.begin(), lst.end(), min_val), lst.end());
-        
+        result.push_back(*lst.begin());
+        lst.erase(lst.begin());
         if (!lst.empty())
-            result.push_back(max_val);
-        lst.erase(std::remove(lst.begin(), lst.end(), max_val), lst.end());
+            reverse(lst.begin(), lst.end());
     }
-    
+
     return result;
 }
 
 int main() {
-    assert (strange_sort_vector({111111}) == vector<int> {111111});
+    vector<int> v1 = {1, 2, 3, 4};
+    vector<int> v2 = {5, 5, 5, 5};
+    vector<int> v4;
+
+    cout << "Vector: " << endl;
+    for (int x : v1) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    vector<int> result1 = strange_sort_vector(v1);
+    vector<int> result2 = strange_sort_vector(v2);
+    vector<int> result4 = strange_sort_vector(v4);
+
+    cout << "Strange sorted Vector: " << endl;
+    for (int x : result1) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    cout << "Strange sorted Vector: " << endl;
+    for (int x : result2) {
+        cout << x << " ";
+    }
+    cout << endl;
+
     return 0;
 }
