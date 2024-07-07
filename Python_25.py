@@ -15,4 +15,5 @@ def find_primes():
 
     return prime_factors
 
+
 print(find_primes())
