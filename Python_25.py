@@ -1,3 +1,4 @@
+```
 def find_primes(num):
     def is_prime(n):
         if n < 2:
