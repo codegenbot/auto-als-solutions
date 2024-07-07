@@ -1,4 +1,4 @@
-Here is the completed code:
+Here's the solution for the GCD and Indices of Substring problems:
 
 def gcd(a, b):
     while b != 0:
@@ -7,11 +7,11 @@ def gcd(a, b):
 
 def indices_of_substring(text, target):
     result = []
-    start = 0
-    while start < len(text):
-        pos = text.find(target, start)
+    last_index = 0
+    while True:
+        pos = text.find(target, last_index)
         if pos == -1:
             break
-        result.append(pos)
-        start = pos + 1
+        result.append(pos + 1)
+        last_index = pos + 1
     return result
