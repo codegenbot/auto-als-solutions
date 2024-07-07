@@ -1,21 +1,18 @@
-#include <algorithm>
+```cpp
+#include <iostream>
 #include <vector>
-#include <string>
 #include <map>
+#include <algorithm>
 
-bool issame(vector<string> a, vector<string> b) {
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i]) return false;
-    }
-    return true;
+bool issame(vector<string> a, vector<string>b) {
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<int> numbers;
+    vector<string> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
+            numbers.push_back(to_string(num));
         }
     }
     sort(numbers.begin(), numbers.end());
@@ -25,12 +22,12 @@ vector<string> by_length(vector<int> arr) {
                                      {4, "Four"}, {5, "Five"}, {6, "Six"},
                                      {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
     for (int num : numbers) {
-        result.push_back(numberNames[num]);
+        result.push_back(numberNames[stoi(num)]);
     }
     return result;
 }
 
 int main() {
-    assert(issame(by_length({9, 4, 8}), {"Nine", "Four", "Eight"}));
+    assert(by_length({9, 4, 8}) == vector<string>{"Nine", "Eight", "Four"});
     return 0;
 }
