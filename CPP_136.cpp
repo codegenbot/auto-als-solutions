@@ -1,21 +1,28 @@
 #include <vector>
-#include <algorithm>
+#include <climits>
 
 using namespace std;
 
 vector<int> largest_smallest_integers(vector<int> lst) {
-    int max_negative = 0;
-    int min_positive = INT_MAX;
-
+    vector<int> result = {0, 0};
+    
+    bool hasNegative = false;
+    int maxNegative = 0;
+    bool hasPositive = false;
+    int minPositive = INT_MAX;
+    
     for (int num : lst) {
-        if (num < 0 && num > max_negative) {
-            max_negative = num;
-        }
-        else if (num > 0 && num < min_positive) {
-            min_positive = num;
+        if (num < 0) {
+            hasNegative = true;
+            maxNegative = max(maxNegative, num);
+        } else if (num > 0) {
+            hasPositive = true;
+            minPositive = min(minPositive, num);
         }
     }
-
-    return {(max_negative >= 0 ? 0 : max_negative), 
-            (min_positive <= 0 ? 0 : min_positive)};
+    
+    result[0] = hasNegative ? maxNegative : 0;
+    result[1] = hasPositive ? minPositive : 0;
+    
+    return result;
 }
