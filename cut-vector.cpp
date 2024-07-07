@@ -1,44 +1,46 @@
 #include <vector>
-#include <iostream>
+using namespace std;
 
-std::vector<int> cutVector(const std::vector<int>& nums) {
-    int minDiff = INT_MAX;
-    int cutIndex = 0;
-
-    for (int i = 1; i < nums.size(); ++i) {
-        int diff = nums[i] - nums[0];
-        if (diff <= minDiff) {
-            minDiff = diff;
-            cutIndex = i;
+void cutVector(vector<int> v) {
+    int min_diff = INT_MAX;
+    vector<vector<int>> subvectors(2);
+    
+    for (int i = 1; i <= v.size() - 1; i++) {
+        int left_sum = 0, right_sum = 0;
+        for (int j = 0; j < i; j++) left_sum += v[j];
+        for (int j = i; j < v.size(); j++) right_sum += v[j];
+        
+        if (left_sum == right_sum) {
+            subvectors[0] = vector<int>(v.begin(), v.begin() + i);
+            subvectors[1] = vector<int>(v.begin() + i, v.end());
+            break;
+        } else if (abs(left_sum - right_sum) < min_diff) {
+            min_diff = abs(left_sum - right_sum);
+            subvectors[0] = vector<int>(v.begin(), v.begin() + i);
+            subvectors[1] = vector<int>(v.begin() + i, v.end());
         }
     }
-
-    return {std::vector<int>(nums.begin(), nums.begin() + cutIndex),
-            std::vector<int>(nums.begin() + cutIndex, nums.end())};
+    
+    for (int i = 0; i < subvectors.size(); i++) {
+        cout << "[";
+        for (int j = 0; j < subvectors[i].size(); j++) {
+            cout << subvectors[i][j];
+            if (j != subvectors[i].size() - 1) cout << " ";
+        }
+        cout << "]" << endl;
+    }
 }
 
 int main() {
     int n;
-    std::cin >> n;
-
-    std::vector<int> nums(n);
-    for (auto& num : nums) {
-        std::cin >> num;
+    cin >> n;
+    vector<int> v(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
     }
-
-    auto res = cutVector(nums);
-
-    std::cout << res[0].size() << '\n';
-    for (int num : res[0]) {
-        std::cout << num << ' ';
-    }
-    std::cout << '\n';
-
-    std::cout << res[1].size() << '\n';
-    for (int num : res[1]) {
-        std::cout << num << ' ';
-    }
-    std::cout << '\n';
-
+    
+    cutVector(v);
+    
     return 0;
 }
