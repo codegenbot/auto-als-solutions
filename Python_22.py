@@ -1,5 +1,4 @@
-from typing import List
-
+```
 def filter_integers() -> List[int]:
     values = []
     while True:
@@ -7,13 +6,13 @@ def filter_integers() -> List[int]:
         if user_input.lower() == 'stop':
             break
         try:
-            value = int(input("Enter an integer: "))
+            value = int(user_input)
             values.append(value)
         except ValueError:
-            print(f"Invalid input '{user_input}'! Please enter an integer.")
-    desired_output = input("Enter 'even' or 'odd' to filter: ")
-    if desired_output.lower() in ['even', 'odd']:
-        result = [x for x in values if (desired_output.lower() == 'even' and x % 2 == 0) or (desired_output.lower() == 'odd' and x % 2 != 0)]
+            print(f"Invalid input! Please enter an integer.")
+    desired_output = input("Enter 'even' or 'odd' to filter: ").lower()
+    if desired_output in ['even', 'odd']:
+        result = [x for x in values if (desired_output == 'even' and x % 2 == 0) or (desired_output == 'odd' and x % 2 != 0)]
     else:
         print("Invalid filter choice! Returning all integers.")
         result = values
