@@ -1,3 +1,4 @@
+```
 from typing import List
 
 def filter_integers() -> List[int]:
@@ -7,11 +8,7 @@ def filter_integers() -> List[int]:
         if user_input.lower() == 'stop':
             break
         try:
-            value = int(user_input)
-            # add validation for your range here, e.g., 1-100
-            if not 1 <= value <= 100: 
-                print(f"Invalid input '{user_input}'! Please enter an integer between 1 and 100.")
-                continue
+            value = int(input("Enter an integer: "))
             values.append(value)
         except ValueError:
             print(f"Invalid input '{user_input}'! Please enter an integer.")
