@@ -4,3 +4,4 @@ string middleCharacter(string s) {
         return s.substr(len / 2 - 1, 2);
     else
         return s.substr(len / 2, 1);
+}
