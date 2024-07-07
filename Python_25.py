@@ -1,30 +1,10 @@
 ```
-from typing import List
-import math
+def find_primes():
+    num = int(input("Enter a number: "))
+    factors = [i for i in range(1, num + 1) if num % i == 0]
+    prime_factors = [
+        factor for factor in set(factors) if all(num % i > 0 for j in range(2, int(i ** 0.5) + 1))
+    ]
+    return prime_factors
 
-
-def factorize(n: int) -> List[int]:
-    factors = []
-    i = 2
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            count = 0
-            while n % i == 0:
-                count += 1
-                n //= i
-            factors.append(i**count)
-            i = 2
-    if n > 1:
-        factors.append(n)
-    return factors
-
-
-num = input("Enter a number: ")
-while not num.isdigit():
-    print("Invalid input. Please enter a number.")
-    num = input("Enter a number: ")
-
-num = int(num)
-print(factorize(num))
+print(find_primes())
