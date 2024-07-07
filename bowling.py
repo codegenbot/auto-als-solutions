@@ -3,9 +3,13 @@ def bowling_score(frames):
     frames = frames.split()
     for i in range(0, len(frames), 2):
         if '/' not in frames[i]:
-            score += sum(map(int, frames[i:i+2]))
-        elif int(frames[i]) == 10:
-            score += 10 + sum(map(int, frames[i+1:i+3]))
+            score += int(frames[i])
         else:
-            score += 10 + max(map(int, frames[i:i+2]))
+            split_frame = list(map(int, frames[i].split('/')))
+            if sum(split_frame) == 10:
+                score += 10
+            elif split_frame[0] == 10:
+                score += 10 + split_frame[1]
+            else:
+                score += sum(split_frame)
     return score
