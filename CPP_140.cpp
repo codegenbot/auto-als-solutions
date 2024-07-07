@@ -6,21 +6,18 @@ std::string fix_spaces(std::string text) {
         return text;
     }
     
-    bool prevSpace = false;
-    for(int i = 0; i < text.length(); i++) {
-        if(text[i] == ' ') {
-            if(!prevSpace) {
-                result += (i == 0 ? "" : "-");
-            } else {
-                result += "_";
+    bool in_sequence = false;
+    std::string result = "";
+    
+    for(char c : text) {
+        if(c == ' ') {
+            if(!in_sequence) {
+                result += (result.empty() ? "-" : "_");
+                in_sequence = true;
             }
-            prevSpace = true;
         } else {
-            if(prevSpace) {
-                result += "-";
-                prevSpace = false;
-            }
-            result += text[i];
+            in_sequence = false;
+            result += c;
         }
     }
     
