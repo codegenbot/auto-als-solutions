@@ -26,28 +26,3 @@ vector<int> strange_sort_list(vector<int> lst) {
     }
     return result;
 }
-
-int main() {
-    vector<int> input;
-    int n;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-    
-    for(int i = 0; i < n; i++) {
-        int num;
-        cout << "Enter element " << i+1 << ": ";
-        cin >> num;
-        input.push_back(num);
-    }
-    
-    vector<int> output = strange_sort_list(input);
-    
-    if(issame(output,{1,2,3,4,5})) {
-        cout << "Output is correct." << endl;
-    } else {
-        for(int i : output) {
-            cout << i << " ";
-        }
-        cout << endl;
-    }
-}
