@@ -1,8 +1,7 @@
 ```cpp
-int main() {
-    long long min_sum = minSubArraySum({1, -1});
-    return 0;
-}
+#include <iostream>
+#include <vector>
+using namespace std;
 
 long long minSubArraySum(vector<long long> nums) {
     long long sum = 0, min_sum = LLONG_MAX;
@@ -14,4 +13,10 @@ long long minSubArraySum(vector<long long> nums) {
         }
     }
     return min_sum;
+}
+
+int main() {
+    vector<long long> nums = {2,-1,2};
+    assert(minSubArraySum(nums) == 3);
+    return 0;
 }
