@@ -1,7 +1,4 @@
 #include <cassert>
-#include <cmath>
-
-bool any_int(float a, float b, float c);
 
 bool any_int(float a, float b, float c) {
     if (a == static_cast<int>(a)) return (a == b + c || a == c + b);
@@ -12,5 +9,6 @@ bool any_int(float a, float b, float c) {
 
 int main() {
     assert(any_int(3.01, 4, 7) == false);
+    // Other test cases
     return 0;
 }
