@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 using namespace std;
+using namespace std::decimal;
 
 double vectorDistance(int n) {
     float v1[n], v2[n];
