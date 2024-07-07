@@ -1,8 +1,3 @@
-```cpp
-#include <vector>
-#include <iostream>
-#include <string>
-
 int pairedDigits(std::string str) {
     int sum = 0;
     for (int i = 0; i < str.length() - 1; i++) {
@@ -11,12 +6,4 @@ int pairedDigits(std::string str) {
         }
     }
     return sum;
-}
-
-int main() {
-    std::string str;
-    std::cout << "Enter a string of digits: ";
-    std::cin >> str;
-    std::cout << "Sum of paired digits: " << pairedDigits(str) << std::endl;
-    return 0;
 }
