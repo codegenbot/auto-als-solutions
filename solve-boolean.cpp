@@ -1,5 +1,4 @@
 #include <string>
-
 bool evaluateBooleanExpression(string expression) {
     stack<char> operators;
     stack<string> operands;
