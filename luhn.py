@@ -1,8 +1,8 @@
 def luhn(card):
+    card = [int(x) for x in str(card)[1:-1].split()]
     total = 0
-    for i in range(len(card)):
-        digit = int(card[i])
-        if (i % 2) == 1:
+    for i, digit in enumerate(reversed(card)):
+        if i % 2 == 0:
             digit *= 2
             if digit > 9:
                 digit -= 9
