@@ -1,15 +1,15 @@
-#include <algorithm>
-#include <cctype>
-
 int bowlingScore(const string& input) {
     int score = 0;
     int roll1, roll2, prevRolls = 0;
 
-    for (char c : input.begin(), input.end()) {
+    #include <algorithm>
+    #include <cctype>
+
+    for (char c : input) {
         if (c == '/') {
             score += std::min(10, prevRolls);
             prevRolls = 0;
-        } else if (std::isdigit(c)) {
+        } else if (::isdigit(c)) {
             prevRolls *= 10;
             prevRolls += c - '0';
         } else { // X
@@ -23,3 +23,4 @@ int bowlingScore(const string& input) {
     }
 
     return score;
+}
