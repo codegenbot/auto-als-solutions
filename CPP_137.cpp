@@ -10,11 +10,11 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
     else if (a.type() == typeid(int) && b.type() == typeid(string)) {
         string str = boost::any_cast<string>(b);
-        return stof(str.erase(0,1).erase(str.length()-2,str.length()).c_str()) > a ?
-            b : boost::any("None");
+        int num = stoi(str.erase(0,1).erase(str.length()-2,str.length()));
+        return num > boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(float) && b.type() == typeid(int)) {
-        return (float)b > a ? b : a;
+        return boost::any_cast<float>(b) > boost::any_cast<float>(a) ? b : a;
     }
     else if (a.type() == typeid(string) && b.type() == typeid(string)) {
         string str1 = boost::any_cast<string>(a);
