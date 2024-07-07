@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <string>
 using namespace std;
@@ -7,7 +8,7 @@ int is_bored(string S) {
     string sentence;
     for (char c : S) {
         if (c == '.' || c == '?' || c == '!') {
-            if (sentence.substr(0, 2) == "I ") {
+            if (sentence.substr(0, 2) == "I am") {
                 count++;
             }
             sentence = "";
@@ -16,7 +17,6 @@ int is_bored(string S) {
         }
     }
     return count;
-
 }
 
 int main() {
