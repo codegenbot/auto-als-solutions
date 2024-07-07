@@ -1,26 +1,26 @@
+#include <iostream>
 #include <string>
 using namespace std;
 
 string camelCase(string s) {
-    string result;
-    int i = 0;
+    string result = "";
+    int flag = 1;
     
-    while (i < s.length()) {
-        if (s[i] == '-') {
-            i++; // skip '-'
-            while (i < s.length() && s[i] == '-') i++; // skip multiple '-'
-            char first = toupper(s[i]);
-            result += first; // capitalize the next word
-            i++; // skip the first character of the next word
-        } else if (s[i] == ' ') {
-            while (i < s.length() && s[i] == ' ') i++; // skip multiple spaces
-            char first = tolower(s[i]);
-            result += first; // lowercase the next word
-            i++; // skip the first character of the next word
+    for(int i=0; i<s.length(); i++) {
+        if(s[i] == '-') {
+            if(flag) {
+                flag = 0;
+                continue;
+            } else {
+                result += s[i+1].toupper();
+                i++;
+            }
+        } 
+        if(flag) {
+            result += s[i];
         } else {
-            char c = tolower(s[i]);
-            result += c;
-            i++;
+            result += s[i].tolower();
+            flag = 1;
         }
     }
     
@@ -28,12 +28,9 @@ string camelCase(string s) {
 }
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        string s;
-        cin >> s;
-        cout << camelCase(s) << endl;
-    }
+    string str;
+    cout << "Enter the kebab-case string: ";
+    cin >> str;
+    cout << "The camelCase is: " << camelCase(str) << endl;
     return 0;
 }
