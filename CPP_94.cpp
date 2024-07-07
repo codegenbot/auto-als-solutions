@@ -32,11 +32,6 @@ bool isPrime(int num) {
 
 int main() {
     assert(solveProblem({127, 97, 8192}) == 10);
-    std::vector<int> input;
-    int n;
-    while(std::cin >> n) {
-        input.push_back(n);
-    }
-    std::cout << solveProblem(input) << std::endl;
+    // You might need to add some input logic here
     return 0;
 }
