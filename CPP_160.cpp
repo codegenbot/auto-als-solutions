@@ -5,6 +5,26 @@
 using namespace std;
 
 long long LONG_LONG_MAX = numeric_limits<long long>::max();
+long long pow(long long a, long long b) {
+    long long result = 1;
+    for(int i=0; i<b; i++) {
+        result *= a;
+    }
+    return result;
+}
+
+int do_algebra(vector<string> operato, vector<int> operand) {
+    string expression = "";
+    for (int i = 0; i < operato.size(); i++) {
+        expression += to_string(operand[i]);
+        expression += operato[i];
+    }
+    expression += to_string(operand.back());
+    
+    int result = eval(expression.c_str());
+    
+    return result;
+}
 
 long long eval(const char* pExpr)
 {
@@ -12,6 +32,7 @@ long long eval(const char* pExpr)
     const char* pToken;
     long long v;
 
+    // Create a new stack
     stack<long long> valueStack;
 
     // Process the input string one token at a time:
@@ -110,29 +131,17 @@ long long eval(const char* pExpr)
                     break;
                 case '/':
                     if (b == 0)
-                        return LONG_LONG_MAX; // invalid operation
+                        return LONG_LONG_MAX;
                     v = a / b;
                     break;
                 case '^':
                     v = pow(a, b);
                     break;
             }
-
             valueStack.push(v);
         }
     }
 
-    // The final result is the top of the stack:
+    // Return the final value in the stack
     return valueStack.top();
-}
-
-int do_algebra(vector<string> operato, vector<int> operand) {
-    string expression = "";
-    for (int i = 0; i < operato.size(); i++) {
-        expression += to_string(operand[i]);
-        expression += operato[i];
-    }
-    expression += to_string(operand.back());
-
-    return eval(expression.c_str());
 }
