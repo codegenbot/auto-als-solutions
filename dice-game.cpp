@@ -1,18 +1,13 @@
-#include <iostream>
-using namespace std;
+Here is the completed code:
 
-double solve(int n, int m) {
-    double sum = 0.0;
-    for (int i = n + 1; i <= m; i++) {
-        sum += 1.0 / (n * 1.0);
+double diceGame(int n, int m) {
+    if (n < m) return 0;
+    double total = (double)n * m;
+    int count = 0;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (i > j) count++;
+        }
     }
-    return sum;
-}
-
-int main() {
-    int n, m;
-    cin >> n >> m;
-    double result = solve(n, m);
-    cout << fixed << setprecision(1) << result << endl;
-    return 0;
+    return (double)count / total;
 }

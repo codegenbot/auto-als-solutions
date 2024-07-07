@@ -17,5 +17,3 @@ def cut_vector(vector):
     
     if left_sum == right_sum:
         return vector[:split_index], vector[split_index:]
-    else:
-        return (vector[:split_index], [vector[split_index]]), vector[split_index+1:]
