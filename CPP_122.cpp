@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -12,8 +13,8 @@ int add_elements(const vector<int>& arr, int k) {
 }
 
 int main() {
-    vector<int> arr = {1, 23, 45, 12};
+    vector<int> arr = {1, 10, 3, 4, 5};
     int k = 3;
-    cout << add_elements(arr, k) << endl;
+    cout << add_elements(arr, k);
     return 0;
 }
