@@ -1,9 +1,13 @@
-vector<int> maximum(vector<int> arr, int k) {
-    vector<int> res;
-    for (int i = 0; i < k; i++) {
-        auto it = std::max_element(arr.begin(), arr.end());
-        res.push_back(*it);
-        arr.erase(it);
+```cpp
+#include <vector>
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
+    return a == b;
+}
+
+std::vector<int> maximum(std::vector<int> arr, int k) {
+    if(k <= 0) {
+        throw std::runtime_error("k should be greater than zero");
     }
-    return res;
+    std::partial_sort(arr.begin(), arr.end(), [&arr](int a, int b) { return arr.count(a) > arr.count(b); });
+    return arr;
 }
