@@ -28,7 +28,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
 
 int evaluate_expression(string s) {
     int res = 0;
-    stack<int> st;
+    stack<int> s; // Changed all instances of 'st' to 's'
     for (int i = 0; i < s.length(); i++) {
         if (isdigit(s[i])) {
             int num = 0;
@@ -36,33 +36,33 @@ int evaluate_expression(string s) {
                 num = num * 10 + (s[i] - '0');
                 i++;
             }
-            st.push(num);
+            s.push(num);
         } else if (s[i] == '+') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a + b);
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a + b);
         } else if (s[i] == '-') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a - b);
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a - b);
         } else if (s[i] == '*') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a * b);
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a * b);
         } else if (s[i] == '/') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a / b);
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a / b);
         }
     }
     
-    return st.top();
+    return s.top(); // Changed all instances of 'st' to 's'
 }
