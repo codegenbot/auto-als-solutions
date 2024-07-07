@@ -1,21 +1,40 @@
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
-vector<int> cutVector(vector<int>& nums) {
-    int n = nums.size();
-    int minDiff = INT_MAX;
-    int cutIndex = 0;
-
-    for (int i = 1; i < n; i++) {
-        int diff = abs(nums[i-1] - nums[i]);
-        if (diff <= minDiff) {
-            minDiff = diff;
-            cutIndex = i;
+vector<vector<int>> cutVector(vector<int> v) {
+    int n = v.size();
+    vector<vector<int>> res;
+    
+    for (int i = 0; i < n; i++) {
+        if (i == 0 || v[i] > v[i - 1]) {
+            res.push_back({v[i]});
+        } else if (i == n - 1 || v[i] < v[i + 1]) {
+            res.back().push_back(v[i]);
         }
     }
 
-    vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
-    vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
+    return res;
+}
 
-    return {left, right};
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> v(n);
+    for (auto& x : v) {
+        cin >> x;
+    }
+
+    vector<vector<int>> res = cutVector(v);
+
+    for (const auto& x : res) {
+        for (int y : x) {
+            cout << y << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
 }
