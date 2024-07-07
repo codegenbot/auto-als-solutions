@@ -4,10 +4,10 @@ bool issame(vector<string> a, vector<string>b) {
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<string> numbers;
+    vector<int> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(num > 5 ? "Greater than Five" : "One to Five");
+            numbers.push_back(num);
         }
     }
     sort(numbers.begin(), numbers.end());
