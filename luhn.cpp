@@ -17,7 +17,7 @@ int luhn(vector<int> numbers) {
 }
 
 int main() {
-    vector<int> numbers = {4, 7, 8, 3, 1, 6, 5, 9, 2, 0, 8, 0, 5, 5, 3, 4};
+    vector<int> numbers = {4, 7, 8, 6, 3, 5, 1, 2, 8, 9, 1, 0, 8, 8, 1};
     cout << "The result is: " << luhn(numbers) << endl;
     return 0;
 }
