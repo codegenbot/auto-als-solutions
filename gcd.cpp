@@ -1,4 +1,3 @@
-```c++
 #include <vector>
 #include <string>
 
@@ -15,7 +14,7 @@ vector<int> indicesOfSubstring(string text, string target) {
         }
     }
     return result;
-};
+}
 
 int gcd(int a, int b) {
     while (b != 0) {
@@ -24,4 +23,3 @@ int gcd(int a, int b) {
         a = temp;
     }
     return a;
-};
