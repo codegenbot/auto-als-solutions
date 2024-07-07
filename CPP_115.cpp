@@ -1,15 +1,11 @@
-Here is the completed code:
+#include <vector>
+#include <algorithm>
 
 int max_fill(vector<vector<int>> grid, int capacity) {
+    int n = grid.size();
     int total_water = 0;
-    for (const auto &row : grid) {
-        for (const auto &cell : row) {
-            if (cell == 1) {
-                total_water += cell;
-            }
-        }
+    for (int i = 0; i < n; i++) {
+        total_water += std::accumulate(grid[i].begin(), grid[i].end(), 0);
     }
-
-    int max_fill_count = -(-total_water / capacity);
-    return max_fill_count;
+    return total_water / capacity + ((total_water % capacity) != 0);
 }
