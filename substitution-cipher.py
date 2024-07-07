@@ -1,9 +1,11 @@
-def substitution_cipher(cipher1, cipher2, message):
-    deciphered_message = ""
-    for char in message:
-        if char in cipher1 and char in cipher2:
-            index = cipher2.index(char)
-            deciphered_message += cipher1[index]
+Here is the solution:
+
+def substitution_cipher(s1, s2, s3):
+    result = ""
+    for c in s3:
+        if c in s1:
+            idx = s1.index(c)
+            result += s2[idx]
         else:
-            deciphered_message += char
-    return deciphered_message
+            result += c
+    return result
