@@ -1,13 +1,13 @@
 ```cpp
 #include <vector>
-bool issame(const vector<int>& a, const vector<int>& b) {
+bool issame(const std::vector<int>& a, const std::vector<int>& b) {
     return a == b;
 }
 
-vector<int> maximum(vector<int> arr,int k){
-    if(k <= 0) 
-        return {error: "k must be greater than zero. Please enter valid value."};
-    vector<int> res(k);
-    partial_sort(res.begin(), res.end(), [&arr](int a, int b) { return arr.count(a) > arr.count(b); });
-    return res;
+std::vector<int> maximum(std::vector<int> arr, int k) {
+    if(k <= 0) {
+        throw std::runtime_error("k should be greater than zero");
+    }
+    std::partial_sort(arr.begin(), arr.end(), [&arr](int a, int b) { return arr.count(a) > arr.count(b); });
+    return arr;
 }
