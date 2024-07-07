@@ -1,9 +1,19 @@
+```Python
 def find_primes():
     num = int(input("Enter a number: "))
-    factors = [i for i in range(1, num + 1) if num % i == 0]
-    prime_factors = [
-        factor for factor in set(factors) if all(num % i > 0 for j in range(2, int(i ** 0.5) + 1))
-    ]
-    return prime_factors
+    primes = []
+    
+    for i in range(2, num + 1):
+        is_prime = True
+        
+        for j in range(2, int(i ** 0.5) + 1):
+            if i % j == 0:
+                is_prime = False
+                break
+                
+        if is_prime:
+            primes.append(i)
+    
+    return primes
 
 print(find_primes())
