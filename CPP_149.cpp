@@ -1,20 +1,26 @@
-Here is the solution:
+#include <algorithm>
+#include <vector>
+#include <string>
+
+using namespace std;
 
 vector<string> sorted_list_sum(vector<string> lst) {
-    // Remove strings with odd lengths from the vector
-    lst.erase(std::remove_if(lst.begin(), lst.end(),
-        [](const string& s) { return s.length() % 2 != 0; }),
-        lst.end());
-
-    // Sort the vector by length and then alphabetically
-    std::stable_partition(lst.begin(), lst.end(),
-        [this](const string& s) {
-            if (s.length() % 2 == 0)
-                return true;
-            else
-                return false;
-        });
-    std::sort(lst.begin(), lst.end());
-
-    return lst;
+    vector<string> result;
+    
+    for (const string& s : lst) {
+        if (s.length() % 2 == 0) {
+            result.push_back(s);
+        }
+    }
+    
+    sort(result.begin(), result.end(), 
+         [](const string& a, const string& b) {
+             if (a.length() != b.length()) {
+                 return a.length() < b.length();
+             } else {
+                 return a < b;
+             }
+         });
+    
+    return result;
 }
