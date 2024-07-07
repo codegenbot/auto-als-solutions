@@ -23,16 +23,9 @@ int countWhitePegs(string code, string guess) {
 
     for (int i = 0; i < 4; ++i) {
         if (guess[i] != code[i]) {
-            bool isPresentInCode = false;
-            for (char c : code) {
-                if (c == guess[i]) {
-                    isPresentInCode = true;
-                    break;
-                }
-            }
-
-            if (isPresentInCode) {
-                ++whitePegs;
+            if (codeCount.find(guess[i]) != codeCount.end()) {
+                --whitePegs;
+                --codeCount[guess[i]];
             }
         }
     }
