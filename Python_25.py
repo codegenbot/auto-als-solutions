@@ -1,6 +1,4 @@
-def find_primes():
-    num = int(input("Enter a number: "))
-
+def find_primes(num):
     def is_prime(n):
         if n < 2:
             return False
@@ -15,4 +13,5 @@ def find_primes():
 
     return prime_factors
 
-print(find_primes())
+
+print(find_primes(int(input("Enter a number: "))))
