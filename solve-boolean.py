@@ -4,8 +4,11 @@ def solve_boolean(expression):
         return True
     elif expression == 'F':
         return False
+    elif '&' in expression:
+        a, b = expression.split('&', 1)
+        return solve_boolean(a) and solve_boolean(b)
+    elif '|' in expression:
+        a, b = expression.split('|', 1)
+        return solve_boolean(a) or solve_boolean(b)
     else:
-        operator = '&' if '&' in expression else '|'
-        left_expression = expression.split(operator)[0]
-        right_expression = expression.split(operator)[1]
-        return solve_boolean(left_expression) if operator == '&' else (not solve_boolean(left_expression))
+        return True if expression == 'T' else False
