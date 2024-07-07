@@ -1,11 +1,6 @@
-using namespace std;
+Here is the modified code:
 
-int gcd(int a, int b) {
-    if (b == 0)
-        return a;
-    else
-        return gcd(b, a % b);
-}
+using namespace std;
 
 vector<int> indicesOfSubstring(string text, string target) {
     vector<int> result;
@@ -22,4 +17,11 @@ vector<int> indicesOfSubstring(string text, string target) {
     }
 
     return result;
+}
+
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
 }
