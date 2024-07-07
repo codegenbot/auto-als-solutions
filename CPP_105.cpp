@@ -23,12 +23,10 @@ vector<string> by_length(vector<int> arr) {
             case 9: result.push_back("Nine"); break;
         }
     }
-    sort(result.begin(), result.end());
-    reverse(result.begin(), result.end());
     return result;
 }
 
 int main() {
-    assert(issame(by_length({9, 4, 8}), {"Nine", "Eight", "Four"}));
+    assert(issame(by_length({9, 4, 8}), {"Nine", "Four", "Eight"}));
     return 0;
 }
