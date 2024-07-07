@@ -18,4 +18,3 @@ std::string solveBoolean(std::string s) {
         }
     }
     return result ? "True" : "False";
-}
