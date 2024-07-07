@@ -1,3 +1,4 @@
+#include <vector>
 #include <limits>
 
 using namespace std;
@@ -18,3 +19,4 @@ vector<pair<int, int>> pluck(vector<int> arr) {
 
     result.push_back({smallestEven, smallestIndex});
     return result;
+}
