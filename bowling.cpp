@@ -1,4 +1,4 @@
-#include <string>
+#include<string>
 
 int bowlingScore(string s) {
     int score = 0;
@@ -18,11 +18,7 @@ int bowlingScore(string s) {
             score += strikeFrames * 10 + total / strikeFrames;
         } else {
             int first = s[i] - '0', second = (i < s.size() && s[i + 1] != '/') ? s[i + 1] - '0' : 0;
-            if (first + second > 10) {
-                score += 10;
-            } else {
-                score += first + second;
-            }
+            score += first + second;
         }
     }
     return score;
