@@ -1,6 +1,5 @@
 #include <vector>
 #include <limits>
-
 using namespace std;
 
 vector<pair<int, int>> pluck(vector<int> arr) {
