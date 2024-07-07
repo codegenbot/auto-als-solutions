@@ -1,3 +1,4 @@
+```cpp
 bool any_int(float a, float b, float c) {
     int ai = (int)a;
     int bi = (int)b;
@@ -8,5 +9,4 @@ bool any_int(float a, float b, float c) {
 
 int main() {
     assert(any_int(3.01f, 4.f, 7.f) == false);
-    // Your code here
 }
