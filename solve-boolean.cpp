@@ -1,5 +1,7 @@
 #include <string>
+
 using namespace std;
+
 string solveBoolean(string s) {
     bool result = false;
     for (char c : s) {
@@ -18,3 +20,4 @@ string solveBoolean(string s) {
         }
     }
     return result ? "True" : "False";
+}
