@@ -5,24 +5,8 @@ int mastermind(string code, string guess) {
     for (int i = 0; i < 4; ++i) {
         if (code[i] == guess[i]) {
             black++;
-        }
-    }
-
-    map<char, int> codeCount, guessCount;
-    for (char c : code) {
-        codeCount[c]++;
-    }
-    for (char c : guess) {
-        guessCount[c]++;
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        if (code[i] != guess[i]) {
-            char c = code[i];
-            if (guessCount[c] > 0) {
-                white++;
-                guessCount[c]--;
-            }
+        } else if (count(guess.begin(), guess.end(), code[i]) > 0) {
+            white++;
         }
     }
 
