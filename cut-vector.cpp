@@ -1,29 +1,56 @@
 #include <vector>
-#include <climits>
-#include <cmath>
+#include <iostream>
 
 using namespace std;
 
-struct Result {
-    vector<int> left;
-    vector<int> right;
-};
-
-Result cutVector(vector<int>& nums) {
-    int n = nums.size();
-    int minDiff = INT_MAX;
-    int cutIndex = 0;
-
-    for (int i = 1; i < n; i++) {
-        int diff = abs(nums[i-1] - nums[i]);
-        if (diff <= minDiff) {
-            minDiff = diff;
-            cutIndex = i;
+vector<vector<int>> cutVector(vector<int> v) {
+    int n = v.size();
+    vector<vector<int>> res;
+    
+    int diffL = INT_MAX, diffR = INT_MAX; // Initialize maximum difference
+    
+    for (int i = 0; i < n; i++) {
+        if (i == 0 || (v[i] - v[i-1]) > diffL) {
+            res.push_back({v[i]});
+            diffL = 0;
+        } else if (i == n - 1 || (v[n-i-1] - v[i+1]) > diffR) {
+            vector<int> temp = {v[i]};
+            for(int j = i; j < n; j++) {
+                if((v[j] - v[i]) > diffR) break;
+                temp.push_back(v[j]);
+            }
+            res.push_back(temp);
+            diffR = 0;
+        } else if ((v[i] - (v[0]+v[n-1]))/2.0 < min(diffL, diffR)) {
+            res.clear();
+            res.push_back({v[0]});
+            for(int j = 1; j < n; j++) {
+                if((v[j] - v[0]) > diffL) break;
+                res.back().push_back(v[j]);
+            }
         }
     }
 
-    Result result;
-    result.left = vector<int>(nums.begin(), nums.begin() + cutIndex);
-    result.right = vector<int>(nums.begin() + cutIndex, nums.end());
+    return res;
+}
 
-    return result;
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> v(n);
+    for (auto& x : v) {
+        cin >> x;
+    }
+
+    vector<vector<int>> res = cutVector(v);
+
+    for (const auto& x : res) {
+        for (int y : x) {
+            cout << y << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
