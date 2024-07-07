@@ -38,4 +38,3 @@ int main() {
     cout << whitePegs << endl;
     cout << blackPegs << endl;
     return 0;
-}
