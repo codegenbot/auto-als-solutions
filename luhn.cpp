@@ -19,5 +19,7 @@ int luhn(vector<int> digits) {
 }
 
 int main() {
-    return luhn({4,7,8,1,3,9,2,5,9,8,6,4,8,2,8,3});
+    vector<int> testVector = {3,4,5,1,3,6,7,8,9,0,2,1,6};
+    cout << "The Luhn check value is: " << luhn(testVector) << endl;
+    return 0;
 }
