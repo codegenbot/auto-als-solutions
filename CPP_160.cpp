@@ -1,30 +1,32 @@
-#include <iostream>
 #include <vector>
 #include <cmath>
 
-int do_algebra(vector<string> operato, vector<int> operand) {
-    int result = operand[0];
-    for (int i = 0; i < operato.size(); i++) {
-        if (operato[i] == "+") {
-            if(i+1 >= operand.size()) break;
-            result += operand[i + 1];
-        } else if (operato[i] == "-") {
-            if(i+1 >= operand.size()) break;
-            result -= operand[i + 1];
-        } else if (operato[i] == "*") {
-            if(i+1 >= operand.size()) break;
-            result *= operand[i + 1];
-        } else if (operato[i] == "//") {
-            if(i+1 >= operand.size()) break;
-            result = result / operand[i + 1];
-        } else if (operato[i] == "**") {
-            if(i+1 >= operand.size()) break;
-            result = pow(result, operand[i + 1]);
+int do_algebra(vector<string> operator_, vector<int> operands_) {
+    int result = 0;
+    for (int i = 0; i < operator_.size(); i++) {
+        if (operator_[i] == "+") {
+            result += operands_[i];
+        } else if (operator_[i] == "-") {
+            result -= operands_[i];
+        } else if (operator_[i] == "*") {
+            int temp = 0;
+            for (int j = i; j < operands_.size(); j++) {
+                temp *= operands_[j];
+            }
+            result += temp;
+        } else if (operator_[i] == "/*" || operator_[i] == "//") {
+            int temp = operands_[i] / 1;
+            for (int j = i + 1; j < operands_.size(); j++) {
+                temp /= operands_[j];
+            }
+            result += temp;
+        } else if (operator_[i] == "**") {
+            int temp = 1;
+            for (int j = i; j < operands_.size(); j++) {
+                temp *= pow(operands_[j], 1);
+            }
+            result += temp;
         }
     }
     return result;
-}
-
-int main() {
-    assert (do_algebra({"//", "*"}, {7, 3, 4}) == 8);
 }
