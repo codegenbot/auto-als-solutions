@@ -1,6 +1,4 @@
-```cpp
 #include <vector>
-#include <cmath>
 
 int skjkasdkd(vector<int> lst){
     int max_prime = 0;
