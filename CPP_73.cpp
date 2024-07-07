@@ -26,3 +26,4 @@ int smallest_change(vector<int> arr) {
 int main() {
     cout << smallest_change({0, 1}) << endl;
     return 0;
+}
