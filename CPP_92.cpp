@@ -1,3 +1,4 @@
+```cpp
 bool any_int(float a, float b, float c) {
     int ai = (int)a;
     int bi = (int)b;
@@ -8,13 +9,13 @@ bool any_int(float a, float b, float c) {
 
 int main() {
     float a, b, c;
-    std::cout << "Enter three floating point numbers: ";
+    std::cout << "Enter three numbers: ";
     std::cin >> a >> b >> c;
 
     if(any_int(a, b, c))
-        std::cout << "At least one integer.\n";
+        std::cout << "At least one number is an integer.\n";
     else
-        std::cout << "No integers.\n";
+        std::cout << "All numbers are decimal.\n";
 
     return 0;
 }
