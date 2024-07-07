@@ -1,33 +1,25 @@
-#include <vector>
+#include <iostream>
 using namespace std;
-
-vector<int> coinSums(int cents) {
-    vector<int> coins(4); // quarters, dimes, nickles, pennies
-    while (cents > 0) {
-        if (cents >= 25) {
-            cents -= 25;
-            coins[0]++;
-        } else if (cents >= 10) {
-            cents -= 10;
-            coins[1]++;
-        } else if (cents >= 5) {
-            cents -= 5;
-            coins[2]++;
-        } else {
-            cents -= 1;
-            coins[3]++;
-        }
-    }
-    return coins;
-}
 
 int main() {
     int cents;
     cin >> cents;
-    vector<int> result = coinSums(cents);
-    cout << result[0] << endl;
-    cout << result[1] << endl;
-    cout << result[2] << endl;
-    cout << result[3] << endl;
+
+    vector<int> coins = {25, 10, 5, 1};
+    vector<int> coinCounts(4, 0);
+
+    for (int i = 3; i >= 0; i--) {
+        while (cents >= coins[i]) {
+            int count = cents / coins[i];
+            cents -= count * coins[i];
+            coinCounts[i] = count;
+        }
+    }
+
+    cout << coinCounts[3] << endl;
+    cout << coinCounts[2] << endl;
+    cout << coinCounts[1] << endl;
+    cout << coinCounts[0] << endl;
+
     return 0;
 }
