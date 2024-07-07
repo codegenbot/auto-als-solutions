@@ -1,7 +1,11 @@
 #include <vector>
-#include <iostream>
+#include <stdexcept>
 
 int do_algebra(vector<string> operato, vector<int> operand) {
+    if(operato.size() != operand.size()) {
+        throw runtime_error("Invalid input: Operands and operators must have the same size.");
+    }
+    
     int result = 0;
     for (int i = 1; i < operato.size(); i++) {
         if (operato[i] == "+") {
@@ -22,7 +26,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             result += temp;
             i = j - 1; // skip the remaining operators
         } else if (operato[i] == "//") {
-            int temp = operand[i-1] / (operand[i+1]);
+            int temp = operand[i-1] / static_cast<int>(operand[i+1]);
             result += temp;
             i++; // skip the division operator
         } else if (operato[i] == "**") {
@@ -36,7 +40,10 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             }
             result += temp;
             i = j - 1; // skip the remaining operators
+        } else {
+            throw runtime_error("Invalid operator. Only +, -, *, //, ** are allowed.");
         }
     }
+    
     return result;
 }
