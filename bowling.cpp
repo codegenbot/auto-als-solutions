@@ -1,3 +1,4 @@
+```cpp
 #include <algorithm>
 #include <cctype>
 
@@ -9,7 +10,7 @@ int bowlingScore(const string& input) {
         if (*it == '/') {
             score += std::min(10, prevRolls);
             prevRolls = 0;
-        } else if (std::isdigit(*it)) {
+        } else if (::isdigit(*it)) {
             prevRolls *= 10;
             prevRolls += *it - '0';
         } else { // X
