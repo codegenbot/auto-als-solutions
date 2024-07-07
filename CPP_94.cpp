@@ -1,5 +1,4 @@
 #include <vector>
-#include <cmath>
 
 int skjkasdkd(vector<int> lst) {
     int maxPrime = 0;
