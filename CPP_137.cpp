@@ -1,9 +1,21 @@
+```cpp
 #include <boost/any.hpp>
 #include <string>
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
+
+int main() {
+    int num1, num2;
+    cin >> num1 >> num2;
+    
+    boost::any a = boost::any(num1);
+    boost::any b = boost::any(num2);
+
+    cout << "The comparison result is: " << compare_one(a, b) << endl;
+
+    return 0;
+}
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(int)) {
@@ -64,16 +76,4 @@ boost::any compare_one(boost::any a, boost::any b) {
     else {
         return boost::any("None");
     }
-}
-
-int main() {
-    int num1, num2;
-    cin >> num1 >> num2;
-    
-    boost::any a = boost::any(num1);
-    boost::any b = boost::any(num2);
-    
-    cout << boost::any_cast<int>(compare_one(a, b)) << endl;
-    
-    return 0;
 }
