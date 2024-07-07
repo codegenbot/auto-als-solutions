@@ -8,5 +8,6 @@ vector<int> get_odd_collatz(int n) {
         if (n % 2 != 0)
             result.push_back(n);
     }
+    sort(result.begin(), result.end());
     return result;
 }
