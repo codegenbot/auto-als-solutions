@@ -28,6 +28,7 @@ int main() {
         string target;
         cin >> target;
         indices = indicesOfSubstring(text, target);
+        
         // Print output
         for (int index : indices) {
             cout << index << endl;
