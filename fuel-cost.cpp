@@ -1,4 +1,6 @@
 #include <vector>
+#include <cmath>
+
 int fuelCost(std::vector<int> nums) {
     int sum = 0;
     for (int num : nums) {
