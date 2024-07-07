@@ -7,14 +7,16 @@ std::string solveBoolean(std::string s) {
             result = true;
         } else if (c == 'F') {
             return "False";
-        } else if (c == '|') {
-            if (result) {
-                return "True";
-            }
         } else if (c == '&') {
             if (!result) {
                 return "False";
             }
+            result &= true;
+        } else if (c == '|') {
+            if (result) {
+                return "True";
+            }
+            result |= true;
         }
     }
     return result ? "True" : "False";
