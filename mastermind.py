@@ -1,9 +1,9 @@
 ```
 def mastermind(code, guess):
     correct_colors = [c1 == c2 for c1, c2 in zip(code, guess)]
-    black_pegs = sum(correct_colors)
-    
-    white_pegs = 4 - black_pegs
+    black_pegs = sum([a and b for a, b in zip(correct_colors, code)])
+
+    white_pegs = sum(correct_colors) - black_pegs
     return str(white_pegs) + "\n" + str(black_pegs)
 
 print(mastermind("RRRR", "RRRR"))
