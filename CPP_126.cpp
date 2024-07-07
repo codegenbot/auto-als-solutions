@@ -1,7 +1,6 @@
-```
 #include <vector>
 
-bool is_sorted(vector<int> lst){
+bool is_sorted(vector<int> lst) {
     if(lst.size() <= 1) return true;
     for(int i = 1; i < lst.size(); i++){
         if(lst[i] >= lst[i-1]){
@@ -21,5 +20,5 @@ bool is_sorted(vector<int> lst){
             else return true;
         }
     }
-    return false;
+    return true;
 }
