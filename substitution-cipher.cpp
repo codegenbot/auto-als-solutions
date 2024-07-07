@@ -2,31 +2,26 @@
 #include <iostream>
 #include <string>
 
-std::string substitutionCipher(const std::string &cipherMap, const std::string &input) {
-    std::string output;
-    for (char c : input) {
-        if (c >= 'a' && c <= 'z') {
-            int index = c - 'a';
-            if (index < cipherMap.size()) {
-                c = cipherMap[index];
+std::string decipher(std::string cipher1, std::string cipher2, std::string message) {
+    std::string result = "";
+    for (int i = 0; i < message.length(); i++) {
+        if (i < cipher1.length()) {
+            int index = cipher1.find(message[i]);
+            if (index != -1) {
+                result += cipher2[index];
+            } else {
+                result += message[i];
             }
-        } else if (c >= 'A' && c <= 'Z') {
-            int index = c - 'A';
-            if (index < cipherMap.size()) {
-                c = toupper(cipherMap[index] - 'a' + 'A');
-            }
+        } else {
+            result += message[i];
         }
-        output += c;
     }
-    return output;
+    return result;
 }
 
 int main() {
-    std::string cipherMap, input;
-    std::cout << "Enter the cipher map: ";
-    std::cin >> cipherMap;
-    std::cout << "Enter the message to decipher: ";
-    std::cin >> input;
-    std::cout << "Deciphered message: " << substitutionCipher(cipherMap, input) << std::endl;
+    std::string cipher1, cipher2, message;
+    std::cin >> cipher1 >> cipher2 >> message;
+    std::cout << decipher(cipher1, cipher2, message) << std::endl;
     return 0;
 }
