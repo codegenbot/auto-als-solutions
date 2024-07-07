@@ -1,4 +1,5 @@
 #include <vector>
+#include <numeric>
 
 int max_fill(vector<vector<int>> grid, int capacity) {
     int n = grid.size();
@@ -7,4 +8,3 @@ int max_fill(vector<vector<int>> grid, int capacity) {
         total_water += std::accumulate(grid[i].begin(), grid[i].end(), 0);
     }
     return total_water / capacity + ((total_water % capacity) != 0);
-}
