@@ -1,4 +1,3 @@
-````
 int main() {
     string output;
     output = words_in_sentence("here is");
