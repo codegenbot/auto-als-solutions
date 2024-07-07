@@ -13,16 +13,22 @@ def filter_integers() -> List[int]:
             values.append(value)
         except ValueError:
             print(f"Invalid input! Please enter an integer.")
-    desired_output = input("Enter 'even' or 'odd' to filter: ").lower()
-    while desired_output not in ["even", "odd"]:
-        print("Invalid filter choice! Please enter 'even' or 'odd'.")
+    while True:
         desired_output = input("Enter 'even' or 'odd' to filter: ").lower()
-    result = [
-        x
-        for x in values
-        if (desired_output == "even" and x % 2 == 0)
-        or (desired_output == "odd" and x % 2 != 0)
-    ]
+        if desired_output in ["even", "odd"]:
+            break
+        else:
+            print("Invalid filter choice! Please enter 'even' or 'odd'.")
+    if desired_output in ["even", "odd"]:
+        result = [
+            x
+            for x in values
+            if (desired_output == "even" and x % 2 == 0)
+            or (desired_output == "odd" and x % 2 != 0)
+        ]
+    else:
+        print("Invalid filter choice! Returning all integers.")
+        result = values
     return result
 
 
