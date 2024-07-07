@@ -1,5 +1,15 @@
-def cut_vector(lst):
-    for i in range(len(lst) - 1):
-        if np.abs(np.mean(lst[: i + 1]) - np.mean(lst[i:])).argmin() == 0:
-            return [lst[: i + 1], lst[i:]]
-    return [lst, []]
+def cut_vector(vector):
+    n = len(vector)
+    min_diff = float("inf")
+    cut_index = -1
+
+    for i in range(1, n):
+        left_sum = sum(vector[:i])
+        right_sum = sum(vector[i:])
+
+        diff = abs(left_sum - right_sum)
+        if diff < min_diff:
+            min_diff = diff
+            cut_index = i
+
+    return vector[:cut_index], vector[cut_index:]
