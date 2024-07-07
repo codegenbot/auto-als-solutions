@@ -1,35 +1,28 @@
-```cpp
 #include <iostream>
 #include <string>
 
-std::string fix_spaces(std::string text) {
-    if(text.empty()) {
-        return text;
-    }
-    
+int fix_spaces(std::string text){
     std::string result = "";
-    bool in_sequence = false;
-
-    for(char c : text) {
-        if(c == ' ') {
-            if(!in_sequence) {
-                if(result.length() > 0 && (result.back() != '_' || !in_sequence)) {
-                    result += '-';
-                } else {
-                    result += '_';
+    for(int i = 0; i < text.length(); i++){
+        if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length() - 1 || text[i+1] != ' ')){
+            result += '_';
+        } else if(text[i] == ' '){
+            bool consecutive = true;
+            for(int j = i + 1; j < text.length(); j++){
+                if(text[j] != ' '){
+                    consecutive = false;
+                    break;
                 }
-                in_sequence = true;
+            }
+            if(consecutive){
+                result += '-';
+                i = text.length() - 1;
+            } else {
+                result += '_';
             }
         } else {
-            in_sequence = false;
+            result += text[i];
         }
-        result += c;
     }
-
-    return result;
-}
-
-int main() {
-    assert(fix_spaces("   Exa 1 2 2 mple") == "-Exa_1_2_2_mple");
-    return 0;
+    return 0; // Return an integer type
 }
