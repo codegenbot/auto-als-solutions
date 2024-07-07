@@ -35,21 +35,10 @@ int main() {
         return changes;
     }
 
-    // Read input from user
-    vector<int> arr;
-    int num;
-    cout << "Enter the number of elements: ";
-    cin >> num;
-    for (int i = 0; i < num; ++i) {
-        cout << "Enter element " << i + 1 << ": ";
-        cin >> arr.push_back(i);
-    }
-
-    // Call the function
+    // Example usage:
+    vector<int> arr = {1, 2, 3, 4, 5};
     int result = smallest_change(arr);
+    cout << "Smallest number of coin changes: " << result << endl;
 
-    // Print output
-    cout << "Smallest change: " << result << endl;
-    
     return 0;
 }
