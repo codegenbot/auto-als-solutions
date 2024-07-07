@@ -1,16 +1,17 @@
-Here is the solution:
-
 #include <vector>
 using namespace std;
 
-vector<int> leaders(vector<int> v) {
-    vector<int> res;
-    int maxRight = v.back();
-    for(int i=v.size()-2; i>=0; i--) {
-        if(v[i] >= maxRight) {
-            res.push_back(v[i]);
-            maxRight = v[i];
+vector<int> leaders(vector<int>& arr) {
+    vector<int> result;
+    int n = arr.size();
+    int rightmost = arr[n-1];
+    
+    for(int i=n-2; i>=0; i--) {
+        if(arr[i] >= rightmost) {
+            result.push_back(arr[i]);
+            rightmost = arr[i];
         }
     }
-    return res;
+    
+    return result;
 }
