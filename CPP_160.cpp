@@ -1,5 +1,4 @@
 #include <vector>
-using namespace std;
 #include <cmath>
 
 int do_algebra(vector<pair<char, int>> expressions) {
@@ -21,10 +20,10 @@ int do_algebra(vector<pair<char, int>> expressions) {
                 temp /= expressions[i].second;
             }
             result += temp;
-        } else if (expression.first == '^') {
+        } else if (expression.first == '**') {
             int temp = 1;
-            for (int i = 1; i < expressions.size(); i++) {
-                temp *= pow(expression.second, expressions[i].second);
+            for (int i = 0; i < expressions.size(); i++) {
+                temp *= pow(expressions[i].second, 1);
             }
             result += temp;
         }
