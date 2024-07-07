@@ -1,7 +1,6 @@
-def luhn(card):
-    card = [int(x) for x in str(card)]
-    result = sum(
-        2 * int(digit) if i % 2 else int(digit)
-        for i, digit in enumerate(reversed(card))
-    )
-    return result - divmod(result, 10)[1]
+Here is the Python solution:
+
+def luhn(card_number):
+    card_number = [int(x) for x in str(card_number)]
+    checksum = sum([num if i % 2 == 0 else num * 2 if num * 2 > 9 else num * 2 - 9 for i, num in enumerate(card_number)])
+    return checksum
