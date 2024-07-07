@@ -1,8 +1,7 @@
-#include <iostream>
 #include <string>
 
-int fix_spaces(std::string text){
-    std::string result = "";
+int fix_spaces(string text) {
+    string result = "";
     for(int i = 0; i < text.length(); i++){
         if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length() - 1 || text[i+1] != ' ')){
             result += '_';
@@ -24,5 +23,5 @@ int fix_spaces(std::string text){
             result += text[i];
         }
     }
-    return 0; // This should probably be the length of the string
+    return 0; // Return type should be integer
 }
