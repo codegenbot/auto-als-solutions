@@ -1,8 +1,8 @@
-```
 def luhn(card):
     total = 0
-    for i, digit in enumerate(map(int, card)):
-        if (i % 2) == 1:
+    for i in range(len(card)):
+        digit = int(card[i])
+        if (i % 2) == 1 and i != 0:  
             digit *= 2
             if digit > 9:
                 digit -= 9
