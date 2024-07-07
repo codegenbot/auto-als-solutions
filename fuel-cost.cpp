@@ -2,7 +2,7 @@ int fuelCost(std::vector<int> nums) {
     int sum = 0;
     for (int num : nums) {
         long long temp = num / 3;
-        temp = std::floor(temp);
+        temp = llround(temp);
         temp -= 2;
         sum += temp;
     }
