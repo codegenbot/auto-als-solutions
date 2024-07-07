@@ -1,26 +1,25 @@
 int mastermind(string code, string guess) {
     int white = 0;
     int black = 0;
+    vector<char> codeVec(code.begin(), code.end());
+    vector<char> guessVec(guess.begin(), guess.end());
 
     for (int i = 0; i < 4; ++i) {
-        if (code[i] == guess[i]) {
-            black++;
+        if (codeVec[i] == guessVec[i]) {
+            --guessVec.end();
+            ++black;
         }
     }
 
-    for (int i = 0; i < 4; ++i) {
+    for (char c : codeVec) {
         int count = 0;
-        for (int j = 0; j < 4; ++j) {
-            if (code[j] == guess[i]) {
-                count++;
+        for (char d : guessVec) {
+            if (c == d) {
+                ++count;
             }
         }
-        if (count > 1) {
-            white += count - 1;
-        } else if (count == 1) {
-            black--;
-        }
+        white += min(count, 1);
     }
 
-    return black + white;
+    return black + white - black;
 }
