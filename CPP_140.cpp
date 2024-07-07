@@ -2,22 +2,25 @@
 #include <string>
 
 std::string fix_spaces(std::string text) {
-    std::string result = "";
+    if(text.empty()) {
+        return text;
+    }
+    
     bool in_sequence = false;
-    for(int i = 0; i < text.length(); i++){
-        if(text[i] == ' '){
-            if(!in_sequence){
-                if(result.length() > 0 || i != 0)
-                    result += '_';
-                else
-                    result += '-';
+    std::string result = "";
+    
+    for(char c : text) {
+        if(c == ' ') {
+            if(!in_sequence) {
+                result += (result.empty() ? "-" : "_");
                 in_sequence = true;
             }
-        }else{
+        } else {
             in_sequence = false;
-            result += text[i];
+            result += c;
         }
     }
+    
     return result;
 }
 
