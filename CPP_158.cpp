@@ -1,11 +1,11 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
 string find_max(vector<string> words){
-    string result = *words.begin();
-    for(const auto& word : words){
-        if(count(word.begin(), word.end(), unique(word.begin(), word.end())) > count(result.begin(), result.end(), unique(result.begin(), result.end()))){
-            result = word;
-        } else if(count(word.begin(), word.end(), unique(word.begin(), word.end())) == count(result.begin(), result.end(), unique(result.begin(), result.end())) && word < result){
-            result = word;
-        }
-    }
-    return result;
+    string max_word = *max_element(words.begin(), words.end(), 
+                                   [](const string& a, const string& b) {
+                                       return count(a.begin(), a.end(), a[0]) > count(b.begin(), b.end(), b[0]);
+                                   });
+    return max_word;
 }

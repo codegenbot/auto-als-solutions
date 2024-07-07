@@ -1,14 +1,17 @@
 string solve(string s) {
     string result = "";
+    bool foundLetter = false;
+
     for (char c : s) {
         if (isalpha(c)) {
-            result += tolower(c) == 'a' || tolower(c) == 'e' || tolower(c) == 'i' || tolower(c) == 'o' || tolower(c) == 'u'
-                ? toupper(c)
-                : tolower(c);
-        } else {
-            result += c;
+            foundLetter = true;
+            c = (c == tolower(c)) ? toupper(c) : tolower(c);
         }
+        result += c;
     }
-    reverse(result.begin(), result.end());
+
+    if (!foundLetter)
+        reverse(result.begin(), result.end());
+
     return result;
 }
