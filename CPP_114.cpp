@@ -1,7 +1,6 @@
-```cpp
 int main() {
     long long min_sum = minSubArraySum({1, -1});
-    return 0;
+    // Your code here
 }
 
 long long minSubArraySum(vector<long long> nums) {
