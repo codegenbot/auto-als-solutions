@@ -1,10 +1,8 @@
+#include <iostream>
 #include <vector>
-#include <string>
 
-using namespace std;
-
-vector<int> indicesOfSubstring(string text, string target) {
-    vector<int> result;
+std::vector<int> indicesOfSubstring(std::string text, std::string target) {
+    std::vector<int> result;
     int n = text.length();
     int m = target.length();
 
