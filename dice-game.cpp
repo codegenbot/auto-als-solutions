@@ -1,6 +1,4 @@
-Here is the solution:
-
-double diceGame(int n, int m) {
-    if (n < m) swap(n, m);
-    return 1.0 * (m + 1) / (double)(n);
+double probability(int n, int m) {
+    double total = (n + m - 2);
+    return (double)(m-1)/total;
 }
