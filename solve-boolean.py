@@ -19,5 +19,4 @@ def solve_boolean(expression):
         if operator == "&": return a and b
         if operator == "|": return a or b
         raise ValueError("Invalid operator")
-
     return evaluate_expression(expression)
