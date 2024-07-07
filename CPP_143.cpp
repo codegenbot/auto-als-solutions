@@ -1,38 +1,33 @@
-#include <vector>
-using namespace std;
-
-bool isPrime(int n) {
-    if (n <= 1) return false;
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) return false;
+string words_in_sentence(string sentence){
+    string result = "";
+    int count = 0;
+    for (int i = 0; i < sentence.size(); i++) {
+        if (sentence[i] == ' ') {
+            continue;
+        }
+        bool isPrime = true;
+        int len = 0;
+        for (int j = i; j < sentence.size() && sentence[j] != ' '; j++, len++) {
+            len++;
+            if (len > 1 && !isPrime(len)) {
+                isPrime = false;
+                break;
+            }
+        }
+        if (isPrime) {
+            result += &sentence[i] - &sentence[0];
+            i += len - 1;
+            count++;
+        }
     }
-    return true;
+    return result;
 }
 
-string words_in_sentence(string sentence) {
-    vector<string> words;
-    string word;
-    int len;
-    
-    // Split the sentence into words
-    for (int i = 0; i < sentence.length(); i++) {
-        if (sentence[i] == ' ') {
-            words.push_back(word);
-            word = "";
-        } else {
-            word += sentence[i];
-        }
-    }
-    words.push_back(word);
-
-    // Filter out the words that are not prime length
-    string result;
-    for (const auto& w : words) {
-        len = w.length();
-        if (isPrime(len)) {
-            result += w + " ";
-        }
-    }
-
-    return result.substr(0, result.length() - 1); // Remove trailing space
+bool isPrime(int num) {
+    if (num <= 1)
+        return false;
+    for (int i = 2; i * i <= num; i++)
+        if (num % i == 0)
+            return false;
+    return true;
 }
