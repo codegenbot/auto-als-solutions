@@ -1,66 +1,47 @@
+```
 def bowling_score(s):
     score = 0
     frame = 1
     while frame <= 10:
-        if s[2 * len(str(frame)) - 3 : 2 * len(str(frame))].isdigit():
-            first_roll = int(s[2 * len(str(frame)) - 3 : 2 * len(str(frame))])
-            if s[2 * len(str(frame)) : 2 * len(str(frame)) + 1].isdigit():
-                second_roll = int(s[2 * len(str(frame)) : 2 * len(str(frame)) + 1])
-                if first_roll + second_roll == 10:
-                    score += 10
-                    frame += 1
-                else:
-                    score += first_roll + second_roll
-                    frame += 1
-            elif s[2 * len(str(frame))].upper() == "X":
-                if frame < 9 or (
-                    frame == 9
-                    and sum(
-                        int(
-                            s[18 - i : i + 3].strip().replace("/", "0").replace("X", 10)
-                        )
-                    )
-                    <= 10
-                ):
-                    score += 10
-                    frame += 1
-                else:
-                    bonus = 10 - first_roll
-                    score += 10 + bonus
-                    frame += 1
-            elif s[2 * len(str(frame))].upper() == "/":
-                if frame < 9 or (
-                    frame == 9
-                    and sum(
-                        int(
-                            s[18 - i : i + 3].strip().replace("/", "0").replace("X", 10)
-                        )
-                    )
-                    <= 10
-                ):
-                    score += first_roll + int(
-                        s[2 * len(str(frame)) + 1]
-                        .strip()
-                        .replace("/", "0")
-                        .replace("X", 10)
-                    )
-                    frame += 1
-                else:
-                    bonus = 10 - first_roll
-                    score += first_roll + bonus
-                    frame += 1
-        elif s[2 * len(str(frame))].upper() == "X":
-            if frame < 9 or (
-                frame == 9
-                and sum(
-                    int(s[18 - i : i + 3].strip().replace("/", "0").replace("X", 10))
-                )
-                <= 10
-            ):
+        if s[2*len(str(frame))-2].isdigit():
+            first_roll = int(s[2*len(str(frame))-2])
+            second_roll = int(s[2*len(str(frame))-1]) if len(str(frame)) == 2 else 0
+            if first_roll + second_roll == 10:
+                score += 10
+                frame += 1
+            elif second_roll > 0 and (first_roll + second_roll) > 10:
+                score += 10 - first_roll
+                frame += 1
+            else:
+                score += first_roll + second_roll
+                frame += 1
+        elif s[2*len(str(frame))-2] == "X":
+            if len(str(frame)) == 1:
                 score += 10
                 frame += 1
             else:
-                bonus = 10
-                score += 10 + bonus
+                if s[4*len(str(frame))-3].isdigit():
+                    second_roll = int(s[4*len(str(frame))-3]) + int(s[4*len(str(frame))-2])
+                    score += 10 + second_roll
+                elif s[4*len(str(frame))-3] == "X":
+                    score += 15
+                else:
+                    score += 10 + 10 - int(s[4*len(str(frame))-3])
                 frame += 1
+        else:
+            if len(str(frame)) == 1:
+                score += 10
+                frame += 1
+            else:
+                if s[2*len(str(frame))-1] == "/":
+                    first_roll = int(s[2*len(str(frame))-2]) + 10 - int(s[4*len(str(frame))-3])
+                    score += first_roll
+                    frame += 1
+                else:
+                    second_roll = int(s[4*len(str(frame))-2]) + int(s[4*len(str(frame))-1])
+                    if first_roll + second_roll > 10:
+                        score += 10 + (second_roll - 10)
+                    else:
+                        score += first_roll + second_roll
+                    frame += 1
     return score
