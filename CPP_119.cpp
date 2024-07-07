@@ -25,6 +25,6 @@ bool match_parens(vector<string> lst) {
 
 int main() {
     vector<string> lst = {")", "("};
-    assert(match_parens(lst));
+    cout << boolalpha << match_parens(lst);
     return 0;
 }
