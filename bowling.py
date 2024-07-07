@@ -20,20 +20,14 @@ def bowling_score(s):
                 frame -= 1
                 i += 1
             else:
-                if s[i] == "/":
-                    score += 5
-                    frame -= 1
-                    i += 2
-                else:
-                    if frame > 9 and (s[i].isdigit() or s[i] == "X"):
-                        break
+                if frame > 9 and (s[i].isdigit() or s[i] == "X"):
+                    break
         else:
             if s[i] == "X":
                 score += 10
                 frame -= 1
                 i += 1
             elif s[i] == "/":
-                score += 5
-                frame -= 1
-                i += 2
+                score += 10 - int(s[i-1])
+                i += 1
     return score
