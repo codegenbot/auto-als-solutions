@@ -23,10 +23,5 @@ string string_to_md5(string text) {
 }
 
 int main() {
-    string text;
-    cout << "Enter a string: ";
-    cin >> text;
-    string output = string_to_md5(text);
-    cout << "MD5 hash of the input string is: " << output << endl;
-    return 0;
+    // Your code here
 }
