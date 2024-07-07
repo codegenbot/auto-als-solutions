@@ -1,3 +1,4 @@
+```
 int do_algebra(vector<string> operato, vector<int> operand) {
     int result = 0;
     int i = 0;
@@ -28,7 +29,6 @@ int do_algebra(vector<string> operato, vector<int> operand) {
 
 int evaluate_expression(string s) {
     stack<int> st;
-    int res = 0;
     for (int i = 0; i < s.length(); i++) {
         if (isdigit(s[i])) {
             int num = 0;
