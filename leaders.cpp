@@ -1,20 +1,15 @@
 #include <vector>
 using namespace std;
 
-vector<int> leaders(vector<int>& vec) {
-    int rightmost = -1;
-    for (int i = 0; i < vec.size(); i++) {
-        if (vec[i] >= rightmost) {
-            rightmost = vec[i];
-        }
-    }
-
+vector<int> leaders(vector<int>& arr) {
     vector<int> result;
-    for (int i = vec.size() - 1; i >= 0; i--) {
-        if (vec[i] >= rightmost) {
-            result.push_back(vec[i]);
+    int maxRight = arr.back();
+    for (int i = arr.size() - 1; i >= 0; i--) {
+        if (arr[i] >= maxRight) {
+            result.push_back(arr[i]);
+            maxRight = arr[i];
         }
     }
-
+    reverse(result.begin(), result.end());
     return result;
 }
