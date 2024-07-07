@@ -5,14 +5,14 @@
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(float)) {
-        return boost::any_cast<int>(b) > boost::any_cast<int>(a) ? b : a;
+        return boost::any_cast<float>(b) > boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(int) && b.type() == typeid(double)) {
         return boost::any_cast<double>(b) > boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(int) && b.type() == typeid(std::string)) {
         double val = std::stod(boost::any_cast<std::string>(b).c_str());
-        return val > boost::any_cast<int>(a) ? b : a;
+        return val > (double)boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(float) && b.type() == typeid(double)) {
         return boost::any_cast<double>(b) > boost::any_cast<float>(a) ? b : a;
