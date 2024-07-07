@@ -1,3 +1,4 @@
+```
 #include <iostream>
 #include <string>
 using namespace std;
@@ -16,6 +17,7 @@ int is_bored(string S) {
         }
     }
     return count;
+
 }
 
 int main() {
