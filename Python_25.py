@@ -17,5 +17,4 @@ def find_primes():
     ]
 
     print(sorted(prime_factors))  
-
 find_primes()
