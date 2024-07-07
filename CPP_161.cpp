@@ -1,12 +1,18 @@
 ```
-std::string solve(std::string s) {
+#include <string>
+#include <cctype>
+
+std::string solve(std::string s){
     std::string result = "";
-    for (char c : s) {
-        if (std::isalpha(c)) {
-            c = (c >= 'a' && c <= 'z') ? c + ('A' - 'a') : c - ('A' - 'a');
-        } else {
-            result += c;
+    for(int i=0; i<s.length(); i++){
+        if(isalpha(s[i])){
+            if(islower(s[i]))
+                result += toupper(s[i]);
+            else
+                result += tolower(s[i]);
         }
+        else
+            result += s[i];
     }
-    return result.empty() ? std::string(s).reverse() : result;
+    return result;
 }
