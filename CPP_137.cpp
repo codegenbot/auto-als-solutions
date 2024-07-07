@@ -1,4 +1,3 @@
-```cpp
 #include <boost/convert.hpp>
 #include <boost/any.hpp>
 #include <string>
@@ -12,21 +11,21 @@ boost::any compare_one(boost::any a, boost::any b) {
             ? b
             : (int)boost::any_cast<int>(a) > (int)boost::any_cast<int>(b)
                 ? a
-                : boost::any((int)boost::any_cast<int>(a));
+                : boost::any((int)boost::any_cast<int>(a) - (int)boost::any_cast<int>(b));
     }
     else if (a.type() == typeid(float) && b.type() == typeid(float)) {
         return boost::any_cast<float>(a) > boost::any_cast<float>(b)
             ? b
             : boost::any_cast<float>(a) > boost::any_cast<float>(b)
                 ? a
-                : boost::any((int)boost::any_cast<float>(a));
+                : boost::any((boost::any_cast<float>(a) - boost::any_cast<float>(b)));
     }
     else if (a.type() == typeid(string) && b.type() == typeid(string)) {
         return boost::any_cast<string>(a) > boost::any_cast<string>(b)
             ? b
             : boost::any_cast<string>(a) > boost::any_cast<string>(b)
                 ? a
-                : boost::any((int)boost::any_cast<string>(a).length());
+                : boost::any((boost::any_cast<string>(a) - boost::any_cast<string>(b)));
     }
     else if (a.type() == typeid(string)) {
         double val1 = stod(boost::any_cast<string>(a));
@@ -35,14 +34,14 @@ boost::any compare_one(boost::any a, boost::any b) {
                 ? b
                 : val1 > (int)boost::any_cast<int>(b)
                     ? a
-                    : boost::any((int)val1);
+                    : boost::any((val1 - (int)boost::any_cast<int>(b)));
         }
         else if (b.type() == typeid(float)) {
             return val1 > boost::any_cast<float>(b)
                 ? b
                 : val1 > boost::any_cast<float>(b)
                     ? a
-                    : boost::any((int)val1);
+                    : boost::any((val1 - boost::any_cast<float>(b)));
         }
     }
     else if (a.type() == typeid(int)) {
@@ -51,7 +50,7 @@ boost::any compare_one(boost::any a, boost::any b) {
             ? b
             : int(val2) > (int)a
                 ? a
-                : boost::any((int)val2);
+                : boost::any((int(val2) - (int)a));
     }
     else if (a.type() == typeid(float)) {
         double val1 = boost::any_cast<float>(a);
@@ -60,9 +59,9 @@ boost::any compare_one(boost::any a, boost::any b) {
             ? b
             : val1 > val2
                 ? a
-                : boost::any((int)val1);
+                : boost::any((val1 - val2));
     }
     else {
-        return boost::any((int)0);
+        return boost::any("None");
     }
 }
