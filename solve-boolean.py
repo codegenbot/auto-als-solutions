@@ -5,10 +5,10 @@ def solve_boolean(expression):
         return False
     while '|' in expression:
         a, b = expression.split('|')
-        expression = str(solve_boolean(a)) and str(solve_boolean(b))
+        expression = solve_boolean(a) and solve_boolean(b)
     while '&' in expression:
         a, b = expression.split('&')
-        expression = str(solve_boolean(a) and solve_boolean(b))
+        expression = solve_boolean(a) and solve_boolean(b)
     if expression == 'T':
         return True
     elif expression == 'F':
