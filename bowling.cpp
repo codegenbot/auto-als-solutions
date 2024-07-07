@@ -1,4 +1,4 @@
-#include<string>
+#include <string>
 
 int bowlingScore(string s) {
     int score = 0;
