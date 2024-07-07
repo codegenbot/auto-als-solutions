@@ -12,16 +12,8 @@ int add_elements(std::vector<int> arr, int k) {
 }
 
 int main() {
-    std::vector<int> my_array;
-    int k;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> k;
-    std::cout << "Enter the elements: ";
-    for (int i = 0; i < k; i++) {
-        int num;
-        std::cin >> num;
-        my_array.push_back(num);
-    }
-    std::cout << "The sum of elements with length of string representation <= 2 is: " << add_elements(my_array, k) << std::endl;
+    std::vector<int> my_array = {1, 2, 3};
+    int k = 3;
+    assert(add_elements(my_array, k) == 3);
     return 0;
 }
