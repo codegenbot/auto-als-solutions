@@ -1,60 +1,46 @@
 #include <vector>
 using namespace std;
 
-vector<vector<int>> cutVector(vector<int> vec) {
-    int n = vec.size();
-    vector<vector<int>> res(2);
-    for (int i = 0; i < n; i++) {
-        if (i == 0 || i == n - 1) {
-            res[0].push_back(vec[i]);
-            res[1].push_back(vec[i]);
-        } else {
-            int left_sum = 0, right_sum = 0;
-            for (int j = 0; j < i; j++) {
-                left_sum += vec[j];
-            }
-            for (int j = i; j < n; j++) {
-                right_sum += vec[j];
-            }
-            if (left_sum == right_sum) {
-                res[0].push_back(vec[i]);
-                res[1].push_back(vec[i]);
-            } else {
-                int min_diff = abs(left_sum - right_sum);
-                for (int j = 0; j < i; j++) {
-                    left_sum -= vec[j];
-                    if (abs(left_sum - right_sum) < min_diff) {
-                        res[0].clear();
-                        res[1].clear();
-                        res[0].push_back(vec[j]);
-                        res[1].push_back(vec[i]);
-                        for (int k = 0; k < j; k++) {
-                            res[0].push_back(vec[k]);
-                        }
-                        for (int k = i + 1; k < n; k++) {
-                            res[1].push_back(vec[k]);
-                        }
-                        min_diff = abs(left_sum - right_sum);
-                    }
-                }
-                for (int j = i; j < n; j++) {
-                    right_sum -= vec[j];
-                    if (abs(left_sum - right_sum) < min_diff) {
-                        res[0].clear();
-                        res[1].clear();
-                        res[0].push_back(vec[i]);
-                        res[1].push_back(vec[j]);
-                        for (int k = 0; k < i; k++) {
-                            res[0].push_back(vec[k]);
-                        }
-                        for (int k = j + 1; k < n; k++) {
-                            res[1].push_back(vec[k]);
-                        }
-                        min_diff = abs(left_sum - right_sum);
-                    }
-                }
-            }
+vector<int> cutVector(vector<int>& nums) {
+    int minDiff = INT_MAX;
+    int splitIndex = 0;
+    
+    for (int i = 1; i < nums.size(); i++) {
+        int diff = abs(nums[i] - nums[i-1]);
+        
+        if (diff == 0 || diff < minDiff) {
+            minDiff = diff;
+            splitIndex = i;
         }
     }
-    return res;
+    
+    vector<int> left(nums.begin(), nums.begin() + splitIndex);
+    vector<int> right(nums.begin() + splitIndex, nums.end());
+    
+    return {left, right};
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+    
+    auto result = cutVector(nums);
+    
+    cout << result[0].size() << endl;
+    for (int num : result[0]) {
+        cout << num << " ";
+    }
+    cout << endl;
+    
+    cout << result[1].size() << endl;
+    for (int num : result[1]) {
+        cout << num << " ";
+    }
+    cout << endl;
+    
+    return 0;
 }
