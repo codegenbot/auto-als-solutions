@@ -1,6 +1,4 @@
-from typing import List
-
-def filter_integers() -> List[int]:
+def filter_integers():
     values = []
     while True:
         user_input = input("Enter a value (or 'stop' to finish): ")
