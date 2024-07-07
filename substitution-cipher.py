@@ -1,11 +1,10 @@
 def substitution_cipher(cipher1, cipher2, message):
-    return "".join(
-        [cipher2[i] if i < len(cipher2) else "" for i in range(len(message))]
-    )
-
-
-# test cases
-print(substitution_cipher("a", "z", "a"))  # z
-print(substitution_cipher("j", "h", "jj"))  # hh
-print(substitution_cipher("a", "z", "azza"))  # zzazz
-print(substitution_cipher("e", "l", "eeeeeeeeee"))  # llllllllll
+    deciphered_message = ""
+    for char in message:
+        for i in range(len(cipher1)):
+            if char == cipher1[i]:
+                deciphered_message += cipher2[i]
+                break
+        else:
+            deciphered_message += char
+    return deciphered_message
