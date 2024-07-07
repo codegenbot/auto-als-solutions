@@ -31,16 +31,10 @@ boost::any compare_one(boost::any a, boost::any b) {
         string strA = boost::any_cast<string>(a);
 
         return (stod(strA) > numB) ? a : b;
-    } else if ((a.type() == typeid(string)) &&
-               (b.type() == typeid(string))) {
-        string strA = boost::any_cast<string>(a);
-        string strB = boost::any_cast<string>(b);
-
-        return (stod(strA) > stod(strB)) ? a : b;
     }
 
     if (boost::any_cast<int>(a) == boost::any_cast<int>(b)) {
-        return boost::any("None");
+        return boost::any("Equal");
     } else if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
         return a;
     } else {
