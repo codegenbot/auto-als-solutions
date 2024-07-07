@@ -1,3 +1,4 @@
+```
 def find_primes():
     num = int(input("Enter a number: "))
 
