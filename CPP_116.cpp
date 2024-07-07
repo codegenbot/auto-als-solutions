@@ -11,21 +11,21 @@ bool issame(std::vector<int> a, std::vector<int> b) {
 }
 
 // Function to sort the array based on the number of 1 bits in binary representation
-std::vector<int> sort_array(std::vector<int> arr){
+std::vector<int> sort_array(std::vector<int> arr) {
     std::vector<std::pair<int, int>> result;
-    for(int i: arr) {
+    for (int i : arr) {
         int ones = 0;
         int num = i;
-        while(num > 0) {
-            if((num & 1) == 1)
+        while (num > 0) {
+            if ((num & 1) == 1)
                 ones++;
             num >>= 1;
         }
         result.push_back({ones, i});
     }
-    sort(result.begin(), result.end());
+    std::sort(result.begin(), result.end());
     std::vector<int> res;
-    for(auto x: result) {
+    for (auto x : result) {
         res.push_back(x.second);
     }
     return res;
