@@ -1,10 +1,7 @@
-#include <iostream>
-#include <cctype>
 #include <string>
+#include <cctype>
 
-using namespace std;
-
-string solve(string s) {
+string solve(string s){
     string result = "";
     for(int i=0; i<s.size(); i++){
         if(isalpha(s[i])){
@@ -14,9 +11,4 @@ string solve(string s) {
         else result += s[i];
     }
     return result;
-}
-
-int main() {
-    assert(solve("#ccc") == "#CCC");
-    return 0;
 }
