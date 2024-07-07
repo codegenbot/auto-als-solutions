@@ -10,8 +10,7 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
     else if (a.type() == typeid(int) && b.type() == typeid(string)) {
         string str = boost::any_cast<string>(b);
-        string temp = str.erase(0,1).erase(str.length()-2,str.length());
-        int num = stoi(temp);
+        int num = stoi(str.erase(0,1).erase(str.length()-2,str.length()).c_str());
         return num > boost::any_cast<int>(a) ? b : a;
     }
     else if (a.type() == typeid(float) && b.type() == typeid(int)) {
@@ -29,8 +28,5 @@ boost::any compare_one(boost::any a, boost::any b) {
 
 int main() {
     using namespace std;
-    cout << compare_one(5, 3.14) << endl;
-    cout << compare_one(10, "123") << endl;
-    cout << compare_one(1.2f, 7) << endl;
-    cout << compare_one("hello", "world") << endl;
+    // use compare_one function here
 }
