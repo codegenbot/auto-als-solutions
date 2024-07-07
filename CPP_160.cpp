@@ -20,7 +20,7 @@ int do_algebra(vector<string> operator_, vector<int> operands_) {
                 if (operator_[j] == "/") {
                     temp /= operands_[j];
                 } else if (operator_[j] == "//") {
-                    temp /= operands_[j];
+                    temp /= static_cast<int>(operands_[j]);
                 } else if (operator_[j] == "**") {
                     temp = pow(temp, operands_[j]);
                 }
