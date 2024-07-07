@@ -1,4 +1,6 @@
-#include <cmath>
+#include <math.h>
+
+using namespace std;
 
 int x_or_y(int n, int x, int y) {
     if (isPrime(n)) {
