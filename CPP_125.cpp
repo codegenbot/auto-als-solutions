@@ -7,26 +7,40 @@ using namespace std;
 
 vector<string> split_words(string txt) {
     vector<string> result;
-    size_t prev = 0, next = 0;
+    size_t pos = 0, prevPos = 0;
 
-    while ((next = txt.find_first_of(" ,")) != string::npos) {
-        if (next == 0) {
-            break;
+    while (pos != string::npos) {
+        if (pos == string::npos || txt[pos] == ' ') {
+            if (prevPos != pos) {
+                result.push_back(txt.substr(prevPos, pos - prevPos));
+            }
+            pos++;
+        } else if (txt[pos] == ',') {
+            if (prevPos != pos) {
+                result.push_back(txt.substr(prevPos, pos - prevPos));
+            }
+            pos++;
+        } else {
+            size_t nextComma = txt.find_first_of(", ", pos);
+            if (nextComma == string::npos) {
+                result.push_back(txt.substr(pos));
+                break;
+            }
+            if (pos != nextComma) {
+                result.push_back(txt.substr(pos, nextComma - pos));
+            }
+            pos = nextComma;
         }
-        string word = txt.substr(prev, next - prev);
-        result.push_back(word);
-        prev = next + 1;
     }
 
-    if (prev < txt.size()) {
-        result.push_back(txt.substr(prev));
-    } else if (txt.empty()) {
+    if (result.empty()) {
         int count = 0;
         for (char c : txt) {
-            if ((int)c - (int)'a' % 26 == 3)
-                count++;
+            if (c >= 'a' && c <= 'z' && (count & 1)) {
+                result.push_back(to_string(count));
+            }
+            count++;
         }
-        result.push_back(to_string(count));
     }
 
     return result;
@@ -37,7 +51,7 @@ int main() {
     cout << "Enter a string: ";
     getline(cin, txt);
     vector<string> result = split_words(txt);
-    for (string s : result) {
+    for (auto s : result) {
         cout << s << endl;
     }
     return 0;
