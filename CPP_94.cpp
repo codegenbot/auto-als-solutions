@@ -32,15 +32,17 @@ bool isPrime(int num) {
 
 int main() {
     assert(solveProblem({127, 97, 8192}) == 10);
-    int n;
-    std::cout << "Enter the number of integers: ";
-    std::cin >> n;
-    std::vector<int> lst(n);
-    for (int i = 0; i < n; i++) {
-        std::cout << "Enter integer " << i+1 << ": ";
-        std::cin >> lst[i];
+    // You might need to add some input logic here
+    std::vector<int> lst;
+    int num;
+    while (true) {
+        std::cout << "Enter a number (-1 to stop): ";
+        std::cin >> num;
+        if (num == -1) {
+            break;
+        }
+        lst.push_back(num);
     }
-    int result = solveProblem(lst);
-    std::cout << "Sum of digits of the maximum prime number is: " << result;
+    std::cout << "Sum of digits: " << solveProblem(lst) << std::endl;
     return 0;
 }
