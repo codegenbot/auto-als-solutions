@@ -1,46 +1,17 @@
-Here is the solution:
-
-#include <vector>
-#include <iostream>
 #include <string>
+#include <sstream>
 
-using namespace std;
+std::string spinWords(const std::string& input) {
+    std::stringstream ss(input);
+    std::string word;
+    std::stringstream result;
 
-string spinWords(string str) {
-    string result = "";
-    int wordLength = 0;
-    
-    for (int i = 0; i < str.length(); i++) {
-        if (str[i] == ' ') {
-            if (wordLength >= 5) {
-                for (int j = wordLength - 1; j >= 0; j--) {
-                    result += str[i - wordLength + j];
-                }
-            } else {
-                result += str.substr(i - wordLength, wordLength);
-            }
-            wordLength = 0;
-        } else {
-            wordLength++;
+    while (ss >> word) {
+        if (word.length() >= 5) {
+            std::reverse(word.begin(), word.end());
         }
+        result << word << " ";
     }
-    
-    if (wordLength >= 5) {
-        for (int i = wordLength - 1; i >= 0; i--) {
-            result += str[wordLength - i - 1];
-        }
-    } else {
-        result = str;
-    }
-    
-    return result;
-}
 
-int main() {
-    cout << spinWords("a") << endl; // a
-    cout << spinWords("this is a test") << endl; // this is a test
-    cout << spinWords("this is another test") << endl; // this is rehtona test
-    cout << spinWords("hi") << endl; // hi
-    
-    return 0;
+    return result.str().substr(0, result.str().size() - 1);
 }
