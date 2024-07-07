@@ -1,5 +1,4 @@
 #include <iostream>
-#include <map>
 using namespace std;
 
 int countBlackPegs(string code, string guess) {
@@ -39,4 +38,3 @@ int main() {
     cout << whitePegs << endl;
     cout << blackPegs << endl;
     return 0;
-}
