@@ -28,7 +28,6 @@ int max_fill(vector<vector<int>> grid, int capacity) {
     }
 
     return count;
-
 }
 
 int main() {
