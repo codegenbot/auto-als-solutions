@@ -1,5 +1,5 @@
-#include <vector>
 #include <iostream>
+#include <vector>
 
 int specialFilter(std::vector<int> nums) {
     int count = 0;
@@ -13,6 +13,8 @@ int specialFilter(std::vector<int> nums) {
 
 int main() {
     assert(specialFilter({}) == 0);
-    // You can test your function with different inputs here
+    std::vector<int> input = {123, 456, -789, 101};
+    int result = specialFilter(input);
+    std::cout << "The number of elements in the vector that meet the condition is: " << result << std::endl;
     return 0;
 }
