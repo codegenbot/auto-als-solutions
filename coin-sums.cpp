@@ -4,22 +4,23 @@ using namespace std;
 int main() {
     int cents;
     cin >> cents;
+    
+    int quarters = cents / 25;
+    cents %= 25;
+    
+    int remaining_cents = cents; 
+    int dimes = remaining_cents / 10;
+    remaining_cents %= 10;
 
-    vector<int> coins = {25, 10, 5, 1};
-    vector<int> coinCounts(4, 0);
+    int nickles = remaining_cents / 5;
+    remaining_cents %= 5;
 
-    for (int i = 3; i >= 0; i--) {
-        while (cents >= coins[i]) {
-            int count = cents / coins[i];
-            cents -= count * coins[i];
-            coinCounts[i] = count;
-        }
-    }
+    int pennies = remaining_cents; 
 
-    cout << coinCounts[3] << endl;
-    cout << coinCounts[2] << endl;
-    cout << coinCounts[1] << endl;
-    cout << coinCounts[0] << endl;
+    cout << quarters << endl;
+    cout << nickles << endl;
+    cout << dimes << endl;
+    cout << pennies << endl;
 
     return 0;
 }
