@@ -3,12 +3,17 @@ def solve_boolean(expression):
         return True
     elif expression == "F":
         return False
-    operators = "|&"
-    for op in operators:
-        if op in expression:
-            left, right = expression.split(op)
-            return (
-                (solve_boolean(left) or solve_boolean(right))
-                if op == "|"
-                else (solve_boolean(left) and solve_boolean(right))
-            )
+    else:
+        i = expression.find("&")
+        if i != -1:
+            a = expression[:i]
+            b = expression[i + 1 :]
+            return solve_boolean(a) and solve_boolean(b)
+        else:
+            i = expression.find("|")
+            if i != -1:
+                a = expression[:i]
+                b = expression[i + 1 :]
+                return solve_boolean(a) or solve_boolean(b)
+            else:
+                return True
