@@ -1,52 +1,23 @@
 #include <vector>
 #include <iostream>
-#include <string>
-
 using namespace std;
 
-bool solveBoolean(string input) {
-    bool result = (input == "t") || (input == "T");
-    
-    if (result) {
-        for (int i = 1; i < input.length(); i++) {
-            if (input[i] == '&') {
-                return false;
-            } else if (input[i] == '|') {
-                result = false;
-                break;
-            }
-        }
-        
-        if (!result && input[input.length() - 1] == '&') {
-            result = true;
-        }
-    } else {
-        for (int i = 1; i < input.length(); i++) {
-            if (input[i] == '|') {
-                return false;
-            } else if (input[i] == '&') {
-                result = true;
-                break;
-            }
-        }
-        
-        if (!result && input[input.length() - 1] == '|') {
-            result = true;
-        }
-    }
-    
-    return result;
+bool solveBoolean(string s) {
+    if (s == "T" || s == "t")
+        return true;
+    else if (s == "F" || s == "f")
+        return false;
+    else if (s.length() > 1 && s[0] == 'n' && s[1] == '&') {
+        return !solveBoolean(string(s, 2));
+    } else if (s.length() > 1 && s[0] == '|') {
+        return solveBoolean(string(s, 1)) || solveBoolean(string(s, 2));
+    } else
+        return false;
 }
 
 int main() {
-    // Your code goes here
     string s;
-    cout << "Enter the boolean expression: ";
     cin >> s;
-    bool output = solveBoolean(s);
-    if (output)
-        cout << "True";
-    else
-        cout << "False";
+    cout << boolalpha << solveBoolean(s) << endl;
     return 0;
 }
