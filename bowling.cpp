@@ -1,3 +1,4 @@
+```cpp
 #include <algorithm>
 #include <cctype>
 
@@ -12,7 +13,7 @@ int bowlingScore(const string& input) {
         } else if (::isdigit(c)) {
             prevRolls *= 10;
             prevRolls += c - '0';
-        } else { 
+        } else { // X
             score += 10;
             prevRolls = 0;
         }
