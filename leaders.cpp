@@ -1,21 +1,15 @@
 #include <vector>
-#include <algorithm>
+
 using namespace std;
 
-vector<int> leaders(vector<int>& arr) {
-    int n = arr.size();
-    vector<int> result;
-    
-    // The rightmost element is always a leader.
-    result.push_back(arr[n-1]);
-    
-    for(int i = n-2; i >= 0; i--) {
-        if(arr[i] >= arr[i+1]) {
-            result.push_back(arr[i]);
+vector<int> leaders(vector<int> v) {
+    vector<int> res;
+    int maxRight = v.back();
+    for(int i=v.size()-2; i>=0; i--) {
+        if(v[i] >= maxRight) {
+            res.push_back(v[i]);
+            maxRight = v[i];
         }
     }
-    
-    reverse(result.begin(), result.end());
-    
-    return result;
+    return res;
 }
