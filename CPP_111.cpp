@@ -1,31 +1,41 @@
-Here is the completed code:
+#include<string>
+#include<map>
+#include<unordered_map>
+using namespace std;
 
-map<char, int> histogram(string test) {
-    map<char, int> result;
-    if (test.empty()) return result;
-
-    size_t pos = 0;
-    while ((pos = test.find(' ')) != string::npos) {
-        char c = test[0];
-        int count = 1;
-        while (pos > 0 && test[pos - 1] == c) {
-            pos = test.find(' ', pos);
-            if (pos == string::npos) break;
-            pos++;
-            count++;
+map<char,int> histogram(string test){
+    map<char,int> result;
+    unordered_map<char,int> count;
+    string temp;
+    
+    for(int i=0; i<test.length(); i++){
+        if(test[i] == ' ' || i==test.length()-1){
+            if(temp.length() > 0){
+                if(count.find(temp[0]) == count.end()){
+                    count[temp[0]] = 1;
+                }else{
+                    count[temp[0]]++;
+                }
+                temp.clear();
+            }
+        }else{
+            temp += test[i];
         }
-        result[c] = count;
-        test.erase(0, pos);
     }
-
-    // handle the remaining characters
-    char c = test[0];
-    int count = 1;
-    while (test.size() > 1 && test[1] == c) {
-        test.erase(0, 1);
-        count++;
+    
+    int maxCount = 0;
+    for(auto it : count){
+        if(it.second > maxCount){
+            maxCount = it.second;
+        }
     }
-    if (!test.empty()) result[c] = count;
-
-    return result;
+    
+    map<char,int> finalResult;
+    for(auto it : count){
+        if(it.second == maxCount){
+            finalResult[it.first] = it.second;
+        }
+    }
+    
+    return finalResult;
 }
