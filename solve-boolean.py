@@ -1,12 +1,11 @@
-def solve(input):
-    if input == "t":
+def solveBoolean(input_str):
+    if input_str == "T":
         return True
-    elif input == "f":
+    elif input_str == "F":
         return False
-    elif len(input) > 1:
-        op = input[-1]
-        a, b = input[:-1].split(op)
-        if op == "|":
-            return bool(a) or bool(b)
-        else:
-            return bool(a) and bool(b)
+    elif "&" in input_str:
+        res = [solveBoolean(part) for part in input_str.split("&")]
+        return all(res)
+    elif "|" in input_str:
+        res = [solveBoolean(part) for part in input_str.split("|")]
+        return any(res)
