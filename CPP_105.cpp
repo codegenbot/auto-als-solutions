@@ -4,10 +4,10 @@ bool issame(vector<string> a, vector<string>b) {
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<int> numbers;
+    vector<string> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
+            numbers.push_back(num > 5 ? "Greater than five" : to_string(num));
         }
     }
     sort(numbers.begin(), numbers.end());
@@ -17,7 +17,7 @@ vector<string> by_length(vector<int> arr) {
                                      {4, "Four"}, {5, "Five"}, {6, "Six"},
                                      {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
     for (int num : numbers) {
-        result.push_back(numberNames[num]);
+        result.push_back(numberNames[num] != "" ? numberNames[num] : "Less than or equal to five");
     }
     return result;
 }
