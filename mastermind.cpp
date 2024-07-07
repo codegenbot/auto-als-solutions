@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
 using namespace std;
 
 int whitePegs(string code, string guess) {
@@ -43,3 +42,4 @@ int main() {
     cout << blackPegs(code, guess) << endl;
     cout << whitePegs(code, guess) << endl;
     return 0;
+}
