@@ -1,3 +1,5 @@
+Here is the modified code:
+
 ```c++
 #include <stack>
 #include <limits>
@@ -6,8 +8,8 @@ using namespace std;
 
 long long LONG_LONG_MAX = numeric_limits<long long>::max();
 
-double pow(long long a, long long b) {
-    double result = 1;
+long long pow(long long a, long long b) {
+    long long result = 1;
     for (int i = 0; i < b; i++) {
         result *= a;
     }
@@ -34,7 +36,7 @@ long long eval(const char* pExpr)
     long long v;
 
     // Create a new stack
-    stack<long long> valueStack;
+    std::stack<long long> valueStack;
 
     // Process the input string one token at a time:
     while (*pExpr) {
@@ -143,6 +145,6 @@ long long eval(const char* pExpr)
         }
     }
 
-    // Return the final result
+    // Return the final value
     return valueStack.top();
 }
