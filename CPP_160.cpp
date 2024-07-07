@@ -1,3 +1,4 @@
+```
 int do_algebra(vector<string> operato, vector<int> operand) {
     int result = 0;
     int i = 0;
