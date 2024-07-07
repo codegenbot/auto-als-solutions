@@ -1,23 +1,22 @@
-string fix_spaces(string text) {
+string fix_spaces(string text){
     string result = "";
-    bool prev_was_space = false;
+    int count = 0;
 
-    for (char c : text) {
-        if (c == ' ') {
-            if (!prev_was_space) {
-                result += '_';
-                prev_was_space = true;
-            } else if (result.back() != '-') {
-                result += '-';
-                prev_was_space = true;
+    for(int i = 0; i < text.length(); i++){
+        if(text[i] == ' '){
+            if(count > 2){
+                result += "-";
+                count = 1;
+            } else {
+                count++;
             }
         } else {
-            if (prev_was_space) {
-                result += c;
-                prev_was_space = false;
-            } else {
-                result += c;
+            while(count > 0){
+                result += '_';
+                count--;
             }
+            result += text[i];
+            count = 0;
         }
     }
 
