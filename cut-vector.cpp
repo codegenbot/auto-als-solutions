@@ -14,7 +14,7 @@ CutResult cutVector(vector<int>& nums) {
     int cutIndex = 0;
 
     for (int i = 1; i < n; i++) {
-        int diff = abs(nums[i-1] - nums[i]);
+        int diff = std::abs(nums[i-1] - nums[i]);
         if (diff <= minDiff) {
             minDiff = diff;
             cutIndex = i;
