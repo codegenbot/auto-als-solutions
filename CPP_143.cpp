@@ -2,8 +2,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 bool is_prime(int n) {
     if (n <= 1) return false;
     for (int i = 2; i * i <= n; ++i) {
@@ -12,10 +10,10 @@ bool is_prime(int n) {
     return true;
 }
 
-vector<string> split(const string& str, char c) {
-    vector<string> tokens;
+std::vector<std::string> split(const std::string& str, char c) {
+    std::vector<std::string> tokens;
     size_t pos = 0;
-    while ((pos = str.find(c)) != string::npos) {
+    while ((pos = str.find(c)) != std::string::npos) {
         tokens.push_back(str.substr(0, pos));
         str.erase(0, pos + 1);
     }
@@ -23,9 +21,9 @@ vector<string> split(const string& str, char c) {
     return tokens;
 }
 
-string words_in_sentence(string sentence) {
-    vector<string> words = split(sentence, ' ');
-    string result;
+std::string words_in_sentence(std::string sentence) {
+    std::vector<std::string> words = split(sentence, ' ');
+    std::string result;
 
     for (const auto& word : words) {
         if (is_prime(word.length())) {
@@ -37,9 +35,6 @@ string words_in_sentence(string sentence) {
 }
 
 int main() {
-    string sentence;
-    cout << "Enter a sentence: ";
-    getline(cin, sentence);
-    cout << "Words with prime length: " << words_in_sentence(sentence) << endl;
+    std::cout << words_in_sentence("Hello world") << std::endl;
     return 0;
 }
