@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 int gcd(int a, int b) {
@@ -10,13 +11,9 @@ int gcd(int a, int b) {
 }
 
 int main() {
-    int a,b;
-    cout << "Enter the value of a: ";
-    cin >> a;
-    cout << "Enter the value of b: ";
-    cin >> b;
-    
-    cout << "GCD of " << a << " and " << b << " is " << gcd(a, b);
-    
+    int a, b;
+    cout << "Enter the two numbers: ";
+    cin >> a >> b;
+    cout << "GCD is: " << gcd(a, b) << endl;
     return 0;
 }
