@@ -1,4 +1,3 @@
-```
 def filter_integers() -> List[int]:
     values = []
     while True:
