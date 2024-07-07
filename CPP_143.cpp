@@ -1,7 +1,8 @@
 #include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <string>
+#include <cctype>
+#include <initializer_list>
 
 string words_in_sentence(string sentence) {
     vector<string> words;
