@@ -1,7 +1,8 @@
-using namespace std;
-
 #include <vector>
 #include <algorithm>
+#include <string>
+
+using namespace std;
 
 string words_in_sentence(string sentence) {
     vector<string> words = split(sentence, ' ');
@@ -33,3 +34,4 @@ vector<string> split(const string& str, char c) {
     }
     tokens.push_back(str);
     return tokens;
+}
