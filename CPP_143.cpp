@@ -1,33 +1,48 @@
-string words_in_sentence(string sentence) {
+string words_in_sentence(string sentence){
     string result = "";
-    vector<int> primeNumbers;
-    for (int i = 2; i <= 100; i++) {
-        bool isPrime = true;
-        for (int j = 2; j * j <= i; j++) {
-            if (i % j == 0) {
-                isPrime = false;
-                break;
-            }
+    int count = 0;
+    for(int i=1; i<=1000000; i++){
+        if(isPrime(i)){
+            count++;
         }
-        if (isPrime)
-            primeNumbers.push_back(i);
+        else break;
     }
-
-    vector<string> words = split(sentence, ' ');
-    for (string word : words) {
-        if (find(primeNumbers.begin(), primeNumbers.end(), word.length()) != primeNumbers.end())
+    for (auto &word : split(sentence, ' ')) {
+        if(count-- > 0 && word.length() == isPrime(count+1)){
             result += word + " ";
+        }
     }
-    return result.substr(0, result.size() - 1);
+    return result.substr(0, result.size()-1);
 }
 
-vector<string> split(const string& str, char ch) {
-    vector<string> tokens;
-    size_t pos = 0;
-    while ((pos = str.find(ch)) != string::npos) {
-        tokens.push_back(str.substr(0, pos));
-        str.erase(0, pos + 1);
+string split(string str, char delimeter) {
+    string arr[100];
+    int i = 0;
+    int x = 0;
+    while (str.length() > 0) {
+        x = str.find(delimeter);
+        if (x == 0)
+            break;
+        arr[i] = str.substr(0, x);
+        str = str.substr(x + 1);
+        i++;
     }
-    tokens.push_back(str);
-    return tokens;
+    arr[i] = str;
+    string result = "";
+    for(int j=0; j<i+1;j++){
+        result += arr[j];
+        if(j < i)
+            result += " ";
+    }
+    return result;
+}
+
+bool isPrime(int n) {
+    if (n <= 1)
+        return false;
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0)
+            return false;
+    }
+    return true;
 }
