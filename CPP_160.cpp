@@ -4,39 +4,39 @@
 int do_algebra(vector<pair<char, int>> expressions) {
     int result = 0;
     for (const auto& expression : expressions) {
-        char operator_;
-        int operand_;
-
-        std::tie(operator_, operand_) = expression;
-
-        if (operator_ == '+') {
-            result += operand_;
-        } else if (operator_ == '-') {
-            result -= operand_;
-        } else if (operator_ == '*') {
-            int temp = 1;
-            for (int i = 0; i < expressions.size(); i++) {
-                if (expressions[i].first == '*') {
-                    temp *= expressions[i].second;
+        switch (expression.first) {
+            case '+':
+                result += expression.second;
+                break;
+            case '-':
+                result -= expression.second;
+                break;
+            case '*':
+                for (int i = expressions.size() - 1; i >= 0; --i) {
+                    if (expressions[i].first == '*') {
+                        result *= expressions[i].second;
+                    }
                 }
-            }
-            result += temp * operand_;
-        } else if (operator_ == "/") {
-            int temp = operand_;
-            for (int i = 0; i < expressions.size(); i++) {
-                if (expressions[i].first == '/') {
-                    temp /= expressions[i].second;
+                break;
+            case '/':
+            case '//':
+                int temp = expression.second;
+                for (int i = expressions.size() - 1; i >= 0; --i) {
+                    if ((expressions[i].first == '/') || (expressions[i].first == '//')) {
+                        temp /= expressions[i].second;
+                    }
                 }
-            }
-            result += temp;
-        } else if (operator_ == "**") {
-            int temp = 1;
-            for (int i = 0; i < expressions.size(); i++) {
-                if (expressions[i].first == '**') {
-                    temp *= pow(expressions[i].second, 1.0);
+                result = temp;
+                break;
+            case '^':
+                int temp2 = 1;
+                for (int i = expressions.size() - 1; i >= 0; --i) {
+                    if (expressions[i].first == '^') {
+                        temp2 = pow(temp2, expressions[i].second);
+                    }
                 }
-            }
-            result += temp * operand_;
+                result = temp2;
+                break;
         }
     }
     return result;
