@@ -24,5 +24,5 @@ int fix_spaces(std::string text){
             result += text[i];
         }
     }
-    return 0;
+    return 0; // This should probably be the length of the string
 }
