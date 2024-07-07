@@ -8,12 +8,14 @@ bool any_int(float a, float b, float c) {
 
 int main() {
     float a, b, c;
-    std::cout << "Enter three floats: ";
+    std::cout << "Enter three numbers: ";
     std::cin >> a >> b >> c;
-    if(any_int(a, b, c)) {
-        std::cout << "At least one of the inputs is an integer.\n";
+    
+    if (any_int(a, b, c)) {
+        std::cout << "At least one of the input values is an integer.\n";
     } else {
-        std::cout << "None of the inputs are integers.\n";
+        std::cout << "None of the input values are integers.\n";
     }
+    
     return 0;
 }
