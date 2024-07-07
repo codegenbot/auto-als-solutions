@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <climits>
 
@@ -14,7 +15,7 @@ CutResult cutVector(vector<int>& nums) {
     int cutIndex = 0;
 
     for (int i = 1; i < n; i++) {
-        int diff = abs(nums[i-1] - nums[i]);
+        int diff = std::abs(nums[i-1] - nums[i]);
         if (diff <= minDiff) {
             minDiff = diff;
             cutIndex = i;
@@ -24,5 +25,5 @@ CutResult cutVector(vector<int>& nums) {
     vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
     vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
 
-    return CutResult{left, right};
+    return {left, right};
 }
