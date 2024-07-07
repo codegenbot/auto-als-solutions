@@ -1,12 +1,9 @@
-Here is the completed code:
-
 vector<int> maximum(vector<int> arr, int k) {
-    vector<int> res(k);
-    copy(n_max_element(arr.begin(), arr.end()), n_max_element(arr.begin(), arr.end()) + k, res.begin());
+    vector<int> res;
+    for (int i = 0; i < k; i++) {
+        auto it = std::max_element(arr.begin(), arr.end());
+        res.push_back(*it);
+        arr.erase(it);
+    }
     return res;
-}
-
-int main() {
-    // test your function here
-    return 0;
 }
