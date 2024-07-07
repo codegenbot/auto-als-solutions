@@ -1,25 +1,22 @@
-```c++
 #include <vector>
 using namespace std;
 
-int luhn(vector<int> digits) {
+int luhn(vector<int> numbers) {
     int sum = 0;
-    bool doubleNext = false;
-    for (int i = 15; i >= 0; --i) {
-        int digit = digits[i];
-        if (doubleNext) {
-            digit *= 2;
-            if (digit > 9) {
-                digit -= 9;
+    for(int i = 0; i < numbers.size(); i++) {
+        if(i % 2 == 1) {
+            numbers[i] *= 2;
+            if(numbers[i] > 9) {
+                numbers[i] -= 9;
             }
         }
-        sum += digit;
-        doubleNext = !doubleNext;
+        sum += numbers[i];
     }
     return sum;
 }
 
 int main() {
-    vector<int> someDigits = {4,3,2,8,7,9,1,6,5,4,3,2,8,7,9,1};
-    return luhn(someDigits);
+    vector<int> numbers = {4, 7, 8, 6, 3, 5, 1, 2, 4, 9, 0, 8, 6, 7, 3};
+    cout << "The result is: " << luhn(numbers) << endl;
+    return 0;
 }
