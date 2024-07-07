@@ -1,5 +1,5 @@
-#include <string>
-#include <openssl/md5.h>
+#include <openssl/ssl.h>
+#include <openssl/crypto.h>
 
 using namespace std;
 
@@ -20,4 +20,8 @@ string string_to_md5(string text) {
     }
 
     return result;
+}
+
+int main() {
+    // Your code here
 }
