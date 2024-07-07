@@ -1,3 +1,4 @@
+```
 #include <iostream>
 using namespace std;
 
@@ -38,3 +39,4 @@ int main() {
     cout << whitePegs << endl;
     cout << blackPegs << endl;
     return 0;
+}
