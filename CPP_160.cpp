@@ -1,8 +1,7 @@
 #include <vector>
+#include <string>
+
 int do_algebra(vector<string> operato, vector<int> operand) {
-    if (operato.size() != operand.size()) {
-        throw runtime_error("Invalid input");
-    }
     int result = 0;
     for (int i = 1; i < operato.size(); i++) {
         if (operato[i] == "+") {
