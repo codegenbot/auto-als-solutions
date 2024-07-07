@@ -1,6 +1,9 @@
-#include <iostream>
-#include <vector>
-using namespace std;
+int main() {
+    vector<int> arr = {1, 2, 3, 4, 5};
+    int k = 3;
+    assert(add_elements(arr, k) == 6);
+    return 0;
+}
 
 int add_elements(vector<int> arr, int k) {
     int sum = 0;
@@ -10,11 +13,4 @@ int add_elements(vector<int> arr, int k) {
         }
     }
     return sum;
-}
-
-int main() {
-    vector<int> arr = {1, 2, 3, 4, 5};
-    int k = 3;
-    assert(add_elements(arr, k) == 6);
-    return 0;
 }
