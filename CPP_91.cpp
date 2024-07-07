@@ -1,14 +1,15 @@
+#include <string>
+
 int is_bored(string S) {
     int count = 0;
-    string boredom = "I";
     size_t pos = 0;
-
-    while ((pos = S.find("I", pos)) != string::npos) {
-        if (S.substr(pos, boredom.size()).compare(boredom) == 0) {
+    while ((pos = S.find('.', pos)) != string::npos || 
+           (pos = S.find('?', pos)) != string::npos || 
+           (pos = S.find('!', pos)) != string::npos) {
+        if (S.substr(0, 2).compare("I ") == 0) {
             count++;
         }
-        pos += boredom.size();
+        pos++;
     }
-
     return count;
 }

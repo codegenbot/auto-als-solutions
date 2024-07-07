@@ -1,7 +1,5 @@
 #include <vector>
-#include <iostream>
-
-using namespace std;
+#include <limits>
 
 vector<int> pluck(vector<int> arr) {
     vector<int> result = {};
