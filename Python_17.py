@@ -1,4 +1,3 @@
-```
 def parse_music(music_string: str) -> list:
     music_list = []
     i = 0
@@ -15,4 +14,4 @@ def parse_music(music_string: str) -> list:
         elif music_string[i:i+3] == '.||':
             music_list.append(1)
             i += 3
-    return music_list```
+    return music_list
