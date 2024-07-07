@@ -1,10 +1,8 @@
-```c++
-#include <iostream>
+```cpp
 #include <vector>
+#include <cassert>
 
-using namespace std;
-
-int count_nums(vector<int> v) {
+int count_nums(std::vector<int> v) {
     int count = 0;
     for (int num : v) {
         if (num >= 0) {
@@ -30,7 +28,6 @@ int count_nums(vector<int> v) {
 }
 
 int main() {
-    vector<int> v = {1};
-    cout << "Count: " << count_nums(v) << endl; 
+    assert(count_nums({1}) == 1);
     return 0;
 }
