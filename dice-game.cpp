@@ -1,18 +1,14 @@
 #include <iostream>
 using namespace std;
 
-double solve(int n, int m) {
-    double sum = 0.0;
-    for (int i = n + 1; i <= m; i++) {
-        sum += 1.0 / (n * 1.0);
-    }
-    return sum;
+double getProbability(int n, int m) {
+    if(n == 1 || m == 1) return 0.0;
+    return (n - 1.0) / (n + m - 2.0);
 }
 
 int main() {
     int n, m;
     cin >> n >> m;
-    double result = solve(n, m);
-    cout << fixed << setprecision(1) << result << endl;
+    cout << fixed << setprecision(4) << getProbability(n, m) << endl;
     return 0;
 }
