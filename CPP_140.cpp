@@ -1,26 +1,28 @@
+```cpp
 #include <iostream>
 #include <string>
 
 std::string fix_spaces(std::string text) {
-    if(text.empty()) {
-        return text;
-    }
-    
-    bool in_sequence = false;
     std::string result = "";
-    
-    for(char c : text) {
-        if(c == ' ') {
-            if(!in_sequence) {
-                result += (result.empty() ? "-" : "_");
-                in_sequence = true;
+    bool consecutive = false;
+
+    for(int i = 0; i < text.length(); i++){
+        if(text[i] == ' '){
+            if(consecutive){
+                result += '-';
+                consecutive = false;
+            } else {
+                if(result.length() > 0 && (result[result.length()-1] != '_' || result[result.length()-1] != '-')){
+                    result += '_';
+                }
+                consecutive = true;
             }
         } else {
-            in_sequence = false;
-            result += c;
+            result += text[i];
+            consecutive = false;
         }
     }
-    
+
     return result;
 }
 
