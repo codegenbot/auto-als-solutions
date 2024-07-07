@@ -1,30 +1,31 @@
-int bowlingScore(string s) {
+Here is the solution:
+
+int bowling(string s) {
     int score = 0;
-    int frame = 1;
-    for (char c : s) {
-        if (c == '/') {
-            if (frame < 10) {
-                score += min(stoi(s.substr(0, s.find('/'))) + stoi(s.substr(s.find('/') + 1)), 10);
+    for(int i = 0; i < 10; ++i){
+        if(s[i] == 'X' || (s[i] == '/' && s[i+1] == 'X')){
+            score += 30;
+            continue;
+        }
+        else{
+            int sum = 0;
+            int j = i + 1;
+            while(j < 10 && s[j] != '/'){
+                if(s[j] == 'X'){
+                    score += 10;
+                    break;
+                }
+                else{
+                    sum += (s[j]-'0');
+                }
+                j++;
             }
-            frame++;
-            s = s.substr(s.find('/') + 1);
-        } else if (c == 'X') {
-            score += 10;
-            frame++;
-            s = "";
-        } else {
-            int pins = 0;
-            for (; c != '/' && c != 'X'; c++) {
-                pins *= 10;
-                pins += c - '0';
+            if(sum == 10) {
+                score += 10;
             }
-            if (pins < 10) {
-                score += pins;
-            } else {
-                score += 10 + min(pins - 10, 10);
+            else {
+                score += sum + s[i]-'0';
             }
-            frame++;
-            s = s.substr(s.find('/') + 1);
         }
     }
     return score;
