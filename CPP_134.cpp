@@ -1,3 +1,6 @@
-size_t last_space = txt.find_last_of(' ');
-return (last_space == string::npos || txt[last_space + 1] >= 'a' && txt[last_space + 1] <= 'z') ||
-       (txt.length() == 0);
+```cpp
+bool check_if_last_char_is_a_letter(string txt) {
+    if (txt.empty()) return false;
+    string lastChar = txt.substr(txt.length() - 1);
+    return isalpha(lastChar[0]) && !isalnum(lastChar[0]);
+}
