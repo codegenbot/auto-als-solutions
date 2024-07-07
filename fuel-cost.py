@@ -1,5 +1,7 @@
 ```
 def fuel_cost():
-    n = int(input())
-    numbers = list(map(int, input().split()))
-    return sum((num // 3) - 2 for num in numbers)
+    total = 0
+    for line in sys.stdin:
+        num = int(line)
+        total += num // 3 - 2
+    return total
