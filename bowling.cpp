@@ -1,25 +1,28 @@
-#include<string>
+#include <string>
 
 int bowlingScore(string s) {
     int score = 0;
-    for (int i = 0; i < 10; i++) {
-        if (s[i] == 'X') {
-            score += 30;
-        } else if (s[i] == '/') {
-            int strikeFrames = 1, total = 10;
-            for (int j = i + 1; j < 11 && j < s.size(); j++) {
-                if (s[j] != 'X') {
-                    strikeFrames++;
-                    total += s[j] - '0';
-                } else {
-                    break;
-                }
-            }
-            score += strikeFrames * 10 + total / strikeFrames;
+    int currentRoll = 0;
+    bool strike = false;
+
+    for (char c : s) {
+        if (c == 'X') {
+            score += 10 + (strike ? 10 : currentRoll);
+            strike = true;
+            currentRoll = 0;
+        } else if (c == '/') {
+            score += 10 - currentRoll;
+            strike = false;
+            currentRoll = 0;
         } else {
-            int first = s[i] - '0', second = (i < s.size() && s[i + 1] != '/') ? s[i + 1] - '0' : 0;
-            score += first + second;
+            int roll = c - '0';
+            if (strike) {
+                score += roll;
+                strike = false;
+            } else {
+                currentRoll += roll;
+            }
         }
     }
+
     return score;
-}
