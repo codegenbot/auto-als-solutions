@@ -1,22 +1,31 @@
-string solveBoolean(string expression) {
-    stack<char> s;
-    for (int i = 0; i < expression.length(); ++i) {
-        if (expression[i] == '&') {
-            s.push(expression[i]);
+bool solveBoolean(string s) {
+    if(s == "T" || s == "t")
+        return true;
+    else if(s == "F" || s == "f")
+        return false;
+    else if(s.find("|") != string::npos) {
+        size_t pos = 0;
+        int i = 0;
+        while (i < s.length()) {
+            if (s[i] == '|') {
+                string a = s.substr(pos, i - pos);
+                string b = s.substr(i + 1);
+                return solveBoolean(a) || solveBoolean(b);
+            }
             i++;
-            while(i < expression.length() && expression[i] != '|') {
-                i++;
-            }
-        } else if (expression[i] == '|') {
-            while(!s.empty()) {
-                s.pop();
-            }
         }
+    } else if(s.find("&") != string::npos) {
+        size_t pos = 0;
+        int i = 0;
+        while (i < s.length()) {
+            if (s[i] == '&') {
+                string a = s.substr(pos, i - pos);
+                string b = s.substr(i + 1);
+                return solveBoolean(a) && solveBoolean(b);
+            }
+            i++;
+        }
+    } else {
+        cout << "Invalid input. Only T/F/&( )| are allowed.";
     }
-    string result = "";
-    while (!s.empty()) {
-        result += s.top();
-        s.pop();
-    }
-    return result;
 }
