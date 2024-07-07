@@ -1,24 +1,31 @@
-```cpp
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
-int luhn(vector<int> numbers) {
+int luhn(vector<int> digits) {
     int sum = 0;
-    for(int i = 0; i < numbers.size(); i++) {
-        if(i % 2 == 1) {
-            numbers[i] *= 2;
-            if(numbers[i] > 9) {
-                numbers[i] -= 9;
+    for (int i = 0; i < digits.size(); i++) {
+        if ((i % 2 == 1)) {
+            int temp = digits[i] * 2;
+            if (temp > 9) {
+                temp -= 9;
             }
+            sum += temp;
+        } else {
+            sum += digits[i];
         }
-        sum += numbers[i];
     }
     return sum;
 }
 
 int main() {
-    vector<int> numbers = {4,3,7,1,3,5,8,6,7,9,2};
-    int result = luhn(numbers);
-    cout << "The Luhn check sum is: " << result << endl;
+    int n;
+    cin >> n;
+    vector<int> digits(n);
+    for (int i = 0; i < n; i++) {
+        cin >> digits[i];
+    }
+    cout << luhn(digits) << "\n";
     return 0;
 }
