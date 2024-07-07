@@ -1,22 +1,19 @@
-#include<stdexcept>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+bool vowel(char c) {
+    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' ||
+            c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U');
+}
 
 string get_closest_vowel(string word) {
-    int left = 0;
-    for(int right = word.size() - 1; right > 0; --right) {
-        if(!isvowel(word[right])) continue;
-        for(int i = right - 1; i > left; --i) {
-            if(isconsonant(word[i])) break;
+    for (int i = 0; i < word.size(); i++) {
+        if (!isalpha(word[i])) continue;
+        for (int j = i + 1; j < word.size(); j++) {
+            if (!isalpha(word[j])) break;
+            if (vowel(word[i]) || vowel(word[j])) return word.substr(i, 1);
         }
-        return string(1, word[right]);
     }
     return "";
-}
-
-bool isvowel(char c) {
-    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
-            || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U');
-}
-
-bool isconsonant(char c) {
-    return !isvowel(c);
 }

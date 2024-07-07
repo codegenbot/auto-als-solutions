@@ -1,8 +1,10 @@
-Here is the completed code:
+#include <cmath>
 
-bool any_int(float a, float b, float c) {
-    if (a == static_cast<int>(a)) return (a == b + c || a == c + b);
-    if (b == static_cast<int>(b)) return (b == a + c || b == c + a);
-    if (c == static_cast<int>(c)) return (c == a + b || c == b + a);
-    return false;
+bool any_int(float a, float b, float c){
+    if (round(a) == a && round(b) == b && round(c) == c) {
+        return (a == b + c || a == c + b || b == a + c || b == c + a || c == a + b || c == b + a);
+    } else {
+        return false;
+    }
+    return true;
 }
