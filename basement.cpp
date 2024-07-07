@@ -1,24 +1,22 @@
 #include <vector>
 using namespace std;
 
-int basement(vector<int>& arr) {
+int basementIndex(vector<int>& arr) {
     int sum = 0;
     for (int i = 0; i < arr.size(); i++) {
         sum += arr[i];
         if (sum < 0) return i;
     }
-    return -1;
+    return -1; // not found
 }
 
 int main() {
-    vector<int> arr;
     int n;
     cin >> n;
+    vector<int> arr(n);
     for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        arr.push_back(x);
+        cin >> arr[i];
     }
-    cout << basement(arr) << endl;
+    cout << basementIndex(arr) << endl;
     return 0;
 }
