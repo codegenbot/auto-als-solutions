@@ -1,7 +1,7 @@
 #include <string>
 #include <cctype>
 
-string get_closest_vowel(string word){
+string get_closest_vowel(string word) {
     int left = 0, right = word.size() - 1;
     while(left <= right){
         if(!isvowel(word[left])){
