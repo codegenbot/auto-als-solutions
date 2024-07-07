@@ -5,20 +5,18 @@ int luhn(vector<int> numbers) {
     int sum = 0;
     for(int i = 0; i < numbers.size(); i++) {
         if(i % 2 == 1) {
-            int temp = numbers[i] * 2;
-            if(temp > 9) {
-                temp -= 9;
+            numbers[i] *= 2;
+            if(numbers[i] > 9) {
+                numbers[i] -= 9;
             }
-            sum += temp;
-        } else {
-            sum += numbers[i];
         }
+        sum += numbers[i];
     }
     return sum;
 }
 
 int main() {
-    vector<int> numbers = {4,7,8,7,1,1,6,5,9,2,9,8,0,9,1,4};
+    vector<int> numbers = {4, 7, 8, 1, 3, 2, 6, 5, 3, 9, 0, 8, 4, 1, 5};
     cout << "The result is: " << luhn(numbers) << endl;
     return 0;
 }
