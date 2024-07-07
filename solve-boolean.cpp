@@ -1,4 +1,3 @@
-#include <stack>
 #include <string>
 
 bool evaluateBooleanExpression(std::string expression) {
