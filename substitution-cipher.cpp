@@ -2,18 +2,14 @@
 #include <iostream>
 #include <string>
 
-std::string decipher(std::string cipher1, std::string cipher2, std::string message) {
-    std::string result = "";
-    for (int i = 0; i < message.length(); i++) {
-        if (i < cipher1.length()) {
-            int index = cipher1.find(message[i]);
-            if (index != -1) {
-                result += cipher2[index];
-            } else {
-                result += message[i];
-            }
+std::string substituteCipher(const std::string& cipher1, const std::string& cipher2, const std::string& message) {
+    std::string result;
+    for (char c : message) {
+        int index = cipher1.find(c);
+        if (index != std::string::npos) {
+            result += cipher2[index];
         } else {
-            result += message[i];
+            result += c; // If the character is not found in cipher1, keep it as is
         }
     }
     return result;
@@ -22,6 +18,6 @@ std::string decipher(std::string cipher1, std::string cipher2, std::string messa
 int main() {
     std::string cipher1, cipher2, message;
     std::cin >> cipher1 >> cipher2 >> message;
-    std::cout << decipher(cipher1, cipher2, message) << std::endl;
+    std::cout << substituteCipher(cipher1, cipher2, message) << std::endl;
     return 0;
 }
