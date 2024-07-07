@@ -1,8 +1,7 @@
 ```
 #include <string>
-#include <cctype>
 
-std::string solve(std::string s){
+std::string solve(std::string s) {
     std::string result = "";
     for(int i=0; i<s.length(); i++){
         if(isalpha(s[i])){
