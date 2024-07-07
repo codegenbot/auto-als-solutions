@@ -3,30 +3,26 @@
 
 int do_algebra(vector<pair<char, int>> expressions) {
     int result = 0;
-    for (const auto& expression : expressions) {
-        char operator_;
-        int operand_;
-        tie(operator_, operand_) = expression;
-
-        if (operator_ == '+') {
-            result += operand_;
-        } else if (operator_ == '-') {
-            result -= operand_;
-        } else if (operator_ == '*') {
-            int temp = 1;
-            for (int i = 0; i < operand_; i++) {
+    for (auto& expression : expressions) {
+        if (expression.first == '+') {
+            result += expression.second;
+        } else if (expression.first == '-') {
+            result -= expression.second;
+        } else if (expression.first == '*') {
+            int temp = expression.second;
+            for (int i = 1; i < expressions.size(); i++) {
                 temp *= expressions[i].second;
             }
             result += temp;
-        } else if (operator_ == '/') {
-            int temp = operand_;
+        } else if (expression.first == '/') {
+            int temp = expression.second;
             for (int i = 1; i < expressions.size(); i++) {
                 temp /= expressions[i].second;
             }
             result += temp;
-        } else if (operator_ == '**') {
+        } else if (expression.first == '^') {
             int temp = 1;
-            for (int i = 0; i < operand_; i++) {
+            for (int i = 0; i < expressions.size(); i++) {
                 temp *= pow(expressions[i].second, 1);
             }
             result += temp;
