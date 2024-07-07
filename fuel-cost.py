@@ -1,2 +1,5 @@
-def fuel_cost(vector):
-    return sum((i // 3) - 2 for i in vector)
+```
+def fuel_cost():
+    n = int(input())
+    numbers = list(map(int, input().split()))
+    return sum((num // 3) - 2 for num in numbers)
