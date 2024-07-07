@@ -13,19 +13,16 @@ long long double_the_difference(std::vector<float> lst) {
 }
 
 int main() {
-    std::vector<float> numbers = {1.5, 3.4, -7.8, 9.9};
-    float odd_sum = 0;
+    std::vector<float> numbers;
+    float input;
 
-    for (float num : numbers) {
-        if (num > 0 && modf(num, &num) == 0) {
-            odd_sum += pow(num, 2);
-        }
+    while (std::cin >> input) {
+        numbers.push_back(input);
     }
 
-    long long sum = double_the_difference(numbers);
+    long long result = double_the_difference(numbers);
 
-    std::cout << "Odd sum: " << odd_sum << std::endl;
-    std::cout << "Double the difference: " << sum << std::endl;
+    std::cout << "The total of the squares is: " << result << std::endl;
 
     return 0;
 }
