@@ -1,6 +1,5 @@
 ```cpp
 #include <vector>
-#include <cmath>
 
 int skjkasdkd(vector<int> lst){
     int max_prime = 0;
@@ -27,8 +26,8 @@ bool isPrime(int n) {
         }
     }
     return true;
-}
 
+}
 int main() {
     vector<int> lst = {127, 97, 8192};
     cout << skjkasdkd(lst);
