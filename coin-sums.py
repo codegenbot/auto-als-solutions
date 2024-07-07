@@ -8,7 +8,9 @@ def coin_sums():
     dimes = cents // 10
     cents %= 10
     pennies = cents
-    print(f"Quarters: {quarters}")
-    print(f"Nickels: {nickles}")
-    print(f"Dimes: {dimes}")
-    print(f"Pennies: {pennies}")
+    print(quarters)
+    print(nickles)
+    print(dimes)
+    print(pennies)
+
+coin_sums()
