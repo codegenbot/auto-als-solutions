@@ -1,21 +1,23 @@
 #include <string>
 
-bool solveBoolean(std::string s) {
+std::string solveBoolean(std::string s) {
     bool result = false;
     for (char c : s) {
-        if (c == 'T' || c == 't') {
+        if (c == 'T') {
             result = true;
-        } else if (c == 'F' || c == 'f') {
-            return !result;
-        } else if (c == '&') {
-            if (!result) {
-                return false;
-            }
+        } else if (c == 'F') {
+            return "false";
         } else if (c == '|') {
-            if (result) {
-                return true;
-            }
+            if (result)
+                return "true";
+            else
+                continue;
+        } else if (c == '&') {
+            if (!result)
+                return "false";
+            else
+                continue;
         }
     }
-    return result;
+    return result ? "true" : "false";
 }
