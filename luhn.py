@@ -8,4 +8,4 @@ def luhn(card):
                 digit -= 9
         else:
             total += digit
-        total += digit
+    return total
