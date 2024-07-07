@@ -22,3 +22,7 @@ string string_to_md5(string text) {
 
     return result;
 }
+
+int main() {
+    // Your code here
+}
