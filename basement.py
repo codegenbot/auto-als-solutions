@@ -4,7 +4,7 @@ def basement(arr):
     for i in range(len(arr)):
         total += arr[i]
         if total < 0:
-            return i + 1
+            return i
 
 print(basement([1])) # 0
 print(basement([-100, 1])) # 0
