@@ -1,25 +1,18 @@
 ```
-from typing import List
-
 def filter_integers() -> List[int]:
     values = []
-    value_input = input("Enter the first integer: ")
-    try:
-        values.append(int(value_input))
-    except ValueError:
-        print(f"Invalid input '{value_input}'! Please enter an integer.")
     while True:
         user_input = input("Enter a value (or 'stop' to finish): ")
         if user_input.lower() == 'stop':
             break
         try:
-            value = int(input("Enter an integer: "))
+            value = int(user_input)
             values.append(value)
         except ValueError:
-            print(f"Invalid input '{user_input}'! Please enter an integer.")
-    filter_choice = input("Enter 'even' or 'odd' to filter: ")
-    if filter_choice.lower() in ['even', 'odd']:
-        result = [x for x in values if (filter_choice.lower() == 'even' and x % 2 == 0) or (filter_choice.lower() == 'odd' and x % 2 != 0)]
+            print(f"Invalid input! Please enter an integer.")
+    desired_output = input("Enter 'even' or 'odd' to filter: ").lower()
+    if desired_output in ['even', 'odd']:
+        result = [x for x in values if (desired_output == 'even' and x % 2 == 0) or (desired_output == 'odd' and x % 2 != 0)]
     else:
         print("Invalid filter choice! Returning all integers.")
         result = values
