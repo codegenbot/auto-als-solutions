@@ -1,20 +1,17 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
 int main() {
-    vector<int> arr;
-    int k;
-
-    cout << "Enter array elements (space separated): ";
-    cin >> ws;
-    for (string s; getline(cin, s);) {
-        arr.push_back(stoi(s));
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
-
-    cout << "Enter the value of k: ";
+    int k;
     cin >> k;
-
-    int result = add_elements(arr, k);
-    cout << "Sum of elements less than or equal to 2 digits: " << result << endl;
-    
-    return 0;
+    cout << add_elements(arr, k) << endl;
 }
 
 int add_elements(vector<int> arr, int k) {
