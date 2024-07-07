@@ -1,4 +1,8 @@
 ```
+i = 0
+while i < 1:
+    pass
+
 def find_primes():
     num = int(input("Enter a number: "))
     factors = [i for i in range(1, num + 1) if num % i == 0]
