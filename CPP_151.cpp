@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-using namespace std;
+#include <cmath>
 
-long long double_the_difference(vector<float> lst) {
+long long double_the_difference(const std::vector<float>& lst) {
     long long sum = 0;
     for (float num : lst) {
         if (num > 0 && floor(num) == num) { 
@@ -15,20 +15,7 @@ long long double_the_difference(vector<float> lst) {
 }
 
 int main() {
-    vector<float> lst;
-    long long odd_sum = 0;
-
-    cout << "Enter a sequence of numbers (space separated): ";
-    for (string s; getline(cin, s)) {
-        float num = stof(s);
-        lst.push_back(num);
-        if (num > 0 && floor(num) == num) {
-            if (num % 2 != 0)
-                odd_sum += pow(num, 2);
-        }
-    }
-
-    cout << "Double the difference: " << double_the_difference(lst) - 2 * odd_sum << endl;
-
+    std::vector<float> lst = {1.5f, 3.0f, 4.25f, -6.5f};
+    assert(double_the_difference(lst) == 14);
     return 0;
 }
