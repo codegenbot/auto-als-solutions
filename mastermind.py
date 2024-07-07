@@ -1,13 +1,17 @@
-```
 def mastermind(code, guess):
-    correct_colors = [c1 == c2 for c1, c2 in zip(code, guess)]
-    black_pegs = sum(correct_colors)
-    
-    white_pegs = 4 - black_pegs
-    return str(white_pegs) + "\n" + str(black_pegs)
+    code_count = [0] * 6
+    guess_count = [0] * 6
+    white_pegs = 0
+    black_pegs = 0
 
-print(mastermind("RRRR", "RRRR"))
-print(mastermind("BOYG", "GYOB"))
-print(mastermind("WYYW", "BBOG"))
-print(mastermind("GGGB", "BGGG"))
-print(mastermind("BBBB", "OOOO"))
+    for i in range(4):
+        if code[i] == guess[i]:
+            black_pegs += 1
+        else:
+            code_count[ord(code[i]) - ord("A")] += 1
+            guess_count[ord(guess[i]) - ord("A")] += 1
+
+    for i in range(6):
+        white_pegs += min(code_count[i], guess_count[i])
+
+    return str(black_pegs) + "\n" + str(white_pegs)
