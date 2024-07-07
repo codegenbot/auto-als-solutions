@@ -1,4 +1,3 @@
-```
 from typing import List
 
 def remove_duplicates(input_list: str) -> List[int]:
