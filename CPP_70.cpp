@@ -13,6 +13,7 @@ bool issame(vector<int> a,vector<int> b){
             return false;
     }
     return true;
+
 }
 
 vector<int> strange_sort_list(vector<int> lst) {
