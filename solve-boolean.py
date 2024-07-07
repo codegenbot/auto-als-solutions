@@ -1,21 +1,12 @@
-Here is a possible solution in Python:
-
-def solve_boolean(expression):
-    if expression == 'T':
+def solve(input):
+    if input == "t":
         return True
-    elif expression == 'F':
+    elif input == "f":
         return False
-    elif '&' in expression:
-        left, right = expression.split('&')
-        return not (solve_boolean(left) and solve_boolean(right))
-    elif '|' in expression:
-        left, right = expression.split('|')
-        return solve_boolean(left) or solve_boolean(right)
-    else:
-        raise ValueError("Invalid Boolean expression")
-
-# example usage
-print(solve_boolean('t'))  # True
-print(solve_boolean('f&f'))  # False
-print(solve_boolean('f&t'))  # False
-print(solve_boolean('t&f'))  # False
+    elif len(input) > 1:
+        op = input[-1]
+        a, b = input[:-1].split(op)
+        if op == "|":
+            return bool(a) or bool(b)
+        else:
+            return bool(a) and bool(b)
