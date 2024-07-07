@@ -1,49 +1,28 @@
-#include <vector>
-#include <iostream>
-#include <string>
+int getHint(string code, string guess) {
+    int white = 0;
+    int black = 0;
 
-int countBlackPegs(const std::string& code, const std::string& guess) {
-    int blackPegs = 0;
-    for (int i = 0; i < 4; ++i) {
-        if (code[i] == guess[i]) {
-            ++blackPegs;
-        }
-    }
-    return blackPegs;
-}
-
-int countWhitePegs(const std::string& code, const std::string& guess) {
-    int whitePegs = 0;
-    std::map<char, int> codeCount;
+    // Count the correct colors at wrong places (white pegs)
+    map<char, int> codeCount, guessCount;
     for (char c : code) {
-        ++codeCount[c];
+        codeCount[c]++;
     }
-    
-    for (int i = 0; i < 4; ++i) {
-        if (guess[i] == code[i]) {
-            --codeCount[guess[i]];
+    for (char c : guess) {
+        guessCount[c]++;
+    }
+    for (int i = 0; i < 4; i++) {
+        if (code[i] != guess[i]) {
+            white += min(codeCount[code[i]], guessCount[guess[i]]);
         }
     }
 
-    for (auto& pair : codeCount) {
-        whitePegs += pair.second;
+    // Count the correct colors at correct places (black pegs)
+    int blackPegs = 0;
+    for (int i = 0; i < 4; i++) {
+        if (code[i] == guess[i]) {
+            black++;
+        }
     }
-    
-    return whitePegs - blackPegs(countBlackPegs(code, guess), code);
-}
 
-int main() {
-    std::string code, guess;
-    std::cout << "Enter the Mastermind code: ";
-    std::cin >> code;
-    std::cout << "Enter a guess: ";
-    std::cin >> guess;
-    
-    int blackPegs = countBlackPegs(code, guess);
-    int whitePegs = countWhitePegs(code, guess);
-
-    std::cout << whitePegs << '\n';
-    std::cout << blackPegs << '\n';
-
-    return 0;
+    return white + black;
 }
