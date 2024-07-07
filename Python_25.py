@@ -1,20 +1,10 @@
-from typing import List
-import math
+def find_primes():
+    num = int(input("Enter a number: "))
+    factors = factorize(num)
+    prime_factors = [
+        factor for factor in factors if factor == 1 or math.isqrt(factor) ** 2 != factor
+    ]
+    return prime_factors
 
 
-def factorize(n: int) -> List[int]:
-    factors = []
-    i = 2
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            n //= i
-            count = 0
-            while n % i == 0:
-                n //= i
-                count += 1
-            factors.append([i] * count)
-    if n > 1:
-        factors.append([n])
-    return [factor for factor in factors]
+print(find_primes())
