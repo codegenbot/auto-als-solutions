@@ -33,17 +33,10 @@ int sumOfDigits(int n){
 int main(){
     std::vector<int> lst;
     int num;
-    
-    // Read the numbers from user
-    std::cout << "Enter a series of integers (enter 'q' to stop):" << std::endl;
-    while(true){
-        std::cin >> num;
-        if(num == 'q')
-            break;
+    std::cout << "Enter the numbers: ";
+    while(std::cin >> num) {
         lst.push_back(num);
     }
-    
-    std::cout << "The sum of the digits of the maximum prime number is: " << skjkasdkd(lst) << std::endl;
-    
+    std::cout << "The sum of digits for the maximum prime number is: " << skjkasdkd(lst) << std::endl;
     return 0;
 }
