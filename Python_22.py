@@ -15,10 +15,8 @@ def filter_integers():
         desired_output = 'all'
     if desired_output == 'all':
         result = values
-    elif desired_output == 'even':
-        result = [x for x in values if x % 2 == 0]
     else:
-        result = [x for x in values if x % 2 != 0]
+        result = [x for x in values if (desired_output == 'even' and x % 2 == 0) or (desired_output == 'odd' and x % 2 != 0)]
     return result
 
 print(filter_integers())
