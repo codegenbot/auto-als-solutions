@@ -9,14 +9,14 @@ int main() {
     int quarters = cents / 25;
     cents %= 25;
     
-    int remaining_cents = cents; // store the remaining cents
+    int remaining_cents = cents; 
     int dimes = remaining_cents / 10;
     remaining_cents %= 10;
-
+    
     int nickles = remaining_cents / 5;
     remaining_cents %= 5;
-
-    int pennies = remaining_cents; // use the stored remaining cents
+    
+    int pennies = remaining_cents;
     
     cout << quarters << endl;
     cout << nickles << endl;
