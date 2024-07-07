@@ -1,4 +1,5 @@
 #include <string>
+
 using namespace std;
 
 string solveBoolean(string s) {
@@ -7,14 +8,14 @@ string solveBoolean(string s) {
         if (c == 't') {
             result = true;
         } else if (c == 'f') {
-            result = false;
+            return "False";
         } else if (c == '&') {
             if (!result) {
-                result = false;
+                return "False";
             }
         } else if (c == '|') {
             if (result) {
-                result = true;
+                return "True";
             }
         }
     }
