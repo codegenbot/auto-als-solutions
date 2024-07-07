@@ -13,9 +13,8 @@ int specialFilter(std::vector<int> nums) {
 
 int main() {
     assert(specialFilter({}) == 0);
-    // You can test your function with different inputs here
-    std::vector<int> numbers = {123, -12, 15, -145, 120};
-    int result = specialFilter(numbers);
-    std::cout << "The number of filtered values is: " << result << std::endl;
+    std::vector<int> nums = {123, -456, 789, -111};
+    int result = specialFilter(nums);
+    std::cout << "Result: " << result << std::endl;
     return 0;
 }
