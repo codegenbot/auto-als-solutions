@@ -1,26 +1,18 @@
+#include <iostream>
 #include <vector>
-#include <string>
-
-std::vector<int> indicesOfSubstring(std::string text, std::string target) {
-    std::vector<int> result;
-    int n = text.length();
-    int m = target.length();
-
-    for (int i = 0; ; i++) {
-        if (i + m > n) break;
-
-        int j = 0;
-        while (j < m && text[i + j] == target[j]) j++;
-
-        if (j == m) result.push_back(i);
-    }
-
-    return result;
-}
+using namespace std;
 
 int gcd(int a, int b) {
     if (b == 0)
         return a;
     else
         return gcd(b, a % b);
+}
+
+int main() {
+    int num1, num2;
+    cout << "Enter two numbers: ";
+    cin >> num1 >> num2;
+    cout << "GCD of " << num1 << " and " << num2 << " is " << gcd(num1, num2) << endl;
+    return 0;
 }
