@@ -1,6 +1,6 @@
 #include <vector>
-#include <cmath>
 #include <climits>
+#include <cmath>
 
 pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
     int minDiff = INT_MAX;
