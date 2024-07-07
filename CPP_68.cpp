@@ -1,20 +1,31 @@
-#include <limits>
-
+#include <iostream>
+#include <vector>
 using namespace std;
 
-vector<pair<int, int>> pluck(vector<int> arr) {
-    vector<pair<int, int>> result;
-    if (arr.empty()) return result;
+bool issame(vector<int> a,vector<int>b){
+    if(a.size() != b.size()) return false;
+    for(int i = 0; i<a.size(); i++){
+        if(a[i] != b[i]) return false;
+    }
+    return true;
+}
 
-    int smallestEven = numeric_limits<int>::max();
-    int smallestIndex = -1;
-
+std::vector<int> pluck(std::vector<int> arr) {
+    std::vector<pair<int, int>> nodes;
     for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] % 2 == 0 && arr[i] < smallestEven) {
-            smallestEven = arr[i];
-            smallestIndex = i;
+        if (arr[i] % 2 == 0) {
+            nodes.push_back({arr[i], i});
         }
     }
+    if (nodes.empty()) {
+        return {};
+    }
+    sort(nodes.begin(), nodes.end());
+    return {nodes[0].first, nodes[0].second};
+}
 
-    result.push_back({smallestEven, smallestIndex});
-    return result;
+int main() {
+    assert(issame(pluck({7, 9, 7, 1}), {}));
+    cout << "No errors." << endl;
+    return 0;
+}

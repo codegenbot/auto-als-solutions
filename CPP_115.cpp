@@ -1,6 +1,4 @@
-```cpp
 #include <vector>
-#include <algorithm>
 
 int max_fill(vector<vector<int>> grid, int capacity) {
     int n = grid.size();
