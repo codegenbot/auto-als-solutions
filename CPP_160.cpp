@@ -25,7 +25,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             result += temp;
             i = j; // skip the remaining operators
         } else if (operato[i] == "//") {
-            int temp = operand[i-1] / (operand[i+1]);
+            int temp = operand[i-1] / operand[i+1];
             result += temp;
             i++; // skip the division operator
         } else if (operato[i] == "**") {
