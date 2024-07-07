@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -14,19 +13,19 @@ long long double_the_difference(std::vector<float> lst) {
 }
 
 int main() {
-    std::vector<float> numbers = {1.5, 2.25, -3.75, 4.0};
+    std::vector<float> numbers = {1.5, 3.4, -7.8, 9.9};
     float odd_sum = 0;
-    
+
     for (float num : numbers) {
         if (num > 0 && modf(num, &num) == 0) {
             odd_sum += pow(num, 2);
         }
     }
-    
-    long long result = double_the_difference(numbers);
-    
-    std::cout << "The sum of squares is: " << result << std::endl;
-    std::cout << "The sum of squares of odd numbers is: " << odd_sum << std::endl;
-    
+
+    long long sum = double_the_difference(numbers);
+
+    std::cout << "Odd sum: " << odd_sum << std::endl;
+    std::cout << "Double the difference: " << sum << std::endl;
+
     return 0;
 }
