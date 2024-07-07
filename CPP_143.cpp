@@ -15,7 +15,7 @@ int words_in_sentence(string sentence){
                 break;
             }
         }
-        if(isPrime) result += (count + 1);
+        if(isPrime) result++;
         count++;
     }
     return result;
