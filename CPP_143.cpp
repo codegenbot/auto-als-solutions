@@ -2,20 +2,21 @@
 
 int words_in_sentence(string sentence){
     int result = 0;
-    int count = 1;
+    int count = 0;
     for(int i=0; i<sentence.size(); i++){
         if(sentence[i] == ' '){
-            int word_length = i - count;
-            bool isPrime = true;
-            for(int j=2; j*j<=word_length+1; j++){
-                if((word_length+1)%j==0){
-                    isPrime = false;
-                    break;
-                }
-            }
-            if(isPrime) result++;
             count++;
+            continue;
         }
+        bool isPrime = true;
+        for(int j=2; j*j<=count+1; j++){
+            if((count+1)%j==0){
+                isPrime = false;
+                break;
+            }
+        }
+        if(isPrime) result++;
+        count++;
     }
     return result;
 }
