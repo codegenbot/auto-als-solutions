@@ -22,5 +22,5 @@ vector<int> indicesOfSubstring(string text, string target) {
             result.push_back(i);
         }
     }
-    
+    return result;
 }
