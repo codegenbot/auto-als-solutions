@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -24,8 +25,6 @@ bool isPrime(int n) {
         if (n % i == 0) return false;
     }
     return true;
-
-}
 
 int main() {
     assert (skjkasdkd({127, 97, 8192}) == 10);
