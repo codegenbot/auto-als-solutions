@@ -8,15 +8,13 @@ vector<int> leaders(vector<int>& arr) {
     
     if(n == 1) return {arr[0]};
     
-    result.push_back(arr[n-1]);
-    
     for(int i=n-2; i>=0; i--) {
-        while(i<n-1 && arr[i] >= arr[i+1]) {
-            i--;
+        while(i<n-1 && arr[i] >= arr[n-1]) {
+            n--;
         }
-        if(i == -1) break;
-        result.push_back(arr[i]);
+        result.push_back(arr[n-1]);
     }
     
+    reverse(result.begin(), result.end());
     return result;
 }
