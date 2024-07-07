@@ -7,13 +7,12 @@ def gcd(a, b):
 def indices_of_substring(text, target):
     result = []
     i = 0
-    last_pos = -1
     while True:
-        pos = text.find(target, last_pos + 1)
+        pos = text.find(target, i)
         if pos == -1:
             break
         result.append(pos + 1)
-        last_pos = pos
+        i = pos + 1
     return result
 
 print(gcd(1, 1))
