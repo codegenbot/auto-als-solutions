@@ -26,6 +26,7 @@ int blackPegs(string code, string guess) {
             if (guess[j] == codeVec[i] && guess[j] != ' ') {
                 found = true;
                 break;
+            }
         }
         if (!found) {
             count++;
