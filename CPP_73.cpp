@@ -34,19 +34,19 @@ int main() {
         
         return changes;
     }
-    
+
     // Read input from user
     vector<int> arr;
-    int n;
-    cin >> n;
-    for (int i = 0; i < n; ++i) {
-        int val;
-        cin >> val;
-        arr.push_back(val);
+    int numCoins;
+    cin >> numCoins;
+
+    for (int i = 0; i < numCoins; ++i) {
+        int coinValue;
+        cin >> coinValue;
+        arr.push_back(coinValue);
     }
-    
-    // Call the function and return output
-    cout << smallest_change(arr) << endl;
-    
+
+    cout << "Smallest number of changes: " << smallest_change(arr) << endl;
+
     return 0;
 }
