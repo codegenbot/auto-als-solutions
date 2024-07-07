@@ -1,24 +1,28 @@
 #include <vector>
 #include <climits>
-#include <cmath>
 
-pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
+using namespace std;
+
+struct CutResult {
+    vector<int> left;
+    vector<int> right;
+};
+
+CutResult cutVector(vector<int>& nums) {
+    int n = nums.size();
     int minDiff = INT_MAX;
-    int cutIndex = -1;
-    for (int i = 0; i < vec.size() - 1; i++) {
-        int diff = abs(vec[i] - vec[i + 1]);
+    int cutIndex = 0;
+
+    for (int i = 1; i < n; i++) {
+        int diff = std::abs(nums[i-1] - nums[i]);
         if (diff <= minDiff) {
             minDiff = diff;
             cutIndex = i;
         }
     }
-    vector<int> leftVec;
-    vector<int> rightVec;
-    for (int i = 0; i < cutIndex; i++) {
-        leftVec.push_back(vec[i]);
-    }
-    for (int i = cutIndex + 1; i < vec.size(); i++) {
-        rightVec.push_back(vec[i]);
-    }
-    return {leftVec, rightVec};
+
+    vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
+    vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
+
+    return {left, right};
 }
