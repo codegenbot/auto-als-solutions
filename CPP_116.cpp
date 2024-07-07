@@ -1,10 +1,3 @@
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 vector<int> sort_array(vector<int> arr) {
     vector<int> result = arr;
     sort(result.begin(), result.end(), [](int a, int b) {
