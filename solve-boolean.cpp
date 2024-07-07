@@ -1,21 +1,22 @@
 #include <string>
+#include <cctype>
 
-bool solveBoolean(std::string s) {
+std::string solveBoolean(std::string s) {
     bool result = false;
     for (char c : s) {
-        if (c == 'T' || c == 't') {
+        if (std::tolower(c) == 't') {
             result = true;
-        } else if (c == 'F' || c == 'f') {
-            return !result;
+        } else if (std::tolower(c) == 'f') {
+            return result ? "True" : "False";
         } else if (c == '&') {
             if (!result) {
-                return false;
+                return "False";
             }
         } else if (c == '|') {
             if (result) {
-                return true;
+                return "True";
             }
         }
     }
-    return result;
+    return result ? "True" : "False";
 }
