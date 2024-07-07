@@ -18,6 +18,9 @@ def filter_integers() -> List[int]:
     else:
         print("Invalid filter choice! Returning all integers.")
         result = values
+    else:
+        print("Please enter 'even' or 'odd'.")
+        return filter_integers()
     return result
 
 print(filter_integers())
