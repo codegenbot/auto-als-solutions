@@ -1,2 +1,2 @@
-def dice_game(n, m):
-    return sum(1 / i for i in range(1, min(n, m) + 1)) / min(n, m)
+def solution(n, m):
+    return (n - 1) / (n * m - 1) if n > m else (m - 1) / (n * m - 1)
