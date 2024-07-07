@@ -1,11 +1,8 @@
-```
+```"""
 def parse_music(music_string: str) -> list:
     notes = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11, 'o': 4}
     music_list = []
     i = 0
-    """ 
-    while loop to parse the input string
-    """
     while i < len(music_string):
         if i < len(music_string) - 1 and music_string[i:i+2] == 'o|':
             note_duration = 4
@@ -14,20 +11,15 @@ def parse_music(music_string: str) -> list:
             note_duration = 1
             i += 3
         if i < len(music_string):
-            """ 
-            checks for invalid input
-            """
             if music_string[i] not in 'o.|':
                 return ['Invalid input']
             if music_string[i] == '.':
                 note_duration = 1
             elif music_string[i:i+2] == 'o|' or music_string[i:i+3] == '.||':
                 continue
-            """ 
-            gets the note name and duration
-            """
             note_name = music_string[i]
             if note_name in notes:
                 music_list.append((notes[note_name], note_duration))
                 i += 1
     return music_list
+"""""
