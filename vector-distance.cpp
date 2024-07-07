@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 using namespace std;
-using namespace std::decimal;
 
 double vectorDistance(int n) {
     float v1[n], v2[n];
@@ -26,4 +25,3 @@ int main() {
     cout << fixed << setprecision(10) << vectorDistance(n) << endl;
 
     return 0;
-}
