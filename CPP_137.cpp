@@ -4,7 +4,6 @@
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
-
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(int)) {
         return max(a, b);
@@ -34,7 +33,7 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
 
     if (boost::any_cast<int>(a) == boost::any_cast<int>(b)) {
-        return boost::any("Both values are equal");
+        return boost::any("Equal");
     } else if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
         return a;
     } else {
