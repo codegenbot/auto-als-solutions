@@ -1,3 +1,24 @@
-def parse_music(user_input=""):
-    note = input("Enter the music string (o| followed by digit for note duration, .|| for 1 beat): ")
-    return [int(x) if x.isdigit() else 1 for x in note.replace('.|', '1').replace('o|', user_input)]
+```
+def parse_music(music_string: str) -> list:
+    notes = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
+    music_list = []
+    i = 0
+    while i < len(music_string):
+        if i < len(music_string) - 1 and music_string[i:i+2] == 'o|':
+            note_duration = 4
+            i += 2
+        elif i < len(music_string) - 2 and music_string[i:i+3] == '.||':
+            note_duration = 1
+            i += 3
+        if i < len(music_string):
+            if music_string[i] not in 'o.|':
+                return ['Invalid input']
+            if music_string[i] == '.':
+                note_duration = 1
+            elif music_string[i:i+2] == 'o|' or music_string[i:i+3] == '.||':
+                continue
+            note_name = music_string[i]
+            if note_name in notes:
+                music_list.append((notes[note_name], note_duration))
+                i += 1
+    return music_list
