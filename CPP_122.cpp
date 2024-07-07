@@ -2,18 +2,6 @@
 #include <vector>
 using namespace std;
 
-int main() {
-    int n;
-    cin >> n;
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-    }
-    int k;
-    cin >> k;
-    cout << add_elements(arr, k) << endl;
-}
-
 int add_elements(vector<int> arr, int k) {
     int sum = 0;
     for (int i = 0; i < min(k, arr.size()); i++) {
@@ -22,4 +10,11 @@ int add_elements(vector<int> arr, int k) {
         }
     }
     return sum;
+}
+
+int main() {
+    vector<int> arr = {1, 2, 3, 4, 5};
+    int k = 3;
+    assert(add_elements(arr, k) == 6);
+    return 0;
 }
