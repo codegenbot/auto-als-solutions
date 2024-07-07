@@ -23,5 +23,9 @@ string string_to_md5(string text) {
 }
 
 int main() {
-    // Your code here
+    string text;
+    cout << "Enter a string: ";
+    cin >> text;
+    cout << "MD5 of the input is: " << string_to_md5(text) << endl;
+    return 0;
 }
