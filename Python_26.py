@@ -1,6 +1,6 @@
 from typing import List
 
 def remove_duplicates() -> List[int]:
-    user_input = input("Enter numbers separated by space: ")
-    numbers = list(map(int, user_input.split()))
+    numbers_str = input("Enter numbers separated by space: ")
+    numbers = list(map(int, numbers_str.split()))
     return sorted(list(set(numbers)))
