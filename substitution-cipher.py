@@ -1,11 +1,19 @@
-Here is the solution:
-
-def substitution_cipher(s1, s2, s3):
-    result = ""
-    for c in s3:
-        if c in s1:
-            idx = s1.index(c)
-            result += s2[idx]
+def substitute_cipher(ciphertext, cipher_map):
+    deciphered_text = ""
+    for char in ciphertext:
+        if char in cipher_map:
+            deciphered_text += cipher_map[char]
         else:
-            result += c
-    return result
+            deciphered_text += char
+    return deciphered_text
+
+
+# Read input from user
+cipher_map1 = str(input())
+cipher_map2 = str(input())
+text_to_decrypt = str(input())
+
+# Apply the cipher to the text and print the result
+print(
+    substitute_cipher(text_to_decrypt, dict(zip(list(cipher_map1), list(cipher_map2))))
+)
