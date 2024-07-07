@@ -1,15 +1,16 @@
-string solve(string s) {
-    string result = "";
-    bool has_letter = false;
-
-    for (char c : s) {
-        if (isalpha(c)) { // Check if character is a letter
-            has_letter = true;
-            result += (c >= 'a' && c <= 'z') ? toupper(c) : tolower(c);
-        } else {
-            result += c;
+std::string solve(std::string s){
+    std::string result = "";
+    for(int i=0; i<s.length();i++){
+        if(isalpha(s[i])){
+            if(islower(s[i]))
+                result += toupper(s[i]);
+            else
+                result += tolower(s[i]);
         }
+        else
+            result += s[i];
     }
-
-    return has_letter ? s : string(rbegin(s), rend(s));
+    if(result.empty())
+        return std::string(1, result[0]).append(std::string(result.length()-1, char(result[0])));
+    return result;
 }
