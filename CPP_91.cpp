@@ -17,6 +17,7 @@ int is_bored(string S) {
         }
     }
     return count;
+
 }
 
 int main() {
@@ -25,4 +26,5 @@ int main() {
     getline(cin, S);
     int result = is_bored(S);
     cout << "Number of boredoms: " << result << endl;
+    return 0;
 }
