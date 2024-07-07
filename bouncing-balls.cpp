@@ -1,26 +1,26 @@
 #include <iostream>
 using namespace std;
 
-int main() {
-    double start_height;
-    cin >> start_height;
-    
-    double first_bounce_height;
-    cin >> first_bounce_height;
-    
-    double bounciness_index = first_bounce_height / start_height;
-    
-    int num_bounces;
-    cin >> num_bounces;
-    
-    double total_distance = 0.0;
-    
-    for(int i = 1; i <= num_bounces; i++) {
-        total_distance += pow(2, -bounciness_index) * (start_height * (1 - pow(2, -bounciness_index)));
+double calculateTotalDistance(double startingHeight, double heightAfterFirstBounce, int numberOfBounces) {
+    double bouncinessIndex = heightAfterFirstBounce / startingHeight;
+    double totalDistance = 0.0;
+
+    for(int i = 1; i <= numberOfBounces; ++i) {
+        totalDistance += startingHeight * (1 + bouncinessIndex) * pow(1 - bouncinessIndex, i);
+        startingHeight *= (1 + bouncinessIndex) * (1 - pow(bouncinessIndex, i));
     }
-    
-    cout << fixed << setprecision(5);
-    cout << total_distance << endl;
-    
+
+    return totalDistance;
+}
+
+int main() {
+    double startingHeight = 0.0;
+    double heightAfterFirstBounce = 0.0;
+    int numberOfBounces = 0;
+
+    cin >> startingHeight >> heightAfterFirstBounce >> numberOfBounces;
+
+    cout << fixed << setprecision(6) << calculateTotalDistance(startingHeight, heightAfterFirstBounce, numberOfBounces) << endl;
+
     return 0;
 }
