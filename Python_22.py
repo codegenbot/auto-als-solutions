@@ -1,4 +1,3 @@
-```
 from typing import List
 
 def filter_integers() -> List[int]:
@@ -15,7 +14,7 @@ def filter_integers() -> List[int]:
         user_input = input("Enter a value (or 'stop' to finish): ")
     desired_output = input("Enter 'even' or 'odd' to filter: ")
     if desired_output.lower() in ['even', 'odd']:
-        user_filter_value = int(input("Enter the number to filter by: "))
+        filtering_value = int(input("Enter the number to filter by: "))
         result = [x for x in values if (desired_output.lower() == 'even' and x % 2 == 0) or (desired_output.lower() == 'odd' and x % 2 != 0)]
     else:
         print("Invalid filter choice! Returning all integers.")
