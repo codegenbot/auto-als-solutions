@@ -5,12 +5,8 @@ using namespace std;
 
 long long LONG_LONG_MAX = numeric_limits<long long>::max();
 
-double pow(long long a, long long b) {
-    double result = 1;
-    for (int i = 0; i < b; i++) {
-        result *= a;
-    }
-    return result;
+double pow(double a, double b) {
+    return pow(a, b);
 }
 
 int do_algebra(vector<string> operato, vector<int> operand) {
@@ -130,7 +126,7 @@ long long eval(const char* pExpr)
                     break;
                 case '/':
                     if (b == 0)
-                        return LONG_LONG_MAX;
+                        return LONG_LONG_MAX; // invalid operation
                     v = a / b;
                     break;
                 case '^':
@@ -141,6 +137,5 @@ long long eval(const char* pExpr)
         }
     }
 
-    // Return the final value on the stack
     return valueStack.top();
 }
