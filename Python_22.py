@@ -1,14 +1,13 @@
-```
 from typing import List
 
 def filter_integers() -> List[int]:
     values = []
     while True:
         user_input = input("Enter a value (or 'stop' to finish): ")
-        if user_input.lower() == 'stop':
+        if user_input.strip().lower() == 'stop':
             break
         try:
-            value = int(''.join(filter(str.isdigit, user_input)))
+            value = int(user_input)
             values.append(value)
         except ValueError:
             print(f"Invalid input '{user_input}'! Please enter an integer.")
