@@ -1,44 +1,30 @@
-#include <vector>
 #include <iostream>
 #include <string>
 
-using namespace std;
+std::string spinWords(std::string sentence) {
+    std::vector<std::string> words;
+    std::istringstream iss(sentence);
+    std::string word;
 
-string spinWords(string sentence) {
-    string result = "";
-    size_t pos = 0;
-    
-    while ((pos = sentence.find(" ")) != string::npos) {
-        string word = sentence.substr(0, pos);
-        
-        if (word.length() >= 5) {
-            for (int i = word.length() - 1; i >= 0; --i) {
-                result += word[i];
-            }
-        } else {
-            result += word;
-        }
-        
-        sentence.erase(0, pos + 1);
+    while (iss >> word) {
+        if (word.length() >= 5)
+            word = std::string(word.rbegin(), word.rend());
+        words.push_back(word);
     }
-    
-    if (sentence.length() >= 5) {
-        for (int i = sentence.length() - 1; i >= 0; --i) {
-            result += sentence[i];
-        }
-    } else {
-        result += sentence;
+
+    std::string result;
+    for (int i = 0; i < words.size(); ++i) {
+        result += words[i];
+        if (i < words.size() - 1)
+            result += " ";
     }
-    
     return result;
 }
 
 int main() {
-    // Test cases
-    cout << spinWords("a") << endl; // Output: a
-    cout << spinWords("this is a test") << endl; // Output: this is a test
-    cout << spinWords("this is another test") << endl; // Output: this is rehtona test
-    cout << spinWords("hi") << endl; // Output: hi
-    
+    std::cout << spinWords("a") << "\n";
+    std::cout << spinWords("this is a test") << "\n";
+    std::cout << spinWords("this is another test") << "\n";
+    std::cout << spinWords("hi") << "\n";
     return 0;
 }
