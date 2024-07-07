@@ -1,4 +1,4 @@
 bool iscuber(int a){
-    int c = cbrt(a);
-    return c*c*c == a;
+    double c = cbrt(a);
+    return std::floor(c + 0.5) * std::floor(c + 0.5) * std::floor(c + 0.5) == a;
 }
