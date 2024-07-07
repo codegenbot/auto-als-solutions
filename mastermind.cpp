@@ -1,4 +1,3 @@
-```cpp
 #include <string>
 
 int mastermind(string code, string guess) {
@@ -19,5 +18,5 @@ int mastermind(string code, string guess) {
         }
     }
 
-    return black;
+    return black + white - 1;
 }
