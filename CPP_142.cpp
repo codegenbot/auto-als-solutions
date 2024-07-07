@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -16,20 +17,15 @@ int sum_squares(std::vector<int> lst) {
 
 int main() {
     std::vector<int> input;
-    int num;
-    
-    // Input values
+    int n;
     std::cout << "Enter the number of elements: ";
-    int n; std::cin >> n;
-    for(int i = 0; i < n; ++i) {
-        std::cout << "Enter element " << (i+1) << ": ";
+    std::cin >> n;
+    for (int i = 0; i < n; i++) {
+        int num;
+        std::cout << "Enter element " << i+1 << ": ";
         std::cin >> num;
         input.push_back(num);
     }
-    
-    // Test the function
-    int output = sum_squares(input);
-    std::cout << "The sum of squares is: " << output << std::endl;
-
+    std::cout << "Sum of squares: " << sum_squares(input) << std::endl;
     return 0;
 }
