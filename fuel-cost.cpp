@@ -1,28 +1,10 @@
-Here is the solution:
-
-int fuelCost(vector<int> &fuel) {
+int fuelCost(std::vector<int> nums) {
     int sum = 0;
-    for (int i : fuel) {
-        if (i >= 3) {
-            sum += (i / 3 - 2);
-        }
+    for (int num : nums) {
+        long long temp = num / 3;
+        temp = std::floor(temp);
+        temp -= 2;
+        sum += temp;
     }
     return sum;
-}
-
-int main() {
-    vector<int> input;
-    int num;
-    
-    cout << "Enter the number of inputs: ";
-    cin >> num;
-    
-    for(int i = 0; i < num; ++i) {
-        cout << "Enter a positive integer: ";
-        cin >> input.push_back(num);
-    }
-    
-    cout << "The fuel cost is: " << fuelCost(input) << endl;
-    
-    return 0;
 }
