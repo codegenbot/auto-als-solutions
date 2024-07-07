@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 vector<int> indicesOfSubstring(string text, string target) {
@@ -16,7 +17,6 @@ vector<int> indicesOfSubstring(string text, string target) {
 }
 
 int main() {
-    // Read input from user
     string text;
     int numTargets;
 
@@ -26,7 +26,7 @@ int main() {
     cout << "Enter number of targets: ";
     cin >> numTargets;
 
-    vector<int> indices = indicesOfSubstring(text, text.substr(0, 1)); // Pass the target string
+    vector<int> indices = indicesOfSubstring(text, "");
     
     // Print output
     for (int index : indices) {
