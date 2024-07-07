@@ -1,12 +1,25 @@
-def bowling_score(game):
+def bowling_score(bowling_round):
     score = 0
-    frames = game.split("/")
-    for i in range(len(frames)):
-        if frames[i] == "X":
-            score += 30
-        elif len(frames[i]) == 1:
-            score += int(frames[i])
+    roll = [0] * 10
+    i = j = 0
+    for frame in bowing_round:
+        if frame == "X":
+            score += 10
+            i += 1
+        elif "/" in frame:
+            a, b = map(int, frame.split("/"))
+            score += a + b
+            i += 1
+            roll[i] = min(a, b)
         else:
-            frame_value = int(frames[i][0])
-            score += frame_value + (10 - int(frames[i][1]))
+            a = int(frame)
+            score += a
+            i += 1
+            roll[i] = a
+    if i < 10:
+        for k in range(i + 1, 11):
+            if sum(roll[:k]) == 10:
+                score += 10
+            else:
+                score += roll[k]
     return score
