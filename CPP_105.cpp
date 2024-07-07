@@ -1,9 +1,8 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 
-bool issame(vector<string> a, vector<string> b) {
-    return a == b;
+bool issame(vector<string> a, vector<string>b) {
+    // Implementation for the issame function
 }
 
 vector<string> by_length(vector<int> arr) {
