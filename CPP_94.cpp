@@ -32,17 +32,11 @@ bool isPrime(int num) {
 
 int main() {
     assert(solveProblem({127, 97, 8192}) == 10);
-    // You might need to add some input logic here
-    std::vector<int> lst;
-    int num;
-    while (true) {
-        std::cout << "Enter a number (-1 to stop): ";
-        std::cin >> num;
-        if (num == -1) {
-            break;
-        }
-        lst.push_back(num);
+    std::vector<int> input;
+    int n;
+    while(std::cin >> n) {
+        input.push_back(n);
     }
-    std::cout << "Sum of digits: " << solveProblem(lst) << std::endl;
+    std::cout << solveProblem(input) << std::endl;
     return 0;
 }
