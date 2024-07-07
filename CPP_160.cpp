@@ -1,3 +1,4 @@
+```c++
 #include <stack>
 #include <limits>
 
@@ -5,7 +6,8 @@ using namespace std;
 
 long long LONG_LONG_MAX = numeric_limits<long long>::max();
 
-long long eval(const char* pExpr) {
+long long eval(const char* pExpr)
+{
     char buff[256];
     const char* pToken;
     long long v;
