@@ -17,11 +17,3 @@ std::string spinWords(std::string sentence) {
     }
     return result;
 }
-
-int main() {
-    std::cout << spinWords("a") << "\n";
-    std::cout << spinWords("this is a test") << "\n";
-    std::cout << spinWords("this is another test") << "\n";
-    std::cout << spinWords("hi") << "\n";
-    return 0;
-}

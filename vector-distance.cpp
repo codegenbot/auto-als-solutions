@@ -1,40 +1,29 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
+#include <cmath>
 using namespace std;
+using namespace std::decimal;
 
-double vector_distance() {
-    int n;
-    cin >> n;
-
-    vector<float> v1(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> v1[i];
+double vectorDistance(int n) {
+    float v1[n], v2[n];
+    
+    for (int i = 0; i < n; i++) {
+        cin >> v1[i] >> v2[i];
     }
-
-    vector<float> v2(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> v2[i];
+    
+    double sum = 0.0;
+    for (int i = 0; i < n; i++) {
+        sum += pow(v2[i] - v1[i], 2);
     }
-
-    double distance = 0.0;
-    for (int i = 0; i < n; ++i) {
-        distance += pow(v1[i] - v2[i], 2);
-    }
-    return sqrt(distance);
+    
+    return sqrt(sum);
 }
 
 int main() {
-    int n1, n2;
-    cin >> n1 >> n2;
-
-    if(n1 != n2) {
-        cout << "Invalid input. Both vectors must have the same number of dimensions." << endl;
-        return -1;
-    }
-
-    double dist = vector_distance();
-
-    printf("%.10f\n", dist);
+    int n;
+    cin >> n;
+    
+    cout << fixed << setprecision(10) << vectorDistance(n) << endl;
 
     return 0;
 }
