@@ -22,6 +22,6 @@ vector<int> strange_sort_vector(vector<int> lst) {
 }
 
 int main() {
-    assert (strange_sort_vector({111111}) == vector<int>{111111});
+    assert (strange_sort_vector({111111}) == vector<int> {111111});
     return 0;
 }
