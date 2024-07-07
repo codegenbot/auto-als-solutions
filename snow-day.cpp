@@ -1,22 +1,22 @@
 #include <iostream>
 using namespace std;
 
-float snowDay(int hours, float groundSnow, float rate, float melt) {
-    float totalSnow = 0;
+double snowDay(int hours, float initialSnow, float snowfallRate, float meltingRate) {
+    double totalSnow = 0;
     
     for (int i = 0; i < hours; i++) {
-        totalSnow += rate;
-        totalSnow -= melt * totalSnow;
+        totalSnow += snowfallRate - meltingRate;
     }
     
-    return totalSnow;
+    return totalSnow + initialSnow;
 }
 
 int main() {
     int hours;
     cin >> hours;
-    float groundSnow, rate, melt;
-    cin >> groundSnow >> rate >> melt;
-    cout << fixed << setprecision(10) << snowDay(hours, groundSnow, rate, melt) << endl;
+    float initialSnow, snowfallRate, meltingRate;
+    cin >> initialSnow >> snowfallRate >> meltingRate;
+    cout << fixed << setprecision(10) << snowDay(hours, initialSnow, snowfallRate, meltingRate);
+    
     return 0;
 }
