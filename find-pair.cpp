@@ -1,5 +1,5 @@
 #include <vector>
-#include <iostream> 
+#include <iostream>
 using namespace std;
 
 pair<int, int> findPair(vector<int>& nums, int target) {
@@ -11,7 +11,7 @@ pair<int, int> findPair(vector<int>& nums, int target) {
         }
         numMap[nums[i]] = i;
     }
-    return {-1, -1}; 
+    return {-1, -1};
 }
 
 int main() {
