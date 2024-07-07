@@ -1,5 +1,5 @@
 #include <vector>
-#include <cassert>
+#include <assert.h>
 
 int count_nums(std::vector<int> v) {
     int count = 0;
@@ -24,7 +24,6 @@ int count_nums(std::vector<int> v) {
         }
     }
     return count;
-
 }
 
 int main() {
