@@ -1,10 +1,15 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> by_length(std::vector<int> arr) {
-    std::vector<std::string> result;
+bool issame(vector<string> a,vector<string>b){
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+}
+
+vector<string> by_length(vector<int> arr) {
+    vector<string> result;
     for (int i : arr) {
         if (i >= 1 && i <= 9) {
+            string s = to_string(i);
             switch (i) {
                 case 1:
                     result.push_back("One");
@@ -34,7 +39,14 @@ std::vector<std::string> by_length(std::vector<int> arr) {
                     result.push_back("Nine");
                     break;
             }
+        } else {
+            return {};
         }
     }
     return result;
+}
+
+int main() {
+    assert (issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
+    //...
 }
