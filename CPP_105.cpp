@@ -1,18 +1,12 @@
-```cpp
-#include <iostream>
-#include <vector>
-#include <map>
-#include <algorithm>
-
 bool issame(vector<string> a, vector<string>b) {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<string> numbers;
+    vector<int> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(to_string(num));
+            numbers.push_back(num);
         }
     }
     sort(numbers.begin(), numbers.end());
@@ -22,7 +16,7 @@ vector<string> by_length(vector<int> arr) {
                                      {4, "Four"}, {5, "Five"}, {6, "Six"},
                                      {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
     for (int num : numbers) {
-        result.push_back(numberNames[stoi(num)]);
+        result.push_back(numberNames[num]);
     }
     return result;
 }
