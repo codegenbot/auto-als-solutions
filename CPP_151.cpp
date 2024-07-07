@@ -4,19 +4,16 @@
 int main() {
     std::vector<float> lst;
     float num;
-    int count = 0;
-
-    while (std::cin >> num) {
-        lst.push_back(num);
-    }
-
     long long sum = 0;
-    for (float n : lst) {
-        if (n > 0 && floor(n) == n) {
-            sum += pow(n, 2);
-        }
-    }
-    std::cout << sum << std::endl;
 
+    std::cout << "Enter numbers (enter 'stop' to finish):" << std::endl;
+    while(std::cin >> num) {
+        if(num > 0 && floor(num) == num) {
+            sum += pow(num, 2);
+        }
+        if(std::string("stop") == num) break;
+    }
+
+    long long double_the_difference = sum;
     return 0;
 }
