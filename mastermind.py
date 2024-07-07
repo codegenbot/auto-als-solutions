@@ -1,8 +1,7 @@
-```
 def mastermind(code, guess):
     correct_colors = [c1 == c2 for c1, c2 in zip(code, guess)]
-    black_pegs = sum([a and b for a, b in zip(correct_colors, code)])
-
+    black_pegs = sum([c1 == c2 and idx1 == idx2 for idx1, (c1, c3), idx2, (c2, c4) in enumerate(zip(code, guess))])
+    
     white_pegs = sum(correct_colors) - black_pegs
     return str(white_pegs) + "\n" + str(black_pegs)
 
