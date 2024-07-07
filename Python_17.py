@@ -1,5 +1,6 @@
-```
-def parse_music(music_string: str) -> list[int]:
+from typing import List
+
+def parse_music(music_string: str) -> List[int]:
     music_notes = ["o", "o|", ".|"]
     beats_per_note = [4, 2, 1]
     result = []
