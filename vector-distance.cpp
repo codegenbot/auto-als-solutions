@@ -25,4 +25,3 @@ int main() {
     cout << setprecision(10) << fixed << vectorDistance(v1, v2) << endl;
 
     return 0;
-}
