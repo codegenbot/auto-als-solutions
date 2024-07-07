@@ -5,6 +5,6 @@ def find_primes():
     prime_factors = [
         factor for factor in set(factors) if all(num % i > 0 for i in range(2, int(factor ** 0.5) + 1))
     ]
-    return prime_factors
+    return list(set(prime_factors))
 
 print(find_primes())
