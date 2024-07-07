@@ -34,7 +34,7 @@ boost::any compare_one(boost::any a, boost::any b) {
     }
 
     if (boost::any_cast<int>(a) == boost::any_cast<int>(b)) {
-        return "Equal";
+        return boost::any("Equal");
     } else if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
         return a;
     } else {
@@ -43,10 +43,10 @@ boost::any compare_one(boost::any a, boost::any b) {
 }
 
 int main() {
-    cout << boost::any_cast<string>(compare_one(1, 2.5)) << endl;
-    cout << boost::any_cast<string>(compare_one(1, "2.3")) << endl;
-    cout << boost::any_cast<string>(compare_one("4.1", "6.0")) << endl;
-    cout << boost::any_cast<string>(compare_one("1.5", 1)) << endl;
+    cout << boost::any_cast<string>(compare_one(boost::any(1), boost::any(2.5))) << endl;
+    cout << boost::any_cast<string>(compare_one(boost::any(1), boost::any("2,3"))) << endl;
+    cout << boost::any_cast<string>(compare_one(boost::any("5,1"), boost::any("6"))) << endl;
+    cout << boost::any_cast<string>(compare_one(boost::any("1"), boost::any(1))) << endl;
 
     return 0;
 }
