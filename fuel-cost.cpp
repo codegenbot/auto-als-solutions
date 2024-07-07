@@ -1,8 +1,12 @@
-int calculateFuelCost(vector<int> &costs) {
-    int total = 0;
-    for (int cost : costs) {
-        int new_cost = (cost / 3) - 2;
-        total += new_cost;
+#include <vector>
+using namespace std;
+
+int calculateFuelCost(vector<int> numbers) {
+    int sum = 0;
+    for (int num : numbers) {
+        int result = (num / 3);
+        result = max(0, result - 2);
+        sum += result;
     }
-    return total;
+    return sum;
 }
