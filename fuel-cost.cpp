@@ -1,26 +1,22 @@
-#include <vector>
-using namespace std;
+int getFuel(int n) {
+    return (n / 3) - 2;
+}
 
-int calculateFuelCost(vector<int> costs) {
-    int total = 0;
-    for (int cost : costs) {
-        cost /= 3;
-        cost = floor(cost);
-        cost -= 2;
-        total += cost;
+long long totalFuel(vector<int> numbers) {
+    long long sum = 0;
+    for (int i : numbers) {
+        sum += getFuel(i);
     }
-    return total;
+    return sum;
 }
 
 int main() {
-    vector<int> costs;
-    int n;
-    cin >> n;
-    while(n--) {
-        int cost; 
-        cin >> cost;
-        costs.push_back(cost);
+    int numInputs;
+    cin >> numInputs;
+    vector<int> inputs(numInputs);
+    for (int& input : inputs) {
+        cin >> input;
     }
-    cout << calculateFuelCost(costs) << endl;
+    cout << totalFuel(inputs) << endl;
     return 0;
 }
