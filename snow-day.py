@@ -1,2 +1,4 @@
-def snow_day(hours, initial_amount, rate, melt_rate):
-    return round(initial_amount + (rate * hours) - (melt_rate * hours), 6)
+import math
+
+def snow_day(hours, snow_ground, rate_of_snowfall, proportion_melting):
+    return math.floor(snow_ground + (rate_of_snowfall * hours) - (proportion_melting * hours))
