@@ -1,22 +1,18 @@
 ```
-def bowling_score(game):
+def bowling_score(s):
     score = 0
     roll = 0
-    for frame in game.split('/'):
+    for frame in s.split('/'):
         if len(frame) == 1:
-            score += 10 + (10 - int(frame[0])) * 2
-            continue
-        elif len(frame) > 1 and frame[0] != 'X':
-            score += sum(map(int, frame))
+            score += 10
+        elif 'X' in frame:
+            score += 10 + (10 - int(frame.replace('X', '')))
         else:
-            score += 10 + (10 - int(frame[0])) * 2
-        roll += 1
-        if roll < 10:
-            if len(frame) == 1 or frame[0] == 'X':
-                continue
-            elif int(frame[0]) + int(frame[-1]) == 10:
-                score += sum(map(int, frame))
+            first_roll = int(frame[0])
+            second_roll = 10 - first_roll
+            if second_roll > int(frame[-1]):
+                score += first_roll + second_roll
             else:
-                score += sum(map(int, frame)) + 10
-        roll %= 2
+                score += first_roll + second_roll
+        roll += 1
     return score
