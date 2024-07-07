@@ -1,31 +1,30 @@
 #include <vector>
+using namespace std;
 #include <cmath>
 
 int do_algebra(vector<pair<char, int>> expressions) {
     int result = 0;
-    for (auto &expression : expressions) {
-        char operator_ = expression.first;
-        int operand_ = expression.second;
-        if (operator_ == '+') {
-            result += operand_;
-        } else if (operator_ == '-') {
-            result -= operand_;
-        } else if (operator_ == '*') {
-            int temp = 1;
-            for (int j = 0; j < operand_; j++) {
-                temp *= expressions[j].second;
+    for (const auto& expression : expressions) {
+        if (expression.first == '+') {
+            result += expression.second;
+        } else if (expression.first == '-') {
+            result -= expression.second;
+        } else if (expression.first == '*') {
+            int temp = expression.second;
+            for (int i = 1; i < expressions.size(); i++) {
+                temp *= expressions[i].second;
             }
             result += temp;
-        } else if (operator_ == '/') {
-            int temp = expressions[0].second / operand_;
-            for (int j = 1; j < expressions.size(); j++) {
-                temp /= expressions[j].second;
+        } else if (expression.first == '/' || expression.first == '//') {
+            int temp = expression.second / 1;
+            for (int i = 1; i < expressions.size(); i++) {
+                temp /= expressions[i].second;
             }
             result += temp;
-        } else if (operator_ == '**') {
+        } else if (expression.first == '^') {
             int temp = 1;
-            for (int j = 0; j < operand_; j++) {
-                temp *= pow(expressions[j].second, 1);
+            for (int i = 1; i < expressions.size(); i++) {
+                temp *= pow(expression.second, expressions[i].second);
             }
             result += temp;
         }
