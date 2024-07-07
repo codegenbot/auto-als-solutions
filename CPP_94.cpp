@@ -34,9 +34,14 @@ int main() {
     assert(solveProblem({127, 97, 8192}) == 10);
     std::vector<int> input;
     int n;
-    while(std::cin >> n) {
-        input.push_back(n);
+    std::cout << "Enter the number of elements: ";
+    std::cin >> n;
+    for(int i = 0; i < n; ++i) {
+        std::cout << "Enter element " << i + 1 << ": ";
+        int val;
+        std::cin >> val;
+        input.push_back(val);
     }
-    std::cout << solveProblem(input) << std::endl;
+    std::cout << "The sum of digits is: " << solveProblem(input) << std::endl;
     return 0;
 }
