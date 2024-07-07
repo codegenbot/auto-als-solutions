@@ -15,7 +15,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             if(i+1<operand.size())
                 result *= operand[i + 1];
         } else if (operato[i] == "//") {
-            if(operand[i+1]!=0)
+            if(i+1<operand.size() && operand[i + 1]!=0)
                 result = result / operand[i + 1];
         } else if (operato[i] == "**") {
             if(i+1<operand.size())
