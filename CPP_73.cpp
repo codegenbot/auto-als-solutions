@@ -34,18 +34,23 @@ int main() {
         
         return changes;
     }
-
-    // Read user input
-    vector<int> arr;
-    int num;
-    cout << "Enter numbers separated by spaces: ";
-    while (cin >> num) {
-        arr.push_back(num);
+    
+    int main() {
+        vector<int> arr;
+        // Read input from user
+        cout << "Enter the array elements (space-separated): ";
+        cin >> ws;
+        while (cin.peek() != '\n') {
+            int num;
+            cin >> num;
+            arr.push_back(num);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        
+        // Call the function
+        int result = smallest_change(arr);
+        
+        cout << "Smallest number of changes: " << result << endl;
+    
+        return 0;
     }
-
-    // Print the result
-    int smallest = smallest_change(arr);
-    cout << "Smallest number of changes required: " << smallest << endl;
-
-    return 0;
-}
