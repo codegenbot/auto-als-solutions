@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,7 +15,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             int temp = 0;
             for (int j = i; j < operato.size(); j++) {
                 if (j == i) {
-                    temp *= operand[j];
+                    temp += operand[j];
                 } else if (operato[j] == "+") {
                     temp *= operand[j-1];
                 } else if (operato[j] == "*") {
@@ -43,7 +42,6 @@ int do_algebra(vector<string> operato, vector<int> operand) {
         }
     }
     return result;
-
 }
 
 int main() {
