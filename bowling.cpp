@@ -1,6 +1,6 @@
 #include <string>
 
-int bowlingScore(std::string s) {
+int bowlingScore(string s) {
     int score = 0;
     for (int i = 0; i < 10; i++) {
         if (s[i] == 'X') {
@@ -18,12 +18,11 @@ int bowlingScore(std::string s) {
             score += strikeFrames * 10 + total / strikeFrames;
         } else {
             int first = s[i] - '0', second = (i < s.size() && s[i + 1] != '/') ? s[i + 1] - '0' : 0;
-            if (s[i + 1] == '/') {
-                score += 10 + (second + first);
+            if (first + second > 10) {
+                score += 10;
             } else {
                 score += first + second;
             }
         }
     }
     return score;
-}
