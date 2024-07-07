@@ -1,16 +1,18 @@
-int luhn(const vector<int>& digits) {
+int luhnSum(const std::vector<int>& digits) {
     int sum = 0;
     bool doubleNext = false;
 
-    for (int i = digits.size() - 1; i >= 0; --i) {
-        int digit = digits[i];
-        if (doubleNext) {
-            digit *= 2;
+    for (int i = 0; i < digits.size(); i++) {
+        if (!doubleNext) {
+            sum += digits[i];
+        } else {
+            int digit = digits[i] * 2;
             if (digit > 9) {
                 digit -= 9;
             }
+            sum += digit;
         }
-        sum += digit;
+
         doubleNext = !doubleNext;
     }
 
