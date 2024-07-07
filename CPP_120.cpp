@@ -1,17 +1,12 @@
 Here is the completed code:
 
 vector<int> maximum(vector<int> arr, int k) {
-    priority_queue<int> pq;
-    for (int i : arr) {
-        pq.push(i);
-        if (pq.size() > k) {
-            pq.pop();
-        }
-    }
-    vector<int> result;
-    while (!pq.empty()) {
-        result.push_back(pq.top());
-        pq.pop();
-    }
-    return result;
+    vector<int> res(k);
+    copy(n_max_element(arr.begin(), arr.end()), n_max_element(arr.begin(), arr.end()) + k, res.begin());
+    return res;
+}
+
+int main() {
+    // test your function here
+    return 0;
 }
