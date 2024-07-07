@@ -1,7 +1,8 @@
+```cpp
 #include <string>
 
-string solve(string s){
-    string result = "";
+std::string solve(std::string s){
+    std::string result = "";
     for(int i=0; i<s.length();i++){
         if(isalpha(s[i])){
             if(islower(s[i]))
@@ -13,6 +14,6 @@ string solve(string s){
             result += s[i];
     }
     if(result.empty())
-        return string(1, result[0]).append(string(result.length()-1, char(result[0])));
+        return std::string(1, result[0]).append(std::string(result.length()-1, char(result[0])));
     return result;
 }
