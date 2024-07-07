@@ -1,14 +1,18 @@
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
-bool issame(const std::vector<int>& a, const std::vector<int>& b);
+using namespace std;
 
-std::vector<int> sort_array(std::vector<int> arr) {
-    std::sort(arr.begin(), arr.end());
-    return arr;
-}
-
-int main() {
-    assert(issame(sort_array({2,4,8,16,32}) , {2, 4, 8, 16, 32}));
-    // ...
+vector<int> sort_array(vector<int> arr) {
+    vector<int> result = arr;
+    sort(result.begin(), result.end(), [](int a, int b) {
+        bitset<32> ba = a; // Convert a to bitset
+        bitset<32> bb = b; // Convert b to bitset
+        if (ba.count() == bb.count()) {
+            return a < b;
+        }
+        return ba.count() < bb.count();
+    });
+    return result;
 }
