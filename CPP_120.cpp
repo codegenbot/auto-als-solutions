@@ -1,5 +1,17 @@
-vector<int> maximum(vector<int> arr,int k){
-    vector<int> res(k);
-    partial_sort(res.begin(), res.end(), [&arr](int a, int b) { return arr.count(a) > arr.count(b); });
-    return res;
+Here is the completed code:
+
+vector<int> maximum(vector<int> arr, int k) {
+    priority_queue<int> pq;
+    for (int i : arr) {
+        pq.push(i);
+        if (pq.size() > k) {
+            pq.pop();
+        }
+    }
+    vector<int> result;
+    while (!pq.empty()) {
+        result.push_back(pq.top());
+        pq.pop();
+    }
+    return result;
 }
