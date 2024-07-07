@@ -13,8 +13,8 @@ int specialFilter(std::vector<int> nums) {
 
 int main() {
     assert(specialFilter({}) == 0);
-    std::vector<int> numbers = {123, 456, 789};
-    int result = specialFilter(numbers);
-    std::cout << "Count: " << result << std::endl;
+    std::vector<int> nums = {123, -456, 789, -111};
+    int result = specialFilter(nums);
+    std::cout << "Result: " << result << std::endl;
     return 0;
 }
