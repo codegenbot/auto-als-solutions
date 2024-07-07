@@ -1,24 +1,35 @@
 #include <iostream>
 using namespace std;
 
-int minOperations(vector<int> target, vector<vector<int>>& arr, int start) {
-    int res = INT_MAX;
-    for (int i = 0; i < arr.size(); i++) {
-        int current_sum = 0;
-        for (int j = 0; j < arr[i].size(); j++) {
-            if (target[arr[i][j]] - 1 >= start) {
-                current_sum++;
-                target[arr[i][j]]--;
-            }
+long long minSubArraySum(vector<long long> nums) {
+    long long min_sum = LLONG_MAX;
+    long long current_sum = 0;
+
+    for (int i = 0; i < nums.size(); i++) {
+        current_sum += nums[i];
+        min_sum = min(min_sum, current_sum);
+        if (current_sum > 0) {
+            current_sum = 0;
         }
-        res = min(res, current_sum);
     }
-    return res;
+
+    return min_sum;
 }
 
 int main() {
-    vector<int> target = {5, 25, 15};
-    vector<vector<int>> arr = {{2, 3, 8}, {1, 6, 18}};
-    cout << "The minimum operations are: " << minOperations(target, arr, 0) << endl;
+    vector<long long> input;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    
+    for(int i=0; i<n; i++) {
+        long long x;
+        cout << "Enter element " << i+1 << ": ";
+        cin >> x;
+        input.push_back(x);
+    }
+    
+    cout << "The minimum subarray sum is: " << minSubArraySum(input) << endl;
+
     return 0;
 }
