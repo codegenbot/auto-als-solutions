@@ -1,7 +1,6 @@
-```cpp
 #include <vector>
 #include <climits>
-#include <cmath> 
+#include <cmath>
 using namespace std;
 
 pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
