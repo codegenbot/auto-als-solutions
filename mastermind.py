@@ -1,11 +1,13 @@
+```
 def mastermind(code, guess):
-    white_pegs = 0
-    black_pegs = 0
+    correct_colors = [c1 == c2 for c1, c2 in zip(code, guess)]
+    black_pegs = sum(correct_colors)
+    
+    white_pegs = 4 - black_pegs
+    return f"{white_pegs}\n{black_pegs}"
 
-    for i in range(4):
-        if code[i] == guess[i]:
-            black_pegs += 1
-        elif str(code[i]) in str(guess):
-            white_pegs += 1
-
-    return str(black_pegs) + "\n" + str(white_pegs)
+print(mastermind("RRRR", "RRRR"))
+print(mastermind("BOYG", "GYOB"))
+print(mastermind("WYYW", "BBOG"))
+print(mastermind("GGGB", "BGGG"))
+print(mastermind("BBBB", "OOOO"))
