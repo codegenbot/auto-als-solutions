@@ -1,10 +1,24 @@
-def find_primes():
-    num = int(input("Enter a number: "))
-    factors = factorize(num)
-    prime_factors = [
-        factor for factor in factors if factor == 1 or math.isqrt(factor) ** 2 != factor
-    ]
-    return prime_factors
+from typing import List
+import math
 
 
-print(find_primes())
+def factorize(n: int) -> List[int]:
+    factors = []
+    i = 2
+    while i * i <= n:
+        if n % i:
+            i += 1
+        else:
+            count = 0
+            while n % i == 0:
+                count += 1
+                n //= i
+            factors.append(i**count)
+            i = 2
+    if n > 1:
+        factors.append(n)
+    return factors
+
+
+num = int(input("Enter a number: "))
+print(factorize(num))
