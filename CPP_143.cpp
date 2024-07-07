@@ -35,6 +35,6 @@ std::string words_in_sentence(std::string sentence) {
 }
 
 int main() {
-    std::cout << words_in_sentence("Hello world") << std::endl;
+    std::cout << words_in_sentence("Hello world this is a test") << std::endl;
     return 0;
 }
