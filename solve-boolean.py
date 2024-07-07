@@ -1,4 +1,3 @@
-```Python
 def solve_boolean(expression):
     def evaluate_expression(expression):
         if not expression: return None  # base case: empty string
