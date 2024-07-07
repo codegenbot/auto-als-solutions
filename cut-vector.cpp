@@ -23,8 +23,9 @@ Result cutVector(vector<int>& nums) {
         }
     }
 
-    vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
-    vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
+    Result result;
+    result.left = vector<int>(nums.begin(), nums.begin() + cutIndex);
+    result.right = vector<int>(nums.begin() + cutIndex, nums.end());
 
-    return Result{left, right};
+    return result;
 }
