@@ -33,9 +33,10 @@ int sumOfDigits(int n){
 int main(){
     std::vector<int> lst;
     int num;
+    std::cout << "Enter the numbers: ";
     while(std::cin >> num) {
         lst.push_back(num);
     }
-    assert (skjkasdkd(lst) == 10);
+    std::cout << "The sum of digits for the maximum prime number is: " << skjkasdkd(lst) << std::endl;
     return 0;
 }
