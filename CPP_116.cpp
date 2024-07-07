@@ -1,7 +1,18 @@
-Here is the solution:
-
 vector<int> sort_array(vector<int> arr) {
-    stable_partition(arr.begin(), arr.end(),
-        [](int x) { return __builtin_popcount(x); });
+    sort(arr.begin(), arr.end(), [](int a, int b) {
+        if (countBits(a) == countBits(b)) {
+            return a < b;
+        }
+        return countBits(a) < countBits(b);
+    });
     return arr;
+}
+
+int countBits(int n) {
+    int count = 0;
+    while (n > 0) {
+        n &= n - 1;
+        count++;
+    }
+    return count;
 }
