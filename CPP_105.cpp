@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <string>
 
@@ -40,6 +39,8 @@ vector<string> by_length(vector<int> arr) {
                     result.push_back("Nine");
                     break;
             }
+        } else {
+            return {};
         }
     }
     return result;
@@ -47,4 +48,5 @@ vector<string> by_length(vector<int> arr) {
 
 int main() {
     assert (issame(by_length({9, 4, 8}) , {"Nine", "Four", "Eight"}));
+    //...
 }
