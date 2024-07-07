@@ -1,8 +1,9 @@
+```
 def mastermind(code, guess):
     code_count = [0] * 6
     guess_count = [0] * 6
-    white_pegs = 0
     black_pegs = 0
+    white_pegs = 0
 
     for i in range(4):
         if code[i] == guess[i]:
