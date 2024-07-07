@@ -12,3 +12,4 @@ vector<int> leaders(vector<int> v) {
         }
     }
     return res;
+}
