@@ -8,4 +8,4 @@ def remove_duplicates(numbers: List[int]) -> List[int]:
         if str(num) not in seen:
             seen.add(str(num))
             result.append(num)
-    return list(set(result))  # Ensure unique elements in the output
+    return list(set(result))
