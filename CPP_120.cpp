@@ -1,12 +1,8 @@
+#include <iostream>
 #include <vector>
-using namespace std;
 
-bool issame(vector<int> a,vector<int>b){
-    // function implementation
-}
-
-vector<int> maximum(vector<int> arr,int k){
-    vector<int> res(k);
-    partial_sort(res.begin(), res.end(), [&arr](int a, int b) { return arr.count(a) > arr.count(b); });
-    return res;
+std::vector<int> maximum(std::vector<int> arr, int k) {
+    std::vector<int> result(arr.begin(), arr.begin() + k);
+    sort(result.begin(), result.end());
+    return result;
 }
