@@ -1,14 +1,22 @@
-string solve(string s) {
+string solve(string s){
     string result = "";
-    for (char c : s) {
-        if (isalpha(c)) {
-            result += tolower(c) == 'a' || tolower(c) == 'e' || tolower(c) == 'i' || tolower(c) == 'o' || tolower(c) == 'u'
-                ? toupper(c)
-                : tolower(c);
-        } else {
-            result += c;
+    bool foundLetter = false;
+
+    for(int i = 0; i < s.length(); i++){
+        if(isalpha(s[i])){
+            foundLetter = true;
+            if(islower(s[i]))
+                result += toupper(s[i]);
+            else
+                result += tolower(s[i]);
+        }
+        else{
+            result += s[i];
         }
     }
-    reverse(result.begin(), result.end());
+
+    if(!foundLetter)
+        reverse(result.begin(), result.end());
+
     return result;
 }
