@@ -6,8 +6,7 @@ using namespace std;
 
 int main() {
     vector<long long> nums = {2,3,-1,5,-7,2,3};
-    long long result = minSubArraySum(nums);
-    cout << "The minimum subarray sum is: " << result << endl;
+    cout << minSubArraySum(nums) << endl;
     return 0;
 }
 
