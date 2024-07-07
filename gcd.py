@@ -1,9 +1,8 @@
 ```
 def gcd(a, b):
-    if b == 0:
-        return a
-    else:
-        return gcd(b, a % b)
+    while b != 0:
+        a, b = b, a % b
+    return abs(a)
 
 print(gcd(1, 1))
 print(indices_of_substring("Hello World", "World"))
