@@ -1,19 +1,24 @@
-```cpp
-long long minSubArraySum(vector<long long> nums) {
-    long long min_sum = INT_MAX;
-    long long current_sum = 0;
+#include <iostream>
+using namespace std;
 
-    for (int i = 0; i < nums.size(); i++) {
-        current_sum += nums[i];
-        min_sum = min(min_sum, current_sum);
-        if (current_sum > 0) {
-            current_sum = 0;
+int minOperations(vector<int> target, vector<vector<int>>& arr, int start) {
+    int res = INT_MAX;
+    for (int i = 0; i < arr.size(); i++) {
+        int current_sum = 0;
+        for (int j = 0; j < arr[i].size(); j++) {
+            if (target[arr[i][j]] - 1 >= start) {
+                current_sum++;
+                target[arr[i][j]]--;
+            }
         }
+        res = min(res, current_sum);
     }
-
-    return min_sum;
+    return res;
 }
 
 int main() {
-    assert(minSubArraySum({1, -1}) == -1);
+    vector<int> target = {5, 25, 15};
+    vector<vector<int>> arr = {{2, 3, 8}, {1, 6, 18}};
+    cout << "The minimum operations are: " << minOperations(target, arr, 0) << endl;
+    return 0;
 }
