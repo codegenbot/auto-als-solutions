@@ -1,34 +1,25 @@
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
-void cutVector(vector<int> v) {
-    int min_diff = INT_MAX;
-    vector<vector<int>> subvectors(2);
+pair<vector<int>, vector<int>> cutVector(vector<int> v) {
+    int minDiff = INT_MAX;
+    int idx = 0;
     
-    for (int i = 1; i <= v.size() - 1; i++) {
-        int left_sum = 0, right_sum = 0;
-        for (int j = 0; j < i; j++) left_sum += v[j];
-        for (int j = i; j < v.size(); j++) right_sum += v[j];
+    for(int i = 1; i < v.size(); i++) {
+        int diff = abs(v[i] - v[i-1]);
         
-        if (left_sum == right_sum) {
-            subvectors[0] = vector<int>(v.begin(), v.begin() + i);
-            subvectors[1] = vector<int>(v.begin() + i, v.end());
-            break;
-        } else if (abs(left_sum - right_sum) < min_diff) {
-            min_diff = abs(left_sum - right_sum);
-            subvectors[0] = vector<int>(v.begin(), v.begin() + i);
-            subvectors[1] = vector<int>(v.begin() + i, v.end());
+        if(diff <= minDiff) {
+            minDiff = diff;
+            idx = i;
         }
     }
     
-    for (int i = 0; i < subvectors.size(); i++) {
-        cout << "[";
-        for (int j = 0; j < subvectors[i].size(); j++) {
-            cout << subvectors[i][j];
-            if (j != subvectors[i].size() - 1) cout << " ";
-        }
-        cout << "]" << endl;
-    }
+    vector<int> left = vector<int>(v.begin(), v.begin() + idx);
+    vector<int> right = vector<int>(v.begin() + idx, v.end());
+    
+    return make_pair(left, right);
 }
 
 int main() {
@@ -36,11 +27,23 @@ int main() {
     cin >> n;
     vector<int> v(n);
     
-    for (int i = 0; i < n; i++) {
+    for(int i = 0; i < n; i++) {
         cin >> v[i];
     }
     
-    cutVector(v);
+    pair<vector<int>, vector<int>> res = cutVector(v);
+    
+    cout << "<";
+    for(auto x : res.first) {
+        cout << x << " ";
+    }
+    cout << ">" << endl;
+    
+    cout << "<";
+    for(auto x : res.second) {
+        cout << x << " ";
+    }
+    cout << "0" << endl;
     
     return 0;
 }
