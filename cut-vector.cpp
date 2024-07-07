@@ -24,5 +24,5 @@ CutResult cutVector(vector<int>& nums) {
     vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
     vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
 
-    return CutResult{left, right};
+    return {left, right};
 }
