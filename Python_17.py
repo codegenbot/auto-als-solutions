@@ -1,7 +1,5 @@
-Here is the corrected code:
-
-```
-def parse_music(music_string: str) -> list:
+```python
+def """parse_music(music_string: str) -> list:
     notes = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
     music_list = []
     i = 0
@@ -24,3 +22,4 @@ def parse_music(music_string: str) -> list:
                 music_list.append((notes[note_name], note_duration))
                 i += 1
     return music_list
+""```
