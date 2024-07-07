@@ -1,42 +1,23 @@
 #include <vector>
 using namespace std;
 
-int luhnAlgo(vector<int> numbers) {
+int luhn(vector<int> digits) {
     int sum = 0;
     bool doubleNext = false;
-    
-    for (int i = numbers.size() - 1; i >= 0; --i) {
-        int digit = numbers[i];
-        
+    for (int i = 15; i >= 0; --i) {
+        int digit = digits[i];
         if (doubleNext) {
             digit *= 2;
-            
             if (digit > 9) {
                 digit -= 9;
             }
         }
-        
         sum += digit;
-        
         doubleNext = !doubleNext;
     }
-    
     return sum;
 }
 
 int main() {
-    int n;
-    vector<int> numbers;
-    
-    cin >> n;
-    
-    for(int i = 0; i < n; ++i) {
-        int num;
-        cin >> num;
-        numbers.push_back(num);
-    }
-    
-    cout << luhnAlgo(numbers) << endl;
-    
-    return 0;
+    return luhn({4,7,8,0,1,6,3,5,9,2,8,0,8,4,6});
 }
