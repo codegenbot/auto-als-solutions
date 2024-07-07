@@ -1,12 +1,10 @@
-```cpp
 #include <vector>
 #include <algorithm>
-#include <string>
 
-int add_elements(const std::vector<int>& arr, int k) {
+int add_elements(const vector<int>& arr, int k) {
     int sum = 0;
     for (int i = 0; i < k && i < arr.size(); i++) {
-        if (std::to_string(arr[i]).size() <= 2) {
+        if (to_string(arr[i]).size() <= 2) {
             sum += arr[i];
         }
     }
@@ -14,6 +12,8 @@ int add_elements(const std::vector<int>& arr, int k) {
 }
 
 int main() {
-    // Test the function
-    assert(add_elements({1}, 1) == 1);
+    vector<int> arr = {1, 2, 3, 4};
+    int k = 3;
+    cout << add_elements(arr, k);
+    return 0;
 }
