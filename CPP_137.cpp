@@ -1,6 +1,6 @@
+```cpp
 #include <boost/any.hpp>
 #include <string>
-#include <stdexcept>
 
 boost::any compare_one(boost::any a, boost::any b) {
     if (a.type() == typeid(int) && b.type() == typeid(float)) {
@@ -53,5 +53,5 @@ boost::any compare_one(boost::any a, boost::any b) {
         else if (std::stod(str) > d) return b;
         else return boost::any(typeid(int));
     }
-    return boost::any((boost::any_cast<int>(a) < boost::any_cast<int>(b)) ? a : b);
+    return boost::any(a < b ? a : b);
 }

@@ -1,27 +1,34 @@
-int main() {
-    string output;
-    output = words_in_sentence("here is");
-    assert(output == "is");
-    return 0;
+#include <vector>
+#include<string>
+
+using namespace std;
+
+bool is_prime(int n) {
+    if (n <= 1) return false;
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) return false;
+    }
+    return true;
 }
 
-string words_in_sentence(string sentence){
-    string word;
-    int count = 0;
-    for(int i=0; i<sentence.size(); i++){
-        if(sentence[i] == ' '){
-            count++;
-            continue;
+string words_in_sentence(string sentence) {
+    vector<string> words = split(sentence, ' ');
+    string result;
+    for (const auto& word : words) {
+        if (is_prime(word.length())) {
+            result += word + " ";
         }
-        bool isPrime = true;
-        for(int j=2; j*j<=count+1; j++){
-            if((count+1)%j==0){
-                isPrime = false;
-                break;
-            }
-        }
-        if(isPrime) word += sentence.substr(i-count, count)+ " ";
-        count++;
     }
-    return word;
+    return result.substr(0, result.size() - 1);
+}
+
+vector<string> split(const string& str, char delimiter) {
+    vector<string> tokens;
+    size_t pos = 0;
+    while ((pos = str.find(delimiter)) != string::npos) {
+        tokens.push_back(str.substr(0, pos));
+        str.erase(pos, str.find(delimiter));
+    }
+    tokens.push_back(str);
+    return tokens;
 }
