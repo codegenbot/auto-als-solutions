@@ -1,9 +1,10 @@
-#include<vector>
+#include <iostream>
+#include <vector>
 
 int add_elements(std::vector<int> arr, int k) {
     int sum = 0;
     for (int i = 0; i < k; i++) {
-        if (to_string(arr[i]).length() <= 2) {
+        if (std::to_string(arr[i]).length() <= 2) {
             sum += arr[i];
         }
     }
@@ -11,7 +12,8 @@ int add_elements(std::vector<int> arr, int k) {
 }
 
 int main() {
-    std::vector<int> testVector = {1};
-    int result = add_elements(testVector, 1);
+    std::vector<int> my_array = {1, 2, 3};
+    int k = 3;
+    assert(add_elements(my_array, k) == 3);
     return 0;
 }
