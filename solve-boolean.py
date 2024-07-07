@@ -9,5 +9,3 @@ def solve_boolean(expression):
     elif "|" in expression:
         a, b = expression.split("|", 1)
         return solve_boolean(a) or solve_boolean(b)
-    else:
-        return eval("T" if expression == "T" else "F")
