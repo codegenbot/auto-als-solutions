@@ -17,7 +17,7 @@ int luhn(vector<int> numbers) {
 }
 
 int main() {
-    vector<int> numbers = {3,4,5,7,8,3,6};
+    vector<int> numbers = {4,3,7,1,3,5,8,6,7,9,2};
     int result = luhn(numbers);
     cout << "The Luhn check sum is: " << result << endl;
     return 0;
