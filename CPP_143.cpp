@@ -1,7 +1,6 @@
-#include <iostream>
 #include <string>
 
-int words_in_sentence(std::string sentence){
+int words_in_sentence(string sentence){
     int result = 0;
     int count = 1;
     for(int i=0; i<sentence.size(); i++){
