@@ -1,5 +1,4 @@
 #include <vector>
-#include <cassert>
 
 int smallest_change(std::vector<int> arr) {
     int left = 0, right = arr.size() - 1;
