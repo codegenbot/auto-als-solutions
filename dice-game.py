@@ -1,7 +1,4 @@
-def dice_game(n, m):
-    if n < m:
-        return 0.0
-    elif n == m:
-        return 0.5
-    else:
-        return (m - 1) / (n * m - m + 1)
+def roll_game(n, m):
+    return sum(
+        1.0 / (m + 1) if i < j else 0 for i in range(1, n + 1) for j in range(1, m + 1)
+    ) / (n * m)
