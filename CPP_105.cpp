@@ -13,6 +13,9 @@ bool issame(vector<string> a, vector<string> b) {
 
 vector<string> by_length(vector<int> arr) {
     vector<int> numbers;
+    map<int, string> numberNames = {{1, "One"}, {2, "Two"}, {3, "Three"},
+                                     {4, "Four"}, {5, "Five"}, {6, "Six"},
+                                     {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
             numbers.push_back(num);
@@ -21,9 +24,6 @@ vector<string> by_length(vector<int> arr) {
     sort(numbers.begin(), numbers.end());
     reverse(numbers.begin(), numbers.end());
     vector<string> result;
-    map<int, string> numberNames = {{1, "One"}, {2, "Two"}, {3, "Three"},
-                                     {4, "Four"}, {5, "Five"}, {6, "Six"},
-                                     {7, "Seven"}, {8, "Eight"}, {9, "Nine"}};
     for (int num : numbers) {
         result.push_back(numberNames[num]);
     }
@@ -31,6 +31,5 @@ vector<string> by_length(vector<int> arr) {
 }
 
 int main() {
-    assert(issame(by_length({9, 4, 8}), {"Nine", "Four", "Eight"}));
-    return 0;
+    assert(issame(by_length({9, 4, 8}), {"Nine", "Eight", "Four"}));
 }
