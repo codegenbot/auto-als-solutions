@@ -1,7 +1,12 @@
-def solve_boolean(s):
-    def eval_bool_expr(s):
-        s = s.replace("&", " and ")
-        s = s.replace("|", " or ")
-        return eval(s)
-
-    return eval_bool_expr(s)
+def solve(input):
+    if input == "t":
+        return True
+    elif input == "f":
+        return False
+    elif len(input) > 1:
+        op = input[-1]
+        a, b = input[:-1].split(op)
+        if op == "|":
+            return bool(a) or bool(b)
+        else:
+            return bool(a) and bool(b)
