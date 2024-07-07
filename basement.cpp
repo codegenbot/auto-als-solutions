@@ -1,8 +1,12 @@
-int basement(vector<int>& nums) {
-    int sum = 0;
-    for (int i = 0; ; i++) {
-        sum += nums[i];
-        if (sum < 0)
-            return i;
+int firstNegative(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n; i++) {
+        int sum = 0;
+        for (int j = 0; j <= i; j++) {
+            sum += arr[j];
+            if (sum < 0)
+                return i;
+        }
     }
+    return -1;
 }
