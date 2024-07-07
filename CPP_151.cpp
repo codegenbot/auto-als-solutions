@@ -2,9 +2,9 @@
 #include <vector>
 #include <cmath>
 
-long long doubleTheDifference(std::vector<float> numbers) {
+long long double_the_difference(std::vector<float> lst) {
     long long sum = 0;
-    for (float num : numbers) {
+    for (float num : lst) {
         if (num > 0 && modf(num, &num) == 0) {
             sum += pow(num, 2);
         }
@@ -13,8 +13,8 @@ long long doubleTheDifference(std::vector<float> numbers) {
 }
 
 int main() {
-    std::vector<float> numbers = {1.5, 4.5, -3.5, 10.5};
-    long long result = doubleTheDifference(numbers);
+    std::vector<float> lst = {1.5, 3.4, 6.7, 8.9};
+    long long result = double_the_difference(lst);
     std::cout << "The difference is: " << result << std::endl;
     return 0;
 }
