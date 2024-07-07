@@ -1,12 +1,13 @@
+```cpp
 bool issame(vector<string> a, vector<string>b) {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
 vector<string> by_length(vector<int> arr) {
-    vector<int> numbers;
+    vector<string> numbers;
     for (int num : arr) {
         if (num >= 1 && num <= 9) {
-            numbers.push_back(num);
+            numbers.push_back(num > 5 ? "Greater than Five" : "One to Five");
         }
     }
     sort(numbers.begin(), numbers.end());
