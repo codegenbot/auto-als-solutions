@@ -1,10 +1,8 @@
-string squareDigits(string input) {
-    string output = "";
-    for (char c : input) {
+string squareDigits(string n) {
+    string res = "";
+    for (char c : n) {
         int digit = c - '0';
-        long long squared = (long long)digit * digit;
-        char squaredChar = '0' + (squared % 10);
-        output += squaredChar;
+        res += to_string(digit * digit);
     }
-    return output;
+    return res;
 }
