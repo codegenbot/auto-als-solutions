@@ -1,30 +1,26 @@
-if (a.type() == boost::any::typeless_type) {
-    if (b.type() == boost::any::typeless_type) {
-        return "None";
+#include <string>
+#include <algorithm>
+#include <boost/any.hpp>
+
+using namespace std;
+
+boost::any compare_one(boost::any a, boost::any b) {
+    if (a.type() == typeid(int) && b.type() == typeid(float)) {
+        return (int)b > a.convert_to<int>() ? b : a;
     }
-    else if (boost::any_cast<double>(b) > boost::any_cast<double>(a)) {
-        return b;
+    else if (a.type() == typeid(float) && b.type() == typeid(int)) {
+        return (float)a > b.convert_to<float>() ? a : boost::any("None");
     }
-    else {
-        return a;
+    else if (a.type() == typeid(string) && b.type() == typeid(string)) {
+        return max(a, b);
     }
-}
-else if (b.type() == boost::any::typeless_type) {
-    if (boost::any_cast<double>(a) > boost::any_cast<double>(b)) {
-        return a;
+    else if (a.type() == typeid(float) && b.type() == typeid(string)) {
+        return (float)a > stod(b.convert_to<string>().c_str()) ? a : boost::any("None");
     }
-    else {
-        return "None";
-    }
-}
-else {
-    if (boost::any_cast<std::string>(a) > boost::any_cast<std::string>(b)) {
-        return a;
-    }
-    else if (boost::any_cast<std::string>(b) > boost::any_cast<std::string>(a)) {
-        return b;
+    else if (a.type() == typeid(string) && b.type() == typeid(float)) {
+        return stod(a.convert_to<string>().c_str()) > b ? a : boost::any("None");
     }
     else {
-        return "None";
+        return boost::any("None");
     }
 }
