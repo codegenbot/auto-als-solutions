@@ -1,6 +1,8 @@
-```
-def basement(input_list):
-    for i in range(len(input_list)):
-        if sum(input_list[:i+1]) < 0:
+Here is the solution:
+
+def basement(lst):
+    total = 0
+    for i in range(len(lst)):
+        total += lst[i]
+        if total < 0:
             return i
-    return -1
