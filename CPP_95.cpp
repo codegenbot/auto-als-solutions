@@ -7,11 +7,24 @@ bool check_dict_case(map<string, string> dict) {
     bool allUpper = true;
 
     for (auto& pair : dict) {
-        if (!islower(pair.first[0])) {
+        string key = pair.first;
+        if (!islower(key[0])) {
             allLower = false;
+            break;
         }
-        if (!isupper(pair.first[0])) {
-            allUpper = false;
+        for (char c : key) {
+            if (!islower(c)) {
+                allLower = false;
+                break;
+            }
+        }
+        if (allUpper) {
+            for (char c : key) {
+                if (isupper(c)) {
+                    allUpper = false;
+                    break;
+                }
+            }
         }
     }
 

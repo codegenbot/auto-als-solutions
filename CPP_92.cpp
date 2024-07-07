@@ -1,6 +1,8 @@
-bool any_int(float a, float b, float c){
-    if (fmod(a+b-c,1) == 0 && fmod(a+b-0.5,2) > -0.5)
-        return true;
-    else
-        return false;
+Here is the completed code:
+
+bool any_int(float a, float b, float c) {
+    if (a == int(a) && b == int(b) && c == int(c)) {
+        return (a == b + c || a == c + b || b == c + a);
+    }
+    return false;
 }
