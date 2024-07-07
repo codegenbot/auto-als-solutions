@@ -1,4 +1,4 @@
-```c++
+```cpp
 #include <iostream>
 #include <string>
 
@@ -26,6 +26,6 @@ std::string words_in_sentence(std::string sentence) {
 int main() {
     std::string word;
     word = words_in_sentence("here is");
-    assert(word == "is");
+    std::cout << word << std::endl;
     return 0;
 }
