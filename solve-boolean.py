@@ -1,11 +1,17 @@
 def solve_boolean(expression):
-    if expression == 'T':
-        return True
-    elif expression == 'F':
-        return False
-    elif '&' in expression:
-        a, b = expression.split('&')
-        return solve_boolean(a) and solve_boolean(b)
-    elif '|' in expression:
-        a, b = expression.split('|')
-        return solve_boolean(a) or solve_boolean(b)
+    def evaluate_operator(a, b, operator):
+        if operator == "&":
+            return a and b
+        elif operator == "|":
+            return a or b
+        else:
+            raise ValueError("Invalid operator")
+
+    result = True  # assume True initially
+    operators = ["&", "|"]
+    for i in range(len(expression) - 1):
+        if expression[i] in operators:
+            a = expression[i - 1] == "T"
+            b = expression[i + 1] == "T"
+            result = evaluate_operator(a, b, expression[i])
+    return result
