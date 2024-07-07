@@ -22,30 +22,3 @@ vector<int> maximum(vector<int> arr, int k) {
     }
     return result;
 }
-
-int main() {
-    int n, k;
-    cin >> n >> k;
-
-    vector<int> arr(n);
-
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-    }
-
-    vector<int> res = maximum(arr, k);
-
-    cout << "Maximum elements: ";
-    for (int i = 0; i < k; i++) {
-        cout << res[i] << " ";
-    }
-    cout << endl;
-
-    if (issame(res, arr)) {
-        cout << "Array is same after removal" << endl;
-    } else {
-        cout << "Array is not same after removal" << endl;
-    }
-
-    return 0;
-}
