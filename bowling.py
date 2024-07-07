@@ -1,35 +1,50 @@
 ```
 def bowling_score(s):
     score = 0
-    i = 0
-    while i < len(s):
-        if s[i].isdigit():
-            first_roll = int(s[i])
-            i += 1
-            if i < len(s) and s[i].isdigit():
-                second_roll = int(s[i])
-                i += 1
-                if first_roll + second_roll == 10:
-                    score += 10
+    frame = 1
+    while s:
+        if s[:2] == "X ":
+            score += 10
+            s = s[2:]
+            if len(s) >= 2 and (s[:2] in ["11", "20"] or s[:2].isdigit()):
+                score += int(s[:2])
+                s = s[2:]
+        elif s[:1] == "X":
+            score += 10
+            s = s[1:]
+            if len(s) >= 1 and (s[:1].isdigit() or s[:2] in ["11", "20"]):
+                if int(s[:1]) + 10 <= 10:
+                    score += int(s[:1]) + 10
+                    s = s[1:]
                 else:
-                    score += first_roll + second_roll
-            elif s[i] == "X":
+                    score += 10
+                    s = s[1:]
+        elif s[:2].isdigit() and int(s[:2]) < 10:
+            if int(s[:2]) + int(s[1:2]) == 10:
                 score += 10
-                i += 1
+                s = s[2:]
             else:
-                if s[i] == "/":
-                    i += 2
-                    continue
-        else:
-            if s[i] == "X":
-                score += 10
-                i += 1
-            elif s[i] == "/":
-                first_roll = 10 - int(s[i-1])
-                score += first_roll
-                i += 1
-            else:
-                first_roll, second_roll = map(int, s[i-1:i+1])
-                score += first_roll + second_roll
-                i += 2
+                score += int(s[:2]) + int(s[1:])
+                s = s[2:]
+        elif s[:2].isdigit() and int(s[:2]) == 10:
+            score += 10
+            s = s[2:]
+        elif s[:1] == "/":
+            if len(s) >= 3 and (s[:2].isdigit() or s[:2] in ["11", "20"]):
+                if int(s[:1]) + int(s[1:2]) <= 10:
+                    score += int(s[:1]) + int(s[1:])
+                    s = s[2:]
+                else:
+                    score += 10
+                    s = s[2:]
+            elif len(s) >= 2 and (s[:2].isdigit() or s[:2] in ["11", "20"]):
+                if int(s[:2]) <= 10:
+                    score += int(s[:2])
+                    s = s[2:]
+                else:
+                    score += 10
+                    s = s[2:]
+        elif s[:1].isdigit():
+            score += int(s[:1])
+            s = s[1:]
     return score
