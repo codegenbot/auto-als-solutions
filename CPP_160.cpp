@@ -1,5 +1,5 @@
 #include <vector>
-#include <string>
+#include <iostream>
 
 int do_algebra(vector<string> operato, vector<int> operand) {
     int result = 0;
