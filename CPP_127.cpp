@@ -3,11 +3,17 @@ string intersection(vector<int> interval1, vector<int> interval2){
     int end = min(interval1[1], interval2[1]);
 
     if(start > end) return "NO";
-    
-    for(int i = 2; i * i <= end - start + 1; i++){
-        if(end - start + 1 % i != 0) continue;
-        if(i < end - start + 1) continue;
-        return "YES";
+
+    int length = end - start + 1;
+    bool isPrime = true;
+
+    for(int i = 2; i * i <= length; i++){
+        if(length % i == 0){
+            isPrime = false;
+            break;
+        }
     }
-    return "YES";
+
+    if(isPrime) return "YES";
+    else return "NO";
 }
