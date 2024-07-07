@@ -12,7 +12,7 @@ string int_to_mini_roman(int number) {
     for (const auto& pair : romanMap) {
         while (number >= pair.first) {
             number -= pair.first;
-            result += pair.second;
+            result += to_string(pair.second);
         }
     }
 
