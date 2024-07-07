@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
 
-int do_algebra(vector<string> operato, vector<int> operand) {
+int do_algebra(std::vector<std::string> operato, std::vector<int> operand) {
     int result = 0;
     for (int i = 1; i < operato.size(); i++) {
         if (operato[i] == "+") {
@@ -20,11 +20,11 @@ int do_algebra(vector<string> operato, vector<int> operand) {
                 }
             }
             result += temp;
-            i = j - 1; 
+            i = j - 1; // skip the remaining operators
         } else if (operato[i] == "//") {
             int temp = operand[i-1] / (operand[i+1]);
             result += temp;
-            i++; 
+            i++; // skip the division operator
         } else if (operato[i] == "**") {
             int temp = 1;
             for (int j = i; j < operato.size(); j++) {
@@ -35,7 +35,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
                 }
             }
             result += temp;
-            i = j - 1; 
+            i = j - 1; // skip the remaining operators
         }
     }
     return result;
