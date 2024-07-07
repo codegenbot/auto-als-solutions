@@ -1,22 +1,15 @@
-string solveBoolean(string expression) {
-    stack<char> s;
-    for (int i = 0; i < expression.length(); ++i) {
-        if (expression[i] == '&') {
-            s.push(expression[i]);
-            i++;
-            while(i < expression.length() && expression[i] != '|') {
-                i++;
-            }
-        } else if (expression[i] == '|') {
-            while(!s.empty()) {
-                s.pop();
-            }
+bool evaluate(const string &s) {
+    bool res = true;
+    for (char c : s) {
+        if (c == '&') {
+            res &= false;
+        } else if (c == '|') {
+            res |= true;
+        } else if (c == 't' || c == 'T') {
+            res = true;
+        } else if (c == 'f' || c == 'F') {
+            res = false;
         }
     }
-    string result = "";
-    while (!s.empty()) {
-        result += s.top();
-        s.pop();
-    }
-    return result;
+    return res;
 }
