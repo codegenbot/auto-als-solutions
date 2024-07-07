@@ -12,7 +12,7 @@ int basement(vector<int>& nums) {
 }
 
 int main() {
-    vector<int> nums = {-1,2,3,-7,5};
+    vector<int> nums = {-2, 3, 10, -4, -10};
     int result = basement(nums);
     cout << "Result: " << result << endl;
     return 0;
