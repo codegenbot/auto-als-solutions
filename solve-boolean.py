@@ -1,4 +1,3 @@
-```
 def solveBoolean(expression):
     def evaluate(expression):
         while "|" in expression:
