@@ -1,23 +1,18 @@
+```
 def solve_boolean(expression):
-    if expression == "T":
+    if expression == 'T':
         return True
-    elif expression == "F":
+    elif expression == 'F':
         return False
-    elif "&" in expression:
-        a, b = expression.split("&")
+    elif '&' in expression:
+        a, b = expression.split('&')
         return solve_boolean(a) and solve_boolean(b)
-    elif "|" in expression:
-        parts = []
-        current_part = ""
-        for char in expression:
-            if char in ["|", "&"]:
-                parts.append(current_part)
-                current_part = ""
-                parts.append(char)
-            else:
-                current_part += char
-        return (
-            (solve_boolean(parts[0]) or solve_boolean(parts[2]))
-            if parts[1] == "|"
-            else (solve_boolean(parts[0]) and solve_boolean(parts[2]))
-        )
+    elif '|' in expression:
+        while '|' in expression or '&' in expression:
+            if '|' in expression:
+                a, b = expression.split('|', 1)
+                expression = str(solve_boolean(a)) + ('&' if '&' in b else '|') + str(solve_boolean(b)).replace('&|', '|').replace('&|', '&')
+            elif '&' in expression:
+                a, b = expression.split('&', 1)
+                expression = str(solve_boolean(a)) + ('|' if '|' in b else '&') + str(solve_boolean(b))
+        return eval(expression)
