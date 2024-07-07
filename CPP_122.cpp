@@ -14,5 +14,15 @@ int add_elements(const std::vector<int>& arr, int k) {
 
 int main() {
     // Test the function
-    assert(add_elements({1}, 1) == 1);
+    std::vector<int> input;
+    int count;
+    std::cout << "Enter the elements of array: ";
+    for(int i = 0; i < 10; i++) {
+        int num;
+        std::cin >> num;
+        input.push_back(num);
+    }
+    std::cout << "Enter the number of elements to add: ";
+    std::cin >> count;
+    std::cout << "The sum is: " << add_elements(input, count) << std::endl;
 }
