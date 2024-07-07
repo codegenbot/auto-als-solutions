@@ -1,26 +1,22 @@
-Here is the solution:
+#include <string>
 
 string get_closest_vowel(string word) {
-    int i = word.size() - 1;
-    while (i > 0 && !isVowel(word[i])) {
-        --i;
-    }
-    if (i == 0 || !isVowel(word[i]))
-        return "";
-    for (; i > 0; --i) {
-        if (!isConsonant(word[i-1]) && isVowel(word[i])) {
-            return string(1, word[i]);
+    int left = 0;
+    for(int right = word.size() - 1; right > 0; --right) {
+        if(!isvowel(word[right])) continue;
+        for(int i = right - 1; i > left; --i) {
+            if(isconsonant(word[i])) break;
         }
+        return string(1, word[right]);
     }
     return "";
 }
 
-bool isVowel(char c) {
-    c = tolower(c);
-    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+bool isvowel(char c) {
+    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+            || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U');
 }
 
-bool isConsonant(char c) {
-    c = tolower(c);
-    return (!isVowel(c));
+bool isconsonant(char c) {
+    return !isvowel(c);
 }
