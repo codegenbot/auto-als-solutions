@@ -6,36 +6,39 @@ using namespace std;
 
 string spinWords(string sentence) {
     string result = "";
-    int i = 0;
+    size_t pos = 0;
     
-    while (i < sentence.length()) {
-        if (sentence[i] == ' ') {
-            result += " ";
-            i++;
+    while ((pos = sentence.find(" ")) != string::npos) {
+        string word = sentence.substr(0, pos);
+        
+        if (word.length() >= 5) {
+            for (int i = word.length() - 1; i >= 0; --i) {
+                result += word[i];
+            }
         } else {
-            int j = i + 1;
-            while (j <= sentence.length() && sentence[j] != ' ') {
-                j++;
-            }
-            
-            string word = sentence.substr(i, j - i);
-            
-            if (word.length() >= 5) {
-                reverse(word.begin(), word.end());
-            }
-            
-            result += word + " ";
-            i = j;
+            result += word;
         }
+        
+        sentence.erase(0, pos + 1);
     }
     
-    return result.substr(0, result.length() - 1);
+    if (sentence.length() >= 5) {
+        for (int i = sentence.length() - 1; i >= 0; --i) {
+            result += sentence[i];
+        }
+    } else {
+        result += sentence;
+    }
+    
+    return result;
 }
 
 int main() {
-    string sentence;
-    cout << "Enter a sentence: ";
-    getline(cin, sentence);
-    cout << "Spin words: " << spinWords(sentence) << endl;
+    // Test cases
+    cout << spinWords("a") << endl; // Output: a
+    cout << spinWords("this is a test") << endl; // Output: this is a test
+    cout << spinWords("this is another test") << endl; // Output: this is rehtona test
+    cout << spinWords("hi") << endl; // Output: hi
+    
     return 0;
 }
