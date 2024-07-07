@@ -19,12 +19,7 @@ int count_nums(std::vector<int> n) {
 }
 
 int main() {
-    std::vector<int> input;
-    int num;
-    cout << "Enter numbers (enter -1 to stop): ";
-    while ((cin >> num) && (num != -1)) {
-        input.push_back(num);
-    }
-    cout << "Count: " << count_nums(input) << endl;
+    std::vector<int> n = {1};
+    int result = count_nums(n);
     return 0;
 }
