@@ -1,25 +1,33 @@
 #include <vector>
 using namespace std;
 
-vector<vector<int>> cutVector(vector<int> v) {
-    int n = v.size();
-    vector<vector<int>> result;
-    
-    for (int i = 0; i < n - 1; i++) {
-        if (v[i] == v[i + 1]) {
-            result.push_back({v[i]});
-            return {{}, {v[i], v[i+1]}};
+vector<vector<int>> cutVector(vector<int>& v) {
+    int min_diff = INT_MAX;
+    int split_idx = -1;
+
+    for (int i = 0; i < v.size() - 1; i++) {
+        int left_sum = 0, right_sum = 0;
+        for (int j = 0; j <= i; j++) {
+            left_sum += v[j];
+        }
+        for (int k = i + 1; k < v.size(); k++) {
+            right_sum += v[k];
+        }
+
+        int diff = abs(left_sum - right_sum);
+        if (diff < min_diff) {
+            min_diff = diff;
+            split_idx = i;
         }
     }
-    
-    int minDiff = INT_MAX, index;
-    for (int i = 0; i < n - 1; i++) {
-        if (abs(v[i] - v[i + 1]) < minDiff) {
-            minDiff = abs(v[i] - v[i+1]);
-            index = i;
-        }
+
+    vector<vector<int>> result(2);
+    for (int i = 0; i <= split_idx; i++) {
+        result[0].push_back(v[i]);
     }
-    
-    result.push_back({v[0], v[index]});
-    return {{v.begin() + (index + 1)}, {v.begin(), v.begin() + (index + 1)}};
+    for (int i = split_idx + 1; i < v.size(); i++) {
+        result[1].push_back(v[i]);
+    }
+
+    return result;
 }
