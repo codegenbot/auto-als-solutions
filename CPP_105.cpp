@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <vector>
-#include <map>
 #include <string>
+#include <map>
 
 bool issame(vector<string> a, vector<string> b) {
     if (a.size() != b.size()) return false;
