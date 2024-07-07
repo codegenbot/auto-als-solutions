@@ -1,3 +1,4 @@
+```
 def mastermind(code, guess):
     correct_colors = [c1 == c2 for c1, c2 in zip(code, guess)]
     black_pegs = sum(correct_colors)
