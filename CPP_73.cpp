@@ -32,3 +32,4 @@ int smallest_change(vector<int> arr) {
     }
     
     return changes;
+}
