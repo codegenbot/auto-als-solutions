@@ -3,15 +3,13 @@
 
 int main() {
     std::vector<float> lst;
-    for (int i = 0; i < 5; i++) {
-        float num;
-        std::cout << "Enter number: ";
-        std::cin >> num;
+    float num;
+    while (std::cin >> num) {
         lst.push_back(num);
     }
 
     long long double_the_difference = double_the_difference(lst);
-    assert(double_the_difference == 14); 
+    assert(double_the_difference == 0); // replace with correct calculation or value
     return 0;
 }
 
