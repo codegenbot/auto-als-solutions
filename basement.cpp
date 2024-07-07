@@ -1,3 +1,4 @@
+```c++
 #include <vector>
 using namespace std;
 
@@ -8,11 +9,10 @@ int basement(vector<int>& nums) {
         if (sum < 0) return i;
     }
     return -1;
-
 }
 
 int main() {
-    vector<int> nums = {9,-2,7,5,-1,3};
+    vector<int> nums = {1, -2, -3};
     cout << basement(nums) << endl;
     return 0;
 }
