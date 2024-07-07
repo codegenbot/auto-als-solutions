@@ -21,10 +21,10 @@ def factorize(n: int) -> List[int]:
     return factors
 
 
-while True:
-    try:
-        num = int(input("Enter a number: "))
-        print(factorize(num))
-        break
-    except ValueError:
-        print("Invalid input. Enter a number: ")
+num = input("Enter a number: ")
+while not num.isdigit():
+    print("Invalid input. Please enter a number.")
+    num = input("Enter a number: ")
+
+num = int(num)
+print(factorize(num))
