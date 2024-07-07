@@ -11,9 +11,7 @@ vector<int> indicesOfSubstring(string text, string target) {
                 break;
             }
         }
-        if (found) {
-            result.push_back(i);
-        }
+        if (found) result.push_back(i);
     }
     return result;
 }
