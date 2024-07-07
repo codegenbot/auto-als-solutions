@@ -2,28 +2,28 @@
 #include <string>
 
 std::string fix_spaces(std::string text) {
-    if(text.empty()) {
-        return text;
-    }
-    
-    bool prevSpace = false;
-    for(int i = 0; i < text.length(); i++) {
-        if(text[i] == ' ') {
-            if(!prevSpace) {
-                result += (i == 0 ? "" : "-");
+    std::string result = "";
+    for(int i = 0; i < text.length(); i++){
+        if(text[i] == ' ' && (i == 0 || text[i-1] != ' ') && (i == text.length() - 1 || text[i+1] != ' ')){
+            result += '_';
+        } else if(text[i] == ' '){
+            bool consecutive = true;
+            for(int j = i + 1; j < text.length(); j++){
+                if(text[j] != ' '){
+                    consecutive = false;
+                    break;
+                }
+            }
+            if(consecutive){
+                result += '-';
+                i = text.length() - 1;
             } else {
-                result += "_";
+                result += '_';
             }
-            prevSpace = true;
         } else {
-            if(prevSpace) {
-                result += "-";
-                prevSpace = false;
-            }
             result += text[i];
         }
     }
-    
     return result;
 }
 
