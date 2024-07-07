@@ -34,23 +34,19 @@ int main() {
         
         return changes;
     }
-    
-    int main() {
-        vector<int> arr;
-        // Read input from user
-        cout << "Enter the array elements (space-separated): ";
-        cin >> ws;
-        while (cin.peek() != '\n') {
-            int num;
-            cin >> num;
-            arr.push_back(num);
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-        
-        // Call the function
-        int result = smallest_change(arr);
-        
-        cout << "Smallest number of changes: " << result << endl;
-    
-        return 0;
+
+    // Read input from user
+    vector<int> arr;
+    int numCoins;
+    cin >> numCoins;
+
+    for (int i = 0; i < numCoins; ++i) {
+        int coinValue;
+        cin >> coinValue;
+        arr.push_back(coinValue);
     }
+
+    cout << "Smallest number of changes: " << smallest_change(arr) << endl;
+
+    return 0;
+}
