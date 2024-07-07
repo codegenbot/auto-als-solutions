@@ -1,13 +1,13 @@
-```cpp
+````
 int main() {
-    string word;
-    word = words_in_sentence("here is");
-    assert(word == "is");
+    string output;
+    output = words_in_sentence("here is");
+    assert(output == "is");
     return 0;
 }
 
-word words_in_sentence(string sentence){
-    word result = "";
+string words_in_sentence(string sentence){
+    string word;
     int count = 0;
     for(int i=0; i<sentence.size(); i++){
         if(sentence[i] == ' '){
@@ -21,8 +21,8 @@ word words_in_sentence(string sentence){
                 break;
             }
         }
-        if(isPrime) result += sentence.substr(i-count, count)+ " ";
+        if(isPrime) word += sentence.substr(i-count, count)+ " ";
         count++;
     }
-    return result;
+    return word;
 }
