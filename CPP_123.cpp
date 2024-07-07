@@ -1,6 +1,3 @@
-#include <iostream>
-#include <vector>
-
 std::vector<int> get_odd_collatz(int n) {
     std::vector<int> result;
     while (n != 1) {
@@ -15,9 +12,3 @@ std::vector<int> get_odd_collatz(int n) {
     }
     std::sort(result.begin(), result.end());
     return result;
-}
-
-int main() {
-    assert(std::equal(get_odd_collatz(1).begin(), get_odd_collatz(1).end(), {1}));
-    // Your test case here
-}
