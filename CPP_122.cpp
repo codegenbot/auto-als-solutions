@@ -1,21 +1,15 @@
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
 int main() {
+    vector<int> arr;
     int k;
-    std::vector<int> arr;
-    std::cout << "Enter the size of array: ";
-    std::cin >> k;
+    cout << "Enter number of elements: ";
+    cin >> k;
     for (int i = 0; i < k; i++) {
+        cout << "Enter element " << i + 1 << ": ";
         int num;
-        std::cout << "Enter element " << i + 1 << ": ";
-        std::cin >> num;
+        cin >> num;
         arr.push_back(num);
     }
-    int sum = add_elements(arr, k);
-    std::cout << "The sum of elements is: " << sum << std::endl;
+    cout << "Sum of elements that are single-digit or two-digit numbers: " << add_elements(arr, k) << endl;
     return 0;
 }
 
