@@ -1,3 +1,5 @@
+#include <cmath>
+
 int starts_one_ends(int n) {
     int count = 0;
     for (long long i = 1; i <= 9LL; i++) {
@@ -10,4 +12,3 @@ int starts_one_ends(int n) {
     }
     return count;
 }
-#include <cmath>
