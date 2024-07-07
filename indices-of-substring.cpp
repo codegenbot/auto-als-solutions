@@ -26,7 +26,8 @@ int main() {
     cout << "Enter number of targets: ";
     cin >> numTargets;
 
-    vector<int> indices = indicesOfSubstring(text, target); 
+    vector<int> indices = indicesOfSubstring(text, "");
+    
     // Print output
     for (int index : indices) {
         cout << index << endl;
