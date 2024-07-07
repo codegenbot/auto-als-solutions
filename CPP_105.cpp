@@ -1,12 +1,22 @@
 #include <string>
 #include <vector>
-bool issame(vector<string> a, vector<string>b);
+#include <algorithm>
+
+bool issame(vector<string> a, vector<string>b) {
+    if(a.size() != b.size()) 
+        return false;
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] != b[i]) 
+            return false;
+    }
+    return true;
+}
 
 vector<string> by_length(vector<int> arr) {
     vector<string> result;
     for (int i : arr) {
-        if (i >= 1 && i <= 9) {
-            string s = to_string(i);
+        string s = to_string(i);
+        if (s.length() == 1) {
             switch (i) {
                 case 1:
                     result.push_back("One");
