@@ -1,11 +1,25 @@
+#include <iostream>
 #include <vector>
-int fuelCost(vector<int> nums) {
+
+using namespace std;
+
+int fuelCost(vector<int> vec) {
     int sum = 0;
-    for (int num : nums) {
-        long long temp = static_cast<long long>(num / 3);
-        temp = floor(static_cast<double>(temp));
-        temp -= 2;
-        sum += static_cast<int>(temp);
+    for (int i : vec) {
+        sum += ((i/3) - 2);
     }
     return sum;
+}
+
+int main() {
+    vector<int> vec;
+    int n;
+    cin >> n;
+    for(int i=0; i<n; i++){
+        int x;
+        cin >> x;
+        vec.push_back(x);
+    }
+    cout << fuelCost(vec) << endl;
+    return 0;
 }
