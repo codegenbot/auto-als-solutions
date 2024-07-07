@@ -1,6 +1,5 @@
-Here's the solution:
-
-def fuel_cost(n):
-    return sum((i // 3) - 2 for i in map(int, input().split(',')))
-
-print(fuel_cost(input()))
+```
+def fuel_cost():
+    n = int(input())
+    numbers = list(map(int, input().split()))
+    return sum((num // 3) - 2 for num in numbers)
