@@ -1,5 +1,6 @@
 Here is the solution:
 
-double getProbability(int n, int m) {
-    return (n - 1.0) / (n * m);
+double diceGame(int n, int m) {
+    double total = (long long)n * m;
+    return (n - 1) / (double)total;
 }
