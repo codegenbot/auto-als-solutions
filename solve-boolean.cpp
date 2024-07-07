@@ -6,23 +6,7 @@ bool evaluateBooleanExpression(string expression) {
     stack<string> operands;
 
     for (int i = 0; i < expression.length(); i++) {
-        if (expression[i] == '&') {
-            string operand1 = operands.top();
-            operands.pop();
-            string operand2;
-            while (!operators.empty() && operators.top() != '|') {
-                operators.pop();
-            }
-            if (operators.empty()) {
-                operand2 = "T";
-            } else {
-                operand2 = operands.top();
-                operands.pop();
-            }
-            string result = (operand1 == "T" && operand2 == "T") ? "T" : "F";
-            operands.push(result);
-            operators.push('&');
-        } else if (expression[i] == '|') {
+        if (expression[i] == '|') {
             string operand1 = operands.top();
             operands.pop();
             string operand2;
@@ -35,9 +19,25 @@ bool evaluateBooleanExpression(string expression) {
                 operand2 = operands.top();
                 operands.pop();
             }
-            string result = (operand1 == "T" || operand2 == "T") ? "T" : "F";
+            string result = (operand1 == "F" || operand2 == "T") ? "T" : "F";
             operands.push(result);
             operators.push('|');
+        } else if (expression[i] == '&') {
+            string operand1 = operands.top();
+            operands.pop();
+            string operand2;
+            while (!operators.empty() && operators.top() != '|') {
+                operators.pop();
+            }
+            if (operators.empty()) {
+                operand2 = "T";
+            } else {
+                operand2 = operands.top();
+                operands.pop();
+            }
+            string result = (operand1 == "F" && operand2 == "F") ? "F" : "T";
+            operands.push(result);
+            operators.push('&');
         } else if (expression[i] == 't' || expression[i] == 'T') {
             operands.push("T");
         } else if (expression[i] == 'f' || expression[i] == 'F') {
