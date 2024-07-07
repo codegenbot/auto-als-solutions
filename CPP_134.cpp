@@ -1,21 +1,8 @@
-bool check_if_last_char_is_a_letter(string txt) {
-    if (txt.empty()) return false;
-    string lastChar = txt.substr(txt.length() - 1);
-    return isalpha(lastChar[0]) && !isalnum(lastChar[0]);
-}
+#include <string>
+#include <cctype>
 
-int main() {
-    string input;
-    cout << "Enter a text: ";
-    cin >> input;
-
-    bool result = check_if_last_char_is_a_letter(input);
-
-    if (result) {
-        cout << "The last character is a letter." << endl;
-    } else {
-        cout << "The last character is not a letter." << endl;
-    }
-
-    return 0;
-}
+bool check_if_last_char_is_a_letter(std::string txt) {
+    if(txt.empty()) return false;
+    std::string lastChar = txt.substr(txt.length() - 1);
+    if(lastChar.length() > 0 && !std::isalpha(lastChar[0])) return false;
+    return true;
