@@ -1,11 +1,8 @@
-#include <iostream>
-#include <vector>
-
-std::vector<int> get_odd_collatz(int n) {
-    std::vector<int> result;
+vector<int> get_odd_collatz(int n) {
+    vector<int> result;
     while (n != 1) {
         if (n % 2 == 0) {
-            n /= 2;
+            n = n / 2;
         } else {
             n = 3 * n + 1;
         }
@@ -13,11 +10,6 @@ std::vector<int> get_odd_collatz(int n) {
             result.push_back(n);
         }
     }
-    std::sort(result.begin(), result.end());
+    sort(result.begin(), result.end());
     return result;
-}
-
-int main() {
-    assert(std::equal(get_odd_collatz(6).begin(), get_odd_collatz(6).end(), {1, 3, 5}));
-    // Your test case here
 }
