@@ -12,7 +12,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
         } else if (operato[i] == "-") {
             result -= operand[i-1];
         } else if (operato[i] == "*") {
-            int temp = 0;
+            int temp = 1;
             for (int j = i; j < operato.size(); j++) {
                 if (j == i) {
                     temp *= operand[j];
