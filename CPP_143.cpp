@@ -1,9 +1,13 @@
-```c++
-#include <iostream>
-#include <string>
+````
+int main() {
+    string output;
+    output = words_in_sentence("here is");
+    assert(output == "is");
+    return 0;
+}
 
-std::string words_in_sentence(std::string sentence) {
-    std::string result = "";
+string words_in_sentence(string sentence){
+    string word;
     int count = 0;
     for(int i=0; i<sentence.size(); i++){
         if(sentence[i] == ' '){
@@ -17,15 +21,8 @@ std::string words_in_sentence(std::string sentence) {
                 break;
             }
         }
-        if(isPrime) result += sentence.substr(i-count, 1)+ " ";
+        if(isPrime) word += sentence.substr(i-count, count)+ " ";
         count++;
     }
-    return result;
-}
-
-int main() {
-    std::string word;
-    word = words_in_sentence("here is");
-    assert(word == "is");
-    return 0;
+    return word;
 }
