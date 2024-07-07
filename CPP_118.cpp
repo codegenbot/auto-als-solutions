@@ -1,9 +1,10 @@
+```cpp
 #include <string>
 #include <cctype>
 
-string get_closest_vowel(string word){
+std::string get_closest_vowel(std::string word){
     int left = 0, right = word.size() - 1;
-    while(left <= right){
+    while(left < right){
         if(!isvowel(word[left])){
             left++;
         } else if (!isvowel(word[right])) {
@@ -18,4 +19,8 @@ string get_closest_vowel(string word){
 bool isvowel(char c) {
     c = tolower(c);
     return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+}
+
+int main() {
+    assert(get_closest_vowel("Above") == "o");
 }
