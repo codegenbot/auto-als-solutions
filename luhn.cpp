@@ -1,18 +1,18 @@
-int luhnSum(const std::vector<int>& digits) {
+#include <vector>
+using namespace std;
+
+int luhn(const vector<int>& cc) {
     int sum = 0;
     bool doubleNext = false;
 
-    for (int i = 0; i < digits.size(); i++) {
-        if (!doubleNext) {
-            sum += digits[i];
-        } else {
-            int digit = digits[i] * 2;
-            if (digit > 9) {
+    for (int i = cc.size() - 1; i >= 0; --i) {
+        int digit = cc[i];
+        if (doubleNext) {
+            digit *= 2;
+            if (digit > 9)
                 digit -= 9;
-            }
-            sum += digit;
         }
-
+        sum += digit;
         doubleNext = !doubleNext;
     }
 
