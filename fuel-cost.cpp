@@ -7,4 +7,3 @@ int fuelCost(std::vector<int> nums) {
         sum += temp;
     }
     return sum;
-}
