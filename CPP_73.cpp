@@ -35,17 +35,18 @@ int main() {
         return changes;
     }
 
-    // Read user input
+    // Read input from user
     vector<int> arr;
-    int num;
-    cout << "Enter numbers separated by spaces: ";
-    while (cin >> num) {
-        arr.push_back(num);
+    int numCoins;
+    cin >> numCoins;
+
+    for (int i = 0; i < numCoins; ++i) {
+        int coinValue;
+        cin >> coinValue;
+        arr.push_back(coinValue);
     }
 
-    // Print the result
-    int smallest = smallest_change(arr);
-    cout << "Smallest number of changes required: " << smallest << endl;
+    cout << "Smallest number of changes: " << smallest_change(arr) << endl;
 
     return 0;
 }
