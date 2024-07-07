@@ -11,17 +11,6 @@ bool is_prime(int n) {
     return true;
 }
 
-string words_in_sentence(string sentence) {
-    vector<string> words = split(sentence, ' ');
-    string result;
-    for (const auto& word : words) {
-        if (is_prime(word.length())) {
-            result += word + " ";
-        }
-    }
-    return result.substr(0, result.size() - 1);
-}
-
 vector<string> split(const string& str, char delimiter) {
     vector<string> tokens;
     size_t pos = 0;
@@ -31,4 +20,15 @@ vector<string> split(const string& str, char delimiter) {
     }
     tokens.push_back(str);
     return tokens;
+}
+
+string words_in_sentence(string sentence) {
+    vector<string> words = split(sentence, ' ');
+    string result;
+    for (const auto& word : words) {
+        if (is_prime(word.length())) {
+            result += word + " ";
+        }
+    }
+    return result.substr(0, result.size() - 1);
 }
