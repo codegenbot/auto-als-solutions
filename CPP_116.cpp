@@ -23,7 +23,7 @@ std::vector<int> sort_array(std::vector<int> arr){
         }
         result.push_back({ones, i});
     }
-    std::sort(result.begin(), result.end());
+    sort(result.begin(), result.end());
     std::vector<int> res;
     for(auto x: result) {
         res.push_back(x.second);
