@@ -7,14 +7,12 @@ bool check_if_last_char_is_a_letter(string txt) {
 int main() {
     string input;
     cout << "Enter a string: ";
-    cin >> input;
+    getline(cin, input);
 
-    bool result = check_if_last_char_is_a_letter(input);
-
-    if (result) {
-        cout << "The last character is a letter." << endl;
+    if (check_if_last_char_is_a_letter(input)) {
+        cout << "The last character of the entered string is a letter." << endl;
     } else {
-        cout << "The last character is not a letter." << endl;
+        cout << "The last character of the entered string is not a letter." << endl;
     }
 
     return 0;
