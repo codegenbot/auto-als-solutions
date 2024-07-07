@@ -2,15 +2,41 @@
 #include <vector>
 
 bool issame(vector<int> a, vector<int> b) {
-    if (a.size() != b.size()) {
+    if(a.size() != b.size())
         return false;
-    }
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i]) {
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] != b[i])
             return false;
-        }
     }
     return true;
+}
+
+int main() {
+    std::vector<int> arr;
+    int k, n;
+
+    std::cout << "Enter the size of array: ";
+    std::cin >> n;
+    
+    for(int i = 0; i < n; i++) {
+        int x;
+        std::cout << "Enter element " << i+1 << ": ";
+        std::cin >> x;
+        arr.push_back(x);
+    }
+
+    std::cout << "Enter k: ";
+    std::cin >> k;
+
+    vector<int> result = maximum(arr, k);
+
+    if(issame(result, arr)) {
+        std::cout << "Array is sorted" << std::endl;
+    } else {
+        std::cout << "Array is not sorted" << std::endl;
+    }
+
+    return 0;
 }
 
 vector<int> maximum(vector<int> arr, int k) {
@@ -21,24 +47,4 @@ vector<int> maximum(vector<int> arr, int k) {
         arr.erase(it);
     }
     return result;
-}
-
-int main() {
-    int n, k;
-    cin >> n >> k;
-
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-    }
-
-    vector<int> res = maximum(arr, k);
-
-    cout << "Maximum values: ";
-    for (int i = 0; i < k; i++) {
-        cout << res[i] << " ";
-    }
-    cout << endl;
-
-    return 0;
 }
