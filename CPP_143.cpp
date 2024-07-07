@@ -16,9 +16,9 @@ std::string words_in_sentence(std::string sentence) {
             primeNumbers.push_back(i);
     }
 
-    std::vector<std::string> words = split(sentence, ' ');
+    std::vector<string> words = split(sentence, ' ');
     for (std::string word : words) {
-        if (find(primeNumbers.begin(), primeNumbers.end(), static_cast<int>(word.length())) != primeNumbers.end())
+        if (find(primeNumbers.begin(), primeNumbers.end(), word.length()) != primeNumbers.end())
             result += word + " ";
     }
     return result.substr(0, result.size() - 1);
@@ -33,6 +33,7 @@ std::vector<std::string> split(const std::string& str, char ch) {
     }
     tokens.push_back(str);
     return tokens;
+
 }
 
 int main() {
