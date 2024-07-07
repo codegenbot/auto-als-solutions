@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 
 int main() {
@@ -34,24 +35,10 @@ int main() {
         
         return changes;
     }
-
-    // Read input from user
-    vector<int> arr;
-    int n;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-    for (int i = 0; i < n; ++i) {
-        int x;
-        cout << "Enter element " << i + 1 << ": ";
-        cin >> x;
-        arr.push_back(x);
-    }
-
-    // Call the function
-    int result = smallest_change(arr);
-
-    // Print output
-    cout << "Smallest number of changes: " << result << endl;
-
+    
+    // Input your array here
+    vector<int> arr = {1, 2, 3, 4};
+    cout << smallest_change(arr) << endl;
+    
     return 0;
 }
