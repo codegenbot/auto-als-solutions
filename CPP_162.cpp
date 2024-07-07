@@ -1,4 +1,3 @@
-```c++
 #include <string>
 #include <openssl/md5.h>
 
@@ -21,12 +20,4 @@ string string_to_md5(string text) {
     }
 
     return result;
-}
-
-int main() {
-    string text;
-    cout << "Enter a string: ";
-    getline(cin, text);
-    cout << "MD5 of the input is: " << string_to_md5(text) << endl;
-    return 0;
 }
