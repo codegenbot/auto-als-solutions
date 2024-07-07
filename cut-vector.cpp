@@ -7,7 +7,7 @@ vector<vector<int>> cutVector(vector<int> v) {
     int n = v.size();
     vector<vector<int>> res;
     int min_diff = INT_MAX;
-
+    
     for (int i = 0; i < n; i++) {
         if (i == 0 || abs(v[i] - v[i-1]) > min_diff) {
             res.push_back({v[i]});
