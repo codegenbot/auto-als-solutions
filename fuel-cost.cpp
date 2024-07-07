@@ -1,11 +1,10 @@
-int fuelCost(vector<int> prices) {
+int fuelCost(std::vector<int> nums) {
     int sum = 0;
-    for (int price : prices) {
-        int result = floor((double)price / 3) - 2;
-        if (result < 0) {
-            result = 0;
-        }
-        sum += result;
+    for (int num : nums) {
+        long long temp = num / 3;
+        temp = floor(temp);
+        temp -= 2;
+        sum += static_cast<int>(temp);
     }
     return sum;
 }
