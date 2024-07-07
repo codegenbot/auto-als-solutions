@@ -15,18 +15,21 @@ int sum_squares(std::vector<int> lst) {
 }
 
 int main() {
-    int n;
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
+    std::vector<int> input;
+    int num;
     
-    std::vector<int> lst(n);
-    for (int i = 0; i < n; i++) {
-        std::cout << "Element " << i+1 << ": ";
-        std::cin >> lst[i];
+    // Input values
+    std::cout << "Enter the number of elements: ";
+    int n; std::cin >> n;
+    for(int i = 0; i < n; ++i) {
+        std::cout << "Enter element " << (i+1) << ": ";
+        std::cin >> num;
+        input.push_back(num);
     }
     
-    int output = sum_squares(lst);
-    std::cout << "Sum of squares: " << output << std::endl;
-    
+    // Test the function
+    int output = sum_squares(input);
+    std::cout << "The sum of squares is: " << output << std::endl;
+
     return 0;
 }
