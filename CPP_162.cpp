@@ -21,3 +21,11 @@ string string_to_md5(string text) {
 
     return result;
 }
+
+int main() {
+    string text;
+    cout << "Enter a string: ";
+    cin >> text;
+    cout << "MD5: " << string_to_md5(text) << endl;
+    return 0;
+}
