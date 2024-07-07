@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <vector>
 #include <string>
@@ -23,7 +24,7 @@ int do_algebra(vector<string> operato, vector<int> operand) {
                 }
             }
             result += temp;
-            i = j; // skip the remaining operators
+            i = j - 1; // skip the remaining operators
         } else if (operato[i] == "//") {
             int temp = operand[i-1] / (operand[i+1]);
             result += temp;
@@ -32,16 +33,17 @@ int do_algebra(vector<string> operato, vector<int> operand) {
             int temp = 1;
             for (int j = i; j < operato.size(); j++) {
                 if (j == i) {
-                    temp *= pow(operand[j], 1);
+                    temp *= operand[j];
                 } else if (operato[j] == "*") {
                     temp *= operand[j-1];
                 }
             }
             result += temp;
-            i++; // skip the remaining operators
+            i = j - 1; // skip the remaining operators
         }
     }
     return result;
+
 }
 
 int main() {
