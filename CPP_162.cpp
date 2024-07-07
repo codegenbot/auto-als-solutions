@@ -1,5 +1,5 @@
-#include <string>
-#include <openssl/md5.h>
+#include <openssl/ssl.h>
+#include <openssl/crypto.h>
 
 using namespace std;
 
@@ -20,4 +20,13 @@ string string_to_md5(string text) {
     }
 
     return result;
+}
+
+int main() {
+    string text;
+    cout << "Enter a string: ";
+    cin >> text;
+    string output = string_to_md5(text);
+    cout << "MD5 hash of the input string is: " << output << endl;
+    return 0;
 }
