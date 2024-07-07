@@ -5,6 +5,18 @@ def gcd(a, b):
     return a
 
 
+def indices_of_substring(text, target):
+    result = []
+    i = 0
+    while i < len(text):
+        pos = text.find(target)
+        if pos == -1:
+            break
+        result.append(pos + 1)
+        i += pos + 1
+    return result
+
+
 print(gcd(1, 1))
 print(indices_of_substring("Hello World", "World"))
 print(gcd(4, 400000))
