@@ -4,14 +4,15 @@ using namespace std;
 vector<int> leaders(vector<int>& arr) {
     vector<int> result;
     int n = arr.size();
-    int rightmost = arr[n-1];
-    
-    for(int i=n-2; i>=0; i--) {
-        if(arr[i] >= rightmost) {
-            result.push_back(arr[i]);
-            rightmost = arr[i];
+    for (int i = 0; i < n; i++) {
+        bool is_leader = true;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] >= arr[i]) {
+                is_leader = false;
+                break;
+            }
         }
+        if (is_leader) result.push_back(arr[i]);
     }
-    
     return result;
 }
