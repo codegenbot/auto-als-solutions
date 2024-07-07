@@ -5,7 +5,7 @@ using namespace std;
 bool solveBoolean(string s) {
     bool result = true;
     for (int i = 0; i < s.length(); i++) {
-        if (s[i] == 'F') {
+        if (s[i] == 'f') {
             result = false;
             break;
         }
@@ -24,3 +24,4 @@ int main() {
     cin >> s;
     cout << (solveBoolean(s) ? "True" : "False");
     return 0;
+}
