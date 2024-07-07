@@ -11,7 +11,7 @@ def parse_music(music_string: str) -> list:
             note_duration = 1
             i += 3
         if i < len(music_string):
-            if music_string[i] not in 'o.|':
+            if music_string[i] not in 'o.||':
                 return ['Invalid input']
             if music_string[i] == '.':
                 note_duration = 1
