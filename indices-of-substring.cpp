@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
 vector<int> indicesOfSubstring(string text, string target) {
@@ -20,17 +19,15 @@ int main() {
     string text;
     int numTargets;
 
-    cin >> text >> numTargets;
+    cout << "Enter a text: ";
+    cin >> text;
+    
+    cout << "Enter number of targets: ";
+    cin >> numTargets;
 
-    vector<int> indices = indicesOfSubstring(text, "");
-
-    for (int i = 0; i < numTargets; ++i) {
-        string target;
-        cin >> target;
-        vector<int> result = indicesOfSubstring(text, target);
-        for (int index : result) {
-            cout << index << endl;
-        }
+    vector<int> indices = indicesOfSubstring(text, text.substr(0, 1)); 
+    for (int index : indices) {
+        cout << index << endl;
     }
 
     return 0;
