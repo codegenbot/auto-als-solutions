@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
 vector<string> select_words(string s, int n) {
     vector<string> result;
     string word = "";
@@ -5,8 +11,13 @@ vector<string> select_words(string s, int n) {
         if (isalpha(c)) {
             word += tolower(c);
         } else if (!word.empty()) {
-            bool has_n_consonants = count(word.begin(), word.end(), [](unsigned char ch) { return !ispunct(ch) && !isvowel(ch); }) == n;
-            if (has_n_consonants) {
+            int consonants = 0;
+            for (char ch : word) {
+                if (!ispunct(ch) && !isdigit(ch) && ch != 'a' && ch != 'e' && ch != 'i' && ch != 'o' && ch != 'u') {
+                    consonants++;
+                }
+            }
+            if (consonants == n) {
                 result.push_back(word);
             }
             word = "";
