@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -16,7 +17,7 @@ std::string words_in_sentence(std::string sentence) {
                 break;
             }
         }
-        if(isPrime) result += sentence.substr(i-count, 1)+ " ";
+        if(isPrime) result += sentence.substr(i-count, count)+ " ";
         count++;
     }
     return result;
