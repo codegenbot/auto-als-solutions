@@ -1,9 +1,9 @@
+#include <algorithm>
+#include <cctype>
+
 int bowlingScore(const string& input) {
     int score = 0;
     int roll1, roll2, prevRolls = 0;
-
-    #include <algorithm>
-    #include <cctype>
 
     for (char c : input) {
         if (c == '/') {
