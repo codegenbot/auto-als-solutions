@@ -1,9 +1,11 @@
 def substitution_cipher(cipher1, cipher2, message):
-    result = ""
-    for char in message:
-        if char in cipher1:
-            index = cipher1.index(char)
-            result += cipher2[index]
-        else:
-            result += char
-    return result
+    return "".join(
+        [cipher2[i] if i < len(cipher2) else "" for i in range(len(message))]
+    )
+
+
+# test cases
+print(substitution_cipher("a", "z", "a"))  # z
+print(substitution_cipher("j", "h", "jj"))  # hh
+print(substitution_cipher("a", "z", "azza"))  # zzazz
+print(substitution_cipher("e", "l", "eeeeeeeeee"))  # llllllllll
