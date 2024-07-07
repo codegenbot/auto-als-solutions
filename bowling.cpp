@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <cctype>
 
-int bowlingScore(const string& input) {
+int bowlingScore(const std::string& input) {
     int score = 0;
     int roll1, roll2, prevRolls = 0;
 
@@ -9,7 +9,7 @@ int bowlingScore(const string& input) {
         if (*it == '/') {
             score += std::min(10, prevRolls);
             prevRolls = 0;
-        } else if (std::isdigit(*it)) {
+        } else if (::isdigit(*it)) {
             prevRolls *= 10;
             prevRolls += *it - '0';
         } else { // X
