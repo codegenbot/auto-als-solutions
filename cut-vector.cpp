@@ -1,23 +1,40 @@
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
-pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
-    int minDiff = INT_MAX;
-    int cutIndex = -1;
-    for (int i = 0; i < vec.size() - 1; i++) {
-        int diff = abs(vec[i] - vec[i + 1]);
-        if (diff <= minDiff) {
-            minDiff = diff;
-            cutIndex = i;
+vector<vector<int>> cutVector(vector<int> v) {
+    int n = v.size();
+    vector<vector<int>> res;
+    
+    for (int i = 0; i < n; i++) {
+        if (i == 0 || v[i] > v[i - 1]) {
+            res.push_back({v[i]});
+        } else if (i == n - 1 || v[i] < v[i + 1]) {
+            res.back().push_back(v[i]);
         }
     }
-    vector<int> leftVec;
-    vector<int> rightVec;
-    for (int i = 0; i < cutIndex; i++) {
-        leftVec.push_back(vec[i]);
+
+    return res;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> v(n);
+    for (auto& x : v) {
+        cin >> x;
     }
-    for (int i = cutIndex + 1; i < vec.size(); i++) {
-        rightVec.push_back(vec[i]);
+
+    vector<vector<int>> res = cutVector(v);
+
+    for (const auto& x : res) {
+        for (int y : x) {
+            cout << y << " ";
+        }
+        cout << endl;
     }
-    return {leftVec, rightVec};
+
+    return 0;
 }
