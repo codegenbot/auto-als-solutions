@@ -1,7 +1,6 @@
-````
 #include <vector>
-#include <cllimits>
-#include <cmath>
+#include <climits>
+#include <cmath> 
 using namespace std;
 
 pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
@@ -24,4 +23,3 @@ pair<vector<int>, vector<int>> cutVector(vector<int> vec) {
     }
     return {leftVec, rightVec};
 }
-```
