@@ -1,10 +1,14 @@
 #include <vector>
-int can_arrange(vector<int> arr) {
-    int i = -1;
-    for (int j = 0; j < arr.size() - 1; j++) {
-        if (arr[j] >= arr[j + 1]) {
-            return j + 1;
+
+int can_arrange(std::vector<int> arr) {
+    int first = -1;
+    for (int i = 1; i < arr.size(); i++) {
+        if (arr[i] <= arr[i - 1]) {
+            if (first == -1)
+                first = i;
+            else
+                return -1;
         }
     }
-    return arr.size();
+    return first;
 }
