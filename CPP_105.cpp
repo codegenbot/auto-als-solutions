@@ -5,5 +5,7 @@ vector<string> by_length(vector<int> arr){
     for(auto x:arr){
         if(x>=1 && x<=9)result.push_back(numNames[x]);
     }
+    sort(result.begin(),result.end());
+    reverse(result.begin(),result.end());
     return result;
 }
