@@ -1,4 +1,3 @@
-#include <vector>
 using namespace std;
 
 int max_fill(vector<vector<int>> grid, int capacity) {
@@ -28,8 +27,4 @@ int max_fill(vector<vector<int>> grid, int capacity) {
     }
 
     return count;
-}
-
-int main() {
-    assert(max_fill({{1,1,1,1}, {1,1,1,1}}, 9) == 2);
 }
