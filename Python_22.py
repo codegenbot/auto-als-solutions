@@ -1,15 +1,9 @@
-```python
-from typing import List
+from typing import List, Any
 
-def filter_integers() -> None:
-    result = []
-    while True:
-        line = input("Enter a value (or 'stop' to finish): ")
-        if line.lower() == 'stop':
-            break
-        try:
-            integer = int(line)
-            result.append(integer)
-        except ValueError:
-            pass
-    print(result)
+
+def filter_integers(values: List[Any]) -> List[int]:
+    return [
+        value
+        for value in values
+        if isinstance(value, int) and not isinstance(value, bool)
+    ]
