@@ -1,36 +1,36 @@
-Here is the completed code:
-
 ```cpp
-bool has_digits = false;
-int dot_count = 0;
-
-for (char c : file_name) {
-    if (isdigit(c)) {
-        if (!has_digits) {
-            has_digits = true;
-        }
-        if (has_digits && has_digits < 3) {
-            return "No";
-        }
-    } else if (c == '.') {
-        dot_count++;
-        if (dot_count > 1) {
-            return "No";
+int count_digits(const string& str) {
+    int count = 0;
+    for (char c : str) {
+        if (isdigit(c)) {
+            count++;
         }
     }
+    return count;
 }
 
-if (!has_digits || dot_count != 1) {
-    return "No";
-}
+string file_name_check(string file_name) {
+    int digit_count = count_digits(file_name);
+    if (digit_count > 3) {
+        return "No";
+    }
 
-string extension = "";
-for (int i = file_name.find('.') + 1; i < file_name.length(); i++) {
-    extension += file_name[i];
-}
+    size_t dot_pos = file_name.find('.');
+    if (dot_pos == string::npos || dot_pos == 0 || dot_pos == file_name.size() - 1) {
+        return "No";
+    }
 
-if (extension != "txt" && extension != "exe" && extension != "dll") {
-    return "No";
-}
+    string before_dot = file_name.substr(0, dot_pos);
+    string after_dot = file_name.substr(dot_pos + 1);
 
-return "Yes";
+    if (!isalpha(before_dot[0])) {
+        return "No";
+    }
+
+    vector<string> valid_extensions = {"txt", "exe", "dll"};
+    if (find(valid_extensions.begin(), valid_extensions.end(), after_dot) == valid_extensions.end()) {
+        return "No";
+    }
+
+    return "Yes";
+}
