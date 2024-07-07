@@ -43,4 +43,3 @@ int main() {
     cout << blackPegs(code, guess) << endl;
     cout << whitePegs(code, guess) << endl;
     return 0;
-}
