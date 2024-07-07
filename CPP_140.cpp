@@ -1,4 +1,3 @@
-```cpp
 std::string fix_spaces(std::string text){
     std::string result = "";
     for(int i=0; i < text.length(); i++){
