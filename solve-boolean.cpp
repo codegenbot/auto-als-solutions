@@ -1,15 +1,24 @@
-bool evaluate(const string &s) {
-    bool res = true;
-    for (char c : s) {
-        if (c == '&') {
-            res &= false;
-        } else if (c == '|') {
-            res |= true;
-        } else if (c == 't' || c == 'T') {
-            res = true;
-        } else if (c == 'f' || c == 'F') {
-            res = false;
+bool solveBoolean(string s) {
+    stack<char> st;
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == '&') {
+            while (!st.empty() && st.top() == '&') {
+                st.pop();
+            }
+            if (st.empty()) return false;
+        } else if (s[i] == '|') {
+            while (!st.empty() && st.top() == '|') {
+                st.pop();
+            }
+            if (st.empty()) return true;
+        } else {
+            st.push(s[i]);
         }
     }
-    return res;
+    while (!st.empty()) {
+        if (st.top() == '&') return false;
+        if (st.top() == '|') return true;
+        st.pop();
+    }
+    return s[0] == 't';
 }
