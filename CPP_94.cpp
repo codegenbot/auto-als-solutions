@@ -33,19 +33,9 @@ int sumOfDigits(int n){
 int main(){
     std::vector<int> lst;
     int num;
-    
-    std::cout << "Enter the numbers (space separated): ";
     while(std::cin >> num) {
         lst.push_back(num);
-        if(std::cin.peek() == ' ') {
-            std::cin.ignore();
-        } else if(std::cin.peek() != '\n') {
-            break;
-        }
     }
-    
-    int result = skjkasdkd(lst);
-    std::cout << "The sum of the digits of the maximum prime number is: " << result << std::endl;
-
+    assert (skjkasdkd(lst) == 10);
     return 0;
 }
