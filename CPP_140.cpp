@@ -23,5 +23,5 @@ int fix_spaces(std::string text){
             result += text[i];
         }
     }
-    return 0;
+    return 0; // Return type changed to int
 }
