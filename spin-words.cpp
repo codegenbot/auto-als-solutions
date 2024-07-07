@@ -1,46 +1,31 @@
 Here is the solution:
 
-#include <vector>
-#include <iostream>
 #include <string>
-
 using namespace std;
 
-string spinWords(string str) {
-    string result = "";
-    int wordLength = 0;
+string spinWords(string input) {
+    string output = "";
+    string word = "";
     
-    for (int i = 0; i < str.length(); i++) {
-        if (str[i] == ' ') {
-            if (wordLength >= 5) {
-                for (int j = wordLength - 1; j >= 0; j--) {
-                    result += str[i - wordLength + j];
-                }
-            } else {
-                result += str.substr(i - wordLength, wordLength);
-            }
-            wordLength = 0;
+    for (char c : input) {
+        if (c == ' ') {
+            if (word.length() >= 5) {
+                for (int i = word.length() - 1; i >= 0; --i)
+                    output += word[i];
+                output += ' ';
+            } else
+                output += word + ' ';
+            word = "";
         } else {
-            wordLength++;
+            word += c;
         }
     }
     
-    if (wordLength >= 5) {
-        for (int i = wordLength - 1; i >= 0; i--) {
-            result += str[wordLength - i - 1];
-        }
-    } else {
-        result = str;
-    }
+    if (word.length() >= 5) {
+        for (int i = word.length() - 1; i >= 0; --i)
+            output += word[i];
+    } else
+        output += word;
     
-    return result;
-}
-
-int main() {
-    cout << spinWords("a") << endl; // a
-    cout << spinWords("this is a test") << endl; // this is a test
-    cout << spinWords("this is another test") << endl; // this is rehtona test
-    cout << spinWords("hi") << endl; // hi
-    
-    return 0;
+    return output;
 }
