@@ -1,6 +1,3 @@
 double probability(int n, int m) {
-    double totalOutcomes = (double)n * m;
-    double favorableOutcomes = (n - 1) * m;
-    
-    return favorableOutcomes / totalOutcomes;
+    return (n - 1.0) / (n * m);
 }
