@@ -2,7 +2,7 @@
 
 string get_closest_vowel(string word) {
     int left = 0;
-    for(int right = word.size() - 1; right > 0; --right) {
+    for(int right = word.size() - 1; right >= 0; --right) {
         if(!isvowel(word[right])) continue;
         for(int i = right - 1; i > left; --i) {
             if(isconsonant(word[i])) break;
