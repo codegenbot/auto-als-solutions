@@ -19,6 +19,5 @@ int luhn(vector<int> digits) {
 }
 
 int main() {
-    vector<int> testVector = {3, 7, 1, 5, 9, 2, 6, 5, 3, 8, 4, 0, 1, 9, 7, 1};
-    return luhn(testVector);
+    return luhn({4,7,8,5,3,9,2,0,8,6,7,1,1,9,3,5});
 }

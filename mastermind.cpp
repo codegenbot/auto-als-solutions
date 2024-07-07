@@ -1,28 +1,43 @@
-int getHint(string code, string guess) {
-    int white = 0;
-    int black = 0;
+#include <iostream>
+#include <vector>
+using namespace std;
 
-    // Count the correct colors at wrong places (white pegs)
-    map<char, int> codeCount, guessCount;
-    for (char c : code) {
-        codeCount[c]++;
-    }
-    for (char c : guess) {
-        guessCount[c]++;
-    }
-    for (int i = 0; i < 4; i++) {
-        if (code[i] != guess[i]) {
-            white += min(codeCount[code[i]], guessCount[guess[i]]);
-        }
-    }
-
-    // Count the correct colors at correct places (black pegs)
-    int blackPegs = 0;
+int whitePegs(string code, string guess) {
+    int count = 0;
     for (int i = 0; i < 4; i++) {
         if (code[i] == guess[i]) {
-            black++;
+            count++;
         }
     }
-
-    return white + black;
+    return count;
 }
+
+int blackPegs(string code, string guess) {
+    int count = 0;
+    vector<char> codeVec(code.begin(), code.end());
+    for (int i = 0; i < 4; i++) {
+        if (code[i] == guess[i]) {
+            codeVec[i] = ' ';
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        bool found = false;
+        for (int j = 0; j < 4; j++) {
+            if (guess[j] == codeVec[i] && guess[j] != ' ') {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    string code, guess;
+    cin >> code >> guess;
+    cout << blackPegs(code, guess) << endl;
+    cout << whitePegs(code, guess) << endl;
+    return 0;
