@@ -1,4 +1,3 @@
-#include <string>
 #include <openssl/ssl.h>
 #include <openssl/crypto.h>
 
@@ -27,5 +26,6 @@ int main() {
     string text;
     cout << "Enter a string: ";
     getline(cin, text);
-    cout << "MD5 of the input is: " << string_to_md5(text) << endl;
+    cout << "MD5 of the entered string is: " << string_to_md5(text) << endl;
+    return 0;
 }
