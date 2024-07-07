@@ -4,15 +4,8 @@ def solve_boolean(expression):
         return True
     elif expression == 'F':
         return False
-    elif '&' in expression:
-        a, b = expression.split('&')
-        return solve_boolean(a) and solve_boolean(b)
-    elif '|' in expression:
-        while'|' in expression or '&' in expression':
-            if '|' in expression:
-                a, b = expression.split('|',1)
-                expression = str(solve_boolean(a)) and str(solve_boolean(b))
-            elif '&' in expression:
-                a, b = expression.split('&',1)
-                expression = str(solve_boolean(a)) and str(solve_boolean(b))
-        return eval(expression)
+    else:
+        operator = '&' if '&' in expression else '|'
+        left_expression = expression.split(operator)[0]
+        right_expression = expression.split(operator)[1]
+        return solve_boolean(left_expression) if operator == '&' else (not solve_boolean(left_expression))
