@@ -28,8 +28,10 @@ int do_algebra(vector<string> operato, vector<int> operand) {
 }
 
 int evaluate_expression(string s) {
-    stack<int> st;
     int res = 0;
+    stack<int> st;
+    stack<string> ops;
+
     for (int i = 0; i < s.length(); i++) {
         if (isdigit(s[i])) {
             int num = 0;
@@ -38,32 +40,46 @@ int evaluate_expression(string s) {
                 i++;
             }
             st.push(num);
-        } else if (s[i] == '+') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a + b);
-        } else if (s[i] == '-') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a - b);
-        } else if (s[i] == '*') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a * b);
-        } else if (s[i] == '/') {
-            int b = st.top();
-            st.pop();
-            int a = st.top();
-            st.pop();
-            st.push(a / b);
+        } else if (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/') {
+            while (!ops.empty() && priority(ops.top()) >= priority(s[i])) {
+                applyOp(st, ops);
+            }
+            ops.push(string(1, s[i]));
         }
     }
-    
+
+    while (!ops.empty()) {
+        applyOp(st, ops);
+    }
+
     return st.top();
+}
+
+int priority(char op) {
+    if (op == '+' || op == '-') {
+        return 1;
+    } else if (op == '*' || op == '/') {
+        return 2;
+    }
+    return 0;
+}
+
+void applyOp(stack<int>& st, stack<string>& ops) {
+    int b = st.top();
+    st.pop();
+    int a = st.top();
+    st.pop();
+
+    string op = ops.top();
+    ops.pop();
+
+    if (op == "+") {
+        st.push(a + b);
+    } else if (op == "-") {
+        st.push(a - b);
+    } else if (op == "*") {
+        st.push(a * b);
+    } else if (op == "/") {
+        st.push(a / b);
+    }
 }
