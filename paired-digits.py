@@ -1,2 +1,3 @@
+```
 def paired_digits(s):
-    return sum(int(d) for d in s if s[int(s.index(d)) + 1 : :].find(d) != -1)
+    return sum(int(digit) for digit, nxt in zip(s, s[1:]) if digit == nxt)
