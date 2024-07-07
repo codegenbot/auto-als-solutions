@@ -6,16 +6,16 @@ std::string solveBoolean(std::string s) {
         if (c == 'T') {
             result = true;
         } else if (c == 'F') {
-            return "false";
+            return "False";
         } else if (c == '|') {
             if (result) {
-                return "true";
+                return "True";
             }
         } else if (c == '&') {
             if (!result) {
-                return "false";
+                return "False";
             }
         }
     }
-    return result ? "true" : "false";
+    return result ? "True" : "False";
 }
