@@ -3,24 +3,20 @@
 
 int main() {
     std::vector<float> lst;
-    for (int i = 0; i < 5; i++) {
-        float num;
-        std::cout << "Enter a number: ";
-        std::cin >> num;
+    float num;
+
+    cout << "Enter numbers (enter 'stop' to finish): ";
+    while (cin >> num) {
+        if (num == 'stop') break;
         lst.push_back(num);
     }
 
-    long long double_the_difference = double_the_difference(lst);
-    assert(double_the_difference == 24); 
-    return 0;
-}
-
-long long double_the_difference(vector<float> lst) {
-    long long sum = 0;
-    for (float num : lst) {
-        if (num > 0 && floor(num) == num) {
-            sum += pow(num, 2);
+    long long double_the_difference = 0;
+    for (float n : lst) {
+        if (n > 0 && floor(n) == n) {
+            double_the_difference += pow(n, 2);
         }
     }
-    return sum;
+    assert(double_the_difference == ...); 
+    return 0;
 }
