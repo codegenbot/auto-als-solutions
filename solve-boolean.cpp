@@ -1,21 +1,48 @@
 #include <string>
-using namespace std;
 
-string solveBoolean(string s) {
-    bool result = false;
-    for (char c : s) {
-        if (c == 't') {
-            result = true;
-        } else if (c == 'f') {
-            return "False";
-        } else if (c == '&') {
-            if (!result) {
-                return "False";
+bool evaluateBooleanExpression(std::string expression) {
+    std::stack<char> operators;
+    std::stack<std::string> operands;
+
+    for (int i = 0; i < expression.length(); i++) {
+        if (expression[i] == '&') {
+            std::string operand1 = operands.top();
+            operands.pop();
+            std::string operand2;
+            while (!operators.empty() && operators.top() != '|') {
+                operators.pop();
             }
-        } else if (c == '|') {
-            if (result) {
-                return "True";
+            if (operators.empty()) {
+                operand2 = "T";
+            } else {
+                operand2 = operands.top();
+                operands.pop();
             }
+            std::string result = (operand1 == "T" && operand2 == "T") ? "T" : "F";
+            operands.push(result);
+            operators.push('&');
+        } else if (expression[i] == '|') {
+            std::string operand1 = operands.top();
+            operands.pop();
+            std::string operand2;
+            while (!operators.empty() && operators.top() != '&') {
+                operators.pop();
+            }
+            if (operators.empty()) {
+                operand2 = "T";
+            } else {
+                operand2 = operands.top();
+                operands.pop();
+            }
+            std::string result = (operand1 == "T" || operand2 == "T") ? "T" : "F";
+            operands.push(result);
+            operators.push('|');
+        } else if (expression[i] == 't' || expression[i] == 'T') {
+            operands.push("T");
+        } else if (expression[i] == 'f' || expression[i] == 'F') {
+            operands.push("F");
         }
     }
-    return result ? "True" : "False";
+
+    return operands.top() == "T";
+}
