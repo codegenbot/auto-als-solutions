@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <algorithm>
 
@@ -12,7 +13,7 @@ int add_elements(const vector<int>& arr, int k) {
 }
 
 int main() {
-    vector<int> arr = {1, 12, 123, 1234};
+    vector<int> arr = {1, 12, 123, 4};
     int k = 3;
     cout << add_elements(arr, k);
     return 0;
