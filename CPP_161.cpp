@@ -1,17 +1,15 @@
 string solve(string s) {
     string result = "";
-    bool foundLetter = false;
+    bool has_letter = false;
 
     for (char c : s) {
-        if (isalpha(c)) {
-            foundLetter = true;
-            c = (c == tolower(c)) ? toupper(c) : tolower(c);
+        if (isalpha(c)) { // Check if character is a letter
+            has_letter = true;
+            result += (c >= 'a' && c <= 'z') ? toupper(c) : tolower(c);
+        } else {
+            result += c;
         }
-        result += c;
     }
 
-    if (!foundLetter)
-        reverse(result.begin(), result.end());
-
-    return result;
+    return has_letter ? s : string(rbegin(s), rend(s));
 }
