@@ -1,36 +1,28 @@
-#include <string>
-using namespace std;
+int getHint(string code, string guess) {
+    int white = 0;
+    int black = 0;
 
-int whitePegs(string code, string guess) {
-    int count = 0;
-    for(int i = 0; i < 4; i++) {
-        if(code[i] == guess[i])
-            count++;
+    // Count the correct colors at wrong places (white pegs)
+    map<char, int> codeCount, guessCount;
+    for (char c : code) {
+        codeCount[c]++;
     }
-    return count;
-}
-
-int blackPegs(string code, string guess) {
-    int codeCount[6] = {0};
-    int guessCount[6] = {0};
-
-    for(int i = 0; i < 4; i++) {
-        codeCount[code[i]-'A']++;
-        guessCount[guess[i]-'A']++;
+    for (char c : guess) {
+        guessCount[c]++;
+    }
+    for (int i = 0; i < 4; i++) {
+        if (code[i] != guess[i]) {
+            white += min(codeCount[code[i]], guessCount[guess[i]]);
+        }
     }
 
+    // Count the correct colors at correct places (black pegs)
     int blackPegs = 0;
-    for(int i = 0; i < 6; i++)
-        if(codeCount[i] && guessCount[i])
-            blackPegs += min(codeCount[i], guessCount[i]);
+    for (int i = 0; i < 4; i++) {
+        if (code[i] == guess[i]) {
+            black++;
+        }
+    }
 
-    return blackPegs;
-}
-
-int main() {
-    string code, guess;
-    cin >> code >> guess;
-    cout << whitePegs(code, guess) << endl;
-    cout << blackPegs(code, guess) << endl;
-    return 0;
+    return white + black;
 }
