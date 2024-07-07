@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -24,3 +26,20 @@ vector<int> indicesOfSubstring(string text, string target) {
     }
 
     return result;
+}
+
+int main() {
+    cout << "GCD of two numbers: " << gcd(48, 18) << endl;
+
+    string text = "ABCABC";
+    string target = "BC";
+    vector<int> indices = indicesOfSubstring(text, target);
+
+    cout << "Indices where '" << target << "' appears in '" << text << "': ";
+    for (int i : indices) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
