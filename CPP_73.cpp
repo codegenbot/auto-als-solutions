@@ -34,11 +34,23 @@ int main() {
         
         return changes;
     }
-
-    // Example usage:
-    vector<int> arr = {1, 2, 3, 4, 5};
-    int result = smallest_change(arr);
-    cout << "Smallest number of coin changes: " << result << endl;
-
-    return 0;
-}
+    
+    int main() {
+        vector<int> arr;
+        // Read input from user
+        cout << "Enter the array elements (space-separated): ";
+        cin >> ws;
+        while (cin.peek() != '\n') {
+            int num;
+            cin >> num;
+            arr.push_back(num);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        
+        // Call the function
+        int result = smallest_change(arr);
+        
+        cout << "Smallest number of changes: " << result << endl;
+    
+        return 0;
+    }
