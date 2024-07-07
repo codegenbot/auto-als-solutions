@@ -1,9 +1,13 @@
 ```cpp
-#include <string>
-using namespace std;
+int main() {
+    string word;
+    word = words_in_sentence("here is");
+    assert(word == "is");
+    return 0;
+}
 
-string word_in_sentence(string sentence){
-    string result = "";
+word words_in_sentence(string sentence){
+    word result = "";
     int count = 0;
     for(int i=0; i<sentence.size(); i++){
         if(sentence[i] == ' '){
@@ -21,11 +25,4 @@ string word_in_sentence(string sentence){
         count++;
     }
     return result;
-}
-
-int main() {
-    string word;
-    word = word_in_sentence("here is");
-    assert(word == "is");
-    return 0;
 }
