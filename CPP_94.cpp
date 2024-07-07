@@ -29,5 +29,6 @@ int sumOfDigits(int n){
 
 int main() {
     vector<int> lst = {127, 97, 8192};
-    assert (skjkasdkd(lst) == 10);
+    cout << skjkasdkd(lst) << endl;
+    assert (skjkasdkd({127, 97, 8192}) == 10);
 }
