@@ -6,7 +6,7 @@ int do_algebra(vector<pair<char, int>> expressions) {
     for (const auto& expression : expressions) {
         char operator_;
         int operand_;
-        tie(operator_, operand_) = expression;
+        std::tie(operator_, operand_) = expression;
 
         if (operator_ == '+') {
             result += operand_;
@@ -14,19 +14,19 @@ int do_algebra(vector<pair<char, int>> expressions) {
             result -= operand_;
         } else if (operator_ == '*') {
             int temp = 1;
-            for (int i = 0; i < operand_; i++) {
+            for (int i = 0; i < operand_; ++i) {
                 temp *= expressions[i].second;
             }
             result += temp;
         } else if (operator_ == '/') {
-            int temp = operand_;
-            for (int i = 1; i < expressions.size(); i++) {
+            int temp = expressions[operand_ - 1].second;
+            for (int i = operand_ + 1; i < expressions.size(); ++i) {
                 temp /= expressions[i].second;
             }
             result += temp;
-        } else if (operator_ == '**') {
+        } else if (operator_ == '^') {
             int temp = 1;
-            for (int i = 0; i < operand_; i++) {
+            for (int i = 0; i < operand_; ++i) {
                 temp *= pow(expressions[i].second, 1);
             }
             result += temp;
