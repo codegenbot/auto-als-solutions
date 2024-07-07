@@ -1,4 +1,3 @@
-```cpp
 #include <boost/any.hpp>
 #include <string>
 #include <algorithm>
@@ -70,9 +69,8 @@ boost::any compare_one(boost::any a, boost::any b) {
 int main() {
     int num1, num2;
     cin >> num1 >> num2;
-    boost::any a = num1;
-    boost::any b = num2;
-    cout << boost::any_cast<int>(compare_one(a, b)) << endl;
+    
+    cout << compare_one(boost::any(num1), boost::any(num2)) << endl;
     
     return 0;
 }
