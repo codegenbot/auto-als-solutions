@@ -15,8 +15,8 @@ long long minSubArraySum(vector<long long> nums) {
 }
 
 int main() {
-    vector<long long> nums = {2,3,-1,-5};
-    assert(minSubArraySum(nums) == -1);
-    cout << "Output: " << minSubArraySum(nums) << endl;
+    vector<long long> nums = {2,3,-1,5,-7,2,3};
+    cout << "Minimum subarray sum: " << minSubArraySum(nums) << endl;
+    assert(minSubArraySum({2,3,-1,5,-7,2,3}) == 6);
     return 0;
 }
