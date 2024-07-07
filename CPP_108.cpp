@@ -16,7 +16,7 @@ int count_nums(std::vector<int> v) {
             }
             num /= 10;
         }
-        if (!has_positive_sum) {
+        if (has_positive_sum) {
             count++;
         }
     }
@@ -24,6 +24,6 @@ int count_nums(std::vector<int> v) {
 }
 
 int main() {
-    std::cout << count_nums({1}) << std::endl;
+    assert(count_nums({1}) == 1);
     return 0;
 }
