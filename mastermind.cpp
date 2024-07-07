@@ -23,16 +23,20 @@ int countWhitePegs(string code, string guess) {
 
     for (int i = 0; i < 4; ++i) {
         if (guess[i] != code[i]) {
-            bool isPresentInCode = false;
-            for (char c : code) {
-                if (c == guess[i]) {
-                    isPresentInCode = true;
+            bool found = false;
+            for (int j = 0; j < 4; ++j) {
+                if (guess[j] == code[i]) {
+                    found = true;
                     break;
                 }
             }
-
-            if (isPresentInCode) {
-                ++whitePegs;
+            if (found) {
+                --whitePegs;
+            } else {
+                if (codeCount[guess[i]] > 0) {
+                    --whitePegs;
+                    --codeCount[guess[i]];
+                }
             }
         }
     }
