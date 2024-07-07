@@ -5,15 +5,17 @@ bool solveBoolean(string s) {
             while (!st.empty() && st.top() == '&') {
                 st.pop();
             }
-            st.push('&');
+            if (st.empty()) return false;
+            st.pop();
         } else if (s[i] == '|') {
-            while (!st.empty()) {
+            while (!st.empty() && st.top() == '|') {
                 st.pop();
             }
-            st.push('|');
+            if (st.empty()) return true;
+            st.pop();
         } else {
             st.push(s[i]);
         }
     }
-    return st.top() == 'T';
+    return st.size() > 0 ? (st.top() == 'T') : false;
 }
