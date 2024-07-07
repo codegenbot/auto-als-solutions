@@ -1,3 +1,4 @@
+```
 #include <string>
 #include <vector>
 
@@ -31,11 +32,10 @@ vector<string> split(const string& str, char c) {
     }
     tokens.push_back(str);
     return tokens;
-
 }
 
 int main() {
-    string test_sentence = "Hello World";
-    cout << words_in_sentence(test_sentence) << endl;
+    string sentence = "Hello world";
+    cout << words_in_sentence(sentence) << endl;
     return 0;
 }
