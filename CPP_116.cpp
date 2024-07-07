@@ -1,13 +1,11 @@
 Here is the completed code:
 
-#include <algorithm>
-
 vector<int> sort_vector(vector<int> arr) {
-    sort(arr.begin(), arr.end(), [](int a, int b) {
-        int ones_a = __builtin_popcount(a);
-        int ones_b = __builtin_popcount(b);
-        if (ones_a == ones_b) return a <= b;
-        return ones_a < ones_b;
-    });
-    return arr;
+    vector<pair<int, int>> pairs;
+    for (int num : arr) {
+        int ones = __builtin_popcount(num);
+        pairs.push_back({ones, num});
+    }
+    sort(pairs.begin(), pairs.end());
+    return vector<int>(pairs.begin(), pairs.end());
 }
