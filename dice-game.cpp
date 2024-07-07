@@ -1,6 +1,15 @@
 Here is the solution:
 
-double diceGame(int n, int m) {
-    double total = (long long)n * m;
-    return (n - 1) / (double)total;
+double calculateProbability(int n, int m) {
+    double sum = 0;
+    for (int i = 1; i <= n; ++i) {
+        sum += 1.0 / m;
+    }
+    return sum - (n > m ? 1.0 : 0);
+}
+int main() {
+    int n, m;
+    cin >> n >> m;
+    cout << setprecision(5) << fixed << calculateProbability(n, m) << endl;
+    return 0;
 }
