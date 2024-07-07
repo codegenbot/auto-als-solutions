@@ -6,7 +6,7 @@ vector<pair<int, int>> pluck(vector<int> arr) {
     vector<pair<int, int>> result;
     if (arr.empty()) return result;
 
-    int smallestEven = numeric_limits<int>::max();
+    int smallestEven = INT_MAX;
     int smallestIndex = -1;
 
     for (int i = 0; i < arr.size(); i++) {
@@ -18,4 +18,3 @@ vector<pair<int, int>> pluck(vector<int> arr) {
 
     result.push_back({smallestEven, smallestIndex});
     return result;
-}
