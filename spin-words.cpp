@@ -1,3 +1,7 @@
+```cpp
+#include <iostream>
+#include <string>
+
 std::string spinWords(std::string sentence) {
     std::vector<std::string> words;
     std::istringstream iss(sentence);
@@ -18,4 +22,12 @@ std::string spinWords(std::string sentence) {
             words.pop_back(); 
     }
     return sentence;
+}
+
+int main() {
+    std::cout << spinWords("a") << "\n";
+    std::cout << spinWords("this is a test") << "\n";
+    std::cout << spinWords("this is another test") << "\n";
+    std::cout << spinWords("hi") << "\n";
+    return 0;
 }
