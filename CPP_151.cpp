@@ -4,10 +4,7 @@
 int main() {
     std::vector<float> lst;
     float num;
-
-    cout << "Enter numbers (enter 'stop' to finish): ";
-    while (cin >> num) {
-        if (num == 'stop') break;
+    while(std::cin >> num) {
         lst.push_back(num);
     }
 
@@ -17,6 +14,6 @@ int main() {
             double_the_difference += pow(n, 2);
         }
     }
-    assert(double_the_difference == ...); 
+    std::cout << double_the_difference;
     return 0;
 }
