@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 
 int main() {
@@ -35,10 +34,21 @@ int main() {
         
         return changes;
     }
+
+    vector<int> arr;
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
     
-    // Input your array here
-    vector<int> arr = {1, 2, 3, 4};
-    cout << smallest_change(arr) << endl;
+    for (int i = 0; i < n; ++i) {
+        int temp;
+        cout << "Enter element " << i + 1 << ": ";
+        cin >> temp;
+        arr.push_back(temp);
+    }
     
+    int result = smallest_change(arr);
+    cout << "Smallest change needed: " << result << endl;
+
     return 0;
 }
