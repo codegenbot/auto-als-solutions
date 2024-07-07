@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 using namespace std;
 
@@ -9,7 +8,7 @@ int basement(vector<int>& nums) {
         if (sum < 0)
             return i;
     }
-    return -1; // not found
+    return -1; 
 }
 
 int main() {
