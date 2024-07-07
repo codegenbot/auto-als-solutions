@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <climits>
 
@@ -22,8 +21,9 @@ CutResult cutVector(vector<int>& nums) {
         }
     }
 
-    vector<int> left = vector<int>(nums.begin(), nums.begin() + cutIndex);
-    vector<int> right = vector<int>(nums.begin() + cutIndex, nums.end());
+    CutResult result;
+    result.left = vector<int>(nums.begin(), nums.begin() + cutIndex);
+    result.right = vector<int>(nums.begin() + cutIndex, nums.end());
 
-    return {left, right};
+    return result;
 }
