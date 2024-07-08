@@ -1,6 +1,6 @@
 #include <utility>
 
-pair<vector<int>, vector<int>> cutVector(vector<int> v) {
+std::pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     int minDiff = INT_MAX;
     int cutIndex = -1;
     
@@ -15,7 +15,10 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
             sumRight += v[j];
         }
         
-        if (abs(sumLeft - sumRight) < minDiff || abs(sumLeft - sumRight) == 0) {
+        if (abs(sumLeft - sumRight) < minDiff) {
+            minDiff = abs(sumLeft - sumRight);
+            cutIndex = i;
+        } else if (abs(sumLeft - sumRight) == 0 && cutIndex == -1) {
             minDiff = abs(sumLeft - sumRight);
             cutIndex = i;
         }
@@ -24,5 +27,5 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     vector<int> left(v.begin(), v.begin() + cutIndex + 1);
     vector<int> right(v.begin() + cutIndex, v.end());
     
-    return {left, right};
+    return make_pair(left, right);
 }
