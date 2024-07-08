@@ -1,3 +1,4 @@
+```cpp
 #include <utility>
 #include <vector>
 #include <initializer_list>
@@ -28,7 +29,7 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
 
     if (cutIndex == -1) {
         return {vector<int>(), vector<int>()};
-    } else {
-        return {left, right};
     }
+
+    return {left, right};
 }
