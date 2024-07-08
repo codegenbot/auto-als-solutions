@@ -1,3 +1,4 @@
+```c++
 std::string camelCase(std::string s) {
     std::string result = "";
     bool firstWord = true;
@@ -22,3 +23,4 @@ std::string camelCase(std::string s) {
     }
     
     return result;
+}
