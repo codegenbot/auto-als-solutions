@@ -1,9 +1,9 @@
 #include <vector>
-#include <climits>
 #include <cmath>
+#include <climits>
 using namespace std;
 
-vector<pair<vector<int>, vector<int>>> cutVector(vector<int>& nums) {
+vector<int> cutVector(vector<int>& nums) {
     int minDiff = INT_MAX;
     int splitIndex = 0;
     
@@ -15,5 +15,4 @@ vector<pair<vector<int>, vector<int>>> cutVector(vector<int>& nums) {
         }
     }
     
-    return {vector<int>(nums.begin(), nums.begin() + splitIndex), vector<int>(nums.begin() + splitIndex, nums.end())};
-}
+    return {vector<int>(nums.begin(), nums.begin() + splitIndex), vector<int>(nums.erase(nums.begin() + splitIndex, nums.end()))};
