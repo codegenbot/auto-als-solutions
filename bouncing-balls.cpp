@@ -13,10 +13,9 @@ int main() {
     double bounciness = firstBounce / startHeight;
 
     double totalDistance = 0.0;
-    double currentHeight = startHeight; 
-
+    double currentHeight = firstBounce; 
     for (int i = 1; i <= numBounces; i++) {
-        totalDistance += pow(2, -bounciness) * currentHeight; 
+        totalDistance += (pow(2, -bounciness)) * currentHeight; 
         currentHeight *= (pow(2, -bounciness)); 
     }
 
