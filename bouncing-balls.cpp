@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -10,7 +9,6 @@ int main() {
     int numBounces;
 
     cin >> startHeight >> firstBounce >> numBounces;
-    cin.ignore();  // Add this line
 
     double bounciness = firstBounce / startHeight;
 
@@ -24,4 +22,3 @@ int main() {
     cout << fixed << setprecision(5) << totalDistance + firstBounce;
 
     return 0;
-}
