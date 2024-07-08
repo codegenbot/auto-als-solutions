@@ -1,8 +1,8 @@
+```
 h0 = float(input())
 hf = float(input())
 bounciness_index = hf / h0
 num_bounces = int(input())
-
 
 def bouncing_balls():
     total_distance = 0
