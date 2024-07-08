@@ -1,4 +1,3 @@
-```cpp
 #include <iostream>
 using namespace std;
 
@@ -25,13 +24,7 @@ int main() {
     int nickles = cents / 5;
     cents %= 5;
     
-    while(cents >= 5) {
-        nickles++;
-        cents -= 5;
-    }
-    
-    int pennies = cents % 5;
-    cents /= 5;
+    int pennies = cents;
     
     cout << quarters << endl;
     cout << nickles << endl;
