@@ -1,3 +1,4 @@
+```c++
 int pennies = 0;
 while(cents > 0) {
     if (cents >= 25) {
