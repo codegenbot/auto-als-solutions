@@ -1,6 +1,3 @@
-#include<iostream>
-#include<string>
-
 std::string camelCase(std::string s) {
     std::string result = "";
     bool firstWord = true;
@@ -20,19 +17,16 @@ std::string camelCase(std::string s) {
         } 
         else {
             if (firstWord)
-                result += c;
+                result += std::toupper(c);  // Check if this is the first word
             else
                 result += std::tolower(c);
             firstWord = false;
         }
     }
     
+    if (firstWord) {  // Handle the first word separately
+        result = std::string(1, std::toupper(s[0])) + std::tolower(s[1]);
+    }
+    
     return result;
 }
-
-int main() {
-    std::string s;
-    std::cout << "Enter a string: ";
-    std::cin >> s;
-    std::cout << camelCase(s) << std::endl;
-    return 0;
