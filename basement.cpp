@@ -11,3 +11,7 @@ int basement(const vector<int>& v) {
     }
     return -1;
 }
+
+int main() {
+    return 0;
+}
