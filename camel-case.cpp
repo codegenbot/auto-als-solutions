@@ -1,8 +1,7 @@
 #include <string>
 #include <iostream>
-using namespace std;
-
 #include <cctype>
+using namespace std;
 
 string camelCase(string s) {
     string result = "";
@@ -38,4 +37,3 @@ int main() {
         cout << "camelCase: " << camelCase(s) << endl;
     }
     return 0;
-}
