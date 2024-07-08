@@ -27,11 +27,11 @@ std::string camelCase(std::string s) {
             firstWord = false;
         }
     }
-    
+
     if (firstWord) {  // Handle the first word separately
-        result = std::toupper(s[0]) + s.substr(1).substr(0,1).tolower() + s.substr(1).substr(1);
+        result = std::toupper(s[0]) + s.substr(1).substr(0, 1).tolower() + s.substr(1).substr(1);
     }
-    
+
     return result;
 }
 
