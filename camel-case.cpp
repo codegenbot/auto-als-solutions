@@ -23,13 +23,13 @@ std::string camelCase(std::string s) {
             if (firstWord)
                 result += std::toupper(c);  // Check if this is the first word
             else
-                result += std::tolower(c);
+                result += c;
             firstWord = false;
         }
     }
 
     if (firstWord) {  // Handle the first word separately
-        result = std::toupper(s[0]) + s.substr(1).substr(0, 1).toLower() + s.substr(1).substr(1);
+        result = std::toupper(s[0]) + s.substr(1).substr(0, 1) + s.substr(1).substr(1);
     }
 
     return result;
