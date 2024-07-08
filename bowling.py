@@ -1,3 +1,4 @@
+```
 def bowling_score(frames):
     score = 0
     frames = frames.split('/')
@@ -21,7 +22,7 @@ def bowling_score(frames):
                 else:
                     score += sum([int(x) for x in frame.replace('-', '').replace('/', '')])
             else:
-                rolls = [int(x) for x in frame.replace('-', '').replace('/', '")]
+                rolls = [int(x) for x in frame.replace('-', '').replace('/', '')]
                 score += sum(rolls)
     return score
 
