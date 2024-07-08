@@ -1,4 +1,7 @@
-```cpp
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
 using namespace std;
 
 int main() {
@@ -16,7 +19,7 @@ int main() {
         currentHeight *= (pow(2, -bounciness)); 
     }
 
-    cout << fixed << totalDistance + firstBounce;
+    cout << std::fixed << std::setprecision(5) << totalDistance + firstBounce;
 
     return 0;
 }
