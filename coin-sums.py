@@ -4,7 +4,7 @@ def coin_sums(cents):
     result = []
 
     while cents > 0:
-        for coin in coins[::-1]:  
+        for coin in coins[::-1]:  # Start with quarters and go down to pennies
             count = min(cents // coin, len(result))
             result.extend([coin] * count)
             cents -= coin * count
