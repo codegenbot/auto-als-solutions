@@ -1,7 +1,4 @@
-#include <vector>
-#include <iostream>
 #include <string>
-#include <cctype>
 
 std::string camelCase(std::string s) {
     std::string result = "";
@@ -9,16 +6,13 @@ std::string camelCase(std::string s) {
     
     for (char c : s) {
         if (c == '-') {
-            if (!firstWord)
-                result += std::toupper(c);
-            else
-                firstWord = false;
+            result += std::toupper(c);
+            firstWord = false;
         } 
         else if (c == ' ') {
             if (!firstWord)
-                result += std::toupper(c);
-            else
-                firstWord = false;
+                result += c;
+            firstWord = false;
         } 
         else {
             if (firstWord)
@@ -28,18 +22,9 @@ std::string camelCase(std::string s) {
             firstWord = false;
         }
     }
-
-    if (firstWord) {  // Handle the first word separately
-        result = std::toupper(s[0]) + std::string(1, std::tolower(s[0])) + s.substr(1);
+    
+    if (!firstWord) {  // Handle the last word separately
+        result[0] = std::tolower(result[0]);
     }
-
+    
     return result;
-}
-
-int main() {
-    std::string s;
-    std::cout << "Enter a string: ";
-    std::cin >> s;
-    std::cout << camelCase(s) << std::endl;
-    return 0;
-}
