@@ -35,3 +35,4 @@ int main() {
         std::cout << camelCase(input) << std::endl;
     }
     return 0;
+}
