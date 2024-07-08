@@ -1,3 +1,4 @@
+```c++
 #include <iostream>
 using namespace std;
 
@@ -24,7 +25,6 @@ int main() {
     int nickles = cents / 5;
     cents %= 5;
     
-    // Move calculations of nickles and pennies outside the loop
     int pennies = cents;
     
     cout << quarters << endl;
