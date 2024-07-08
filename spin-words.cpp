@@ -1,4 +1,4 @@
-#include <vector>
+```c
 #include <iostream>
 #include <string>
 
@@ -10,8 +10,8 @@ string spinWords(string str) {
     
     while(i < str.length()) {
         if(str[i] != ' ') {
-            if(str.substr(i).size() >= 5) {
-                for(int j=str.substr(i).size()-1; j>=0; --j)
+            if(str.substr(i).length() >= 5) {
+                for(int j=str.substr(i).length()-1; j>=0; --j)
                     result += str[i+j];
                 result += " ";
             } else 
