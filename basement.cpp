@@ -1,4 +1,7 @@
-int basement(const vector<int>& v) {
+#include <vector>
+#include <iostream>
+
+int basement(const std::vector<int>& v) {
     int sum = 0;
     for (int i = 0; i < v.size(); i++) {
         sum += v[i];
@@ -6,4 +9,11 @@ int basement(const vector<int>& v) {
             return i + 1;
     }
     return -1;
+}
+
+int main() {
+    std::vector<int> v = {-2, 1, 3, -5};
+    int result = basement(v);
+    std::cout << "The basement index is: " << result << std::endl;
+    return 0;
 }
