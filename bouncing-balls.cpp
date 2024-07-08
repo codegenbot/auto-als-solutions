@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -19,7 +20,7 @@ int main() {
         currentHeight *= (pow(2, -bounciness)); 
     }
 
-    cout << fixed << setprecision(5) << totalDistance + firstBounce;
+    cout << fixed << totalDistance + firstBounce;
 
     return 0;
 }
