@@ -1,8 +1,6 @@
-#include <vector>
+```cpp
 #include <iostream>
 #include <string>
-#include <cctype>
-#include <initializer_list>
 
 std::string camelCase(std::string s) {
     std::string result = "";
@@ -39,3 +37,4 @@ int main() {
     std::cin >> s;
     std::cout << camelCase(s) << std::endl;
     return 0;
+}
