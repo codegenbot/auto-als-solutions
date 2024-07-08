@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+
 using namespace std;
 
 int bowlingScore(string s) {
@@ -25,3 +27,11 @@ int bowlingScore(string s) {
         }
     }
     return score;
+}
+
+int main() {
+    string input;
+    cin >> input;
+    int result = bowlingScore(input);
+    cout << "The final score is: " << result << endl;
+}
