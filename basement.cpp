@@ -1,10 +1,8 @@
-```cpp
+#include <vector>
+
 int basement(const std::vector<int>& v) {
     int sum = 0;
     for (int i = 0; i < v.size(); i++) {
-        if (i == 0) { 
-            sum += v[i];
-        }
         sum += v[i];
         if (sum < 0)
             return i + 1;
