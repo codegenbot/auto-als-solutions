@@ -1,7 +1,10 @@
+```
 def basement(arr):
-    total = 0
+    sum_so_far = 0
+    found_basement_index = None
     for i in range(len(arr)):
-        total += arr[i]
-        if total < 0:
-            return i+1
-    return -1
+        sum_so_far += arr[i]
+        if sum_so_far < 0:
+            found_basement_index = i+1
+            break
+    return -1 if found_basement_index is None else found_basement_index
