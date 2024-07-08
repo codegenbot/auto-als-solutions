@@ -1,7 +1,6 @@
 #include <iostream>
-using namespace std;
-
 #include <cmath>
+using namespace std;
 
 int main() {
     double startHeight, firstBounce;
