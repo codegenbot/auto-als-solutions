@@ -29,7 +29,7 @@ std::string camelCase(std::string s) {
     }
     
     if (firstWord) {  
-        result += std::string(1, std::toupper(s[0])) + std::string(1, std::tolower(s[1]));
+        result = std::string(1, std::toupper(s[0])) + std::string(1, std::tolower(s[1]));
     }
     
     return result;
