@@ -1,6 +1,5 @@
-```cpp
-#include <iostream>
-#include <string>
+#include<iostream>
+#include<string>
 
 std::string camelCase(std::string s) {
     std::string result = "";
@@ -37,4 +36,3 @@ int main() {
     std::cin >> s;
     std::cout << camelCase(s) << std::endl;
     return 0;
-}
