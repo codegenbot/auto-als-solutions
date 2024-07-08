@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 #include <iostream>
 #include <string>
@@ -28,7 +29,7 @@ std::string camelCase(std::string s) {
         }
     }
     
-    if (firstWord) {  
+    if (firstWord) {  // Handle the first word separately
         result = std::toupper(s[0]) + s.substr(1).substr(0,1) + std::tolower(s.substr(1).substr(1));
     }
     
