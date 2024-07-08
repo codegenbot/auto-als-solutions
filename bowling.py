@@ -1,40 +1,34 @@
 ```
 def bowling_score(frames):
     score = 0
-    frame = 1
-    i = 0
-    while i < len(frames):
-        if frames[i] == "X":
-            if frame == 10:
-                score += 10 + int(frames[i-2])
-            else:
-                score += 10 + int(frames[i-1])
-            i += 1
-        elif frames[i] == "/":
-            score += 10
-            i += 2
+    roll_index = 0
+    for frame in range(1, 11):
+        if frames[roll_index] == "X":
+            score += 10 + get_next_two_frames(frames, roll_index)
+            roll_index += 3
+        elif frames[roll_index] == "/":
+            first_roll = int(frames[roll_index - 1])
+            second_roll = 10 - int(frames[roll_index + 1][0])
+            score += first_roll + second_roll
+            roll_index += 2
         else:
-            first_roll = int(frames[i])
-            if frame < 10 and frames[i+1].isdigit():
-                second_roll = int(frames[i+1])
-                if first_roll + second_roll == 10:
-                    score += 10
-                    i += 2
-                else:
-                    score += first_roll + second_roll
-                    i += 2
-            elif frame < 10 and not frames[i+1].isdigit():
-                score += first_roll + int(frames[i+1])
-                i += 2
+            if len(frames) > roll_index + 1 and frames[roll_index] + frames[roll_index + 1] == "10":
+                score += 10
+                roll_index += 2
             else:
-                if frame < 9:
-                    score += first_roll
-                    i += 1
-                elif frame == 9 and frames[i] != "X":
-                    score += first_roll + int(frames[i+1])
-                    i += 2
-                else:
-                    score += first_roll + 10
-                    i += 1
-        frame += 1
+                score += int(frames[roll_index]) + int(frames[roll_index + 1])
+                roll_index += 2
+
+    return score
+
+
+def get_next_two_frames(frames, index):
+    score = 0
+    for i in range(1, 3):
+        if frames[index] == "X":
+            score += 10
+            break
+        else:
+            score += int(frames[index])
+        index += 1
     return score
