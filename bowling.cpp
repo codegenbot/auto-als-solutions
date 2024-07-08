@@ -1,6 +1,4 @@
-#include <string>
-
-int bowlingScore(string s) {
+int bowlingScore(std::string s) {
     int score = 0;
     bool inFrame = true;
     int currentRolls = 0;
@@ -13,13 +11,13 @@ int bowlingScore(string s) {
             currentRolls++;
             currentFrameScore = 0;
         } else if (c == '/') {
-            int firstRoll = currentRolls % 2 == 0 ? 10 - stoi(string(1, c)) : stoi(string(1, c));
+            int firstRoll = currentRolls % 2 == 0 ? 10 - stoi(std::string(1, c)) : stoi(std::string(1, c));
             score += firstRoll;
             inFrame = false;
             currentRolls++;
             currentFrameScore = 0;
         } else if (c >= '0' && c <= '9') {
-            int roll = stoi(string(1, c));
+            int roll = stoi(std::string(1, c));
             currentRolls++;
             currentFrameScore += roll;
 
@@ -36,3 +34,4 @@ int bowlingScore(string s) {
     }
 
     return score;
+}
