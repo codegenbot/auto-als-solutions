@@ -1,37 +1,22 @@
-int bowlingScore(std::string s) {
+```
+#include <string>
+
+int bowlingScore(string s) {
     int score = 0;
-    bool inFrame = true;
-    int currentRolls = 0;
-    int currentFrameScore = 0;
-
+    int currentRoll = 0;
     for (char c : s) {
-        if (c == 'X') {
-            score += 10 + (inFrame ? 10 : 20);
-            inFrame = false;
-            currentRolls++;
-            currentFrameScore = 0;
-        } else if (c == '/') {
-            int firstRoll = currentRolls % 2 == 0 ? 10 - std::stoi(std::string(1, c)) : std::stoi(std::string(1, c));
-            score += firstRoll;
-            inFrame = false;
-            currentRolls++;
-            currentFrameScore = 0;
-        } else if (c >= '0' && c <= '9') {
-            int roll = std::stoi(std::string(1, c));
-            currentRolls++;
-            currentFrameScore += roll;
-
-            if (currentRolls == 2) {
-                inFrame = true;
-                if (currentFrameScore < 10) {
-                    score += currentFrameScore;
-                } else if (currentFrameScore == 10) {
-                    score += 10;
-                }
-                currentFrameScore = 0;
+        if (c == '/') {
+            if (currentRoll < 2) {
+                score += 10 - (10 - currentRoll);
             }
+            currentRoll = 0;
+        } else if (c == 'X') {
+            score += 10;
+            currentRoll = 0;
+        } else {
+            currentRoll++;
+            score += c - '0';
         }
     }
-
     return score;
 }
