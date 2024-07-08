@@ -1,3 +1,4 @@
+```
 def coin_sums(cents):
     coins = [25, 10, 5, 1]  
     result = [0, 0, 0, 0]
@@ -8,9 +9,8 @@ def coin_sums(cents):
             cents -= coins[i]
             count += 1
         result[i] = count
-        result[3] -= count
 
-    return result
+    return result[::-1]
 
 cents = int(input())
 print(*coin_sums(cents))
