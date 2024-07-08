@@ -18,8 +18,8 @@ std::pair<std::vector<int>, std::vector<int>> cutVector(std::vector<int> v) {
             sumRight += v[j];
         }
         
-        if (std::abs(sumLeft - sumRight) < minDiff || std::abs(sumLeft - sumRight) == 0) {
-            minDiff = std::abs(sumLeft - sumRight);
+        if (abs(sumLeft - sumRight) < minDiff || abs(sumLeft - sumRight) == 0) {
+            minDiff = abs(sumLeft - sumRight);
             cutIndex = i;
         }
     }
