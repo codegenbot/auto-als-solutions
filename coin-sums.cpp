@@ -11,7 +11,7 @@ int main() {
         cents -= 25;
     }
 
-    // Calculate dimes, nickles, and pennies after quarters are accounted for
+    // Calculate dimes and nickles after quarters are accounted for
     int dimes = 0;
     int remainingCents = cents;
     
@@ -20,11 +20,16 @@ int main() {
         remainingCents -= 10;
     }
     
-    int nickles = remainingCents / 5;
-    remainingCents %= 5;
-
+    int nickles = 0;
+    int dimeRemainder = remainingCents;
+    
+    while(dimeRemainder >= 5) {
+        nickles++;
+        dimeRemainder -= 5;
+    }
+    
     // Calculate pennies
-    int pennies = remainingCents;
+    int pennies = dimeRemainder;
     
     cout << quarters << endl;
     cout << nickles << endl;
