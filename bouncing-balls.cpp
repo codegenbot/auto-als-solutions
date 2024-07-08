@@ -1,5 +1,7 @@
+```
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 #include <iosstream>
 
 using namespace std;
@@ -13,7 +15,7 @@ int main() {
     double bounciness = firstBounce / startHeight;
 
     double totalDistance = 0.0;
-    double currHeight = firstBounce;  
+    double currHeight = firstBounce;  // Actual current height
     for (int i = 1; i <= numBounces; i++) {
         totalDistance += currHeight;
         currHeight *= pow(2, -bounciness);
