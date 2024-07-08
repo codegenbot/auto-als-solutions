@@ -21,24 +21,19 @@ std::string camelCase(std::string s) {
         } 
         else {
             if (firstWord)
-                result += std::toupper(c);  // Check if this is the first word
+                result += c;
             else
                 result += std::tolower(c);
             firstWord = false;
         }
     }
-
-    if (firstWord) {  // Handle the first word separately
-        result = std::toupper(s[0]) + s.substr(1).substr(0, 1).tolower() + s.substr(1).substr(1);
-    }
-
+    
     return result;
 }
 
 int main() {
     std::string s;
     std::cout << "Enter a string: ";
-    std::cin >> s;
+    std::getline(std::cin, s);
     std::cout << camelCase(s) << std::endl;
     return 0;
-}
