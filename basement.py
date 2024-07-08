@@ -1,7 +1,7 @@
-def basement(arr):
+def basement(vector):
     total = 0
-    for i in range(len(arr)):
-        total += arr[i]
+    for i, num in enumerate(vector):
         if total < 0:
-            return i + 1
+            return i
+        total += num
     return -1
