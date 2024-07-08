@@ -22,5 +22,5 @@ std::pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     vector<int> left(v.begin(), v.begin() + cutIndex + 1);
     vector<int> right(v.begin() + cutIndex, v.end());
     
-    return {std::make_pair(left, right)};
+    return std::pair<vector<int>, vector<int>>(left, right);
 }
