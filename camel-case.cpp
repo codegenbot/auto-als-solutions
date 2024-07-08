@@ -1,4 +1,3 @@
-```
 #include <string>
 using namespace std;
 
@@ -11,7 +10,7 @@ string camelCase(string s) {
                 i++; // skip the spaces
             }
             if (result != "") {
-                result += toupper(s[i]); // capitalize the first letter of each word
+                result += char(toupper(s[i])); // capitalize the first letter of each word
             } else {
                 result = toupper(s[i]) + ""; // capitalize the first letter of the first word
             }
@@ -19,7 +18,7 @@ string camelCase(string s) {
             continue; // skip the spaces
         } else {
             if (result != "") {
-                result += tolower(s[i]); // add the rest of the letters in lowercase
+                result += char(tolower(s[i])); // add the rest of the letters in lowercase
             } else {
                 result = tolower(s[i]) + ""; // add the first letter of the first word in lowercase
             }
@@ -31,9 +30,9 @@ string camelCase(string s) {
 int main() {
     string s;
     while (true) {
-        cout << "Enter a string: ";
-        cin >> s;
-        cout << "camelCase: " << camelCase(s) << endl;
+        std::cout << "Enter a string: ";
+        std::cin >> s;
+        std::cout << "camelCase: " << camelCase(s) << std::endl;
     }
     return 0;
 }
