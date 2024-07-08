@@ -30,7 +30,7 @@ std::string camelCase(std::string s) {
     }
 
     if (firstWord) {  // Handle the first word separately
-        result = std::string(1, std::toupper(s[0])) + s.substr(1).substr(0, 1).ToLower() + s.substr(1).substr(1);
+        result = std::toupper(s[0]) + std::string(1, std::tolower(s[0])) + s.substr(1);
     }
 
     return result;
