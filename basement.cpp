@@ -10,8 +10,9 @@ int basement(const std::vector<int>& v) {
             return i + 1;
     }
     return -1;
+
 }
 
 int main() {
-    return basement({-2, 3, -4, 5, -6});
+    return basement({-2, 3, -4});
 }
