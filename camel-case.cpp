@@ -1,8 +1,10 @@
-```c++
+#include <string>
+#include <cctype>
+
 std::string camelCase(std::string s) {
     std::string result = "";
     bool firstWord = true;
-    
+
     for (char c : s) {
         if (c == '-') {
             result += std::toupper(c);
@@ -15,11 +17,15 @@ std::string camelCase(std::string s) {
         } 
         else {
             if (firstWord)
-                result += std::toupper(c);  // Check if this is the first word
+                result += std::toupper(c);  
             else
                 result += std::tolower(c);
             firstWord = false;
         }
+    }
+    
+    if (!firstWord) {  // Handle the last word separately
+        result[0] = std::tolower(result[0]);
     }
     
     return result;
