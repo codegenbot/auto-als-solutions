@@ -1,43 +1,29 @@
-```cpp
-#include <string>
-
 std::string camelCase(std::string s) {
-    std::string result = "";
+    std::string result;
     bool firstWord = true;
-    
+
     for (char c : s) {
         if (c == '-') {
-            if (!firstWord)
-                result += std::toupper(c);
-            else
-                firstWord = false;
+            // skip '-'
         } 
         else if (c == ' ') {
             if (!firstWord)
-                result += std::toupper(c);
-            else
-                firstWord = false;
+                result += c;
+            firstWord = false;
         } 
         else {
             if (firstWord)
                 result += std::toupper(c);  // Check if this is the first word
             else
-                result += c;
+                result += c;  // If not the first word, just add as it is
             firstWord = false;
         }
     }
     
-    if (!s.empty() && !firstWord) {  // Handle the first word separately
+    // Handle the last word separately
+    if (result.size() > 0 && !std::isupper(result[0])) {
         result[0] = std::tolower(result[0]);
     }
     
     return result;
-}
-
-int main() {
-    std::string input;
-    std::cout << "Enter a string in kebab-case: ";
-    std::getline(std::cin, input);
-    std::cout << camelCase(input) << std::endl;
-    return 0;
 }
