@@ -5,16 +5,12 @@ def coin_sums(cents):
     for i in range(len(coins)):
         count = 0
         while cents >= coins[i]:
-            if cents < coins[i]:
-                result[i] = 1
-                break
-            else:
-                cents -= coins[i]
-                count += 1
+            cents -= coins[i]
+            count += 1
         result[i] = count
+        result[3] -= count
 
     return result
-
 
 cents = int(input())
 print(*coin_sums(cents))
