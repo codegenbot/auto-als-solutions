@@ -4,4 +4,6 @@ def basement(arr):
         total_sum += arr[i]
         if total_sum < 0:
             return i + 1
+        elif total_sum == 0:
+            continue
     return -1
