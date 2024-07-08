@@ -1,4 +1,3 @@
-```
 def basement(arr):
     sum_so_far = 0
     found_basement_index = None
