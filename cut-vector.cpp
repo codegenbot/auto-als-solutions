@@ -1,3 +1,5 @@
+#include <utility>
+#include <vector>
 #include <initializer_list>
 
 pair<vector<int>, vector<int>> cutVector(vector<int> v) {
@@ -24,5 +26,9 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     vector<int> left(v.begin(), v.begin() + cutIndex + 1);
     vector<int> right(v.begin() + cutIndex, v.end());
 
-    return {left, right};
+    if (cutIndex == -1) {
+        return {vector<int>(), vector<int>()};
+    } else {
+        return {left, right};
+    }
 }
