@@ -1,5 +1,4 @@
 #include <string>
-#include <cctype>
 
 std::string camelCase(std::string s) {
     std::string result = "";
@@ -29,3 +28,4 @@ std::string camelCase(std::string s) {
     }
     
     return result;
+}
