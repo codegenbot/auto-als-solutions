@@ -1,25 +1,35 @@
+```cpp
 #include <string>
-#include <iostream>
+#include <vector>
+
 using namespace std;
 
 int bowlingScore(string s) {
     int score = 0;
-    int currentRoll = 0;
+    vector<int> rolls;
+
     for (char c : s) {
-        if (c == '/') {
-            if (currentRoll < 2) {
-                score += 10 - (10 - currentRoll);
-            }
-            currentRoll = 0;
-        } else if (c == 'X') {
+        if (c == 'X') {
             score += 10;
-            currentRoll = 0;
+            rolls.push_back(10);
+        } else if (c == '/') {
+            score += 10 - (rolls[rolls.size() - 1] + 1);
+            rolls.pop_back();
         } else {
-            currentRoll++;
-            if (isdigit(c)) {
-                score += c - '0';
+            int roll = c - '0';
+            if (rolls.size() >= 2) {
+                if (rolls[rolls.size() - 1] + rolls[rolls.size() - 2] + 1 == 10) {
+                    score += 10;
+                    score += roll;
+                } else {
+                    score += roll;
+                }
+            } else {
+                score += roll;
             }
+            rolls.push_back(roll);
         }
     }
+
     return score;
 }
