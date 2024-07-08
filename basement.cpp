@@ -1,4 +1,3 @@
-```cpp
 #include <vector>
 #include <iostream>
 
@@ -10,15 +9,9 @@ int basement(const std::vector<int>& v) {
             return i + 1;
     }
     return -1;
+
 }
 
 int main() {
-    std::vector<int> v = {-1,-2};
-    int result = basement(v);
-    if (result != -1) {
-        std::cout << "Basement is found at index: " << result << std::endl;
-    } else {
-        std::cout << "No basement found." << std::endl;
-    }
     return 0;
 }
