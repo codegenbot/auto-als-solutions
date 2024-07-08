@@ -1,5 +1,8 @@
 #include <string>
+#include <iostream>
 using namespace std;
+
+#include <cctype>
 
 string camelCase(string s) {
     string result = "";
@@ -30,9 +33,9 @@ string camelCase(string s) {
 int main() {
     string s;
     while (true) {
-        std::cout << "Enter a string: ";
-        std::cin >> s;
-        std::cout << "camelCase: " << camelCase(s) << std::endl;
+        cout << "Enter a string: ";
+        cin >> s;
+        cout << "camelCase: " << camelCase(s) << endl;
     }
     return 0;
 }
