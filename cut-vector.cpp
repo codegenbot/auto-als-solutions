@@ -16,3 +16,4 @@ vector<int> cutVector(vector<int>& nums) {
     }
     
     return {vector<int>(nums.begin(), nums.begin() + splitIndex), vector<int>(nums.erase(nums.begin() + splitIndex, nums.end()))};
+}
