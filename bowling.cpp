@@ -1,35 +1,18 @@
-```cpp
-#include <string>
-#include <vector>
-
-using namespace std;
-
-int bowlingScore(string s) {
+int bowlingScore(std::string s) {
     int score = 0;
-    vector<int> rolls;
-
+    int currentRoll = 0;
     for (char c : s) {
-        if (c == 'X') {
-            score += 10;
-            rolls.push_back(10);
-        } else if (c == '/') {
-            score += 10 - (rolls[rolls.size() - 1] + 1);
-            rolls.pop_back();
-        } else {
-            int roll = c - '0';
-            if (rolls.size() >= 2) {
-                if (rolls[rolls.size() - 1] + rolls[rolls.size() - 2] + 1 == 10) {
-                    score += 10;
-                    score += roll;
-                } else {
-                    score += roll;
-                }
-            } else {
-                score += roll;
+        if (c == '/') {
+            if (currentRoll < 2) {
+                score += 10 - (10 - currentRoll);
             }
-            rolls.push_back(roll);
+            currentRoll = 0;
+        } else if (c == 'X') {
+            score += 10;
+            currentRoll = 0;
+        } else {
+            currentRoll++;
+            score += c - '0';
         }
     }
-
     return score;
-}
