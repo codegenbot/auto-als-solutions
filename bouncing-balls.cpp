@@ -1,3 +1,5 @@
+Here is the modified code:
+
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -21,3 +23,4 @@ int main() {
     cout << fixed << setprecision(5) << totalDistance + firstBounce;
 
     return 0;
+}
