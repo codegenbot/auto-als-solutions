@@ -1,5 +1,3 @@
-#include <string>
-
 std::string camelCase(std::string s) {
     std::string result = "";
     bool firstWord = true;
