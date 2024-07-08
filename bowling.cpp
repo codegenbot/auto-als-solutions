@@ -8,11 +8,17 @@ int bowlingScore(std::string s) {
             }
             currentRoll = 0;
         } else if (c == 'X') {
-            score += 10;
+            score += 30;
             currentRoll = 0;
         } else {
-            currentRoll++;
-            score += c - '0';
+            int roll = c - '0';
+            if (currentRoll + roll > 10) {
+                score += 10;
+                currentRoll = 0;
+            } else {
+                score += roll;
+                currentRoll += roll;
+            }
         }
     }
     return score;
