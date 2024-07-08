@@ -1,29 +1,22 @@
 ```
 def bowling_score(frames):
     score = 0
-    frames = frames.split('/')
-    for frame in frames:
-        if len(frame) == 1:
+    current_frame_rolls = []
+    
+    frames = frames.replace('/', '')
+    for char in frames:
+        if char == 'X':
             score += 10
-        elif len(frame) == 2:
-            first_roll = int(frame[0])
-            second_roll = int(frame[1])
-            if first_roll + second_roll == 10:
-                score += 10
-            else:
-                score += first_roll + second_roll
-        elif len(frame.replace('-', '').replace('/', '')) > 2:
-            if 'X' in frame or str(sum([int(x) for x in frame.replace('-', '').replace('/', '')])) + '/' in frame:
-                if 'X' in frame:
-                    score += 10
-                else:
-                    first_roll = int(str(sum([int(x) for x in frame.replace('-', '').replace('/', '')]))) 
-                    second_roll = int(frame[3]) 
-                    third_roll = int(frame[4])
-                    score += first_roll + second_roll + third_roll
-            else:
-                rolls = [int(x) for x in frame.replace('-', '').replace('/', '')]
-                score += sum(rolls)
+        elif char == '-':
+            previous_frame_score = sum(current_frame_rolls)
+            score += 10 + previous_frame_score
+            current_frame_rolls = []
+        else:
+            current_frame_rolls.append(int(char))
+    
+    if len(current_frame_rolls) > 0:
+        score += sum(current_frame_rolls)
+    
     return score
 
 frames = "7/3/5/5/10/0/1/7/6/4"
