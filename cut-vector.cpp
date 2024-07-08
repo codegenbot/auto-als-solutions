@@ -1,7 +1,9 @@
 #include <vector>
 #include <utility>
+#include <climits>
+#include <cmath>
 
-std::pair<vector<int>, vector<int>> cutVector(vector<int> v) {
+std::pair<std::vector<int>, std::vector<int>> cutVector(std::vector<int> v) {
     int minDiff = INT_MAX;
     int cutIndex = -1;
     
@@ -16,17 +18,14 @@ std::pair<vector<int>, vector<int>> cutVector(vector<int> v) {
             sumRight += v[j];
         }
         
-        if (abs(sumLeft - sumRight) < minDiff) {
-            minDiff = abs(sumLeft - sumRight);
-            cutIndex = i;
-        } else if (abs(sumLeft - sumRight) == 0 && cutIndex == -1) {
-            minDiff = abs(sumLeft - sumRight);
+        if (std::abs(sumLeft - sumRight) < minDiff || std::abs(sumLeft - sumRight) == 0) {
+            minDiff = std::abs(sumLeft - sumRight);
             cutIndex = i;
         }
     }
     
-    vector<int> left(v.begin(), v.begin() + cutIndex + 1);
-    vector<int> right(v.begin() + cutIndex, v.end());
+    std::vector<int> left(v.begin(), v.begin() + cutIndex + 1);
+    std::vector<int> right(v.begin() + cutIndex, v.end());
     
-    return make_pair(vector<int>(left), vector<int>(right));
+    return {left, right};
 }
