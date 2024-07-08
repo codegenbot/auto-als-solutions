@@ -1,6 +1,6 @@
 ```
-#include <iostream>
 #include <vector>
+#include <iostream>
 using namespace std;
 
 vector<int> cutVector(vector<int> v) {
@@ -39,17 +39,17 @@ int main() {
     
     vector<pair<vector<int>, vector<int>>> result = {{cutVector(v)}};
     
-    std::cout << "[";
+    cout << "[";
     for (int num : result[0].first) {
-        std::cout << num << " ";
+        cout << num << " ";
     }
-    std::cout << "]" << endl;
+    cout << "]" << endl;
     
-    std::cout << "[";
+    cout << "[";
     for (int num : result[0].second) {
-        std::cout << num << " ";
+        cout << num << " ";
     }
-    std::cout << "]]" << std::endl;
+    std::cout << "]]]" << std::endl;
     
     return 0;
 }
