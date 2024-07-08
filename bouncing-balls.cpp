@@ -1,9 +1,7 @@
-```
 #include <iostream>
-#include <cmath>
-#include <iomanip>
-
 using namespace std;
+
+#include <cmath>
 
 int main() {
     double startHeight, firstBounce;
@@ -19,7 +17,7 @@ int main() {
         startHeight *= pow(2, -bounciness);
     }
 
-    cout << fixed << setprecision(5) << totalDistance + firstBounce;
+    cout << fixed << std::setprecision(5) << totalDistance + firstBounce;
 
     return 0;
 }
