@@ -1,3 +1,8 @@
+#include <vector>
+#include <iostream>
+#include <climits> 
+using namespace std;
+
 pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     int minDiff = INT_MAX;
     int cutIndex = -1;
@@ -13,8 +18,10 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
             sumRight += v[j];
         }
         
-        if (abs(sumLeft - sumRight) < minDiff || abs(sumLeft - sumRight) == 0) {
-            minDiff = abs(sumLeft - sumRight);
+        int diff = std::abs(sumLeft - sumRight) - sumLeft;
+        
+        if (diff < minDiff) {
+            minDiff = diff;
             cutIndex = i;
         }
     }
@@ -23,4 +30,26 @@ pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     vector<int> right(v.begin() + cutIndex, v.end());
     
     return {left, right};
+}
+
+int main() {
+    int n; cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    
+    pair<vector<int>, vector<int>> result = cutVector(v);
+    
+    cout << "[";
+    for (int num : result.first) {
+        cout << num << " ";
+    }
+    cout << "]" << endl;
+    
+    cout << "[";
+    for (int num : result.second) {
+        cout << num << " ";
+    }
+    cout << "0]" << endl;
+    
+    return 0;
 }
