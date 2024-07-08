@@ -18,16 +18,15 @@ int main() {
     int nickles = 0;
     int remainingCents = cents;
     
-    int dimes = 0;
-    
+    int nickles = remainingCents / 5;
+    remainingCents %= 5;
+
     while(remainingCents >= 10) {
-        dimes++;
         remainingCents -= 10;
     }
     
-    nickles = remainingCents / 5;
-    remainingCents %= 5;
-
+    int dimes = remainingCents;
+    
     // Calculate pennies
     int pennies = remainingCents;
     
