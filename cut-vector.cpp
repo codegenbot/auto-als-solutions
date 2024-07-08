@@ -1,4 +1,3 @@
-```cpp
 pair<vector<int>, vector<int>> cutVector(vector<int> v) {
     int minDiff = INT_MAX;
     int cutIndex = -1;
