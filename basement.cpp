@@ -1,17 +1,10 @@
 ```c++
-#include <vector>
-using namespace std;
-
-int basement(vector<int>& v) {
+int basement(const vector<int>& v) {
     int sum = 0;
     for (int i = 0; i < v.size(); i++) {
         sum += v[i];
         if (sum < 0)
-            return i;
+            return i + 1;
     }
-    return -1; // not found
-}
-
-int main() { 
-    return basement({-3,2,-1,4,-2,5,1,-5,2}); 
+    return -1;
 }
