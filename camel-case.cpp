@@ -6,25 +6,29 @@ std::string camelCase(std::string s) {
     
     for (char c : s) {
         if (c == '-') {
-            result += std::toupper(c);
-            firstWord = false;
+            if (!firstWord)
+                result += std::toupper(c);
+            else
+                firstWord = false;
         } 
         else if (c == ' ') {
             if (!firstWord)
-                result += c;
-            firstWord = false;
+                result += std::toupper(c);
+            else
+                firstWord = false;
         } 
         else {
             if (firstWord)
                 result += std::toupper(c);  // Check if this is the first word
             else
-                result += std::tolower(c);
+                result += c;
             firstWord = false;
         }
     }
     
-    if (!firstWord) {  // Handle the last word separately
+    if (!s.empty() && !firstWord) {  // Handle the first word separately
         result[0] = std::tolower(result[0]);
     }
     
     return result;
+}
