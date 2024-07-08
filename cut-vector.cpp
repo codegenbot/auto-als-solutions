@@ -1,8 +1,9 @@
-#include <vector>
+```
 #include <iostream>
+#include <vector>
 using namespace std;
 
-pair<vector<int>, vector<int>> cutVector(vector<int> v) {
+vector<int> cutVector(vector<int> v) {
     int minDiff = INT_MAX;
     int cutIndex = -1;
     
@@ -36,18 +37,19 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     
-    pair<vector<int>, vector<int>> result = cutVector(v);
+    vector<pair<vector<int>, vector<int>>> result = {{cutVector(v)}};
     
-    cout << "[";
-    for (int num : result.first) {
-        cout << num << " ";
+    std::cout << "[";
+    for (int num : result[0].first) {
+        std::cout << num << " ";
     }
-    cout << "]" << endl;
+    std::cout << "]" << endl;
     
-    cout << "[";
-    for (int num : result.second) {
-        cout << num << " ";
+    std::cout << "[";
+    for (int num : result[0].second) {
+        std::cout << num << " ";
     }
-    cout << "0]" << endl;
+    std::cout << "]]" << std::endl;
     
     return 0;
+}
