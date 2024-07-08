@@ -11,13 +11,13 @@ int bowlingScore(std::string s) {
             currentRolls++;
             currentFrameScore = 0;
         } else if (c == '/') {
-            int firstRoll = currentRolls % 2 == 0 ? 10 - stoi(std::string(1, c)) : stoi(std::string(1, c));
+            int firstRoll = currentRolls % 2 == 0 ? 10 - std::stoi(std::string(1, c)) : std::stoi(std::string(1, c));
             score += firstRoll;
             inFrame = false;
             currentRolls++;
             currentFrameScore = 0;
         } else if (c >= '0' && c <= '9') {
-            int roll = stoi(std::string(1, c));
+            int roll = std::stoi(std::string(1, c));
             currentRolls++;
             currentFrameScore += roll;
 
