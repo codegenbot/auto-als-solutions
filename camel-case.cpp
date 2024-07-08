@@ -37,3 +37,4 @@ int main() {
     std::getline(std::cin, s);
     std::cout << camelCase(s) << std::endl;
     return 0;
+}
