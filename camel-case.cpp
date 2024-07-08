@@ -1,1 +1,33 @@
-std::string result = ""; bool firstWord = true; for (char c : s) { if (c == '-') { if (!firstWord) result += std::toupper(c); else firstWord = false; } else if (c == ' ') { if (!firstWord) result += std::toupper(c); else firstWord = false; } else { if (firstWord) result += std::toupper(c); // Check if this is the first word else result += std::tolower(c); firstWord = false; } } if (firstWord) result = std::string(1, std::toupper(s[0])) + std::string(1, std::tolower(s[1])); return result;
+```c++
+#include <string>
+#include <cctype>
+
+std::string camelCase(std::string s) {
+    std::string result = "";
+    bool firstWord = true;
+    
+    for (char c : s) {
+        if (c == '-') {
+            result += std::toupper(c);
+            firstWord = false;
+        } 
+        else if (c == ' ') {
+            if (!firstWord)
+                result += c;
+            firstWord = false;
+        } 
+        else {
+            if (firstWord)
+                result += std::toupper(c);  // Check if this is the first word
+            else
+                result += std::tolower(c);
+            firstWord = false;
+        }
+    }
+    
+    if (!firstWord) {  // Handle the last word separately
+        result[0] = std::tolower(result[0]);
+    }
+    
+    return result;
+}
