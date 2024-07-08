@@ -24,7 +24,12 @@ int main() {
     int nickles = cents / 5;
     cents %= 5;
     
-    int pennies = cents;
+    int pennies = cents; // move this line down
+    
+    while(cents >= 5) {
+        nickles++;
+        cents -= 5;
+    }
     
     cout << quarters << endl;
     cout << nickles << endl;
