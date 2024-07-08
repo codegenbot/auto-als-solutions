@@ -3,7 +3,7 @@
 #include <cmath>
 using namespace std;
 
-pair<vector<int>, vector<int>> cutVector(vector<int>& nums) {
+vector<pair<vector<int>, vector<int>>> cutVector(vector<int>& nums) {
     int minDiff = INT_MAX;
     int splitIndex = 0;
     
