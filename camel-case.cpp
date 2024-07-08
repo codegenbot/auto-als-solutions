@@ -1,10 +1,8 @@
-#include <string>
-#include <cctype>
-
+```cpp
 std::string camelCase(std::string s) {
     std::string result = "";
     bool firstWord = true;
-
+    
     for (char c : s) {
         if (c == '-') {
             result += std::toupper(c);
