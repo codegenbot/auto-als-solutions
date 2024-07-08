@@ -1,5 +1,5 @@
 ```
-def  bouncing_balls():
+def bouncing_balls():
     h0 = float(input())
     hf = float(input())
     bounciness_index = hf / h0
