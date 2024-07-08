@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 std::string camelCase(std::string s) {
@@ -26,8 +27,8 @@ std::string camelCase(std::string s) {
         }
     }
     
-    if (!s.empty() && !firstWord) {  // Handle the first word separately
-        result[0] = std::tolower(result[0]);
+    if (firstWord) {  // Handle the first word separately
+        result = std::string(1, std::toupper(s[0])) + std::tolower(s.substr(1));
     }
     
     return result;
