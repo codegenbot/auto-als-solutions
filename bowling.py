@@ -15,7 +15,7 @@ def bowling_score(frames):
             if 'X' in frame or str(sum([int(x) for x in frame.replace('-', '').replace('/', '')])) + '/' in frame:
                 score += 10
             else:
-                rolls = [int(x) for x in frame.replace('-', '').replace('/', '")]
+                rolls = [int(x) for x in frame.replace('-', '').replace('/', '')]
                 score += sum(rolls)
     return score
 
