@@ -1,9 +1,7 @@
 def basement(arr):
-    sum_so_far = 0
-    found_basement_index = -1
+    total = 0
     for i in range(len(arr)):
-        sum_so_far += arr[i]
-        if sum_so_far < 0:
-            found_basement_index = i + 1
-            break
-    return found_basement_index if found_basement_index != -1 else -1
+        total += arr[i]
+        while total < 0:
+            return i + 1
+    return -1
