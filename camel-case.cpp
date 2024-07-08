@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 
 std::string camelCase(std::string s) {
@@ -28,8 +27,7 @@ std::string camelCase(std::string s) {
     }
     
     if (firstWord) {  // Handle the first word separately
-        result = std::string(1, std::toupper(s[0])) + std::tolower(s.substr(1));
+        result = std::string(1, std::toupper(s[0])) + std::tolower(std::string(s.begin()+1, s.end()));
     }
     
     return result;
-}
