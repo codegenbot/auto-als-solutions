@@ -1,33 +1,23 @@
+```
 def bowling_score(frames):
     score = 0
-    roll_index = 0
-    for frame in range(1, 11):
-        if frames[roll_index] == "X":
-            score += 10 + get_next_two_frames(frames, roll_index)
-            roll_index += 3
-        elif frames[roll_index] == "/":
-            first_roll = int(frames[roll_index - 1])
-            second_roll = 10 - int(frames[roll_index + 1][0])
-            score += first_roll + second_roll
-            roll_index += 2
-        else:
-            if len(frames) > roll_index + 1 and frames[roll_index] + frames[roll_index + 1] == "10":
-                score += 10
-                roll_index += 2
-            else:
-                score += int(frames[roll_index]) + int(frames[roll_index + 1])
-                roll_index += 2
-
-    return score
-
-
-def get_next_two_frames(frames, index):
-    score = 0
-    for i in range(1, 3):
-        if frames[index] == "X":
+    for frame in frames.split('/'):
+        if len(frame) == 1:
             score += 10
-            break
-        else:
-            score += int(frames[index])
-        index += 1
+        elif len(frame) == 2:
+            first_roll = int(frame[0])
+            second_roll = int(frame[1])
+            if first_roll + second_roll == 10:
+                score += 10
+            else:
+                score += first_roll + second_roll
+        elif len(frame.replace('-', '').replace('/', '')) > 2:
+            if 'X' in frame or str(sum([int(x) for x in frame.replace('-', '').replace('/', '')])) + '/' in frame:
+                score += 10
+            else:
+                rolls = [int(x) for x in frame.replace('-', '').replace('/', '')]
+                score += sum(rolls)
     return score
+
+frames = "7/3/5/5/10/0/1/7/6/4"
+print(bowling_score(frames))
