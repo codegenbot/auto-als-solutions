@@ -24,14 +24,6 @@ def select_action(observations):
         observations[16] == 0 or observations[17] == 0
     ):  # RadialPulsePalpable or RadialPulseNonPalpable
         return 5  # ExamineCirculation
-
-    if observations[33] > 0 and observations[40] < 60:  # MeasuredMAP
-        return 27  # UseBloodPressureCuff
-    if observations[34] > 0 and observations[41] < 88:  # MeasuredSats
-        return 30  # UseNonRebreatherMask
-    if observations[35] > 0 and observations[42] < 8:  # MeasuredResps
-        return 29  # UseBagValveMask
-
     if observations[20] > 0 or observations[21] > 0:  # AVPU_U or AVPU_V
         return 6  # ExamineDisability
     if observations[24] > 0 or observations[25] > 0:  # PupilsPinpoint or PupilsNormal
@@ -40,6 +32,13 @@ def select_action(observations):
         observations[26] > 0 or observations[27] > 0
     ):  # ExposureRash or ExposurePeripherallyShutdown
         return 34  # TakeBloodForArtherialBloodGas
+
+    if observations[33] > 0 and observations[40] < 60:  # MeasuredMAP
+        return 27  # UseBloodPressureCuff
+    if observations[34] > 0 and observations[41] < 88:  # MeasuredSats
+        return 30  # UseNonRebreatherMask
+    if observations[35] > 0 and observations[42] < 8:  # MeasuredResps
+        return 29  # UseBagValveMask
 
     if (
         observations[3] > 0
