@@ -15,20 +15,21 @@ def main():
 
         # Check for critical conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(17)  # StartChestCompression for cardiac arrest
-            continue
+            print(48)  # Finish
+            return
 
         # ABCDE Assessment and Stabilization
         if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
             print(3)  # ExamineAirway
-        elif any(event_relevances[i] > 0 for i in [6, 7, 8]):  # Breathing issues
+        elif (
+            any(event_relevances[i] > 0 for i in [6, 7, 8])
+            or vital_signs_measurements[6] < 8
+        ):  # Breathing issues
             print(4)  # ExamineBreathing
         elif (
             vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88
         ):  # Circulation issues
             print(5)  # ExamineCirculation
-        elif vital_signs_measurements[6] < 8:  # Breathing issues (Resps)
-            print(4)  # ExamineBreathing
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
