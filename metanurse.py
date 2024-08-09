@@ -8,6 +8,8 @@ def parse_input():
 
 def main():
     steps = 0
+    airway_checked = breathing_checked = circulation_checked = False
+
     while steps < 350:
         observations = parse_input()
         event_relevances = observations[:33]
@@ -20,12 +22,21 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if any(event_relevance == 0 for event_relevance in event_relevances[:6]):
+        if not airway_checked and any(
+            event_relevance == 0 for event_relevance in event_relevances[:6]
+        ):
             print(3)  # ExamineAirway
-        elif any(event_relevance == 0 for event_relevance in event_relevances[6:15]):
+            airway_checked = True
+        elif not breathing_checked and any(
+            event_relevance == 0 for event_relevance in event_relevances[6:15]
+        ):
             print(4)  # ExamineBreathing
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
+            breathing_checked = True
+        elif not circulation_checked and (
+            vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60
+        ):
             print(5)  # ExamineCirculation
+            circulation_checked = True
         elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
             print(5)  # ExamineCirculation
         elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
