@@ -8,8 +8,7 @@ def parse_input():
 
 def main():
     steps = 0
-    stabilized = False
-    while steps < 350 and not stabilized:
+    while steps < 350:
         observations = parse_input()
         event_relevances = observations[:33]
         vital_signs_relevances = observations[33:40]
@@ -20,22 +19,11 @@ def main():
             print(48)  # Finish
             return
 
-        # Check if John is stabilized
-        if (
-            event_relevances[3] > 0
-            and vital_signs_measurements[5] >= 88  # AirwayClear
-            and vital_signs_measurements[6] >= 8  # Sats >= 88%
-            and vital_signs_measurements[4] >= 60  # Respiratory rate >= 8
-        ):  # MAP >= 60mmHg
-            stabilized = True
-            print(48)  # Finish
-            continue
-
         # ABCDE Assessment and Stabilization
         if vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(5)  # ExamineCirculation
+            print(27)  # UseBloodPressureCuff
         elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(4)  # ExamineBreathing
+            print(25)  # UseSatsProbe
         elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
             print(4)  # ExamineBreathing
         elif (
