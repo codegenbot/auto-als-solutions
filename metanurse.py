@@ -20,29 +20,19 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if (
-            event_relevances[3] == 0
-            or event_relevances[4] == 0
-            or event_relevances[5] == 0
-        ):
+        if vital_signs_measurements[5] < 88:
+            print(30)  # UseNonRebreatherMask
+        elif vital_signs_measurements[4] < 60:
+            print(15)  # GiveFluids
+        elif vital_signs_measurements[6] < 8:
+            print(29)  # UseBagValveMask
+        elif not all(event_relevances[3:6]):
             print(3)  # ExamineAirway
-        elif (
-            event_relevances[6] == 0
-            or event_relevances[7] == 0
-            or event_relevances[8] == 0
-        ):
+        elif not all(event_relevances[6:9]):
             print(4)  # ExamineBreathing
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
+        elif not all(event_relevances[16:19]):
             print(5)  # ExamineCirculation
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
-            print(4)  # ExamineBreathing
-        elif (
-            event_relevances[0] == 0
-            or event_relevances[1] == 0
-            or event_relevances[2] == 0
-        ):
+        elif not all(event_relevances[0:3]):
             print(8)  # ExamineResponse
         else:
             print(0)  # DoNothing
