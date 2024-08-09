@@ -20,22 +20,38 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if vital_signs_measurements[5] < 88:
-            print(30)  # UseNonRebreatherMask
-        elif vital_signs_measurements[4] < 60:
-            print(15)  # GiveFluids
-        elif vital_signs_measurements[6] < 8:
-            print(29)  # UseBagValveMask
-        elif not all(event_relevances[3:6]):
+        if any(event_relevances[i] == 0 for i in [3, 4, 5]):  # Airway issues
             print(3)  # ExamineAirway
-        elif not all(event_relevances[6:9]):
+        elif any(event_relevances[i] == 0 for i in [6, 7, 8]):  # Breathing issues
             print(4)  # ExamineBreathing
-        elif not all(event_relevances[16:19]):
+        elif (
+            vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60
+        ):  # Circulation issues (MAP)
             print(5)  # ExamineCirculation
-        elif not all(event_relevances[0:3]):
+        elif (
+            vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88
+        ):  # Circulation issues (Sats)
+            print(5)  # ExamineCirculation
+        elif (
+            vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8
+        ):  # Breathing issues (Resps)
+            print(4)  # ExamineBreathing
+        elif any(event_relevances[i] == 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
-            print(0)  # DoNothing
+            # Check for stabilization and take appropriate actions
+            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+                print(48)  # Finish if stabilized
+            else:
+                # Prioritize actions based on current status
+                if vital_signs_measurements[4] < 60:
+                    print(20)  # OpenCirculationDrawer
+                elif vital_signs_measurements[5] < 88:
+                    print(30)  # UseNonRebreatherMask
+                elif vital_signs_measurements[6] < 8:
+                    print(29)  # UseBagValveMask
+                else:
+                    print(0)  # DoNothing
 
         steps += 1
 
