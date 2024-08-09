@@ -45,23 +45,7 @@ def main():
         ):
             print(8)  # ExamineResponse
         else:
-            # Check for stabilization and take appropriate actions
-            if (
-                vital_signs_measurements[4] >= 60
-                and vital_signs_measurements[5] >= 88
-                and vital_signs_measurements[6] >= 8
-            ):
-                print(48)  # Finish if stabilized
-            else:
-                # Prioritize actions based on current status
-                if vital_signs_measurements[4] < 60:
-                    print(20)  # OpenCirculationDrawer
-                elif vital_signs_measurements[5] < 88:
-                    print(30)  # UseNonRebreatherMask
-                elif vital_signs_measurements[6] < 8:
-                    print(29)  # UseBagValveMask
-                else:
-                    print(0)  # DoNothing
+            print(0)  # DoNothing
 
         steps += 1
 
