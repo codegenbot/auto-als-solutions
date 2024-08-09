@@ -20,12 +20,12 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(27)  # UseBloodPressureCuff
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(25)  # UseSatsProbe
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
-            print(4)  # ExamineBreathing
+        if vital_signs_measurements[4] < 60:
+            print(15)  # GiveFluids
+        elif vital_signs_measurements[5] < 88:
+            print(29)  # UseBagValveMask
+        elif vital_signs_measurements[6] < 8:
+            print(29)  # UseBagValveMask
         elif (
             event_relevances[3] == 0
             and event_relevances[4] == 0
