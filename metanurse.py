@@ -6,43 +6,49 @@ def parse_observations(obs_str):
 
 
 def select_action(observations):
+    # Extract event relevance and vital signs measurements
     event_relevance = observations[:33]
     vital_signs_relevance = observations[33:40]
     vital_signs_measurements = observations[40:47]
 
+    # Check for critical conditions
     if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-        return 47
+        return 47  # Finish if in cardiac arrest
 
-    if max(event_relevance[:3]) > 0:
-        return 8
-    if max(event_relevance[3:7]) > 0:
-        return 3
-    if max(event_relevance[7:16]) > 0:
-        return 4
-    if max(event_relevance[16:24]) > 0:
-        return 5
-    if max(event_relevance[24:33]) > 0:
-        return 6
-    if max(event_relevance[33:]) > 0:
-        return 7
+    # Prioritize actions based on observations
+    if max(event_relevance[:3]) > 0:  # Response events
+        return 8  # ExamineResponse
+    if max(event_relevance[3:7]) > 0:  # Airway events
+        return 3  # ExamineAirway
+    if max(event_relevance[7:16]) > 0:  # Breathing events
+        return 4  # ExamineBreathing
+    if max(event_relevance[16:24]) > 0:  # Circulation events
+        return 5  # ExamineCirculation
+    if max(event_relevance[24:33]) > 0:  # Heart rhythm events
+        return 6  # ExamineDisability
+    if max(event_relevance[33:]) > 0:  # Exposure events
+        return 7  # ExamineExposure
 
-    if vital_signs_relevance[0] == 0:
-        return 27
-    if vital_signs_relevance[1] == 0:
-        return 25
-    if vital_signs_relevance[4] == 0:
-        return 27
-    if vital_signs_relevance[5] == 0:
-        return 25
+    # Check vital signs if not recently checked
+    if vital_signs_relevance[0] == 0:  # Heart rate not measured
+        return 27  # UseBloodPressureCuff
+    if vital_signs_relevance[1] == 0:  # Resp rate not measured
+        return 25  # UseSatsProbe
+    if vital_signs_relevance[4] == 0:  # MAP not measured
+        return 27  # UseBloodPressureCuff
+    if vital_signs_relevance[5] == 0:  # Sats not measured
+        return 25  # UseSatsProbe
 
-    if vital_signs_measurements[5] < 88:
-        return 30
-    if vital_signs_measurements[1] < 8:
-        return 29
-    if vital_signs_measurements[4] < 60:
-        return 15
+    # Stabilization actions based on vital signs
+    if vital_signs_measurements[5] < 88:  # Low oxygen saturation
+        return 30  # UseNonRebreatherMask
+    if vital_signs_measurements[1] < 8:  # Low respiratory rate
+        return 29  # UseBagValveMask
+    if vital_signs_measurements[4] < 60:  # Low mean arterial pressure
+        return 15  # GiveFluids
 
-    return 0
+    # Default action if no specific action is needed
+    return 0  # DoNothing
 
 
 def main():
@@ -51,7 +57,7 @@ def main():
         observations = input()
         action = select_action(parse_observations(observations))
         print(action)
-        if action == 48:
+        if action == 48:  # Finish
             break
         steps += 1
 
