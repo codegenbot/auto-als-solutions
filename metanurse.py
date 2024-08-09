@@ -32,6 +32,8 @@ def main():
             print(5)  # ExamineCirculation
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
+        elif any(event_relevances[i] > 0 for i in [34, 35, 36]):  # Exposure issues
+            print(7)  # ExamineExposure
         else:
             # Check for stabilization and take appropriate actions
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
