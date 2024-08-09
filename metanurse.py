@@ -26,11 +26,9 @@ def main():
             or event_relevances[5] == 0
         ):
             print(3)  # ExamineAirway
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
+        elif vital_signs_measurements[6] < 8 or vital_signs_measurements[5] < 88:
             print(4)  # ExamineBreathing
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
+        elif vital_signs_measurements[4] < 60:
             print(5)  # ExamineCirculation
         elif (
             event_relevances[0] == 0
