@@ -7,34 +7,34 @@ def parse_input():
 
 
 def select_action(observations):
-    if observations[2] > 0:  # ResponseNone
-        return 1  # CheckSignsOfLife
+    if (
+        observations[34] < 20 or observations[36] < 65
+    ):  # MeasuredMAP < 20 or MeasuredSats < 65
+        return 17  # StartChestCompression
     if observations[7] > 0 or observations[8] > 0:  # BreathingNone or BreathingSnoring
         return 29  # UseBagValveMask
     if observations[16] == 0:  # RadialPulseNonPalpable
-        return 17  # StartChestCompression
-
+        return 27  # UseBloodPressureCuff
+    if observations[34] > 0:  # MeasuredMAP
+        if observations[34] < 60:  # MAP below 60
+            return 15  # GiveFluids
+    if observations[36] > 0:  # MeasuredSats
+        if observations[36] < 88:  # Sats below 88
+            return 30  # UseNonRebreatherMask
+    if (
+        observations[3] > 0 and observations[34] >= 60 and observations[36] >= 88
+    ):  # AirwayClear, MAP >= 60, Sats >= 88
+        return 48  # Finish
+    if observations[2] > 0:  # ResponseNone
+        return 1  # CheckSignsOfLife
     if observations[3] == 0:  # AirwayClear
         return 3  # ExamineAirway
-    if observations[7] > 0 or observations[8] > 0:  # BreathingNone or BreathingSnoring
-        return 4  # ExamineBreathing
-    if observations[16] == 0:  # RadialPulseNonPalpable
+    if observations[16] == 0:  # RadialPulsePalpable
         return 5  # ExamineCirculation
     if observations[20] > 0 or observations[21] > 0:  # AVPU_U or AVPU_V
         return 6  # ExamineDisability
     if observations[26] == 0:  # ExposureRash
         return 7  # ExamineExposure
-
-    if observations[34] == 0:  # MeasuredMAP
-        return 27  # UseBloodPressureCuff
-    if observations[36] == 0:  # MeasuredSats
-        return 25  # UseSatsProbe
-
-    if observations[34 + 4] < 60:  # MAP < 60mmHg
-        return 15  # GiveFluids
-    if observations[34 + 6] < 88:  # Sats < 88%
-        return 30  # UseNonRebreatherMask
-
     return 0  # DoNothing
 
 
