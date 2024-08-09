@@ -20,48 +20,30 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if (
+        if vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
+            print(25)  # UseSatsProbe to check and potentially improve oxygen saturation
+        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
+            print(
+                27
+            )  # UseBloodPressureCuff to check and potentially improve mean arterial pressure
+        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
+            print(
+                4
+            )  # ExamineBreathing to assess and potentially improve respiratory rate
+        elif (
             event_relevances[3] == 0
             or event_relevances[4] == 0
             or event_relevances[5] == 0
         ):
-            print(3)  # ExamineAirway
-        elif (
-            event_relevances[6] == 0
-            or event_relevances[7] == 0
-            or event_relevances[8] == 0
-        ):
-            print(4)  # ExamineBreathing
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
-            print(4)  # ExamineBreathing
+            print(3)  # ExamineAirway to ensure clear airway
         elif (
             event_relevances[0] == 0
             or event_relevances[1] == 0
             or event_relevances[2] == 0
         ):
-            print(8)  # ExamineResponse
+            print(8)  # ExamineResponse to assess consciousness level
         else:
-            # Check for stabilization and take appropriate actions
-            if (
-                vital_signs_measurements[4] >= 60
-                and vital_signs_measurements[5] >= 88
-                and vital_signs_measurements[6] >= 8
-            ):
-                print(48)  # Finish if stabilized
-            else:
-                # Prioritize actions based on current status
-                if vital_signs_measurements[4] < 60:
-                    print(20)  # OpenCirculationDrawer
-                elif vital_signs_measurements[5] < 88:
-                    print(30)  # UseNonRebreatherMask
-                elif vital_signs_measurements[6] < 8:
-                    print(29)  # UseBagValveMask
-                else:
-                    print(0)  # DoNothing
+            print(0)  # DoNothing if no immediate action is required
 
         steps += 1
 
