@@ -1,48 +1,53 @@
+import sys
 import math
 
 
-def parse_observations(obs_str):
-    return list(map(float, obs_str.split()))
+def parse_input():
+    return list(map(float, sys.stdin.readline().strip().split()))
 
 
 def select_action(observations):
-    event_relevance = observations[:33]
-    vital_signs_relevance = observations[33:40]
-    vital_signs_measurements = observations[40:47]
-
-    if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-        return 47  # Finish if in cardiac arrest
-
-    if event_relevance[7] > 0:  # BreathingNone
+    if observations[2] > 0:  # ResponseNone
+        return 1  # CheckSignsOfLife
+    if observations[7] > 0 or observations[8] > 0:  # BreathingNone or BreathingSnoring
         return 29  # UseBagValveMask
+    if observations[16] == 0:  # RadialPulseNonPalpable
+        return 17  # StartChestCompression
 
-    if vital_signs_measurements[5] < 88:  # Low Sats
+    if observations[3] == 0:  # AirwayClear
+        return 3  # ExamineAirway
+    if observations[7] > 0 or observations[8] > 0:  # BreathingNone or BreathingSnoring
+        return 4  # ExamineBreathing
+    if observations[16] == 0:  # RadialPulseNonPalpable
+        return 5  # ExamineCirculation
+    if observations[20] > 0 or observations[21] > 0:  # AVPU_U or AVPU_V
+        return 6  # ExamineDisability
+    if observations[26] == 0:  # ExposureRash
+        return 7  # ExamineExposure
+
+    if observations[34] == 0:  # MeasuredMAP
+        return 27  # UseBloodPressureCuff
+    if observations[36] == 0:  # MeasuredSats
+        return 25  # UseSatsProbe
+
+    if observations[34 + 4] < 60:  # MAP < 60mmHg
+        return 15  # GiveFluids
+    if observations[34 + 6] < 88:  # Sats < 88%
         return 30  # UseNonRebreatherMask
-
-    if vital_signs_measurements[4] < 60:  # Low MAP
-        return 27  # UseBloodPressureCuff
-
-    if vital_signs_relevance[1] == 0:  # Resp rate not measured
-        return 25  # UseSatsProbe
-
-    if vital_signs_relevance[4] == 0:  # MAP not measured
-        return 27  # UseBloodPressureCuff
-
-    if vital_signs_relevance[5] == 0:  # Sats not measured
-        return 25  # UseSatsProbe
 
     return 0  # DoNothing
 
 
 def main():
-    steps = 0
-    while steps < 350:
-        observations = input()
-        action = select_action(parse_observations(observations))
+    step = 0
+    while step < 350:
+        observations = parse_input()
+        action = select_action(observations)
         print(action)
+        sys.stdout.flush()
+        step += 1
         if action == 48:  # Finish
             break
-        steps += 1
 
 
 if __name__ == "__main__":
