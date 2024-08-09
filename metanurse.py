@@ -20,22 +20,26 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(25)  # UseSatsProbe to check and possibly improve oxygen saturation
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(
-                27
-            )  # UseBloodPressureCuff to check and possibly improve mean arterial pressure
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
-            print(4)  # ExamineBreathing to assess and possibly improve respiratory rate
-        elif (
+        if (
             event_relevances[3] == 0
             or event_relevances[4] == 0
             or event_relevances[5] == 0
         ):
-            print(3)  # ExamineAirway to ensure clear airway
+            print(3)  # ExamineAirway
+        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
+            print(4)  # ExamineBreathing
+        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
+            print(5)  # ExamineCirculation
+        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
+            print(5)  # ExamineCirculation
+        elif (
+            event_relevances[0] == 0
+            or event_relevances[1] == 0
+            or event_relevances[2] == 0
+        ):
+            print(8)  # ExamineResponse
         else:
-            print(0)  # DoNothing if no immediate action is required
+            print(0)  # DoNothing
 
         steps += 1
 
