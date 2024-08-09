@@ -19,18 +19,17 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if any(event_relevances[i] == 0 for i in [3, 4, 5]):  # Airway issues
+        if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
             print(3)  # ExamineAirway
-        elif (
-            any(event_relevances[i] == 0 for i in [6, 7, 8])
-            or vital_signs_measurements[6] < 8
+        elif any(event_relevances[i] > 0 for i in [6, 7, 8]) or (
+            vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
         ):  # Breathing issues
             print(4)  # ExamineBreathing
-        elif (
-            vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88
+        elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
+            vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
         ):  # Circulation issues
             print(5)  # ExamineCirculation
-        elif any(event_relevances[i] == 0 for i in range(3)):  # Response issues
+        elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
             # Check for stabilization and take appropriate actions
