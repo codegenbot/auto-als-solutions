@@ -14,8 +14,8 @@ def main():
         vital_signs_measurements = observations[40:]
 
         # Check for critical conditions
-        if (vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 65) or (
-            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 20
+        if (vital_signs_relevances[5] != 0 and vital_signs_measurements[5] < 65) or (
+            vital_signs_relevances[4] != 0 and vital_signs_measurements[4] < 20
         ):
             print(48)  # Finish
             return
@@ -25,12 +25,12 @@ def main():
             print(3)  # ExamineAirway
         elif any(event_relevances[i] == 0 for i in [6, 7, 8]):  # Breathing issues
             print(4)  # ExamineBreathing
-        elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
-            vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
+        elif (vital_signs_relevances[4] != 0 and vital_signs_measurements[4] < 60) or (
+            vital_signs_relevances[5] != 0 and vital_signs_measurements[5] < 88
         ):  # Circulation issues
             print(5)  # ExamineCirculation
         elif (
-            vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
+            vital_signs_relevances[6] != 0 and vital_signs_measurements[6] < 8
         ):  # Breathing issues (Resps)
             print(4)  # ExamineBreathing
         elif any(event_relevances[i] == 0 for i in range(3)):  # Response issues
@@ -38,18 +38,20 @@ def main():
         else:
             # Check for stabilization and take appropriate actions
             if all(
-                vital_signs_relevances[i] > 0
+                vital_signs_relevances[i] != 0
                 and vital_signs_measurements[i] >= [60, 88, 8][i]
                 for i in range(3)
             ):
                 print(48)  # Finish if stabilized
             else:
                 # Prioritize actions based on current status
-                if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+                if vital_signs_relevances[4] != 0 and vital_signs_measurements[4] < 60:
                     print(20)  # OpenCirculationDrawer
-                elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+                elif (
+                    vital_signs_relevances[5] != 0 and vital_signs_measurements[5] < 88
+                ):
                     print(30)  # UseNonRebreatherMask
-                elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+                elif vital_signs_relevances[6] != 0 and vital_signs_measurements[6] < 8:
                     print(29)  # UseBagValveMask
                 else:
                     print(0)  # DoNothing
