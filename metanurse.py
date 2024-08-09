@@ -1,5 +1,4 @@
 import sys
-import math
 
 
 def parse_input():
@@ -8,8 +7,6 @@ def parse_input():
 
 def main():
     steps = 0
-    airway_checked = breathing_checked = circulation_checked = False
-
     while steps < 350:
         observations = parse_input()
         event_relevances = observations[:33]
@@ -22,34 +19,21 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if not airway_checked and any(
-            event_relevance == 0 for event_relevance in event_relevances[:6]
-        ):
+        if any(event_relevances[i] == 0 for i in [3, 4, 5]):  # Airway issues
             print(3)  # ExamineAirway
-            airway_checked = True
-        elif not breathing_checked and any(
-            event_relevance == 0 for event_relevance in event_relevances[6:15]
-        ):
+        elif any(event_relevances[i] == 0 for i in [6, 7, 8]):  # Breathing issues
             print(4)  # ExamineBreathing
-            breathing_checked = True
-        elif not circulation_checked and (
-            vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60
-        ):
+        elif vital_signs_measurements[4] < 60:  # Circulation issues (MAP)
             print(5)  # ExamineCirculation
-            circulation_checked = True
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
+        elif vital_signs_measurements[5] < 88:  # Circulation issues (Sats)
             print(5)  # ExamineCirculation
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
+        elif vital_signs_measurements[6] < 8:  # Breathing issues (Resps)
             print(4)  # ExamineBreathing
-        elif any(event_relevance == 0 for event_relevance in event_relevances[15:22]):
+        elif any(event_relevances[i] == 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
             # Check for stabilization and take appropriate actions
-            if (
-                vital_signs_measurements[4] >= 60
-                and vital_signs_measurements[5] >= 88
-                and vital_signs_measurements[6] >= 8
-            ):
+            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)  # Finish if stabilized
             else:
                 # Prioritize actions based on current status
