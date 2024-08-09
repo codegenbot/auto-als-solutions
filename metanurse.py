@@ -6,48 +6,37 @@ def parse_input():
     return list(map(float, sys.stdin.readline().strip().split()))
 
 
+def select_action(observations):
+    # Prioritize actions based on observations
+    if observations[2] > 0:  # ResponseNone
+        return 1  # CheckSignsOfLife
+    if observations[3] == 0:  # AirwayClear
+        return 3  # ExamineAirway
+    if observations[7] > 0 or observations[8] > 0:  # BreathingNone or BreathingSnoring
+        return 29  # UseBagValveMask
+    if observations[16] == 0:  # RadialPulsePalpable
+        return 5  # ExamineCirculation
+    if observations[20] > 0 or observations[21] > 0:  # AVPU_U or AVPU_V
+        return 6  # ExamineDisability
+    if observations[26] == 0:  # ExposureRash
+        return 7  # ExamineExposure
+    if observations[34] == 0:  # MeasuredMAP
+        return 27  # UseBloodPressureCuff
+    if observations[36] == 0:  # MeasuredSats
+        return 25  # UseSatsProbe
+    return 0  # DoNothing
+
+
 def main():
-    steps = 0
-    while steps < 350:
+    step = 0
+    while step < 350:
         observations = parse_input()
-        event_relevances = observations[:33]
-        vital_signs_relevances = observations[33:40]
-        vital_signs_measurements = observations[40:]
-
-        # Check for critical conditions
-        if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(48)  # Finish
-            return
-
-        # ABCDE Assessment and Stabilization
-        if (
-            event_relevances[0] == 0
-            and event_relevances[1] == 0
-            and event_relevances[2] == 0
-        ):
-            print(8)  # ExamineResponse
-        elif (
-            event_relevances[3] == 0
-            and event_relevances[4] == 0
-            and event_relevances[5] == 0
-        ):
-            print(3)  # ExamineAirway
-        elif (
-            event_relevances[6] == 0
-            and event_relevances[7] == 0
-            and event_relevances[8] == 0
-        ):
-            print(4)  # ExamineBreathing
-        elif vital_signs_relevances[4] == 0 or vital_signs_measurements[4] < 60:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[5] == 0 or vital_signs_measurements[5] < 88:
-            print(5)  # ExamineCirculation
-        elif vital_signs_relevances[6] == 0 or vital_signs_measurements[6] < 8:
-            print(4)  # ExamineBreathing
-        else:
-            print(0)  # DoNothing
-
-        steps += 1
+        action = select_action(observations)
+        print(action)
+        sys.stdout.flush()
+        step += 1
+        if action == 48:  # Finish
+            break
 
 
 if __name__ == "__main__":
