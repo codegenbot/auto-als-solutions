@@ -33,19 +33,20 @@ def main():
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
-            # Check for stabilization and take appropriate actions
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)  # Finish if stabilized
-            else:
-                # Prioritize actions based on current status
-                if vital_signs_measurements[4] < 60:
-                    print(20)  # OpenCirculationDrawer
-                elif vital_signs_measurements[5] < 88:
-                    print(30)  # UseNonRebreatherMask
-                elif vital_signs_measurements[6] < 8:
-                    print(29)  # UseBagValveMask
-                else:
-                    print(0)  # DoNothing
+            # Exposure Assessment
+            print(7)  # ExamineExposure
+
+        # Stabilization Actions
+        if vital_signs_measurements[4] < 60:
+            print(20)  # OpenCirculationDrawer
+        elif vital_signs_measurements[5] < 88:
+            print(30)  # UseNonRebreatherMask
+        elif vital_signs_measurements[6] < 8:
+            print(29)  # UseBagValveMask
+        elif all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+            print(48)  # Finish if stabilized
+        else:
+            print(0)  # DoNothing
 
         steps += 1
 
