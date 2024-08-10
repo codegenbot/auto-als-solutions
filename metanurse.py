@@ -17,40 +17,30 @@ def main():
             print(48)  # Finish due to cardiac arrest
             return
 
-        # Airway assessment
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # Perform Head-tilt chin-lift
-            continue
-
-        # Breathing assessment
-        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)  # Use non-rebreather mask
-            continue
-        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-            print(29)  # Use bag valve mask
-            continue
-
-        # Circulation assessment
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
             continue
 
-        # Disability assessment
-        if not any(event_relevances[i] > 0 for i in range(3)):
+        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+            print(30)  # Use non-rebreather mask
+            continue
+
+        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+            print(29)  # Use bag valve mask
+            continue
+
+        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+            print(36)  # Head-tilt chin-lift
+        elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # Check response
-            continue
-
-        # Exposure assessment
-        if not any(event_relevances[i] > 0 for i in range(26, 33)):
+        elif not any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # Examine exposure
-            continue
+        else:
+            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+                print(48)  # Finish if stabilized
+            else:
+                print(0)  # Do nothing if unsure
 
-        # Check if stabilized
-        if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-            print(48)  # Finish if stabilized
-            return
-
-        print(0)  # Do nothing if unsure
         steps += 1
 
 
