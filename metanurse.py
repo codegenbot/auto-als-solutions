@@ -13,14 +13,14 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
-        # Immediate critical interventions
+        # Check for cardiac arrest conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
             print(48)  # Finish due to cardiac arrest
             return
 
         # Airway assessment and intervention
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # Head-tilt chin-lift
+            print(36)  # Perform Head-tilt chin-lift
         # Breathing assessment and intervention
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # Use non-rebreather mask
@@ -34,7 +34,7 @@ def main():
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # Examine exposure
         else:
-            # Check for stabilization
+            # Check if stabilized
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)  # Finish if stabilized
             else:
