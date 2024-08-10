@@ -24,14 +24,9 @@ def main():
         # Breathing assessment and intervention
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # Use non-rebreather mask
-        # Circulation assessment and intervention for hypotension
+        # Circulation assessment and intervention
         elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
-        # Check for tachyarrhythmia and indication for cardioversion
-        elif (
-            vital_signs_relevances[0] > 0 and vital_signs_measurements[0] > 100
-        ):  # Assuming heart rate is at index 0
-            print(40)  # Turn on defibrillator for possible cardioversion
         # Disability assessment
         elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # Check response
