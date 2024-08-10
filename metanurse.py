@@ -13,13 +13,11 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
-        # Check for cardiac arrest conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
             print(17)  # StartChestCompression
             steps += 1
             continue
 
-        # ABCDE Assessment and Stabilization
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)  # PerformHeadTiltChinLift
         elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
