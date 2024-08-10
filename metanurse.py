@@ -18,22 +18,22 @@ def main():
             return
 
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)
+            print(36)  # PerformHeadTiltChinLift to clear airway
         elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-            print(29)
+            print(29)  # UseBagValveMask for breathing support
         elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-            print(20)
+            print(20)  # OpenCirculationDrawer for circulation support
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask for oxygen saturation
         elif not any(event_relevances[i] > 0 for i in range(3)):
-            print(8)
+            print(8)  # ExamineResponse for disability assessment
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
-            print(7)
+            print(7)  # ExamineExposure for exposure assessment
         else:
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)
+                print(48)  # Finish if stabilized
             else:
-                print(0)
+                print(0)  # DoNothing as a fallback
 
         steps += 1
 
