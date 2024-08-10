@@ -14,32 +14,38 @@ def main():
         vital_signs_measurements = observations[40:]
 
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(48)
+            print(48)  # Finish due to cardiac arrest
             return
 
-        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-            print(20)
-            continue
-
-        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)
-            continue
-
-        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-            print(29)
-            continue
-
+        # A - Airway
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)
-        elif not any(event_relevances[i] > 0 for i in range(3)):
-            print(8)
-        elif not any(event_relevances[i] > 0 for i in range(26, 33)):
-            print(7)
-        else:
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)
-            else:
-                print(0)
+            print(36)  # PerformHeadTiltChinLift
+            continue
+
+        # B - Breathing
+        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        # C - Circulation
+        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+            print(20)  # OpenCirculationDrawer
+            continue
+
+        # D - Disability
+        if not any(event_relevances[i] > 0 for i in range(26, 33)):
+            print(7)  # ExamineExposure
+            continue
+
+        # E - Exposure
+        if not any(event_relevances[i] > 0 for i in range(3)):
+            print(8)  # ExamineResponse
+            continue
+
+        # Check if stabilized
+        if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+            print(48)  # Finish
+            return
 
         steps += 1
 
