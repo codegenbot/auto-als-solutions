@@ -20,7 +20,7 @@ def main():
 
         # ABCDE Assessment and Stabilization
         # Airway
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+        if any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(3)  # ExamineAirway
         # Breathing
         elif vital_signs_measurements[6] < 8:
