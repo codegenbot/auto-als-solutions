@@ -18,29 +18,34 @@ def main():
             print(48)  # Finish
             return
 
-        # Actively seek vital signs if not recently measured
-        if vital_signs_relevances[4] == 0:  # MeasuredMAP
-            print(27)  # UseBloodPressureCuff
-        elif vital_signs_relevances[5] == 0:  # MeasuredSats
-            print(25)  # UseSatsProbe
-        elif vital_signs_relevances[6] == 0:  # MeasuredResps
+        # ABCDE Assessment and Stabilization
+        if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
+            print(3)  # ExamineAirway
+        elif (
+            any(event_relevances[i] > 0 for i in [6, 7, 8])
+            or vital_signs_measurements[6] < 8
+        ):  # Breathing issues
             print(4)  # ExamineBreathing
+        elif (
+            vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88
+        ):  # Circulation issues
+            print(5)  # ExamineCirculation
+        elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
+            print(8)  # ExamineResponse
         else:
-            # ABCDE Assessment and Stabilization
-            if not any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway clear
-                if vital_signs_measurements[6] < 8:  # Breathing issues
-                    print(29)  # UseBagValveMask
-                elif (
-                    vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88
-                ):  # Circulation issues
-                    if vital_signs_measurements[4] < 60:
-                        print(20)  # OpenCirculationDrawer
-                    else:
-                        print(30)  # UseNonRebreatherMask
-                else:
-                    print(48)  # Finish if stabilized
+            # Check for stabilization and take appropriate actions
+            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+                print(48)  # Finish if stabilized
             else:
-                print(3)  # ExamineAirway
+                # Prioritize actions based on current status
+                if vital_signs_measurements[4] < 60:
+                    print(20)  # OpenCirculationDrawer
+                elif vital_signs_measurements[5] < 88:
+                    print(30)  # UseNonRebreatherMask
+                elif vital_signs_measurements[6] < 8:
+                    print(29)  # UseBagValveMask
+                else:
+                    print(7)  # ExamineExposure
 
         steps += 1
 
