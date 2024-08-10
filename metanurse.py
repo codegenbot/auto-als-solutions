@@ -20,17 +20,17 @@ def main():
 
         # ABCDE Assessment and Stabilization
         if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
-            print(36)  # PerformHeadTiltChinLift or 37 PerformJawThrust
+            print(3)  # ExamineAirway
         elif any(event_relevances[i] > 0 for i in [6, 7, 8]) or (
             vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
         ):  # Breathing issues
-            print(29)  # UseBagValveMask or 30 UseNonRebreatherMask
+            print(4)  # ExamineBreathing
         elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
             vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
         ):  # Circulation issues
-            print(20)  # OpenCirculationDrawer or 16 ViewMonitor
+            print(5)  # ExamineCirculation
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
-            print(8)  # ExamineResponse or 6 ExamineDisability
+            print(8)  # ExamineResponse
         elif any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
             print(7)  # ExamineExposure
         else:
