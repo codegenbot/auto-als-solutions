@@ -19,19 +19,20 @@ def main():
             return
 
         # ABCDE Assessment and Stabilization
-        if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
+        # Airway
+        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(3)  # ExamineAirway
-        elif any(event_relevances[i] > 0 for i in [6, 7, 8]) or (
-            vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
-        ):  # Breathing issues
+        # Breathing
+        elif vital_signs_measurements[6] < 8:
             print(4)  # ExamineBreathing
-        elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
-            vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
-        ):  # Circulation issues
+        # Circulation
+        elif vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88:
             print(5)  # ExamineCirculation
-        elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
+        # Disability
+        elif any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # ExamineResponse
-        elif any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
+        # Exposure
+        elif any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # ExamineExposure
         else:
             # Check for stabilization and take appropriate actions
@@ -39,11 +40,11 @@ def main():
                 print(48)  # Finish if stabilized
             else:
                 # Prioritize actions based on current status
-                if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+                if vital_signs_measurements[4] < 60:
                     print(20)  # OpenCirculationDrawer
-                elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+                elif vital_signs_measurements[5] < 88:
                     print(30)  # UseNonRebreatherMask
-                elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+                elif vital_signs_measurements[6] < 8:
                     print(29)  # UseBagValveMask
                 else:
                     print(0)  # DoNothing
