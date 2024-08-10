@@ -25,10 +25,6 @@ def main():
             print(20)
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)
-        elif not any(event_relevances[i] > 0 for i in range(3)):
-            print(8)
-        elif not any(event_relevances[i] > 0 for i in range(26, 33)):
-            print(7)
         else:
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)
