@@ -14,38 +14,53 @@ def main():
         vital_signs_measurements = observations[40:]
 
         # Check for cardiac arrest conditions
-        if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
+        if (vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 65) or (
+            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 20
+        ):
             print(48)  # Finish due to cardiac arrest
             return
 
-        # Check and address airway issues
+        # Airway assessment
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # Perform head-tilt chin-lift
+            print(36)  # Perform Head-tilt chin-lift
             continue
 
-        # Check and address breathing issues
+        # Breathing assessment
+        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+            print(30)  # Use non-rebreather mask
+            continue
         if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
             print(29)  # Use bag valve mask
             continue
-        elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)  # Use non-rebreather mask
-            continue
 
-        # Check and address circulation issues
+        # Circulation assessment
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
             continue
+        if any(event_relevances[i] > 0 for i in range(30, 33)):  # Check for arrhythmias
+            print(16)  # View monitor
+            continue
 
-        # Check for response if no specific issues detected
+        # Disability assessment
         if not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # Check response
-        else:
-            # Finish if stabilized according to the criteria
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)  # Finish if stabilized
-            else:
-                print(0)  # Do nothing if unsure
+            continue
 
+        # Exposure assessment
+        if not any(event_relevances[i] > 0 for i in range(26, 33)):
+            print(7)  # Examine exposure
+            continue
+
+        # Check if stabilized
+        if all(
+            vital_signs_relevances[i] > 0
+            and vital_signs_measurements[i] >= [60, 88, 8][i]
+            for i in range(3)
+        ):
+            print(48)  # Finish if stabilized
+            return
+
+        print(0)  # Do nothing if unsure
         steps += 1
 
 
