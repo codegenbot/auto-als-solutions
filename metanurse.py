@@ -13,34 +13,48 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
+        # Check for cardiac arrest
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(48)
+            print(17)  # StartChestCompression
+            continue
+
+        # Check and address low MAP
+        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+            print(20)  # OpenCirculationDrawer
+            continue
+
+        # Check and address low sats
+        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        # Check and address low respiratory rate
+        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        # Examine airway if not examined
+        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+            print(36)  # PerformHeadTiltChinLift
+            continue
+
+        # Examine response if not examined
+        if not any(event_relevances[i] > 0 for i in range(3)):
+            print(8)  # ExamineResponse
+            continue
+
+        # Examine exposure if not examined
+        if not any(event_relevances[i] > 0 for i in range(26, 33)):
+            print(7)  # ExamineExposure
+            continue
+
+        # Finish if stabilized
+        if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+            print(48)  # Finish
             return
 
-        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-            print(20)
-            continue
-
-        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)
-            continue
-
-        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-            print(29)
-            continue
-
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)
-        elif not any(event_relevances[i] > 0 for i in range(3)):
-            print(8)
-        elif not any(event_relevances[i] > 0 for i in range(26, 33)):
-            print(7)
-        else:
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)
-            else:
-                print(0)
-
+        # Default action
+        print(0)  # DoNothing
         steps += 1
 
 
