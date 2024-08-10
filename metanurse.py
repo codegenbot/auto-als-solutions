@@ -7,6 +7,10 @@ def parse_input():
 
 def main():
     steps = 0
+    checked_airway = (
+        checked_breathing
+    ) = checked_circulation = checked_disability = False
+
     while steps < 350:
         observations = parse_input()
         event_relevances = observations[:33]
@@ -18,36 +22,43 @@ def main():
             return
 
         # A - Airway
-        if any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # PerformHeadTiltChinLift
+        if not checked_airway:
+            if event_relevances[3] == 0:  # AirwayClear not observed
+                print(36)  # PerformHeadTiltChinLift
+            else:
+                for i in [4, 5]:  # AirwayVomit, AirwayBlood
+                    if event_relevances[i] > 0:
+                        print(31)  # UseYankeurSucionCatheter
+                        break
+            checked_airway = True
             steps += 1
             continue
 
         # B - Breathing
-        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-            print(29)  # UseBagValveMask
-            steps += 1
-            continue
-        elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)  # UseNonRebreatherMask
+        if not checked_breathing:
+            if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+                print(29)  # UseBagValveMask
+            elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+                print(30)  # UseNonRebreatherMask
+            checked_breathing = True
             steps += 1
             continue
 
         # C - Circulation
-        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-            print(20)  # OpenCirculationDrawer
+        if not checked_circulation:
+            if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+                print(20)  # OpenCirculationDrawer
+            checked_circulation = True
             steps += 1
             continue
 
         # D - Disability
-        if any(event_relevances[i] > 0 for i in [21, 22, 23]):
-            print(6)  # ExamineDisability
-            steps += 1
-            continue
-
-        # E - Exposure
-        if any(event_relevances[i] > 0 for i in [24, 25, 26]):
-            print(7)  # ExamineExposure
+        if not checked_disability:
+            if (
+                vital_signs_relevances[2] > 0 and vital_signs_measurements[2] < 4
+            ):  # Hypoglycemia
+                print(15)  # GiveFluids
+            checked_disability = True
             steps += 1
             continue
 
