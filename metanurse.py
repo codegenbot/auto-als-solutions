@@ -19,14 +19,14 @@ def main():
             return
 
         # ABCDE Assessment and Actions
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # PerformHeadTiltChinLift
-        elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # UseNonRebreatherMask
         elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
             print(29)  # UseBagValveMask
         elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # OpenCirculationDrawer
+        elif not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+            print(36)  # PerformHeadTiltChinLift
         elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # ExamineResponse
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
