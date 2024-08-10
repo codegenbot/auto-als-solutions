@@ -14,7 +14,9 @@ def main():
         vital_signs_measurements = observations[40:]
 
         # Check for critical conditions
-        if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
+        if (vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 65) or (
+            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 20
+        ):
             print(48)  # Finish
             return
 
@@ -38,7 +40,11 @@ def main():
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
             print(7)  # ExamineExposure
         else:
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+            if all(
+                vital_signs_relevances[i] > 0
+                and vital_signs_measurements[i] >= [60, 88, 8][i]
+                for i in range(3)
+            ):
                 print(48)  # Finish if stabilized
             else:
                 print(0)  # DoNothing
