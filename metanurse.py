@@ -18,23 +18,28 @@ def main():
             steps += 1
             continue
 
+        # Airway assessment and management
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)  # PerformHeadTiltChinLift
+        # Breathing assessment and management
         elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
             print(29)  # UseBagValveMask
+        # Circulation assessment and management
         elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # OpenCirculationDrawer
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # UseNonRebreatherMask
+        # Disability assessment
         elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # ExamineResponse
+        # Exposure assessment
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # ExamineExposure
         else:
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
-                print(48)  # Finish
+                print(48)  # Finish if stabilized
             else:
-                print(0)  # DoNothing
+                print(0)  # DoNothing as a fallback
 
         steps += 1
 
