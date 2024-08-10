@@ -13,6 +13,7 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
+        # Critical conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
             print(48)  # Finish due to cardiac arrest
             return
