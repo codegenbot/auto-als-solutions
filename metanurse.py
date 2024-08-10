@@ -13,10 +13,12 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
+        # Check for immediate life-threatening conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
             print(48)  # Finish due to cardiac arrest
             return
 
+        # Prioritize stabilizing MAP, Sats, and Respiratory Rate
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
             continue
@@ -29,6 +31,7 @@ def main():
             print(29)  # Use bag valve mask
             continue
 
+        # Check and act on airway, breathing, and circulation
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)  # Head-tilt chin-lift
         elif not any(event_relevances[i] > 0 for i in range(3)):
@@ -36,6 +39,7 @@ def main():
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # Examine exposure
         else:
+            # Check if John is stabilized
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)  # Finish if stabilized
             else:
