@@ -10,6 +10,7 @@ def main():
     while steps < 350:
         observations = parse_input()
         event_relevances = observations[:33]
+        vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
         # Check for critical conditions
