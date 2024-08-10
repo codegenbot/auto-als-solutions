@@ -45,7 +45,7 @@ def main():
                 elif vital_signs_measurements[6] < 8:
                     print(29)  # UseBagValveMask
                 else:
-                    print(7)  # ExamineExposure
+                    print(0)  # DoNothing
 
         steps += 1
 
