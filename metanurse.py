@@ -15,7 +15,7 @@ def main():
 
         # Check for critical conditions
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(17)  # StartChestCompression for cardiac arrest
+            print(48)  # Finish
             return
 
         # ABCDE Assessment and Stabilization
