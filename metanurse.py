@@ -19,17 +19,11 @@ def main():
 
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)
-            continue
-
-        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+        elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)
-            continue
-
-        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+        elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
             print(29)
-            continue
-
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+        elif not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)
         elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)
