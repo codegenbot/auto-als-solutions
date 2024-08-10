@@ -31,8 +31,12 @@ def main():
             print(20)  # OpenCirculationDrawer
         elif (
             vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
-        ):  # Low sats
+        ):  # Low oxygen saturation
             print(30)  # UseNonRebreatherMask
+        elif not any(event_relevances[i] > 0 for i in range(3)):  # Response issues
+            print(8)  # ExamineResponse or 6 ExamineDisability
+        elif not any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
+            print(7)  # ExamineExposure
         else:
             # Check for stabilization and take appropriate actions
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
