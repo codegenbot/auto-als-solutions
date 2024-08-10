@@ -33,6 +33,7 @@ def main():
         else:
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)
+                return
             else:
                 print(0)
 
