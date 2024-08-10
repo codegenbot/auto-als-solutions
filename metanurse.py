@@ -18,20 +18,25 @@ def main():
             print(48)  # Finish
             return
 
+        # Ensure recent observations
+        if vital_signs_relevances[4] == 0:  # MAP not measured
+            print(27)  # UseBloodPressureCuff
+            continue
+        if vital_signs_relevances[6] == 0:  # Respiratory rate not measured
+            print(16)  # ViewMonitor
+            continue
+        if vital_signs_relevances[5] == 0:  # Sats not measured
+            print(25)  # UseSatsProbe
+            continue
+
         # ABCDE Assessment and Stabilization
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway clear
             print(36)  # PerformHeadTiltChinLift or 37 PerformJawThrust
-        elif (
-            vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
-        ):  # Breathing insufficient
+        elif vital_signs_measurements[6] < 8:  # Breathing insufficient
             print(29)  # UseBagValveMask or 30 UseNonRebreatherMask
-        elif (
-            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60
-        ):  # Circulation insufficient (MAP)
+        elif vital_signs_measurements[4] < 60:  # Circulation insufficient (MAP)
             print(20)  # OpenCirculationDrawer or 16 ViewMonitor
-        elif (
-            vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
-        ):  # Circulation insufficient (Sats)
+        elif vital_signs_measurements[5] < 88:  # Circulation insufficient (Sats)
             print(30)  # UseNonRebreatherMask
         elif not any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse or 6 ExamineDisability
