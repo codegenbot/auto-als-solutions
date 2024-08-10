@@ -19,7 +19,7 @@ def main():
 
         # Airway assessment and intervention
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
-            print(36)  # Perform Head-tilt chin-lift
+            print(36)  # Head-tilt chin-lift
         # Breathing assessment and intervention
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # Use non-rebreather mask
