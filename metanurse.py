@@ -21,18 +21,12 @@ def main():
         # ABCDE Assessment and Stabilization
         if any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway issues
             print(3)  # ExamineAirway
-        elif (
-            vital_signs_measurements[6] < 8 or vital_signs_measurements[5] < 88
-        ):  # Breathing issues
+        elif vital_signs_measurements[6] < 8:  # Breathing issues
             print(4)  # ExamineBreathing
-            if vital_signs_measurements[6] < 8:
-                print(29)  # UseBagValveMask
-            if vital_signs_measurements[5] < 88:
-                print(30)  # UseNonRebreatherMask
-        elif vital_signs_measurements[4] < 60:  # Circulation issues
+        elif (
+            vital_signs_measurements[4] < 60 or vital_signs_measurements[5] < 88
+        ):  # Circulation issues
             print(5)  # ExamineCirculation
-            print(20)  # OpenCirculationDrawer
-            print(15)  # GiveFluids
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         else:
