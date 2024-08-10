@@ -25,14 +25,16 @@ def main():
             vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
         ):  # Breathing issues
             print(29)  # UseBagValveMask or 30 UseNonRebreatherMask
-        elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
-            vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
-        ):  # Circulation issues
+        elif (
+            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60
+        ):  # Hypotension
             print(20)  # OpenCirculationDrawer or 16 ViewMonitor
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse or 6 ExamineDisability
         elif any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
             print(7)  # ExamineExposure
+        elif any(event_relevances[i] > 0 for i in range(33, 39)):  # Tachyarrhythmia
+            print(40)  # TurnOnDefibrillator for cardioversion
         else:
             # Check for stabilization and take appropriate actions
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
