@@ -13,39 +13,50 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
-        # Critical state check
         if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
-            print(48)  # Finish
+            print(48)  # Finish due to cardiac arrest
             return
 
-        # Airway assessment
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
+        # A - Airway
+        if any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)  # PerformHeadTiltChinLift
+            steps += 1
             continue
 
-        # Breathing assessment
+        # B - Breathing
         if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
             print(29)  # UseBagValveMask
+            steps += 1
             continue
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # UseNonRebreatherMask
+            steps += 1
             continue
 
-        # Circulation assessment
+        # C - Circulation
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # OpenCirculationDrawer
-            continue
-        elif vital_signs_measurements[4] < 60:
-            print(27)  # UseBloodPressureCuff
+            steps += 1
             continue
 
-        # Check if stabilized
+        # D - Disability
+        if any(event_relevances[i] > 0 for i in [21, 22, 23]):
+            print(6)  # ExamineDisability
+            steps += 1
+            continue
+
+        # E - Exposure
+        if any(event_relevances[i] > 0 for i in [24, 25, 26]):
+            print(7)  # ExamineExposure
+            steps += 1
+            continue
+
+        # Stabilization Check
         if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
             print(48)  # Finish
             return
-        else:
-            print(0)  # DoNothing
 
+        print(0)  # DoNothing if no action is required
         steps += 1
 
 
