@@ -25,10 +25,16 @@ def main():
             vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
         ):  # Breathing issues
             print(4)  # ExamineBreathing
+            if vital_signs_measurements[6] < 8:
+                print(29)  # UseBagValveMask
         elif (vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60) or (
             vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88
         ):  # Circulation issues
             print(5)  # ExamineCirculation
+            if vital_signs_measurements[4] < 60:
+                print(20)  # OpenCirculationDrawer
+            if vital_signs_measurements[5] < 88:
+                print(30)  # UseNonRebreatherMask
         elif any(event_relevances[i] > 0 for i in range(3)):  # Response issues
             print(8)  # ExamineResponse
         elif any(event_relevances[i] > 0 for i in range(26, 33)):  # Exposure issues
@@ -38,15 +44,7 @@ def main():
             if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
                 print(48)  # Finish if stabilized
             else:
-                # Prioritize actions based on current status
-                if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-                    print(20)  # OpenCirculationDrawer
-                elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-                    print(30)  # UseNonRebreatherMask
-                elif vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
-                    print(29)  # UseBagValveMask
-                else:
-                    print(0)  # DoNothing
+                print(0)  # DoNothing
 
         steps += 1
 
