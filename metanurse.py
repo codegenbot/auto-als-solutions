@@ -13,7 +13,10 @@ def main():
         vital_signs_relevances = observations[33:40]
         vital_signs_measurements = observations[40:]
 
-        if vital_signs_measurements[5] < 65 or vital_signs_measurements[4] < 20:
+        # Check for cardiac arrest conditions
+        if (vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 65) or (
+            vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 20
+        ):
             print(48)  # Finish due to cardiac arrest
             return
 
@@ -34,6 +37,9 @@ def main():
         if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
             continue
+        if any(event_relevances[i] > 0 for i in range(33, 38)):  # Check for arrhythmias
+            print(16)  # View monitor for arrhythmia assessment
+            continue
 
         # Disability assessment
         if not any(event_relevances[i] > 0 for i in range(3)):
@@ -46,7 +52,11 @@ def main():
             continue
 
         # Check if stabilized
-        if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+        if all(
+            vital_signs_relevances[i] > 0
+            and vital_signs_measurements[i] >= [60, 88, 8][i]
+            for i in range(3)
+        ):
             print(48)  # Finish if stabilized
             return
 
