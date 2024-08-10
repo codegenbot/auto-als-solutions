@@ -18,9 +18,9 @@ def main():
             print(48)  # Finish
             return
 
-        # ABCDE Assessment and Stabilization
-        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway not examined
-            print(36)  # PerformHeadTiltChinLift
+        # Initial Assessments
+        if not any(event_relevances[i] > 0 for i in [3, 4, 5]):  # Airway clear
+            print(36)  # PerformHeadTiltChinLift or 37 PerformJawThrust
         elif (
             vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8
         ):  # Breathing insufficient
