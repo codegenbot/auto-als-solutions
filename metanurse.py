@@ -17,19 +17,22 @@ def main():
             print(48)  # Finish due to cardiac arrest
             return
 
-        # Airway assessment and intervention
+        if vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
+            print(20)  # Open circulation drawer
+            continue
+
+        if vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
+            print(30)  # Use non-rebreather mask
+            continue
+
+        if vital_signs_relevances[6] > 0 and vital_signs_measurements[6] < 8:
+            print(29)  # Use bag valve mask
+            continue
+
         if not any(event_relevances[i] > 0 for i in [3, 4, 5]):
             print(36)  # Head-tilt chin-lift
-        # Breathing assessment and intervention
-        elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
-            print(30)  # Use non-rebreather mask
-        # Circulation assessment and intervention
-        elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
-            print(20)  # Open circulation drawer
-        # Disability assessment
         elif not any(event_relevances[i] > 0 for i in range(3)):
             print(8)  # Check response
-        # Exposure assessment
         elif not any(event_relevances[i] > 0 for i in range(26, 33)):
             print(7)  # Examine exposure
         else:
