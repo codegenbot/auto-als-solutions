@@ -24,6 +24,8 @@ def main():
         # Breathing assessment and intervention
         elif vital_signs_relevances[5] > 0 and vital_signs_measurements[5] < 88:
             print(30)  # Use non-rebreather mask
+        elif vital_signs_relevances[1] > 0 and vital_signs_measurements[1] < 8:
+            print(29)  # Bag-mask ventilation
         # Circulation assessment and intervention
         elif vital_signs_relevances[4] > 0 and vital_signs_measurements[4] < 60:
             print(20)  # Open circulation drawer
