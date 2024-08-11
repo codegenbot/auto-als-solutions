@@ -35,7 +35,11 @@ def main():
             print(7)  # Examine exposure
         else:
             # Check for stabilization
-            if all(vital_signs_measurements[i] >= [60, 88, 8][i] for i in range(3)):
+            if (
+                vital_signs_measurements[4] >= 60
+                and vital_signs_measurements[5] >= 88
+                and vital_signs_measurements[6] >= 8
+            ):
                 print(48)  # Finish if stabilized
             else:
                 print(0)  # Do nothing if unsure
