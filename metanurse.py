@@ -5,8 +5,6 @@ def main():
     opened_breathing_drawer = False
     used_sats_probe = False
     viewed_monitor = False
-    defib_pads_attached = False
-    defib_charged = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,14 +32,12 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if not defib_pads_attached and (events[29] or events[30] or events[31] or events[32] or events[36] or events[37]):
+            if events[29] or events[30] or events[31] or events[32] or events[36] or events[37] or events[38]:
                 print(28)  # AttachDefibPads
-                defib_pads_attached = True
                 continue
 
-            if defib_pads_attached and not defib_charged:
+            if events[40] or events[41] or events[42] or events[43] or events[44] or events[45] or events[46] or events[47]:
                 print(40)  # DefibrillatorCharge
-                defib_charged = True
                 continue
 
             if sats is not None and sats < 65 or map_value is not None and map_value < 20:
