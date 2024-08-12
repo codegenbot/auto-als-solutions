@@ -1,9 +1,8 @@
 import sys
-import math
+
 
 def main():
     used_sats_probe = False
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -43,20 +42,19 @@ def main():
             print(7)  # ExamineExposure
             continue
 
-        # Check and measure SATS
+        # Use SatsProbe and ViewMonitor for oxygen saturation
         if not used_sats_probe:
-            print(25)  # UseSatsProbe
+            print(19)  # OpenBreathingDrawer
             used_sats_probe = True
             continue
-
-        if used_sats_probe and not vital_signs_times[5]:  # Check if sats has been measured
-            print(16)  # ViewMonitor
+        if used_sats_probe and not sats:
+            print(25)  # UseSatsProbe
+            continue
+        if sats is not None and sats < 88:
+            print(30)  # UseNonRebreatherMask
             continue
 
         # Stabilization
-        if sats and sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
         if resp_rate and resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
@@ -64,7 +62,9 @@ def main():
             print(15)  # GiveFluids
             continue
 
+        # Finish the game
         print(48)  # Finish
+
 
 if __name__ == "__main__":
     main()
