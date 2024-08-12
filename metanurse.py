@@ -1,17 +1,12 @@
 import sys
 
 def main():
-    has_used_sats_probe = False
-    has_used_bp_cuff = False
-
     for _ in range(350):
         observations = list(map(float, input().split()))
 
-        ResponseVerbal = observations[0]
+        # Extracting the measurements and events
         AirwayClear = observations[3]
         BreathingNone = observations[7]
-        BreathingSnoring = observations[8]
-        BreathingSeeSaw = observations[9]
         MeasuredRespRate = observations[39+1]
         MeasuredMAP = observations[39+4]
         MeasuredSats = observations[39+5]
@@ -19,32 +14,28 @@ def main():
         MAP = observations[39+4+7]
         Sats = observations[39+5+7]
 
-        if BreathingNone > 0:
-            print(35)
+        if not MeasuredRespRate:
+            print(4)  # ExamineBreathing
+        elif not MeasuredMAP:
+            print(27)  # UseBloodPressureCuff
+        elif not MeasuredSats:
+            print(25)  # UseSatsProbe
+        elif BreathingNone > 0:
+            print(35)  # PerformAirwayManoeuvres
         elif AirwayClear == 0:
-            print(3)
-        elif MeasuredSats and Sats < 65:
-            print(17)
-        elif MeasuredMAP and MAP < 20:
-            print(17)
-        elif not has_used_sats_probe:
-            has_used_sats_probe = True
-            print(25)
-        elif not has_used_bp_cuff:
-            has_used_bp_cuff = True
-            print(27)
-        elif MeasuredRespRate == 0:
-            print(4)
-        elif MeasuredRespRate and RespRate < 8:
-            print(29)
-        elif MeasuredSats and Sats < 88:
-            print(30)
-        elif MeasuredMAP and MAP < 60:
-            print(15)
+            print(3)  # ExamineAirway
+        elif Sats < 65 or MAP < 20:
+            print(17)  # StartChestCompression
+        elif RespRate < 8:
+            print(29)  # UseBagValveMask
+        elif Sats < 88:
+            print(30)  # UseNonRebreatherMask
+        elif MAP < 60:
+            print(15)  # GiveFluids
         else:
-            print(0)
+            print(0)  # DoNothing
 
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
