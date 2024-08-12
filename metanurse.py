@@ -57,9 +57,7 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
@@ -75,38 +73,33 @@ def main():
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
-                continue
             elif not used_methods["UsedMonitorPads"]:
                 print(24)
                 used_methods["UsedMonitorPads"] = True
-                continue
             elif not used_methods["UsedBP_Cuff"]:
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
-                continue
             elif not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
-                continue
             elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
-                continue
+            continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(9)
+            if vitals["HeartRate"] < 50:
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
                 print(2)
                 continue
-            elif vitals["HeartRate"] < 50:
-                print(12)
+            elif vitals["HeartRate"] > 150:
+                print(40)
                 continue
 
-        if vitals["HeartRate"] and (vitals["MAP"] and vitals["MAP"] >= 60) and (vitals["Sats"] and vitals["Sats"] >= 88) and (vitals["RespRate"] and vitals["RespRate"] >= 8):
-            print(48)
-            return
+        print(48)
+        return
 
     print(48)
 
