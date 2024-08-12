@@ -13,7 +13,6 @@ def main():
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
-        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
         if events[3]:  # AirwayClear
             if not opened_breathing_drawer:
@@ -31,14 +30,6 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if events[30] or events[31] or events[32] or events[34] or events[36]:  # Handle unstable rhythms
-                print(28)  # AttachDefibPads
-                continue
-
-            if heart_rate is not None and heart_rate > 150:  # Handle unstable tachyarrhythmia
-                print(40)  # DefibrillatorCharge
-                continue
-
             if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
                 print(17)  # StartChestCompression
                 continue
@@ -51,12 +42,23 @@ def main():
                 print(29)  # UseBagValveMask
                 continue
 
-            if map_value is not None and map_value < 60:
-                print(15)  # GiveFluids
+            if map_value is not None:
+                if map_value < 60:
+                    print(15)  # GiveFluids
+                    continue
+                else:
+                    if events[28]:  # HeartRhythmSVT
+                        print(9)  # GiveAdenosine
+                    elif events[29]:  # HeartRhythmAF
+                        print(11)  # GiveAmiodarone
+                    elif events[39]:  # HeartRhythmVF
+                        print(40)  # DefibrillatorCharge
+                    else:
+                        print(48)  # Finish
+                    return
+            else:
+                print(38)  # TakeBloodPressure
                 continue
-
-            print(48)  # Finish
-            return
 
         print(3)  # ExamineAirway
 
