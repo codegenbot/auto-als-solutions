@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_breathing_drawer = False
@@ -56,16 +55,14 @@ def main():
             examined_circulation = True
             continue
 
-        # Check for no breathing
-        if events[7]:  # BreathingNone
-            print(29)  # UseBagValveMask
+        # Check for cardiac arrest condition
+        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            print(17)  # StartChestCompression
             continue
 
-        # Check for cardiac arrest condition
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
-            print(17)  # StartChestCompression
+        # If John stops breathing
+        if events[7]:  # BreathingNone
+            print(29)  # UseBagValveMask
             continue
 
         # Stabilize patient based on vital signs
@@ -82,17 +79,12 @@ def main():
             continue
 
         # If all vitals are stable
-        if (
-            (sats is not None and sats >= 88)
-            and (resp_rate is not None and resp_rate >= 8)
-            and (map_value is not None and map_value >= 60)
-        ):
+        if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
             print(48)  # Finish
             return
 
         # Default to DoNothing if no action required
         print(0)  # DoNothing
-
 
 if __name__ == "__main__":
     main()
