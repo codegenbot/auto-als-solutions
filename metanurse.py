@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -13,7 +12,7 @@ def main():
         "UsedA_Line": False,
         "GivenFluids": False,
     }
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -40,9 +39,7 @@ def main():
         }
 
         # Check for cardiac arrest conditions first
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -112,13 +109,10 @@ def main():
 
         # Check if all conditions for stabilization are met before finishing
         if (
-            events[3]
-            and vitals["Sats"]
-            and vitals["Sats"] >= 88
-            and vitals["RespRate"]
-            and vitals["RespRate"] >= 8
-            and vitals["MAP"]
-            and vitals["MAP"] >= 60
+            events[3] and
+            vitals["Sats"] and vitals["Sats"] >= 88 and 
+            vitals["RespRate"] and vitals["RespRate"] >= 8 and 
+            vitals["MAP"] and vitals["MAP"] >= 60
         ):
             print(48)  # Finish
             return
@@ -127,7 +121,6 @@ def main():
             continue
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
