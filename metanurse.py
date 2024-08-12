@@ -70,11 +70,11 @@ def main():
         if not examined_airway:
             print(3)  # ExamineAirway
             examined_airway = True
-
+            
         elif not examined_breathing:
             print(4)  # ExamineBreathing
             examined_breathing = True
-
+            
         elif not examined_circulation:
             print(5)  # ExamineCirculation
             examined_circulation = True
