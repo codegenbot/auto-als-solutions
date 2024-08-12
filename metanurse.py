@@ -2,67 +2,83 @@ import sys
 
 def main():
     max_steps = 350
-    opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
-    
+    opened_drawers = {19: False, 20: False}
+    used_pulse_oximeter = viewed_monitor = False
+    used_circulation_methods = {25: False, 26: False, 27: False}
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Extract vitals if measured
-        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
-        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
-        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
-        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
+        vital_sign_names = ["HeartRate", "RespRate", "CapillaryGlucose", 
+                            "Temperature", "MAP", "Sats", "Resps"]
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(vital_signs_values, vital_signs_times, vital_sign_names)
+        }
         
-        if events[3]:  # AirwayClear
-            if not opened_breathing_drawer:
-                print(19)  # OpenBreathingDrawer
-                opened_breathing_drawer = True
+        if not events[3]:
+            print(3)
+            continue
+        
+        if not opened_drawers[19]:
+            print(19)
+            opened_drawers[19] = True
+            continue
+
+        if not used_pulse_oximeter:
+            print(25)
+            used_pulse_oximeter = True
+            continue
+
+        if not viewed_monitor:
+            print(16)
+            viewed_monitor = True
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            if not opened_drawers[20]:
+                print(20)
+                opened_drawers[20] = True
+            elif not used_circulation_methods[27]:
+                print(27)
+                used_circulation_methods[27] = True
+            elif not used_circulation_methods[26]:
+                print(26)
+                used_circulation_methods[26] = True
+            else:
+                print(15)
+            continue
+
+        if vitals["HeartRate"]:
+            if vitals["HeartRate"] < 50:
+                print(12)
+                continue
+            elif vitals["HeartRate"] > 150:
+                print(10)
+                continue
+            elif 100 < vitals["HeartRate"] < 150:
+                print(9)
                 continue
 
-            if not used_pulse_oximeter:
-                print(25)  # UseSatsProbe
-                used_pulse_oximeter = True
-                continue
+        print(48)
+        return
 
-            if not viewed_monitor:
-                print(16)  # ViewMonitor
-                viewed_monitor = True
-                continue
-            
-            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)  # StartChestCompression
-                continue
-
-            if sats is not None and sats < 88:
-                print(30)  # UseNonRebreatherMask
-                continue
-
-            if resp_rate is not None and resp_rate < 8:
-                print(29)  # UseBagValveMask
-                continue
-
-            if map_value is not None and map_value < 60:
-                print(15)  # GiveFluids
-                continue
-            
-            # Assess Heart Rate and Rhythm
-            if heart_rate is not None:
-                if heart_rate < 50:
-                    print(12)  # GiveAtropine
-                    continue
-                elif heart_rate > 100:
-                    print(2)  # CheckRhythm to evaluate and decide next steps
-                    continue
-
-            # Finish if stabilized
-            if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
-                print(48)  # Finish
-                return
-
-        print(3)  # ExamineAirway
+    print(48)
 
 if __name__ == "__main__":
     main()
