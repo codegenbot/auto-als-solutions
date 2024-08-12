@@ -1,10 +1,9 @@
 import sys
 
 def main():
-    used_probe = False
-    used_drawer = False
-    used_cuff = False
-    used_monitor = False
+    used_sats_probe = False
+    used_breathing_drawer = False
+    used_bag_valve_mask = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -22,54 +21,54 @@ def main():
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17)
-            continue
-        
-        if not events[3]:  # AirwayClear
-            print(3)
-            continue
-        
-        if not used_drawer:
-            print(19)
-            used_drawer = True
-            continue
-        
-        if not used_probe:
-            print(25)
-            used_probe = True
+            print(17)  # Cardiac arrest, start CPR
             continue
 
-        if map_value is none:
-            if not used_cuff:
-                print(27)
-                used_cuff = True
-                continue
-            if not used_monitor:
-                print(16)
-                used_monitor = True
-                continue
+        if not events[3]:
+            print(3)  # ExamineAirway
+            continue
 
-        if resp_rate is None:
-            print(4)
+        if not used_breathing_drawer:
+            print(19)  # OpenBreathingDrawer
+            used_breathing_drawer = True
             continue
-        
-        if sats is None:
-            print(16)
+
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
+            used_sats_probe = True
             continue
-        
+
+        if not vital_signs_times[5]:
+            print(16)  # ViewMonitor
+            continue
+
+        if map_value is None or resp_rate is None or sats is None:
+            if map_value is None:
+                print(27)  # UseBloodPressureCuff
+            elif resp_rate is None:
+                print(4)  # ExamineBreathing
+            elif sats is None:
+                print(16)  # ViewMonitor
+            continue
+
         if sats < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if resp_rate < 8:
-            print(29)
-            continue
+            if not used_bag_valve_mask:
+                print(29)  # UseBagValveMask
+                used_bag_valve_mask = True
+                continue
+            else:
+                print(5)  # ExamineBreathing to check if rate has improved
+                continue
 
         if map_value < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
-        print(48)
+        print(48)  # Finish
         break
 
 if __name__ == "__main__":
