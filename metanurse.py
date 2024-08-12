@@ -1,17 +1,19 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = {
-        "OpenedBreathingDrawer": False,
-        "OpenedCirculationDrawer": False,
         "UsedSatsProbe": False,
         "ViewedMonitor": False,
+        "OpenedBreathingDrawer": False,
+        "OpenedCirculationDrawer": False,
         "UsedMonitorPads": False,
         "BP_CuffOn": False,
         "UsedA_Line": False,
-        "GivenAmiodarone": False,
         "GivenFluids": False,
+        "GivenAmiodarone": False,
+        "GivenAdrenaline": False,
     }
 
     for step in range(max_steps):
@@ -19,7 +21,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -38,7 +40,7 @@ def main():
             )
         }
 
-        if not events[3]:  # No AirwayClear event
+        if not events[3]:
             print(3)  # Examine Airway
             continue
 
@@ -89,18 +91,23 @@ def main():
                 used_methods["GivenFluids"] = True
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150 and vitals["MAP"] and vitals["MAP"] < 60:
-                print(2)  # Check Rhythm (Cardioversion)
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            if vitals["MAP"] and vitals["MAP"] < 60:
+                print(9)  # Give Adenosine for unstable tachyarrhythmia
+                used_methods["GivenAmiodarone"] = True
                 continue
-            elif vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
-                continue
+            print(2)  # Check Rhythm (Cardioversion)
+            continue
+
+        if vitals["HeartRate"] and vitals["HeartRate"] < 50:
+            print(12)  # Give Atropine
+            continue
 
         print(48)  # Finish
         return
 
     print(48)  # Finish
+
 
 if __name__ == "__main__":
     main()
