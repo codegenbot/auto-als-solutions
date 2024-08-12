@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_drawers = {19: False, 20: False}  # Breathing and Circulation
@@ -14,20 +13,11 @@ def main():
         vital_signs_values = observations[40:]
 
         # Extract vitals if measured
-        vital_sign_names = [
-            "HeartRate",
-            "RespRate",
-            "CapillaryGlucose",
-            "Temperature",
-            "MAP",
-            "Sats",
-            "Resps",
-        ]
+        vital_sign_names = ["HeartRate", "RespRate", "CapillaryGlucose",
+                            "Temperature", "MAP", "Sats", "Resps"]
         vitals = {
             name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values, vital_signs_times, vital_sign_names
-            )
+            for value, time, name in zip(vital_signs_values, vital_signs_times, vital_sign_names)
         }
 
         if not events[3]:  # No AirwayClear
@@ -49,9 +39,7 @@ def main():
             viewed_monitor = True
             continue
 
-        if vitals["Sats"] is not None and (
-            vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
@@ -63,19 +51,20 @@ def main():
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if not opened_drawers[20]:  # CirculationDrawer Not opened
-                print(20)  # OpenCirculationDrawer
-                opened_drawers[20] = True
-            elif not used_circulation_methods[27]:  # UseBloodPressureCuff not used
-                print(27)  # UseBloodPressureCuff
-                used_circulation_methods[27] = True
-            elif not used_circulation_methods[26]:  # UseAline not used
-                print(26)  # UseAline
-                used_circulation_methods[26] = True
-            else:
-                print(15)  # GiveFluids
-            continue
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60:
+                if not opened_drawers[20]:  # CirculationDrawer Not opened
+                    print(20)  # OpenCirculationDrawer
+                    opened_drawers[20] = True
+                elif not used_circulation_methods[27]:  # UseBloodPressureCuff not used
+                    print(27)  # UseBloodPressureCuff
+                    used_circulation_methods[27] = True
+                elif not used_circulation_methods[26]:  # UseAline not used
+                    print(26)  # UseAline
+                    used_circulation_methods[26] = True
+                else:
+                    print(15)  # GiveFluids
+                continue
 
         if vitals["HeartRate"] is not None:
             if vitals["HeartRate"] < 50:
@@ -92,7 +81,6 @@ def main():
         return
 
     print(48)  # Finish if max steps reached
-
 
 if __name__ == "__main__":
     main()
