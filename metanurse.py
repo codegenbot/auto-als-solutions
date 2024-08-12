@@ -1,10 +1,14 @@
 import sys
 
+
 def main():
     max_steps = 350
     opened_breathing_drawer = False
     used_sats_probe = False
     viewed_monitor = False
+    examined_airway = False
+    examined_breathing = False
+    examined_circulation = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -12,41 +16,51 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        airway_clear = events[3]
-        breathing_none = events[7]
-        
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        # Check for cardiac arrest condition
-        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-            print(17)  # StartChestCompression
-            continue
-
-        # Stepwise action for airway examination
-        if not airway_clear:
+        # Airway (A)
+        if not examined_airway:
             print(3)  # ExamineAirway
+            examined_airway = True
             continue
 
+        # Breathing (B)
+        if not examined_breathing and events[3]:  # AirwayClear
+            print(4)  # ExamineBreathing
+            examined_breathing = True
+            continue
+
+        # Open Breathing drawer if not already done
         if not opened_breathing_drawer:
             print(19)  # OpenBreathingDrawer
             opened_breathing_drawer = True
             continue
 
+        # Use Sats probe if not already done
         if not used_sats_probe:
             print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
+        # View monitor if not already done
         if not viewed_monitor:
             print(16)  # ViewMonitor
             viewed_monitor = True
             continue
 
-        # Ensure breathing
-        if breathing_none:
-            print(29)  # UseBagValveMask
+        # Circulation (C)
+        if not examined_circulation:
+            print(5)  # ExamineCirculation
+            examined_circulation = True
+            continue
+
+        # Check for cardiac arrest condition
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
+        ):
+            print(17)  # StartChestCompression
             continue
 
         # Stabilize patient based on vital signs
@@ -63,9 +77,17 @@ def main():
             continue
 
         # If all vitals are stable
-        if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
+        if (
+            (sats is not None and sats >= 88)
+            and (resp_rate is not None and resp_rate >= 8)
+            and (map_value is not None and map_value >= 60)
+        ):
             print(48)  # Finish
             return
+
+        # Default to DoNothing if no action required
+        print(0)  # DoNothing
+
 
 if __name__ == "__main__":
     main()
