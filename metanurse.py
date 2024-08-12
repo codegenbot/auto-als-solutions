@@ -61,7 +61,7 @@ def main():
                 used_bag_valve_mask = True
                 continue
             else:
-                print(5)  # ExamineBreathing to check if rate has improved
+                print(5)  # Assume sufficiency and re-check breathing
                 continue
 
         if map_value < 60:
