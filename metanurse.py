@@ -10,7 +10,6 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Extract vitals if measured
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
@@ -18,49 +17,48 @@ def main():
 
         if events[3]:  # AirwayClear
             if not opened_breathing_drawer:
-                print(19)  # OpenBreathingDrawer
+                print(19)
                 opened_breathing_drawer = True
                 continue
 
             if not used_pulse_oximeter:
-                print(25)  # UseSatsProbe
+                print(25)
                 used_pulse_oximeter = True
                 continue
 
             if not viewed_monitor:
-                print(16)  # ViewMonitor
+                print(16)
                 viewed_monitor = True
                 continue
 
             if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)  # StartChestCompression
+                print(17)
                 continue
 
             if sats is not None and sats < 88:
-                print(30)  # UseNonRebreatherMask
+                print(30)
                 continue
 
             if resp_rate is not None and resp_rate < 8:
-                print(29)  # UseBagValveMask
+                print(29)
                 continue
 
             if map_value is not None and map_value < 60:
-                print(15)  # GiveFluids
+                print(15)
                 continue
-            
-            # Added: Assess Heart Rate for potential therapy
+
             if heart_rate is not None:
                 if heart_rate < 50:
-                    print(12)  # GiveAtropine
+                    print(12)
                     continue
                 elif heart_rate > 100:
-                    print(9)  # GiveAdenosine
+                    print(9)
                     continue
 
-            print(48)  # Finish
+            print(48)
             return
 
-        print(3)  # ExamineAirway
+        print(3)
 
 if __name__ == "__main__":
     main()
