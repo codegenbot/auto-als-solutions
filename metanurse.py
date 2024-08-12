@@ -31,17 +31,6 @@ def main():
                 print(16)
                 viewed_monitor = True
                 continue
-            
-            if map_value is None:
-                if not opened_circulation_drawer:
-                    print(20)  # OpenCirculationDrawer
-                    opened_circulation_drawer = True
-                    continue
-                
-                if not used_bp_cuff:
-                    print(27)  # UseBloodPressureCuff
-                    used_bp_cuff = True
-                    continue
 
             if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
                 print(17)  # StartChestCompression
@@ -56,6 +45,16 @@ def main():
                 continue
 
             if map_value is not None and map_value < 60:
+                if not opened_circulation_drawer:
+                    print(20)  # OpenCirculationDrawer
+                    opened_circulation_drawer = True
+                    continue
+
+                if not used_bp_cuff:
+                    print(27)  # UseBloodPressureCuff
+                    used_bp_cuff = True
+                    continue
+
                 print(15)  # GiveFluids
                 continue
 
@@ -64,13 +63,29 @@ def main():
                     print(12)  # GiveAtropine
                     continue
                 elif heart_rate > 100:
-                    print(9)  # GiveAdenosine
+                    for i in range(27, 35):
+                        if events[i]:
+                            print(9)  # GiveAdenosine
+                            break
                     continue
 
+            print(3)  # ExamineAirway
+            continue
+
+        # Proceed with other examinations
+        if not events[3]:
+            print(3)  # ExamineAirway
+        elif not events[11]: # BreathingExamine
+            print(4)  # ExamineBreathing
+        elif not events[17]: # CirculationExamine
+            print(5)  # ExamineCirculation
+        elif not events[24]: # DisabilityExamine
+            print(6)  # ExamineDisability
+        elif not events[35]: # ExposureExamine
+            print(7)  # ExamineExposure
+        else:
             print(48)
             return
-
-        print(3)  # ExamineAirway
 
 if __name__ == "__main__":
     main()
