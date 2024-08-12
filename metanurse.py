@@ -3,7 +3,7 @@ import sys
 def main():
     used_sats_probe = False
     used_monitor = False
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
