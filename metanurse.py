@@ -91,14 +91,7 @@ def main():
             print(10)  # Give adrenaline for stabilization
             continue
 
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] >= 88
-            and vitals["RespRate"] is not None
-            and vitals["RespRate"] >= 8
-            and vitals["MAP"] is not None
-            and vitals["MAP"] >= 60
-        ):
+        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
             print(48)  # Finish
             return
 
