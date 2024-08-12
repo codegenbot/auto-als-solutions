@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     used_sats_probe = False
     used_blood_pressure_cuff = False
@@ -81,6 +82,7 @@ def main():
 
         print(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     main()
