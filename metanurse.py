@@ -1,11 +1,12 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_breathing_drawer = False
     used_sats_probe = False
     viewed_monitor = False
+    defib_pads_attached = False
+    defib_charged = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -17,7 +18,6 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        # Check if airway is clear
         if events[3]:  # AirwayClear
             if not opened_breathing_drawer:
                 print(19)  # OpenBreathingDrawer
@@ -34,14 +34,20 @@ def main():
                 viewed_monitor = True
                 continue
 
-            # Check for cardiac arrest condition
-            if (sats is not None and sats < 65) or (
-                map_value is not None and map_value < 20
-            ):
+            if not defib_pads_attached and (events[29] or events[30] or events[31] or events[32] or events[36] or events[37]):
+                print(28)  # AttachDefibPads
+                defib_pads_attached = True
+                continue
+
+            if defib_pads_attached and not defib_charged:
+                print(40)  # DefibrillatorCharge
+                defib_charged = True
+                continue
+
+            if sats is not None and sats < 65 or map_value is not None and map_value < 20:
                 print(17)  # StartChestCompression
                 continue
 
-            # Stabilize patient based on vital signs
             if sats is not None and sats < 88:
                 print(30)  # UseNonRebreatherMask
                 continue
@@ -54,18 +60,10 @@ def main():
                 print(15)  # GiveFluids
                 continue
 
-            # If all vitals are stable
-            if (
-                (sats is not None and sats >= 88)
-                and (resp_rate is not None and resp_rate >= 8)
-                and (map_value is not None and map_value >= 60)
-            ):
-                print(48)  # Finish
-                return
+            print(48)  # Finish
+            return
 
-        # Initial airway examination
         print(3)  # ExamineAirway
-
 
 if __name__ == "__main__":
     main()
