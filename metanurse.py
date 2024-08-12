@@ -5,8 +5,6 @@ def main():
     opened_drawers = {19: False, 20: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
                     'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
-    finished = False
-    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -64,17 +62,17 @@ def main():
                 continue
             elif vitals["HeartRate"] > 150:
                 print(2)  # Check rhythm
+                print(10)  # Give adrenaline - stabilization after checking
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
                 print(2)  # Check rhythm
+                print(9)  # Give adenosine - stabilization after checking
                 continue
         
-        finished = True
         print(48)
-        break
+        return
 
-    if not finished:
-        print(48)
+    print(48)
 
 if __name__ == "__main__":
     main()
