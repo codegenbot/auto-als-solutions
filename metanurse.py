@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
@@ -38,7 +39,7 @@ def main():
             if heart_rate is not None and map_value is not None:
                 if heart_rate > 100 and map_value < 60:
                     print(2)
-                    if events[32] or events[33]:
+                    if events[32] or events[33]:  # Unstable tachyarrhythmia
                         print(13)
                     continue
 
@@ -60,14 +61,15 @@ def main():
                     continue
                 elif heart_rate > 100:
                     print(2)
-                    if heart_rate > 150 and events[30]:
+                    if heart_rate > 150 and events[30]:  # HeartRhythmSVT
                         print(9)
                     continue
 
             print(48)
             return
 
-        print(3)
+        print(3)  # ExamineAirway
+
 
 if __name__ == "__main__":
     main()
