@@ -1,11 +1,10 @@
 import sys
 
 def main():
-    used_sats_probe = False
-    used_breathing_drawer = False
-    examined_airway = False
-    examined_breathing = False
-    inserted_IV = False
+    used_probe = False
+    used_drawer = False
+    used_cuff = False
+    used_monitor = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -25,51 +24,47 @@ def main():
         if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)
             continue
-
-        if not examined_airway:
+        
+        if not events[3]:  # AirwayClear
             print(3)
-            examined_airway = True
             continue
-
-        if not events[3]:
-            print(35)
-            continue
-
-        if not examined_breathing:
-            print(4)
-            examined_breathing = True
-            continue
-
-        if not used_breathing_drawer:
+        
+        if not used_drawer:
             print(19)
-            used_breathing_drawer = True
+            used_drawer = True
             continue
-
-        if not used_sats_probe:
+        
+        if not used_probe:
             print(25)
-            used_sats_probe = True
+            used_probe = True
             continue
 
-        if not vital_signs_times[5]:
+        if map_value is None:
+            if not used_cuff:
+                print(27)
+                used_cuff = True
+                continue
+            if not used_monitor:
+                print(16)
+                used_monitor = True
+                continue
+
+        if resp_rate is None:
+            print(4)
+            continue
+        
+        if sats is None:
             print(16)
             continue
         
-        if resp_rate is None or resp_rate < 8:
-            print(29)
-            continue
-        
-        if sats is not None and sats < 88:
+        if sats < 88:
             print(30)
             continue
-        
-        if map_value is None or not inserted_IV:
-            if not inserted_IV:
-                print(14)
-                inserted_IV = True
-            elif map_value is None:
-                print(27)
+
+        if resp_rate < 8:
+            print(29)
             continue
-        
+
         if map_value < 60:
             print(15)
             continue
