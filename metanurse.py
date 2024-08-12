@@ -54,7 +54,7 @@ def main():
                 continue
 
             if heart_rate is not None and heart_rate > 100: 
-                print(24)  # UseMonitorPads
+                print(24)  # UseMonitorPads (potential start cardioversion)
                 continue
 
             print(48)  # Finish
