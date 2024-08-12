@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
@@ -32,9 +31,7 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if (sats is not None and sats < 65) or (
-                map_value is not None and map_value < 20
-            ):
+            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
                 print(17)
                 continue
 
@@ -64,7 +61,6 @@ def main():
             return
 
         print(3)  # ExamineAirway
-
 
 if __name__ == "__main__":
     main()
