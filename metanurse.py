@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     used_sats_probe = False
     for step in range(350):
@@ -64,7 +63,6 @@ def main():
 
         # Finish the game
         print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
