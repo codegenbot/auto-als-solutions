@@ -11,6 +11,7 @@ def main():
         "Fluids": False,
         "A_Line": False,
         "HeartRateChecked": False,
+        "AirwayClear": False,
         "AirwayExamine": False,
     }
 
@@ -37,74 +38,70 @@ def main():
             )
         }
 
-        # Check and ensure Airway
         if not events[3] and not actions_taken["AirwayExamine"]:
-            print(3)  # ExamineAirway
+            print(3)
             actions_taken["AirwayExamine"] = True
             continue
 
-        # Check Sats and vital signs
         if not actions_taken["BreathingDrawer"]:
-            print(19)  # OpenBreathingDrawer
+            print(19)
             actions_taken["BreathingDrawer"] = True
             continue
 
         if not actions_taken["SatsProbe"]:
-            print(25)  # UseSatsProbe
+            print(25)
             actions_taken["SatsProbe"] = True
             continue
 
         if not actions_taken["Monitor"]:
-            print(16)  # ViewMonitor
+            print(16)
             actions_taken["Monitor"] = True
             continue
 
-        # Cardiac Arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
-        # Stabilizing measures
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not actions_taken["BPCuff"]:
-                print(27)  # UseBloodPressureCuff
+                print(27)
                 actions_taken["BPCuff"] = True
                 continue
             elif not actions_taken["Fluids"]:
-                print(15)  # GiveFluids
+                print(15)
                 actions_taken["Fluids"] = True
                 continue
             elif not actions_taken["A_Line"]:
-                print(26)  # UseAline
+                print(26)
                 actions_taken["A_Line"] = True
                 continue
 
         if vitals["HeartRate"] and not actions_taken["HeartRateChecked"]:
             actions_taken["HeartRateChecked"] = True
             if vitals["HeartRate"] > 150:
-                print(10)  # GiveAdrenaline
+                print(10)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(9)  # GiveAdenosine
+                print(9)
                 continue
             elif vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+                print(12)
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Finish at the end of max steps
+    print(48)
 
 
 if __name__ == "__main__":
