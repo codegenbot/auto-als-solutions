@@ -2,73 +2,71 @@ import sys
 
 def main():
     max_steps = 350
-    opened_drawers = {19: False, 20: False}
-    used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
-                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+    actions_taken = {'BreathingDrawer': False, 'SatsProbe': False, 'Monitor': False, 'BP Cuff': False, 'Fluids': False, 'A_Line': False}
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
-        vitals = {name: value if time > 0 else None for value, time, name in 
-                  zip(vital_signs_values, vital_signs_times, 
-                      ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
-        
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, 
+                        ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
+
         if not events[3]:
-            print(3)  # ExamineAirway
-            continue
-        
-        if not opened_drawers[19]:
-            print(19)  # OpenBreathingDrawer
-            opened_drawers[19] = True
+            print(3)
             continue
 
-        if not used_methods['UsedSatsProbe']:
-            print(25)  # UseSatsProbe
-            used_methods['UsedSatsProbe'] = True
+        if not actions_taken['BreathingDrawer']:
+            print(19)
+            actions_taken['BreathingDrawer'] = True
             continue
 
-        if not used_methods['ViewedMonitor']:
-            print(16)  # ViewMonitor
-            used_methods['ViewedMonitor'] = True
+        if not actions_taken['SatsProbe']:
+            print(25)
+            actions_taken['SatsProbe'] = True
             continue
-        
+
+        if not actions_taken['Monitor']:
+            print(16)
+            actions_taken['Monitor'] = True
+            continue
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # Start chest compressions
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_methods['BP_Cuff']:
-                print(27)  # Apply BP cuff
-                used_methods['BP_Cuff'] = True
-            elif not used_methods['A_Line']:
-                print(26)  # Use arterial line
-                used_methods['A_Line'] = True
-            elif not used_methods['Fluids']:
-                print(15)  # Give fluids
-                used_methods['Fluids'] = True
+            if not actions_taken['BP Cuff']:
+                print(27)
+                actions_taken['BP Cuff'] = True
+            elif not actions_taken['Fluids']:
+                print(15)
+                actions_taken['Fluids'] = True
+            elif not actions_taken['A_Line']:
+                print(26)
+                actions_taken['A_Line'] = True
             continue
-
+        
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
-                continue
-            elif vitals["HeartRate"] > 150:
-                print(2)  # Check rhythm
-                print(10)  # Give adrenaline - stabilization after checking
+            if vitals["HeartRate"] > 150:
+                print(10)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check rhythm
-                print(9)  # Give adenosine - stabilization after checking
+                print(9)
                 continue
-        
+            elif vitals["HeartRate"] < 50:
+                print(12)
+                continue
+
         print(48)
         return
 
