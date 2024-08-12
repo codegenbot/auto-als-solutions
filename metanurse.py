@@ -79,7 +79,11 @@ def main():
             continue
 
         # If all vitals are stable
-        if (sats is not None and sats >= 88) and (resp_rate is not None and resp_rate >= 8) and (map_value is not None and map_value >= 60):
+        if (
+            (sats is not None and sats >= 88)
+            and (resp_rate is not None and resp_rate >= 8)
+            and (map_value is not None and map_value >= 60)
+        ):
             print(48)  # Finish
             return
 
