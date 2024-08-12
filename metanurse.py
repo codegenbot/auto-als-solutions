@@ -1,90 +1,87 @@
 import sys
 
-
 def main():
-    max_steps = 350
-    opened_breathing_drawer = False
     used_sats_probe = False
-    viewed_monitor = False
-    used_aline = False
-    in_breathing_phase = True
+    used_breathing_drawer = False
+    examined_airway = False
+    examined_breathing = False
+    inserted_IV = False
 
-    for step in range(max_steps):
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
-        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
+        temperature = vital_signs_values[3] if vital_signs_times[3] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         # Check for cardiac arrest
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
+        if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)  # StartChestCompression
             continue
 
-        # A - Airway
-        if not events[3]:  # AirwayClear
+        # ABCDE assessment
+        if not examined_airway:
             print(3)  # ExamineAirway
+            examined_airway = True
             continue
 
-        # B - Breathing
-        if in_breathing_phase:
-            if not opened_breathing_drawer:
-                print(19)  # OpenBreathingDrawer
-                opened_breathing_drawer = True
-                continue
-
-            if not used_sats_probe:
-                print(25)  # UseSatsProbe
-                used_sats_probe = True
-                continue
-
-            if not viewed_monitor:
-                print(16)  # ViewMonitor
-                viewed_monitor = True
-                continue
-
-            if sats is not None and sats < 88:
-                print(30)  # UseNonRebreatherMask
-                continue
-
-            if resp_rate is not None and resp_rate < 8:
-                print(29)  # UseBagValveMask
-                continue
-
-            in_breathing_phase = False
+        if not events[3]:  # AirwayClear
+            print(35)  # PerformAirwayManoeuvres
             continue
 
-        # C - Circulation
-        if not used_aline:
-            print(26)  # UseAline
-            used_aline = True
+        # Breathing assessment
+        if not examined_breathing:
+            print(4)  # ExamineBreathing
+            examined_breathing = True
             continue
 
-        if map_value is not None and map_value < 60:
+        if not used_breathing_drawer:
+            print(19)  # OpenBreathingDrawer
+            used_breathing_drawer = True
+            continue
+
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
+            used_sats_probe = True
+            continue
+
+        if not vital_signs_times[5]:  # Sats measurement
+            print(16)  # ViewMonitor
+            continue
+        
+        # Stabilize breathing
+        if resp_rate is None or resp_rate < 8:
+            print(29)  # UseBagValveMask
+            continue
+        
+        if sats is not None and sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        
+        # Circulation assessment
+        if map_value is None or not inserted_IV:
+            if not inserted_IV:
+                print(14)  # UseVenflonIVCatheter
+                inserted_IV = True
+            elif map_value is None:
+                print(27)  # UseBloodPressureCuff
+            continue
+        
+        if map_value < 60:
             print(15)  # GiveFluids
             continue
 
-        # Other assessments (D & E) if necessary can be checked similarly..
-
-        # If all stabilisation criteria are met
-        if all(
-            [
-                events[3],  # AirwayClear
-                sats is not None and sats >= 88,
-                resp_rate is not None and resp_rate >= 8,
-                map_value is not None and map_value >= 60,
-            ]
-        ):
-            print(48)  # Finish
-            return
-
-        print(6)  # ExamineDisability (continue assessing next factors)
-
+        # Ensure we call finish at the end
+        print(48)  # Finish
+        break
 
 if __name__ == "__main__":
     main()
