@@ -53,16 +53,6 @@ def main():
             used_methods["UsedSatsProbe"] = True
             continue
 
-        if not used_methods["UsedMonitorPads"]:
-            print(24)
-            used_methods["UsedMonitorPads"] = True
-            continue
-
-        if not used_methods["BP_CuffOn"]:
-            print(27)
-            used_methods["BP_CuffOn"] = True
-            continue
-
         if not used_methods["ViewedMonitor"]:
             print(16)
             used_methods["ViewedMonitor"] = True
@@ -86,6 +76,15 @@ def main():
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
+            elif not used_methods["UsedMonitorPads"]:
+                print(24)
+                used_methods["UsedMonitorPads"] = True
+            elif not used_methods["BP_CuffOn"]:
+                print(27)
+                used_methods["BP_CuffOn"] = True
+            elif not used_methods["UsedA_Line"]:
+                print(26)
+                used_methods["UsedA_Line"] = True
             elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
@@ -97,6 +96,7 @@ def main():
                     print(11)
                     used_methods["GivenAmiodarone"] = True
                 continue
+            
             elif vitals["HeartRate"] < 50:
                 if not used_methods["GivenAdrenaline"]:
                     print(10)
