@@ -1,7 +1,6 @@
 import sys
 import math
 
-
 def main():
     used_sats_probe = False
     steps_used = 0
@@ -52,9 +51,7 @@ def main():
             used_sats_probe = True
             continue
 
-        if (
-            used_sats_probe and not vital_signs_times[5]
-        ):  # Check if sats has been measured
+        if used_sats_probe and not vital_signs_times[5]:  # Check if sats has been measured
             print(16)  # ViewMonitor
             continue
 
@@ -71,7 +68,6 @@ def main():
 
         print(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     main()
