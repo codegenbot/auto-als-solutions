@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     used_sats_probe = False
     used_breathing_drawer = False
@@ -66,19 +65,9 @@ def main():
             continue
 
         # Finish the game once stabilized
-        if all(
-            [
-                events[3],
-                resp_rate >= 8,
-                map_value >= 60,
-                sats >= 88,
-                events[21],
-                temperature,
-            ]
-        ):
+        if all([events[3], resp_rate >= 8, map_value >= 60, sats >= 88, events[21], temperature]):
             print(48)  # Finish
             break
-
 
 if __name__ == "__main__":
     main()
