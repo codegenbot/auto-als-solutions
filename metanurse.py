@@ -63,14 +63,15 @@ def main():
                     print(12)  # GiveAtropine
                     continue
                 elif heart_rate > 100:
-                    for i in range(27, 35):
-                        if events[i]:
-                            print(9)  # GiveAdenosine
-                            break
-                    continue
+                    if events[29]:  # HeartRhythmSVT
+                        print(9)  # GiveAdenosine
+                        continue
+                    if events[30]:  # HeartRhythmAF
+                        print(11)  # GiveAmiodarone
+                        continue
 
-            print(3)  # ExamineAirway
-            continue
+            print(48)
+            return
 
         # Proceed with other examinations
         if not events[3]:
