@@ -8,9 +8,11 @@ def main():
         "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
         "UsedMonitorPads": False,
-        "UsedBP_Cuff": False,
+        "BP_CuffOn": False,
         "UsedA_Line": False,
         "GivenFluids": False,
+        "GivenAmiodarone": False,
+        "GivenAdrenaline": False,
     }
 
     for step in range(max_steps):
@@ -25,7 +27,7 @@ def main():
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                [
+                (
                     "HeartRate",
                     "RespRate",
                     "CapillaryGlucose",
@@ -33,83 +35,73 @@ def main():
                     "MAP",
                     "Sats",
                     "Resps",
-                ],
+                ),
             )
         }
 
-        # Ensure airway is examined
         if not events[3]:
-            print(3)
+            print(3)  # Examine Airway
             continue
 
-        # Open the breathing drawer
         if not used_methods["OpenedBreathingDrawer"]:
-            print(19)
+            print(19)  # Open Breathing Drawer
             used_methods["OpenedBreathingDrawer"] = True
             continue
 
-        # Use sats probe
         if not used_methods["UsedSatsProbe"]:
-            print(25)
+            print(25)  # Use Sats Probe
             used_methods["UsedSatsProbe"] = True
             continue
 
-        # View monitor
         if not used_methods["ViewedMonitor"]:
-            print(16)
+            print(16)  # View Monitor
             used_methods["ViewedMonitor"] = True
             continue
 
-        # Respond to cardiac arrest conditions
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)  # Start Chest Compression
             continue
 
-        # Administer oxygen if sats are below 88%
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use Non-Rebreather Mask
             continue
 
-        # Use bag-valve mask if respiratory rate is below 8
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use Bag Valve Mask
             continue
 
-        # Check MAP and perform circulation actions
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
-                print(20)
+                print(20)  # Open Circulation Drawer
                 used_methods["OpenedCirculationDrawer"] = True
             elif not used_methods["UsedMonitorPads"]:
-                print(24)
+                print(24)  # Use Monitor Pads
                 used_methods["UsedMonitorPads"] = True
-            elif not used_methods["UsedBP_Cuff"]:
-                print(27)
-                used_methods["UsedBP_Cuff"] = True
+            elif not used_methods["BP_CuffOn"]:
+                print(27)  # Use Blood Pressure Cuff
+                used_methods["BP_CuffOn"] = True
             elif not used_methods["UsedA_Line"]:
-                print(26)
+                print(26)  # Use A Line
                 used_methods["UsedA_Line"] = True
             elif not used_methods["GivenFluids"]:
-                print(15)
+                print(15)  # Give Fluids
                 used_methods["GivenFluids"] = True
             continue
 
-        # Check heart rate conditions and take appropriate action
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)
+            if vitals["HeartRate"] > 150:
+                print(2)  # Check Rhythm (Cardioversion)
                 continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
-                continue
-            elif vitals["HeartRate"] > 150:
-                print(28)
+            elif vitals["HeartRate"] < 50:
+                print(12)  # Give Atropine
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
