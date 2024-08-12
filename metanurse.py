@@ -1,11 +1,9 @@
 import sys
 
-def get_vital_sign(vital_signs_times, vital_signs_values, index):
-    return vital_signs_values[index] if vital_signs_times[index] > 0 else None
 
 def main():
     max_steps = 350
-    status = {"opened_breathing_drawer": False, "used_pulse_oximeter": False, "viewed_monitor": False}
+    opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -13,33 +11,31 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        sats = get_vital_sign(vital_signs_times, vital_signs_values, 5)
-        map_value = get_vital_sign(vital_signs_times, vital_signs_values, 4)
-        resp_rate = get_vital_sign(vital_signs_times, vital_signs_values, 1)
-        heart_rate = get_vital_sign(vital_signs_times, vital_signs_values, 0)
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
         if events[3]:  # AirwayClear
-            if not status["opened_breathing_drawer"]:
+            if not opened_breathing_drawer:
                 print(19)
-                status["opened_breathing_drawer"] = True
+                opened_breathing_drawer = True
                 continue
 
-            if not status["used_pulse_oximeter"]:
+            if not used_pulse_oximeter:
                 print(25)
-                status["used_pulse_oximeter"] = True
+                used_pulse_oximeter = True
                 continue
 
-            if not status["viewed_monitor"]:
+            if not viewed_monitor:
                 print(16)
-                status["viewed_monitor"] = True
+                viewed_monitor = True
                 continue
 
-            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            if (sats is not None and sats < 65) or (
+                map_value is not None and map_value < 20
+            ):
                 print(17)
-                continue
-                
-            if map_value is not None and map_value < 60:
-                print(15)
                 continue
 
             if sats is not None and sats < 88:
@@ -50,20 +46,25 @@ def main():
                 print(29)
                 continue
 
+            if map_value is not None and map_value < 60:
+                print(15)
+                continue
+
             if heart_rate is not None:
                 if heart_rate < 50:
                     print(12)
                     continue
                 elif heart_rate > 100:
                     print(2)  # CheckRhythm before deciding action
-                    if heart_rate > 150:
+                    if heart_rate > 150 and events[30]:  # HeartRhythmSVT
                         print(9)  # GiveAdenosine
-                    continue
+                        continue
 
             print(48)
             return
 
         print(3)  # ExamineAirway
+
 
 if __name__ == "__main__":
     main()
