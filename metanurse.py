@@ -1,17 +1,18 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
-        "OpenedBreathingDrawer": False,
         "UsedSatsProbe": False,
         "ViewedMonitor": False,
+        "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
         "UsedMonitorPads": False,
         "BP_CuffOn": False,
         "UsedA_Line": False,
         "GivenFluids": False,
+        "GivenAmiodarone": False,
+        "GivenAdrenaline": False,
     }
 
     for step in range(max_steps):
@@ -39,80 +40,59 @@ def main():
         }
 
         if not events[3]:
-            print(3)
+            print(3)  # Examine Airway
             continue
 
         if not used_methods["OpenedBreathingDrawer"]:
-            print(19)
+            print(19)  # Open Breathing Drawer
             used_methods["OpenedBreathingDrawer"] = True
             continue
 
         if not used_methods["UsedSatsProbe"]:
-            print(25)
+            print(25)  # Use Sats Probe
             used_methods["UsedSatsProbe"] = True
             continue
 
         if not used_methods["ViewedMonitor"]:
-            print(16)
+            print(16)  # View Monitor
             used_methods["ViewedMonitor"] = True
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(17)
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)  # Start Chest Compression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use Bag Valve Mask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
-                print(20)
+                print(20)  # Open Circulation Drawer
                 used_methods["OpenedCirculationDrawer"] = True
-                continue
-            if not used_methods["UsedMonitorPads"]:
-                print(24)
-                used_methods["UsedMonitorPads"] = True
-                continue
-            if not used_methods["BP_CuffOn"]:
-                print(27)
-                used_methods["BP_CuffOn"] = True
-                continue
-            if not used_methods["UsedA_Line"]:
-                print(26)
-                used_methods["UsedA_Line"] = True
-                continue
-            if not used_methods["GivenFluids"]:
-                print(15)
+            elif not used_methods["GivenFluids"]:
+                print(15)  # Give Fluids
                 used_methods["GivenFluids"] = True
-                continue
+            continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            if vitals["MAP"] and vitals["MAP"] < 60:
-                print(2)
-            else:
-                print(9)
+            print(2)  # Check Rhythm (Cardioversion)
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] < 50:
-            print(12)
+            print(12)  # Give Atropine
             continue
 
-        if (
-            events[3]
-            and (vitals["Sats"] is None or vitals["Sats"] >= 88)
-            and (vitals["RespRate"] is None or vitals["RespRate"] >= 8)
-            and (vitals["MAP"] is None or vitals["MAP"] >= 60)
-        ):
-            print(48)
-            return
+        print(48)  # Finish
+        return
 
-    print(48)
-
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
