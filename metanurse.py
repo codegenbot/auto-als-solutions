@@ -10,10 +10,12 @@ def main():
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
 
+        # Extract observations
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
+        # Extract specific vital signs
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
@@ -22,14 +24,18 @@ def main():
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
+        # Check for cardiac arrest
         if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
             print(17)  # StartChestCompression
             continue
 
+        # ABCDE assessment
+        # Airway
         if not events[3]:  # AirwayClear
             print(3)  # ExamineAirway
             continue
 
+        # Breathing
         if resp_rate is None:
             print(4)  # ExamineBreathing
             continue
@@ -43,6 +49,7 @@ def main():
                 used_sats_probe = True
             continue
 
+        # Circulation
         if map_value is None and not attached_blood_pressure_cuff:
             print(27)  # UseBloodPressureCuff
             attached_blood_pressure_cuff = True
@@ -53,6 +60,7 @@ def main():
             viewed_monitor = True
             continue
 
+        # Stabilization
         if sats is not None and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
