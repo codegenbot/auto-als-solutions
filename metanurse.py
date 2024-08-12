@@ -1,7 +1,9 @@
 import sys
 
+
 def main():
     used_sats_probe = False
+    used_breathing_drawer = False
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -40,19 +42,43 @@ def main():
         if map_value < 60:
             print(15)  # GiveFluids
             continue
-        if not used_sats_probe:
+        if not events[21]:  # AVPU_A
+            print(6)  # ExamineDisability
+            continue
+        if not temperature:
+            print(7)  # ExamineExposure
+            continue
+
+        # Use SatsProbe and View Monitor for oxygen saturation
+        if not used_breathing_drawer:
             print(19)  # OpenBreathingDrawer
+            used_breathing_drawer = True
+            continue
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
-        if not sats:
-            print(25)  # UseSatsProbe
+        if used_sats_probe and sats is None:
+            print(16)  # ViewMonitor
             continue
         if sats is not None and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        # Finish the game
-        print(48)  # Finish
+        # Finish the game once stabilized
+        if all(
+            [
+                events[3],
+                resp_rate >= 8,
+                map_value >= 60,
+                sats >= 88,
+                events[21],
+                temperature,
+            ]
+        ):
+            print(48)  # Finish
+            break
+
 
 if __name__ == "__main__":
     main()
