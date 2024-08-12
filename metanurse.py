@@ -7,12 +7,9 @@ def main():
         "ViewedMonitor": False,
         "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
-        "UsedMonitorPads": False,
         "BP_CuffOn": False,
-        "UsedA_Line": False,
         "GivenFluids": False,
-        "GivenAmiodarone": False,
-        "GivenAdrenaline": False,
+        "GivenAtropine": False,
     }
 
     for step in range(max_steps):
@@ -58,9 +55,7 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # Start Chest Compression
             continue
 
@@ -86,7 +81,9 @@ def main():
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] < 50:
-            print(12)  # Give Atropine
+            if not used_methods["GivenAtropine"]:
+                print(12)  # Give Atropine
+                used_methods["GivenAtropine"] = True
             continue
 
         print(48)  # Finish
