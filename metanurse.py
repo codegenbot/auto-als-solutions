@@ -2,41 +2,39 @@ import sys
 
 def main():
     max_steps = 350
-    actions_taken = {'BreathingDrawer': False, 'SatsProbe': False, 'Monitor': False, 'BPCuff': False, 
-                     'Fluids': False, 'A_Line': False, 'CirculationDrawer': False}
+    opened_drawers = {18: False, 19: False, 20: False, 21: False}
+    used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
+                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events = observations[:33]
-        vital_signs_times = observations[33:40]
-        vital_signs_values = observations[40:]
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        
+        vitals = {name: value if time > 0 else None for value, time, name in 
+                  zip(vital_signs_values, vital_signs_times, 
+                      ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
 
-        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, 
-                        ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
-
-        # A - Airway
-        if not events[3]:  # Check if airway is clear
+        if not events[3]:
             print(3)
             continue
 
-        # B - Breathing
-        if not actions_taken['BreathingDrawer']:
-            print(19)
-            actions_taken['BreathingDrawer'] = True
-            continue
-            
-        if not actions_taken['SatsProbe']:
-            print(25)
-            actions_taken['SatsProbe'] = True
-            continue
-            
-        if not actions_taken['Monitor']:
-            print(16)
-            actions_taken['Monitor'] = True
+        if not opened_drawers[18]:
+            print(18)
+            opened_drawers[18] = True
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(17)  # Cardiac arrest if sats < 65
+        if not used_methods['UsedSatsProbe']:
+            print(25)
+            used_methods['UsedSatsProbe'] = True
+            continue
+
+        if not used_methods['ViewedMonitor']:
+            print(16)
+            used_methods['ViewedMonitor'] = True
+            continue
+            
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -47,31 +45,18 @@ def main():
             print(29)
             continue
 
-        # C - Circulation
-        if not actions_taken['CirculationDrawer']:
-            print(20)
-            actions_taken['CirculationDrawer'] = True
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # Cardiac arrest if MAP < 20
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not actions_taken['BPCuff']:
+            if not used_methods['BP_Cuff']:
                 print(27)
-                actions_taken['BPCuff'] = True
-                continue
-            if not actions_taken['Fluids']:
-                print(15)
-                actions_taken['Fluids'] = True
-                continue
-            if not actions_taken['A_Line']:
+                used_methods['BP_Cuff'] = True
+            elif not used_methods['A_Line']:
                 print(26)
-                actions_taken['A_Line'] = True
-                continue
-        
-        # Heart rate treatments
+                used_methods['A_Line'] = True
+            elif not used_methods['Fluids']:
+                print(15)
+                used_methods['Fluids'] = True
+            continue
+
         if vitals["HeartRate"]:
             if vitals["HeartRate"] > 150:
                 print(10)
@@ -83,14 +68,10 @@ def main():
                 print(12)
                 continue
         
-        # Finish if all stable
-        if all([vitals["Sats"] >= 88, vitals["RespRate"] >= 8, vitals["MAP"] >= 60]):
-            print(48)
-            return
+        print(48)
+        return
 
-        print(0)  # Do nothing if no specific action required yet
-
-    print(48)  # Ensure to finish after max steps
+    print(48)
 
 if __name__ == "__main__":
     main()
