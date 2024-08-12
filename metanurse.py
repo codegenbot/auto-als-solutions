@@ -11,9 +11,8 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
-        "UsedDefibPads": False,
     }
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -21,6 +20,7 @@ def main():
             observations[33:40],
             observations[40:],
         )
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
@@ -38,7 +38,7 @@ def main():
             )
         }
 
-        # Ensure airway is examined
+        # Examine airway
         if not events[3]:
             print(3)
             continue
@@ -61,12 +61,12 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        # Respond to cardiac arrest conditions
+        # Check for cardiac arrest conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
-        # Administer oxygen if sats are below 88%
+        # Give oxygen if sats are below 88%
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -103,9 +103,8 @@ def main():
             elif 100 < vitals["HeartRate"] <= 150:
                 print(2)
                 continue
-            elif vitals["HeartRate"] > 150 and not used_methods["UsedDefibPads"]:
+            elif vitals["HeartRate"] > 150:
                 print(28)
-                used_methods["UsedDefibPads"] = True
                 continue
 
         print(48)
