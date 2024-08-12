@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -11,6 +10,7 @@ def main():
         "UsedMonitorPads": False,
         "BP_CuffOn": False,
         "UsedA_Line": False,
+        "GivenAmiodarone": False,
         "GivenFluids": False,
     }
 
@@ -19,7 +19,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -71,15 +71,6 @@ def main():
             print(29)  # Use Bag Valve Mask
             continue
 
-        if (
-            vitals["HeartRate"]
-            and vitals["HeartRate"] > 150
-            and vitals["MAP"]
-            and vitals["MAP"] < 60
-        ):
-            print(2)  # Check Rhythm
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)  # Open Circulation Drawer
@@ -99,23 +90,17 @@ def main():
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
+            if vitals["HeartRate"] > 150 and vitals["MAP"] and vitals["MAP"] < 60:
+                print(2)  # Check Rhythm (Cardioversion)
+                continue
+            elif vitals["HeartRate"] < 50:
                 print(12)  # Give Atropine
                 continue
 
-        if all(
-            [
-                events[3],  # AirwayClear
-                vitals["Sats"] >= 88 if vitals["Sats"] is not None else False,
-                vitals["RespRate"] >= 8 if vitals["RespRate"] is not None else False,
-                vitals["MAP"] >= 60 if vitals["MAP"] is not None else False,
-            ]
-        ):
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
