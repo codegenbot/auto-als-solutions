@@ -1,11 +1,10 @@
 import sys
-import math
 
 def main():
     used_sats_probe = False
-    max_steps = 350
+    used_breathing_drawer = False
 
-    for step in range(max_steps):
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
 
         # Extract observations
@@ -23,7 +22,7 @@ def main():
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         # Check for cardiac arrest
-        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+        if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -32,36 +31,52 @@ def main():
             print(3)  # ExamineAirway
             continue
 
-        if resp_rate is None:
+        if not resp_rate or resp_rate < 8:
             print(4)  # ExamineBreathing
             continue
 
-        if not used_sats_probe:
+        if not map_value or map_value < 60:
+            print(5)  # ExamineCirculation
+            continue
+
+        if not events[21]:  # AVPU_A
+            print(6)  # ExamineDisability
+            continue
+
+        if not temperature:
+            print(7)  # ExamineExposure
+            continue
+
+        # Check and measure Sats
+        if not used_breathing_drawer:
             print(19)  # OpenBreathingDrawer
+            used_breathing_drawer = True
+            continue
+
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
-        if used_sats_probe and vital_signs_times[5] == 0:
-            print(25)  # UseSatsProbe
-            continue
-
-        if vital_signs_times[5] > 0 and sats is None:
+        if used_sats_probe and not vital_signs_times[5]:
             print(16)  # ViewMonitor
             continue
 
         # Stabilization
-        if sats is not None and sats < 88:
+        if sats and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
-        if resp_rate is not None and resp_rate < 8:
+
+        if resp_rate and resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
-        if map_value is not None and map_value < 60:
+
+        if map_value and map_value < 60:
             print(15)  # GiveFluids
             continue
 
         print(48)  # Finish
-        return
+        break
 
 if __name__ == "__main__":
     main()
