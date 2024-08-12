@@ -53,6 +53,9 @@ def main():
                     continue
                 elif heart_rate > 100:
                     print(2)  # CheckRhythm before deciding action
+                    if any(events[i] for i in [31, 32, 34, 35, 36, 38]):  # Unstable rhythms
+                        print(40)  # DefibrillatorCharge
+                        continue
                     if heart_rate > 150 and events[30]:  # HeartRhythmSVT
                         print(9)  # GiveAdenosine
                         continue
