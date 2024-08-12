@@ -3,36 +3,47 @@ import sys
 def main():
     max_steps = 350
     opened_drawers = {19: False, 20: False}
-    used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
-                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+    used_pulse_oximeter = viewed_monitor = examined_breathing = False
+    used_circulation_methods = {25: False, 26: False, 27: False, 10: False, 9: False, 15: False}
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
-        vitals = {name: value if time > 0 else None for value, time, name in 
-                  zip(vital_signs_values, vital_signs_times, 
-                      ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
-        
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
+        vital_sign_names = ["HeartRate", "RespRate", "CapillaryGlucose", 
+                            "Temperature", "MAP", "Sats", "Resps"]
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(vital_signs_values, vital_signs_times, vital_sign_names)
+        }
+
         if not events[3]:
             print(3)
             continue
-        
+
         if not opened_drawers[19]:
             print(19)
             opened_drawers[19] = True
             continue
 
-        if not used_methods['UsedSatsProbe']:
+        if not used_pulse_oximeter:
             print(25)
-            used_methods['UsedSatsProbe'] = True
+            used_pulse_oximeter = True
             continue
 
-        if not used_methods['ViewedMonitor']:
+        if not viewed_monitor:
             print(16)
-            used_methods['ViewedMonitor'] = True
+            viewed_monitor = True
             continue
-        
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+
+        if not examined_breathing:
+            print(4)
+            examined_breathing = True
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
 
@@ -45,28 +56,27 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_methods['BP_Cuff']:
+            if not used_circulation_methods[27]:
                 print(27)
-                used_methods['BP_Cuff'] = True
-            elif not used_methods['A_Line']:
+                used_circulation_methods[27] = True
+            elif not used_circulation_methods[26]:
                 print(26)
-                used_methods['A_Line'] = True
-            elif not used_methods['Fluids']:
+                used_circulation_methods[26] = True
+            else:
                 print(15)
-                used_methods['Fluids'] = True
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(10)
-                continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(9)
-                continue
-            elif vitals["HeartRate"] < 50:
+            if vitals["HeartRate"] < 50:
                 print(12)
                 continue
-        
+            elif vitals["HeartRate"] > 150:
+                print(10)
+                continue
+            elif 100 < vitals["HeartRate"] < 150:
+                print(9)
+                continue
+
         print(48)
         return
 
