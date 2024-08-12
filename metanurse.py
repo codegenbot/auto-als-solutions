@@ -39,7 +39,7 @@ def main():
             used_probe = True
             continue
 
-        if map_value is None:
+        if map_value is none:
             if not used_cuff:
                 print(27)
                 used_cuff = True
