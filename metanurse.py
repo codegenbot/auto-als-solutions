@@ -3,7 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
