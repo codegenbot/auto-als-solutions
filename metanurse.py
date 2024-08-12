@@ -8,11 +8,9 @@ def main():
         "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
         "UsedMonitorPads": False,
-        "BP_CuffOn": False,
+        "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
-        "GivenAmiodarone": False,
-        "GivenAdrenaline": False,
     }
 
     for step in range(max_steps):
@@ -20,22 +18,22 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                (
+                [
                     "HeartRate",
                     "RespRate",
                     "CapillaryGlucose",
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                )
+                    "Resps",
+                ],
             )
         }
 
@@ -79,9 +77,9 @@ def main():
             elif not used_methods["UsedMonitorPads"]:
                 print(24)
                 used_methods["UsedMonitorPads"] = True
-            elif not used_methods["BP_CuffOn"]:
+            elif not used_methods["UsedBP_Cuff"]:
                 print(27)
-                used_methods["BP_CuffOn"] = True
+                used_methods["UsedBP_Cuff"] = True
             elif not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
@@ -94,8 +92,8 @@ def main():
             if vitals["HeartRate"] > 150:
                 print(2)
                 continue
-            elif vitals["HeartRate"] < 50:
-                print(12)
+            elif vitals["HeartRate"] > 100:
+                print(9)
                 continue
 
         print(48)
