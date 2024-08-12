@@ -8,41 +8,46 @@ def main():
         "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
         "UsedMonitorPads": False,
-        "BP_CuffOn": False,
+        "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
-        "GivenAmiodarone": False,
-        "GivenAdrenaline": False,
     }
+
+    def is_stable(vitals):
+        return (vitals["Sats"] and vitals["Sats"] >= 88 and
+                vitals["RespRate"] and vitals["RespRate"] >= 8 and
+                vitals["MAP"] and vitals["MAP"] >= 60)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
+        events, vitals_times, vitals_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                (
+                vitals_values,
+                vitals_times,
+                [
                     "HeartRate",
                     "RespRate",
                     "CapillaryGlucose",
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                )
+                    "Resps",
+                ],
             )
         }
 
-        if not events[3]:
+        # Check and update airway
+        if not events[3]:  # AirwayClear
             print(3)
             continue
 
+        # Open breathing drawer and use necessary tools
         if not used_methods["OpenedBreathingDrawer"]:
             print(19)
             used_methods["OpenedBreathingDrawer"] = True
@@ -58,12 +63,13 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
+        # Check for cardiac arrest conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
+        # Stabilize by providing oxygen or ventilation support
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -72,6 +78,7 @@ def main():
             print(29)
             continue
 
+        # Handle blood pressure issues
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
@@ -79,9 +86,9 @@ def main():
             elif not used_methods["UsedMonitorPads"]:
                 print(24)
                 used_methods["UsedMonitorPads"] = True
-            elif not used_methods["BP_CuffOn"]:
+            elif not used_methods["UsedBP_Cuff"]:
                 print(27)
-                used_methods["BP_CuffOn"] = True
+                used_methods["UsedBP_Cuff"] = True
             elif not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
@@ -90,21 +97,23 @@ def main():
                 used_methods["GivenFluids"] = True
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                if not used_methods["GivenAmiodarone"]:
-                    print(11)
-                    used_methods["GivenAmiodarone"] = True
+        # Check and handle tachyarrhythmia
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            if vitals["MAP"] and vitals["MAP"] < 60:  # unstable
+                print(17)  # Cardioversion would be an option, for demo CPR
                 continue
-            
-            elif vitals["HeartRate"] < 50:
-                if not used_methods["GivenAdrenaline"]:
-                    print(10)
-                    used_methods["GivenAdrenaline"] = True
-                continue
+            print(2)
+            continue
 
-        print(48)
-        return
+        # Check for high heart rate
+        if vitals["HeartRate"] and vitals["HeartRate"] > 100:
+            print(9)
+            continue
+
+        # If stabilized, finish
+        if is_stable(vitals):
+            print(48)
+            return
 
     print(48)
 
