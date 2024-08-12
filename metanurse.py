@@ -3,7 +3,8 @@ import sys
 def main():
     max_steps = 350
     opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
-
+    opened_circulation_drawer = used_bp_cuff = False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
@@ -15,7 +16,7 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
-        if events[3]:  # AirwayClear
+        if events[3] and events[3] > 0:  # AirwayClear
             if not opened_breathing_drawer:
                 print(19)
                 opened_breathing_drawer = True
@@ -30,35 +31,41 @@ def main():
                 print(16)
                 viewed_monitor = True
                 continue
+            
+            if map_value is None:
+                if not opened_circulation_drawer:
+                    print(20)  # OpenCirculationDrawer
+                    opened_circulation_drawer = True
+                    continue
+                
+                if not used_bp_cuff:
+                    print(27)  # UseBloodPressureCuff
+                    used_bp_cuff = True
+                    continue
 
             if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)
+                print(17)  # StartChestCompression
                 continue
 
             if sats is not None and sats < 88:
-                print(30)
+                print(30)  # UseNonRebreatherMask
                 continue
 
             if resp_rate is not None and resp_rate < 8:
-                print(29)
+                print(29)  # UseBagValveMask
                 continue
 
             if map_value is not None and map_value < 60:
-                print(15)
+                print(15)  # GiveFluids
                 continue
 
             if heart_rate is not None:
                 if heart_rate < 50:
-                    print(12)
+                    print(12)  # GiveAtropine
                     continue
                 elif heart_rate > 100:
-                    print(2)  # CheckRhythm before deciding action
-                    if any(events[i] for i in [31, 32, 34, 35, 36, 38]):  # Unstable rhythms
-                        print(40)  # DefibrillatorCharge
-                        continue
-                    if heart_rate > 150 and events[30]:  # HeartRhythmSVT
-                        print(9)  # GiveAdenosine
-                        continue
+                    print(9)  # GiveAdenosine
+                    continue
 
             print(48)
             return
