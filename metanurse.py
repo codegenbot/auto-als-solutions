@@ -2,23 +2,24 @@ import sys
 
 def main():
     max_steps = 350
-    opened_drawers = {19: False, 20: False, 21: False}
+    opened_drawers = {19: False, 20: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
-                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False, 'CheckedRhythm': False}
     finished = False
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
+
         vitals = {name: value if time > 0 else None for value, time, name in 
                   zip(vital_signs_values, vital_signs_times, 
-                      ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
-        
+                      ["HeartRate", "RespRate", "CapillaryGlucose", 
+                       "Temperature", "MAP", "Sats", "Resps"])}
+
         if not events[3]:
             print(3)  # ExamineAirway
             continue
-        
+
         if not opened_drawers[19]:
             print(19)  # OpenBreathingDrawer
             opened_drawers[19] = True
@@ -32,6 +33,16 @@ def main():
         if not used_methods['ViewedMonitor']:
             print(16)  # ViewMonitor
             used_methods['ViewedMonitor'] = True
+            continue
+
+        if not used_methods['BP_Cuff']:
+            print(27)  # Apply BP cuff
+            used_methods['BP_Cuff'] = True
+            continue
+
+        if not used_methods['CheckedRhythm']:
+            print(2)  # Check rhythm
+            used_methods['CheckedRhythm'] = True
             continue
         
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -47,31 +58,22 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_methods['BP_Cuff']:
-                print(27)  # Apply BP cuff
-                used_methods['BP_Cuff'] = True
-            elif not used_methods['A_Line']:
+            if not used_methods['A_Line']:
                 print(26)  # Use arterial line
                 used_methods['A_Line'] = True
             elif not used_methods['Fluids']:
                 print(15)  # Give fluids
                 used_methods['Fluids'] = True
-            elif not opened_drawers[21]:
-                print(21)  # Open Drugs Drawer
-                opened_drawers[21] = True
-            else:
-                print(10)  # Give Adrenaline
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(2)  # Check rhythm
+            if vitals["HeartRate"] < 50:
+                print(12)  # Give Atropine
                 continue
-            elif not opened_drawers[21]:
-                print(21)  # Open Drugs Drawer
-                opened_drawers[21] = True
-            else:
-                print(11)  # Give Amiodarone
+            elif vitals["HeartRate"] > 150:
+                print(41) # Defibrillator current up
+                continue
+            elif 100 < vitals["HeartRate"] <= 150:
                 continue
 
         finished = True
