@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -40,7 +39,7 @@ def main():
             )
         }
 
-        if not events[3]:
+        if not events[3]:  # AirwayClear
             print(3)
             continue
 
@@ -59,9 +58,7 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
 
@@ -110,7 +107,6 @@ def main():
         return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
