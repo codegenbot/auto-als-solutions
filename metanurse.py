@@ -2,56 +2,45 @@ import sys
 import math
 
 def main():
-    for _ in range(350):
+    steps = 0
+    while steps < 350:
+        steps += 1
         observations = list(map(float, input().strip().split()))
 
-        # Vital signs indices
-        MeasuredMAP_index = 40
-        MeasuredSats_index = 41
-        MeasuredRespRate_index = 42
+        MAP, Sats, RespRate = observations[46], observations[47], observations[48]
 
-        # Vital signs values
-        MAP = observations[46]
-        Sats = observations[47]
-        RespRate = observations[48]
-
-        # Check for recent measurements, take actions if not available
-        if observations[MeasuredMAP_index] == 0:
-            print(27)  # UseBloodPressureCuff
-            continue
-        if observations[MeasuredSats_index] == 0:
-            print(25)  # UseSatsProbe
-            continue
-        if observations[MeasuredRespRate_index] == 0:
-            print(4)  # ExamineBreathing
-            continue
-
-        # Check for critical conditions
         if Sats < 65 or MAP < 20:
-            print(22)  # BagDuringCPR
+            print(35)  # PerformAirwayManoeuvres
             continue
 
-        # Check if patient is stable
         if Sats >= 88 and RespRate >= 8 and MAP >= 60:
             print(48)  # Finish
             break
 
-        # Check and stabilize airway, breathing, circulation
-        if observations[3] == 0:  # AirwayClear
-            print(3)  # ExamineAirway
+        if observations[40] == 0:
+            print(27)  # UseBloodPressureCuff
             continue
-        if Sats < 88:
-            print(30)  # UseNonRebreatherMask
+        elif observations[41] == 0:
+            print(25)  # UseSatsProbe
             continue
-        if RespRate < 8:
-            print(29)  # UseBagValveMask
-            continue
-        if MAP < 60:
-            print(15)  # GiveFluids
+        elif observations[42] == 0:
+            print(4)  # ExamineBreathing
             continue
 
-        # Do nothing if all immediate actions taken
-        print(0)  # DoNothing
+        if observations[7] != 0 or observations[8] != 0 or observations[9] != 0:
+            print(32)  # UseGuedelAirway
+            continue
+        elif Sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        elif RespRate < 8:
+            print(29)  # UseBagValveMask
+            continue
+        elif MAP < 60:
+            print(15)  # GiveFluids
+            continue
+        else:
+            print(0)  # DoNothing
 
 if __name__ == "__main__":
     main()
