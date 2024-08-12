@@ -20,7 +20,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -34,14 +34,10 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ),
+                    "Resps"
+                )
             )
         }
-
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(2)
-            continue
 
         if not events[3]:
             print(3)
@@ -55,6 +51,16 @@ def main():
         if not used_methods["UsedSatsProbe"]:
             print(25)
             used_methods["UsedSatsProbe"] = True
+            continue
+
+        if not used_methods["UsedMonitorPads"]:
+            print(24)
+            used_methods["UsedMonitorPads"] = True
+            continue
+
+        if not used_methods["BP_CuffOn"]:
+            print(27)
+            used_methods["BP_CuffOn"] = True
             continue
 
         if not used_methods["ViewedMonitor"]:
@@ -80,23 +86,22 @@ def main():
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
-            elif not used_methods["UsedMonitorPads"]:
-                print(24)
-                used_methods["UsedMonitorPads"] = True
-            elif not used_methods["BP_CuffOn"]:
-                print(27)
-                used_methods["BP_CuffOn"] = True
-            elif not used_methods["UsedA_Line"]:
-                print(26)
-                used_methods["UsedA_Line"] = True
             elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] < 50:
-            print(12)
-            continue
+        if vitals["HeartRate"]:
+            if vitals["HeartRate"] > 150:
+                if not used_methods["GivenAmiodarone"]:
+                    print(11)
+                    used_methods["GivenAmiodarone"] = True
+                continue
+            elif vitals["HeartRate"] < 50:
+                if not used_methods["GivenAdrenaline"]:
+                    print(10)
+                    used_methods["GivenAdrenaline"] = True
+                continue
 
         print(48)
         return
