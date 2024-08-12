@@ -87,6 +87,7 @@ def main():
                 continue
             elif vitals["HeartRate"] > 100:
                 print(2)  # Check rhythm
+                print(10)  # Give Adrenaline
                 continue
 
         print(48)  # Finish
