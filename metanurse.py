@@ -38,7 +38,7 @@ def main():
             )
         }
 
-        # Examine airway if not clear
+        # Examine airway
         if not events[3]:
             print(3)
             continue
@@ -81,23 +81,19 @@ def main():
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
-                continue
             elif not used_methods["UsedMonitorPads"]:
                 print(24)
                 used_methods["UsedMonitorPads"] = True
-                continue
             elif not used_methods["UsedBP_Cuff"]:
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
-                continue
             elif not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
-                continue
             elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
-                continue
+            continue
 
         # Check heart rate conditions and take appropriate action
         if vitals["HeartRate"]:
@@ -110,16 +106,9 @@ def main():
             elif vitals["HeartRate"] > 150:
                 print(28)
                 continue
-        
-        # If stabilized, finish
-        if (
-            (events[3] > 0) and
-            (vitals["Sats"] and vitals["Sats"] >= 88) and
-            (vitals["RespRate"] and vitals["RespRate"] >= 8) and
-            (vitals["MAP"] and vitals["MAP"] >= 60)
-        ):
-            print(48)
-            return
+
+        # Do nothing to proceed through steps
+        print(0)
 
     print(48)
 
