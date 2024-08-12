@@ -2,7 +2,7 @@ import sys
 
 def main():
     max_steps = 350
-    opened_drawers = {18: False, 19: False, 20: False, 21: False}
+    opened_drawers = {19: False, 20: False, 21: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
                     'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
 
@@ -18,9 +18,9 @@ def main():
             print(3)
             continue
 
-        if not opened_drawers[18]:
-            print(18)
-            opened_drawers[18] = True
+        if not opened_drawers[19]:
+            print(19)
+            opened_drawers[19] = True
             continue
 
         if not used_methods['UsedSatsProbe']:
