@@ -15,51 +15,53 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
-        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
-            print(17)
+        # Check cardiac arrest conditions
+        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            print(17)  # StartChestCompression
             continue
 
+        # Perform ABCDE assessment
         if not opened_airway_drawer:
-            print(18)
+            print(18)  # OpenAirwayDrawer
             opened_airway_drawer = True
             continue
 
         if not opened_breathing_drawer:
-            print(19)
+            print(19)  # OpenBreathingDrawer
             opened_breathing_drawer = True
             continue
 
         if not used_sats_probe:
-            print(25)
+            print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
         if not viewed_monitor:
-            print(16)
+            print(16)  # ViewMonitor
             viewed_monitor = True
             continue
         
         if map_value is not None and map_value < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if sats is not None and sats < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if resp_rate is not None and resp_rate < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if heart_rate is not None:
             if heart_rate < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif heart_rate > 150 and events[30]:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
 if __name__ == "__main__":
