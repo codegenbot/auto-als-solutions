@@ -19,16 +19,19 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
+        # Check for cardiac arrest
         if (sats is not None and sats < 65) or (
             map_value is not None and map_value < 20
         ):
             print(17)  # StartChestCompression
             continue
 
+        # A - Airway
         if not events[3]:  # AirwayClear
             print(3)  # ExamineAirway
             continue
 
+        # B - Breathing
         if in_breathing_phase:
             if not opened_breathing_drawer:
                 print(19)  # OpenBreathingDrawer
@@ -56,6 +59,7 @@ def main():
             in_breathing_phase = False
             continue
 
+        # C - Circulation
         if not used_aline:
             print(26)  # UseAline
             used_aline = True
@@ -65,6 +69,9 @@ def main():
             print(15)  # GiveFluids
             continue
 
+        # Other assessments (D & E) if necessary can be checked similarly..
+
+        # If all stabilisation criteria are met
         if all(
             [
                 events[3],  # AirwayClear
