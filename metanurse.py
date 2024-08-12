@@ -20,7 +20,7 @@ def main():
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17) 
+            print(17)
             continue
 
         if not events[3]:
@@ -49,7 +49,7 @@ def main():
             elif sats is None:
                 print(16)
             continue
-        
+
         if events[7]:
             print(29)
             continue
