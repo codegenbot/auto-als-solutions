@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = {
@@ -11,6 +12,7 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
+        "UsedDefibPads": False,
     }
 
     for step in range(max_steps):
@@ -89,12 +91,13 @@ def main():
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                if events[30]:
-                    print(17)
+            if vitals["HeartRate"] < 50:
+                print(12)
+                continue
+            elif 100 < vitals["HeartRate"] <= 150:
                 print(2)
                 continue
-            elif vitals["HeartRate"] > 100:
+            elif vitals["HeartRate"] > 150:
                 print(9)
                 continue
 
@@ -102,6 +105,7 @@ def main():
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
