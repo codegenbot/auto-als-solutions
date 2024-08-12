@@ -2,9 +2,10 @@ import sys
 
 def main():
     max_steps = 350
-    opened_drawers = {19: False, 20: False}
+    opened_drawers = {19: False, 20: False, 21: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
                     'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+    finished = False
     
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -14,7 +15,7 @@ def main():
                   zip(vital_signs_values, vital_signs_times, 
                       ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
         
-        if not events[3]:  # AirwayClear
+        if not events[3]:
             print(3)  # ExamineAirway
             continue
         
@@ -33,21 +34,21 @@ def main():
             used_methods['ViewedMonitor'] = True
             continue
         
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # Start chest compressions
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # Use non-rebreather mask
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # Use bag valve mask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods['BP_Cuff']:
-                print(27)  # Use blood pressure cuff
+                print(27)  # Apply BP cuff
                 used_methods['BP_Cuff'] = True
             elif not used_methods['A_Line']:
                 print(26)  # Use arterial line
@@ -55,24 +56,30 @@ def main():
             elif not used_methods['Fluids']:
                 print(15)  # Give fluids
                 used_methods['Fluids'] = True
+            elif not opened_drawers[21]:
+                print(21)  # Open Drugs Drawer
+                opened_drawers[21] = True
+            else:
+                print(10)  # Give Adrenaline
             continue
 
-        if vitals["HeartRate"] is not None:
-            if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
-                continue
-            elif vitals["HeartRate"] > 100:
+        if vitals["HeartRate"]:
+            if vitals["HeartRate"] > 150:
                 print(2)  # Check rhythm
-                if vital_signs_values[29] in range(100, 180):
-                    print(9)  # Give Adenosine
-                else:
-                    print(10)  # Give Adrenaline
                 continue
-        
-        print(48)  # Finish
-        return
+            elif not opened_drawers[21]:
+                print(21)  # Open Drugs Drawer
+                opened_drawers[21] = True
+            else:
+                print(11)  # Give Amiodarone
+                continue
 
-    print(48)  # Finish
+        finished = True
+        print(48)
+        break
+
+    if not finished:
+        print(48)
 
 if __name__ == "__main__":
     main()
