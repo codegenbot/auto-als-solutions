@@ -1,93 +1,59 @@
 import sys
 
-
 def main():
-    max_steps = 350
-    opened_breathing_drawer = False
-    used_sats_probe = False
-    viewed_monitor = False
-    examined_airway = False
-    examined_breathing = False
-    examined_circulation = False
-
-    for step in range(max_steps):
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
-        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
-        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        def get_value(index):
+            return vital_signs_values[index] if vital_signs_times[index] > 0 else None
 
-        # Airway (A)
-        if not examined_airway:
-            print(3)  # ExamineAirway
-            examined_airway = True
+        heart_rate = get_value(0)
+        resp_rate = get_value(1)
+        map_value = get_value(4)
+        sats = get_value(5)
+
+        if (sats and sats < 65) or (map_value and map_value < 20):
+            print(17)
             continue
 
-        # Breathing (B)
-        if not examined_breathing and events[3]:  # AirwayClear
-            print(4)  # ExamineBreathing
-            examined_breathing = True
+        if not events[3]:  # AirwayClear
+            print(3)
             continue
 
-        # Open Breathing drawer if not already done
-        if not opened_breathing_drawer:
-            print(19)  # OpenBreathingDrawer
-            opened_breathing_drawer = True
+        if resp_rate is None:
+            print(4)
+            continue
+        
+        if sats is None:
+            print(25)
             continue
 
-        # Use Sats probe if not already done
-        if not used_sats_probe:
-            print(25)  # UseSatsProbe
-            used_sats_probe = True
+        if not map_value:
+            print(27)
+            continue
+        
+        if not events[24] and not events[25]:  # Check if Monitor is not ready
+            print(16)
             continue
 
-        # View monitor if not already done
-        if not viewed_monitor:
-            print(16)  # ViewMonitor
-            viewed_monitor = True
+        if sats < 88:
+            print(30)
             continue
 
-        # Circulation (C)
-        if not examined_circulation:
-            print(5)  # ExamineCirculation
-            examined_circulation = True
+        if resp_rate < 8:
+            print(29)
             continue
 
-        # Check for cardiac arrest condition
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
-            print(17)  # StartChestCompression
+        if map_value < 60:
+            print(15)
             continue
 
-        # Stabilize patient based on vital signs
-        if sats is not None and sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        if resp_rate is not None and resp_rate < 8:
-            print(29)  # UseBagValveMask
-            continue
-
-        if map_value is not None and map_value < 60:
-            print(15)  # GiveFluids
-            continue
-
-        # If all vitals are stable
-        if (
-            (sats is not None and sats >= 88)
-            and (resp_rate is not None and resp_rate >= 8)
-            and (map_value is not None and map_value >= 60)
-        ):
-            print(48)  # Finish
-            return
-
-        # Default to DoNothing if no action required
-        print(0)  # DoNothing
-
+        print(48)
+        break
 
 if __name__ == "__main__":
     main()
