@@ -2,6 +2,8 @@ import sys
 
 
 def main():
+    used_probe = used_drawer = used_cuff = used_monitor = False
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -9,40 +11,55 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        def get_value(index):
-            return vital_signs_values[index] if vital_signs_times[index] > 0 else None
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
+        temperature = vital_signs_values[3] if vital_signs_times[3] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
-        heart_rate = get_value(0)
-        resp_rate = get_value(1)
-        map_value = get_value(4)
-        sats = get_value(5)
-
-        if (sats and sats < 65) or (map_value and map_value < 20):
+        # Check for cardiac arrest conditions
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
+        ):
             print(17)
             continue
 
+        # Ensure airway is clear
         if not events[3]:  # AirwayClear
             print(3)
             continue
 
+        # Ensure saturation probe is used
+        if not used_drawer:
+            print(19)
+            used_drawer = True
+            continue
+
+        if not used_probe:
+            print(25)
+            used_probe = True
+            continue
+
+        # Check MAP with necessary equipment
+        if map_value is None:
+            if not used_cuff:
+                print(27)
+                used_cuff = True
+                continue
+            if not used_monitor:
+                print(16)
+                used_monitor = True
+                continue
+
+        # Assess other vitals
         if resp_rate is None:
             print(4)
             continue
 
         if sats is None:
-            print(25)
-            continue
-
-        if not map_value:
-            print(27)
-            continue
-
-        if not events[24] and not events[25]:  # Check if Monitor is not ready
             print(16)
-            continue
-
-        if sats < 88:
-            print(30)
             continue
 
         if resp_rate < 8:
@@ -53,7 +70,21 @@ def main():
             print(15)
             continue
 
-        print(48)
+        if sats < 88:
+            print(30)
+            continue
+
+        # Stabilize based on signs of life
+        if events[7]:  # BreathingNone
+            print(29)
+            continue
+
+        # Examine for other vital signs if needed
+        if heart_rate is None:
+            print(6)
+            continue
+
+        print(48)  # Finish when stable
         break
 
 
