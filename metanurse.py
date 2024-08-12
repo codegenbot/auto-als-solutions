@@ -20,56 +20,55 @@ def main():
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
-        if not events[3]:  # AirwayClear
-            print(3)  # ExamineAirway
+        if not events[3]:
+            print(3)
             continue
 
         if not resp_rate or resp_rate < 8:
-            print(4)  # ExamineBreathing
+            if not used_breathing_drawer:
+                print(19)
+                used_breathing_drawer = True
+            else:
+                print(25)
             continue
 
         if not map_value or map_value < 60:
-            print(5)  # ExamineCirculation
+            print(5)
             continue
 
-        if not events[21]:  # AVPU_A
-            print(6)  # ExamineDisability
+        if not events[21]:
+            print(6)
             continue
 
         if not temperature:
-            print(7)  # ExamineExposure
-            continue
-
-        if not used_breathing_drawer:
-            print(19)  # OpenBreathingDrawer
-            used_breathing_drawer = True
+            print(7)
             continue
 
         if not used_sats_probe:
-            print(25)  # UseSatsProbe
+            print(25)
             used_sats_probe = True
             continue
 
         if used_sats_probe and not vital_signs_times[5]:
-            print(16)  # ViewMonitor
+            print(16)
             continue
 
         if sats and sats < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if resp_rate and resp_rate < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if map_value and map_value < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        print(48)  # Finish
+        print(48)
         break
 
 if __name__ == "__main__":
