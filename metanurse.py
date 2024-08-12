@@ -33,38 +33,38 @@ def main():
             continue
         
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # Start chest compressions
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods['BP_Cuff']:
-                print(27)  # Apply BP cuff
+                print(27)
                 used_methods['BP_Cuff'] = True
             elif not used_methods['A_Line']:
-                print(26)  # Use arterial line
+                print(26)
                 used_methods['A_Line'] = True
             elif not used_methods['Fluids']:
-                print(15)  # Give fluids
+                print(15)
                 used_methods['Fluids'] = True
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] > 150:
-                print(10)  # Give Adrenaline
+                print(10)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(9)  # Give Adenosine
+                print(9)
                 continue
             elif vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
+                print(12)
                 continue
         
         print(48)
