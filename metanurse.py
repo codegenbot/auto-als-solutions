@@ -3,14 +3,13 @@ import sys
 def main():
     max_steps = 350
     opened_breathing_drawer = used_sats_probe = viewed_monitor = False
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Extract vitals if measured
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
