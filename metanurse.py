@@ -2,7 +2,8 @@ import sys
 
 def main():
     used_sats_probe = False
-    used_bp_cuff = False
+    used_monitor = False
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -25,54 +26,54 @@ def main():
             print(17)  # StartChestCompression
             continue
 
-        # ABCDE assessment
+        # Check Airway
         if not events[3]:  # AirwayClear
             print(3)  # ExamineAirway
             continue
 
-        if resp_rate is None or resp_rate < 8:  # Check breathing
+        # Check Breathing
+        if not resp_rate:
             print(4)  # ExamineBreathing
             continue
-
-        if not map_value and not used_bp_cuff:
-            print(27)  # UseBloodPressureCuff
-            used_bp_cuff = True
+        if resp_rate < 8:
+            print(29)  # UseBagValveMask
             continue
-
-        if not map_value:
-            print(16)  # ViewMonitor
-            continue
-
-        if map_value < 60:
-            print(15)  # GiveFluids
-            continue
-
-        if not events[21]:  # AVPU_A
-            print(6)  # ExamineDisability
-            continue
-
-        if not temperature:
-            print(7)  # ExamineExposure
-            continue
-
+            
+        # If sats probe not used, open the drawer and use it
         if not used_sats_probe:
             print(19)  # OpenBreathingDrawer
             used_sats_probe = True
             continue
-
-        if used_sats_probe and not sats:
+        if used_sats_probe and not used_monitor:
             print(25)  # UseSatsProbe
+            used_monitor = True
             continue
-
+        if used_monitor and not sats:
+            print(16)  # ViewMonitor
+            continue
         if sats is not None and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if resp_rate < 8:
-            print(29)  # UseBagValveMask
+        # Check Circulation
+        if not map_value:
+            print(38)  # TakeBloodPressure
+            continue
+        if map_value < 60:
+            print(15)  # GiveFluids
             continue
 
-        # Finish the game
+        # Check Disability
+        if not events[21]:  # AVPU_A
+            print(6)  # ExamineDisability
+            continue
+
+        # Check Exposure
+        if not temperature:
+            print(7)  # ExamineExposure
+            continue
+
+        # Finish the game if stabilized
         print(48)  # Finish
         break
 
