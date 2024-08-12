@@ -2,8 +2,11 @@ import sys
 
 def main():
     max_steps = 350
-    opened_breathing_drawer = used_sats_probe = viewed_monitor = used_blood_pressure_cuff = False
 
+    # Boolean flags for what has been done
+    opened_breathing_drawer = used_sats_probe = viewed_monitor = used_blood_pressure_cuff = False
+    examined_airway = examined_breathing = examined_circulation = False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
@@ -11,12 +14,12 @@ def main():
         vital_signs_values = observations[40:]
 
         # Extract vitals if measured
-        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
-        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
-        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
 
-        if events[3]:  # AirwayClear
+        if events[3]:  # Airway clear, start examining other systems
             if not opened_breathing_drawer:
                 print(19)  # OpenBreathingDrawer
                 opened_breathing_drawer = True
@@ -53,14 +56,28 @@ def main():
                 print(15)  # GiveFluids
                 continue
 
-            if heart_rate is not None and heart_rate > 100 and map_value < 60:
+            if heart_rate is not None and heart_rate > 100:
                 print(24)  # UseMonitorPads (potential start cardioversion)
                 continue
 
-            print(48)  # Finish
-            return
+            if step > max_steps:
+                print(48)  # Finish
+                return
 
-        print(3)  # ExamineAirway
+            print(0)  # DoNothing
+            continue
+
+        if not examined_airway:
+            print(3)  # ExamineAirway
+            examined_airway = True
+
+        elif not examined_breathing:
+            print(4)  # ExamineBreathing
+            examined_breathing = True
+
+        elif not examined_circulation:
+            print(5)  # ExamineCirculation
+            examined_circulation = True
 
 if __name__ == "__main__":
     main()
