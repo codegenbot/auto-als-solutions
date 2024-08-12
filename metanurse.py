@@ -3,51 +3,71 @@ import math
 
 
 def main():
-    for _ in range(350):
+    used_sats_probe = False
+
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
 
-        # Vital signs indices
-        MeasuredMAP_index = 40
-        MeasuredSats_index = 41
-        MeasuredRespRate_index = 42
+        # Extract observations
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
 
-        # Vital signs values
-        MAP = observations[46]
-        Sats = observations[47]
-        RespRate = observations[48]
+        # Extract specific vital signs
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
+        temperature = vital_signs_values[3] if vital_signs_times[3] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
-        # Check for critical conditions
-        if Sats < 65 or MAP < 20:
+        # Check for cardiac arrest
+        if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)  # StartChestCompression
             continue
 
-        # Check if patient is stable
-        if Sats >= 88 and RespRate >= 8 and MAP >= 60:
-            print(48)  # Finish
-            break
-
-        # Check if measurements are recent
-        if observations[MeasuredMAP_index] == 0:
-            print(27)  # UseBloodPressureCuff
+        # ABCDE assessment
+        if not events[3]:  # AirwayClear
+            print(3)  # ExamineAirway
             continue
-        if observations[MeasuredSats_index] == 0:
-            print(25)  # UseSatsProbe
-            continue
-        if observations[MeasuredRespRate_index] == 0:
+        if not resp_rate or resp_rate < 8:
             print(4)  # ExamineBreathing
             continue
+        if not map_value or map_value < 60:
+            print(5)  # ExamineCirculation
+            continue
+        if not events[21]:  # AVPU_A
+            print(6)  # ExamineDisability
+            continue
+        if not temperature:
+            print(7)  # ExamineExposure
+            continue
 
-        # Take necessary actions based on observations
-        if observations[3] == 0:  # AirwayClear
-            print(3)  # ExamineAirway
-        elif Sats < 88:
+        # Check and measure SATS
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
+            used_sats_probe = True
+            continue
+
+        if (
+            used_sats_probe and not vital_signs_times[5]
+        ):  # Check if sats has been measured
+            print(16)  # ViewMonitor
+            continue
+
+        # Stabilization
+        if sats and sats < 88:
             print(30)  # UseNonRebreatherMask
-        elif RespRate < 8:
+            continue
+        if resp_rate and resp_rate < 8:
             print(29)  # UseBagValveMask
-        elif MAP < 60:
+            continue
+        if map_value and map_value < 60:
             print(15)  # GiveFluids
-        else:
-            print(0)  # DoNothing
+            continue
+
+        print(48)  # Finish
 
 
 if __name__ == "__main__":
