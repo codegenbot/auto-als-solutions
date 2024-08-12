@@ -2,7 +2,7 @@ import sys
 
 def main():
     max_steps = 350
-    opened_breathing_drawer = used_sats_probe = viewed_monitor = False
+    opened_breathing_drawer, used_sats_probe, viewed_monitor = False, False, False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
