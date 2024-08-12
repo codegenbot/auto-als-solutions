@@ -16,7 +16,7 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
-        if events[3] and events[3] > 0:  # AirwayClear
+        if events[3]:  # AirwayClear
             if not opened_breathing_drawer:
                 print(19)
                 opened_breathing_drawer = True
