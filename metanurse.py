@@ -39,7 +39,7 @@ def main():
         }
 
         # Ensure airway is examined
-        if not events[3]:
+        if not events[3]:  # Airway clear
             print(3)
             continue
 
@@ -98,17 +98,19 @@ def main():
         # Check heart rate conditions and take appropriate action
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # Give Atropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # Check Rhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(40)
+                print(9)  # Give Adenosine
                 continue
 
-        print(48)
-        return
+        # If all measures are fine, finish
+        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
+            print(48)
+            return
 
     print(48)
 
