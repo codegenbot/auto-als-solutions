@@ -3,7 +3,8 @@ import sys
 def main():
     max_steps = 350
     opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
-
+    opened_circulation_drawer = used_bp_cuff = False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
@@ -32,29 +33,37 @@ def main():
                 continue
 
             if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)
+                print(17)  # StartChestCompression
                 continue
 
             if sats is not None and sats < 88:
-                print(30)
+                print(30)  # UseNonRebreatherMask
                 continue
 
             if resp_rate is not None and resp_rate < 8:
-                print(29)
+                print(29)  # UseBagValveMask
                 continue
 
             if map_value is not None and map_value < 60:
-                print(15)
+                if not opened_circulation_drawer:
+                    print(20)  # OpenCirculationDrawer
+                    opened_circulation_drawer = True
+                    continue
+
+                if not used_bp_cuff:
+                    print(27)  # UseBloodPressureCuff
+                    used_bp_cuff = True
+                    continue
+
+                print(15)  # GiveFluids
                 continue
 
             if heart_rate is not None:
                 if heart_rate < 50:
-                    print(12)
+                    print(12)  # GiveAtropine
                     continue
                 elif heart_rate > 100:
-                    print(2)  # CheckRhythm before deciding action
-                    if heart_rate > 150 and events[30]:  # HeartRhythmSVT
-                        print(9)  # GiveAdenosine
+                    print(9)  # GiveAdenosine
                     continue
 
             print(48)
