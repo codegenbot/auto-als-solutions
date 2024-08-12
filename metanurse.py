@@ -2,9 +2,9 @@ import sys
 
 def main():
     max_steps = 350
-    opened_drawers = {19: False, 20: False}
-    used_pulse_oximeter = viewed_monitor = examined_breathing = False
-    used_circulation_methods = {25: False, 26: False, 27: False, 10: False, 9: False, 15: False}
+    opened_drawers = {19: False, 20: False}  # Breathing and Circulation
+    used_pulse_oximeter = viewed_monitor = False
+    used_circulation_methods = {25: False, 26: False, 27: False}
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -12,75 +12,76 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
+        # Extract vitals if measured
         vital_sign_names = ["HeartRate", "RespRate", "CapillaryGlucose", 
                             "Temperature", "MAP", "Sats", "Resps"]
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(vital_signs_values, vital_signs_times, vital_sign_names)
         }
-
-        if not events[3]:
-            print(3)
+        
+        if not events[3]:  # No AirwayClear
+            print(3)  # ExamineAirway
+            continue
+        
+        if not opened_drawers[20]:  # CirculationDrawer Not opened
+            print(20)  # OpenCirculationDrawer
+            opened_drawers[20] = True
             continue
 
-        if not opened_drawers[19]:
-            print(19)
+        if not opened_drawers[19]:  # BreathingDrawer Not opened
+            print(19)  # OpenBreathingDrawer
             opened_drawers[19] = True
             continue
 
         if not used_pulse_oximeter:
-            print(25)
+            print(25)  # UseSatsProbe
             used_pulse_oximeter = True
             continue
 
         if not viewed_monitor:
-            print(16)
+            print(16)  # ViewMonitor
             viewed_monitor = True
             continue
 
-        if not examined_breathing:
-            print(4)
-            examined_breathing = True
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_circulation_methods[27]:
-                print(27)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if not used_circulation_methods[27]:  # UseBloodPressureCuff not used
+                print(27)  # UseBloodPressureCuff
                 used_circulation_methods[27] = True
-            elif not used_circulation_methods[26]:
-                print(26)
+            elif not used_circulation_methods[26]:  # UseAline not used
+                print(26)  # UseAline
                 used_circulation_methods[26] = True
             else:
-                print(15)
+                print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"]:
+        if vitals["HeartRate"] is not None:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif vitals["HeartRate"] > 150:
-                print(10)
+                print(10)  # GiveAdrenaline
                 continue
             elif 100 < vitals["HeartRate"] < 150:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Finish if max steps reached
 
 if __name__ == "__main__":
     main()
