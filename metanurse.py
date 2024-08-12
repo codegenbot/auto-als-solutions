@@ -13,16 +13,11 @@ def main():
         vitals = {name: value if time > 0 else None for value, time, name in 
                   zip(vital_signs_values, vital_signs_times, 
                       ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
-
+        
         if not events[3]:
             print(3)
             continue
-
-        if not opened_drawers[19]:
-            print(19)
-            opened_drawers[19] = True
-            continue
-
+            
         if not used_methods['UsedSatsProbe']:
             print(25)
             used_methods['UsedSatsProbe'] = True
@@ -33,6 +28,15 @@ def main():
             used_methods['ViewedMonitor'] = True
             continue
             
+        if not opened_drawers[19]:
+            print(19)
+            opened_drawers[19] = True
+            continue
+        
+        if not events[3]:
+            print(3)
+            continue
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
