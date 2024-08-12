@@ -22,65 +22,59 @@ def main():
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
-        # Check for cardiac arrest
         if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
-        # ABCDE assessment
         if not examined_airway:
-            print(3)  # ExamineAirway
+            print(3)
             examined_airway = True
             continue
 
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
-        # Breathing assessment
         if not examined_breathing:
-            print(4)  # ExamineBreathing
+            print(4)
             examined_breathing = True
             continue
 
         if not used_breathing_drawer:
-            print(19)  # OpenBreathingDrawer
+            print(19)
             used_breathing_drawer = True
             continue
 
         if not used_sats_probe:
-            print(25)  # UseSatsProbe
+            print(25)
             used_sats_probe = True
             continue
 
-        if not vital_signs_times[5]:  # Sats measurement
-            print(16)  # ViewMonitor
+        if not vital_signs_times[5]:
+            print(16)
             continue
         
-        # Stabilize breathing
         if resp_rate is None or resp_rate < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
         
         if sats is not None and sats < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
         
-        # Circulation assessment
         if map_value is None or not inserted_IV:
             if not inserted_IV:
-                print(14)  # UseVenflonIVCatheter
+                print(14)
                 inserted_IV = True
             elif map_value is None:
-                print(27)  # UseBloodPressureCuff
+                print(27)
             continue
         
         if map_value < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        # Ensure we call finish at the end
-        print(48)  # Finish
+        print(48)
         break
 
 if __name__ == "__main__":
