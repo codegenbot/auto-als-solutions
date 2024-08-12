@@ -3,10 +3,9 @@ import math
 
 def main():
     used_sats_probe = False
-    steps_used = 0
+    used_breathing_probe = False
 
-    while steps_used < 350:
-        steps_used += 1
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
 
         # Extract observations
@@ -46,12 +45,17 @@ def main():
             continue
 
         # Check and measure SATS
+        if not used_breathing_probe:
+            print(19)  # OpenBreathingDrawer
+            used_breathing_probe = True
+            continue
+
         if not used_sats_probe:
             print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
-        if used_sats_probe and not vital_signs_times[5]:  # Check if sats has been measured
+        if used_sats_probe and not vital_signs_times[5]:  # Check if SATS has been measured
             print(16)  # ViewMonitor
             continue
 
@@ -67,7 +71,6 @@ def main():
             continue
 
         print(48)  # Finish
-        break
 
 if __name__ == "__main__":
     main()
