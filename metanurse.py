@@ -2,13 +2,7 @@ import sys
 
 def main():
     max_steps = 350
-    used_actions = {19: False, 20: False, 25: False, 26: False, 27: False}
-    steps = 0
-
-    def perform_action(action):
-        nonlocal steps
-        print(action)
-        steps += 1
+    opened_airway_drawer = opened_breathing_drawer = used_sats_probe = viewed_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -16,59 +10,57 @@ def main():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Extract vitals if measured
-        vital_sign_names = ["HeartRate", "RespRate", "CapillaryGlucose", 
-                            "Temperature", "MAP", "Sats", "Resps"]
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(vital_signs_values, vital_signs_times, vital_sign_names)
-        }
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
-        if not events[3]:  # No AirwayClear
-            perform_action(3)  # ExamineAirway
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)
+            continue
+
+        if not opened_airway_drawer:
+            print(18)
+            opened_airway_drawer = True
+            continue
+
+        if not opened_breathing_drawer:
+            print(19)
+            opened_breathing_drawer = True
+            continue
+
+        if not used_sats_probe:
+            print(25)
+            used_sats_probe = True
+            continue
+
+        if not viewed_monitor:
+            print(16)
+            viewed_monitor = True
             continue
         
-        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
-            perform_action(17)  # StartChestCompression
+        if map_value is not None and map_value < 60:
+            print(15)
             continue
 
-        if not used_actions[19]:  # BreathingDrawer Not opened
-            perform_action(19)  # OpenBreathingDrawer
-            used_actions[19] = True
+        if sats is not None and sats < 88:
+            print(30)
             continue
 
-        if not used_actions[25]:
-            perform_action(25)  # UseSatsProbe
-            used_actions[25] = True
+        if resp_rate is not None and resp_rate < 8:
+            print(29)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            perform_action(30)  # UseNonRebreatherMask
-            continue
+        if heart_rate is not None:
+            if heart_rate < 50:
+                print(12)
+                continue
+            elif heart_rate > 150 and events[30]:
+                print(9)
+                continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            perform_action(29)  # UseBagValveMask
-            continue
-
-        if not used_actions[20]:  # CirculationDrawer Not opened
-            perform_action(20)  # OpenCirculationDrawer
-            used_actions[20] = True
-            continue
-
-        if not used_actions[27]:  # UseBloodPressureCuff not used
-            perform_action(27)  # UseBloodPressureCuff
-            used_actions[27] = True
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            perform_action(15)  # GiveFluids
-            continue
-
-        perform_action(48)  # Finish
-        break
-
-    if steps >= max_steps:
-        perform_action(48)  # Finish if max steps reached
+        print(48)
+        return
 
 if __name__ == "__main__":
     main()
