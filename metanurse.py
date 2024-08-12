@@ -1,8 +1,8 @@
 import sys
 
-
 def main():
-    used_probe = used_drawer = used_cuff = used_monitor = False
+    used_sats_probe = False
+    used_breathing_drawer = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -19,47 +19,43 @@ def main():
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
-        # Check for cardiac arrest conditions
-        if (sats is not None and sats < 65) or (
-            map_value is not None and map_value < 20
-        ):
+        if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)
             continue
 
-        # Ensure airway is clear
-        if not events[3]:  # AirwayClear
+        if not events[3]:  # Check Airway
             print(3)
             continue
 
-        # Ensure saturation probe is used
-        if not used_drawer:
+        if events[7]:  # If not breathing
+            print(29)  # Use Bag Valve Mask
+            continue
+
+        if not used_breathing_drawer:
             print(19)
-            used_drawer = True
+            used_breathing_drawer = True
             continue
 
-        if not used_probe:
+        if not used_sats_probe:
             print(25)
-            used_probe = True
+            used_sats_probe = True
             continue
 
-        # Check MAP with necessary equipment
-        if map_value is None:
-            if not used_cuff:
-                print(27)
-                used_cuff = True
-                continue
-            if not used_monitor:
-                print(16)
-                used_monitor = True
-                continue
-
-        # Assess other vitals
-        if resp_rate is None:
-            print(4)
-            continue
-
-        if sats is None:
+        if not vital_signs_times[5]:
             print(16)
+            continue
+            
+        if sats is None or map_value is None or resp_rate is None:
+            if map_value is None:
+                print(27)
+            elif resp_rate is None:
+                print(4)
+            elif sats is None:
+                print(16)
+            continue
+
+        if sats < 88:
+            print(30)
             continue
 
         if resp_rate < 8:
@@ -70,23 +66,8 @@ def main():
             print(15)
             continue
 
-        if sats < 88:
-            print(30)
-            continue
-
-        # Stabilize based on signs of life
-        if events[7]:  # BreathingNone
-            print(29)
-            continue
-
-        # Examine for other vital signs if needed
-        if heart_rate is None:
-            print(6)
-            continue
-
-        print(48)  # Finish when stable
+        print(48)
         break
-
 
 if __name__ == "__main__":
     main()
