@@ -1,11 +1,13 @@
 import sys
 import math
 
+
 def main():
     used_sats_probe = False
-    used_breathing_drawer = False
+    steps_used = 0
 
-    for step in range(350):
+    while steps_used < 350:
+        steps_used += 1
         observations = list(map(float, input().strip().split()))
 
         # Extract observations
@@ -31,35 +33,28 @@ def main():
         if not events[3]:  # AirwayClear
             print(3)  # ExamineAirway
             continue
-
         if not resp_rate or resp_rate < 8:
             print(4)  # ExamineBreathing
             continue
-
         if not map_value or map_value < 60:
             print(5)  # ExamineCirculation
             continue
-
         if not events[21]:  # AVPU_A
             print(6)  # ExamineDisability
             continue
-
         if not temperature:
             print(7)  # ExamineExposure
             continue
 
-        # Check and measure Sats
-        if not used_breathing_drawer:
-            print(19)  # OpenBreathingDrawer
-            used_breathing_drawer = True
-            continue
-
+        # Check and measure SATS
         if not used_sats_probe:
             print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
-        if used_sats_probe and not vital_signs_times[5]:
+        if (
+            used_sats_probe and not vital_signs_times[5]
+        ):  # Check if sats has been measured
             print(16)  # ViewMonitor
             continue
 
@@ -67,17 +62,16 @@ def main():
         if sats and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
-
         if resp_rate and resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
-
         if map_value and map_value < 60:
             print(15)  # GiveFluids
             continue
 
         print(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     main()
