@@ -2,16 +2,15 @@ import sys
 
 def main():
     max_steps = 350
-    opened_breathing_drawer = False
-    used_sats_probe = False
-    viewed_monitor = False
-
+    opened_breathing_drawer = used_sats_probe = viewed_monitor = False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
+        # Extract vitals if measured
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
@@ -32,15 +31,7 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if events[29] or events[30] or events[31] or events[32] or events[36] or events[37] or events[38]:
-                print(28)  # AttachDefibPads
-                continue
-
-            if events[40] or events[41] or events[42] or events[43] or events[44] or events[45] or events[46] or events[47]:
-                print(40)  # DefibrillatorCharge
-                continue
-
-            if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
                 print(17)  # StartChestCompression
                 continue
 
