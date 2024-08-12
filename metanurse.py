@@ -1,64 +1,39 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_drawers = {19: False, 20: False}
-    used_methods = {
-        "UsedSatsProbe": False,
-        "ViewedMonitor": False,
-        "BP_Cuff": False,
-        "A_Line": False,
-        "Fluids": False,
-    }
-
+    used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
+                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
-
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        
+        vitals = {name: value if time > 0 else None for value, time, name in 
+                  zip(vital_signs_values, vital_signs_times, 
+                      ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
+        
         if not events[3]:  # AirwayClear
             print(3)  # ExamineAirway
             continue
-
+        
         if not opened_drawers[19]:
             print(19)  # OpenBreathingDrawer
             opened_drawers[19] = True
             continue
 
-        if not used_methods["UsedSatsProbe"]:
+        if not used_methods['UsedSatsProbe']:
             print(25)  # UseSatsProbe
-            used_methods["UsedSatsProbe"] = True
+            used_methods['UsedSatsProbe'] = True
             continue
 
-        if not used_methods["ViewedMonitor"]:
+        if not used_methods['ViewedMonitor']:
             print(16)  # ViewMonitor
-            used_methods["ViewedMonitor"] = True
+            used_methods['ViewedMonitor'] = True
             continue
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             print(17)  # Start chest compressions
             continue
 
@@ -71,15 +46,15 @@ def main():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if not used_methods["BP_Cuff"]:
+            if not used_methods['BP_Cuff']:
                 print(27)  # Use blood pressure cuff
-                used_methods["BP_Cuff"] = True
-            elif not used_methods["A_Line"]:
+                used_methods['BP_Cuff'] = True
+            elif not used_methods['A_Line']:
                 print(26)  # Use arterial line
-                used_methods["A_Line"] = True
-            elif not used_methods["Fluids"]:
+                used_methods['A_Line'] = True
+            elif not used_methods['Fluids']:
                 print(15)  # Give fluids
-                used_methods["Fluids"] = True
+                used_methods['Fluids'] = True
             continue
 
         if vitals["HeartRate"] is not None:
@@ -88,17 +63,16 @@ def main():
                 continue
             elif vitals["HeartRate"] > 100:
                 print(2)  # Check rhythm
-                if 100 <= vitals["HeartRate"] < 180:
+                if vital_signs_values[29] in range(100, 180):
                     print(9)  # Give Adenosine
                 else:
                     print(10)  # Give Adrenaline
                 continue
-
+        
         print(48)  # Finish
         return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
