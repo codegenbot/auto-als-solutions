@@ -4,7 +4,7 @@ def main():
     max_steps = 350
     opened_drawers = {19: False, 20: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
-                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False, 'CheckedRhythm': False}
+                    'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
     finished = False
 
     for step in range(max_steps):
@@ -35,16 +35,6 @@ def main():
             used_methods['ViewedMonitor'] = True
             continue
 
-        if not used_methods['BP_Cuff']:
-            print(27)  # Apply BP cuff
-            used_methods['BP_Cuff'] = True
-            continue
-
-        if not used_methods['CheckedRhythm']:
-            print(2)  # Check rhythm
-            used_methods['CheckedRhythm'] = True
-            continue
-        
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # Start chest compressions
             continue
@@ -58,22 +48,32 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
+            if not used_methods['BP_Cuff']:
+                print(27)  # Apply BP cuff
+                used_methods['BP_Cuff'] = True
+                continue
+            if not used_methods['ViewedMonitor']:
+                print(5)  # Examine Circulation
+                used_methods['ViewedMonitor'] = True
+                continue
             if not used_methods['A_Line']:
                 print(26)  # Use arterial line
                 used_methods['A_Line'] = True
-            elif not used_methods['Fluids']:
+                continue
+            if not used_methods['Fluids']:
                 print(15)  # Give fluids
                 used_methods['Fluids'] = True
-            continue
+                continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # Give Atropine
                 continue
             elif vitals["HeartRate"] > 150:
-                print(41) # Defibrillator current up
+                print(2)  # Check rhythm
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
+                print(2)  # Check rhythm
                 continue
 
         finished = True
