@@ -3,6 +3,7 @@ import sys
 def main():
     used_sats_probe = False
     used_breathing_drawer = False
+    used_bp_cuff = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -20,53 +21,58 @@ def main():
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
         if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17) 
+            print(17)  # StartChestCompression
             continue
 
-        if not events[3]:  # Check Airway
-            print(3)
+        if not events[3]:  # AirwayClear
+            print(3)  # ExamineAirway
             continue
-        
-        if events[7]:  # If not breathing
-            print(29)  # Use Bag Valve Mask
+
+        if events[7]:  # BreathingNone
+            print(29)  # UseBagValveMask
             continue
 
         if not used_breathing_drawer:
-            print(19)
+            print(19)  # OpenBreathingDrawer
             used_breathing_drawer = True
             continue
 
         if not used_sats_probe:
-            print(25)
+            print(25)  # UseSatsProbe
             used_sats_probe = True
             continue
 
-        if not vital_signs_times[5]:
-            print(16)
+        if not vital_signs_times[5]:  # Sats
+            print(16)  # ViewMonitor
             continue
 
+        if not used_bp_cuff:
+            print(27)  # UseBloodPressureCuff
+            used_bp_cuff = True
+            continue
+
+        if map_value is None:
+            print(16)  # ViewMonitor
+            continue
+        
         if sats is None or map_value is None or resp_rate is None:
-            if map_value is None:
-                print(27)
-            elif resp_rate is None:
-                print(4)
-            elif sats is None:
-                print(16)
+            if resp_rate is None:
+                print(4)  # ExamineBreathing
             continue
 
         if sats < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if resp_rate < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if map_value < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
-        print(48)
+        print(48)  # Finish
         break
 
 if __name__ == "__main__":
