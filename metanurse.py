@@ -1,8 +1,9 @@
 import sys
 
+
 def main():
     max_steps = 350
-    opened_airway_drawer = opened_breathing_drawer = used_sats_probe = viewed_monitor = False
+    opened_breathing_drawer = used_pulse_oximeter = viewed_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -15,34 +16,32 @@ def main():
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
 
-        # Check cardiac arrest conditions
-        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-            print(17)  # StartChestCompression
-            continue
-
-        # Perform ABCDE assessment
-        if not opened_airway_drawer:
-            print(18)  # OpenAirwayDrawer
-            opened_airway_drawer = True
-            continue
-
         if not opened_breathing_drawer:
             print(19)  # OpenBreathingDrawer
             opened_breathing_drawer = True
             continue
 
-        if not used_sats_probe:
+        if not used_pulse_oximeter:
             print(25)  # UseSatsProbe
-            used_sats_probe = True
+            used_pulse_oximeter = True
             continue
 
         if not viewed_monitor:
             print(16)  # ViewMonitor
             viewed_monitor = True
             continue
-        
+
         if map_value is not None and map_value < 60:
-            print(15)  # GiveFluids
+            if map_value < 20:
+                print(17)  # StartChestCompression
+            else:
+                print(15)  # GiveFluids
+            continue
+
+        if heart_rate is not None and heart_rate > 100:
+            print(2)  # CheckRhythm
+            if heart_rate > 150 and events[30]:  # HeartRhythmSVT
+                print(9)  # GiveAdenosine
             continue
 
         if sats is not None and sats < 88:
@@ -53,16 +52,19 @@ def main():
             print(29)  # UseBagValveMask
             continue
 
-        if heart_rate is not None:
-            if heart_rate < 50:
+        if events[3]:  # AirwayClear
+            if heart_rate is not None and heart_rate < 50:
                 print(12)  # GiveAtropine
-                continue
-            elif heart_rate > 150 and events[30]:
-                print(9)  # GiveAdenosine
-                continue
+            elif heart_rate is not None and heart_rate > 100:
+                print(2)  # CheckRhythm
+                if events[32]:  # Unstable tachyarrhythmia
+                    print(13)  # GiveAmiodarone
+            else:
+                print(48)  # Finish
+            return
 
-        print(48)  # Finish
-        return
+        print(3)  # ExamineAirway
+
 
 if __name__ == "__main__":
     main()
