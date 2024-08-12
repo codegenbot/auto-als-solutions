@@ -50,7 +50,7 @@ def main():
         if not status["examined_exposure"]:
             print(7)  # ExamineExposure
             status["examined_exposure"] = True
-            continue       
+            continue        
         
         if not status["opened_breathing_drawer"]:
             print(19)  # OpenBreathingDrawer
