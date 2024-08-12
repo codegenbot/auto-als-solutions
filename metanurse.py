@@ -3,7 +3,6 @@ import sys
 def main():
     used_sats_probe = False
     opened_breathing_drawer = False
-    attached_blood_pressure_cuff = False
     viewed_monitor = False
     max_steps = 350
 
@@ -30,7 +29,7 @@ def main():
             continue
 
         # ABCDE assessment
-        if not events[3]:  # AirwayClear
+        if not any(events[3:7]):  # Ensure AirwayClear or other airway assessments
             print(3)  # ExamineAirway
             continue
 
