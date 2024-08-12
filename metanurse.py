@@ -2,7 +2,6 @@ import sys
 
 def main():
     used_sats_probe = False
-    sats_checked = False
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -45,12 +44,8 @@ def main():
             print(19)  # OpenBreathingDrawer
             used_sats_probe = True
             continue
-        if not sats and not sats_checked:
+        if not sats:
             print(25)  # UseSatsProbe
-            sats_checked = True
-            continue
-        if not sats and sats_checked:
-            print(16)  # ViewMonitor
             continue
         if sats is not None and sats < 88:
             print(30)  # UseNonRebreatherMask
