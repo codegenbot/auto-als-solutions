@@ -1,46 +1,57 @@
 import sys
+import math
 
 def main():
     for _ in range(350):
-        observations = list(map(float, input().split()))
+        observations = list(map(float, input().strip().split()))
 
-        # Extracting the relevant measurements and events
-        ResponseVerbal         = observations[0]
-        AirwayClear            = observations[3]
-        BreathingNone          = observations[7]
-        BreathingSnoring       = observations[8]
-        BreathingSeeSaw        = observations[9]
-        MeasuredRespRate       = observations[39+1]
-        MeasuredMAP            = observations[39+4]
-        MeasuredSats           = observations[39+5]
-        RespRate               = observations[39+1+7]
-        MAP                    = observations[39+4+7]
-        Sats                   = observations[39+5+7]
+        # Vital signs indices
+        MeasuredMAP_index = 40
+        MeasuredSats_index = 41
+        MeasuredRespRate_index = 42
 
-        if BreathingNone > 0:  # If the patient has stopped breathing, clear airway first
-            print(35)  # PerformAirwayManoeuvres
-        elif AirwayClear == 0:  # Ensure airway is clear
-            print(3)  # ExamineAirway
-        elif MeasuredSats and Sats < 65:  # Critical Sats
-            print(17)  # StartChestCompression
-        elif MeasuredMAP and MAP < 20:  # Critical MAP
-            print(17)  # StartChestCompression
-        elif MeasuredSats == 0:  # Attach Sats Probe if not used
-            print(25)  # UseSatsProbe
-        elif MeasuredMAP == 0:  # Attach Blood Pressure Cuff if not used
+        # Vital signs values
+        MAP = observations[46]
+        Sats = observations[47]
+        RespRate = observations[48]
+
+        # Check for recent measurements, take actions if not available
+        if observations[MeasuredMAP_index] == 0:
             print(27)  # UseBloodPressureCuff
-        elif MeasuredRespRate == 0:  # Examine Breathing if RespRate not measured
+            continue
+        if observations[MeasuredSats_index] == 0:
+            print(25)  # UseSatsProbe
+            continue
+        if observations[MeasuredRespRate_index] == 0:
             print(4)  # ExamineBreathing
-        elif MeasuredRespRate and RespRate < 8:  # Use BVM if RespRate low
-            print(29)  # UseBagValveMask
-        elif MeasuredSats and Sats < 88:  # Use Non-rebreather mask if Sats low
-            print(30)  # UseNonRebreatherMask
-        elif MeasuredMAP and MAP < 60:  # Give fluids if MAP is low
-            print(15)  # GiveFluids
-        else:
-            print(0)  # DoNothing
+            continue
 
-    print(48)  # Finish
+        # Check for critical conditions
+        if Sats < 65 or MAP < 20:
+            print(22)  # BagDuringCPR
+            continue
+
+        # Check if patient is stable
+        if Sats >= 88 and RespRate >= 8 and MAP >= 60:
+            print(48)  # Finish
+            break
+
+        # Check and stabilize airway, breathing, circulation
+        if observations[3] == 0:  # AirwayClear
+            print(3)  # ExamineAirway
+            continue
+        if Sats < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        if RespRate < 8:
+            print(29)  # UseBagValveMask
+            continue
+        if MAP < 60:
+            print(15)  # GiveFluids
+            continue
+
+        # Do nothing if all immediate actions taken
+        print(0)  # DoNothing
 
 if __name__ == "__main__":
     main()
