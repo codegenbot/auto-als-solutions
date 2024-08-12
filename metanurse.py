@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     opened_drawers = {19: False, 20: False}
@@ -82,21 +81,18 @@ def main():
                 used_methods["Fluids"] = True
             continue
 
-        if vitals["HeartRate"] is not None and vitals["HeartRate"] < 50:
-            print(12)  # Give Atropine
-            continue
+        if vitals["HeartRate"] is not None:
+            if vitals["HeartRate"] < 50:
+                print(12)  # Give Atropine
+                continue
+            elif vitals["HeartRate"] > 100:
+                print(2)  # Check rhythm
+                continue
 
-        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 100:
-            print(2)  # Check rhythm
-            print(10)  # Give adrenaline for stabilization
-            continue
-
-        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
