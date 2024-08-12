@@ -42,52 +42,54 @@ def main():
             )
         }
 
-        # Ensure airway is examined
+        # 1. Ensure airway is clear
         if not events[3] and not used_methods["ExaminedAirway"]:
             print(3)
             used_methods["ExaminedAirway"] = True
             continue
-        
-        # Ensure breathing is examined
-        if not used_methods["ExaminedBreathing"]:
-            print(4)
+
+        # 2. Check signs of life
+        if not events[21] and not events[22] and not used_methods["ExaminedBreathing"]:
+            print(1)
             used_methods["ExaminedBreathing"] = True
             continue
 
-        # Open the breathing drawer
+        # 3. Open the breathing drawer
         if not used_methods["OpenedBreathingDrawer"]:
             print(19)
             used_methods["OpenedBreathingDrawer"] = True
             continue
 
-        # Use sats probe
+        # 4. Use sats probe
         if not used_methods["UsedSatsProbe"]:
             print(25)
             used_methods["UsedSatsProbe"] = True
             continue
 
-        # View monitor
+        # 5. View monitor
         if not used_methods["ViewedMonitor"]:
             print(16)
             used_methods["ViewedMonitor"] = True
             continue
 
-        # Respond to cardiac arrest conditions
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        # 6. Respond to cardiac arrest conditions
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)
             continue
 
-        # Administer oxygen if sats are below 88%
+        # 7. Administer oxygen if sats are below 88%
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
 
-        # Use bag-valve mask if respiratory rate is below 8
+        # 8. Use bag-valve mask if respiratory rate is below 8
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        # Handle MAP stabilization
+        # 9. Check MAP and perform circulation actions
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
@@ -106,16 +108,16 @@ def main():
                 used_methods["GivenFluids"] = True
             continue
 
-        # Check heart rate conditions and take appropriate action
+        # 10. Check heart rate conditions and take appropriate action
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(28)
+            if vitals["HeartRate"] < 50:
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
                 print(2)
                 continue
-            elif vitals["HeartRate"] < 50:
-                print(12)
+            elif vitals["HeartRate"] > 150:
+                print(28)
                 continue
 
         print(48)
