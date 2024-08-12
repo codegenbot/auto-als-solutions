@@ -4,15 +4,13 @@ import sys
 def main():
     max_steps = 350
     actions_taken = {
+        "AirwayClear": False,
         "BreathingDrawer": False,
         "SatsProbe": False,
         "Monitor": False,
-        "BPCuff": False,
+        "BP_Cuff": False,
         "Fluids": False,
         "A_Line": False,
-        "HeartRateChecked": False,
-        "AirwayClear": False,
-        "AirwayExamine": False,
     }
 
     for step in range(max_steps):
@@ -38,67 +36,71 @@ def main():
             )
         }
 
-        if not events[3] and not actions_taken["AirwayExamine"]:
-            print(3)
-            actions_taken["AirwayExamine"] = True
+        if not actions_taken["AirwayClear"]:
+            print(3)  # ExamineAirway
+            actions_taken["AirwayClear"] = True
             continue
 
         if not actions_taken["BreathingDrawer"]:
-            print(19)
+            print(19)  # OpenBreathingDrawer
             actions_taken["BreathingDrawer"] = True
             continue
 
         if not actions_taken["SatsProbe"]:
-            print(25)
+            print(25)  # UseSatsProbe
             actions_taken["SatsProbe"] = True
             continue
 
         if not actions_taken["Monitor"]:
-            print(16)
+            print(16)  # ViewMonitor
             actions_taken["Monitor"] = True
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
+            continue
+
+        if not actions_taken["BP_Cuff"]:
+            print(27)  # UseBloodPressureCuff
+            actions_taken["BP_Cuff"] = True
+            continue
+
+        if not actions_taken["Fluids"]:
+            print(15)  # GiveFluids
+            actions_taken["Fluids"] = True
+            continue
+
+        if not actions_taken["A_Line"]:
+            print(26)  # UseAline
+            actions_taken["A_Line"] = True
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not actions_taken["BPCuff"]:
-                print(27)
-                actions_taken["BPCuff"] = True
-                continue
-            elif not actions_taken["Fluids"]:
-                print(15)
-                actions_taken["Fluids"] = True
-                continue
-            elif not actions_taken["A_Line"]:
-                print(26)
-                actions_taken["A_Line"] = True
-                continue
+            print(15)  # GiveFluids
+            continue
 
-        if vitals["HeartRate"] and not actions_taken["HeartRateChecked"]:
-            actions_taken["HeartRateChecked"] = True
+        if vitals["HeartRate"]:
             if vitals["HeartRate"] > 150:
-                print(10)
+                print(10)  # GiveAdrenaline
                 continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(9)
+            elif vitals["HeartRate"] > 100:
+                print(9)  # GiveAdenosine
                 continue
             elif vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
     print(48)
