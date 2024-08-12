@@ -11,35 +11,25 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
-        "UsedDefibPads": False,
     }
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
 
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times, [
+                    "HeartRate", "RespRate", "CapillaryGlucose", 
+                    "Temperature", "MAP", "Sats", "Resps"
+                ]
             )
         }
 
-        if not events[3]:  # AirwayClear
+        if not events[3]:
             print(3)
             continue
 
@@ -58,7 +48,7 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
@@ -96,11 +86,7 @@ def main():
                 print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                if not used_methods["UsedDefibPads"]:
-                    print(28)
-                    used_methods["UsedDefibPads"] = True
-                print(44)
-                print(40)
+                print(9)
                 continue
 
         print(48)
