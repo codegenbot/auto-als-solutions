@@ -15,36 +15,36 @@ def main():
         MeasuredRespRate = observations[39+1]
         MeasuredMAP = observations[39+4]
         MeasuredSats = observations[39+5]
-        RespRate = observations[46]
-        MAP = observations[50]
-        Sats = observations[51]
+        RespRate = observations[39+1+7]
+        MAP = observations[39+4+7]
+        Sats = observations[39+5+7]
 
-        if BreathingNone > 0:  # If the patient has stopped breathing
-            print(35)  # PerformAirwayManoeuvres
-        elif AirwayClear == 0:  # Ensure airway is clear
-            print(3)  # ExamineAirway
-        elif MeasuredSats and Sats < 65:  # Critical Sats
-            print(17)  # StartChestCompression
-        elif MeasuredMAP and MAP < 20:  # Critical MAP
-            print(17)  # StartChestCompression
-        elif not has_used_sats_probe:  # Attach Sats Probe if not used
+        if BreathingNone > 0:
+            print(35)
+        elif AirwayClear == 0:
+            print(3)
+        elif MeasuredSats and Sats < 65:
+            print(17)
+        elif MeasuredMAP and MAP < 20:
+            print(17)
+        elif not has_used_sats_probe:
             has_used_sats_probe = True
-            print(25)  # UseSatsProbe
-        elif not has_used_bp_cuff:  # Attach Blood Pressure Cuff if not used
+            print(25)
+        elif not has_used_bp_cuff:
             has_used_bp_cuff = True
-            print(27)  # UseBloodPressureCuff
-        elif MeasuredRespRate == 0:  # Examine Breathing if RespRate not measured
-            print(4)  # ExamineBreathing
-        elif MeasuredRespRate and RespRate < 8:  # Use BVM if RespRate low
-            print(29)  # UseBagValveMask
-        elif MeasuredSats and Sats < 88:  # Use Non-rebreather mask if Sats low
-            print(30)  # UseNonRebreatherMask
-        elif MeasuredMAP and MAP < 60:  # Give fluids if MAP is low
-            print(15)  # GiveFluids
-        else: 
-            print(0)  # DoNothing
+            print(27)
+        elif MeasuredRespRate == 0:
+            print(4)
+        elif MeasuredRespRate and RespRate < 8:
+            print(29)
+        elif MeasuredSats and Sats < 88:
+            print(30)
+        elif MeasuredMAP and MAP < 60:
+            print(15)
+        else:
+            print(0)
 
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
