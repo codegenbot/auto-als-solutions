@@ -24,11 +24,6 @@ def main():
             print(3)  # ExamineAirway
             continue
         
-        if not opened_drawers[20]:  # CirculationDrawer Not opened
-            print(20)  # OpenCirculationDrawer
-            opened_drawers[20] = True
-            continue
-
         if not opened_drawers[19]:  # BreathingDrawer Not opened
             print(19)  # OpenBreathingDrawer
             opened_drawers[19] = True
@@ -57,7 +52,10 @@ def main():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if not used_circulation_methods[27]:  # UseBloodPressureCuff not used
+            if not opened_drawers[20]:  # CirculationDrawer Not opened
+                print(20)  # OpenCirculationDrawer
+                opened_drawers[20] = True
+            elif not used_circulation_methods[27]:  # UseBloodPressureCuff not used
                 print(27)  # UseBloodPressureCuff
                 used_circulation_methods[27] = True
             elif not used_circulation_methods[26]:  # UseAline not used
@@ -72,7 +70,7 @@ def main():
                 print(12)  # GiveAtropine
                 continue
             elif vitals["HeartRate"] > 150:
-                print(10)  # GiveAdrenaline
+                print(28)  # AttachDefibPads
                 continue
             elif 100 < vitals["HeartRate"] < 150:
                 print(9)  # GiveAdenosine
