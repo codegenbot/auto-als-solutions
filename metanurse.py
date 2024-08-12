@@ -2,45 +2,68 @@ import sys
 import math
 
 def main():
-    steps = 0
-    while steps < 350:
-        steps += 1
+    used_sats_probe = False
+    opened_breathing_drawer = False
+    max_steps = 350
+
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
 
-        MAP, Sats, RespRate = observations[46], observations[47], observations[48]
+        # Extract observations
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
 
-        if Sats < 65 or MAP < 20:
-            print(35)  # PerformAirwayManoeuvres
+        # Extract specific vital signs
+        heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
+        resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
+        temperature = vital_signs_values[3] if vital_signs_times[3] > 0 else None
+        map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+        resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
+
+        # Check for cardiac arrest
+        if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            print(17)  # StartChestCompression
             continue
 
-        if Sats >= 88 and RespRate >= 8 and MAP >= 60:
-            print(48)  # Finish
-            break
+        # ABCDE assessment
+        if not events[3]:  # AirwayClear
+            print(3)  # ExamineAirway
+            continue
 
-        if observations[40] == 0:
-            print(27)  # UseBloodPressureCuff
-            continue
-        elif observations[41] == 0:
-            print(25)  # UseSatsProbe
-            continue
-        elif observations[42] == 0:
+        if resp_rate is None:
             print(4)  # ExamineBreathing
             continue
 
-        if observations[7] != 0 or observations[8] != 0 or observations[9] != 0:
-            print(32)  # UseGuedelAirway
+        if not opened_breathing_drawer:
+            print(19)  # OpenBreathingDrawer
+            opened_breathing_drawer = True
             continue
-        elif Sats < 88:
+
+        if not used_sats_probe:
+            print(25)  # UseSatsProbe
+            used_sats_probe = True
+            continue
+
+        if vital_signs_times[5] > 0 and sats is None:
+            print(16)  # ViewMonitor
+            continue
+
+        # Stabilization
+        if sats is not None and sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
-        elif RespRate < 8:
+        if resp_rate is not None and resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
-        elif MAP < 60:
+        if map_value is not None and map_value < 60:
             print(15)  # GiveFluids
             continue
-        else:
-            print(0)  # DoNothing
+
+        print(48)  # Finish
+        return
 
 if __name__ == "__main__":
     main()
