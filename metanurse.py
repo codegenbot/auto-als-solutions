@@ -3,7 +3,6 @@ import math
 
 def main():
     used_sats_probe = False
-    opened_breathing_drawer = False
     max_steps = 350
 
     for step in range(max_steps):
@@ -37,14 +36,13 @@ def main():
             print(4)  # ExamineBreathing
             continue
 
-        if not opened_breathing_drawer:
+        if not used_sats_probe:
             print(19)  # OpenBreathingDrawer
-            opened_breathing_drawer = True
+            used_sats_probe = True
             continue
 
-        if not used_sats_probe:
+        if used_sats_probe and vital_signs_times[5] == 0:
             print(25)  # UseSatsProbe
-            used_sats_probe = True
             continue
 
         if vital_signs_times[5] > 0 and sats is None:
