@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -12,11 +11,6 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
-        "ExaminedAirway": False,
-        "ExaminedBreathing": False,
-        "ExaminedCirculation": False,
-        "ExaminedDisability": False,
-        "ExaminedExposure": False,
     }
 
     for step in range(max_steps):
@@ -44,9 +38,8 @@ def main():
         }
 
         # Ensure airway is examined
-        if not events[3] and not used_methods["ExaminedAirway"]:
+        if not events[3]:
             print(3)
-            used_methods["ExaminedAirway"] = True
             continue
 
         # Open the breathing drawer
@@ -68,9 +61,7 @@ def main():
             continue
 
         # Respond to cardiac arrest conditions
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
@@ -119,7 +110,6 @@ def main():
         return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
