@@ -99,7 +99,7 @@ def main():
 
         print(48)  # Finish
         return
-
+    
     print(48)  # Finish
 
 if __name__ == "__main__":
