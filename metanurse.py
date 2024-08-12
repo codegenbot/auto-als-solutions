@@ -1,9 +1,12 @@
 import sys
 
+
 def main():
     max_steps = 350
-    opened_breathing_drawer = used_sats_probe = viewed_monitor = used_blood_pressure_cuff = False
-    
+    opened_breathing_drawer = (
+        used_sats_probe
+    ) = viewed_monitor = used_blood_pressure_cuff = False
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
@@ -37,12 +40,14 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
+            if (sats is not None and sats < 65) or (
+                map_value is not None and map_value < 20
+            ):
                 print(17)  # StartChestCompression
                 continue
 
-            if heart_rate is not None and heart_rate > 100 and map_value is not None and map_value < 60:
-                print(24)  # UseMonitorPads
+            if map_value is not None and map_value < 60:
+                print(15)  # GiveFluids
                 continue
 
             if sats is not None and sats < 88:
@@ -53,14 +58,19 @@ def main():
                 print(29)  # UseBagValveMask
                 continue
 
-            if map_value is not None and map_value < 60:
-                print(15)  # GiveFluids
+            if heart_rate is not None and heart_rate > 100 and heart_rate < 150:
+                print(24)  # UseMonitorPads
+                continue
+
+            if heart_rate is not None and heart_rate >= 150:
+                print(9)  # GiveAdenosine
                 continue
 
             print(48)  # Finish
             return
 
         print(3)  # ExamineAirway
+
 
 if __name__ == "__main__":
     main()
