@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -39,6 +38,10 @@ def main():
                 ),
             )
         }
+
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            print(2)  # Check Rhythm (Cardioversion)
+            continue
 
         if not events[3]:
             print(3)  # Examine Airway
@@ -91,14 +94,6 @@ def main():
                 used_methods["GivenFluids"] = True
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            if vitals["MAP"] and vitals["MAP"] < 60:
-                print(9)  # Give Adenosine for unstable tachyarrhythmia
-                used_methods["GivenAmiodarone"] = True
-                continue
-            print(2)  # Check Rhythm (Cardioversion)
-            continue
-
         if vitals["HeartRate"] and vitals["HeartRate"] < 50:
             print(12)  # Give Atropine
             continue
@@ -107,7 +102,6 @@ def main():
         return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
