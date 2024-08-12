@@ -1,84 +1,116 @@
 import sys
 
-def get_vital_sign(vital_signs_times, vital_signs_values, index):
-    return vital_signs_values[index] if vital_signs_times[index] > 0 else None
 
 def main():
     max_steps = 350
-    status = {
-        "opened_breathing_drawer": False, 
-        "used_pulse_oximeter": False, 
-        "viewed_monitor": False,
-        "opened_circulation_drawer": False,
-        "used_blood_pressure_cuff": False
+    opened_drawers = {19: False, 20: False, 21: False}
+    used_methods = {
+        "UsedSatsProbe": False,
+        "ViewedMonitor": False,
+        "BP_Cuff": False,
+        "A_Line": False,
+        "Fluids": False,
+        "DefibPads": False,
     }
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events = observations[:33]
-        vital_signs_times = observations[33:40]
-        vital_signs_values = observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
-        sats = get_vital_sign(vital_signs_times, vital_signs_values, 5)
-        map_value = get_vital_sign(vital_signs_times, vital_signs_values, 4)
-        resp_rate = get_vital_sign(vital_signs_times, vital_signs_values, 1)
-        heart_rate = get_vital_sign(vital_signs_times, vital_signs_values, 0)
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
+        }
 
-        if events[3]:  # AirwayClear
-            if not status["opened_breathing_drawer"]:
-                print(19)
-                status["opened_breathing_drawer"] = True
-                continue
+        if not events[3]:
+            print(3)
+            continue
 
-            if not status["used_pulse_oximeter"]:
-                print(25)
-                status["used_pulse_oximeter"] = True
-                continue
+        if not opened_drawers[19]:
+            print(19)
+            opened_drawers[19] = True
+            continue
 
-            if not status["viewed_monitor"]:
-                print(16)
-                status["viewed_monitor"] = True
-                continue
+        if not used_methods["UsedSatsProbe"]:
+            print(25)
+            used_methods["UsedSatsProbe"] = True
+            continue
 
-            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)
-                continue
+        if not used_methods["ViewedMonitor"]:
+            print(16)
+            used_methods["ViewedMonitor"] = True
+            continue
 
-            if map_value is not None and map_value < 60:
-                if not status["opened_circulation_drawer"]:
-                    print(20)
-                    status["opened_circulation_drawer"] = True
-                    continue
-                if not status["used_blood_pressure_cuff"]:
-                    print(27)
-                    status["used_blood_pressure_cuff"] = True
-                    continue
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            if not used_methods["BP_Cuff"]:
+                print(27)
+                used_methods["BP_Cuff"] = True
+            elif not used_methods["A_Line"]:
+                print(26)
+                used_methods["A_Line"] = True
+            elif not used_methods["Fluids"]:
                 print(15)
+                used_methods["Fluids"] = True
+            continue
+
+        if vitals["HeartRate"]:
+            if vitals["HeartRate"] < 50:
+                print(12)
+                continue
+            elif vitals["HeartRate"] > 150:
+                if not used_methods["DefibPads"]:
+                    print(24)
+                    used_methods["DefibPads"] = True
+                print(2)
+                continue
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)
                 continue
 
-            if sats is not None and sats < 88:
-                print(30)
-                continue
+        if all(
+            vitals[name]
+            and (60 <= vitals["HeartRate"] <= 100)
+            and (88 <= vitals["Sats"])
+            and (8 <= vitals["RespRate"])
+            and (60 <= vitals["MAP"])
+            for name in ["HeartRate", "Sats", "RespRate", "MAP"]
+        ):
+            print(48)
+            return
 
-            if resp_rate is not None and resp_rate < 8:
-                print(29)
-                continue
+        print(0)
 
-            if heart_rate is not None:
-                if heart_rate < 50:
-                    print(12)
-                    continue
-                elif heart_rate > 100:
-                    print(2)  # CheckRhythm before deciding action
-                    if heart_rate > 150:
-                        print(9)  # GiveAdenosine; adjust to the specific situation
-                    continue
+    print(48)
 
-            if sats >= 88 and map_value >= 60 and resp_rate >= 8:
-                print(48)
-                return
-
-        print(3)  # ExamineAirway
 
 if __name__ == "__main__":
     main()
