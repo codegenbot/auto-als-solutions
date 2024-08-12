@@ -22,25 +22,25 @@ def main():
         if (sats and sats < 65) or (map_value and map_value < 20):
             print(17)
             continue
-        
+
         if not events[3]:
             print(3)
             continue
-        
+
         if not used_breathing_drawer:
             print(19)
             used_breathing_drawer = True
             continue
-        
+
         if not used_sats_probe:
             print(25)
             used_sats_probe = True
             continue
-        
+
         if not vital_signs_times[5]:
             print(16)
             continue
-        
+
         if map_value is None or resp_rate is None or sats is None:
             if map_value is None:
                 print(27)
@@ -49,7 +49,7 @@ def main():
             elif sats is None:
                 print(16)
             continue
-        
+
         if sats < 88:
             print(30)
             continue
@@ -61,7 +61,7 @@ def main():
         if map_value < 60:
             print(15)
             continue
-        
+
         print(48)
         break
 
