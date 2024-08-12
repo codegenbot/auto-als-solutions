@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -27,7 +28,7 @@ def main():
         if resp_rate is None:
             print(4)
             continue
-        
+
         if sats is None:
             print(25)
             continue
@@ -35,7 +36,7 @@ def main():
         if not map_value:
             print(27)
             continue
-        
+
         if not events[24] and not events[25]:  # Check if Monitor is not ready
             print(16)
             continue
@@ -54,6 +55,7 @@ def main():
 
         print(48)
         break
+
 
 if __name__ == "__main__":
     main()
