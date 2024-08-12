@@ -1,22 +1,17 @@
 import sys
-import math
 
 def main():
     used_sats_probe = False
     steps_used = 0
-    assessed_airway = False
-    assessed_breathing = False
 
     while steps_used < 350:
         steps_used += 1
         observations = list(map(float, input().strip().split()))
 
-        # Extract observations
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Extract specific vital signs
         heart_rate = vital_signs_values[0] if vital_signs_times[0] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         glucose = vital_signs_values[2] if vital_signs_times[2] > 0 else None
@@ -25,61 +20,59 @@ def main():
         sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
         resps = vital_signs_values[6] if vital_signs_times[6] > 0 else None
 
-        # Check for cardiac arrest
-        if (sats and sats < 65) or (map_value and map_value < 20):
-            print(17)  # StartChestCompression
+        if sats is not None and sats < 65 or map_value is not None and map_value < 20:
+            print(17)
             continue
 
-        # ABCDE assessment
-        if not assessed_airway:
-            if not events[3]:  # AirwayClear
-                print(3)  # ExamineAirway
-                continue
-            assessed_airway = True
-
-        if not assessed_breathing:
-            if not resp_rate or resp_rate < 8:
-                print(4)  # ExamineBreathing
-                continue
-            assessed_breathing = True
-
-        if not map_value or map_value < 60:
-            print(5)  # ExamineCirculation
-            continue
-
-        if not events[21]:  # AVPU_A
-            print(6)  # ExamineDisability
-            continue
-
-        if not temperature:
-            print(7)  # ExamineExposure
-            continue
-
-        # Check and measure SATS
-        if not used_sats_probe:
-            print(25)  # UseSatsProbe
-            used_sats_probe = True
-            continue
-                
-        if not vital_signs_times[5]:
-            print(16)  # ViewMonitor
-            continue
-
-        # Stabilization
-        if sats and sats < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        if resp_rate and resp_rate < 8:
-            print(29)  # UseBagValveMask
+        if not events[3]:
+            print(3)
             continue
         
-        if map_value and map_value < 60:
-            print(15)  # GiveFluids
+        if resp_rate is None:
+            print(4)
             continue
 
-        print(48)  # Finish
+        if map_value is None:
+            print(5)
+            continue
+        
+        if not events[21]:
+            print(6)
+            continue
+        
+        if temperature is None:
+            print(7)
+            continue
+        
+        if not used_sats_probe:
+            print(19)
+            used_sats_probe = True
+            continue
+
+        if vital_signs_times[5] == 0 and used_sats_probe:
+            print(25)
+            continue
+
+        if used_sats_probe:
+            print(16)
+            continue
+
+        if sats is not None and sats < 88:
+            print(30)
+            continue
+        
+        if resp_rate is not None and resp_rate < 8:
+            print(29)
+            continue
+        
+        if map_value is not None and map_value < 60:
+            print(15)
+            continue
+
+        print(48)
         break
+    else:
+        print(48)
 
 if __name__ == "__main__":
     main()
