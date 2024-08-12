@@ -1,8 +1,13 @@
 import sys
 
+
 def main():
     max_steps = 350
-    opened_breathing_drawer = used_sats_probe = viewed_monitor = False
+    opened_breathing_drawer = False
+    used_sats_probe = False
+    viewed_monitor = False
+    used_aline = False
+    in_breathing_phase = True
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -14,7 +19,17 @@ def main():
         map_value = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         resp_rate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
 
-        if events[3]:  # AirwayClear
+        if (sats is not None and sats < 65) or (
+            map_value is not None and map_value < 20
+        ):
+            print(17)  # StartChestCompression
+            continue
+
+        if not events[3]:  # AirwayClear
+            print(3)  # ExamineAirway
+            continue
+
+        if in_breathing_phase:
             if not opened_breathing_drawer:
                 print(19)  # OpenBreathingDrawer
                 opened_breathing_drawer = True
@@ -30,10 +45,6 @@ def main():
                 viewed_monitor = True
                 continue
 
-            if (sats is not None and sats < 65) or (map_value is not None and map_value < 20):
-                print(17)  # StartChestCompression
-                continue
-
             if sats is not None and sats < 88:
                 print(30)  # UseNonRebreatherMask
                 continue
@@ -42,14 +53,31 @@ def main():
                 print(29)  # UseBagValveMask
                 continue
 
-            if map_value is not None and map_value < 60:
-                print(15)  # GiveFluids
-                continue
+            in_breathing_phase = False
+            continue
 
+        if not used_aline:
+            print(26)  # UseAline
+            used_aline = True
+            continue
+
+        if map_value is not None and map_value < 60:
+            print(15)  # GiveFluids
+            continue
+
+        if all(
+            [
+                events[3],  # AirwayClear
+                sats is not None and sats >= 88,
+                resp_rate is not None and resp_rate >= 8,
+                map_value is not None and map_value >= 60,
+            ]
+        ):
             print(48)  # Finish
             return
 
-        print(3)  # ExamineAirway
+        print(6)  # ExamineDisability (continue assessing next factors)
+
 
 if __name__ == "__main__":
     main()
