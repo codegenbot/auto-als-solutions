@@ -5,6 +5,7 @@ def main():
     opened_drawers = {19: False, 20: False}
     used_methods = {'UsedSatsProbe': False, 'ViewedMonitor': False, 
                     'BP_Cuff': False, 'A_Line': False, 'Fluids': False}
+    finished = False
     
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -33,19 +34,19 @@ def main():
             used_methods['ViewedMonitor'] = True
             continue
         
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # Start chest compressions
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # Use non-rebreather mask
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # Use bag valve mask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods['BP_Cuff']:
                 print(27)  # Apply BP cuff
                 used_methods['BP_Cuff'] = True
@@ -57,19 +58,23 @@ def main():
                 used_methods['Fluids'] = True
             continue
 
-        if vitals["HeartRate"] is not None:
+        if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # Give Atropine
                 continue
-            elif vitals["HeartRate"] > 100:
+            elif vitals["HeartRate"] > 150:
                 print(2)  # Check rhythm
-                print(10)  # Give adrenaline for stabilization
+                continue
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)  # Check rhythm
                 continue
         
-        print(48)  # Finish
-        return
+        finished = True
+        print(48)
+        break
 
-    print(48)  # Finish
+    if not finished:
+        print(48)
 
 if __name__ == "__main__":
     main()
