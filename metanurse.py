@@ -17,38 +17,40 @@ def main():
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-                ],
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
             )
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
         if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+            print(35)
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -57,10 +59,6 @@ def main():
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
@@ -74,7 +72,7 @@ def main():
         print(48)  # Finish
         return
 
-    print(48)  # Ensure the Finish action in case of reaching max steps
+    print(48)
 
 if __name__ == "__main__":
     main()
