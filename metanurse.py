@@ -16,8 +16,7 @@ def main():
         if not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
-            if step % 3 == 2:
-                initial_examine = True
+            if step % 3 == 2: initial_examine = True
             continue
 
         # Measure vitals if not done yet
