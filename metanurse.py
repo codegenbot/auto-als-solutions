@@ -2,7 +2,7 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions = [3, 4, 5, 6, 7, 25, 27, 16]  # ExamineAirway, ExamineBreathing, ExamineCirculation, ExamineDisability, ExamineExposure, UseSatsProbe, UseBloodPressureCuff, ViewMonitor
+    actions = [3, 4, 5, 6, 7, 25, 27, 16]
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -16,27 +16,27 @@ def stabilize():
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            print(17)
             continue
         
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
         
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
         
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            print(43)  # DefibrillatorPace
+            print(43)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
@@ -45,9 +45,8 @@ def stabilize():
             print(48)
             return
         
-        # Re-evaluate if no specific action needed
         actions = [3, 4, 5, 6, 7, 25, 27, 16]
-        print(0)  # DoNothing
+        print(0)
 
 if __name__ == "__main__":
     stabilize()
