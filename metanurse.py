@@ -4,7 +4,6 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
-    stabilize_needed = True
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -36,7 +35,7 @@ def main():
             initial_examine = True
             continue
 
-        if not events[3]:
+        if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
 
@@ -49,7 +48,7 @@ def main():
             print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
-        
+
         if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
@@ -58,12 +57,11 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
-            used_methods.add("UseNonRebreatherMask")
             continue
-        
+
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
@@ -72,11 +70,11 @@ def main():
         if needs_chest_compression:
             print(17)  # StartChestCompression
             continue
-        
+
         if (
             vitals["HeartRate"] and 
             (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or 
-            any(events[i] for i in range(27, 33))
+            any(events[i] for i in range(28, 34))
         ):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
@@ -86,21 +84,17 @@ def main():
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
-            elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
             else:
                 print(43)  # DefibrillatorPace
                 continue
 
-        if stabilize_needed and not any(
-            vital is None or vital < threshold
+        if all(
+            vital is not None and vital >= threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60]
             )
-        ) and events[3]:
+        ) and events[3]:  # Airway is clear
             print(48)  # Finish
             return
 
