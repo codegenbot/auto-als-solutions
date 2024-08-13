@@ -4,8 +4,6 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
-    assessed_airway = False
-    examined = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -31,76 +29,63 @@ def main():
                 ]
             )
         }
-        
-        unstable_rhythms = [28, 31, 32, 35, 36, 37]
 
-        if step == 0 or not examined:
-            print(3)
-            examined = True
+        if step == 0 or not initial_examine:
+            print(3)  # ExamineAirway
+            initial_examine = True
             continue
-        
-        if events[7]:
-            print(29)
-            continue
-        
-        if not assessed_airway:
-            if not events[3]:
-                print(35)
-                continue
-            assessed_airway = True
-        
+
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
-        
+
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)
+            print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
         
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
 
-        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
-        if needs_chest_compression:
-            print(17)
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
             continue
         
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
+            used_methods.add("UseNonRebreatherMask")
             continue
-
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
-            continue
-        
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
-            continue
-
-        if any(events[i] for i in unstable_rhythms):
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)
-                used_methods.add("TurnOnDefibrillator")
-                continue
-            if "DefibrillatorCharge" not in used_methods:
-                print(40)
-                used_methods.add("DefibrillatorCharge")
-                continue
-            print(47)
-            continue
+            
+        if "HeartRhythmAF" in events or "HeartRhythmNSR" in events:
+            if not any(m in used_methods for m in ["TurnOnDefibrillator", "DefibrillatorCharge", "DefibrillatorSync", "DefibrillatorPace"]):
+                if "TurnOnDefibrillator" not in used_methods:
+                    print(39)  # TurnOnDefibrillator
+                    used_methods.add("TurnOnDefibrillator")
+                    continue
+                if "DefibrillatorCharge" not in used_methods:
+                    print(40)  # DefibrillatorCharge
+                    used_methods.add("DefibrillatorCharge")
+                    continue
+                if "DefibrillatorSync" not in used_methods:
+                    print(47)  # DefibrillatorSync
+                    used_methods.add("DefibrillatorSync")
+                    continue
+                if "DefibrillatorPace" not in used_methods:
+                    print(43)  # DefibrillatorPace
+                    used_methods.add("DefibrillatorPace")
+                    continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])):
-            print(48)
+                [88, 8, 60])) and events[3]:
+            print(48)  # Finish
             return
-        
-        print(1)
-        continue
+
+        print(48)  # Finish as ultimate fallback
+        return
 
 if __name__ == "__main__":
     main()
