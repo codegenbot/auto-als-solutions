@@ -2,6 +2,19 @@ import sys
 
 def main():
     max_steps = 350
+    used_methods = {
+        "UsedSatsProbe": False,
+        "ViewedMonitor": False,
+        "OpenedBreathingDrawer": False,
+        "OpenedCirculationDrawer": False,
+        "UsedMonitorPads": False,
+        "UsedBP_Cuff": False,
+        "UsedA_Line": False,
+        "GivenFluids": False,
+        "UsedDefibPads": False,
+        "DefibrillatorCharged": False,
+    }
+
     steps = {
         "examine_airway": False,
         "open_breathing_drawer": False,
@@ -47,7 +60,7 @@ def main():
             steps["examine_airway"] = True
             continue
 
-        if 3 in events:
+        if events[3]:
             steps["examine_airway"] = True
 
         # Breathing
