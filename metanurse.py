@@ -7,100 +7,75 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:]
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
 
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps"
-                ]
-            )
-        }
-
+        # Initial examinations
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3 if step < 2 else (4 if step == 2 else 5))
             initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        # Airway Management
+        if not events[3]:
+            print(35)
             continue
 
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
-        
+
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        # Critical interventions
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)
             continue
-
+        
+        # Treat breathing issues
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
-
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
-        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
-        if needs_chest_compression:
-            print(17)  # StartChestCompression
+        # Treat circulation; specifically address unstable tachyarrhythmia
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                if "TurnOnDefibrillator" not in used_methods:
+                    print(39)
+                    used_methods.add("TurnOnDefibrillator")
+                    continue
+                if "DefibrillatorCharge" not in used_methods:
+                    print(40)
+                    used_methods.add("DefibrillatorCharge")
+                    continue
+                print(43)  # DefibrillatorPace (Cardioversion)
+                continue
+            print(15)
             continue
-
-        # Check for unstable tachyarrhythmia conditions
-        if (
-            vitals["HeartRate"] and 
-            (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or 
-            any(events[i] for i in range(28, 34))
-        ):
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
-                used_methods.add("TurnOnDefibrillator")
-                continue
-            elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
-                used_methods.add("DefibrillatorCharge")
-                continue
-            else:
-                print(43)  # DefibrillatorPace
-                continue
-
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
+        
+        # Final checks before finishing
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
-            )
-        ) and events[3]:  # Airway is clear
-            print(48)  # Finish
+                [88, 8, 60])):
+            print(48)
             return
 
-        print(48)  # Finish as ultimate fallback
-        return
+    print(48)  # Ensure completion if no other action is taken
 
 if __name__ == "__main__":
     main()
