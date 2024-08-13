@@ -39,35 +39,29 @@ def main():
             )
         }
 
-        # Check Airway
         if not events[3]:  # AirwayClear
             print(3)
             continue
 
-        # Check Breathing
         if not used_methods["OpenedBreathingDrawer"]:
             print(19)
             used_methods["OpenedBreathingDrawer"] = True
             continue
 
-        # Use Sats Probe
         if not used_methods["UsedSatsProbe"]:
             print(25)
             used_methods["UsedSatsProbe"] = True
             continue
 
-        # View Monitor for vitals
         if not used_methods["ViewedMonitor"]:
             print(16)
             used_methods["ViewedMonitor"] = True
             continue
-        
-        # Cardiac arrest check
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
 
-        # Stabilize breathing
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -76,30 +70,24 @@ def main():
             print(29)
             continue
 
-        # Check Circulation
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
-                continue
-            if not used_methods["UsedMonitorPads"]:
+            elif not used_methods["UsedMonitorPads"]:
                 print(24)
                 used_methods["UsedMonitorPads"] = True
-                continue
-            if not used_methods["UsedBP_Cuff"]:
+            elif not used_methods["UsedBP_Cuff"]:
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
-                continue
-            if not used_methods["UsedA_Line"]:
+            elif not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
-                continue
-            if not used_methods["GivenFluids"]:
+            elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
-                continue
+            continue
 
-        # Address HeartRate issues
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)
@@ -111,10 +99,10 @@ def main():
                 if not used_methods["UsedDefibPads"]:
                     print(28)
                     used_methods["UsedDefibPads"] = True
-                print(9)
+                print(44)
+                print(40)
                 continue
 
-        # If everything is stabilized
         print(48)
         return
 
