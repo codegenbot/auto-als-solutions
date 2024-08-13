@@ -11,16 +11,17 @@ def main():
         vitals = {name: value if time else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-        
+
         # Initial examinations
-        if step == 0 or not initial_examine:
-            print(3 if step == 0 else (4 if step == 1 else 5))
-            if step == 2:
+        if not initial_examine:
+            actions = [3, 4, 5, 8, 6, 7]  # ABCDE order
+            print(actions[step % 6])
+            if step % 6 == 5:
                 initial_examine = True
             continue
-        
+
         # Airway Management
-        if not events[3]:
+        if not events[3] and step > 5:  # Ensure airway is clear after initial checks
             print(35)
             continue
 
@@ -39,9 +40,9 @@ def main():
             print(16)
             used_methods.add("ViewMonitor")
             continue
-        
+
         # Critical interventions
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
         
@@ -55,7 +56,7 @@ def main():
 
         # Treat circulation; specifically address unstable tachyarrhythmia
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150):
+            if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)):
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
@@ -76,8 +77,8 @@ def main():
             print(48)
             return
 
-        # Fallback action if no other action has been taken
-        print(0)
+        print(48)  # Just to ensure completion if no other action is taken
+        return
 
 if __name__ == "__main__":
     main()
