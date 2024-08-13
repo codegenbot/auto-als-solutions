@@ -3,6 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -13,7 +14,7 @@ def main():
         )
 
         vitals = {
-            name: value if time != 0 else None
+            name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
@@ -29,9 +30,9 @@ def main():
             )
         }
 
-        if "Examine" not in used_methods:
+        if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
-            used_methods.add("ExamineAirway")
+            initial_examine = True
             continue
 
         if not events[3]:  # AirwayClear
@@ -53,7 +54,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -69,23 +72,21 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50 or events[27]:  # HeartRhythmSVT or unstable rhythm
-                if "TurnOnDefibrillator" not in used_methods:
-                    print(39)  # TurnOnDefibrillator
-                    used_methods.add("TurnOnDefibrillator")
-                    continue
-                elif "DefibrillatorCharge" not in used_methods:
-                    print(40)  # DefibrillatorCharge
-                    used_methods.add("DefibrillatorCharge")
-                    continue
-                elif "DefibrillatorSync" not in used_methods:
-                    print(47)  # DefibrillatorSync
-                    used_methods.add("DefibrillatorSync")
-                    continue
-                else:
-                    print(43)  # DefibrillatorPace
-                    continue
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):  # Unstable heart rhythms
+            if "TurnOnDefibrillator" not in used_methods:
+                print(39)  # TurnOnDefibrillator
+                used_methods.add("TurnOnDefibrillator")
+                continue
+            if "DefibrillatorCharge" not in used_methods:
+                print(40)  # DefibrillatorCharge
+                used_methods.add("DefibrillatorCharge")
+                continue
+            if "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
+            print(43)  # DefibrillatorPace
+            continue
 
         print(48)  # Finish
         return
