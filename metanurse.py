@@ -71,9 +71,9 @@ def main():
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(9)  # GiveAdenosine
+            print(41)  # DefibrillatorCurrentUp (for cardioversion)
             continue
-        
+
         print(48)  # Finish
         return
 
