@@ -2,13 +2,13 @@ import sys
 
 def stabilize():
     max_steps = 350
-    examine_steps = [3, 4, 5, 16, 27, 25, 38]  # Steps to examine in sequence
+    examine_steps = [3, 4, 5, 16, 27, 25, 38]
     treatments = {
-        'low_sats': 30,   # UseNonRebreatherMask for low oxygen saturation
-        'low_resp_rate': 29,  # UseBagValveMask for low respiratory rate
-        'low_map': 15,    # GiveFluids for low mean arterial pressure
-        'tachyarrhythmia': 40,  # DefibrillatorCharge for unstable tachyarrhythmia
-        'cardiac_arrest': 17   # StartChestCompression for cardiac arrest
+        'low_sats': 30,
+        'low_resp_rate': 29,
+        'low_map': 15,
+        'tachyarrhythmia': 40,
+        'cardiac_arrest': 17
     }
     examine_index = 0
     for step in range(max_steps):
@@ -19,13 +19,11 @@ def stabilize():
             ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
         )}
         
-        # Examine steps
         if examine_index < len(examine_steps):
             print(examine_steps[examine_index])
             examine_index += 1
             continue
         
-        # Detect and handle emergencies
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(treatments['cardiac_arrest'])
             continue
@@ -45,13 +43,12 @@ def stabilize():
             print(treatments['tachyarrhythmia'])
             continue
         
-        # Check if stabilized
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
-            print(48)  # Finish
+            print(48)
             return
         
-        print(0)  # DoNothing if no specific action required
+        print(0)
 
 if __name__ == "__main__":
     stabilize()
