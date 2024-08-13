@@ -14,12 +14,12 @@ def main():
 
         # Initial examinations
         if step == 0 or not initial_examine:
-            print(3 if step < 2 else (4 if step == 2 else 5)) # Examine Airway, Breathing, and Circulation
+            print(3 if step < 2 else (4 if step == 2 else 5))
             initial_examine = True
             continue
 
         # Airway Management
-        if events[3] < 1:  # AirwayClear
+        if not events[3]:
             print(35)
             continue
 
@@ -28,12 +28,12 @@ def main():
             print(25)
             used_methods.add("UseSatsProbe")
             continue
+
         if "UseBloodPressureCuff" not in used_methods:
             print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
-        # View Monitor
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
