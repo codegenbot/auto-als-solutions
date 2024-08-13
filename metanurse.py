@@ -1,6 +1,3 @@
-import sys
-
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -30,18 +27,16 @@ def main():
             )
         }
 
-        # Initial examinations
-        if step == 0 or not initial_examine:
-            print(3 if step < 2 else (4 if step == 2 else 5))
-            initial_examine = True
+        if step == 0:
+            print(3)
+            continue
+        if step == 1:
+            print(4)
+            continue
+        if step == 2:
+            print(5)
             continue
 
-        # Airway Management
-        if not events[3]:
-            print(35)
-            continue
-
-        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -57,22 +52,25 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Critical interventions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
             print(17)
             continue
 
-        # Treat breathing issues
+        if not events[3] and "AirwayClear" not in used_methods:
+            print(35)
+            used_methods.add("AirwayClear")
+            continue
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
+
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        # Treat unstable tachyarrhythmia
         if vitals["MAP"] and vitals["MAP"] < 60:
             if vitals["HeartRate"] and (
                 vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
@@ -85,12 +83,11 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion
+                print(43)
                 continue
-            print(15)  # Administer fluids
+            print(15)
             continue
 
-        # Final checks before finishing
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -100,8 +97,7 @@ def main():
             print(48)
             return
 
-        print(48)
-        return
+        print(0)
 
 
 if __name__ == "__main__":
