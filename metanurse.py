@@ -35,12 +35,10 @@ def main():
             )
         }
 
-        # **Airway check**
         if not events[3]:
             print(3)
             continue
         
-        # **Breathing check**
         if not used_methods["UsedSatsProbe"]:
             print(25)
             used_methods["UsedSatsProbe"] = True
@@ -64,8 +62,7 @@ def main():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
-        
-        # **Circulation check**
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
@@ -78,7 +75,6 @@ def main():
                 used_methods["GivenFluids"] = True
             continue
 
-        # **Defibrillation for critical HeartRate values**
         if vitals["HeartRate"]:
             if vitals["HeartRate"] > 150:
                 print(28)
