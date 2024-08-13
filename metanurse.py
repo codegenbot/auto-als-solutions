@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -88,11 +87,11 @@ def stabilize():
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
             print(10)  # GiveAmiodarone (for SVT or AF)
             continue
-
+        
         if events[34] > 0:  # HeartRhythmVT
             print(17)  # StartChestCompression
             continue
-
+        
         # End criteria: Sats >= 88, RespRate >= 8, MAP >= 60
         if all(
             vital is not None and vital >= threshold
@@ -105,7 +104,6 @@ def stabilize():
 
         print(48)  # Finish
         return
-
 
 if __name__ == "__main__":
     stabilize()
