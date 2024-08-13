@@ -70,7 +70,7 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if any([events[i] > 0 for i in [30, 31, 32, 33, 34, 35, 36, 37, 38]]):  # HeartRhythm events indicating tachyarrhythmia
+        if any([events[i] > 0 for i in [29, 30, 31, 32, 33, 34, 35, 36, 37, 38]]):  # HeartRhythm events indicating tachyarrhythmia
             print(17)  # StartChestCompression
             continue
 
