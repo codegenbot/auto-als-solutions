@@ -71,7 +71,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -88,16 +88,14 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        # Check stabilization conditions
-        if all(vitals[name] is not None and vitals[name] >= threshold for name, threshold in zip(
-            ["Sats", "RespRate", "MAP"],
-            [88, 8, 60]
-        )):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60])):
             print(48)  # Finish
             return
 
-        print(48)  # Finish, just in case
-        return
-
+        print(5)  # ExamineCirculation if nothing else to do
+        used_methods.add("ExamineCirculation")
+        
 if __name__ == "__main__":
     main()
