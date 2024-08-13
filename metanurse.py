@@ -13,9 +13,7 @@ def stabilize():
         vital_signs_values = observations[40:]
 
         vitals = {name: (value if time > 0 else None) for value, time, name in zip(
-            vital_signs_values, vital_signs_times, [
-                "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-            ]
+            vital_signs_values, vital_signs_times, ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
         )}
 
         if not assessments["A"]:
@@ -71,6 +69,8 @@ def stabilize():
                 [88, 8, 60])):
             print(48)  # Finish
             return
+
+        print(0)  # DoNothing
 
 if __name__ == "__main__":
     stabilize()
