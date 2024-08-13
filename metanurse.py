@@ -1,7 +1,10 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -27,51 +30,50 @@ def stabilize():
             )
         }
 
-        # Examination Phase
-        if step == 0:
-            print(3)
-            continue
-        elif step == 1:
-            print(4)
-            continue
-        elif step == 2:
-            print(5)
-            continue
-        elif step == 3:
-            print(25)
-            continue
-        elif step == 4:
-            print(27)
-            continue
-        elif step == 5:
-            print(16)
+        if step == 0 or not first_examine:
+            first_examine = True
+            print(3)  # ExamineAirway
             continue
 
-        # Stabilize Phase based on vitals
+        if not use_sats_probe:
+            print(25)  # UseSatsProbe
+            use_sats_probe = True
+            continue
+
+        if not use_blood_pressure_cuff:
+            print(27)  # UseBloodPressureCuff
+            use_blood_pressure_cuff = True
+            continue
+
+        if not view_monitor:
+            print(16)  # ViewMonitor
+            view_monitor = True
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["HeartRate"] is not None and (
             vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
         ):
-            print(24)
+            print(24)  # UseMonitorPads
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if all(
@@ -80,11 +82,12 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)
+            print(48)  # Finish
             return
 
-        print(48)
+        print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
