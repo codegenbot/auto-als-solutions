@@ -2,15 +2,13 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
-    initial_examine = False
-
+    observed = set()
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -19,71 +17,52 @@ def main():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                    "MAP", "Sats", "Resps"
+                ]
             )
         }
 
-        if step == 0 or not initial_examine:
+        if step == 0:
             print(3)  # ExamineAirway
-            initial_examine = True
             continue
-
-        if not events[3]:  # AirwayClear event
+        
+        if not events[3]:  # If airway not clear
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        if "UseSatsProbe" not in used_methods:
+        if step == 1 or "SatsProbe" not in observed:
             print(25)  # UseSatsProbe
-            used_methods.add("UseSatsProbe")
+            observed.add("SatsProbe")
+            continue
+        
+        if step == 2 or "BloodPressureCuff" not in observed:
+            print(27)  # UseBloodPressureCuff
+            observed.add("BloodPressureCuff")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
-            used_methods.add("UseBloodPressureCuff")
+        if step == 3 or "ViewMonitor" not in observed:
+            print(16)  # ViewMonitor
+            observed.add("ViewMonitor")
+            continue
+
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)  # StartChestCompression
+            continue
+
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) and "DefibTurnedOn" not in observed:
+            print(39)  # TurnOnDefibrillator
+            observed.add("DefibTurnedOn")
+            continue
+
+        if "DefibTurnedOn" in observed and "DefibCharged" not in observed:
+            print(40)  # DefibrillatorCharge
+            observed.add("DefibCharged")
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-
-        if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
-            used_methods.add("ViewMonitor")
-            continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
-            continue
-
-        if (
-            vitals["HeartRate"]
-            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
-            or any(events[28:38])
-        ):
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
-                used_methods.add("TurnOnDefibrillator")
-                continue
-            elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
-                used_methods.add("DefibrillatorCharge")
-                continue
-            elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
-            else:
-                print(43)  # DefibrillatorPace
-                continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
@@ -93,17 +72,11 @@ def main():
             print(29)  # UseBagValveMask
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
             print(48)  # Finish
             return
 
-        print(48)  # Finish, just in case
-        return
+    print(48)  # Finish as fallback
 
 if __name__ == "__main__":
     main()
