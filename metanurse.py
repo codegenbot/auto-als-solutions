@@ -1,35 +1,23 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                 "MAP", "Sats", "Resps"]
             )
         }
 
-        # Ensure we examine and attach needed equipment first
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -67,7 +55,6 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        # Interventions based on vitals
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
             continue
@@ -76,7 +63,7 @@ def stabilize():
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone
+                print(10)  # GiveAmiodarone 
             else:
                 print(15)  # GiveFluids
             continue
@@ -88,10 +75,9 @@ def stabilize():
             continue
 
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone (for SVT or AF)
+            print(10)  # GiveAmiodarone
             continue
 
-        # Stabilize check and finish
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -100,9 +86,9 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-
-        print(0)  # DoNothing if no actions needed
-
+        
+        print(48)  # Finish
+        return
 
 if __name__ == "__main__":
     stabilize()
