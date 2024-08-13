@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -8,24 +7,14 @@ def stabilize():
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                 "MAP", "Sats", "Resps"]
             )
         }
 
@@ -63,14 +52,14 @@ def stabilize():
             (5, "ExamineCirculation"),
             (6, "ExamineDisability"),
             (7, "ExamineExposure"),
-            (2, "CheckRhythm"),
+            (2, "CheckRhythm")
         ]
 
         for action_code, _ in next_steps:
             if action_code not in actions_taken:
                 actions_taken.add(action_code)
                 print(action_code)
-                break
+                break  # Perform next action
         else:
             if all(
                 vital is not None and vital >= threshold
@@ -80,7 +69,6 @@ def stabilize():
             ):
                 print(48)  # Finish
                 break
-
 
 if __name__ == "__main__":
     stabilize()
