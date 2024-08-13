@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -39,16 +38,6 @@ def main():
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        if "ExamineBreathing" not in used_methods:
-            print(4)  # ExamineBreathing
-            used_methods.add("ExamineBreathing")
-            continue
-
-        if "ExamineCirculation" not in used_methods:
-            print(5)  # ExamineCirculation
-            used_methods.add("ExamineCirculation")
-            continue
-
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -64,9 +53,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -83,23 +70,18 @@ def main():
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(40)  # DefibrillatorCharge for cardioversion
-            continue
-
-        if None in (
-            vitals["HeartRate"],
-            vitals["RespRate"],
-            vitals["MAP"],
-            vitals["Sats"],
-        ):
-            print(38)  # TakeBloodPressure
-            continue
+            if "DefibrillatorCharged" not in used_methods:
+                print(40)  # DefibrillatorCharge for cardioversion
+                used_methods.add("DefibrillatorCharged")
+                continue
+            else:
+                print(41)  # DefibrillatorCurrentUp
+                continue
 
         print(48)  # Finish
         return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
