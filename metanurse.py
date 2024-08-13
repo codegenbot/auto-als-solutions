@@ -8,7 +8,7 @@ def stabilize():
         'low_resp_rate': 29,
         'low_map': 15,
         'tachyarrhythmia': 40,
-        'cardiac_arrest': 17,
+        'cardiac_arrest': 17
     }
     examine_index = 0
     for step in range(max_steps):
