@@ -72,12 +72,11 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and (
-                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-            ):
-                print(40 if vitals["HeartRate"] > 150 else 15)
-                continue
             print(15)
+            continue
+
+        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
+            print(40)
             continue
 
         if all(
