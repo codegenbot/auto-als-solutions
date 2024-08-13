@@ -1,6 +1,10 @@
 import sys
 
 def main():
+    actions = [
+        [3, 4, 5, 6, 7],  # Examine all
+        [25, 27, 16],     # UseSatsProbe, UseBloodPressureCuff, ViewMonitor
+    ]
     max_steps = 350
     used_methods = set()
     initial_examine = False
@@ -31,63 +35,59 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
-            continue
-
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
+                print(39)
                 used_methods.add("TurnOnDefibrillator")
                 continue
             elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
+                print(40)
                 used_methods.add("DefibrillatorCharge")
                 continue
             elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
+                print(47)
                 used_methods.add("DefibrillatorSync")
                 continue
             else:
-                print(43)  # DefibrillatorPace
+                print(43)
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
