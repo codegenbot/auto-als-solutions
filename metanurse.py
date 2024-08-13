@@ -37,16 +37,18 @@ def main():
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
-
-        if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
-            used_methods.add("UseSatsProbe")
-            continue
-
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
-            used_methods.add("UseBloodPressureCuff")
-            continue
+        
+        if "Sats" not in vitals or not vitals["Sats"]:
+            if "UseSatsProbe" not in used_methods:
+                print(25)  # UseSatsProbe
+                used_methods.add("UseSatsProbe")
+                continue
+        
+        if "MAP" not in vitals or not vitals["MAP"]:
+            if "UseBloodPressureCuff" not in used_methods:
+                print(27)  # UseBloodPressureCuff
+                used_methods.add("UseBloodPressureCuff")
+                continue
 
         if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
@@ -68,9 +70,13 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150):
+
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
             print(40)  # DefibrillatorCharge
+            continue
+        
+        if vitals["HeartRate"] and vitals["MAP"] > 60:
+            print(41)  # DefibrillatorCurrentUp - Cardioversion
             continue
 
         print(48)  # Finish
