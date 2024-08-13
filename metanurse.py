@@ -68,5 +68,8 @@ def main():
             print(48)
             return
 
+    print(48)
+    return
+
 if __name__ == "__main__":
     main()
