@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -19,13 +18,7 @@ def main():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
                 ],
             )
         }
@@ -54,9 +47,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -84,7 +75,7 @@ def main():
             if events[i]:
                 print(24)  # UseMonitorPads
                 continue
-
+        
         # Breathing examination
         if "ExaminedBreathing" not in used_methods and not any(events[7:15]):
             print(4)  # ExamineBreathing
@@ -108,12 +99,11 @@ def main():
             print(7)  # ExamineExposure
             used_methods.add("ExaminedExposure")
             continue
-
+        
         print(48)  # Finish
-        return
+        return 
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
