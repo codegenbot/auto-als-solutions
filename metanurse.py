@@ -60,7 +60,6 @@ def stabilize():
             print(22) # BagDuringCPR
             continue
 
-        # Check and manage tachyarrhythmia
         if any(events[i] > 0 for i in [29, 30, 31, 32, 33, 34, 35, 36, 37]):
             print(9) # GiveAdenosine
             continue
