@@ -8,50 +8,39 @@ def main():
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:40],
+            observations[40:47],
+            observations[47:],
         )
 
         vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] else None,
+            "Temperature": vital_signs_values[3] if vital_signs_times[3] else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
+            "Resps": vital_signs_values[6] if vital_signs_times[6] else None
         }
 
         if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        
+        if "UseMonitor" not in used_methods:
+            print(16)  # ViewMonitor
+            used_methods.add("UseMonitor")
             continue
-
+        
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
-
+        
         if "UseBloodPressureCuff" not in used_methods:
             print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
-            continue
-
-        if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
-            used_methods.add("ViewMonitor")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -69,15 +58,20 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-
+        
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(41)  # DefibrillatorCurrentUp
+            print(40)  # DefibrillatorCharge
+            continue
+        
+        if events[15] and "ExamineCirculation" not in used_methods:  # RadialPulseNonPalpable
+            print(5)  # ExamineCirculation
+            used_methods.add("ExamineCirculation")
             continue
 
         print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
