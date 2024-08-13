@@ -31,76 +31,78 @@ def stabilize():
 
         if 25 not in actions_taken:
             actions_taken.add(25)
-            print(25)  # UseSatsProbe
+            print(25)
             continue
 
         if 27 not in actions_taken:
             actions_taken.add(27)
-            print(27)  # UseBloodPressureCuff
+            print(27)
             continue
 
         if 16 not in actions_taken:
             actions_taken.add(16)
-            print(16)  # ViewMonitor
+            print(16)
             continue
 
         if 3 not in actions_taken:
             actions_taken.add(3)
-            print(3)  # ExamineAirway
+            print(3)
             continue
 
         if 4 not in actions_taken:
             actions_taken.add(4)
-            print(4)  # ExamineBreathing
+            print(4)
             continue
 
         if 5 not in actions_taken:
             actions_taken.add(5)
-            print(5)  # ExamineCirculation
+            print(5)
             continue
 
         if 8 not in actions_taken:
             actions_taken.add(8)
-            print(8)  # ExamineResponse
+            print(8)
             continue
 
         if 2 not in actions_taken:
             actions_taken.add(2)
-            print(2)  # CheckRhythm
+            print(2)
             continue
 
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
 
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
+            print(22)
             continue
 
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)  # AttachDefibPads
-                continue
-            if 40 not in actions_taken:
-                actions_taken.add(40)
-                print(40)  # DefibrillatorCharge
-                continue
-            print(41)  # DefibrillatorCurrentUp
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+            print(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
+            continue
+
+        if unstable_tachyarrhythmia:
+            if 16 not in actions_taken:
+                actions_taken.add(16)
+                print(16)
+            elif 28 not in actions_taken:
+                actions_taken.add(28)
+                print(28)
+            elif 40 not in actions_taken:
+                actions_taken.add(40)
+                print(40)
+            else:
+                print(41)
             continue
 
         if all(
@@ -109,10 +111,11 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
 
-    print(48)  # Finish
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
