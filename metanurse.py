@@ -28,10 +28,12 @@ def main():
             )
         }
 
+        # Critical Condition Checks
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
+        # Examination Steps
         if step == 0 or "InitialExamine" not in used_methods:
             print(3)  # ExamineAirway
             used_methods.add("InitialExamine")
@@ -55,7 +57,8 @@ def main():
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
-        
+
+        # Targeted Treatment Actions
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -72,6 +75,7 @@ def main():
             print(40)  # DefibrillatorCharge
             continue
 
+        # If the patient is stabilized, finish
         if all([
             events[3],  # Airway Clear
             vitals["Sats"] is not None and vitals["Sats"] >= 88,  # Sats >= 88%
