@@ -2,113 +2,74 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = {
-        "UsedSatsProbe": False,
-        "ViewedMonitor": False,
-        "OpenedBreathingDrawer": False,
-        "OpenedCirculationDrawer": False,
-        "UsedMonitorPads": False,
-        "UsedBP_Cuff": False,
-        "UsedA_Line": False,
-        "GivenFluids": False,
-        "UsedDefibPads": False,
-        "DefibrillatorCharged": False,
-    }
+    step_count = 0
+    actions_taken = set()
 
-    for step in range(max_steps):
+    while step_count < max_steps:
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
 
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        vitals = {k: v for v, k in zip(vital_signs_values, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ]) if vital_signs_times[list(vitals.keys()).index(k)] > 0}
 
-        if not events[3]:
+        if 'AirwayClear' not in actions_taken and events[3] == 0:
             print(3)
+            actions_taken.add('AirwayClear')
+            step_count += 1
             continue
 
-        if not used_methods["OpenedBreathingDrawer"]:
-            print(19)
-            used_methods["OpenedBreathingDrawer"] = True
+        if 'MeasuredRespRate' not in actions_taken:
+            print(4)
+            actions_taken.add('MeasuredRespRate')
+            step_count += 1
+            continue
+        
+        if 'MeasuredMAP' not in actions_taken:
+            print(5)
+            actions_taken.add('MeasuredMAP')
+            step_count += 1
             continue
 
-        if not used_methods["UsedSatsProbe"]:
+        if 'MeasuredSats' not in actions_taken:
             print(25)
-            used_methods["UsedSatsProbe"] = True
+            actions_taken.add('MeasuredSats')
+            step_count += 1
             continue
 
-        if not used_methods["ViewedMonitor"]:
-            print(16)
-            used_methods["ViewedMonitor"] = True
-            continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if vitals.get("Sats", 100) < 65 or vitals.get("MAP", 100) < 20:
             print(17)
+            step_count += 1
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals.get("Sats", 100) < 88:
             print(30)
+            step_count += 1
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals.get("RespRate", 100) < 8:
             print(29)
+            step_count += 1
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_methods["OpenedCirculationDrawer"]:
-                print(20)
-                used_methods["OpenedCirculationDrawer"] = True
-            elif not used_methods["UsedMonitorPads"]:
-                print(24)
-                used_methods["UsedMonitorPads"] = True
-            elif not used_methods["UsedBP_Cuff"]:
-                print(27)
-                used_methods["UsedBP_Cuff"] = True
-            elif not used_methods["UsedA_Line"]:
-                print(26)
-                used_methods["UsedA_Line"] = True
-            elif not used_methods["GivenFluids"]:
-                print(15)
-                used_methods["GivenFluids"] = True
+        if vitals.get("MAP", 100) < 60:
+            print(15)
+            step_count += 1
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)
-                continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
-                continue
-            elif vitals["HeartRate"] > 150:
-                if not used_methods["UsedDefibPads"]:
-                    print(28)
-                    used_methods["UsedDefibPads"] = True
-                    continue
-                if not used_methods["DefibrillatorCharged"]:
-                    print(40)
-                    used_methods["DefibrillatorCharged"] = True
-                    continue
-                print(44)
-                continue
+        if 'ExamineDisability' not in actions_taken:
+            print(6)
+            actions_taken.add('ExamineDisability')
+            step_count += 1
+            continue
+
+        if 'ExamineExposure' not in actions_taken:
+            print(7)
+            actions_taken.add('ExamineExposure')
+            step_count += 1
+            continue
 
         print(48)
         return
