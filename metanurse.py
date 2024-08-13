@@ -3,12 +3,10 @@ import sys
 
 def stabilize():
     max_steps = 350
-    examined, use_sats_probe, use_blood_pressure_cuff, view_monitor = (
-        False,
-        False,
-        False,
-        False,
-    )
+    first_examine = False
+    use_sats_probe = False
+    use_blood_pressure_cuff = False
+    view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,9 +32,9 @@ def stabilize():
             )
         }
 
-        if not examined:
+        if step == 0 or not first_examine:
+            first_examine = True
             print(3)  # ExamineAirway
-            examined = True
             continue
 
         if not use_sats_probe:
@@ -44,14 +42,14 @@ def stabilize():
             use_sats_probe = True
             continue
 
-        if not use_blood_pressure_cuff:
-            print(27)  # UseBloodPressureCuff
-            use_blood_pressure_cuff = True
-            continue
-
         if not view_monitor:
             print(16)  # ViewMonitor
             view_monitor = True
+            continue
+
+        if not use_blood_pressure_cuff:
+            print(27)  # UseBloodPressureCuff
+            use_blood_pressure_cuff = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -71,14 +69,13 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None:
-                if vitals["HeartRate"] > 150:
-                    print(39)  # TurnOnDefibrillator
-                    continue
-                elif vitals["HeartRate"] < 50:
-                    print(43)  # DefibrillatorPace
-                    continue
             print(15)  # GiveFluids
+            continue
+
+        if vitals["HeartRate"] is not None and (
+            vitals["HeartRate"] > 150 or events[32] > 0
+        ):  # Treat unstable tachyarrhythmia
+            print(40)  # DefibrillatorCharge
             continue
 
         if all(
@@ -90,7 +87,8 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)  # Finish in case of any other scenario
+        print(48)  # Finish in case of no further action requirement
+        return
 
 
 if __name__ == "__main__":
