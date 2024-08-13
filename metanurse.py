@@ -29,16 +29,6 @@ def stabilize():
             )
         }
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
-        
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
-            continue
-        
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -79,9 +69,24 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        if unstable_tachyarrhythmia:
-            print(40)  # DefibrillatorCharge
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
+
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)  # StartChestCompression
             continue
+        
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(22)  # BagDuringCPR
+            continue
+        
+        if unstable_tachyarrhythmia:
+            if 40 not in actions_taken:
+                actions_taken.add(40)
+                print(40)  # DefibrillatorCharge
+                continue
+            else:
+                print(24)  # UseMonitorPads
+                continue
         
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
