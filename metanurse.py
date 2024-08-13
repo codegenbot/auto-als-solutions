@@ -30,7 +30,7 @@ def main():
         }
 
         # Initial examinations
-        if step == 0 or not initial_examine:
+        if step <= 3 or not initial_examine:
             print([3, 4, 5, 8][step % 4])
             initial_examine = True
             continue
