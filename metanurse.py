@@ -48,7 +48,7 @@ def main():
             print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
-
+        
         if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
@@ -71,6 +71,7 @@ def main():
             print(17)  # StartChestCompression
             continue
 
+        # Check for unstable tachyarrhythmia conditions
         if (
             vitals["HeartRate"] and 
             (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or 
