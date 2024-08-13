@@ -25,7 +25,7 @@ def main():
                     "MAP",
                     "Sats",
                     "Resps",
-                ],
+                ]
             )
         }
 
@@ -34,12 +34,10 @@ def main():
             initial_examine = True
             continue
 
-        # Check Airway
-        if not events[3]:  # !AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
-        # Ensure all measurements are taken
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -55,34 +53,31 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Critical conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
-        # Non-critical stabilisation criteria
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # !StablePulse
-            print(40)  # DefibrillatorCharge
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:
+            print(40)
             continue
 
-        # If stabilised
         if (vitals["Sats"] and vitals["Sats"] >= 88) and (vitals["RespRate"] and vitals["RespRate"] >= 8) and (vitals["MAP"] and vitals["MAP"] >= 60):
-            print(48)  # Finish
+            print(48)
             return
 
-    print(48)  # Finish after max_steps
+    print(48)
 
 if __name__ == "__main__":
     main()
