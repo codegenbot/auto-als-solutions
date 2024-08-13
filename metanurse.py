@@ -14,7 +14,7 @@ def main():
         )
 
         vitals = {
-            name: value if time > 0 else None
+            name: (value if time > 0 else None)
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
@@ -60,32 +60,24 @@ def main():
             print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):  # Unstable heart rhythms
+        if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[28:38]):  # Unstable heart rhythms
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
                 continue
-            if "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
-                used_methods.add("DefibrillatorCharge")
-                continue
-            if "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
-            print(43)  # DefibrillatorPace
+            print(24)  # UseMonitorPads
             continue
 
         print(48)  # Finish
