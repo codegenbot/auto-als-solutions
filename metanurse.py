@@ -1,3 +1,6 @@
+import sys
+
+
 def main():
     max_steps = 350
     used_methods = {
