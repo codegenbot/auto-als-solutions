@@ -2,56 +2,31 @@ import sys
 
 def stabilize():
     max_steps = 350
-    examine_steps = [False] * 6
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events = observations[:33]
-        vital_signs_times = observations[33:40]
-        vital_signs_values = observations[40:]
-
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if not examine_steps[0]:
-            examine_steps[0] = True
+        if step == 0:
             print(3)  # ExamineAirway
             continue
-        if not examine_steps[1]:
-            examine_steps[1] = True
-            print(4)  # ExamineBreathing
-            continue
-        if not examine_steps[2]:
-            examine_steps[2] = True
-            print(5)  # ExamineCirculation
-            continue
-        if not examine_steps[3]:
-            examine_steps[3] = True
-            print(6)  # ExamineDisability
-            continue
-        if not examine_steps[4]:
-            examine_steps[4] = True
-            print(7)  # ExamineExposure
-            continue
-        if not examine_steps[5]:
-            examine_steps[5] = True
-            print(8)  # ExamineResponse
-            continue
-
-        if not use_sats_probe:
-            use_sats_probe = True
-            print(25)  # UseSatsProbe
-            continue
-        if not use_blood_pressure_cuff:
-            use_blood_pressure_cuff = True
-            print(27)  # UseBloodPressureCuff
-            continue
-        if not view_monitor:
-            view_monitor = True
-            print(16)  # ViewMonitor
-            continue
+        
+        if events[0] > 0:  # AirwayClear
+            if not vitals["Sats"]:
+                print(25)  # UseSatsProbe
+                continue
+            if not vitals["RespRate"]:
+                print(27)  # UseBloodPressureCuff
+                continue
+            if not vitals["MAP"]:
+                print(38)  # TakeBloodPressure
+                continue
+            if not vitals["Sats"]:
+                print(16)  # ViewMonitor
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
@@ -77,13 +52,18 @@ def stabilize():
             print(39)  # TurnOnDefibrillator
             continue
 
+        if vitals["HeartRate"] is not None and 60 <= vitals["HeartRate"] <= 100:
+            print(43)  # DefibrillatorPace
+            continue
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
-            print(48)
+            print(48)  # Finish
             return
-        
-        print(0)  # DoNothing
+
+        print(48)  # Finish
+        return
 
 if __name__ == "__main__":
     stabilize()
