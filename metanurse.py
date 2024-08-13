@@ -55,7 +55,7 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)
+                print(43)  # Perform cardioversion pacing
                 continue
             print(15)
             continue
