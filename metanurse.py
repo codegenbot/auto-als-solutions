@@ -1,9 +1,10 @@
 import sys
 
+
 def main():
     max_steps = 350
-    used_methods = set()
-    initial_examine = set()
+    steps_taken = 0
+    actions_taken = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -30,52 +31,33 @@ def main():
             )
         }
 
-        if not initial_examine:
-            if "Airway" not in initial_examine:
-                print(3)  # ExamineAirway
-                initial_examine.add("Airway")
-                continue
-
-            if "Breathing" not in initial_examine:
-                print(4)  # ExamineBreathing
-                initial_examine.add("Breathing")
-                continue
-
-            if "Circulation" not in initial_examine:
-                print(5)  # ExamineCirculation
-                initial_examine.add("Circulation")
-                continue
-
-            if "Disability" not in initial_examine:
-                print(6)  # ExamineDisability
-                initial_examine.add("Disability")
-                continue
-
-            if "Exposure" not in initial_examine:
-                print(7)  # ExamineExposure
-                initial_examine.add("Exposure")
-                continue
+        if steps_taken == 0:
+            print(3)  # ExamineAirway
+            steps_taken += 1
+            continue
 
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        if "UseSatsProbe" not in used_methods:
+        if "UseSatsProbe" not in actions_taken:
             print(25)  # UseSatsProbe
-            used_methods.add("UseSatsProbe")
+            actions_taken.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
+        if "UseBloodPressureCuff" not in actions_taken:
             print(27)  # UseBloodPressureCuff
-            used_methods.add("UseBloodPressureCuff")
+            actions_taken.add("UseBloodPressureCuff")
             continue
 
-        if "ViewMonitor" not in used_methods:
+        if "ViewMonitor" not in actions_taken:
             print(16)  # ViewMonitor
-            used_methods.add("ViewMonitor")
+            actions_taken.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -95,6 +77,7 @@ def main():
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
