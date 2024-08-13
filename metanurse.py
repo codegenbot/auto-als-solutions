@@ -2,7 +2,18 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = {action: False for action in [25, 27, 16, 5, 3, 4, 8, 2]}
+    actions_taken = set()
+
+    action_order = [
+        (25, False), # UseSatsProbe
+        (27, False), # UseBloodPressureCuff
+        (16, False), # ViewMonitor
+        (5, False),  # ExamineCirculation
+        (3, False),  # ExamineAirway
+        (4, False),  # ExamineBreathing
+        (8, False),  # ExamineResponse
+        (2, False)   # CheckRhythm
+    ]
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -28,29 +39,31 @@ def stabilize():
             )
         }
 
-        for action, taken in actions_taken.items():
+        for i in range(len(action_order)):
+            action, taken = action_order[i]
             if not taken:
-                actions_taken[action] = True
+                actions_taken.add(action)
                 print(action)
+                action_order[i] = (action, True)
                 break
         else:
-            if vitals.get("MAP") and vitals["MAP"] < 20:
-                print(17)
+            if vitals["MAP"] and vitals["MAP"] < 20:
+                print(17)  # StartChestCompression
                 continue
-            if vitals.get("Sats") and vitals["Sats"] < 65:
-                print(22)
+            if vitals["Sats"] and vitals["Sats"] < 65:
+                print(22)  # BagDuringCPR
                 continue
             if any(events[i] > 0 for i in range(29, 37)):
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
-            if vitals.get("MAP") and vitals["MAP"] < 60:
-                print(15)
+            if vitals["MAP"] and vitals["MAP"] < 60:
+                print(15)  # GiveFluids
                 continue
-            if vitals.get("Sats") and vitals["Sats"] < 88:
-                print(30)
+            if vitals["Sats"] and vitals["Sats"] < 88:
+                print(30)  # UseNonRebreatherMask
                 continue
-            if vitals.get("RespRate") and vitals["RespRate"] < 8:
-                print(29)
+            if vitals["RespRate"] and vitals["RespRate"] < 8:
+                print(29)  # UseBagValveMask
                 continue
 
             if all(
