@@ -1,10 +1,6 @@
 import sys
 
 def main():
-    actions = [
-        [3, 4, 5, 6, 7],  # Examine all
-        [25, 27, 16],     # UseSatsProbe, UseBloodPressureCuff, ViewMonitor
-    ]
     max_steps = 350
     used_methods = set()
     initial_examine = False
@@ -35,7 +31,7 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # ExamineAirway
             initial_examine = True
             continue
 
@@ -48,26 +44,26 @@ def main():
             print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
-
+        
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:
@@ -84,7 +80,7 @@ def main():
                 used_methods.add("DefibrillatorSync")
                 continue
             else:
-                print(43)
+                print(43)  # DefibrillatorPace
                 continue
 
         print(48)
