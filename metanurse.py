@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -30,13 +29,8 @@ def main():
                 vital_signs_times,
                 vital_signs_values,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
+                    "HeartRate", "RespRate", "CapillaryGlucose",
+                    "Temperature", "MAP", "Sats", "Resps"
                 ],
             )
         }
@@ -60,9 +54,7 @@ def main():
             used_methods["ViewedMonitor"] = True
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -111,7 +103,6 @@ def main():
         return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
