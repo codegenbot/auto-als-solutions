@@ -2,34 +2,15 @@ import sys
 
 def stabilize():
     max_steps = 350
-    state = {
-        "first_examine": False,
-        "use_sats_probe": False,
-        "use_blood_pressure_cuff": False,
-        "view_monitor": False,
-    }
-
-    def initial_steps(step):
-        if step == 0 or not state["first_examine"]:
-            state["first_examine"] = True
-            return 3  # ExamineAirway
-        if not state["use_sats_probe"]:
-            state["use_sats_probe"] = True
-            return 25  # UseSatsProbe
-        if not state["use_blood_pressure_cuff"]:
-            state["use_blood_pressure_cuff"] = True
-            return 27  # UseBloodPressureCuff
-        if not state["view_monitor"]:
-            state["view_monitor"] = True
-            return 16  # ViewMonitor
-        return None
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -43,17 +24,31 @@ def stabilize():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
-        action = initial_steps(step)
-        if action is not None:
-            print(action)
+        if step == 0 or not first_examine:
+            first_examine = True
+            print(3)  # ExamineAirway
             continue
 
-        # Check critical conditions and respond
+        if not use_sats_probe:
+            print(25)  # UseSatsProbe
+            use_sats_probe = True
+            continue
+
+        if not use_blood_pressure_cuff:
+            print(27)  # UseBloodPressureCuff
+            use_blood_pressure_cuff = True
+            continue
+
+        if not view_monitor:
+            print(16)  # ViewMonitor
+            view_monitor = True
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
