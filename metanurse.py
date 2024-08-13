@@ -87,6 +87,7 @@ def main():
             print(48)
             return
 
+    # Finish if maximum steps reached
     print(48)
 
 
