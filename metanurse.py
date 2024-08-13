@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     first_examine = False
@@ -57,7 +58,9 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["HeartRate"] is not None and (
+            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+        ):
             print(24)  # UseMonitorPads
             continue
 
@@ -84,6 +87,7 @@ def stabilize():
 
         print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
