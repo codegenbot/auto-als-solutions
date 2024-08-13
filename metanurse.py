@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -10,27 +11,21 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ]
-            )
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] != 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] != 0 else None,
+            "CapillaryGlucose": vital_signs_values[2]
+            if vital_signs_times[2] != 0
+            else None,
+            "Temperature": vital_signs_values[3] if vital_signs_times[3] != 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] != 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] != 0 else None,
+            "Resps": vital_signs_values[6] if vital_signs_times[6] != 0 else None,
         }
 
-        # Initial assessment steps
         if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
             initial_examine = True
@@ -38,6 +33,12 @@ def main():
 
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
+            continue
+
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)  # StartChestCompression
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -55,28 +56,21 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Action for low saturation or MAP indicating cardiac arrest
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
-            continue
-
-        # Action for low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        # Action for inadequate respiratory rate
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        # Action for low MAP
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
-        # Handle unstable heart rhythm
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or any(
+            events[i] for i in range(28, 39)
+        ):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -85,20 +79,15 @@ def main():
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
-            elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
             else:
                 print(43)  # DefibrillatorPace
                 continue
 
-        # End the scenario if patient is stabilized
-        if vitals["MAP"] and vitals["MAP"] >= 60 and vitals["Sats"] and vitals["Sats"] >= 88 and vitals["RespRate"] and vitals["RespRate"] >= 8:
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
-    print(48)  # Finish
+    print(48)  # Finish after maximum steps
+
 
 if __name__ == "__main__":
     main()
