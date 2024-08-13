@@ -3,14 +3,14 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    step = 0
+    initial_examine = False
 
-    while step < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -25,42 +25,70 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
-        if step == 0:
+        if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
-        elif not events[3]:  # AirwayClear event
+            initial_examine = True
+            continue
+
+        if not events[3]:  # AirwayClear event
             print(35)  # PerformAirwayManoeuvres
-        elif "UseSatsProbe" not in used_methods:
+            continue
+
+        if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
-        elif "UseBloodPressureCuff" not in used_methods:
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
             print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
-        elif vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-        elif "ViewMonitor" not in used_methods:
+            continue
+
+        if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
-        elif (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
-        elif vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-        elif vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
-        elif vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
-                used_methods.add("TurnOnDefibrillator")
-            elif "DefibrillatorCurrentUp" not in used_methods:
-                print(41)  # DefibrillatorCurrentUp
-                used_methods.add("DefibrillatorCurrentUp")
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+        
+        if "TurnOnDefibrillator" not in used_methods:
+            print(39)  # TurnOnDefibrillator
+            used_methods.add("TurnOnDefibrillator")
+            continue
+
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if "DefibrillatorCharge" not in used_methods:
+                print(40)  # DefibrillatorCharge
+                used_methods.add("DefibrillatorCharge")
+                continue
+            elif "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
             else:
                 print(43)  # DefibrillatorPace
-        elif all(
+                continue
+        
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)  # StartChestCompression
+            continue
+        
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
@@ -68,11 +96,9 @@ def main():
         ):
             print(48)  # Finish
             return
-        else:
-            print(48)  # Finish, just in case
-            return
-        
-        step += 1  # Increment step counter for each loop iteration
+
+        print(3)  # Always ensure to continually examine
+        continue
 
 if __name__ == "__main__":
     main()
