@@ -63,7 +63,7 @@ def stabilize():
         heart_rate = vitals.get("HeartRate")
         resp_rate = vitals.get("RespRate")
 
-        if (sats is not None and sats < 65) or (map_ is not None and map_ < 20):
+        if sats is not None and sats < 65 or map_ is not None and map_ < 20:
             print(17)
             step += 1
             continue
