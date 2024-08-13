@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -33,16 +34,9 @@ def main():
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # Airway not clear
-            if events[5] or events[6]:  # Vomit or Blood in airway
-                print(31)  # Use yankeur suction catheter
-                continue
-            elif events[8]:  # Tongue obstructing
-                print(36)  # Perform head tilt chin lift
-                continue
-            else:
-                print(35)  # Perform airway manoeuvres
-                continue
+        if not events[3]:
+            print(35)
+            continue
 
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
@@ -52,11 +46,6 @@ def main():
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
-            continue
-
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)
-            used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
@@ -90,13 +79,14 @@ def main():
                 print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(11)
                 continue
 
         print(48)
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
