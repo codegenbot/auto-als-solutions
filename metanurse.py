@@ -14,65 +14,65 @@ def stabilize():
 
         if not examine_airway:
             examine_airway = True
-            print(3)
+            print(3)  # Examine Airway
             continue
         
         if not examine_breathing:
             examine_breathing = True
-            print(4)
+            print(4)  # Examine Breathing
             continue
 
         if not examine_circulation:
             examine_circulation = True
-            print(5)
+            print(5)  # Examine Circulation
             continue
 
         if vitals["Sats"] is None and not use_sats_probe:
-            print(25)
+            print(25)  # Use Sats Probe
             use_sats_probe = True
             continue
 
         if vitals["MAP"] is None and not use_blood_pressure_cuff:
-            print(27)
+            print(27)  # Use Blood Pressure Cuff
             use_blood_pressure_cuff = True
             continue
 
         if not view_monitor:
             view_monitor = True
-            print(16)
+            print(16)  # View Monitor
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)
+            print(17)  # Start Chest Compression
             continue
         
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
+            print(17)  # Start Chest Compression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use Non Rebreather Mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use Bag Valve Mask
             continue
         
         if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
-            print(43)
+            print(43)  # Defibrillator Pace
             continue
-        
+
         if all([vitals["Sats"] is not None and vitals["Sats"] >= 88,
                 vitals["RespRate"] is not None and vitals["RespRate"] >= 8,
                 vitals["MAP"] is not None and vitals["MAP"] >= 60]):
-            print(48)
+            print(48)  # Finish
             return
 
-        print(48)
+        print(48)  # Finish
         return
 
 if __name__ == "__main__":
