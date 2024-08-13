@@ -2,6 +2,7 @@ import sys
 
 def main():
     max_steps = 350
+    used_methods = set()
     initial_examine = False
 
     for step in range(max_steps):
@@ -10,58 +11,53 @@ def main():
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-        
+
         if step == 0 or not initial_examine:
-            for action in [3, 4, 5]:  # Examine Airway, Breathing, Circulation
-                print(action)
-                initial_examine = True
-                break
+            action = [3, 4, 5][step % 3]
+            print(action)
+            initial_examine = True
             continue
-        
-        if "UseSatsProbe" not in locals():
+
+        if "UseSatsProbe" not in used_methods:
             print(25)
-            locals()["UseSatsProbe"] = True
+            used_methods.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in locals():
+        if "UseBloodPressureCuff" not in used_methods:
             print(27)
-            locals()["UseBloodPressureCuff"] = True
+            used_methods.add("UseBloodPressureCuff")
             continue
 
-        if "ViewMonitor" not in locals():
+        if "ViewMonitor" not in used_methods:
             print(16)
-            locals()["ViewMonitor"] = True
+            used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+        if vitals["Sats"] and (vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)
             continue
         
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)
             continue
         
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-        
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                if "TurnOnDefibrillator" not in locals():
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                if "TurnOnDefibrillator" not in used_methods:
                     print(39)
-                    locals()["TurnOnDefibrillator"] = True
+                    used_methods.add("TurnOnDefibrillator")
                     continue
-                if "DefibrillatorCharge" not in locals():
+                if "DefibrillatorCharge" not in used_methods:
                     print(40)
-                    locals()["DefibrillatorCharge"] = True
+                    used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # DefibrillatorPace
+                print(43)
                 continue
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
