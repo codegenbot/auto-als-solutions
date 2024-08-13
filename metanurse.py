@@ -3,7 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_assessment = False
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -12,12 +12,15 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if step == 0 or not initial_assessment:
+        # Initial examinations
+        if not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
-            initial_assessment = True
+            if step % 3 == 2:
+                initial_examine = True
             continue
 
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -33,19 +36,15 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if "UseMonitorPads" not in used_methods:
-            print(24)
-            used_methods.add("UseMonitorPads")
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+        # Critical interventions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             print(17)
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
-
+        
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
@@ -65,14 +64,14 @@ def main():
             print(15)
             continue
 
+        # Final checks before finishing
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
             print(48)
             return
         
-        print(48)
-        return
+        print(1)  # Default to DoNothing while waiting for new data
 
 if __name__ == "__main__":
     main()
