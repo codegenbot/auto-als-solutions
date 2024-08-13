@@ -1,16 +1,11 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
-    step = 0
-    examinations_done = {
-        "airway": False,
-        "sats_probe": False,
-        "blood_pressure_cuff": False,
-        "monitor": False,
-    }
+    first_examine = False
 
-    while step < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -34,64 +29,49 @@ def stabilize():
             )
         }
 
-        if not examinations_done["airway"]:
+        if step == 0:
             print(3)
-            examinations_done["airway"] = True
-            step += 1
             continue
-
-        if not examinations_done["sats_probe"]:
+        elif step == 1:
+            print(4)
+            continue
+        elif step == 2:
+            print(5)
+            continue
+        elif step == 3:
             print(25)
-            examinations_done["sats_probe"] = True
-            step += 1
             continue
-
-        if not examinations_done["blood_pressure_cuff"]:
+        elif step == 4:
             print(27)
-            examinations_done["blood_pressure_cuff"] = True
-            step += 1
             continue
-
-        if not examinations_done["monitor"]:
+        elif step == 5:
             print(16)
-            examinations_done["monitor"] = True
-            step += 1
             continue
 
-        sats = vitals.get("Sats")
-        map_ = vitals.get("MAP")
-        heart_rate = vitals.get("HeartRate")
-        resp_rate = vitals.get("RespRate")
-
-        if sats is not None and sats < 65 or map_ is not None and map_ < 20:
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)
-            step += 1
             continue
-
-        if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
-            print(40)
-            step += 1
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
             continue
-
-        if map_ is not None and map_ < 60:
+        if vitals["HeartRate"] is not None and (
+            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+        ):
+            print(24)
+            continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)
-            step += 1
             continue
-
-        if sats is not None and sats < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
-            step += 1
             continue
-
-        if resp_rate is not None and resp_rate < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
-            step += 1
             continue
-
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [sats, resp_rate, map_], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             print(48)
@@ -99,6 +79,7 @@ def stabilize():
 
         print(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
