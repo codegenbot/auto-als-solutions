@@ -58,7 +58,7 @@ def main():
             print(16)
             used_methods.add("ViewMonitor")
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)
             continue
