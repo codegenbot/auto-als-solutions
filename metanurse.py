@@ -2,92 +2,69 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = False
-    use_sats_probe = False
-    use_blood_pressure_cuff = False
-    view_monitor = False
+    steps = 0
 
-    for step in range(max_steps):
+    def perform_step(action):
+        nonlocal steps
+        print(action)
+        steps += 1
+        if steps >= max_steps:
+            print(48)  # Finish
+            sys.exit()
+
+    while steps < max_steps:
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+        
+        vitals = {name: value if time > 0 else None for value, time, name in zip(
+            vital_signs_values, vital_signs_times, ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
 
-        if step == 0 or not first_examine:
-            first_examine = True
-            print(3)  # ExamineAirway
+        # Simulate initial ABCDE check routines
+        if steps == 0:
+            perform_step(3)  # ExamineAirway
             continue
-
-        if not use_sats_probe:
-            print(25)  # UseSatsProbe
-            use_sats_probe = True
+        if steps == 1:
+            perform_step(25)  # UseSatsProbe
             continue
-
-        if not view_monitor:
-            print(16)  # ViewMonitor
-            view_monitor = True
+        if steps == 2:
+            perform_step(16)  # ViewMonitor
             continue
-
-        if not use_blood_pressure_cuff:
-            print(27)  # UseBloodPressureCuff
-            use_blood_pressure_cuff = True
+        if steps == 3:
+            perform_step(27)  # UseBloodPressureCuff
             continue
-
+            
+        # Vital actions based on assessments
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            perform_step(17)  # StartChestCompression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            perform_step(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            perform_step(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            perform_step(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            perform_step(15)  # GiveFluids
             continue
 
-        # Handle tachyarrhythmia
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or events[32] > 0
-        ):  # Treat unstable tachyarrhythmia
-            print(40)  # DefibrillatorCharge
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or events[32] > 0):
+            perform_step(40)  # DefibrillatorCharge
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)  # Finish
+        if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+            perform_step(48)  # Finish
             return
 
-    print(48)  # Finish in case of no further action requirement
-
+        perform_step(0)  # DoNothing
+        
 if __name__ == "__main__":
     stabilize()
