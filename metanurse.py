@@ -62,47 +62,36 @@ def main():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)
+            print(17)  # Start chest compression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use non-rebreather mask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use bag valve mask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # Give fluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # Give atropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # Check rhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(9)  # Give adenosine (assume SVT)
                 continue
 
-        if "ExamineCirculation" not in used_methods:
-            print(5)
-            used_methods.add("ExamineCirculation")
-            continue
-
-        if "ExamineDisability" not in used_methods:
-            print(6)
-            used_methods.add("ExamineDisability")
-            continue
-
-        print(48)
+        print(48)  # Finish if patient is stable
         return
 
-    print(48)
-
+    print(48)  # Finish after max_steps
 
 if __name__ == "__main__":
     main()
