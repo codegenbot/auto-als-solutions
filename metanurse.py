@@ -14,58 +14,58 @@ def stabilize():
         
         if step == 0 or not first_examine:
             first_examine = True
-            print(3)  # ExamineAirway
+            print(3)
             continue
         
         if not use_sats_probe:
-            print(25)  # UseSatsProbe
+            print(25)
             use_sats_probe = True
             continue
 
         if not use_blood_pressure_cuff:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             use_blood_pressure_cuff = True
             continue
 
         if not view_monitor:
-            print(16)  # ViewMonitor
+            print(16)
             view_monitor = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
         
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                print(41)  # DefibrillatorCurrentUp (Assuming current up means cardioversion)
+                print(41)
                 continue
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
-            print(48)  # Finish
+            print(48)
             return
         
         if step >= max_steps - 1:
-            print(48)  # Finish as a fallback if max steps reached
+            print(48)
             return
         
-        print(0)  # DoNothing
+        print(0)
 
 if __name__ == "__main__":
     stabilize()
