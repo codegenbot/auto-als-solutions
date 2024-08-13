@@ -23,7 +23,7 @@ def main():
         )
 
         vitals = {
-            name: (value if time > 0 else None)
+            name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
@@ -39,29 +39,35 @@ def main():
             )
         }
 
+        # Check Airway
         if not events[3]:  # AirwayClear
             print(3)
             continue
 
+        # Check Breathing
         if not used_methods["OpenedBreathingDrawer"]:
             print(19)
             used_methods["OpenedBreathingDrawer"] = True
             continue
 
+        # Use Sats Probe
         if not used_methods["UsedSatsProbe"]:
             print(25)
             used_methods["UsedSatsProbe"] = True
             continue
 
+        # View Monitor for vitals
         if not used_methods["ViewedMonitor"]:
             print(16)
             used_methods["ViewedMonitor"] = True
             continue
-
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+        
+        # Cardiac arrest check
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)
             continue
 
+        # Stabilize breathing
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -70,21 +76,30 @@ def main():
             print(29)
             continue
 
+        # Check Circulation
         if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
                 used_methods["OpenedCirculationDrawer"] = True
-            elif not used_methods["UsedBP_Cuff"]:
+                continue
+            if not used_methods["UsedMonitorPads"]:
+                print(24)
+                used_methods["UsedMonitorPads"] = True
+                continue
+            if not used_methods["UsedBP_Cuff"]:
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
-            elif not used_methods["UsedA_Line"]:
+                continue
+            if not used_methods["UsedA_Line"]:
                 print(26)
                 used_methods["UsedA_Line"] = True
-            elif not used_methods["GivenFluids"]:
+                continue
+            if not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
-            continue
+                continue
 
+        # Address HeartRate issues
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)
@@ -96,10 +111,10 @@ def main():
                 if not used_methods["UsedDefibPads"]:
                     print(28)
                     used_methods["UsedDefibPads"] = True
-                print(44)
-                print(40)
+                print(9)
                 continue
 
+        # If everything is stabilized
         print(48)
         return
 
