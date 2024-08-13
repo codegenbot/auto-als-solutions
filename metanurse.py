@@ -31,59 +31,56 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear event
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
-
-        if (
-            vitals["HeartRate"] is not None and 
-            (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50 or any(events[28:38]))
-        ):
+        
+        if any(events[28:38]) and vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
+                print(39)
                 used_methods.add("TurnOnDefibrillator")
                 continue
             elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
+                print(40)
                 used_methods.add("DefibrillatorCharge")
                 continue
             elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
+                print(47)
                 used_methods.add("DefibrillatorSync")
                 continue
             else:
-                print(43)  # DefibrillatorPace
+                print(43)
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if all(
@@ -92,10 +89,10 @@ def main():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
 
-    print(48)  # Finish, just in case
+    print(48)
 
 if __name__ == "__main__":
     main()
