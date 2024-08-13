@@ -3,41 +3,49 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: value if time > 0 else None for value, time, name in zip(
-            vital_signs_values, vital_signs_times, 
-            ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
-        )}
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
+        }
 
-        if step == 0:
-            print(3)  # Initial Airway Examination
+        if step == 0 or not initial_examine:
+            print(3)
+            initial_examine = True
             continue
 
-        if not events[3]:  # Ensure airway is clear
-            print(35)  # Perform Airway Manoeuver
-            continue
-            
-        if "ExamineBreathing" not in used_methods:
-            print(4)  # Examine Breathing
-            used_methods.add("ExamineBreathing")
-            continue
-            
-        if "ExamineCirculation" not in used_methods:
-            print(5)  # Examine Circulation
-            used_methods.add("ExamineCirculation")
-            continue
-
-        if "OpenBreathingDrawer" not in used_methods:
-            print(19)
-            used_methods.add("OpenBreathingDrawer")
+        if not events[3]:
+            print(35)
             continue
 
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
@@ -46,34 +54,35 @@ def main():
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # Start Chest Compressions
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use Non-Rebreather Mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use Bag Valve Mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give Fluids
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
-                continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check Rhythm
+                print(12)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # Give Amiodarone
+                print(9)
                 continue
+        
+        if (vitals["HeartRate"] and vitals["HeartRate"] >= 100 and vitals["HeartRate"] <= 150) or events[27]:
+            print(24)
+            continue
 
-        print(48)  # Finish
-        return
+        print(48)
+        return 
 
     print(48)
 
