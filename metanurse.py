@@ -54,21 +54,6 @@ def stabilize():
             print(4)  # ExamineBreathing
             continue
         
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            print(5)  # ExamineCirculation
-            continue
-        
-        if 8 not in actions_taken:
-            actions_taken.add(8)
-            print(8)  # ExamineResponse
-            continue
-        
-        if 2 not in actions_taken:
-            actions_taken.add(2)
-            print(2)  # CheckRhythm
-            continue
-        
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
