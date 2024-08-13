@@ -30,18 +30,20 @@ def main():
             )
         }
 
-        # Initial examination steps
         if step == 0 or not initial_examine:
             print(3)
             initial_examine = True
             continue
 
-        # Ensure airway is clear
+        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
+        if needs_chest_compression:
+            print(17)
+            continue
+
         if not events[3]:
             print(35)
             continue
 
-        # Use Sats Probe, Blood Pressure Cuff, and View Monitor
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -56,13 +58,11 @@ def main():
             print(16)
             used_methods.add("ViewMonitor")
             continue
-
-        # Check for cardiac arrest
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+        
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)
             continue
 
-        # Breathing and oxygenation issues
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -71,13 +71,7 @@ def main():
             print(29)
             continue
 
-        # Circulation issues
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
-            continue
-
-        # Check for unstable tachyarrhythmia and cardiovert if necessary
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)
                 used_methods.add("TurnOnDefibrillator")
@@ -93,15 +87,13 @@ def main():
             else:
                 print(43)
                 continue
-        
-        # Stabilize if all vitals are within acceptable ranges
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
             print(48)
             return
 
-        # Fallback
         print(48)
         return
 
