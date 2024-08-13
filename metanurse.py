@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -54,7 +55,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -70,7 +73,9 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[
+            27
+        ]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -91,6 +96,7 @@ def main():
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
