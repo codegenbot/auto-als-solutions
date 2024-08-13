@@ -43,7 +43,7 @@ def stabilize():
             actions_taken.add(16)
             print(16)
             continue
-
+        
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)
@@ -68,7 +68,7 @@ def stabilize():
             actions_taken.add(7)
             print(7)
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
