@@ -1,6 +1,8 @@
+import sys
+
 def stabilize():
     max_steps = 350
-    examined, examine_breathing, use_sats_probe, use_blood_pressure_cuff, view_monitor = False, False, False, False, False
+    examined, use_sats_probe, use_blood_pressure_cuff, view_monitor, examine_breathing = False, False, False, False, False
     
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
