@@ -2,13 +2,8 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = {
-        "examine_airway": False,
-        "use_sats_probe": False,
-        "use_blood_pressure_cuff": False,
-        "view_monitor": False
-    }
-
+    examined, use_sats_probe, use_blood_pressure_cuff, view_monitor = False, False, False, False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -16,24 +11,24 @@ def stabilize():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if not actions_taken["examine_airway"]:
-            actions_taken["examine_airway"] = True
+        if not examined:
             print(3)  # ExamineAirway
+            examined = True
             continue
-        
-        if not actions_taken["use_sats_probe"]:
-            actions_taken["use_sats_probe"] = True
+
+        if not use_sats_probe:
             print(25)  # UseSatsProbe
+            use_sats_probe = True
             continue
 
-        if not actions_taken["use_blood_pressure_cuff"]:
-            actions_taken["use_blood_pressure_cuff"] = True
+        if not use_blood_pressure_cuff:
             print(27)  # UseBloodPressureCuff
+            use_blood_pressure_cuff = True
             continue
 
-        if not actions_taken["view_monitor"]:
-            actions_taken["view_monitor"] = True
+        if not view_monitor:
             print(16)  # ViewMonitor
+            view_monitor = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -62,14 +57,15 @@ def stabilize():
                     continue
             print(15)  # GiveFluids
             continue
-
+        
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
             print(48)
             return
-
-    print(48)
+        
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
