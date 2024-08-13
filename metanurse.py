@@ -3,6 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -55,6 +56,11 @@ def main():
             used_methods.add("UseBloodPressureCuff")
             continue
 
+        if "ViewMonitorBP" not in used_methods:
+            print(16)
+            used_methods.add("ViewMonitorBP")
+            continue
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
@@ -81,7 +87,7 @@ def main():
                 print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # GiveAmiodarone 
+                print(11)  # GiveAmiodarone
                 continue
         
         print(48)
