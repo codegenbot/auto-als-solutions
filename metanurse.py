@@ -32,7 +32,7 @@ def main():
             print(3)  # Initial Airway Examination
             continue
 
-        if not events[3]:  # Airway not clear
+        if not events[3]:  # Ensure airway is clear
             if events[4] or events[5] or events[6]:
                 print(31)  # Use Yankeur Suction Catheter
             else:
