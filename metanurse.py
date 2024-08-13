@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -31,11 +32,11 @@ def main():
         if step == 0:
             print(3)  # ExamineAirway
             continue
-        
+
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
-        
+
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -51,7 +52,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -75,6 +78,7 @@ def main():
         return
 
     print(48)  # Finish
+
 
 if __name__ == "__main__":
     main()
