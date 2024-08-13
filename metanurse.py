@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -78,7 +77,9 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or events[32] > 0
+        )
 
         if unstable_tachyarrhythmia:
             print(40)  # DefibrillatorCharge
@@ -106,7 +107,6 @@ def stabilize():
             return
 
         print(0)  # DoNothing
-
 
 if __name__ == "__main__":
     stabilize()
