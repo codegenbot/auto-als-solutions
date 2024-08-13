@@ -50,6 +50,7 @@ def stabilize():
             print(16)  # View Monitor
             continue
 
+        # Conditions for critical actions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
