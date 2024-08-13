@@ -3,6 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -11,9 +12,10 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
         
-        if step < 3:
+        if step == 0 or not initial_examine:
             actions = [3, 4, 5]
-            print(actions[step])
+            print(actions[step % 3])
+            initial_examine = True
             continue
 
         if "UseSatsProbe" not in used_methods:
