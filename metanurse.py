@@ -3,7 +3,6 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -29,13 +28,20 @@ def main():
             )
         }
 
-        if step == 0 or not initial_examine:
+        if step == 0:
             print(3)  # Initial Airway Examination
-            initial_examine = True
             continue
 
-        if not events[3]:  # Ensure airway is clear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:  # Airway not clear
+            if events[4] or events[5] or events[6]:
+                print(31)  # Use Yankeur Suction Catheter
+            else:
+                print(35)  # Perform Airway Manoeuvres
+            continue
+
+        if "OpenBreathingDrawer" not in used_methods:
+            print(19)
+            used_methods.add("OpenBreathingDrawer")
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -43,17 +49,14 @@ def main():
             used_methods.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)
-            used_methods.add("UseBloodPressureCuff")
-            continue
-
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -69,22 +72,24 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if any(events[i] > 0 for i in [30, 31, 32, 33, 34, 37, 38]):  # Unstable tachyarrhythmia
-            print(24)  # UseMonitorPads
-            continue
-
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # GiveAtropine
                 continue
-            elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)  # CheckRhythm
                 continue
-        
-        print(48)  # Finish
-        return 
+            elif vitals["HeartRate"] > 150:
+                print(11)  # GiveAmiodarone
+                continue
 
-    print(48)  # Finish
+        if (vitals["Sats"] and vitals["Sats"] >= 88) and (
+            vitals["RespRate"] and vitals["RespRate"] >= 8) and (
+            vitals["MAP"] and vitals["MAP"] >= 60):
+            print(48)  # Finish
+            return
+
+    print(48)
 
 if __name__ == "__main__":
     main()
