@@ -28,21 +28,21 @@ def main():
             )
         }
 
-        # Airway
         if "ExamineAirway" not in used_methods:
             print(3)
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:
-            print(35)
-            continue
-        
-        # Breathing
-        if "ExamineBreathing" not in used_methods:
-            print(4)
-            used_methods.add("ExamineBreathing")
-            continue
+        if not events[3]:  # Airway not clear
+            if events[5] or events[6]:  # Vomit or Blood in airway
+                print(31)  # Use yankeur suction catheter
+                continue
+            elif events[8]:  # Tongue obstructing
+                print(36)  # Perform head tilt chin lift
+                continue
+            else:
+                print(35)  # Perform airway manoeuvres
+                continue
 
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
@@ -59,40 +59,40 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Vital checks
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)  # Start CPR
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use Non-Rebreather Mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use Bag Valve Mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give Fluids
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check Rhythm
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # Give Adenosine
+                print(9)
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
