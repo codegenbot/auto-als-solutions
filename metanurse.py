@@ -2,9 +2,8 @@ import sys
 
 def stabilize():
     max_steps = 350
-    initial_actions = [3, 4, 5, 6, 25, 27, 16]
-    actions_iter = iter(initial_actions)
     first_examine = True
+    actions = iter([1, 2, 3, 4, 5, 6, 7, 2, 16])  # Initial series of Examine actions
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -27,7 +26,7 @@ def stabilize():
 
         if first_examine:
             try:
-                print(next(actions_iter))  # Execute initial series of Examine actions
+                print(next(actions))  # Execute initial series of Examine actions
                 continue
             except StopIteration:
                 first_examine = False
@@ -51,8 +50,8 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
-
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150):
             print(24)  # UseMonitorPads
             continue
 
