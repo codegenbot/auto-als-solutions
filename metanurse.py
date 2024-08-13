@@ -35,7 +35,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
@@ -47,15 +47,19 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
+
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(39)  # TurnOnDefibrillator
+            continue
+
+        if vitals["HeartRate"] is not None and 60 <= vitals["HeartRate"] <= 100:
             print(43)  # DefibrillatorPace
             continue
-        
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
