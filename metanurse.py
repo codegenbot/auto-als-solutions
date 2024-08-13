@@ -63,7 +63,7 @@ def stabilize():
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone 
+                print(10)  # GiveAmiodarone
             else:
                 print(15)  # GiveFluids
             continue
