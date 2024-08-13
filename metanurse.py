@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -8,10 +7,14 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
+        if len(observations) != 53:
+            print(1)  # DoNothing to sync
+            continue
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -26,8 +29,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
@@ -55,17 +58,11 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
-        if (
-            vitals["HeartRate"]
-            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
-            or any(events[28:38])
-        ):
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -95,17 +92,15 @@ def main():
             continue
 
         if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-            if vital is not None
+            vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
+            ) if vital is not None
         ):
             print(48)  # Finish
             return
 
-        print(1)  # DoNothing
-
+        print(1)  # DoNothing to stabilize/inspect more as necessary
 
 if __name__ == "__main__":
     main()
