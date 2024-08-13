@@ -54,7 +54,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] is not None and (vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
