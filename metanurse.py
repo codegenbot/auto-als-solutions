@@ -71,7 +71,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[28]:  # Unstable SVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
