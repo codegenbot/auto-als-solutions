@@ -7,18 +7,34 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: (value if time > 0 else None) for value, time, name in zip(vital_signs_values, vital_signs_times, [
-            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-        ])}
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+        vitals = {
+            name: (value if time > 0 else None)
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
+        }
 
         # Initial examinations
-        if not initial_examine:
-            if step < 5:
-                print(3 + step)
-                continue
+        if step == 0 or not initial_examine:
+            print(3 if step < 2 else (4 if step == 2 else 5))
             initial_examine = True
-        
+            continue
+
         # Airway Management
         if not events[3]:
             print(35)
@@ -41,7 +57,9 @@ def main():
             continue
 
         # Critical interventions
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)
             continue
 
@@ -55,7 +73,9 @@ def main():
 
         # Treat unstable tachyarrhythmia
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if vitals["HeartRate"] and (
+                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+            ):
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
@@ -64,15 +84,18 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)
+                print(43)  # Perform cardioversion
                 continue
-            print(15)
+            print(15)  # Administer fluids
             continue
-            
+
         # Final checks before finishing
-        if all(vital is not None and vital >= threshold for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])):
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)
             return
 
