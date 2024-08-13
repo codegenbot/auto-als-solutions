@@ -29,74 +29,56 @@ def stabilize():
             )
         }
 
+        def take_action(action):
+            actions_taken.add(action)
+            print(action)
+
+        # AB
         if 25 not in actions_taken:
-            actions_taken.add(25)
-            print(25)
+            take_action(25)
             continue
-        
         if 27 not in actions_taken:
-            actions_taken.add(27)
-            print(27)
+            take_action(27)
             continue
-        
         if 16 not in actions_taken:
-            actions_taken.add(16)
-            print(16)
+            take_action(16)
             continue
         
-        if 3 not in actions_taken:
-            actions_taken.add(3)
-            print(3)
+        # CDE
+        necessary_examinations = [3, 4, 5, 8, 2]
+        for exam in necessary_examinations:
+            if exam not in actions_taken:
+                take_action(exam)
+                continue
+
+        # Handle unstable conditions
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
         
-        if 4 not in actions_taken:
-            actions_taken.add(4)
-            print(4)
-            continue
-        
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            print(5)
-            continue
-        
-        if 8 not in actions_taken:
-            actions_taken.add(8)
-            print(8)
-            continue
-        
-        if 2 not in actions_taken:
-            actions_taken.add(2)
-            print(2)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
-        
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+            take_action(15)
             continue
         
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
         
-        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
-            print(15)
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
-            continue
-        
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)
+                take_action(28)
                 continue
-            print(40)
+            take_action(40)
             continue
 
         if all(
@@ -106,10 +88,11 @@ def stabilize():
                 [88, 8, 60]
             )
         ):
-            print(48)
+            take_action(48)
             return
         
-    print(48)
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
