@@ -2,9 +2,8 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = False
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examine_breathing = examine_circulation = False
+    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -49,16 +48,6 @@ def stabilize():
             view_monitor = True
             continue
 
-        if not examine_breathing:
-            print(4)  # ExamineBreathing
-            examine_breathing = True
-            continue
-
-        if not examine_circulation:
-            print(5)  # ExamineCirculation
-            examine_circulation = True
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
@@ -70,6 +59,10 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
+        
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(24)  # UseMonitorPads
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
@@ -77,12 +70,6 @@ def stabilize():
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
-            continue
-
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-        ):
-            print(24)  # UseMonitorPads
             continue
 
         if all(
@@ -94,8 +81,8 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+        print(1)  # DoNothing
+        continue
 
 if __name__ == "__main__":
     stabilize()
