@@ -24,13 +24,13 @@ def main():
                     "MAP",
                     "Sats",
                     "Resps",
-                ],
+                ]
             )
         }
 
-        # ABCDE Assessment
+        # Check Airway
         if "ExamineAirway" not in used_methods:
-            print(3)  # Examine Airway
+            print(3)
             used_methods.add("ExamineAirway")
             continue
 
@@ -45,6 +45,7 @@ def main():
                 print(35)  # Perform airway manoeuvres
                 continue
 
+        # Check Breathing
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
@@ -60,12 +61,6 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if "ExamineCirculation" not in used_methods:
-            print(5)  # Examine Circulation
-            used_methods.add("ExamineCirculation")
-            continue
-
-        # Check for emergency conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
@@ -80,6 +75,12 @@ def main():
             print(29)  # Use bag valve mask
             continue
 
+        # Check Circulation
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # Give fluids
             continue
@@ -92,7 +93,7 @@ def main():
                 print(2)  # Check rhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # Give adenosine (assume SVT)
+                print(9)  # Give adenosine
                 continue
 
         print(48)  # Finish if patient is stable
