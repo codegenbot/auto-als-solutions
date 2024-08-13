@@ -71,9 +71,9 @@ def main():
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(10)  # GiveAdrenaline
+            print(9)  # GiveAdenosine
             continue
-
+        
         print(48)  # Finish
         return
 
