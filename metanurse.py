@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -8,21 +9,26 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
-        
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose",
-                    "Temperature", "MAP", "Sats", "Resps",
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
                 ],
             )
         }
@@ -51,7 +57,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             steps_taken.append(17)  # StartChestCompression
             continue
 
@@ -74,8 +82,8 @@ def main():
             elif vitals["HeartRate"] > 150:
                 steps_taken.append(9)  # GiveAdenosine
                 continue
-        
-        if (events[27]):  # HeartRhythmNSR
+
+        if events[27]:  # HeartRhythmNSR
             steps_taken.append(24)  # UseMonitorPads
 
         steps_taken.append(48)  # Finish
@@ -83,6 +91,7 @@ def main():
 
     for action in steps_taken:
         print(action)
+
 
 if __name__ == "__main__":
     main()
