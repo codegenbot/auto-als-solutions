@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     initial_examine = False
@@ -19,77 +18,61 @@ def main():
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"],
             )
         }
 
         if not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
         if not has_checked_airway:
-            if not events[3]:  # Airway not clear
-                print(35)  # PerformAirwayManoeuvres
+            if not events[3]:
+                print(35)
             else:
                 has_checked_airway = True
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        if (
-            (vitals["HeartRate"] is not None and vitals["HeartRate"] > 150)
-            or events[30]
-            or events[31]
-            or events[32]
-        ):
-            print(40)  # DefibrillatorCharge
+        if (vitals["HeartRate"] is not None and vitals["HeartRate"] > 150) or events[30] or events[31] or events[32]:
+            print(40)
             continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
