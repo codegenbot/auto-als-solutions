@@ -31,71 +31,66 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # ExamineAirway
             initial_examine = True
             continue
 
-        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
-        if needs_chest_compression:
-            print(17)
-            continue
-
-        if not events[3]:
-            print(35)
+        if not events[3]:  # AirwayClear
+            print(35)  # PerformAirwayManoeuvres
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)
+            print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+        if vitals["Sats"] is not None and (vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20):
+            print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+
+        if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)
+                print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
                 continue
             elif "DefibrillatorCharge" not in used_methods:
-                print(40)
+                print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
             elif "DefibrillatorSync" not in used_methods:
-                print(47)
+                print(47)  # DefibrillatorSync
                 used_methods.add("DefibrillatorSync")
                 continue
             else:
-                print(43)
+                print(43)  # DefibrillatorPace
                 continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])):
-            print(48)
-            return
-
-        print(48)
+        print(48)  # Finish
         return
+
+    print(48)  # Finish after max steps
 
 if __name__ == "__main__":
     main()
