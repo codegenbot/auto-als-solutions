@@ -12,13 +12,13 @@ def stabilize():
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-
+        
         if step == 0 or not first_examine:
             first_examine = True
             print(3)
             continue
         
-        if "AirwayClear" not in events and not airway_clear:
+        if not airway_clear:
             print(3)
             airway_clear = True
             continue
@@ -56,11 +56,7 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                if not view_monitor:
-                    print(39)
-                    view_monitor = True
-                    continue
-                print(43)  # Perform cardioversion
+                print(43)
                 continue
             print(15)
             continue
