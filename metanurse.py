@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     step = 0
@@ -90,14 +91,13 @@ def stabilize():
 
         if all(
             vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [sats, resp_rate, map_], [88, 8, 60]
-            )
+            for vital, threshold in zip([sats, resp_rate, map_], [88, 8, 60])
         ):
             print(48)
             return
 
     print(48)
+
 
 if __name__ == "__main__":
     stabilize()
