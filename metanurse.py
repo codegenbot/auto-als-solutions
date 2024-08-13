@@ -2,8 +2,10 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = False
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+
+    # Status flags
+    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    airway_examined = breathing_examined = circulation_examined = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -29,9 +31,10 @@ def stabilize():
             )
         }
 
-        if step == 0 or not first_examine:
-            print(3)  # ExamineAirway
+        # Examination steps
+        if not first_examine:
             first_examine = True
+            print(3)  # ExamineAirway
             continue
 
         if not use_sats_probe:
@@ -49,39 +52,50 @@ def stabilize():
             view_monitor = True
             continue
 
-        sats = vitals["Sats"]
-        map_ = vitals["MAP"]
-        heart_rate = vitals["HeartRate"]
-        resp_rate = vitals["RespRate"]
+        if not airway_examined:
+            print(3)  # ExamineAirway
+            airway_examined = True
+            continue
 
-        if sats is not None and sats < 65:
+        if not breathing_examined:
+            print(4)  # ExamineBreathing
+            breathing_examined = True
+            continue
+
+        if not circulation_examined:
+            print(5)  # ExamineCirculation
+            circulation_examined = True
+            continue 
+
+        # Intervention steps based on vitals
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
 
-        if map_ is not None and map_ < 20:
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
-        if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
-            print(40)  # DefibrillatorCharge
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(41)  # DefibrillatorCurrentUp
             continue
 
-        if map_ is not None and map_ < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
-        if sats is not None and sats < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if resp_rate is not None and resp_rate < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [sats, resp_rate, map_], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             print(48)  # Finish
