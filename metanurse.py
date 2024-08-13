@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     first_examine = True
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    actions = iter([3, 4, 3, 8, 16])  # Initial series of Examine actions
+    actions = iter([3, 4, 8, 7, 16])  # Initial series of Examine actions
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
