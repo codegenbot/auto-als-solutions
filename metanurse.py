@@ -57,13 +57,13 @@ def stabilize():
                     continue
             print(15)  # GiveFluids
             continue
-        
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
             print(48)
             return
-        
+
         print(48)
         return
 
