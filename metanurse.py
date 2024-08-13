@@ -61,6 +61,7 @@ def stabilize():
                              [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                              [88, 8, 60])):
                     print(48)  # Finish
+                    return
                 steps_taken += 1
 
 if __name__ == "__main__":
