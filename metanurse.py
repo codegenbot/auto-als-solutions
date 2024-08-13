@@ -18,18 +18,24 @@ def main():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
                 ],
             )
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # Initial Airway Examination
             initial_examine = True
             continue
 
-        if not events[3]:
-            print(35)
+        if not events[3]:  # Ensure airway is clear
+            print(35)  # PerformAirwayManoeuvres
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -48,37 +54,37 @@ def main():
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
+            continue
+
+        if any(events[i] > 0 for i in [30, 31, 32, 33, 34, 37, 38]):  # Unstable tachyarrhythmia
+            print(24)  # UseMonitorPads
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
+        
+        print(48)  # Finish
+        return 
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] >= 100 and vitals["HeartRate"] <= 150) or events[27]:
-            print(24)
-            continue
-
-        print(48)
-        return
-
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
