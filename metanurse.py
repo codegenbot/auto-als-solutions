@@ -33,24 +33,24 @@ def main():
             continue
 
         if not events[3]:  # Ensure airway is clear
-            print(35)
+            print(35)  # PerformAirwayManoeuvres
             continue
-
-        if "OpenBreathingDrawer" not in used_methods:
-            print(19)
-            used_methods.add("OpenBreathingDrawer")
+        
+        if "ExamineBreathing" not in used_methods:
+            print(4)  # ExamineBreathing
+            used_methods.add("ExamineBreathing")
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
-
+        
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
