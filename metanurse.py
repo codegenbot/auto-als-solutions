@@ -1,9 +1,6 @@
 import sys
 
 def stabilize():
-    import sys
-    input = sys.stdin.read
-
     max_steps = 350
     first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
     examined = False
