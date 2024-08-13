@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -17,9 +16,7 @@ def main():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] != 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] != 0 else None,
-            "CapillaryGlucose": vital_signs_values[2]
-            if vital_signs_times[2] != 0
-            else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] != 0 else None,
             "Temperature": vital_signs_values[3] if vital_signs_times[3] != 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] != 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] != 0 else None,
@@ -27,67 +24,62 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
-
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        
+        if not events[3]:
+            print(35)
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or any(
-            events[i] for i in range(28, 39)
-        ):
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or any(events[i] for i in range(28, 39)):
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
+                print(39)
                 used_methods.add("TurnOnDefibrillator")
                 continue
             elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
+                print(40)
                 used_methods.add("DefibrillatorCharge")
                 continue
             else:
-                print(43)  # DefibrillatorPace
+                print(43)
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Finish after maximum steps
-
+    print(48)
 
 if __name__ == "__main__":
     main()
