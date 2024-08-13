@@ -9,36 +9,36 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
-                vital_signs_times,
-                [
+                vital_signs_times, [
                     "HeartRate",
                     "RespRate",
                     "CapillaryGlucose",
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
-        if step == 0:
-            print(3)  # Initial Airway Examination
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)  # StartChestCompression
             continue
 
-        if not events[3]:  # Ensure airway is clear
+        if step == 0 or "InitialExamine" not in used_methods:
+            print(3)  # ExamineAirway
+            used_methods.add("InitialExamine")
+            continue
+
+        if not events[3]:  # Not AirwayClear
             print(35)  # PerformAirwayManoeuvres
-            continue
-
-        if "ExamineBreathing" not in used_methods:
-            print(4)  # ExamineBreathing
-            used_methods.add("ExamineBreathing")
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -46,17 +46,16 @@ def main():
             used_methods.add("UseSatsProbe")
             continue
 
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)  # UseBloodPressureCuff
+            used_methods.add("UseBloodPressureCuff")
+            continue
+
         if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
-            continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -69,21 +68,20 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(2)  # CheckRhythm
-                continue
-            elif vitals["HeartRate"] > 100:
-                print(9)  # GiveAdenosine
-                continue
-            elif vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
-                continue
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 60):
+            print(40)  # DefibrillatorCharge
+            continue
 
-        print(48)
-        return
+        if all([
+            events[3],  # Airway Clear
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,  # Sats >= 88%
+            vitals["RespRate"] is not None and vitals["RespRate"] >= 8,  # Resp Rate >= 8
+            vitals["MAP"] is not None and vitals["MAP"] >= 60  # MAP >= 60
+        ]):
+            print(48)  # Finish
+            return
 
-    print(48)
+        print(1)  # DoNothing or CheckSignsOfLife; this is a fallback action
 
 if __name__ == "__main__":
     main()
