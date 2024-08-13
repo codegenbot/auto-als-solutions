@@ -1,30 +1,19 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                 "MAP", "Sats", "Resps"]
             )
         }
 
@@ -44,7 +33,7 @@ def stabilize():
         if vitals["Sats"] is None or vitals["MAP"] is None:
             print(2)  # CheckRhythm
             continue
-
+        
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)  # ExamineAirway
@@ -62,13 +51,11 @@ def stabilize():
         if events[8] > 0:  # Ensure airway is clear if snoring
             print(36)  # Perform Head Tilt Chin Lift
             continue
-
+        
         if events[30] > 0:  # If HeartRhythmAF event occurred
             print(17)  # StartChestCompression
             continue
-        if events[29] > 0 or any(
-            events[i] > 0 for i in range(29, 33)
-        ):  # Heart rhythm events needing intervention
+        if events[29] > 0 or any(events[i]>0 for i in range(29,33)):  # Heart rhythm events needing intervention
             print(17)  # StartChestCompression
             continue
 
@@ -83,7 +70,6 @@ def stabilize():
 
         print(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
