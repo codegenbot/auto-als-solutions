@@ -61,7 +61,6 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        # Check for unstable tachyarrhythmia
         if events[29] > 0 or events[30] > 0:
             print(40)  # DefibrillatorCharge
             continue
