@@ -1,30 +1,19 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                 "MAP", "Sats", "Resps"]
             )
         }
 
@@ -98,7 +87,6 @@ def stabilize():
             return
 
         print(0)  # DoNothing
-
 
 if __name__ == "__main__":
     stabilize()
