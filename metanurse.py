@@ -1,10 +1,9 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -33,11 +32,12 @@ def main():
             print(3)
             used_methods.add("ExamineAirway")
             continue
-
-        if not events[3]:
+        
+        if not events[3] and "PerformAirwayManoeuvres" not in used_methods:
             print(35)
+            used_methods.add("PerformAirwayManoeuvres")
             continue
-
+        
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
@@ -53,10 +53,8 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(23)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -82,11 +80,19 @@ def main():
                 print(9)
                 continue
 
-        print(48)
-        return
+        if all([
+            vitals.get("HeartRate"),
+            vitals.get("RespRate"),
+            vitals.get("MAP"),
+            vitals.get("Sats"),
+            vitals["Sats"] >= 88,
+            vitals["RespRate"] >= 8,
+            vitals["MAP"] >= 60,
+        ]):
+            print(48)
+            return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
