@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
 
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examined_airway = examined_breathing = False
+    examined_airway = examined_breathing = examined_circulation = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -32,13 +31,13 @@ def stabilize():
         }
 
         if not examined_airway:
-            examined_airway = True
             print(3)
+            examined_airway = True
             continue
 
         if not examined_breathing:
-            examined_breathing = True
             print(4)
+            examined_breathing = True
             continue
 
         if not use_sats_probe:
@@ -65,9 +64,6 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
-                print(40)
-                continue
             print(15)
             continue
 
@@ -78,19 +74,15 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
-
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
+        
+        if all(vitals[key] is not None for key in ["Sats", "RespRate", "MAP"]) and all(
+            vitals[key] >= threshold for key, threshold in [("Sats", 88), ("RespRate", 8), ("MAP", 60)]
         ):
             print(48)
             return
 
         print(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
