@@ -12,11 +12,8 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
+        "UsedDefibPads": False,
     }
-
-    airways_done = False
-    breathing_done = False
-    circulation_done = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -42,74 +39,90 @@ def main():
             )
         }
 
-        if not airways_done:
-            if events[3] > 0:
-                airways_done = True
-            else:
-                print(3)
-                continue
+        # Ensure airway is examined
+        if not events[3]:
+            print(3)
+            continue
 
-        if not breathing_done:
-            if not used_methods["OpenedBreathingDrawer"]:
-                print(19)
-                used_methods["OpenedBreathingDrawer"] = True
-                continue
-            if not used_methods["UsedSatsProbe"]:
-                print(25)
-                used_methods["UsedSatsProbe"] = True
-                continue
-            if not used_methods["ViewedMonitor"]:
-                print(16)
-                used_methods["ViewedMonitor"] = True
-                continue
-            if events[7] > 0:
-                print(29)
-                continue
-            breathing_done = True
+        # Examine breathing
+        if not used_methods["OpenedBreathingDrawer"]:
+            print(19)
+            used_methods["OpenedBreathingDrawer"] = True
+            continue
 
+        # Use sats probe
+        if not used_methods["UsedSatsProbe"]:
+            print(25)
+            used_methods["UsedSatsProbe"] = True
+            continue
+
+        # View monitor
+        if not used_methods["ViewedMonitor"]:
+            print(16)
+            used_methods["ViewedMonitor"] = True
+            continue
+
+        # Check critical conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
             print(17)
             continue
 
+        # Administer oxygen if sats are below 88%
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
+
+        # Use bag-valve mask if respiratory rate is below 8
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        if not circulation_done:
-            if not used_methods["OpenedCirculationDrawer"]:
-                print(20)
-                used_methods["OpenedCirculationDrawer"] = True
-                continue
+        # Open circulation drawer and check MAP
+        if not used_methods["OpenedCirculationDrawer"]:
+            print(20)
+            used_methods["OpenedCirculationDrawer"] = True
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
             if not used_methods["UsedBP_Cuff"]:
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
                 continue
-            if not used_methods["ViewedMonitor"]:
-                print(16)
-                used_methods["ViewedMonitor"] = True
+            elif not used_methods["UsedMonitorPads"]:
+                print(24)
+                used_methods["UsedMonitorPads"] = True
                 continue
-            if not used_methods["GivenFluids"] and vitals["MAP"] and vitals["MAP"] < 60:
+            elif not used_methods["UsedA_Line"]:
+                print(26)
+                used_methods["UsedA_Line"] = True
+                continue
+            elif not used_methods["GivenFluids"]:
                 print(15)
                 used_methods["GivenFluids"] = True
                 continue
 
-            circulation_done = True
-
+        # Check heart rate conditions and take appropriate action
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(9)
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
+                if not used_methods["UsedDefibPads"]:
+                    print(28)
+                    used_methods["UsedDefibPads"] = True
+                    continue
                 print(40)
                 continue
+
+        # Check AVPU status for consciousness
+        if not events[20] and not events[21] and not events[22] and not events[23]:
+            print(8)
+            continue
 
         print(48)
         return
