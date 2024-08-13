@@ -14,9 +14,8 @@ def main():
 
         # Initial examinations
         if step == 0 or not initial_examine:
-            action = [3, 4, 5, 16][step]
-            print(action)
-            initial_examine = step == 3
+            print(3 if step == 0 else (4 if step == 1 else (5 if step == 2 else 16)))
+            initial_examine = True
             continue
 
         # Airway Management
@@ -42,15 +41,7 @@ def main():
 
         # Critical interventions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
-            continue
-
-        # Treat breathing issues
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
-            continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(17)  # Start chest compressions if sats < 65 or MAP < 20
             continue
 
         # Treat unstable tachyarrhythmia
@@ -67,6 +58,14 @@ def main():
                 print(43)  # Perform cardioversion
                 continue
             print(15)  # Administer fluids
+            continue
+
+        # Treat breathing issues
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)  # Use NonRebreatherMask
+            continue
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)  # Use BagValveMask
             continue
 
         # Final checks before finishing
