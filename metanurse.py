@@ -44,7 +44,6 @@ def stabilize():
             print(16)  # ViewMonitor
             continue
         
-        # Immediate Checks
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # Start Chest Compression
             continue
@@ -53,7 +52,6 @@ def stabilize():
             print(22)  # Bag During CPR
             continue
         
-        # Evaluate Actions based on priority
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -78,8 +76,7 @@ def stabilize():
             else:
                 print(41)  # Increase Defib Current
             continue
-        
-        # Continue ABCDE Assessments if essential actions are taken 
+
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)  # Examine Airway
@@ -100,7 +97,6 @@ def stabilize():
             print(8)  # Examine Response
             continue
 
-        # Verify Stabilization
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -110,7 +106,6 @@ def stabilize():
             print(48)  # Finish
             return
         
-        # Default to Do Nothing to wait for further inputs if necessary
         print(0)  # Do Nothing
 
 if __name__ == "__main__":
