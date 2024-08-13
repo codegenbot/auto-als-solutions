@@ -36,11 +36,11 @@ def main():
         if vitals["Sats"] is not None and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
             print(17)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
-        
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
