@@ -2,73 +2,56 @@ import sys
 
 def stabilize():
     max_steps = 350
-    action_taken = { "examine": False, "sats_probe": False, "view_monitor": False, "bp_cuff": False }
-
+    examine_steps = [3, 4, 5, 16, 27, 25, 38]  # Steps to examine in sequence
+    treatments = {
+        'low_sats': 30,   # UseNonRebreatherMask for low oxygen saturation
+        'low_resp_rate': 29,  # UseBagValveMask for low respiratory rate
+        'low_map': 15,    # GiveFluids for low mean arterial pressure
+        'tachyarrhythmia': 40,  # DefibrillatorCharge for unstable tachyarrhythmia
+        'cardiac_arrest': 17   # StartChestCompression for cardiac arrest
+    }
+    examine_index = 0
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values, vital_signs_times, [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                    "MAP", "Sats", "Resps"
-                ]
-            )
-        }
-
-        if not action_taken["examine"]:
-            action_taken["examine"] = True
-            print(3)  # ExamineAirway
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(
+            vital_signs_values, vital_signs_times,
+            ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
+        )}
+        
+        # Examine steps
+        if examine_index < len(examine_steps):
+            print(examine_steps[examine_index])
+            examine_index += 1
             continue
-
-        if not action_taken["sats_probe"]:
-            print(25)  # UseSatsProbe
-            action_taken["sats_probe"] = True
-            continue
-
-        if not action_taken["view_monitor"]:
-            print(16)  # ViewMonitor
-            action_taken["view_monitor"] = True
-            continue
-
-        if not action_taken["bp_cuff"]:
-            print(27)  # UseBloodPressureCuff
-            action_taken["bp_cuff"] = True
-            continue
-
+        
+        # Detect and handle emergencies
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            print(treatments['cardiac_arrest'])
             continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(treatments['cardiac_arrest'])
             continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(treatments['low_sats'])
             continue
-
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(treatments['low_resp_rate'])
             continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(treatments['low_map'])
             continue
-
-        is_unstable_tach = (vitals["HeartRate"] is not None and vitals["HeartRate"] > 150) or events[32] > 0
-        if is_unstable_tach:
-            print(40)  # DefibrillatorCharge
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or events[32] > 0):
+            print(treatments['tachyarrhythmia'])
             continue
-
-        if all( vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]) ):
+        
+        # Check if stabilized
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
             print(48)  # Finish
             return
         
-        print(15)  # Default to giving fluids if no critical action required
+        print(0)  # DoNothing if no specific action required
 
 if __name__ == "__main__":
     stabilize()
