@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -54,9 +53,7 @@ def main():
             continue
 
         # Cardiac Arrest Check
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -68,7 +65,7 @@ def main():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
-
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
@@ -88,7 +85,6 @@ def main():
         return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     main()
