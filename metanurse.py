@@ -29,7 +29,7 @@ def main():
             )
         }
 
-        if "ExamineAirway" not in used_methods:
+        if "Examine" not in used_methods:
             print(3)  # ExamineAirway
             used_methods.add("ExamineAirway")
             continue
