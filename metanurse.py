@@ -2,8 +2,7 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
-    initial_examine = False
+    used_methods, initial_examine, stepsTaken = set(), False, []
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -30,62 +29,67 @@ def main():
             )
         }
 
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+            stepsTaken.append(17)  # StartChestCompression
+            break
+
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            stepsTaken.append(3)  # ExamineAirway
             initial_examine = True
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            stepsTaken.append(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            stepsTaken.append(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
         
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            stepsTaken.append(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            stepsTaken.append(15)  # GiveFluids
             continue
         
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            used_methods.add("UseNonRebreatherMask")
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            stepsTaken.append(30)  # UseNonRebreatherMask
             continue
-        
-        defibrillation_process = ["TurnOnDefibrillator", "DefibrillatorCharge", "DefibrillatorSync", "DefibrillatorPace"]
-        if any(events[i+28] > 0 for i in [6, 7, 8, 11]) and not all(m in used_methods for m in defibrillation_process):
+            
+        if any(events[i] for i in [29, 30, 32, 33, 35]):
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
+                stepsTaken.append(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
                 continue
             if "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
+                stepsTaken.append(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
             if "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
+                stepsTaken.append(47)  # DefibrillatorSync
                 used_methods.add("DefibrillatorSync")
                 continue
             if "DefibrillatorPace" not in used_methods:
-                print(43)  # DefibrillatorPace
+                stepsTaken.append(43)  # DefibrillatorPace
                 used_methods.add("DefibrillatorPace")
                 continue
-        
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])) and events[3]:
-            print(48)  # Finish
-            return
+            stepsTaken.append(48)  # Finish
+            break
 
-        print(48)  # Finish as ultimate fallback
-        return
+        stepsTaken.append(48)  # Finish as ultimate fallback
+        break
+
+    for step in stepsTaken:
+        print(step)
 
 if __name__ == "__main__":
     main()
