@@ -30,18 +30,15 @@ def main():
             )
         }
 
-        # Perform initial examination
         if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
             initial_examine = True
             continue
 
-        # Ensure the airway is clear
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        # Use Sats Probe and BP Cuff
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -57,12 +54,10 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Check for cardiac arrest
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
-        
-        # Stabilize breathing and circulation
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -74,9 +69,8 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
-        # Check for unstable heart rhythm
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -93,7 +87,6 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        # Finish if patient is stable
         print(48)  # Finish
         return
 
