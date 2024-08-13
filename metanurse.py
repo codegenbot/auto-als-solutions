@@ -1,22 +1,35 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                 "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
+        # Initial examinations
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -54,26 +67,29 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+        # Interventions based on vitals
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(22)  # Bag During CPR
             continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
-            continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 20:
             print(15)  # GiveFluids
             continue
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
+        # Handle unstable tachyarrhythmia
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(17)  # StartChestCompression (Cardioversion)
+            print(10)  # GiveAmiodarone (for SVT or AF)
             continue
 
+        # End criteria
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -83,8 +99,9 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)
+        print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
