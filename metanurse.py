@@ -34,15 +34,15 @@ def main():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # Start chest compression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -55,9 +55,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Defibrillator pace
+                print(43)
                 continue
-            print(15)  # Give fluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
