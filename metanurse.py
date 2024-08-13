@@ -38,6 +38,16 @@ def main():
             print(35)  # PerformAirwayManoeuvres
             continue
 
+        if "ExamineBreathing" not in used_methods:
+            print(4)  # ExamineBreathing
+            used_methods.add("ExamineBreathing")
+            continue
+
+        if "ExamineCirculation" not in used_methods:
+            print(5)  # ExamineCirculation
+            used_methods.add("ExamineCirculation")
+            continue
+
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -66,16 +76,20 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)  # GiveFluids to raise MAP
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(40)  # DefibrillatorCharge
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150):
+            print(40)  # DefibrillatorCharge for cardioversion
             continue
 
-        if step > 10:
-            print(48)  # Finish
-            return
+        # Ensure all vital signs are measured
+        if None in (vitals["HeartRate"], vitals["RespRate"], vitals["MAP"], vitals["Sats"]):
+            print(38)  # TakeBloodPressure
+            continue
+
+        print(48)  # Finish
+        return
 
     print(48)  # Finish
 
