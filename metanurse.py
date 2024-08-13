@@ -2,7 +2,9 @@ import sys
 
 def main():
     max_steps = 350
-    observed = set()
+    used_methods = set()
+    initial_examine = False
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -17,48 +19,61 @@ def main():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                    "MAP", "Sats", "Resps"
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps"
                 ]
             )
         }
 
-        if step == 0:
+        if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
+            initial_examine = True
             continue
-        
-        if not events[3]:  # If airway not clear
+
+        if not events[3]:  # AirwayClear event
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        if step == 1 or "SatsProbe" not in observed:
+        if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
-            observed.add("SatsProbe")
-            continue
-        
-        if step == 2 or "BloodPressureCuff" not in observed:
-            print(27)  # UseBloodPressureCuff
-            observed.add("BloodPressureCuff")
+            used_methods.add("UseSatsProbe")
             continue
 
-        if step == 3 or "ViewMonitor" not in observed:
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)  # UseBloodPressureCuff
+            used_methods.add("UseBloodPressureCuff")
+            continue
+
+        if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
-            observed.add("ViewMonitor")
+            used_methods.add("ViewMonitor")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) and "DefibTurnedOn" not in observed:
-            print(39)  # TurnOnDefibrillator
-            observed.add("DefibTurnedOn")
-            continue
-
-        if "DefibTurnedOn" in observed and "DefibCharged" not in observed:
-            print(40)  # DefibrillatorCharge
-            observed.add("DefibCharged")
-            continue
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):
+            if "TurnOnDefibrillator" not in used_methods:
+                print(39)  # TurnOnDefibrillator
+                used_methods.add("TurnOnDefibrillator")
+                continue
+            elif "DefibrillatorCharge" not in used_methods:
+                print(40)  # DefibrillatorCharge
+                used_methods.add("DefibrillatorCharge")
+                continue
+            elif "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
+            else:
+                print(43)  # DefibrillatorPace
+                continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
@@ -72,11 +87,16 @@ def main():
             print(29)  # UseBagValveMask
             continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+        if all(
+            vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
+            ) if vital is not None
+        ):
             print(48)  # Finish
             return
 
-    print(48)  # Finish as fallback
+        print(1)  # DoNothing (to give time for vitals to stabilize/inspect more as necessary)
 
 if __name__ == "__main__":
     main()
