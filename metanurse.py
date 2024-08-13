@@ -2,7 +2,8 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    examine_completed = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -28,8 +29,8 @@ def stabilize():
             )
         }
 
-        if step == 0 or not first_examine:
-            first_examine = True
+        if step == 0 or not examine_completed:
+            examine_completed = True
             print(3)  # ExamineAirway
             continue
 
@@ -56,12 +57,12 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-            continue
-        
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
             print(24)  # UseMonitorPads
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -80,9 +81,6 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-
-        print(1)  # DoNothing
-        continue
 
 if __name__ == "__main__":
     stabilize()
