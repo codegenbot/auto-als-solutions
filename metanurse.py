@@ -10,12 +10,10 @@ def stabilize():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        # Examine the Airway initially.
         if step == 0:
             print(3)  # ExamineAirway
             continue
         
-        # Ensure we have readings for necessary vitals.
         if vitals["Sats"] is None:
             print(25)  # UseSatsProbe
             continue
@@ -26,7 +24,6 @@ def stabilize():
             print(5)  # ExamineCirculation
             continue
         
-        # Stabilize based on vital signs.
         if vitals["Sats"] < 65 or vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
