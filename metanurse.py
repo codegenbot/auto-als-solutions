@@ -1,11 +1,12 @@
 import sys
 
+
 def stabilize():
-    max_steps = 350
+    maximum_steps = 350
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
-    for step in range(max_steps):
+    for step in range(maximum_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -80,14 +81,13 @@ def stabilize():
 
         if all(
             vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [sats, resp_rate, map_], [88, 8, 60]
-            )
+            for vital, threshold in zip([sats, resp_rate, map_], [88, 8, 60])
         ):
             print(48)  # Finish
             return
 
         print(1)  # CheckSignsOfLife
+
 
 if __name__ == "__main__":
     stabilize()
