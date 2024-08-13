@@ -19,48 +19,48 @@ def stabilize():
         }
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(22)  # BagDuringCPR
+            print(22)
             continue
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if "A" not in actions_taken:
             actions_taken.add("A")
-            print(3)  # ExamineAirway
+            print(3)
             continue
         if "B" not in actions_taken:
             actions_taken.add("B")
-            print(4)  # ExamineBreathing
+            print(4)
             continue
         if "C" not in actions_taken:
             actions_taken.add("C")
-            print(5)  # ExamineCirculation
+            print(5)
             continue
         if "D" not in actions_taken:
             actions_taken.add("D")
-            print(6)  # ExamineDisability
+            print(6)
             continue
         if "E" not in actions_taken:
             actions_taken.add("E")
-            print(7)  # ExamineExposure
+            print(7)
             continue
 
         if vitals["Sats"] is None:
-            print(25)  # UseSatsProbe
+            print(25)
             continue
         if vitals["MAP"] is None:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             continue
 
         if vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
         if vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
         if vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if (events[29] > 0 or events[30] > 0 or
@@ -68,14 +68,15 @@ def stabilize():
             events[33] > 0 or events[34] > 0 or
             events[35] > 0 or events[36] > 0 or
             events[37] > 0 or events[38] > 0):
-            print(10)  # GiveAmiodarone
+            print(10)
             continue
 
         if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
-            print(48)  # Finish
+            print(48)
             break
 
-        print(48)  # Finish to avoid infinite loop
+        print(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
