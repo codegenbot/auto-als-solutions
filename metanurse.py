@@ -3,13 +3,13 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -23,8 +23,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
@@ -32,16 +32,16 @@ def main():
             print(3)
             used_methods.add("ExamineAirway")
             continue
-        
+
         if "AirwayClear" not in used_methods and events[3] == 0:
             print(35)  # PerformAirwayManoeuvres
             continue
-        
+
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
             continue
-        
+
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
