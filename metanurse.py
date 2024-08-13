@@ -18,6 +18,7 @@ def stabilize():
             )
         }
 
+        # Initial examinations
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -50,34 +51,40 @@ def stabilize():
             actions_taken.add(7)
             print(7)  # ExamineExposure
             continue
-        if 2 not in actions_taken:
-            actions_taken.add(2)
-            print(2)  # CheckRhythm
-            continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
+        # Interventions based on vitals
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
             continue
-        if vitals["MAP"] and vitals["MAP"] < 20:
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(15)  # GiveFluids
             continue
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone
-            else:
-                print(15)  # GiveFluids
+                if 39 not in actions_taken:
+                    actions_taken.add(39)
+                    print(39)  # TurnOnDefibrillator
+                    continue
+                if 40 not in actions_taken:
+                    actions_taken.add(40)
+                    print(40)  # DefibrillatorCharge
+                    continue
+                print(47)  # DefibrillatorSync
+                continue
+            print(15)  # GiveFluids
             continue
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone
-            continue
-
+        # End criteria
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -86,7 +93,7 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-        
+
         print(48)  # Finish
         return
 
