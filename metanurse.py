@@ -53,28 +53,29 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids to raise MAP
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
-            print(40)  # DefibrillatorCharge for cardioversion
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            print(40)  # DefibrillatorCharge
             continue
 
-        print(48)  # Finish
-        return
+        if step > 10:
+            print(48)  # Finish
+            return
 
     print(48)  # Finish
 
