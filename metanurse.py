@@ -10,8 +10,6 @@ def main():
         27, # UseBloodPressureCuff
         16, # ViewMonitor
     ]
-    used_methods = set()
-    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
