@@ -3,7 +3,6 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
