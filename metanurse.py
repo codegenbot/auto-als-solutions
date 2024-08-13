@@ -3,7 +3,7 @@ import sys
 
 def main():
     max_steps = 350
-    actions = [3, 4, 5, 6, 7]  # ABCDE Examination steps
+    actions = [3, 4, 5, 6, 7]
     used_methods = set()
     action_index = 0
 
@@ -50,20 +50,18 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-            or (vitals["MAP"] is not None and vitals["MAP"] < 20)
+        if vitals["Sats"] is not None and (
+            vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)
         ):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -71,16 +69,16 @@ def main():
                 vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
             ):
                 if "TurnOnDefibrillator" not in used_methods:
-                    print(39)  # TurnOnDefibrillator
+                    print(39)
                     used_methods.add("TurnOnDefibrillator")
                     continue
                 if "DefibrillatorCharge" not in used_methods:
-                    print(40)  # DefibrillatorCharge
+                    print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # DefibrillatorPace
+                print(43)
                 continue
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if all(
@@ -89,10 +87,10 @@ def main():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
 
-        print(48)  # Finish
+        print(48)
         return
 
 
