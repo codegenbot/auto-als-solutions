@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -23,11 +22,7 @@ def main():
     def check_circulation(vitals, events):
         if vitals["MAP"] and vitals["MAP"] < 60:
             return 15  # GiveFluids
-        if (
-            vitals["HeartRate"]
-            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
-            or events[27]
-        ):
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or events[27]:
             if "TurnOnDefibrillator" not in used_methods:
                 used_methods.add("TurnOnDefibrillator")
                 return 39  # TurnOnDefibrillator
@@ -40,30 +35,11 @@ def main():
             else:
                 return 43  # DefibrillatorPace
         return None
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
 
         if not initial_examine[0]:
             print(3)  # ExamineAirway
@@ -90,7 +66,7 @@ def main():
         if action:
             print(action)
             continue
-
+        
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -104,9 +80,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -114,17 +88,16 @@ def main():
         if action:
             print(action)
             continue
-
+        
         action = check_circulation(vitals, events)
         if action:
             print(action)
             continue
-
+        
         print(48)  # Finish
         return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
