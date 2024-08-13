@@ -1,23 +1,35 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
-    
+    actions_taken = set()
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:],
         )
-        
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                 "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
-        
+
         if step == 0:
             print(3)  # ExamineAirway
         elif step == 1:
@@ -41,7 +53,9 @@ def stabilize():
                 print(30)  # UseNonRebreatherMask
             elif vitals["RespRate"] and vitals["RespRate"] < 8:
                 print(29)  # UseBagValveMask
-            elif vitals["HeartRate"] and (events[29] > 0 or events[30] > 0):  # HeartRhythmSVT or HeartRhythmAF
+            elif vitals["HeartRate"] and (
+                events[29] > 0 or events[30] > 0
+            ):  # HeartRhythmSVT or HeartRhythmAF
                 print(10)  # GiveAmiodarone
             elif all(
                 vital is not None and vital >= threshold
@@ -53,6 +67,7 @@ def stabilize():
                 break
             else:
                 print(0)  # DoNothing
+
 
 if __name__ == "__main__":
     stabilize()
