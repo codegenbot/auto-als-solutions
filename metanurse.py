@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -105,7 +104,6 @@ def main():
 
     else:
         print(48)  # Finish after max steps
-
 
 if __name__ == "__main__":
     main()
