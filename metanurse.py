@@ -4,7 +4,6 @@ def stabilize():
     max_steps = 350
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examined_airway = examined_breathing = examined_circulation = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -58,23 +57,8 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        if not examined_airway:
-            examined_airway = True
-            print(3)  # ExamineAirway
-            continue
-
-        if not examined_breathing:
-            examined_breathing = True
-            print(4)  # ExamineBreathing
-            continue
-
-        if not examined_circulation:
-            examined_circulation = True
-            print(5)  # ExamineCirculation
-            continue
-
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            print(41)  # DefibrillatorCurrentUp
+            print(24)  # UseMonitorPads
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
