@@ -33,8 +33,9 @@ def main():
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:
+        if not events[3] and "PerformAirwayManoeuvres" not in used_methods:
             print(35)
+            used_methods.add("PerformAirwayManoeuvres")
             continue
 
         if "OpenBreathingDrawer" not in used_methods:
@@ -52,10 +53,19 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        if not vitals["MAP"] and "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
+            continue
+            
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)
+            continue
+            
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)
+            print(23)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -66,10 +76,6 @@ def main():
             print(29)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
-            continue
-
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)
@@ -78,8 +84,12 @@ def main():
                 print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)
+                print(9)
                 continue
+
+        if events[7]:
+            print(29)
+            continue
 
         print(48)
         return
