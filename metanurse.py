@@ -87,13 +87,8 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if any([
-            vitals["MAP"] and vitals["MAP"] >= 60,
-            vitals["Sats"] and vitals["Sats"] >= 88,
-            vitals["RespRate"] and vitals["RespRate"] >= 8
-        ]):
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
     print(48)
 
