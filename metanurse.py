@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -82,7 +81,6 @@ def stabilize():
 
         print(48)  # Finish
         return
-
 
 if __name__ == "__main__":
     stabilize()
