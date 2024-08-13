@@ -7,97 +7,72 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:]
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
 
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps"
-                ]
-            )
-        }
-
+        # Initial examinations
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            action = [3, 4, 5][step % 3]
+            print(action)
             initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear event
-            print(35)  # PerformAirwayManoeuvres
-            continue
-
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
-        if needs_chest_compression:
-            print(17)  # StartChestCompression
+        # Critical interventions
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
-
+        
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
+        # Treat unstable tachyarrhythmia
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                if "TurnOnDefibrillator" not in used_methods:
+                    print(39)
+                    used_methods.add("TurnOnDefibrillator")
+                    continue
+                if "DefibrillatorCharge" not in used_methods:
+                    print(40)
+                    used_methods.add("DefibrillatorCharge")
+                    continue
+                print(43)
+                continue
+            print(15)
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[28]:  # Unstable SVT
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
-                used_methods.add("TurnOnDefibrillator")
-                continue
-            elif "DefibrillatorCharge" not in used_methods:
-                print(40)  # DefibrillatorCharge
-                used_methods.add("DefibrillatorCharge")
-                continue
-            elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
-            else:
-                print(43)  # DefibrillatorPace
-                continue
-
-        # Check stabilization conditions
-        if all(vitals[name] is not None and vitals[name] >= threshold for name, threshold in zip(
-            ["Sats", "RespRate", "MAP"],
-            [88, 8, 60]
-        )):
-            print(48)  # Finish
+        # Final checks before finishing
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60])):
+            print(48)
             return
 
-        print(1)  # Continue with CheckSignsOfLife if no specific action
-        continue
+        print(48)
+        return
 
 if __name__ == "__main__":
     main()
