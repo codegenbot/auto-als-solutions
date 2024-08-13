@@ -4,6 +4,7 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
+    stabilize_needed = True
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -93,8 +94,8 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if all(
-            vital is not None and vital >= threshold
+        if stabilize_needed and not any(
+            vital is None or vital < threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60]
