@@ -71,22 +71,23 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):  # Unstable heart rhythms
+
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[30]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
                 continue
-            if "DefibrillatorCharge" not in used_methods:
+            elif "DefibrillatorCharge" not in used_methods:
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
-            if "DefibrillatorSync" not in used_methods:
+            elif "DefibrillatorSync" not in used_methods:
                 print(47)  # DefibrillatorSync
                 used_methods.add("DefibrillatorSync")
                 continue
-            print(43)  # DefibrillatorPace
-            continue
+            else:
+                print(43)  # DefibrillatorPace
+                continue
 
         print(48)  # Finish
         return
