@@ -34,7 +34,7 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
+            
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
@@ -70,7 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[28]:  # HeartRhythmSVT or unstable rhythm
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
