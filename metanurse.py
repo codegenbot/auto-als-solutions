@@ -2,19 +2,8 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = {
-        "UsedSatsProbe": False,
-        "ViewedMonitor": False,
-        "OpenedBreathingDrawer": False,
-        "OpenedCirculationDrawer": False,
-        "UsedMonitorPads": False,
-        "UsedBP_Cuff": False,
-        "UsedA_Line": False,
-        "GivenFluids": False,
-        "UsedDefibPads": False,
-        "DefibrillatorCharged": False,
-    }
-
+    used_methods = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -22,42 +11,49 @@ def main():
             observations[33:40],
             observations[40:],
         )
-
         vitals = {
-            name: value if time else None
+            name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose",
-                    "Temperature", "MAP", "Sats", "Resps"
-                ]
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
-        if not events[3]:
+        if "ExamineAirway" not in used_methods:
             print(3)
+            used_methods.add("ExamineAirway")
+            continue
+        
+        if not events[3]:
+            print(35)
             continue
 
-        if not used_methods["OpenedBreathingDrawer"]:
+        if "OpenBreathingDrawer" not in used_methods:
             print(19)
-            used_methods["OpenedBreathingDrawer"] = True
+            used_methods.add("OpenBreathingDrawer")
             continue
 
-        if not used_methods["UsedSatsProbe"]:
+        if "UseSatsProbe" not in used_methods:
             print(25)
-            used_methods["UsedSatsProbe"] = True
+            used_methods.add("UseSatsProbe")
             continue
 
-        if not used_methods["ViewedMonitor"]:
+        if "ViewMonitor" not in used_methods:
             print(16)
-            used_methods["ViewedMonitor"] = True
+            used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17) 
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -68,40 +64,28 @@ def main():
             print(29)
             continue
 
+        if "ExamineCirculation" not in used_methods:
+            print(5)
+            used_methods.add("ExamineCirculation")
+            continue
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if not used_methods["OpenedCirculationDrawer"]:
+            if "OpenCirculationDrawer" not in used_methods:
                 print(20)
-                used_methods["OpenedCirculationDrawer"] = True
+                used_methods.add("OpenCirculationDrawer")
                 continue
-            elif not used_methods["UsedMonitorPads"]:
-                print(24)
-                used_methods["UsedMonitorPads"] = True
-                continue
-            elif not used_methods["UsedBP_Cuff"]:
-                print(27)
-                used_methods["UsedBP_Cuff"] = True
-                continue
-            elif not used_methods["UsedA_Line"]:
-                print(26)
-                used_methods["UsedA_Line"] = True
-                continue
-            elif not used_methods["GivenFluids"]:
-                print(15)
-                used_methods["GivenFluids"] = True
-                continue
+            print(15)
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                if not used_methods["UsedDefibPads"]:
-                    print(28)
-                    used_methods["UsedDefibPads"] = True
-                    continue
-                if not used_methods["DefibrillatorCharged"]:
-                    print(40)
-                    used_methods["DefibrillatorCharged"] = True
-                    continue
-                print(44)
+            if vitals["HeartRate"] < 50:
+                print(12)
+                continue
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)
+                continue
+            elif vitals["HeartRate"] > 150:
+                print(9)
                 continue
 
         print(48)
