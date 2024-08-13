@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -9,13 +10,22 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
@@ -59,6 +69,7 @@ def main():
             elif vitals["Sats"] < 88:
                 print(30)  # UseNonRebreatherMask
                 continue
+
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
@@ -83,6 +94,7 @@ def main():
             elif vitals["MAP"] < 60:
                 print(15)  # GiveFluids
                 continue
+
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # GiveAtropine
@@ -97,6 +109,7 @@ def main():
             return
 
     print(48)  # Finish after max_steps
+
 
 if __name__ == "__main__":
     main()
