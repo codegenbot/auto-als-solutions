@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -10,7 +9,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -24,16 +23,16 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
         if step == 0:
-            print(3)  # Initial Airway Examination
+            print(3)
             continue
 
-        if not events[3]:  # Ensure airway is clear
+        if not events[3]:
             print(35)
             continue
 
@@ -55,50 +54,41 @@ def main():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # CheckRhythm
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(10)  # GiveAdrenaline
+                print(11)
                 continue
-
-        if vitals["MAP"] and vitals["MAP"] <= 60:
-            print(2)  # CheckRhythm
-            continue
-
-        # Finish only after stabilizing the patient
+        
         if (
-            vitals["Sats"]
-            and vitals["Sats"] >= 88
-            and vitals["RespRate"]
-            and vitals["RespRate"] >= 8
-            and vitals["MAP"]
-            and vitals["MAP"] >= 60
+            vitals["Sats"] and vitals["Sats"] >= 88 and
+            vitals["RespRate"] and vitals["RespRate"] >= 8 and
+            vitals["MAP"] and vitals["MAP"] >= 60
         ):
             print(48)
             return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
