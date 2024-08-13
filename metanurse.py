@@ -3,7 +3,6 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -12,9 +11,10 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if step == 0 or not initial_examine:
-            print(3 if step == 0 else (4 if step == 1 else (5 if step == 2 else 16)))
-            initial_examine = True
+        if "initial_examine" not in used_methods:
+            print([3, 4, 5, 16][step % 4])
+            if step % 4 == 3: 
+                used_methods.add("initial_examine")
             continue
 
         if not events[3]:
@@ -46,7 +46,7 @@ def main():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
@@ -68,8 +68,8 @@ def main():
             print(48)
             return
 
-    print(48)
-    return
+        print(48)
+        return
 
 if __name__ == "__main__":
     main()
