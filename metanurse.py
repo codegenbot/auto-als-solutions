@@ -2,11 +2,12 @@ import sys
 
 
 def stabilize():
-    maximum_steps = 350
+    max_steps = 350
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    measures_taken = set()
 
-    for step in range(maximum_steps):
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -55,27 +56,30 @@ def stabilize():
         heart_rate = vitals["HeartRate"]
         resp_rate = vitals["RespRate"]
 
-        if sats is not None and sats < 65:
-            print(17)  # StartChestCompression
+        if map_ is None or sats is None or heart_rate is None or resp_rate is None:
+            print(38)  # TakeBloodPressure (to trigger MAP measurement)
             continue
 
-        if map_ is not None and map_ < 20:
+        if sats < 65 or map_ < 20:
             print(17)  # StartChestCompression
             continue
 
         if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
-            print(40)  # DefibrillatorCharge
+            print(41 if heart_rate < 50 else 40)  # Increase or Charge Defibrillator
             continue
 
-        if map_ is not None and map_ < 60:
+        if map_ < 60 and "fluids_given" not in measures_taken:
+            measures_taken.add("fluids_given")
             print(15)  # GiveFluids
             continue
 
-        if sats is not None and sats < 88:
+        if sats < 88 and "oxygen_given" not in measures_taken:
+            measures_taken.add("oxygen_given")
             print(30)  # UseNonRebreatherMask
             continue
 
-        if resp_rate is not None and resp_rate < 8:
+        if resp_rate < 8 and "bag_valve_used" not in measures_taken:
+            measures_taken.add("bag_valve_used")
             print(29)  # UseBagValveMask
             continue
 
@@ -86,7 +90,8 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(1)  # CheckSignsOfLife
+        print(48)  # Finish
+        return
 
 
 if __name__ == "__main__":
