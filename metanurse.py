@@ -34,7 +34,7 @@ def main():
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:
+        if not events[3]:  # If AirwayClear is not observed
             print(35)
             continue
 
@@ -56,30 +56,30 @@ def main():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)
+                print(11)  # GiveAmiodarone
                 continue
 
         print(48)
