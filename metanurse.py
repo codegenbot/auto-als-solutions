@@ -1,96 +1,69 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
-    actions = [
-        "ExamineAirway",  # 3
-        "ExamineBreathing",  # 4
-        "ExamineCirculation",  # 5
-        "ExamineExposure",  # 7
-        "ExamineDisability",  # 6
-        "UseSatsProbe",  # 25
-        "UseBloodPressureCuff",  # 27
-        "ViewMonitor",  # 16
-    ]
-    action_index = 0
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
 
-        if action_index < len(actions):
-            action_mapping = {
-                "ExamineAirway": 3,
-                "ExamineBreathing": 4,
-                "ExamineCirculation": 5,
-                "ExamineExposure": 7,
-                "ExamineDisability": 6,
-                "UseSatsProbe": 25,
-                "UseBloodPressureCuff": 27,
-                "ViewMonitor": 16,
-            }
-            print(action_mapping[actions[action_index]])
-            action_index += 1
+        if step == 0 or not first_examine:
+            first_examine = True
+            print(3)
+            continue
+        
+        if not use_sats_probe:
+            print(25)
+            use_sats_probe = True
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+        if not use_blood_pressure_cuff:
+            print(27)
+            use_blood_pressure_cuff = True
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+        if not view_monitor:
+            print(16)
+            view_monitor = True
+            continue
+        
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(17)
+            continue
+        
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)
+            continue
+        
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)
+            continue
+        
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)
+            continue
+        
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(43)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
-            continue
-
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-        ):
-            print(43)  # DefibrillatorPace
-            continue
-
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)  # Finish
+        if all([vitals["Sats"] and vitals["Sats"] >= 88,
+                vitals["RespRate"] and vitals["RespRate"] >= 8,
+                vitals["MAP"] and vitals["MAP"] >= 60]):
+            print(48)
             return
 
-        print(0)  # DoNothing
-
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
