@@ -12,8 +12,10 @@ def main():
             observations[40:],
         )
         vitals = {
-            name: value if vital_signs_times[i] > 0 else None
-            for i, (name, value) in enumerate(zip(
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
                 [
                     "HeartRate",
                     "RespRate",
@@ -23,8 +25,7 @@ def main():
                     "Sats",
                     "Resps",
                 ],
-                vital_signs_values,
-            ))
+            )
         }
 
         if "ExamineAirway" not in used_methods:
@@ -47,17 +48,14 @@ def main():
             used_methods.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)
-            used_methods.add("UseBloodPressureCuff")
-            continue
-
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(23)
             continue
 
@@ -77,12 +75,21 @@ def main():
             if vitals["HeartRate"] < 50:
                 print(12)
                 continue
-            elif vitals["HeartRate"] > 100:
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)
+                continue
+            elif vitals["HeartRate"] > 150:
                 print(9)
                 continue
 
-        if step < max_steps:
-            print(1)
+        if "ExamineBreathing" not in used_methods:
+            print(4)
+            used_methods.add("ExamineBreathing")
+            continue
+
+        if "ExamineCirculation" not in used_methods:
+            print(5)
+            used_methods.add("ExamineCirculation")
             continue
 
         print(48)
