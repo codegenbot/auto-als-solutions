@@ -2,11 +2,12 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
     initial_examine = False
+    used_methods = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -26,7 +27,7 @@ def main():
                     "MAP",
                     "Sats",
                     "Resps",
-                ]
+                ],
             )
         }
 
@@ -70,7 +71,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[i] for i in range(28, 36)):  # Unstable rhythms
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -87,7 +88,11 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-    print(48)  # Finish
+        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
+            print(48)  # Finish
+            return
+
+    print(48)  # Finish at the end of the loop
 
 if __name__ == "__main__":
     main()
