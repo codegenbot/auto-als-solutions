@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -29,22 +30,12 @@ def stabilize():
             )
         }
 
-        if "MAP" in vitals and vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
-        if "Sats" in vitals and vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
-            continue
-
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
-
-        if unstable_tachyarrhythmia:
-            print(40)  # DefibrillatorCharge
-            continue
-
-        if "MAP" in vitals and vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
             continue
 
         if 25 not in actions_taken:
@@ -87,11 +78,21 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        if "Sats" in vitals and vitals["Sats"] is not None and vitals["Sats"] < 88:
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[32] > 0
+
+        if unstable_tachyarrhythmia:
+            print(40)  # DefibrillatorCharge
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if "RespRate" in vitals and vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
@@ -104,8 +105,8 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+        print(0)  # DoNothing
+
 
 if __name__ == "__main__":
     stabilize()
