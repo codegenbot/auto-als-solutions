@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -40,7 +41,6 @@ def stabilize():
             actions_taken.add(16)
             print(16)
             continue
-        
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)
@@ -54,54 +54,50 @@ def stabilize():
             print(5)
             continue
 
-        # Airway management
         if events[3] == 0:
-            print(18)  # OpenAirwayDrawer
+            print(18)
             continue
         if events[4] > 0:
-            print(31)  # UseYankeurSucionCatheter
+            print(31)
             continue
 
-        # Breathing management
         if vitals["Sats"] is None or vitals["RespRate"] is None:
-            print(5)  # ExamineBreathing
+            print(5)
             continue
         if vitals["Sats"] < 65:
-            print(22)  # BagDuringCPR
+            print(22)
             continue
         if vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
         if vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
-        # Circulation management
         if events[30] > 0 and vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(10)  # GiveAdrenaline
+            print(10)
             continue
         if vitals["MAP"] is None:
-            print(5)  # ExamineCirculation
+            print(5)
             continue
         if vitals["MAP"] < 20:
-            print(15)  # GiveFluids
+            print(15)
             continue
         if vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        # Disability management
         if events[21] == 0:
-            print(6)  # ExamineDisability
+            print(6)
             continue
 
-        # Exposure management
         if events[25] == 0:
-            print(7)  # ExamineExposure
+            print(7)
             continue
 
         print(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
