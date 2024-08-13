@@ -69,7 +69,7 @@ def main():
             print(15)  # GiveFluids to raise MAP
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150):
             print(40)  # DefibrillatorCharge for cardioversion
             continue
 
