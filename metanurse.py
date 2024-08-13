@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -37,7 +38,13 @@ def stabilize():
             return
 
         # Step 2: Perform ABCDE Examinations
-        examinations = [3, 4, 5, 6, 7]  # Airway, Breathing, Circulation, Disability, Exposure
+        examinations = [
+            3,
+            4,
+            5,
+            6,
+            7,
+        ]  # Airway, Breathing, Circulation, Disability, Exposure
         for action in examinations:
             if action not in actions_taken:
                 actions_taken.add(action)
@@ -70,6 +77,7 @@ def stabilize():
                 return
 
         print(0)  # DoNothing
+
 
 if __name__ == "__main__":
     stabilize()
