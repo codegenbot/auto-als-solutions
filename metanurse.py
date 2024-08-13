@@ -4,7 +4,8 @@ def stabilize():
     max_steps = 350
     first_examine = True
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    actions = iter([3, 4, 8, 7, 16, 27, 16, 25, 16])  # Initial series of Examine actions
+    actions = iter([3, 4, 8, 7])
+    assessments_done = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -27,44 +28,49 @@ def stabilize():
 
         if first_examine:
             try:
-                print(next(actions))
+                next_assessment = next(actions)
+                assessments_done.add(next_assessment)
+                print(next_assessment)
                 continue
             except StopIteration:
                 first_examine = False
-
-        if vitals["Sats"] is None:
-            if not use_sats_probe:
-                print(25)
-                use_sats_probe = True
-                continue
-            print(16)
-            continue
-
-        if vitals["MAP"] is None:
-            if not use_blood_pressure_cuff:
-                print(27)
-                use_blood_pressure_cuff = True
-                continue
-            print(16)
-            continue
-
-        if vitals["Sats"] < 65 or vitals["MAP"] < 20:
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)
             continue
 
-        if vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
+            continue
+
+        if not use_sats_probe:
+            print(25)
+            use_sats_probe = True
+            continue
+
+        if not use_blood_pressure_cuff:
+            print(27)
+            use_blood_pressure_cuff = True
+            continue
+
+        if not view_monitor:
+            print(16)
+            view_monitor = True
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)
             continue
 
-        if vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
 
-        if vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        if any(event > 0.5 for event in events[28:33]):
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
             print(24)
             continue
 
@@ -74,10 +80,11 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
 
-    print(48)  # Finish
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
