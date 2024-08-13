@@ -10,7 +10,8 @@ def stabilize():
         vitals = {name: value if time > 0 else None for value, time, name in zip(
             vital_signs_values, vital_signs_times, [
                 "HeartRate", "RespRate", "CapillaryGlucose",
-                "Temperature", "MAP", "Sats", "Resps"])}
+                "Temperature", "MAP", "Sats", "Resps",]
+        )}
 
         if 25 not in actions_taken:
             actions_taken.add(25)
