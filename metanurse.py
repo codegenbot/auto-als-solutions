@@ -3,7 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine_count = 0
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -30,10 +30,9 @@ def main():
             )
         }
 
-        if initial_examine_count < 5:
-            actions = [3, 4, 5, 6, 7]
-            print(actions[initial_examine_count])  # Examine actions in sequence
-            initial_examine_count += 1
+        if step == 0 or not initial_examine:
+            print(3)  # ExamineAirway
+            initial_examine = True
             continue
 
         if not events[3]:  # AirwayClear event
@@ -72,7 +71,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -89,6 +88,7 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
+        # Check stabilization conditions
         if all(vitals[name] is not None and vitals[name] >= threshold for name, threshold in zip(
             ["Sats", "RespRate", "MAP"],
             [88, 8, 60]
@@ -96,7 +96,8 @@ def main():
             print(48)  # Finish
             return
 
-    print(48)  # Finish after max_steps
+        print(48)  # Finish, just in case
+        return
 
 if __name__ == "__main__":
     main()
