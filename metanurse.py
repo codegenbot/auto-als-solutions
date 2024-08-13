@@ -73,26 +73,11 @@ def main():
             print(29)  # Use bag valve mask
             continue
 
-        if "ExamineCirculation" not in used_methods:
-            print(5)
-            used_methods.add("ExamineCirculation")
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # Give fluids
             continue
 
-        if "ExamineResponse" not in used_methods:
-            print(8)
-            used_methods.add("ExamineResponse")
-            continue
-
-        if "CheckRhythm" not in used_methods:
-            print(2)
-            used_methods.add("CheckRhythm")
-            continue
-
-        if vitals["HeartRate"] is not None:
+        if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # Give atropine
                 continue
@@ -103,12 +88,8 @@ def main():
                 print(9)  # Give adenosine (assume SVT)
                 continue
 
-        if vitals["HeartRate"] is None and events[18]:  # No radial pulse
-            print(17)  # Start chest compression
-            continue
-
-        print(48)  # Finish if patient is stable
-        return
+        print(16)  # ViewMonitor to check updated vitals
+        continue
 
     print(48)  # Finish after max_steps
 
