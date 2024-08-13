@@ -3,7 +3,6 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -12,9 +11,8 @@ def stabilize():
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                 "MAP", "Sats", "Resps"]
+                vital_signs_values, vital_signs_times, 
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
             )
         }
 
@@ -56,12 +54,12 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        # Interventions based on vitals
+        # Interventions
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
+            print(17)  # StartChestCompression
             continue
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(15)  # GiveFluids
+            print(17)  # StartChestCompression
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
@@ -73,9 +71,13 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        # Handle unstable tachyarrhythmia
+        # Handle unstable tachyarrhythmia via cardioversion; need to sync defibrillator first
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone (for SVT or AF)
+            if 47 not in actions_taken:
+                actions_taken.add(47)
+                print(47)  # DefibrillatorSync
+                continue
+            print(17)  # StartChestCompression (Cardioversion)
             continue
 
         # End criteria
