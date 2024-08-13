@@ -2,7 +2,17 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
+    used_methods = {
+        "UsedSatsProbe": False,
+        "ViewedMonitor": False,
+        "OpenedBreathingDrawer": False,
+        "OpenedCirculationDrawer": False,
+        "UsedMonitorPads": False,
+        "UsedBP_Cuff": False,
+        "UsedA_Line": False,
+        "GivenFluids": False,
+        "UsedDefibPads": False,
+    }
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -28,31 +38,15 @@ def main():
             )
         }
 
-        if "ExamineAirway" not in used_methods:
+        if not events[3]:
             print(3)
-            used_methods.add("ExamineAirway")
             continue
 
-        if "AirwayClear" not in used_methods and events[3] == 0:
-            print(35)  # PerformAirwayManoeuvres
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(17)
             continue
-
-        if "OpenBreathingDrawer" not in used_methods:
-            print(19)
-            used_methods.add("OpenBreathingDrawer")
-            continue
-
-        if "UseSatsProbe" not in used_methods:
-            print(25)
-            used_methods.add("UseSatsProbe")
-            continue
-
-        if "ViewMonitor" not in used_methods:
-            print(16)
-            used_methods.add("ViewMonitor")
-            continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        
+        if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
 
@@ -65,26 +59,53 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            if not used_methods["OpenedCirculationDrawer"]:
+                print(20)
+                used_methods["OpenedCirculationDrawer"] = True
+            elif not used_methods["UsedMonitorPads"]:
+                print(24)
+                used_methods["UsedMonitorPads"] = True
+            elif not used_methods["UsedBP_Cuff"]:
+                print(27)
+                used_methods["UsedBP_Cuff"] = True
+            elif not used_methods["UsedA_Line"]:
+                print(26)
+                used_methods["UsedA_Line"] = True
+            elif not used_methods["GivenFluids"]:
+                print(15)
+                used_methods["GivenFluids"] = True
+            continue
+
+        if not used_methods["OpenedBreathingDrawer"]:
+            print(19)
+            used_methods["OpenedBreathingDrawer"] = True
+            continue
+
+        if not used_methods["UsedSatsProbe"]:
+            print(25)
+            used_methods["UsedSatsProbe"] = True
+            continue
+
+        if not used_methods["ViewedMonitor"]:
+            print(16)
+            used_methods["ViewedMonitor"] = True
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # CheckRhythm
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+                print(40)
                 continue
 
-        if all(val is not None for val in [vitals["Sats"], vitals["RespRate"], vitals["MAP"]]) and \
-           vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
-            print(48)  # Finish
-            return
+        print(48)
+        return
 
-    print(48)  # Finish after max_steps
+    print(48)
 
 if __name__ == "__main__":
     main()
