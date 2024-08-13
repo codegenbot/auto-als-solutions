@@ -79,7 +79,7 @@ def main():
             elif vitals["HeartRate"] > 150:
                 print(11)  # GiveAmiodarone
                 continue
-
+        
         print(48)
         return
 
