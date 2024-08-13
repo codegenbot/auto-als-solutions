@@ -65,10 +65,6 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if "OpenCirculationDrawer" not in used_methods:
-                print(20)
-                used_methods.add("OpenCirculationDrawer")
-                continue
             print(15)
             continue
 
