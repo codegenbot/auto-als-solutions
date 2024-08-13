@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
 
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examined_airway = False
+    examined_airway = examined_breathing = examined_circulation = examined_disability = examined_exposure = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -31,14 +30,25 @@ def stabilize():
             )
         }
 
+        # ABCDE assessment
         if not examined_airway:
             examined_airway = True
             print(3)
             continue
 
+        if not examined_breathing:
+            examined_breathing = True
+            print(4)
+            continue
+
         if not use_sats_probe:
             print(25)
             use_sats_probe = True
+            continue
+
+        if not examined_circulation:
+            examined_circulation = True
+            print(5)
             continue
 
         if not use_blood_pressure_cuff:
@@ -51,45 +61,45 @@ def stabilize():
             view_monitor = True
             continue
 
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-            or vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-        ):
-            print(17)
+        if not examined_disability:
+            examined_disability = True
+            print(6)
+            continue
+
+        if not examined_exposure:
+            examined_exposure = True
+            print(7)
+            continue
+
+        # Immediate interventions
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)  # Start chest compression
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)  # Start chest compression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use non-rebreather mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use bag valve mask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(2)
+            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                print(41 if vitals["HeartRate"] > 150 else 15)  # Defibrillator current up or give fluids
+                continue
+            print(15)  # Give fluids
             continue
 
-        if (
-            events[27] > 0 or events[29] > 0 or events[30] > 0 or events[33] > 0
-        ) and vitals["MAP"] < 60:
-            print(41 if events[27] > 0 else 15)
-            continue
-
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)
+        if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+            print(48)  # Finish
             return
 
-        print(48)
-        return
-
+    print(48)  # Finish as last resort if not stabilized within 350 steps
 
 if __name__ == "__main__":
     stabilize()
