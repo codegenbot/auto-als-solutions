@@ -2,15 +2,17 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examine_breathing = check_signs_of_life = use_monitor_pads = False
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    examine_breathing = examine_circulation = False
+    examine_disability = examine_exposure = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -18,9 +20,14 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                    "MAP", "Sats", "Resps"
-                ]
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
@@ -49,9 +56,19 @@ def stabilize():
             examine_breathing = True
             continue
 
-        if not check_signs_of_life:
-            print(1)  # CheckSignsOfLife
-            check_signs_of_life = True
+        if not examine_circulation:
+            print(5)  # ExamineCirculation
+            examine_circulation = True
+            continue
+
+        if not examine_disability:
+            print(6)  # ExamineDisability
+            examine_disability = True
+            continue
+
+        if not examine_exposure:
+            print(7)  # ExamineExposure
+            examine_exposure = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -74,11 +91,11 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["HeartRate"] is not None and not use_monitor_pads:
-            if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50:
-                print(24)  # UseMonitorPads
-                use_monitor_pads = True
-                continue
+        if vitals["HeartRate"] is not None and (
+            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+        ):
+            print(24)  # UseMonitorPads
+            continue
 
         if all(
             vital is not None and vital >= threshold
