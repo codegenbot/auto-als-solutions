@@ -34,7 +34,7 @@ def main():
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # If AirwayClear is not observed
+        if not events[3]:  # AirwayClear check
             print(35)
             continue
 
@@ -53,12 +53,14 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Cardiac Arrest Check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
             print(17)  # StartChestCompression
             continue
 
+        # Stabilization Checks
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -82,10 +84,10 @@ def main():
                 print(11)  # GiveAmiodarone
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Finish
 
 
 if __name__ == "__main__":
