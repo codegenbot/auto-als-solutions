@@ -23,39 +23,37 @@ def stabilize():
             if action not in actions_taken:
                 actions_taken.add(action)
                 print(action)
-                break
-        else:
-            # Interventions
-            if vitals["Sats"] and vitals["Sats"] < 65:
-                print(17)  # StartChestCompression
-                continue
-            if vitals["MAP"] and vitals["MAP"] < 20:
-                print(17)  # StartChestCompression
-                continue
-            if vitals["MAP"] and vitals["MAP"] < 60:
-                print(15)  # GiveFluids
-                continue
-            if vitals["Sats"] and vitals["Sats"] < 88:
-                print(30)  # UseNonRebreatherMask
-                continue
-            if vitals["RespRate"] and vitals["RespRate"] < 8:
-                print(29)  # UseBagValveMask
                 continue
 
-            # End criteria - if vital signs are stable, indicate completion.
-            if all(
-                vital is not None and vital >= threshold
-                for vital, threshold in zip(
-                    [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-                )
-            ):
-                print(48)  # Finish
-                return
+        # Interventions
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(17)  # StartChestCompression
+            continue
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)  # StartChestCompression
+            continue
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
+            continue
 
-        # Default action to prevent infinite loop.
-        if step == max_steps - 1:
+        # End criteria - if vital signs are stable, indicate completion.
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)  # Finish
             return
+
+        print(48)  # Finish by default to prevent infinite loop.
+        return
 
 if __name__ == "__main__":
     stabilize()
