@@ -62,7 +62,6 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        # New additions: treat specific conditions if found
         if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
             print(40)  # DefibrillatorCharge
             continue
