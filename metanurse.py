@@ -42,7 +42,7 @@ def main():
             continue
 
         # Critical interventions
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
         
