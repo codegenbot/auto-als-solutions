@@ -18,7 +18,7 @@ def stabilize():
             continue
 
         if vitals["Sats"] is None or vitals["MAP"] is None or vitals["RespRate"] is None or vitals["HeartRate"] is None:
-            print((3, 5, 38, 25)[current_exam_step % 4])  # Re-check necessary measurements
+            print((3, 5, 38, 25)[current_exam_step % 4])
             current_exam_step += 1
             continue
 
@@ -26,7 +26,7 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] < 60:  # Hypotension
+        if vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
