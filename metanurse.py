@@ -24,12 +24,12 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # Initial Airway Examination
+            print(3)
             initial_examine = True
             continue
 
-        if not events[3]:  # Ensure airway is clear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -48,38 +48,37 @@ def main():
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+                print(12)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+                print(9)
                 continue
 
-        for i in range(27, 33):
-            if events[i]:
-                print(24)  # UseMonitorPads
-                continue
+        if (vitals["HeartRate"] and vitals["HeartRate"] >= 100 and vitals["HeartRate"] <= 150) or events[27]:
+            print(24)
+            continue
 
-        print(48)  # Finish
-        return 
+        print(48)
+        return
 
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
