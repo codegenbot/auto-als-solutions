@@ -34,7 +34,7 @@ def main():
             print(3)
             initial_examine = True
             continue
-        
+
         if not events[3]:
             print(35)
             continue
@@ -54,7 +54,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)
             continue
 
