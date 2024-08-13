@@ -17,15 +17,39 @@ def stabilize():
             )
         }
 
-        # Initial examinations
-        initial_exams = [25, 27, 16, 3, 4, 5, 6]
-        for action in initial_exams:
-            if action not in actions_taken:
-                actions_taken.add(action)
-                print(action)
-                continue
+        if 3 not in actions_taken:
+            actions_taken.add(3)
+            print(3)  # ExamineAirway
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            print(25)  # UseSatsProbe
+            continue
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            print(27)  # UseBloodPressureCuff
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            print(16)  # ViewMonitor
+            continue
+        if 4 not in actions_taken:
+            actions_taken.add(4)
+            print(4)  # ExamineBreathing
+            continue
+        if 5 not in actions_taken:
+            actions_taken.add(5)
+            print(5)  # ExamineCirculation
+            continue
+        if 6 not in actions_taken:
+            actions_taken.add(6)
+            print(6)  # ExamineDisability
+            continue
+        if 7 not in actions_taken:
+            actions_taken.add(7)
+            print(7)  # ExamineExposure
+            continue
 
-        # Interventions
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
@@ -42,7 +66,6 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        # End criteria - if vital signs are stable, indicate completion.
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -52,8 +75,7 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)  # Finish by default to prevent infinite loop.
-        return
+        print(1)  # DoNothing for now
 
 if __name__ == "__main__":
     stabilize()
