@@ -18,13 +18,16 @@ def stabilize():
                  "MAP", "Sats", "Resps"]
             )
         }
-        
-        if step < len(action_sequence):
-            if action_sequence[step] not in actions_taken:
-                actions_taken.add(action_sequence[step])
-                print(action_sequence[step])
-                continue
 
+        for action in action_sequence:
+            if action not in actions_taken:
+                actions_taken.add(action)
+                print(action)
+                break
+
+        if step < len(action_sequence):
+            continue
+        
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
             continue
