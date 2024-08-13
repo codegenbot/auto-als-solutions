@@ -9,7 +9,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -23,16 +23,16 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
         if step == 0:
-            print(3)
+            print(3)  # Initial Airway Examination
             continue
 
-        if not events[3]:
+        if not events[3]:  # Ensure airway is clear
             print(35)
             continue
 
@@ -54,39 +54,34 @@ def main():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)
+                print(11)  # GiveAmiodarone
                 continue
         
-        if (
-            vitals["Sats"] and vitals["Sats"] >= 88 and
-            vitals["RespRate"] and vitals["RespRate"] >= 8 and
-            vitals["MAP"] and vitals["MAP"] >= 60
-        ):
-            print(48)
-            return
+        print(48)
+        return
 
     print(48)
 
