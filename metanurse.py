@@ -37,15 +37,15 @@ def main():
 
         # Critical interventions
         if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
+            print(17)  # Start CPR
             continue
         
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use Non-Rebreather Mask
             continue
         
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use Bag Valve Mask
             continue
 
         # Treat unstable tachyarrhythmia
@@ -59,9 +59,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)
+                print(43)  # Perform Defibrillator Pace
                 continue
-            print(15)
+            print(15)  # Administer fluids
             continue
 
         # Final checks before finishing
