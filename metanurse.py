@@ -28,15 +28,17 @@ def main():
             )
         }
 
+        # Airway assessment
         if "ExamineAirway" not in used_methods:
             print(3)
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # AirwayClear check
+        if not events[3]:  # No AirwayClear event
             print(35)
             continue
 
+        # Breathing assessment
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
@@ -52,39 +54,45 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Cardiac Arrest Check
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
-            continue
-
-        # Stabilization Checks
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            if vitals["Sats"] < 65:  # Critical threshold, prepare CPR
+                print(22)
+            else:
+                print(30)  # Non-rebreather mask for sats < 88%
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)  # Use Bag Valve Mask for low respiratory rate
             continue
-        
+
+        # Circulation assessment
+        if "ExamineCirculation" not in used_methods:
+            print(5)
+            used_methods.add("ExamineCirculation")
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            if vitals["MAP"] < 20:  # Critical threshold, prepare CPR
+                print(22)
+            else:
+                print(15)  # Give fluids for low MAP
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+                print(12)  # Give Atropine for bradycardia
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # CheckRhythm
+                print(2)  # Check Rhythm for rates between 100 and 150
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # GiveAmiodarone
+                print(11)  # Give Amiodarone for high heart rate
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
