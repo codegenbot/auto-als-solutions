@@ -53,7 +53,7 @@ def stabilize():
                 print(2)  # CheckRhythm
                 continue
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone
+                print(10)  # GiveAmiodarone 
             else:
                 print(15)  # GiveFluids
             continue
