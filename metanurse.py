@@ -1,8 +1,9 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
+    steps_examine = [3, 4, 5, 25, 27, 16]
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -27,57 +28,31 @@ def stabilize():
             )
         }
 
-        if step == 0:
-            print(3)  # Examine Airway
-            continue
-        elif step == 1:
-            print(4)  # Examine Breathing
-            continue
-        elif step == 2:
-            print(5)  # Examine Circulation
-            continue
-        elif step == 3:
-            print(25)  # Use Sats Probe
-            continue
-        elif step == 4:
-            print(27)  # Use Blood Pressure Cuff
-            continue
-        elif step == 5:
-            print(16)  # View Monitor
-            continue
+        critical_actions = [(vitals["Sats"], 65, 17), 
+                            (vitals["MAP"], 20, 17), 
+                            (vitals["HeartRate"], 50, 24)]
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # Start Chest Compression
-            continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # Start Chest Compression
-            continue
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-        ):
-            print(24)  # Use Monitor Pads
-            continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # Give Fluids
-            continue
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use Non Rebreather Mask
-            continue
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use Bag Valve Mask
-            continue
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)  # Finish
+        for critical_vital, threshold, action in critical_actions:
+            if critical_vital is not None and (critical_vital < threshold or critical_vital > 150):
+                print(action)
+                break
+
+        if step < len(steps_examine):
+            print(steps_examine[step])
+        elif vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(15)
+        elif vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)
+        elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)
+        elif vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(24)
+        elif all(vital is not None and vital >= threshold
+                for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+            print(48)
             return
-
-        print(48)  # Finish
-        return
-
+        else:
+            print(1)
 
 if __name__ == "__main__":
     stabilize()
