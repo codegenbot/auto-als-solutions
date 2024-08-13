@@ -65,7 +65,7 @@ def main():
                 [88, 8, 60])):
             print(48)
             return
-        
+
         print(48)
         return
 
