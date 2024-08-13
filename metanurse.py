@@ -8,7 +8,6 @@ def main():
         "OpenedBreathingDrawer": False,
         "OpenedCirculationDrawer": False,
         "UsedBP_Cuff": False,
-        "MonitoredHeartRate": False,
         "GivenFluids": False,
     }
 
@@ -17,7 +16,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -31,17 +30,17 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
         # Check for immediate life-threatening conditions.
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            print(17)  # StartChestCompression for cardiac arrest
             continue
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)  # StartChestCompression for cardiac arrest
             continue
 
         # Perform Airway Assessment
@@ -62,14 +61,6 @@ def main():
             print(16)  # View Monitor
             used_methods["ViewedMonitor"] = True
             continue
-        if not used_methods["OpenedCirculationDrawer"]:
-            print(20)  # Open Circulation Drawer
-            used_methods["OpenedCirculationDrawer"] = True
-            continue
-        if not used_methods["UsedBP_Cuff"]:
-            print(27)  # Use Blood Pressure Cuff
-            used_methods["UsedBP_Cuff"] = True
-            continue
 
         # Check vital signs and apply treatments
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -79,9 +70,18 @@ def main():
             print(29)  # Use Bag-Valve-Mask
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give Fluids
-            used_methods["GivenFluids"] = True
-            continue
+            if not used_methods["OpenedCirculationDrawer"]:
+                print(20)  # Open Circulation Drawer
+                used_methods["OpenedCirculationDrawer"] = True
+                continue
+            if not used_methods["UsedBP_Cuff"]:
+                print(27)  # Use Blood Pressure Cuff
+                used_methods["UsedBP_Cuff"] = True
+                continue
+            if not used_methods["GivenFluids"]:
+                print(15)  # Give Fluids
+                used_methods["GivenFluids"] = True
+                continue
 
         # Handle Heart Rate conditions
         if vitals["HeartRate"]:
@@ -90,10 +90,6 @@ def main():
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
                 print(2)  # CheckRhythm
-                continue
-            elif vitals["HeartRate"] > 150 and not used_methods["MonitoredHeartRate"]:
-                print(2)  # CheckRhythm
-                used_methods["MonitoredHeartRate"] = True
                 continue
             elif vitals["HeartRate"] > 150:
                 print(40)  # DefibrillatorCharge (for cardioversion)
