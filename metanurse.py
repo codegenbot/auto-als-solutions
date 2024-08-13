@@ -2,8 +2,8 @@ import sys
 
 def main():
     max_steps = 350
-    initial_examine = False
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,7 +34,7 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
+            
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
@@ -70,7 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[i] for i in range(28, 36)):  # Unstable rhythms
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[i] for i in [27, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -87,11 +87,10 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
-    print(48)  # Finish at the end of the loop
+    print(48)
 
 if __name__ == "__main__":
     main()
