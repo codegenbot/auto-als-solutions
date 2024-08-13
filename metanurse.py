@@ -76,11 +76,11 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
