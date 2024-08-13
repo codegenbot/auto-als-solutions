@@ -10,7 +10,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -26,10 +26,11 @@ def main():
                     "MAP",
                     "Sats",
                     "Resps",
-                ],
+                ]
             )
         }
 
+        # Initial assessment steps
         if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
             initial_examine = True
@@ -54,23 +55,28 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Action for low saturation or MAP indicating cardiac arrest
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
+        # Action for low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
+        # Action for inadequate respiratory rate
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
+        # Action for low MAP
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
+        # Handle unstable heart rhythm
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[27]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -87,10 +93,12 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        print(48)  # Finish
-        return
+        # End the scenario if patient is stabilized
+        if vitals["MAP"] and vitals["MAP"] >= 60 and vitals["Sats"] and vitals["Sats"] >= 88 and vitals["RespRate"] and vitals["RespRate"] >= 8:
+            print(48)  # Finish
+            return
 
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
