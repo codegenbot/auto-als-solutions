@@ -70,11 +70,8 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if events[29] > 0:  # HeartRhythmSVT
-            print(9)  # GiveAdenosine
-            continue
-        if events[28] > 0:  # HeartRhythmAF
-            print(12)  # GiveAtropine
+        if any([events[i] > 0 for i in [30, 31, 32, 33, 34, 35, 36, 37, 38]]):  # HeartRhythm events indicating tachyarrhythmia
+            print(17)  # StartChestCompression
             continue
 
         if all(
@@ -86,7 +83,8 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(0)  # DoNothing
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
