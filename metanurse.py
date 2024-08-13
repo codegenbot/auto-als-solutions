@@ -24,54 +24,54 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
         
         if "UseMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("UseMonitor")
             continue
         
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
         
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(40)  # DefibrillatorCharge
+            print(40)
             continue
 
-        if any(event for event in (events[32], events[33], events[34], events[35], events[36], events[37], events[38])) and "UseMonitorPads" not in used_methods:
-            print(24)  # UseMonitorPads
+        if ("HeartRhythmVT" in events or "HeartRhythmVF" in events) and "UseMonitorPads" not in used_methods:
+            print(24)
             used_methods.add("UseMonitorPads")
             continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
