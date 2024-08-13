@@ -3,19 +3,21 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine = False
+    initial_assessment = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
+        if not observations:
+            continue
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if step == 0 or not initial_examine:
+        if step == 0 or not initial_assessment:
             action = [3, 4, 5][step % 3]
             print(action)
-            initial_examine = True
+            initial_assessment = True
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -33,14 +35,19 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] is not None and (vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if "UseMonitorPads" not in used_methods:
+            print(24)
+            used_methods.add("UseMonitorPads")
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
-        
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
@@ -55,7 +62,7 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion pacing
+                print(43)
                 continue
             print(15)
             continue
