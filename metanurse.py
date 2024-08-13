@@ -34,7 +34,7 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
+            
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
