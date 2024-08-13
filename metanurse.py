@@ -53,9 +53,13 @@ def stabilize():
             actions_taken.add(5)
             print(5)
             continue
-        if 8 not in actions_taken:
-            actions_taken.add(8)
-            print(8)
+        if 6 not in actions_taken:
+            actions_taken.add(6)
+            print(6)
+            continue
+        if 7 not in actions_taken:
+            actions_taken.add(7)
+            print(7)
             continue
         if 2 not in actions_taken:
             actions_taken.add(2)
@@ -69,10 +73,7 @@ def stabilize():
             print(15)
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if events[29] > 0 or events[30] > 0:
-                print(10)
-            else:
-                print(15)
+            print(15)
             continue
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
@@ -81,6 +82,9 @@ def stabilize():
             print(29)
             continue
 
+        if events[31] > 0 or events[32] > 0 or events[33] > 0 or events[34] > 0:
+            print(43)
+            continue
         if events[29] > 0 or events[30] > 0:
             print(10)
             continue
