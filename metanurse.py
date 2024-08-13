@@ -81,8 +81,6 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-        
-        print(1)  # DoNothing as default action for now
 
 if __name__ == "__main__":
     stabilize()
