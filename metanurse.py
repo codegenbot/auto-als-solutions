@@ -12,12 +12,14 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
+        # Initial examinations
         if step == 0 or not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
             initial_examine = True
             continue
 
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -33,6 +35,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Critical interventions
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
@@ -45,6 +48,7 @@ def main():
             print(29)
             continue
 
+        # Treat unstable tachyarrhythmia
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
@@ -60,6 +64,7 @@ def main():
             print(15)
             continue
 
+        # Final checks before finishing
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
