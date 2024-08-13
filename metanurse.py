@@ -3,8 +3,8 @@ import sys
 def stabilize():
     max_steps = 350
     initial_examine = True
-    use_sats_probe = use_blood_pressure_cuff = False
-    examine_airway = examine_breathing = examine_circulation = True
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = check_response = check_airway_done = use_monitor_pads = False
+    actions = iter([3, 4, 8, 16])  # Initial series of Examine actions
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -25,73 +25,87 @@ def stabilize():
             )
         }
 
+        # Initial examinations
         if initial_examine:
-            if examine_airway:
-                print(3)
-                examine_airway = False
+            try:
+                print(next(actions))
                 continue
-            if examine_breathing:
-                print(4)
-                examine_breathing = False
-                continue
-            if examine_circulation:
-                print(5)
-                examine_circulation = False
-                continue
-            initial_examine = False
+            except StopIteration:
+                initial_examine = False
 
+        # Use Sats Probe
         if not use_sats_probe:
             print(25)
             use_sats_probe = True
             continue
 
+        # Use Blood Pressure Cuff
         if not use_blood_pressure_cuff:
             print(27)
             use_blood_pressure_cuff = True
             continue
 
-        if use_sats_probe and use_blood_pressure_cuff:
-            print(16)
+        # Use Monitor Pads if not done
+        if not use_monitor_pads:
+            print(24)
+            use_monitor_pads = True
             continue
 
+        # View Monitor
+        if not view_monitor:
+            print(16)
+            view_monitor = True
+            continue
+
+        # Check Response if not done
+        if not check_response:
+            print(8)
+            check_response = True
+            continue
+
+        # Check Airway
+        if not check_airway_done:
+            print(3)  # ExamineAirway
+            check_airway_done = True
+            continue
+
+        # Immediate critical interventions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
+            print(17)  # Start CPR
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)
+            print(17)  # Start CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
-            continue
-            
-        if events[12] > 0:
-            print(32)
-            continue
-            
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
-            continue
-            
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            print(24)
+            print(30)  # Use Non-Rebreather Mask
             continue
 
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)  # Use Bag Valve Mask
+            continue
+
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(24)  # Use Monitor Pads
+            continue
+
+        # Finish if patient is stabilized
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)
+            print(48)  # Finish
             return
 
-        print(48)
+        # Default action if nothing else is triggered
+        print(1)  # DoNothing
         return
 
 if __name__ == "__main__":
