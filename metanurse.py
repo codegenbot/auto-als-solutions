@@ -33,20 +33,20 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] and (vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20):
+        if vitals["Sats"] is not None and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
             print(17)
             continue
         
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
         
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
