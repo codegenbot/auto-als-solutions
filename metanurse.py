@@ -5,9 +5,6 @@ def main():
     used_methods = set()
     initial_examine = False
 
-    def initial_examination_sequence(step):
-        return [3, 4, 5, 6, 7][step % 5]
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -19,7 +16,7 @@ def main():
 
         # Initial examinations
         if step < 5:
-            action = initial_examination_sequence(step)
+            action = [3, 4, 5, 6, 7][step]
             print(action)
             if step == 4:
                 initial_examine = True
