@@ -9,7 +9,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -60,10 +60,6 @@ def stabilize():
             print(22) # BagDuringCPR
             continue
 
-        if any(events[i] > 0 for i in [29, 30, 31, 32, 33, 34, 35, 36, 37]):
-            print(9) # GiveAdenosine
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15) # GiveFluids
             continue
@@ -73,7 +69,7 @@ def stabilize():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29) # UseBagValveMask
             continue
-        
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -83,7 +79,8 @@ def stabilize():
             print(48) # Finish
             return
 
-    print(48) # Finish
+        print(48) # Finish just in case no action taken
+        return
 
 if __name__ == "__main__":
     stabilize()
