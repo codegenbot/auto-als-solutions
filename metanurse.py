@@ -10,10 +10,11 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
-            name: (value if time > 0 else None) for value, time, name in zip(
+            name: (value if time > 0 else None)
+            for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
                 [
@@ -23,66 +24,67 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
         # Initial examinations
-        if step == 0:
-            print(3)  # ExamineAirway
-            continue
-        if step == 1:
-            print(4)  # ExamineBreathing
-            continue
-        if step == 2:
-            print(5)  # ExamineCirculation
+        if step == 0 or not initial_examine:
+            print(3 if step < 2 else (4 if step == 2 else 5))
+            initial_examine = True
             continue
 
         # Airway Management
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
-        # Checking and using probes to get vital signs
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
+
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
+
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        # Cardiac arrest condition
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
+        # Critical interventions
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)
             continue
 
         # Treat breathing issues
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         # Treat unstable tachyarrhythmia
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if vitals["HeartRate"] and (
+                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+            ):
                 if "TurnOnDefibrillator" not in used_methods:
-                    print(39)  # TurnOnDefibrillator
+                    print(39)
                     used_methods.add("TurnOnDefibrillator")
                     continue
                 if "DefibrillatorCharge" not in used_methods:
-                    print(40)  # DefibrillatorCharge
+                    print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # DefibrillatorPace (for cardioversion)
+                print(43)  # Perform cardioversion
                 continue
             print(15)  # Administer fluids
             continue
