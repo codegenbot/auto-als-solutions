@@ -88,6 +88,7 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
+        # Check stabilization conditions
         if all(vitals[name] is not None and vitals[name] >= threshold for name, threshold in zip(
             ["Sats", "RespRate", "MAP"],
             [88, 8, 60]
