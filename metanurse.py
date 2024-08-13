@@ -36,16 +36,10 @@ def main():
             initial_examine = True
             continue
 
-        if "BreathingExamined" not in used_methods:
-            print(4)  # ExamineBreathing
-            used_methods.add("BreathingExamined")
-            continue
-        
-        # Ensure airway is clear
-        if not events[3]:
+        if not events[3]:  # Ensure airway is clear
             print(35)  # PerformAirwayManoeuvres
             continue
-        
+
         # Use Sats Probe, Blood Pressure Cuff, and View Monitor
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
@@ -107,7 +101,7 @@ def main():
             return
 
         # Fallback
-        print(48)  # Finish
+        print(48)
         return
 
 if __name__ == "__main__":
