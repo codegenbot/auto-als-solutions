@@ -3,16 +3,28 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times, 
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
@@ -71,27 +83,18 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        # Handle unstable tachyarrhythmia via cardioversion; need to sync defibrillator first
+        # Handle unstable tachyarrhythmia
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            if 47 not in actions_taken:
-                actions_taken.add(47)
-                print(47)  # DefibrillatorSync
-                continue
-            print(17)  # StartChestCompression (Cardioversion)
+            print(24)  # UseMonitorPads for cardioversion
             continue
 
-        # End criteria
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
+        # Check if patient is stabilized before finishing
+        if all(vitals[key] and vitals[key] >= threshold for key, threshold in zip(["Sats", "RespRate", "MAP"], [88, 8, 60])):
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+        print(0)  # DoNothing
+        continue
 
 if __name__ == "__main__":
     stabilize()
