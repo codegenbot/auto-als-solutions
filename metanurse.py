@@ -74,11 +74,8 @@ def stabilize():
             continue
 
         # Handle unstable tachyarrhythmia
-        if events[30] > 0 or events[35] > 0:  # HeartRhythmAF or HeartRhythmCompleteHeartBlock
-            print(10)  # GiveAmiodarone
-            continue
-        if events[31] > 0 or events[32] > 0:  # HeartRhythmVT or HeartRhythmTorsades
-            print(12)  # GiveAtropine
+        if events[29] > 0 or events[30] > 0 or events[32] > 0 or events[36] > 0:
+            print(9)  # GiveAdenosine
             continue
         
         # Re-examine if still not stable
@@ -89,7 +86,7 @@ def stabilize():
             print(25)  # UseSatsProbe
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 12:
-            print(4) #ExamineBreathing
+            print(4) #Examine Breathing
             continue
 
         # End criteria
