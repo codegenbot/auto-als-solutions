@@ -14,7 +14,7 @@ def main():
         vitals = {k: v for v, k in zip(vital_signs_values, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ]) if vital_signs_times[list(vitals.keys()).index(k)] > 0}
-
+        
         if 'AirwayClear' not in actions_taken and events[3] == 0:
             print(3)
             actions_taken.add('AirwayClear')
