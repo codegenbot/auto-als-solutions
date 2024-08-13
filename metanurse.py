@@ -38,10 +38,10 @@ def stabilize():
         # Initial examinations to retrieve required vitals
         initial_exams = [25, 27, 16, 3, 4, 5, 6, 2]  # Added CheckRhythm for diagnosing tachyarrhythmia
         for action in initial_exams:
-            if action not in actions_taken:
+            if len(actions_taken) < len(initial_exams):
                 actions_taken.add(action)
                 print(action)
-                continue
+                break
 
         # End criteria - if vital signs are stable, indicate completion.
         if all(
