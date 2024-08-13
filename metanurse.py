@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -40,6 +41,10 @@ def stabilize():
             actions_taken.add(16)
             print(16)  # ViewMonitor
             continue
+        if 5 not in actions_taken:
+            actions_taken.add(5)
+            print(5)  # ExamineCirculation
+            continue
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)  # ExamineAirway
@@ -47,10 +52,6 @@ def stabilize():
         if 4 not in actions_taken:
             actions_taken.add(4)
             print(4)  # ExamineBreathing
-            continue
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            print(5)  # ExamineCirculation
             continue
         if 8 not in actions_taken:
             actions_taken.add(8)
@@ -61,16 +62,14 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        # Check for unstable tachyarrhythmia
-        if events[29] > 0 or events[30] > 0 or events[35] > 0:
-            print(40)  # DefibrillatorCharge
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
+            continue
+        if events[29] > 0 or events[30] > 0:
+            print(24)  # UseMonitorPads
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
@@ -85,15 +84,14 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+    print(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
