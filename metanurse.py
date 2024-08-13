@@ -77,7 +77,7 @@ def main():
                 print(43)  # DefibrillatorPace
                 used_methods.add("DefibrillatorPace")
                 continue
-
+        
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])) and events[3]:
