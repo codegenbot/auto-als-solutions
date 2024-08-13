@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     steps_left = max_steps
@@ -27,9 +26,7 @@ def main():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2]
-            if vital_signs_times[2] > 0
-            else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
             "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
@@ -42,7 +39,7 @@ def main():
             print(3)  # ExamineAirway
             initialized = True
             continue
-
+        
         if vitals["Sats"] is None:
             if not used_methods["UsedSatsProbe"]:
                 print(25)  # UseSatsProbe
@@ -107,7 +104,6 @@ def main():
         return
 
     print(48)  # Finish if max_steps reached
-
 
 if __name__ == "__main__":
     main()
