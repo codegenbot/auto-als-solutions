@@ -63,7 +63,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] < 50 or vitals["HeartRate"] > 150):
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
             print(24)  # UseMonitorPads
             continue
 
@@ -73,7 +73,7 @@ def main():
                 continue
 
         print(48)  # Finish
-        return 
+        return
 
     print(48)  # Finish
 
