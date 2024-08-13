@@ -16,7 +16,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -24,8 +24,13 @@ def main():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", 
-                    "Temperature", "MAP", "Sats", "Resps"
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
                 ],
             )
         }
@@ -75,14 +80,17 @@ def main():
                 continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] > 150:
-                print(40)  # Perform cardioversion
-                continue
-            elif vitals["HeartRate"] < 50:
+            if vitals["HeartRate"] < 50:
                 print(12)
                 continue
+            elif 100 < vitals["HeartRate"] <= 150:
+                print(2)
+                continue
+            elif vitals["HeartRate"] > 150:
+                print(28)
+                continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
