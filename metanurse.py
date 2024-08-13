@@ -10,7 +10,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -24,7 +24,7 @@ def stabilize():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
+                    "Resps"
                 ],
             )
         }
@@ -54,10 +54,6 @@ def stabilize():
         heart_rate = vitals["HeartRate"]
         resp_rate = vitals["RespRate"]
 
-        if map_ is None or sats is None or heart_rate is None or resp_rate is None:
-            print(38)  # TakeBloodPressure
-            continue
-
         if sats is not None and sats < 65:
             print(17)  # StartChestCompression
             continue
@@ -66,28 +62,33 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
+        # New additions: treat specific conditions if found
         if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
-            print(41 if heart_rate < 50 else 40)  # Increase or Charge Defibrillator
+            print(40)  # DefibrillatorCharge
             continue
-
-        if map_ < 60:
+        
+        if map_ is not None and map_ < 60:
             print(15)  # GiveFluids
             continue
 
-        if sats < 88:
+        if sats is not None and sats < 92:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if resp_rate < 8:
+        if resp_rate is not None and resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip([sats, resp_rate, map_], [88, 8, 60])):
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [sats, resp_rate, map_], [88, 8, 60]
+            )
+        ):
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+    print(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
