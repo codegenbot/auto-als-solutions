@@ -12,10 +12,10 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if step == 0 or not initial_examine:
-            action = [3, 4, 5][step % 3]
-            print(action)
-            initial_examine = True
+        if step == 0:
+            for action in [3, 4, 5]:  # First examine Airway, Breathing, Circulation.
+                print(action)
+                sys.stdout.flush()
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -27,22 +27,22 @@ def main():
             print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
-
+        
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
-            print(17)
+            print(17)  # Start chest compressions.
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use non-rebreather mask for low oxygen saturation.
             continue
-
+        
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use bag valve mask for low respiratory rate.
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -55,19 +55,19 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)
+                print(43)  # Perform cardioversion if necessary.
                 continue
-            print(15)
+            print(15)  # Administer fluids for low MAP.
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
-            print(48)
+            print(48)  # Finish if stable.
             return
-
-        print(48)
-        return
+        
+        print(0)  # Default action is to DoNothing.
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
