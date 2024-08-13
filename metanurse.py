@@ -28,9 +28,7 @@ def stabilize():
             devices_used["BPCuff"] = True
             continue
         
-        if step == 2:
-            print(16)
-            continue
+        print(16)
         
         if "AirwayClear" not in actions_taken:
             print(3)
