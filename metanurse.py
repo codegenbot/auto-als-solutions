@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = {
@@ -12,6 +11,8 @@ def main():
         "UsedBP_Cuff": False,
         "UsedA_Line": False,
         "GivenFluids": False,
+        "UsedDefibPads": False,
+        "CheckedHeartRhythm": False
     }
 
     for step in range(max_steps):
@@ -38,16 +39,16 @@ def main():
             )
         }
 
-        if not events[3]:  # AirwayClear
-            print(3)
+        if not events[3]:
+            print(3)  # ExamineAirway
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(17)  # Cardiac arrest, start CPR
+            print(17)  # StartChestCompression
             continue
-
+        
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # Cardiac arrest, start CPR
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -90,23 +91,27 @@ def main():
             print(16)  # ViewMonitor
             used_methods["ViewedMonitor"] = True
             continue
+        
+        if not used_methods["CheckedHeartRhythm"]:
+            print(2)  # CheckRhythm
+            used_methods["CheckedHeartRhythm"] = True
+            continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)  # GiveAtropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # CheckRhythm
+                print(40)  # DefibrillatorCharge
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+                print(40)  # DefibrillatorCharge
                 continue
-
+        
         print(48)  # Finish
         return
 
-    print(48)  # Finish after max_steps
-
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
