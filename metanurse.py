@@ -4,8 +4,7 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
-    checked_vitals = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -29,18 +28,16 @@ def main():
                 ]
             )
         }
-
+        
         if not initial_examine:
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
-        # Airway Assessment
+        
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        # Breathing Assessment
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -68,7 +65,6 @@ def main():
             print(29)  # UseBagValveMask
             continue
 
-        # Circulation Assessment
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
@@ -80,7 +76,7 @@ def main():
         print(48)  # Finish
         return
     
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
