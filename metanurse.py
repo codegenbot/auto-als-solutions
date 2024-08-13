@@ -3,9 +3,8 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine_steps = [3, 4, 5]
-    initial_examine_index = 0
-    
+    initial_examine = False
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -13,9 +12,10 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        if initial_examine_index < len(initial_examine_steps):
-            print(initial_examine_steps[initial_examine_index])
-            initial_examine_index += 1
+        if step == 0 or not initial_examine:
+            action = [3, 4, 5][step % 3]
+            print(action)
+            initial_examine = True
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -34,15 +34,15 @@ def main():
             continue
 
         if vitals["Sats"] is not None and (vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20):
-            print(17)  # Start chest compressions
+            print(17)
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use Non-Rebreather Mask
+            print(30)
             continue
         
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use Bag-Valve Mask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -55,9 +55,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion pacing
+                print(43)
                 continue
-            print(15)  # Give Fluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
@@ -65,7 +65,7 @@ def main():
                 [88, 8, 60])):
             print(48)
             return
-
+        
         print(48)
         return
 
