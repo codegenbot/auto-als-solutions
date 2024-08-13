@@ -4,8 +4,7 @@ def stabilize():
     max_steps = 350
 
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examined_airway = False
-    examined_breathing = examined_circulation = examined_disability = examined_exposure = False
+    examined_airway = examined_breathing = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -31,7 +30,6 @@ def stabilize():
             )
         }
 
-        # ABCDE assessment
         if not examined_airway:
             examined_airway = True
             print(3)
@@ -47,11 +45,6 @@ def stabilize():
             use_sats_probe = True
             continue
 
-        if not examined_circulation:
-            examined_circulation = True
-            print(5)
-            continue
-
         if not use_blood_pressure_cuff:
             print(27)
             use_blood_pressure_cuff = True
@@ -62,17 +55,6 @@ def stabilize():
             view_monitor = True
             continue
 
-        if not examined_disability:
-            examined_disability = True
-            print(6)
-            continue
-
-        if not examined_exposure:
-            examined_exposure = True
-            print(7)
-            continue
-
-        # Immediate interventions
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)
             continue
@@ -90,17 +72,25 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                print(41 if vitals["HeartRate"] > 150 else 15)
+            if vitals["HeartRate"] is not None and (
+                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+            ):
+                print(40 if vitals["HeartRate"] > 150 else 15)
                 continue
             print(15)
             continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)
             return
 
-    print(48)
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
