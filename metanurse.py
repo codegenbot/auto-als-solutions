@@ -96,8 +96,8 @@ def main():
             print(48)  # Finish
             return
 
-        print(48)  # Finish, just in case
-        return
+        print(1)  # Continue with CheckSignsOfLife if no specific action
+        continue
 
 if __name__ == "__main__":
     main()
