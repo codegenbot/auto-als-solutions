@@ -5,8 +5,6 @@ def stabilize():
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
     examine_breathing = examine_circulation = False
-    examine_disability = examine_exposure = False
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -59,16 +57,6 @@ def stabilize():
         if not examine_circulation:
             print(5)  # ExamineCirculation
             examine_circulation = True
-            continue
-
-        if not examine_disability:
-            print(6)  # ExamineDisability
-            examine_disability = True
-            continue
-
-        if not examine_exposure:
-            print(7)  # ExamineExposure
-            examine_exposure = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
