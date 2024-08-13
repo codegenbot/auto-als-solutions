@@ -2,49 +2,58 @@ import sys
 
 def main():
     max_steps = 350
-    step_actions = [
-        3,  # ExamineAirway
-        4,  # ExamineBreathing
-        5,  # ExamineCirculation
-        25, # UseSatsProbe
-        27, # UseBloodPressureCuff
-        16, # ViewMonitor
-    ]
-
+    initial_examine = False
+    used_methods = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
+        
+        if step == 0 or not initial_examine:
+            action = [3, 4, 5][step % 3]
+            print(action)
+            initial_examine = True
+            continue
 
-        if step < len(step_actions):
-            print(step_actions[step])
+        if "UseSatsProbe" not in used_methods:
+            print(25)
+            used_methods.add("UseSatsProbe")
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
+            continue
+
+        if "ViewMonitor" not in used_methods:
+            print(16)
+            used_methods.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
-            print(48)  # Finish
+            print(48)
             return
-
-        print(0)  # DoNothing
 
 if __name__ == "__main__":
     main()
