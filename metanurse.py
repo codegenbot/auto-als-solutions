@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -84,14 +83,14 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
             )
         ):
             print(48)  # Finish
             return
 
     print(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
