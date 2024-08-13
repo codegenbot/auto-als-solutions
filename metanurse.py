@@ -28,8 +28,9 @@ def main():
             )
         }
 
+        # ABCDE Assessment
         if "ExamineAirway" not in used_methods:
-            print(3)
+            print(3)  # Examine Airway
             used_methods.add("ExamineAirway")
             continue
 
@@ -59,6 +60,12 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        if "ExamineCirculation" not in used_methods:
+            print(5)  # Examine Circulation
+            used_methods.add("ExamineCirculation")
+            continue
+
+        # Check for emergency conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
@@ -88,9 +95,8 @@ def main():
                 print(9)  # Give adenosine (assume SVT)
                 continue
 
-        # Recheck after interventions to ensure stability
-        print(16)  # ViewMonitor to check updated vitals
-        continue
+        print(48)  # Finish if patient is stable
+        return
 
     print(48)  # Finish after max_steps
 
