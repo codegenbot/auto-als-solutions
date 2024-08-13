@@ -2,35 +2,42 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
     initial_examine = False
+    actions_taken = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
-            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-        ])}
+        vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
+            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None
+        }
 
-        if step == 0 or not initial_examine:
+        if not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
-            initial_examine = True
+            if step % 3 == 2:
+                initial_examine = True
             continue
 
-        if "UseSatsProbe" not in used_methods:
+        if "UseSatsProbe" not in actions_taken:
             print(25)
-            used_methods.add("UseSatsProbe")
+            actions_taken.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
+        if "UseBloodPressureCuff" not in actions_taken:
             print(27)
-            used_methods.add("UseBloodPressureCuff")
+            actions_taken.add("UseBloodPressureCuff")
             continue
 
-        if "ViewMonitor" not in used_methods:
+        if "ViewMonitor" not in actions_taken:
             print(16)
-            used_methods.add("ViewMonitor")
+            actions_taken.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
@@ -47,15 +54,11 @@ def main():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                if "TurnOnDefibrillator" not in used_methods:
+                if "TurnOnDefibrillator" not in actions_taken:
                     print(39)
-                    used_methods.add("TurnOnDefibrillator")
+                    actions_taken.add("TurnOnDefibrillator")
                     continue
-                if "DefibrillatorCharge" not in used_methods:
-                    print(40)
-                    used_methods.add("DefibrillatorCharge")
-                    continue
-                print(43)
+                print(40)
                 continue
             print(15)
             continue
@@ -65,9 +68,8 @@ def main():
                 [88, 8, 60])):
             print(48)
             return
-        
-        print(48)
-        return
+
+    print(48)
 
 if __name__ == "__main__":
     main()
