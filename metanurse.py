@@ -18,6 +18,13 @@ def stabilize():
             )
         }
 
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            print(22)  # Bag During CPR
+            continue
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            print(15)  # GiveFluids
+            continue
+
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -42,17 +49,22 @@ def stabilize():
             actions_taken.add(5)
             print(5)  # ExamineCirculation
             continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
+        if 6 not in actions_taken:
+            actions_taken.add(6)
+            print(6)  # ExamineDisability
             continue
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(15)  # GiveFluids
+        if 7 not in actions_taken:
+            actions_taken.add(7)
+            print(7)  # ExamineExposure
+            continue
+        if 2 not in actions_taken:
+            actions_taken.add(2)
+            print(2)  # CheckRhythm
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone 
+                print(10)  # GiveAmiodarone
             else:
                 print(15)  # GiveFluids
             continue
@@ -63,14 +75,20 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if all(vital is not None and vital >= threshold
-               for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                                           [88, 8, 60])):
+        if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
+            print(9)  # GiveAdenosine
+            continue
+
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)  # Finish
             return
-
-        print(48)  # Finish
-        return
+        
+    print(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
