@@ -79,7 +79,7 @@ def main():
         ):
             print(40)  # DefibrillatorCharge
             continue
-        
+
         print(48)  # Finish
         return
 
