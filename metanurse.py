@@ -4,17 +4,16 @@ def main():
     max_steps = 350
     used_methods = set()
 
-    examine_actions = [3, 4, 5]
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-
+        
         if step < 3:
-            print(examine_actions[step])
+            actions = [3, 4, 5]
+            print(actions[step])
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -31,11 +30,11 @@ def main():
             print(16)
             used_methods.add("ViewMonitor")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
