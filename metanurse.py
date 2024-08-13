@@ -28,17 +28,15 @@ def main():
             )
         }
 
-        # Airway assessment
         if "ExamineAirway" not in used_methods:
             print(3)
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # No AirwayClear event
+        if not events[3]:
             print(35)
             continue
 
-        # Breathing assessment
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
@@ -54,39 +52,33 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)
+            continue
+
         if vitals["Sats"] and vitals["Sats"] < 88:
-            if vitals["Sats"] < 65:  # Critical threshold, prepare CPR
-                print(22)
-            else:
-                print(30)  # Non-rebreather mask for sats < 88%
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use Bag Valve Mask for low respiratory rate
-            continue
-
-        # Circulation assessment
-        if "ExamineCirculation" not in used_methods:
-            print(5)
-            used_methods.add("ExamineCirculation")
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["MAP"] < 20:  # Critical threshold, prepare CPR
-                print(22)
-            else:
-                print(15)  # Give fluids for low MAP
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine for bradycardia
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check Rhythm for rates between 100 and 150
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # Give Amiodarone for high heart rate
+                print(11)
                 continue
 
         print(48)
