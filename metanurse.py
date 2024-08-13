@@ -29,7 +29,6 @@ def main():
             )
         }
 
-        # ABCDE assessment and stabilization logic
         if step == 0:
             print(1)  # CheckSignsOfLife
             continue
