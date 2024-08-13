@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -11,7 +10,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -26,8 +25,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
@@ -55,10 +54,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        )
-        if needs_chest_compression:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
 
@@ -74,12 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (
-            vitals["HeartRate"]
-            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
-        ) or events[
-            27
-        ]:  # SVT or unstable rhythm
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -96,17 +87,10 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)  # Finish
-            return
+        print(48)  # Finish
+        return
 
-    print(48)  # Finish at last step if nothing else to do
-
+    print(48)
 
 if __name__ == "__main__":
     main()
