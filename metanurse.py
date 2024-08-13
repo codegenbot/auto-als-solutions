@@ -2,31 +2,56 @@ import sys
 
 def main():
     max_steps = 350
-    step_sequence = [
-        3, 4, 5, 6, 7,  # Initial ABCDE exam
-        25, 27, 38, 16   # Use Sats probe, BP cuff, measure BP, view monitor
-    ]
-    step_idx = 0
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:]
         )
 
         vitals = {
-            name: value if time > 0 else None for value, time, name in zip(
-                vital_signs_values, vital_signs_times, [
-                    "HeartRate", "RespRate", "CapillaryGlucose", 
-                    "Temperature", "MAP", "Sats", "Resps"
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps"
                 ]
             )
         }
 
-        if step_idx < len(step_sequence):
-            print(step_sequence[step_idx])
-            step_idx += 1
+        if step == 0 or not initial_examine:
+            print(3)
+            initial_examine = True
+            continue
+        
+        if not events[3]:
+            print(35)
+            continue
+
+        if "UseSatsProbe" not in used_methods:
+            print(25)
+            used_methods.add("UseSatsProbe")
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
+            continue
+        
+        if "ViewMonitor" not in used_methods:
+            print(16)
+            used_methods.add("ViewMonitor")
             continue
 
         needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
@@ -46,7 +71,7 @@ def main():
             print(15)
             continue
 
-        if ("ViewMonitor" in used_methods) and (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or events[27]):
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)
                 used_methods.add("TurnOnDefibrillator")
