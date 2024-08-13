@@ -31,10 +31,11 @@ def main():
         }
 
         # Initial examinations
-        if step == 0 or not initial_examine:
-            print(3 if step == 0 else (4 if step == 1 else (5 if step == 2 else 16)))
+        if not initial_examine:
+            if step < 5:
+                print(3 + step)
+                continue
             initial_examine = True
-            continue
 
         # Airway Management
         if not events[3]:
@@ -85,9 +86,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion
+                print(43)
                 continue
-            print(15)  # Administer fluids
+            print(15)
             continue
 
         # Final checks before finishing
@@ -99,6 +100,9 @@ def main():
         ):
             print(48)
             return
+
+        print(48)
+        return
 
 
 if __name__ == "__main__":
