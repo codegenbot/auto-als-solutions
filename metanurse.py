@@ -73,10 +73,6 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if events[29] > 0 or events[30] > 0:
-            print(17)  # StartChestCompression
-            continue
-
         if any(events[i] > 0 for i in range(31, 37)):  # Check unstable rhythms
             print(24)  # UseMonitorPads
             continue
