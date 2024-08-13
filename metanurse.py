@@ -7,8 +7,6 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        if not observations:
-            continue
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
