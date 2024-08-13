@@ -54,6 +54,11 @@ def main():
             used_methods.add("UseSatsProbe")
             continue
 
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
+            continue
+
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
@@ -62,36 +67,36 @@ def main():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)  # Start chest compression
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give fluids
+            print(15)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # Give atropine
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check rhythm
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)  # Give adenosine (assume SVT)
+                print(9)
                 continue
 
-        print(48)  # Finish if patient is stable
+        print(48)
         return
 
-    print(48)  # Finish after max_steps
+    print(48)
 
 if __name__ == "__main__":
     main()
