@@ -63,43 +63,15 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
-                continue
-            elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
-                continue
+        if vitals["HeartRate"] and (vitals["HeartRate"] < 50 or vitals["HeartRate"] > 150):
+            print(24)  # UseMonitorPads
+            continue
 
         for i in range(27, 33):
             if events[i]:
                 print(24)  # UseMonitorPads
                 continue
-        
-        # Breathing examination
-        if "ExaminedBreathing" not in used_methods and not any(events[7:15]):
-            print(4)  # ExamineBreathing
-            used_methods.add("ExaminedBreathing")
-            continue
 
-        # Circulation examination
-        if "ExaminedCirculation" not in used_methods and not any(events[15:21]):
-            print(5)  # ExamineCirculation
-            used_methods.add("ExaminedCirculation")
-            continue
-
-        # Disability examination
-        if "ExaminedDisability" not in used_methods and not any(events[21:27]):
-            print(6)  # ExamineDisability
-            used_methods.add("ExaminedDisability")
-            continue
-
-        # Exposure examination
-        if "ExaminedExposure" not in used_methods and not any(events[27:33]):
-            print(7)  # ExamineExposure
-            used_methods.add("ExaminedExposure")
-            continue
-        
         print(48)  # Finish
         return 
 
