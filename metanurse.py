@@ -67,15 +67,11 @@ def main():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
-
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-
-        if vitals["HeartRate"] and vitals["HeartRate"] < 50:
-            print(12)  # GiveAtropine
-            continue
-
+        
         if vitals["HeartRate"] and (100 <= vitals["HeartRate"] <= 150):
             print(2)  # CheckRhythm
             continue
