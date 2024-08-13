@@ -4,7 +4,8 @@ def stabilize():
     max_steps = 350
 
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    examined_airway = examined_breathing = examined_circulation = examined_disability = examined_exposure = False
+    examined_airway = False
+    examined_breathing = examined_circulation = examined_disability = examined_exposure = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -73,33 +74,33 @@ def stabilize():
 
         # Immediate interventions
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # Start chest compression
+            print(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # Start chest compression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-                print(41 if vitals["HeartRate"] > 150 else 15)  # Defibrillator current up or give fluids
+                print(41 if vitals["HeartRate"] > 150 else 15)
                 continue
-            print(15)  # Give fluids
+            print(15)
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
-            print(48)  # Finish
+            print(48)
             return
 
-    print(48)  # Finish as last resort if not stabilized within 350 steps
+    print(48)
 
 if __name__ == "__main__":
     stabilize()
