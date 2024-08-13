@@ -63,8 +63,13 @@ def stabilize():
         heart_rate = vitals.get("HeartRate")
         resp_rate = vitals.get("RespRate")
 
-        if sats is not None and sats < 65 or map_ is not None and map_ < 20:
+        if (sats is not None and sats < 65) or (map_ is not None and map_ < 20):
             print(17)
+            step += 1
+            continue
+
+        if heart_rate is not None and (heart_rate > 150 or heart_rate < 50):
+            print(40)
             step += 1
             continue
 
@@ -92,7 +97,8 @@ def stabilize():
             print(48)
             return
 
-        step += 1
+    print(48)
+    return
 
 if __name__ == "__main__":
     stabilize()
