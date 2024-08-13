@@ -4,7 +4,7 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
-    examine_interval = 30  # Re-examine every 30 steps or so
+    examine_interval = 30
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -55,7 +55,7 @@ def main():
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
-        
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
