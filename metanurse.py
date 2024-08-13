@@ -1,15 +1,17 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
-    examined = {"airway": False, "breathing": False, "circulation": False}
+    first_examine = True
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    actions = iter([3, 4, 3, 8, 16])  # Initial series of Examine actions
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -17,56 +19,56 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                    "MAP", "Sats", "Resps"
+                ]
             )
         }
 
-        if not examined["airway"]:
-            examined["airway"] = True
-            print(3)  # Examine Airway
-            continue
-        elif not examined["breathing"]:
-            examined["breathing"] = True
-            print(4)  # Examine Breathing
-            continue
-        elif not examined["circulation"]:
-            examined["circulation"] = True
-            print(5)  # Examine Circulation
-            continue
-        elif "MAP" not in vitals or vitals["MAP"] is None:
-            print(27)  # Use Blood Pressure Cuff
-            continue
-        elif "Sats" not in vitals or vitals["Sats"] is None:
-            print(25)  # Use Sats Probe
-            continue
-        elif not vital_signs_times[6]:  # Check for MAP and Sats measured together
-            print(16)  # View Monitor
+        if first_examine:
+            try:
+                print(next(actions))
+                continue
+            except StopIteration:
+                first_examine = False
+
+        if not use_sats_probe:
+            print(25)
+            use_sats_probe = True
             continue
 
-        # Conditions for critical actions
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            print(17)  # Start Chest Compression
+        if not use_blood_pressure_cuff:
+            print(27)
+            use_blood_pressure_cuff = True
             continue
-        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
-            print(24)  # Use Monitor Pads
+
+        if not view_monitor:
+            print(16)
+            view_monitor = True
             continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # Give Fluids
+            print(15)
             continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use Non Rebreather Mask
+            print(30)
             continue
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use Bag Valve Mask
+            print(29)
+            continue
+
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(24)
             continue
 
         if all(
@@ -80,7 +82,6 @@ def stabilize():
 
         print(48)  # Finish
         return
-
 
 if __name__ == "__main__":
     stabilize()
