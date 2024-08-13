@@ -3,7 +3,7 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    assessments = [3, 4, 5, 6, 7]  # ABCDE assessment sequence
+    assessments = [3, 4, 5, 6, 7]
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -12,12 +12,10 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        # Perform initial ABCDE assessment
         if step < len(assessments):
             print(assessments[step])
             continue
 
-        # Essential checks
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -33,12 +31,10 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Cardiac arrest conditions
         if vitals["Sats"] and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
             print(17)
             continue
 
-        # Critical conditions
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
@@ -62,13 +58,11 @@ def main():
             print(15)
             continue
 
-        # Stabilized condition check
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
             print(48)
             return
         
-        # Do nothing as default
         print(0)
 
 if __name__ == "__main__":
