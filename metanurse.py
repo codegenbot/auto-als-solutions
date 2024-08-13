@@ -34,7 +34,7 @@ def stabilize():
             if action_code not in actions_taken:
                 actions_taken.add(action_code)
                 print(action_code)
-                break
+                break  # Proceed with next action
         else:
             if vitals["Sats"] and vitals["Sats"] < 65:
                 print(22)  # BagDuringCPR
