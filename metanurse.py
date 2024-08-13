@@ -30,7 +30,14 @@ def stabilize():
             actions_taken.add(16)
             print(16)  # ViewMonitor
             continue
-        
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)  # StartChestCompression
+            continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)  # StartChestCompression
+            continue
+
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)  # ExamineAirway
@@ -55,13 +62,6 @@ def stabilize():
             actions_taken.add(2)
             print(2)  # CheckRhythm
             continue
-            
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
-            continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
-            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
@@ -73,6 +73,14 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
+        if events[29] > 0 or events[30] > 0:
+            print(17)  # StartChestCompression
+            continue
+
+        if any(events[i] > 0 for i in range(31, 37)):  # Check unstable rhythms
+            print(24)  # UseMonitorPads
+            continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -81,6 +89,9 @@ def stabilize():
         ):
             print(48)  # Finish
             return
+    
+        print(1)  # Default to CheckSignsOfLife
+        continue
 
 if __name__ == "__main__":
     stabilize()
