@@ -10,7 +10,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -25,8 +25,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
@@ -34,7 +34,7 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-
+            
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
