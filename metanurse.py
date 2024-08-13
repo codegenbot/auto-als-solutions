@@ -1,10 +1,11 @@
 import sys
 
 
-def main():
+def stabilize():
     max_steps = 350
-    initial_examine = False
-    used_methods = set()
+    used_probes = set(
+        ["ExamineAirway", "UseSatsProbe", "UseBloodPressureCuff", "ViewMonitor"]
+    )
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -30,28 +31,31 @@ def main():
             )
         }
 
-        if step == 0 or not initial_examine:
-            action = [3, 4, 5][step % 3]
-            print(action)
-            initial_examine = True
+        if "ExamineAirway" not in used_probes:
+            print(3)
+            used_probes.add("ExamineAirway")
             continue
 
-        if "UseSatsProbe" not in used_methods:
+        if "UseSatsProbe" not in used_probes:
             print(25)
-            used_methods.add("UseSatsProbe")
+            used_probes.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
+        if "UseBloodPressureCuff" not in used_probes:
             print(27)
-            used_methods.add("UseBloodPressureCuff")
+            used_probes.add("UseBloodPressureCuff")
             continue
 
-        if "ViewMonitor" not in used_methods:
+        if "ViewMonitor" not in used_probes:
             print(16)
-            used_methods.add("ViewMonitor")
+            used_probes.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
 
@@ -59,13 +63,21 @@ def main():
             print(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)
             continue
+
+        if vitals["HeartRate"] is not None:
+            if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50:
+                print(39)
+                continue
+            if 60 <= vitals["HeartRate"] <= 100:
+                print(43)
+                continue
 
         if all(
             vital is not None and vital >= threshold
@@ -76,6 +88,8 @@ def main():
             print(48)
             return
 
+        print(1)
+
 
 if __name__ == "__main__":
-    main()
+    stabilize()
