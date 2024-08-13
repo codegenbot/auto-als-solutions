@@ -2,68 +2,85 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = False
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-
+    actions_taken = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
-            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-        ])}
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps"
+                ],
+            )
+        }
 
-        if step == 0 or not first_examine:
-            first_examine = True
+        if step == 0:
             print(3)
             continue
         
-        if not use_sats_probe:
+        if "sats_probe" not in actions_taken:
             print(25)
-            use_sats_probe = True
+            actions_taken.add("sats_probe")
             continue
 
-        if not use_blood_pressure_cuff:
+        if "bp_cuff" not in actions_taken:
             print(27)
-            use_blood_pressure_cuff = True
+            actions_taken.add("bp_cuff")
             continue
 
-        if not view_monitor:
+        if "view_monitor" not in actions_taken:
             print(16)
-            view_monitor = True
+            actions_taken.add("view_monitor")
             continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 65:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
         
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
+        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
+            print(43)
             continue
-        
-        if vitals["MAP"] and vitals["MAP"] < 60:
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)
             continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
         
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            if vitals["HeartRate"] > 150:
-                print(43)
-            else:
-                print(15)
-            continue
-
-        if all([vitals["Sats"] and vitals["Sats"] >= 88,
-                vitals["RespRate"] and vitals["RespRate"] >= 8,
-                vitals["MAP"] and vitals["MAP"] >= 60]):
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)
             return
+
+        print(0)
 
 if __name__ == "__main__":
     stabilize()
