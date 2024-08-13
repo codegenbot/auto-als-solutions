@@ -9,7 +9,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
@@ -23,8 +23,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
@@ -33,15 +33,15 @@ def main():
             used_methods.add("ExamineAirway")
             continue
         
-        if not events[3]:
-            print(35)
+        if "AirwayClear" not in used_methods and events[3] == 0:
+            print(35)  # PerformAirwayManoeuvres
             continue
         
         if "OpenBreathingDrawer" not in used_methods:
             print(19)
             used_methods.add("OpenBreathingDrawer")
             continue
-
+        
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -65,24 +65,26 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
 
-        print(48)
-        return
+        if all(val is not None for val in [vitals["Sats"], vitals["RespRate"], vitals["MAP"]]) and \
+           vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
+            print(48)  # Finish
+            return
 
-    print(48)
+    print(48)  # Finish after max_steps
 
 if __name__ == "__main__":
     main()
