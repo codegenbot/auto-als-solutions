@@ -4,15 +4,13 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
-    examine_b = False
-    examine_c = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -27,8 +25,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
@@ -39,16 +37,6 @@ def main():
 
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
-            continue
-
-        if not examine_b:
-            print(4)  # ExamineBreathing
-            examine_b = True
-            continue
-        
-        if not examine_c:
-            print(5)  # ExamineCirculation
-            examine_c = True
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -82,7 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[28]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
