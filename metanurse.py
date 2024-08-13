@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -79,7 +80,11 @@ def stabilize():
             print(22)  # Bag During CPR
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+        if unstable_tachyarrhythmia:
+            print(40)  # DefibrillatorCharge
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
@@ -89,20 +94,6 @@ def stabilize():
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
-            continue
-
-        if unstable_tachyarrhythmia:
-            if 16 not in actions_taken:
-                actions_taken.add(16)
-                print(16)  # ViewMonitor
-            elif 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)  # AttachDefibPads
-            elif 40 not in actions_taken:
-                actions_taken.add(40)
-                print(40)  # DefibrillatorCharge
-            else:
-                print(41)  # DefibrillatorCurrentUp
             continue
 
         if all(
@@ -116,6 +107,7 @@ def stabilize():
 
         print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
