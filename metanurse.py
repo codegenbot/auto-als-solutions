@@ -1,11 +1,9 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    measures_taken = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -57,10 +55,14 @@ def stabilize():
         resp_rate = vitals["RespRate"]
 
         if map_ is None or sats is None or heart_rate is None or resp_rate is None:
-            print(38)  # TakeBloodPressure (to trigger MAP measurement)
+            print(38)  # TakeBloodPressure
             continue
 
-        if sats < 65 or map_ < 20:
+        if sats is not None and sats < 65:
+            print(17)  # StartChestCompression
+            continue
+
+        if map_ is not None and map_ < 20:
             print(17)  # StartChestCompression
             continue
 
@@ -68,31 +70,24 @@ def stabilize():
             print(41 if heart_rate < 50 else 40)  # Increase or Charge Defibrillator
             continue
 
-        if map_ < 60 and "fluids_given" not in measures_taken:
-            measures_taken.add("fluids_given")
+        if map_ < 60:
             print(15)  # GiveFluids
             continue
 
-        if sats < 88 and "oxygen_given" not in measures_taken:
-            measures_taken.add("oxygen_given")
+        if sats < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if resp_rate < 8 and "bag_valve_used" not in measures_taken:
-            measures_taken.add("bag_valve_used")
+        if resp_rate < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip([sats, resp_rate, map_], [88, 8, 60])
-        ):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip([sats, resp_rate, map_], [88, 8, 60])):
             print(48)  # Finish
             return
 
         print(48)  # Finish
         return
-
 
 if __name__ == "__main__":
     stabilize()
