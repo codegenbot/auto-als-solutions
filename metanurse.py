@@ -2,49 +2,43 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
+    actions_taken = {
+        'examine_airway': False,
+        'use_sats_probe': False,
+        'use_blood_pressure_cuff': False,
+        'view_monitor': False
+    }
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
             )
         }
 
-        if step == 0 or "ExamineAirway" not in actions_taken:
-            actions_taken.add("ExamineAirway")
+        if not actions_taken['examine_airway']:
+            actions_taken['examine_airway'] = True
             print(3)  # ExamineAirway
             continue
 
-        if "UseSatsProbe" not in actions_taken:
-            actions_taken.add("UseSatsProbe")
+        if not actions_taken['use_sats_probe']:
+            actions_taken['use_sats_probe'] = True
             print(25)  # UseSatsProbe
             continue
 
-        if "UseBloodPressureCuff" not in actions_taken:
-            actions_taken.add("UseBloodPressureCuff")
+        if not actions_taken['use_blood_pressure_cuff']:
+            actions_taken['use_blood_pressure_cuff'] = True
             print(27)  # UseBloodPressureCuff
             continue
 
-        if "ViewMonitor" not in actions_taken:
-            actions_taken.add("ViewMonitor")
+        if not actions_taken['view_monitor']:
+            actions_taken['view_monitor'] = True
             print(16)  # ViewMonitor
             continue
 
@@ -68,9 +62,7 @@ def stabilize():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or events[32] > 0
-        ):  # Treat unstable tachyarrhythmia
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or events[32] > 0):
             print(43)  # DefibrillatorPace
             continue
 
@@ -80,10 +72,10 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
-
-    print(48)  # Finish game if steps exhaust
+    
+    print(48)
 
 if __name__ == "__main__":
     stabilize()
