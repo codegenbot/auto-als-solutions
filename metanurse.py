@@ -35,6 +35,10 @@ def main():
             initial_examine = True
             continue
 
+        if not events[3]:
+            print(35)  # PerformAirwayManoeuvres
+            continue
+
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -58,29 +62,44 @@ def main():
             print(30)  # UseNonRebreatherMask
             used_methods.add("UseNonRebreatherMask")
             continue
-            
-        if "HeartRhythmAF" in events or "HeartRhythmNSR" in events:
-            if not any(m in used_methods for m in ["TurnOnDefibrillator", "DefibrillatorCharge", "DefibrillatorSync", "DefibrillatorPace"]):
-                if "TurnOnDefibrillator" not in used_methods:
-                    print(39)  # TurnOnDefibrillator
-                    used_methods.add("TurnOnDefibrillator")
-                    continue
-                if "DefibrillatorCharge" not in used_methods:
-                    print(40)  # DefibrillatorCharge
-                    used_methods.add("DefibrillatorCharge")
-                    continue
-                if "DefibrillatorSync" not in used_methods:
-                    print(47)  # DefibrillatorSync
-                    used_methods.add("DefibrillatorSync")
-                    continue
-                if "DefibrillatorPace" not in used_methods:
-                    print(43)  # DefibrillatorPace
-                    used_methods.add("DefibrillatorPace")
-                    continue
+        
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
+            continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+        needs_chest_compression = (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20)
+        if needs_chest_compression:
+            print(17)  # StartChestCompression
+            continue
+        
+        if (
+            vitals["HeartRate"] and 
+            (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or 
+            any(events[i] for i in range(27, 33))
+        ):
+            if "TurnOnDefibrillator" not in used_methods:
+                print(39)  # TurnOnDefibrillator
+                used_methods.add("TurnOnDefibrillator")
+                continue
+            elif "DefibrillatorCharge" not in used_methods:
+                print(40)  # DefibrillatorCharge
+                used_methods.add("DefibrillatorCharge")
+                continue
+            elif "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
+            else:
+                print(43)  # DefibrillatorPace
+                continue
+
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])) and events[3]:
+                [88, 8, 60]
+            )
+        ) and events[3]:
             print(48)  # Finish
             return
 
