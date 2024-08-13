@@ -38,13 +38,7 @@ def main():
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
-            continue
-
+    
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
@@ -60,13 +54,23 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+            print(17)  # StartChestCompression
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and vitals["HeartRate"] > 150) or events[
-            27
-        ]:  # HeartRhythmSVT
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -83,24 +87,10 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
+        print(48)  # Finish
+        return
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
-            continue
-
-        if all([
-            events[3],  # AirwayClear
-            vitals.get("Sats", 90) >= 88,
-            vitals.get("RespRate", 10) >= 8,
-            vitals.get("MAP", 65) >= 60
-        ]):
-            print(48)  # Finish
-            return
-
-    print(48)  # If max steps reached, Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
