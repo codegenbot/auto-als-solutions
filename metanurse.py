@@ -2,31 +2,19 @@ import sys
 
 def main():
     max_steps = 350
-    used_methods = set()
-    initial_examine = False
+    used_methods, initial_examine = set(), False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
 
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
             )
         }
 
@@ -54,7 +42,7 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
@@ -70,7 +58,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[28]:  # HeartRhythmSVT or unstable rhythm
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or events[28]:
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -87,10 +75,16 @@ def main():
                 print(43)  # DefibrillatorPace
                 continue
 
-        print(48)  # Finish
-        return
-
-    print(48)
+        if all([
+            events[3],  # AirwayClear
+            vitals["Sats"] and vitals["Sats"] >= 88,
+            vitals["RespRate"] and vitals["RespRate"] >= 8,
+            vitals["MAP"] and vitals["MAP"] >= 60
+        ]):
+            print(48)  # Finish
+            return
+    
+    print(48)  # Finish after max steps
 
 if __name__ == "__main__":
     main()
