@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     first_examine = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -53,7 +53,7 @@ def stabilize():
                 if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50:
                     print(39)  # TurnOnDefibrillator
                     continue
-                if 60 <= vitals["HeartRate"] <= 100:
+                if 60 <= vitals["MAP"] <= 100:
                     print(43)  # DefibrillatorPace
                     continue
             print(15)  # GiveFluids
