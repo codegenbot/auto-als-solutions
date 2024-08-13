@@ -30,69 +30,78 @@ def stabilize():
 
         if 25 not in actions_taken:
             actions_taken.add(25)
-            print(25)  # UseSatsProbe
+            print(25)
             continue
         if 27 not in actions_taken:
             actions_taken.add(27)
-            print(27)  # UseBloodPressureCuff
+            print(27)
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            print(16)  # ViewMonitor
+            print(16)
             continue
+        
         if 3 not in actions_taken:
             actions_taken.add(3)
-            print(3)  # ExamineAirway
+            print(3)
             continue
         if 4 not in actions_taken:
             actions_taken.add(4)
-            print(4)  # ExamineBreathing
+            print(4)
             continue
         if 5 not in actions_taken:
             actions_taken.add(5)
-            print(5)  # ExamineCirculation
-            continue
-        if 8 not in actions_taken:
-            actions_taken.add(8)
-            print(8)  # ExamineResponse
-            continue
-        if 2 not in actions_taken:
-            actions_taken.add(2)
-            print(2)  # CheckRhythm
+            print(5)
             continue
 
-        # If MAP is too low and there is tachyarrhythmia, attempt to stabilize
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(15)  # GiveFluids
+        # Airway management
+        if events[3] == 0:
+            print(18)  # OpenAirwayDrawer
             continue
-        if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
+        if events[4] > 0:
+            print(31)  # UseYankeurSucionCatheter
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        # Breathing management
+        if vitals["Sats"] is None or vitals["RespRate"] is None:
+            print(5)  # ExamineBreathing
             continue
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] < 65:
+            print(22)  # BagDuringCPR
+            continue
+        if vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            print(48)  # Finish
-            return
+        # Circulation management
+        if events[30] > 0 and vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(10)  # GiveAdrenaline
+            continue
+        if vitals["MAP"] is None:
+            print(5)  # ExamineCirculation
+            continue
+        if vitals["MAP"] < 20:
+            print(15)  # GiveFluids
+            continue
+        if vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
 
-        print(0)  # DoNothing
+        # Disability management
+        if events[21] == 0:
+            print(6)  # ExamineDisability
+            continue
+
+        # Exposure management
+        if events[25] == 0:
+            print(7)  # ExamineExposure
+            continue
+
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
