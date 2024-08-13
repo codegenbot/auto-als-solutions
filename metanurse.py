@@ -3,7 +3,6 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-    observations_needed = {"AirwayClear", "RespRate", "MeasuredSats", "MeasuredMAP"}
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -33,23 +32,20 @@ def main():
             print(3)  # Initial Airway Examination
             continue
 
-        # Ensure airway is clear
-        if not events[3]:  # Ensure AirwayClear
+        if not events[3]:  # Ensure airway is clear
             print(35)  # PerformAirwayManoeuvres
             continue
-        
-        # Breathing examination
-        if not events[10]:
+
+        if "ExamineBreathing" not in used_methods:
             print(4)  # ExamineBreathing
+            used_methods.add("ExamineBreathing")
             continue
 
-        # Use Sats probe
         if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
-        
-        # View Monitor for the Sats Probe reading
+
         if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
@@ -74,25 +70,20 @@ def main():
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
-                continue
-            elif 100 < vitals["HeartRate"] <= 150:
+            if vitals["HeartRate"] > 150:
                 print(2)  # CheckRhythm
                 continue
-            elif vitals["HeartRate"] > 150:
-                print(11)  # GiveAmiodarone
+            elif vitals["HeartRate"] > 100:
+                print(9)  # GiveAdenosine
                 continue
-            
-        if all(vitals[k] and vitals[k] >= v for k, v in {
-            "Sats": 88, "RespRate": 8, "MAP": 60
-        }.items()):
-            print(48)  # Finish
-            return
+            elif vitals["HeartRate"] < 50:
+                print(12)  # GiveAtropine
+                continue
 
-        print(0)  # DoNothing
+        print(48)
+        return
 
-    print(48)  # Just in case, finish anyway
+    print(48)
 
 if __name__ == "__main__":
     main()
