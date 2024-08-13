@@ -17,7 +17,7 @@ def stabilize():
                  "MAP", "Sats", "Resps"]
             )
         }
-        
+
         # Initial examinations
         if 25 not in actions_taken:
             actions_taken.add(25)
@@ -63,17 +63,28 @@ def stabilize():
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(15)  # GiveFluids
             continue
-        if vitals["MAP"] and vitals["MAP"] < 60 and (events[29] > 0 or events[30] > 0):  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone
-            continue
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-            continue
+            if "IVGiven" not in actions_taken:
+                actions_taken.add("IVGiven")
+                print(14)  # UseVenflonIVCatheter
+                continue
+            if "FluidsGiven" not in actions_taken:
+                actions_taken.add("FluidsGiven")
+                print(15)  # GiveFluids
+                continue
+            if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
+                print(11)  # GiveAmiodarone
+                continue
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
+            continue
+
+        # Handle unstable tachyarrhythmia
+        if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
+            print(11)  # GiveAmiodarone (for SVT or AF)
             continue
 
         # End criteria
@@ -86,8 +97,7 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)  # Finish
-        return
+    print(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
