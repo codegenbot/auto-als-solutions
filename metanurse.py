@@ -2,10 +2,9 @@ import sys
 
 def stabilize():
     max_steps = 350
-
-    # Status flags
-    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-    airway_examined = breathing_examined = circulation_examined = False
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    examined_airway = examined_breathing = examined_circulation = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -31,8 +30,7 @@ def stabilize():
             )
         }
 
-        # Examination steps
-        if not first_examine:
+        if step == 0 or not first_examine:
             first_examine = True
             print(3)  # ExamineAirway
             continue
@@ -52,28 +50,27 @@ def stabilize():
             view_monitor = True
             continue
 
-        if not airway_examined:
-            print(3)  # ExamineAirway
-            airway_examined = True
-            continue
-
-        if not breathing_examined:
-            print(4)  # ExamineBreathing
-            breathing_examined = True
-            continue
-
-        if not circulation_examined:
-            print(5)  # ExamineCirculation
-            circulation_examined = True
-            continue 
-
-        # Intervention steps based on vitals
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
+            continue
+
+        if not examined_airway:
+            examined_airway = True
+            print(3)  # ExamineAirway
+            continue
+
+        if not examined_breathing:
+            examined_breathing = True
+            print(4)  # ExamineBreathing
+            continue
+
+        if not examined_circulation:
+            examined_circulation = True
+            print(5)  # ExamineCirculation
             continue
 
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
