@@ -29,7 +29,6 @@ def stabilize():
             )
         }
 
-        # Measure vitals if necessary
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)
@@ -45,7 +44,6 @@ def stabilize():
             print(16)
             continue
 
-        # Assess airway, breathing, circulation, disability, exposure
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)
@@ -65,14 +63,13 @@ def stabilize():
             actions_taken.add(8)
             print(8)
             continue
-        
-        # Stabilization steps
+
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # Start chest compressions
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag during CPR
+            print(22)
             continue
         
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
@@ -80,25 +77,25 @@ def stabilize():
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 actions_taken.add(28)
-                print(28)  # Attach defib pads
+                print(28)
                 continue
             if 40 not in actions_taken:
                 actions_taken.add(40)
-                print(40)  # Defibrillator charge
+                print(40)
                 continue
-            print(41)  # Defibrillator current up
+            print(41)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give fluids
+            print(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag-valve mask
+            print(29)
             continue
 
         if all(
@@ -108,10 +105,10 @@ def stabilize():
                 [88, 8, 60]
             )
         ):
-            print(48)  # Finish
+            print(48)
             return
 
-        print(48)  # Finish
+        print(48)
         return
 
 if __name__ == "__main__":
