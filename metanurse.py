@@ -3,24 +3,21 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
+    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: (value if time > 0 else None) for value, time, name in zip(vital_signs_values, vital_signs_times, [
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-
-        if "initial_examine" not in used_methods:
-            print([3, 4, 5, 16][step % 4])
-            if step % 4 == 3: 
-                used_methods.add("initial_examine")
+        
+        if step < 3 and not initial_examine:
+            print([3, 4, 5][step])
+            if step == 2:
+                initial_examine = True
             continue
-
-        if not events[3]:
-            print(35)
-            continue
-
+        
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -36,19 +33,24 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)
             continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
+            continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
@@ -67,7 +69,7 @@ def main():
                 [88, 8, 60])):
             print(48)
             return
-
+        
         print(48)
         return
 
