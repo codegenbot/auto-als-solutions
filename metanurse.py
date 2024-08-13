@@ -30,44 +30,44 @@ def stabilize():
 
         if 25 not in actions_taken:
             actions_taken.add(25)
-            print(25) # UseSatsProbe
+            print(25)  # UseSatsProbe
             continue
         if 27 not in actions_taken:
             actions_taken.add(27)
-            print(27) # UseBloodPressureCuff
+            print(27)  # UseBloodPressureCuff
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            print(16) # ViewMonitor
+            print(16)  # ViewMonitor
             continue
         if 3 not in actions_taken:
             actions_taken.add(3)
-            print(3) # ExamineAirway
+            print(3)  # ExamineAirway
             continue
         if 4 not in actions_taken:
             actions_taken.add(4)
-            print(4) # ExamineBreathing
+            print(4)  # ExamineBreathing
             continue
         if 5 not in actions_taken:
             actions_taken.add(5)
-            print(5) # ExamineCirculation
+            print(5)  # ExamineCirculation
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17) # StartChestCompression
+            print(17)  # StartChestCompression
             continue
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22) # BagDuringCPR
+            print(22)  # BagDuringCPR
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15) # GiveFluids
+            print(15)  # GiveFluids
             continue
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30) # UseNonRebreatherMask
+            print(30)  # UseNonRebreatherMask
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29) # UseBagValveMask
+            print(29)  # UseBagValveMask
             continue
 
         if all(
@@ -76,11 +76,8 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48) # Finish
+            print(48)  # Finish
             return
-
-        print(48) # Finish just in case no action taken
-        return
 
 if __name__ == "__main__":
     stabilize()
