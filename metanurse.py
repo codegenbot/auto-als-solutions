@@ -1,3 +1,4 @@
+```python
 import sys
 
 def stabilize():
