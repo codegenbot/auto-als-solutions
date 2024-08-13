@@ -96,6 +96,6 @@ def main():
 
         print(5)  # ExamineCirculation if nothing else to do
         used_methods.add("ExamineCirculation")
-        
+
 if __name__ == "__main__":
     main()
