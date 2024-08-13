@@ -53,7 +53,10 @@ def stabilize():
             continue
         
         if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            print(40)
+            if vitals["HeartRate"] > 150:
+                print(43)
+            else:
+                print(15)
             continue
 
         if all([vitals["Sats"] and vitals["Sats"] >= 88,
@@ -61,9 +64,6 @@ def stabilize():
                 vitals["MAP"] and vitals["MAP"] >= 60]):
             print(48)
             return
-    
-    print(48)
-    return
 
 if __name__ == "__main__":
     stabilize()
