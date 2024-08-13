@@ -64,15 +64,15 @@ def main():
         # Critical interventions for cardiac arrest
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # Start chest compressions
+            print(17)
             continue
 
         # Treat breathing issues
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+            print(30)
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         # Treat unstable tachyarrhythmia if MAP < 60
@@ -80,16 +80,16 @@ def main():
             if vitals["HeartRate"] and (
                 vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
-                    print(39)  # Turn on defibrillator
+                    print(39)
                     used_methods.add("TurnOnDefibrillator")
                     continue
                 if "DefibrillatorCharge" not in used_methods:
-                    print(40)  # Charge defibrillator
+                    print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion
+                print(43)
                 continue
-            print(15)  # Administer fluids
+            print(15)
             continue
 
         # Final checks before finishing
