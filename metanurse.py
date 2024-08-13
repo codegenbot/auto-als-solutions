@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     first_examine = True
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = use_monitor_pads = False
     actions = iter([3, 4, 8, 7, 16])  # Initial series of Examine actions
 
     for step in range(max_steps):
@@ -46,13 +46,21 @@ def stabilize():
             print(16)
             view_monitor = True
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
+            continue
+        
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if not use_monitor_pads:
+                print(24)
+                use_monitor_pads = True
+                continue
+            print(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -67,14 +75,11 @@ def stabilize():
             print(29)
             continue
 
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            print(24)
-            continue
-
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
             )
         ):
             print(48)  # Finish
