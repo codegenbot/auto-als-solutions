@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -10,7 +11,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -24,13 +25,13 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
         if step < 3 and not initial_examine[step]:
-            actions = [3, 4, 5]  # Examine Airway, Breathing, Circulation
+            actions = [3, 4, 5]
             print(actions[step])
             initial_examine[step] = True
             continue
@@ -51,18 +52,17 @@ def main():
             continue
 
         if vitals["Sats"] is not None and (
-            vitals["Sats"] < 65 or 
-            (vitals["MAP"] is not None and vitals["MAP"] < 20)
+            vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)
         ):
-            print(17)  # Start chest compression
+            print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # Use NonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # Use BagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -77,9 +77,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # DefibrillatorPace (Perform cardioversion pacing)
+                print(43)
                 continue
-            print(15)  # Give Fluids
+            print(15)
             continue
 
         if all(
@@ -93,6 +93,7 @@ def main():
 
         print(48)
         return
+
 
 if __name__ == "__main__":
     main()
