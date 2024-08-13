@@ -12,15 +12,18 @@ def main():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
+        # Initial examinations
         if step == 0 or not initial_examine:
             print(3 if step == 0 else (4 if step == 1 else (5 if step == 2 else 16)))
             initial_examine = True
             continue
 
+        # Airway Management
         if not events[3]:
             print(35)
             continue
 
+        # Measure vitals if not done yet
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
@@ -36,17 +39,20 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Critical interventions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+            print(17)  # Start chest compressions if sats < 65 or MAP < 20
             continue
 
+        # Treat breathing issues
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use NonRebreatherMask
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use BagValveMask
             continue
 
+        # Start treatment for hypotension
         if vitals["MAP"] and vitals["MAP"] < 60:
             if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
                 if "TurnOnDefibrillator" not in used_methods:
@@ -57,11 +63,12 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)
+                print(43)  # Perform cardioversion
                 continue
-            print(15)
+            print(15)  # Administer fluids
             continue
 
+        # Final checks before finishing
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
