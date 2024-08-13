@@ -31,56 +31,56 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # ExamineAirway
             initial_examine = True
             continue
 
-        if not events[3]:
-            print(35)
+        if not events[3]:  # AirwayClear event
+            print(35)  # PerformAirwayManoeuvres
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)
+            print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
         
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
         
         if any(events[28:38]) and vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)
+                print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
                 continue
             elif "DefibrillatorCharge" not in used_methods:
-                print(40)
+                print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
             elif "DefibrillatorSync" not in used_methods:
-                print(47)
+                print(47)  # DefibrillatorSync
                 used_methods.add("DefibrillatorSync")
                 continue
             else:
-                print(43)
+                print(43)  # DefibrillatorPace
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if all(
@@ -89,10 +89,10 @@ def main():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)
+            print(48)  # Finish
             return
 
-    print(48)
+    print(48)  # Finish if all stabilization attempts exhausted
 
 if __name__ == "__main__":
     main()
