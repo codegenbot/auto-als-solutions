@@ -14,7 +14,7 @@ def main():
 
         # Initial examinations
         if step == 0 or not initial_examine:
-            print(3 if step < 2 else (4 if step == 2 else 5))  # Examine Airway, Breathing, and Circulation
+            print(3 if step < 2 else (4 if step == 2 else 5)) # Examine Airway, Breathing, and Circulation
             initial_examine = True
             continue
 
