@@ -21,7 +21,6 @@ def stabilize():
         if step == 1: actions_taken.add(27); print(27); continue
         if step == 2: actions_taken.add(16); print(16); continue
         if step == 3: actions_taken.add(3); print(3); continue
-
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)
             continue
