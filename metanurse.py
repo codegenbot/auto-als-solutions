@@ -54,7 +54,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
-        
+
         if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
             if not use_monitor_pads:
                 print(24)
