@@ -31,56 +31,54 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            print(17)  # StartChestCompression
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            print(17)
             continue
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 88):
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 60):
-            print(15)  # GiveFluids
+            print(15)
             continue
 
-        if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[28:38]):  # Unstable heart rhythms
+        if (vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[28:38]):
             if "TurnOnDefibrillator" not in used_methods:
-                print(39)  # TurnOnDefibrillator
+                print(39)
                 used_methods.add("TurnOnDefibrillator")
                 continue
-            print(24)  # UseMonitorPads
+            print(24)
             continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
