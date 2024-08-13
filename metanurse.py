@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = {
@@ -47,7 +48,7 @@ def main():
             else:
                 print(3)
                 continue
-        
+
         if not breathing_done:
             if not used_methods["OpenedBreathingDrawer"]:
                 print(19)
@@ -65,18 +66,20 @@ def main():
                 print(29)
                 continue
             breathing_done = True
-        
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)
             continue
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
-        
+
         if not circulation_done:
             if not used_methods["OpenedCirculationDrawer"]:
                 print(20)
@@ -86,12 +89,17 @@ def main():
                 print(27)
                 used_methods["UsedBP_Cuff"] = True
                 continue
+            if not used_methods["ViewedMonitor"]:
+                print(16)
+                used_methods["ViewedMonitor"] = True
+                continue
             if not used_methods["GivenFluids"] and vitals["MAP"] and vitals["MAP"] < 60:
                 print(15)
                 used_methods["GivenFluids"] = True
                 continue
+
             circulation_done = True
-        
+
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
                 print(12)
@@ -102,11 +110,12 @@ def main():
             elif vitals["HeartRate"] > 150:
                 print(40)
                 continue
-        
+
         print(48)
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
