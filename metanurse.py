@@ -100,7 +100,7 @@ def main():
                 print(2)  # Check rhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(40)  # Defibrillator charge for cardioversion
+                print(9)  # Give adenosine (assume SVT)
                 continue
 
         if vitals["HeartRate"] is None and events[18]:  # No radial pulse
