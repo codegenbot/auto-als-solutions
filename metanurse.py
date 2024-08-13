@@ -1,33 +1,22 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
-    first_examine = (
-        use_sats_probe
-    ) = use_blood_pressure_cuff = view_monitor = use_aline = check_resprate = False
+    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = use_aline = check_resprate = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
             )
         }
 
@@ -61,12 +50,7 @@ def stabilize():
             check_resprate = True
             continue
 
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-            or vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-        ):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression (cardiac arrest)
             continue
 
@@ -95,9 +79,7 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-
         print(1)  # DoNothing (default action if all vital signs meet criteria)
-
 
 if __name__ == "__main__":
     stabilize()
