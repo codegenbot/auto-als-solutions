@@ -2,70 +2,97 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
+    initial_examine = True
+    use_sats_probe = use_blood_pressure_cuff = False
+    examine_airway = examine_breathing = examine_circulation = True
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                 "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                    "MAP", "Sats", "Resps"
+                ]
             )
         }
 
-        # Initial examinations
-        initial_exams = [25, 27, 16, 3, 4, 5, 6]
-        for action in initial_exams:
-            if action not in actions_taken:
-                actions_taken.add(action)
-                print(action)
-                sys.stdout.flush()
-                break
+        if initial_examine:
+            if examine_airway:
+                print(3)
+                examine_airway = False
+                continue
+            if examine_breathing:
+                print(4)
+                examine_breathing = False
+                continue
+            if examine_circulation:
+                print(5)
+                examine_circulation = False
+                continue
+            initial_examine = False
 
-        # Interventions
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
-            sys.stdout.flush()
-            continue
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-            sys.stdout.flush()
-            continue
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            sys.stdout.flush()
-            continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
-            sys.stdout.flush()
-            continue
-        
-        # Add cardioversion if unstable tachyarrhythmia detected
-        unstable_tachyarrhythmia = [
-            'HeartRhythmSVT', 'HeartRhythmVT', 'HeartRhythmAF', 'HeartRhythmAtrialFlutter'
-        ]
-        if any(events[i] > 0 for i in range(38, 42)):
-            print(10)  # e.g., cardioversion action like `GiveAdrenaline`
-            sys.stdout.flush()
+        if not use_sats_probe:
+            print(25)
+            use_sats_probe = True
             continue
 
-        # End criteria - if vital signs are stable, indicate completion.
+        if not use_blood_pressure_cuff:
+            print(27)
+            use_blood_pressure_cuff = True
+            continue
+
+        if use_sats_probe and use_blood_pressure_cuff:
+            print(16)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(15)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)
+            continue
+            
+        if events[12] > 0:
+            print(32)
+            continue
+            
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)
+            continue
+            
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            print(24)
+            continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            print(48)  # Finish
-            sys.stdout.flush()
+            print(48)
             return
 
-        print(0)  # DoNothing by default to progress loop without Finish.
-        sys.stdout.flush()
+        print(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
