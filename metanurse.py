@@ -26,23 +26,23 @@ def stabilize():
             print(38)  # TakeBloodPressure
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
