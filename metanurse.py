@@ -11,7 +11,7 @@ def main():
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-        
+
         if step == 0 or not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
