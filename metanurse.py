@@ -17,6 +17,7 @@ def stabilize():
             )
         }
 
+        # Initial examinations
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)  # ExamineAirway
@@ -50,6 +51,7 @@ def stabilize():
             print(7)  # ExamineExposure
             continue
 
+        # Interventions
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
@@ -66,6 +68,7 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
+        # End criteria
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
