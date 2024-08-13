@@ -1,9 +1,11 @@
 import sys
 
+
 def main():
     max_steps = 350
-    used_methods = set()
     initial_examine = False
+    has_checked_airway = False
+    used_methods = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,8 +36,11 @@ def main():
             initial_examine = True
             continue
 
-        if not events[3]:  # Airway not clear
-            print(35)  # PerformAirwayManoeuvres
+        if not has_checked_airway:
+            if not events[3]:  # Airway not clear
+                print(35)  # PerformAirwayManoeuvres
+            else:
+                has_checked_airway = True
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -53,26 +58,26 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             print(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
         if (
-            (vitals["HeartRate"] and vitals["HeartRate"] > 150)
+            (vitals["HeartRate"] is not None and vitals["HeartRate"] > 150)
             or events[30]
             or events[31]
             or events[32]
@@ -84,6 +89,7 @@ def main():
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
