@@ -28,11 +28,12 @@ def main():
             )
         }
 
-        if step == 0:
-            print(3)  # Initial Airway Examination
+        if "ExamineAirway" not in used_methods:
+            print(3)
+            used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # Ensure airway is clear
+        if not events[3]:  # AirwayClear check
             print(35)
             continue
 
@@ -51,12 +52,14 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Cardiac Arrest Check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
             print(17)  # StartChestCompression
             continue
 
+        # Stabilization Checks
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -69,21 +72,21 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
-                continue
-            elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # CheckRhythm
-                continue
-            elif vitals["HeartRate"] > 150:
-                print(11)  # GiveAmiodarone
-                continue
-        
-        print(48)
+        if vitals["HeartRate"] and vitals["HeartRate"] < 50:
+            print(12)  # GiveAtropine
+            continue
+
+        if vitals["HeartRate"] and (100 <= vitals["HeartRate"] <= 150):
+            print(2)  # CheckRhythm
+            continue
+        elif vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            print(11)  # GiveAmiodarone
+            continue
+
+        print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Finish
 
 if __name__ == "__main__":
     main()
