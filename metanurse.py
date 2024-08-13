@@ -81,10 +81,6 @@ def main():
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
-            elif "DefibrillatorSync" not in used_methods:
-                print(47)  # DefibrillatorSync
-                used_methods.add("DefibrillatorSync")
-                continue
             else:
                 print(43)  # DefibrillatorPace
                 continue
