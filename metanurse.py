@@ -90,7 +90,7 @@ def main():
         print(48)  # Finish
         return
 
-    print(48)  # Finish after max steps
+    print(48)
 
 if __name__ == "__main__":
     main()
