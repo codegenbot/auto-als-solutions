@@ -39,7 +39,6 @@ def main():
             )
         }
 
-        # Perform actions based on the current situation
         if not events[3]:  # AirwayClear
             print(3)
             continue
