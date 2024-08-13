@@ -30,7 +30,7 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)  # ExamineAirway
+            print(3)
             initial_examine = True
             continue
 
@@ -39,17 +39,17 @@ def main():
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)  # UseBloodPressureCuff
+            print(27)
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
@@ -66,22 +66,17 @@ def main():
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids to raise MAP
+            print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            if "DefibrillatorCharged" not in used_methods:
-                print(40)  # DefibrillatorCharge for cardioversion
-                used_methods.add("DefibrillatorCharged")
-                continue
-            else:
-                print(41)  # DefibrillatorCurrentUp
-                continue
+        if (vitals["HeartRate"] and vitals["HeartRate"] > 150):
+            print(40)  # DefibrillatorCharge
+            continue
 
         print(48)  # Finish
         return
 
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     main()
