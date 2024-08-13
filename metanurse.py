@@ -3,6 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -83,8 +84,7 @@ def stabilize():
             print(48)  # Finish
             return
 
-        print(48)
-        return
-
+    print(48)
+    
 if __name__ == "__main__":
     stabilize()
