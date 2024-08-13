@@ -18,7 +18,7 @@ def stabilize():
             )
         }
 
-        # Ensure we examine and attach needed equipment first
+        # Initial examinations
         if 25 not in actions_taken:
             actions_taken.add(25)
             print(25)  # UseSatsProbe
@@ -60,25 +60,37 @@ def stabilize():
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
             continue
+        
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(15)  # GiveFluids
             continue
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
             if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone 
-            else:
-                print(15)  # GiveFluids
+                print(39)  # TurnOnDefibrillator
+                continue
+            print(15)  # GiveFluids
             continue
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
+        
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
         # Handle unstable tachyarrhythmia
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone (for SVT or AF)
+            if 39 not in actions_taken:
+                actions_taken.add(39)
+                print(39)  # TurnOnDefibrillator
+                continue
+            if 40 not in actions_taken:
+                actions_taken.add(40)
+                print(40)  # DefibrillatorCharge
+                continue
+            print(47)  # DefibrillatorSync
             continue
 
         # End criteria
