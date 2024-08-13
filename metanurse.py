@@ -35,7 +35,7 @@ def main():
             initial_examine = True
             continue
 
-        if events[3] < 0.5:  # If Airway not clear (event expired or less relevant)
+        if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
 
@@ -70,7 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -78,6 +78,10 @@ def main():
             elif "DefibrillatorCharge" not in used_methods:
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
+                continue
+            elif "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
                 continue
             else:
                 print(43)  # DefibrillatorPace
