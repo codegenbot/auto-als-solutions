@@ -1,97 +1,100 @@
 import sys
 
+
 def main():
     max_steps = 350
+    actions = [3, 4, 5, 6, 7]  # ABCDE Examination steps
     used_methods = set()
-    initial_examine = False
-    step_counter = 0
+    action_index = 0
 
-    def next_action(actions):
-        for action in actions:
-            if action not in used_methods:
-                used_methods.add(action)
-                return action
-        return 0  # Default to DoNothing if no actions left
-
-    while step_counter < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
-            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-        ])}
-        
-        if not initial_examine:
-            actions = [3, 4, 5, 6, 7, 8]
-            action = next_action(actions)
-            if action:
-                initial_examine = True
-                step_counter += 1
-                print(action)
-                continue
-        
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
+        }
+
+        if action_index < len(actions):
+            print(actions[action_index])
+            action_index += 1
+            continue
+
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
-            step_counter += 1
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
             print(27)
             used_methods.add("UseBloodPressureCuff")
-            step_counter += 1
             continue
 
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
-            step_counter += 1
             continue
 
-        if vitals["Sats"] and (vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)):
-            print(17)
-            step_counter += 1
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
-            step_counter += 1
-            continue
-        
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
-            step_counter += 1
+        if (
+            vitals["Sats"] is not None
+            and vitals["Sats"] < 65
+            or (vitals["MAP"] is not None and vitals["MAP"] < 20)
+        ):
+            print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)  # UseBagValveMask
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if vitals["HeartRate"] is not None and (
+                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+            ):
                 if "TurnOnDefibrillator" not in used_methods:
-                    print(39)
+                    print(39)  # TurnOnDefibrillator
                     used_methods.add("TurnOnDefibrillator")
-                    step_counter += 1
                     continue
                 if "DefibrillatorCharge" not in used_methods:
-                    print(40)
+                    print(40)  # DefibrillatorCharge
                     used_methods.add("DefibrillatorCharge")
-                    step_counter += 1
                     continue
-                if "DefibrillatorPace" not in used_methods:
-                    print(43)
-                    used_methods.add("DefibrillatorPace")
-                    step_counter += 1
-                    continue
-            print(15)
-            step_counter += 1
+                print(43)  # DefibrillatorPace
+                continue
+            print(15)  # GiveFluids
             continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])):
-            print(48)
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
+            print(48)  # Finish
             return
-        
-        step_counter += 1
-        print(48)
+
+        print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     main()
