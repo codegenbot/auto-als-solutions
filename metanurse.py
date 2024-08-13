@@ -87,7 +87,7 @@ def main():
                 print(9)
                 continue
 
-        if events[7]:
+        if events[7]:  # BreathingNone event
             print(29)
             continue
 
