@@ -46,7 +46,7 @@ def main():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if vitals["HeartRate"] is not None and (vitals["HeartRate"] < 60 or vitals["HeartRate"] > 100):
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
