@@ -58,14 +58,14 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
+
         if vitals["HeartRate"] and vitals["HeartRate"] > 150:
             print(40)  # DefibrillatorCharge
             continue
-        
-        if events[15] and "ExamineCirculation" not in used_methods:  # RadialPulseNonPalpable
-            print(5)  # ExamineCirculation
-            used_methods.add("ExamineCirculation")
+
+        if any(event for event in (events[32], events[33], events[34], events[35], events[36], events[37], events[38])) and "UseMonitorPads" not in used_methods:
+            print(24)  # UseMonitorPads
+            used_methods.add("UseMonitorPads")
             continue
 
         print(48)  # Finish
