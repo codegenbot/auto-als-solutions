@@ -2,53 +2,84 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
+    first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    examine_breathing = check_signs_of_life = use_monitor_pads = False
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:]
+            observations[:33],
+            observations[33:40],
+            observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values, vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                 "MAP", "Sats", "Resps"]
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                    "MAP", "Sats", "Resps"
+                ]
             )
         }
 
-        # Initial examinations
-        if step == 0: actions_taken.add(25); print(25); continue  # UseSatsProbe
-        if step == 1: actions_taken.add(27); print(27); continue  # UseBloodPressureCuff
-        if step == 2: actions_taken.add(16); print(16); continue  # ViewMonitor
-        if all(a in actions_taken for a in [25, 27, 16]):
-            if "AirwayClear" not in actions_taken:
-                print(3)  # ExamineAirway
-                actions_taken.add("AirwayClear")
-                continue
+        if step == 0 or not first_examine:
+            first_examine = True
+            print(3)  # ExamineAirway
+            continue
 
-        # Interventions
-        if vitals["Sats"] and vitals["Sats"] < 65:
+        if not use_sats_probe:
+            print(25)  # UseSatsProbe
+            use_sats_probe = True
+            continue
+
+        if not use_blood_pressure_cuff:
+            print(27)  # UseBloodPressureCuff
+            use_blood_pressure_cuff = True
+            continue
+
+        if not view_monitor:
+            print(16)  # ViewMonitor
+            view_monitor = True
+            continue
+
+        if not examine_breathing:
+            print(4)  # ExamineBreathing
+            examine_breathing = True
+            continue
+
+        if not check_signs_of_life:
+            print(1)  # CheckSignsOfLife
+            check_signs_of_life = True
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 20:
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        # End criteria
+        if vitals["HeartRate"] is not None and not use_monitor_pads:
+            if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50:
+                print(24)  # UseMonitorPads
+                use_monitor_pads = True
+                continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
