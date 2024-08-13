@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -73,12 +72,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (
-            vitals["HeartRate"]
-            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
-        ) or events[
-            30
-        ]:  # HeartRhythmSVT
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[30]:  # HeartRhythmSVT
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -99,7 +93,6 @@ def main():
         return
 
     print(48)
-
 
 if __name__ == "__main__":
     main()
