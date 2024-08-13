@@ -2,7 +2,7 @@ import sys
 
 def stabilize():
     max_steps = 350
-    steps_examine = [3, 4, 5, 25, 27, 16]
+    steps_examine = [3, 4, 5, 25, 27, 16]  # Sequence: Airway, Breathing, Circulation, SatsProbe, BPCuff, View Monitor
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -52,7 +52,7 @@ def stabilize():
             print(48)
             return
         else:
-            print(1)
+            print(1)  # Default fallback action, CheckSignsOfLife
 
 if __name__ == "__main__":
     stabilize()
