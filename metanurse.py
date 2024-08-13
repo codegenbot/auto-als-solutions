@@ -3,6 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     first_examine = use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    vital_signs_measured = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -43,6 +44,7 @@ def stabilize():
             view_monitor = True
             continue
 
+        # Handle critical values leading to cardiac arrest
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
