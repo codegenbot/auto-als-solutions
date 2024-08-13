@@ -18,7 +18,6 @@ def stabilize():
             )
         }
 
-        # Interventions for critical conditions
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression for critically low oxygen saturation
             continue
@@ -26,7 +25,6 @@ def stabilize():
             print(17)  # StartChestCompression for critically low MAP
             continue
 
-        # Stabilize based on less critical but urgent conditions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -37,7 +35,6 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        # Initial examinations to retrieve required vitals
         initial_exams = [25, 27, 16, 3, 4, 5, 6, 2]
         for action in initial_exams:
             if action not in actions_taken:
@@ -45,15 +42,13 @@ def stabilize():
                 print(action)
                 break
 
-        # Check specific events to handle airway obstructions
-        airway_events = [3, 1, 2]  # ExamineAirway, CheckSignsOfLife, CheckRhythm
+        airway_events = [3, 1, 2]
         for event in airway_events:
-            if events[event] > 0.5 and event not in actions_taken:  # Adjust event threshold as needed
+            if events[event] > 0.5 and event not in actions_taken:  
                 actions_taken.add(event)
                 print(event)
                 break
 
-        # End criteria - if vital signs are stable, indicate completion.
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
