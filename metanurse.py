@@ -3,7 +3,6 @@ import sys
 def main():
     max_steps = 350
     used_methods = set()
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -33,10 +32,7 @@ def main():
             continue
 
         if not events[3]:  # Ensure airway is clear
-            if events[4] or events[5] or events[6]:
-                print(31)  # Use Yankeur Suction Catheter
-            else:
-                print(35)  # Perform Airway Manoeuvres
+            print(35)
             continue
 
         if "OpenBreathingDrawer" not in used_methods:
@@ -52,6 +48,11 @@ def main():
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
+            print(27)
+            used_methods.add("UseBloodPressureCuff")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
@@ -80,14 +81,11 @@ def main():
                 print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # GiveAmiodarone
+                print(11)  # GiveAmiodarone 
                 continue
-
-        if (vitals["Sats"] and vitals["Sats"] >= 88) and (
-            vitals["RespRate"] and vitals["RespRate"] >= 8) and (
-            vitals["MAP"] and vitals["MAP"] >= 60):
-            print(48)  # Finish
-            return
+        
+        print(48)
+        return
 
     print(48)
 
