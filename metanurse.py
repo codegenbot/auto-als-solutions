@@ -2,9 +2,9 @@ import sys
 
 def stabilize():
     max_steps = 350
+    initial_actions = [3, 4, 5, 6, 25, 27, 16]
+    actions_iter = iter(initial_actions)
     first_examine = True
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = use_monitor_pads = False
-    actions = iter([3, 4, 8, 7, 16])  # Initial series of Examine actions
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -27,59 +27,42 @@ def stabilize():
 
         if first_examine:
             try:
-                print(next(actions))
+                print(next(actions_iter))  # Execute initial series of Examine actions
                 continue
             except StopIteration:
                 first_examine = False
 
-        if not use_sats_probe:
-            print(25)
-            use_sats_probe = True
-            continue
-
-        if not use_blood_pressure_cuff:
-            print(27)
-            use_blood_pressure_cuff = True
-            continue
-
-        if not view_monitor:
-            print(16)
-            view_monitor = True
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)
-            continue
-
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            if not use_monitor_pads:
-                print(24)
-                use_monitor_pads = True
-                continue
-            print(40)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
+            continue
+
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            if any(events[i] > 0 for i in range(33)):
+                print(2)  # CheckRhythm
+                continue
+            print(9)  # GiveAdenosine
             continue
 
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             print(48)  # Finish
