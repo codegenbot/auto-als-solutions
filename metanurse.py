@@ -7,13 +7,11 @@ def main():
     
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
             observations[40:]
         )
-
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
@@ -40,14 +38,12 @@ def main():
             print(35)  # PerformAirwayManoeuvres
             continue
 
-        if "UseSatsProbe" not in used_methods:
+        if vitals["Sats"] is None:
             print(25)  # UseSatsProbe
-            used_methods.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
+        if vitals["MAP"] is None:
             print(27)  # UseBloodPressureCuff
-            used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
@@ -55,15 +51,14 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        # Critical actions based on current vitals
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
-
+        
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
