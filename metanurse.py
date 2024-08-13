@@ -24,57 +24,57 @@ def main():
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # ExamineAirway
             initial_examine = True
             continue
 
-        if not events[3]:
-            print(35)
+        if not events[3]:  # AirwayClear
+            print(35)  # PerformAirwayManoeuvres
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)
+            print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
 
-        print(48)
+        print(48)  # Finish
         return
 
-    print(48)
+    print(48)  # Ensure the Finish action in case of reaching max steps
 
 if __name__ == "__main__":
     main()
