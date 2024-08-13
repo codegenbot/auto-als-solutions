@@ -2,9 +2,6 @@ import sys
 
 def stabilize():
     max_steps = 350
-    first_examine = False
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -29,52 +26,45 @@ def stabilize():
             )
         }
 
-        if step == 0 or not first_examine:
-            first_examine = True
-            print(3)  # ExamineAirway
+        if step == 0:
+            print(3)  # Examine Airway
             continue
-
-        if not use_sats_probe:
-            print(25)  # UseSatsProbe
-            use_sats_probe = True
+        elif step == 1:
+            print(4)  # Examine Breathing
             continue
-
-        if not use_blood_pressure_cuff:
-            print(27)  # UseBloodPressureCuff
-            use_blood_pressure_cuff = True
+        elif step == 2:
+            print(5)  # Examine Circulation
             continue
-
-        if not view_monitor:
-            print(16)  # ViewMonitor
-            view_monitor = True
+        elif step == 3:
+            print(25)  # Use Sats Probe
+            continue
+        elif step == 4:
+            print(27)  # Use Blood Pressure Cuff
+            continue
+        elif step == 5:
+            print(16)  # View Monitor
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            print(17)  # StartChestCompression
+            print(17)  # Start Chest Compression
             continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            print(17)  # StartChestCompression
+            print(17)  # Start Chest Compression
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
-            continue
-
         if vitals["HeartRate"] is not None and (
             vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
         ):
-            print(24)  # UseMonitorPads
+            print(24)  # Use Monitor Pads
             continue
-
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            print(15)  # Give Fluids
+            continue
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            print(30)  # Use Non Rebreather Mask
+            continue
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            print(29)  # Use Bag Valve Mask
+            continue
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
