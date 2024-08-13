@@ -1,9 +1,10 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -28,70 +29,69 @@ def main():
             )
         }
 
-        if "ExamineAirway" not in used_methods:
-            print(3)
-            used_methods.add("ExamineAirway")
-            continue
-        
-        if not events[3]:
-            print(35)
+        # ABCDE assessment and stabilization logic
+        if step == 0:
+            print(1)  # CheckSignsOfLife
             continue
 
-        if "OpenBreathingDrawer" not in used_methods:
-            print(19)
+        if not events[3] and "ExamineAirway" not in used_methods:
+            print(3)  # ExamineAirway
+            used_methods.add("ExamineAirway")
+            continue
+
+        if events[3] and "OpenBreathingDrawer" not in used_methods:
+            print(19)  # OpenBreathingDrawer
             used_methods.add("OpenBreathingDrawer")
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)
+            print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
-        if "ExamineCirculation" not in used_methods:
-            print(5)
-            used_methods.add("ExamineCirculation")
-            continue
-        
         if vitals["MAP"] and vitals["MAP"] < 60:
             if "OpenCirculationDrawer" not in used_methods:
-                print(20)
+                print(20)  # OpenCirculationDrawer
                 used_methods.add("OpenCirculationDrawer")
                 continue
-            print(15)
+            print(15)  # GiveFluids
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)
+                print(12)  # GiveAtropine
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)
+                print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 150:
-                print(9)
+                print(9)  # GiveAdenosine
                 continue
 
         print(48)
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
