@@ -10,7 +10,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -25,8 +25,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
@@ -34,7 +34,7 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-            
+
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
             continue
@@ -70,7 +70,7 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or any(events[i] for i in [27, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]):
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
