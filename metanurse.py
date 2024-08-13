@@ -2,16 +2,15 @@ import sys
 
 def main():
     max_steps = 350
-    step = 0
     used_methods = set()
-    initial_examine_done = False
+    initial_examine = False
 
-    while step < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -26,53 +25,78 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps",
-                ],
+                    "Resps"
+                ]
             )
         }
 
-        if step == 0:
+        if step == 0 or not initial_examine:
             print(3)  # ExamineAirway
-            initial_examine_done = True
-        elif not events[3]:  # AirwayClear event hasn't occurred
+            initial_examine = True
+            continue
+
+        if not events[3]:  # AirwayClear event
             print(35)  # PerformAirwayManoeuvres
-        elif "UseSatsProbe" not in used_methods:
+            continue
+
+        if "UseSatsProbe" not in used_methods:
             print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
-        elif "UseBloodPressureCuff" not in used_methods:
+            continue
+
+        if "UseBloodPressureCuff" not in used_methods:
             print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
-        elif "ViewMonitor" not in used_methods:
+            continue
+
+        if "ViewMonitor" not in used_methods:
             print(16)  # ViewMonitor
             used_methods.add("ViewMonitor")
-        elif vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+            continue
+
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             print(17)  # StartChestCompression
-        elif vitals["MAP"] is not None and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
-        elif any(events[28:35]) and vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+            continue
+
+        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50) or any(events[28:38]):
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
+                continue
             elif "DefibrillatorCharge" not in used_methods:
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
+                continue
             elif "DefibrillatorSync" not in used_methods:
                 print(47)  # DefibrillatorSync
                 used_methods.add("DefibrillatorSync")
+                continue
             else:
                 print(43)  # DefibrillatorPace
-        elif vitals["Sats"] is not None and vitals["Sats"] < 88:
+                continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)  # GiveFluids
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
-        elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
-        elif all(vital is not None and vital >= threshold for vital, threshold in zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+            continue
+
+        if all(
+            vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
+            ) if vital is not None
+        ):
             print(48)  # Finish
             return
-        else:
-            print(48)  # Finish, just in case
-            return
-        
-        step += 1
+
+        print(1)  # DoNothing
 
 if __name__ == "__main__":
     main()
