@@ -1,6 +1,5 @@
 import sys
 
-
 def main():
     max_steps = 350
     used_methods = set()
@@ -8,11 +7,10 @@ def main():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
@@ -42,7 +40,7 @@ def main():
             if vitals["Sats"] < 88:
                 print(30)
                 continue
-
+                
             if vitals["RespRate"] < 8:
                 print(29)
                 continue
@@ -73,7 +71,6 @@ def main():
 
         print(48)
         return
-
 
 if __name__ == "__main__":
     main()
