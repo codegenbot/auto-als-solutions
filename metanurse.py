@@ -79,10 +79,9 @@ def stabilize():
             print(22)  # Bag During CPR
             continue
         
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            if not unstable_tachyarrhythmia:
-                print(15)  # GiveFluids
-                continue
+        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+            print(15)  # GiveFluids
+            continue
         
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
