@@ -8,67 +8,86 @@ def main():
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:40],
-            observations[40:47],
-            observations[47:],
+            observations[:33],
+            observations[33:40],
+            observations[40:],
         )
 
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
-            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
-            "Resps": vital_signs_values[6] if vital_signs_times[6] else None
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
         }
 
         if step == 0 or not initial_examine:
-            print(3)
+            print(3)  # ExamineAirway
             initial_examine = True
             continue
-        
-        if "UseMonitor" not in used_methods:
-            print(16)
-            used_methods.add("UseMonitor")
+            
+        if not events[3]:  # AirwayClear
+            print(35)  # PerformAirwayManoeuvres
             continue
-        
+
         if "UseSatsProbe" not in used_methods:
-            print(25)
+            print(25)  # UseSatsProbe
             used_methods.add("UseSatsProbe")
             continue
-        
+
         if "UseBloodPressureCuff" not in used_methods:
-            print(27)
+            print(27)  # UseBloodPressureCuff
             used_methods.add("UseBloodPressureCuff")
             continue
 
+        if "ViewMonitor" not in used_methods:
+            print(16)  # ViewMonitor
+            used_methods.add("ViewMonitor")
+            continue
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)
+            print(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
+            print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            print(40)
-            continue
+        if (vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)) or events[27]:  # HeartRhythmSVT or unstable rhythm
+            if "TurnOnDefibrillator" not in used_methods:
+                print(39)  # TurnOnDefibrillator
+                used_methods.add("TurnOnDefibrillator")
+                continue
+            elif "DefibrillatorCharge" not in used_methods:
+                print(40)  # DefibrillatorCharge
+                used_methods.add("DefibrillatorCharge")
+                continue
+            elif "DefibrillatorSync" not in used_methods:
+                print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
+            else:
+                print(43)  # DefibrillatorPace
+                continue
 
-        if ("HeartRhythmVT" in events or "HeartRhythmVF" in events) and "UseMonitorPads" not in used_methods:
-            print(24)
-            used_methods.add("UseMonitorPads")
-            continue
-
-        print(48)
+        print(48)  # Finish
         return
 
     print(48)
