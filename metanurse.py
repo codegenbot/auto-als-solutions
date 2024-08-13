@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
@@ -10,7 +11,7 @@ def main():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -25,8 +26,8 @@ def main():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
@@ -57,13 +58,15 @@ def main():
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
-        
+
         if "TurnOnDefibrillator" not in used_methods:
             print(39)  # TurnOnDefibrillator
             used_methods.add("TurnOnDefibrillator")
             continue
 
-        if vitals["HeartRate"] and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+        if vitals["HeartRate"] and (
+            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+        ):
             if "DefibrillatorCharge" not in used_methods:
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
@@ -75,11 +78,13 @@ def main():
             else:
                 print(43)  # DefibrillatorPace
                 continue
-        
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
@@ -97,8 +102,9 @@ def main():
             print(48)  # Finish
             return
 
-        print(3)  # Always ensure to continually examine
+        print(3)  # ExamineAirway again
         continue
+
 
 if __name__ == "__main__":
     main()
