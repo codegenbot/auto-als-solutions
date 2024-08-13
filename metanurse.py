@@ -1,99 +1,72 @@
 import sys
 
-
-def main():
+def stabilize():
     max_steps = 350
-    used_methods = set()
-    initial_examine = [False] * 3
-
+    first_examine = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
-
-        if step < 3 and not initial_examine[step]:
-            actions = [3, 4, 5]
-            print(actions[step])
-            initial_examine[step] = True
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
+        
+        if step == 0 or not first_examine:
+            first_examine = True
+            print(3)
             continue
-
-        if "UseSatsProbe" not in used_methods:
+        
+        if not use_sats_probe:
             print(25)
-            used_methods.add("UseSatsProbe")
+            use_sats_probe = True
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
+        if not use_blood_pressure_cuff:
             print(27)
-            used_methods.add("UseBloodPressureCuff")
+            use_blood_pressure_cuff = True
             continue
 
-        if "ViewMonitor" not in used_methods:
+        if not view_monitor:
             print(16)
-            used_methods.add("ViewMonitor")
+            view_monitor = True
             continue
 
-        if vitals["Sats"] is not None and (
-            vitals["Sats"] < 65 or (vitals["MAP"] is not None and vitals["MAP"] < 20)
-        ):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            print(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
-
+        
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and (
-                vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-            ):
-                if "TurnOnDefibrillator" not in used_methods:
+            if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                if not view_monitor:
                     print(39)
-                    used_methods.add("TurnOnDefibrillator")
-                    continue
-                if "DefibrillatorCharge" not in used_methods:
-                    print(40)
-                    used_methods.add("DefibrillatorCharge")
+                    view_monitor = True
                     continue
                 print(43)
                 continue
             print(15)
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60])):
             print(48)
             return
-
+        
         print(48)
         return
 
-
 if __name__ == "__main__":
-    main()
+    stabilize()
