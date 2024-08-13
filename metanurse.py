@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     initial_actions = [3, 4, 5, 6, 25, 27, 16]
@@ -11,7 +12,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
         vitals = {
             name: value if time > 0 else None
@@ -19,9 +20,14 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                    "MAP", "Sats", "Resps"
-                ]
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
@@ -52,11 +58,10 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
-            if any(events[i] > 0 for i in range(33)):
-                print(2)  # CheckRhythm
-                continue
-            print(9)  # GiveAdenosine
+        if vitals["HeartRate"] is not None and (
+            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
+        ):
+            print(2)  # CheckRhythm
             continue
 
         if all(
@@ -70,6 +75,7 @@ def stabilize():
 
         print(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
