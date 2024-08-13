@@ -12,20 +12,13 @@ def main():
             observations[40:],
         )
         vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
+            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None,
         }
 
         if "ExamineAirway" not in used_methods:
@@ -33,7 +26,7 @@ def main():
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # Airway is not clear
+        if not events[3]:
             print(35)
             continue
 
@@ -52,58 +45,47 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            print(17)  # Start chest compressions
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)  # Start chest compressions
+        if vitals["Sats"] is None:
+            print(25)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # Use non-rebreather mask
+        if vitals["MAP"] is None:
+            print(27)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # Use bag valve mask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # Give fluids
+            print(15)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            print(30)
             continue
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] < 50:
-                print(12)  # Give Atropine
+                print(12)
                 continue
             elif 100 < vitals["HeartRate"] <= 150:
-                print(2)  # Check rhythm
+                print(2)
                 continue
             elif vitals["HeartRate"] > 150:
-                print(11)  # Give Amiodarone
+                print(11)
                 continue
 
-        if "ExamineCirculation" not in used_methods:
-            print(5)
-            used_methods.add("ExamineCirculation")
-            continue
-
-        if "ExamineDisability" not in used_methods:
-            print(6)
-            used_methods.add("ExamineDisability")
-            continue
-
-        if "ExamineExposure" not in used_methods:
-            print(7)
-            used_methods.add("ExamineExposure")
-            continue
-
-        if vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
-            print(48)  # Finish when stable
-            break
-
-    else:
-        print(48)  # Finish after max steps
+        print(48)
+        return
+    
+    print(48)
 
 if __name__ == "__main__":
     main()
