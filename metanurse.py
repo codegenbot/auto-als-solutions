@@ -27,6 +27,7 @@ def stabilize():
             )
         }
 
+        # Initial necessary examinations
         if not actions_taken["sats_probe"]:
             actions_taken["sats_probe"] = True
             print(25)  # UseSatsProbe
@@ -40,6 +41,7 @@ def stabilize():
             print(16)  # ViewMonitor
             continue
 
+        # ABCDE Assessments
         if not actions_taken["airway"]:
             actions_taken["airway"] = True
             print(3)  # ExamineAirway
@@ -53,6 +55,7 @@ def stabilize():
             print(5)  # ExamineCirculation
             continue
 
+        # Check for critical interventions
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
@@ -69,6 +72,7 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
+        # Stabilization check
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
