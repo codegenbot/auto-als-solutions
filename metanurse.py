@@ -11,10 +11,10 @@ def main():
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-
+        
         if step == 0 or not initial_examine:
-            action = [3, 4, 5][step % 3]
-            print(action)
+            actions = [3, 4, 5, 6, 7]
+            print(actions[step % 5])
             initial_examine = True
             continue
 
@@ -33,16 +33,16 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if vitals["Sats"] is not None and (vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20):
-            print(17)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+            print(17)  # Start chest compression
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            print(30)
+            print(30)  # Use non-rebreather mask
             continue
-        
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            print(29)
+            print(29)  # Use bag valve mask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -55,9 +55,9 @@ def main():
                     print(40)
                     used_methods.add("DefibrillatorCharge")
                     continue
-                print(43)  # Perform cardioversion pacing
+                print(43)  # Defibrillator pace
                 continue
-            print(15)
+            print(15)  # Give fluids
             continue
 
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
