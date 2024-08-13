@@ -33,7 +33,7 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag during CPR
+            print(22)  # Bag During CPR
             continue
 
         # Step 2: Apply the examination actions
