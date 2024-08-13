@@ -61,16 +61,20 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        if events[29] > 0 or events[30] > 0:
-            print(40)  # DefibrillatorCharge
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
         if vitals["Sats"] and vitals["Sats"] < 65:
             print(22)  # Bag During CPR
             continue
+
+        if events[29] > 0 or events[30] > 0:
+            if vitals["MAP"] and vitals["MAP"] < 60:
+                print(9)  # Cardioversion for unstable tachyarrhythmia (as a proxy use Adenosine)
+                continue
+            print(9)  # Give Adenosine for stable SVT or AF
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
