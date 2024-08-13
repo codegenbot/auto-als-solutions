@@ -13,10 +13,10 @@ def main():
         ])}
 
         # Initial examinations
-        if not initial_examine:
+        if step == 0 or not initial_examine:
             action = [3, 4, 5][step % 3]
             print(action)
-            if step % 3 == 2: initial_examine = True
+            initial_examine = True
             continue
 
         # Measure vitals if not done yet
@@ -35,8 +35,19 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
+        # Additional checks
+        if "UseMonitorPads" not in used_methods:
+            print(24)
+            used_methods.add("UseMonitorPads")
+            continue
+
+        if "CheckRhythm" not in used_methods:
+            print(2)
+            used_methods.add("CheckRhythm")
+            continue
+
         # Critical interventions
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             print(17)
             continue
         
@@ -48,8 +59,13 @@ def main():
             print(29)
             continue
 
+        # Treat unstable tachyarrhythmia
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
+                if "UseMonitorPads" not in used_methods:
+                    print(24)
+                    used_methods.add("UseMonitorPads")
+                    continue
                 if "TurnOnDefibrillator" not in used_methods:
                     print(39)
                     used_methods.add("TurnOnDefibrillator")
@@ -70,7 +86,8 @@ def main():
             print(48)
             return
         
-        print(1)  # Default to DoNothing while waiting for new data
+        print(48)
+        return
 
 if __name__ == "__main__":
     main()
