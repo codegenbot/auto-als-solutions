@@ -11,7 +11,7 @@ def stabilize():
             observations[33:40],
             observations[40:]
         )
-        
+
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
@@ -68,17 +68,29 @@ def stabilize():
             actions_taken.add(2)
             print(2)
             continue
-
+        
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
         
         if vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
+            print(17) 
             continue
         
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)
+            print(22) 
             continue
         
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                actions_taken.add(28)
+                print(28) 
+                continue
+            if 40 not in actions_taken:
+                actions_taken.add(40)
+                print(40) 
+                continue
+            print(41)
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             print(15)
             continue
@@ -89,14 +101,6 @@ def stabilize():
         
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
-            continue
-
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)
-                continue
-            print(40)
             continue
 
         if all(
