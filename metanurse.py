@@ -3,28 +3,18 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                vital_signs_values, vital_signs_times,
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                 "MAP", "Sats", "Resps"]
             )
         }
 
@@ -74,7 +64,10 @@ def stabilize():
             print(15)  # GiveFluids
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
+                print(10)  # GiveAmiodarone 
+            else:
+                print(15)  # GiveFluids
             continue
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
@@ -87,12 +80,8 @@ def stabilize():
         if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
             print(10)  # GiveAmiodarone (for SVT or AF)
             continue
-        
-        if events[34] > 0:  # HeartRhythmVT
-            print(17)  # StartChestCompression
-            continue
-        
-        # End criteria: Sats >= 88, RespRate >= 8, MAP >= 60
+
+        # End criteria
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
