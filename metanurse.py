@@ -37,7 +37,7 @@ def main():
         if not events[3]:
             print(35)
             continue
-
+        
         # Breathing
         if "ExamineBreathing" not in used_methods:
             print(4)
