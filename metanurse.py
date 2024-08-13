@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
 
@@ -63,19 +64,19 @@ def stabilize():
             print(17)
             continue
 
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
+                print(40)
+                continue
+            print(15)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
-                print(40)
-                continue
-            print(15)
             continue
 
         if all(
@@ -89,6 +90,7 @@ def stabilize():
 
         print(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
