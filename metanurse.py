@@ -1,43 +1,22 @@
-import sys
-
-
 def stabilize():
     max_steps = 350
-    examined, use_sats_probe, use_blood_pressure_cuff, view_monitor = (
-        False,
-        False,
-        False,
-        False,
-    )
-
+    examined, examine_breathing, use_sats_probe, use_blood_pressure_cuff, view_monitor = False, False, False, False, False
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
 
         if not examined:
             print(3)  # ExamineAirway
             examined = True
+            continue
+
+        if not examine_breathing:
+            print(4)  # ExamineBreathing
+            examine_breathing = True
             continue
 
         if not use_sats_probe:
@@ -72,28 +51,20 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if vitals["HeartRate"] is not None:
-                if vitals["HeartRate"] > 150:
-                    print(40)  # DefibrillatorCharge (initiate cardioversion sequence)
-                    continue
-                elif vitals["HeartRate"] < 50:
-                    print(39)  # TurnOnDefibrillator (consider pacing)
-                    continue
+            if vitals["HeartRate"] is not None and vitals["HeartRate"] > 150:
+                print(39)  # TurnOnDefibrillator
+                continue
             print(15)  # GiveFluids
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60])):
             print(48)
             return
 
-        print(0)  # DoNothing to avoid infinite loop of Finish
+        print(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
