@@ -64,10 +64,7 @@ def stabilize():
             print(15)  # GiveFluids
             continue
         if vitals["MAP"] and vitals["MAP"] < 60:
-            if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-                print(10)  # GiveAmiodarone 
-            else:
-                print(15)  # GiveFluids
+            print(15)  # GiveFluids
             continue
         if vitals["Sats"] and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
@@ -77,8 +74,22 @@ def stabilize():
             continue
 
         # Handle unstable tachyarrhythmia
-        if events[29] > 0 or events[30] > 0:  # HeartRhythmSVT or HeartRhythmAF
-            print(10)  # GiveAmiodarone (for SVT or AF)
+        if events[30] > 0 or events[35] > 0:  # HeartRhythmAF or HeartRhythmCompleteHeartBlock
+            print(10)  # GiveAmiodarone
+            continue
+        if events[31] > 0 or events[32] > 0:  # HeartRhythmVT or HeartRhythmTorsades
+            print(12)  # GiveAtropine
+            continue
+        
+        # Re-examine if still not stable
+        if vitals["MAP"] and vitals["MAP"] < 75:
+            print(27)  # UseBloodPressureCuff
+            continue
+        if vitals["Sats"] and vitals["Sats"] < 100:
+            print(25)  # UseSatsProbe
+            continue
+        if vitals["RespRate"] and vitals["RespRate"] < 12:
+            print(4) #ExamineBreathing
             continue
 
         # End criteria
