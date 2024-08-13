@@ -88,6 +88,7 @@ def main():
                 print(9)  # Give adenosine (assume SVT)
                 continue
 
+        # Recheck after interventions to ensure stability
         print(16)  # ViewMonitor to check updated vitals
         continue
 
