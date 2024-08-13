@@ -1,9 +1,17 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
+    examine_steps = [
+        3,
+        4,
+        5,
+        6,
+        7,
+    ]  # ExamineAirway, ExamineBreathing, ExamineCirculation, ExamineDisability, ExamineExposure
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,9 +42,13 @@ def main():
             print(3)  # ExamineAirway
             initial_examine = True
             continue
-            
+
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
+            continue
+
+        if examine_steps:
+            print(examine_steps.pop(0))
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -54,7 +66,9 @@ def main():
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             print(17)  # StartChestCompression
             continue
 
@@ -70,7 +84,12 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+        if (
+            vitals["HeartRate"]
+            and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50)
+        ) or events[
+            27
+        ]:  # HeartRhythmSVT or unstable rhythm
             if "TurnOnDefibrillator" not in used_methods:
                 print(39)  # TurnOnDefibrillator
                 used_methods.add("TurnOnDefibrillator")
@@ -79,14 +98,19 @@ def main():
                 print(40)  # DefibrillatorCharge
                 used_methods.add("DefibrillatorCharge")
                 continue
-            else:
+            elif "DefibrillatorSync" not in used_methods:
                 print(47)  # DefibrillatorSync
+                used_methods.add("DefibrillatorSync")
+                continue
+            else:
+                print(43)  # DefibrillatorPace
                 continue
 
         print(48)  # Finish
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
