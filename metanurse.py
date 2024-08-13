@@ -71,7 +71,7 @@ def main():
 
         if vitals["HeartRate"]:
             if vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+                print(2)  # CheckRhythm
                 continue
             elif vitals["HeartRate"] > 100:
                 print(9)  # GiveAdenosine
@@ -80,10 +80,10 @@ def main():
                 print(12)  # GiveAtropine
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Fail-safe finish
+    print(48)
 
 if __name__ == "__main__":
     main()
