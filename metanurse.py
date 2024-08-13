@@ -4,6 +4,8 @@ def main():
     max_steps = 350
     used_methods = set()
     initial_examine = False
+    examine_b = False
+    examine_c = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -37,6 +39,16 @@ def main():
 
         if not events[3]:  # AirwayClear
             print(35)  # PerformAirwayManoeuvres
+            continue
+
+        if not examine_b:
+            print(4)  # ExamineBreathing
+            examine_b = True
+            continue
+        
+        if not examine_c:
+            print(5)  # ExamineCirculation
+            examine_c = True
             continue
 
         if "UseSatsProbe" not in used_methods:
