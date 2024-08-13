@@ -58,15 +58,7 @@ def main():
 
         # Critical interventions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            if "TurnOnDefibrillator" not in used_methods:
-                print(39)
-                used_methods.add("TurnOnDefibrillator")
-                continue
-            if "DefibrillatorCharge" not in used_methods:
-                print(40)
-                used_methods.add("DefibrillatorCharge")
-                continue
-            print(43)
+            print(17)
             continue
 
         # Treat breathing issues
