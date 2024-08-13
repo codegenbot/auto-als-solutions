@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     examined_airway = False
@@ -8,33 +7,16 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-        vitals = {
-            name: value if time > 0 else None
-            for value, time, name in zip(
-                vital_signs_values,
-                vital_signs_times,
-                [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
-            )
-        }
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
+            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
+        ])}
 
         if not examined_airway:
             examined_airway = True
             print(3)  # ExamineAirway
             continue
-
+        
         if not used_sats_probe:
             print(25)  # UseSatsProbe
             used_sats_probe = True
@@ -72,9 +54,7 @@ def stabilize():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] is not None and (
-            vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50
-        ):
+        if vitals["HeartRate"] is not None and (vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50):
             print(39)  # TurnOnDefibrillator
             continue
 
@@ -82,17 +62,13 @@ def stabilize():
             print(43)  # DefibrillatorPace
             continue
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60])):
             print(48)  # Finish
             return
 
     print(48)  # Finish to avoid technical failure
-
 
 if __name__ == "__main__":
     stabilize()
