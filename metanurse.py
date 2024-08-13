@@ -69,7 +69,7 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 32, 34, 36, 38])
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 32])
 
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
@@ -79,11 +79,11 @@ def stabilize():
             print(22)  # BagDuringCPR
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60 and unstable_tachyarrhythmia:
+        if unstable_tachyarrhythmia:
             print(40)  # DefibrillatorCharge
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
 
@@ -103,8 +103,6 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-
-    print(48)  # Ensure Finish is always called after loop
 
 if __name__ == "__main__":
     stabilize()
