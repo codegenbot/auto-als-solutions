@@ -11,7 +11,7 @@ def main():
             if action not in used_methods:
                 used_methods.add(action)
                 return action
-        return 0
+        return 0  # Default to DoNothing if no actions left
 
     while step_counter < max_steps:
         observations = list(map(float, input().strip().split()))
@@ -19,7 +19,7 @@ def main():
         vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
-
+        
         if not initial_examine:
             actions = [3, 4, 5, 6, 7, 8]
             action = next_action(actions)
@@ -28,7 +28,7 @@ def main():
                 step_counter += 1
                 print(action)
                 continue
-
+        
         if "UseSatsProbe" not in used_methods:
             print(25)
             used_methods.add("UseSatsProbe")
