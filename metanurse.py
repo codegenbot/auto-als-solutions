@@ -34,7 +34,7 @@ def main():
             continue
 
         if not events[3]:  # AirwayClear check
-            print(35)
+            print(35)  # PerformAirwayManoeuvres
             continue
 
         if "OpenBreathingDrawer" not in used_methods:
@@ -72,8 +72,15 @@ def main():
             print(15)  # GiveFluids
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 100:
+        if vitals["HeartRate"] and vitals["HeartRate"] < 50:
+            print(12)  # GiveAtropine
+            continue
+
+        if vitals["HeartRate"] and (100 <= vitals["HeartRate"] <= 150):
             print(2)  # CheckRhythm
+            continue
+        elif vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            print(11)  # GiveAmiodarone
             continue
 
         print(48)  # Finish
