@@ -1,16 +1,35 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
 
-    use_sats_probe = use_blood_pressure_cuff = view_monitor = examined_airway = False
+    use_sats_probe = use_blood_pressure_cuff = view_monitor = False
+    examined_airway = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        vitals = {name: value if time > 0 else None for value, time, name in zip(vital_signs_values, vital_signs_times, [
-            "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
-        ])}
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+        vitals = {
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
+            )
+        }
 
         if not examined_airway:
             examined_airway = True
@@ -32,7 +51,12 @@ def stabilize():
             view_monitor = True
             continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (
+            vitals["Sats"] is not None
+            and vitals["Sats"] < 65
+            or vitals["MAP"] is not None
+            and vitals["MAP"] < 20
+        ):
             print(17)
             continue
 
@@ -48,18 +72,24 @@ def stabilize():
             print(2)
             continue
 
-        if (events[27] > 0 or events[29] > 0 or events[30] > 0 or events[33] > 0) and vitals["MAP"] < 60:
+        if (
+            events[27] > 0 or events[29] > 0 or events[30] > 0 or events[33] > 0
+        ) and vitals["MAP"] < 60:
             print(41 if events[27] > 0 else 15)
             continue
 
-        if all(vital is not None and vital >= threshold for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60])):
+        if all(
+            vital is not None and vital >= threshold
+            for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
             print(48)
             return
 
         print(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
