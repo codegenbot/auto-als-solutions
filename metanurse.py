@@ -31,26 +31,26 @@ def main():
         }
 
         if "ExamineAirway" not in used_methods:
-            print(3)  # ExamineAirway
+            print(3)
             used_methods.add("ExamineAirway")
             continue
 
-        if not events[3]:  # AirwayClear check
-            print(35)  # PerformAirwayManoeuvres
+        if not events[3]:
+            print(35)
             continue
 
         if "OpenBreathingDrawer" not in used_methods:
-            print(19)  # OpenBreathingDrawer
+            print(19)
             used_methods.add("OpenBreathingDrawer")
             continue
 
         if "UseSatsProbe" not in used_methods:
-            print(25)  # UseSatsProbe
+            print(25)
             used_methods.add("UseSatsProbe")
             continue
 
         if "ViewMonitor" not in used_methods:
-            print(16)  # ViewMonitor
+            print(16)
             used_methods.add("ViewMonitor")
             continue
 
@@ -61,34 +61,32 @@ def main():
         ):
             continue
 
-        # Cardiac Arrest Check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            print(17)  # StartChestCompression
+            print(17)
             continue
 
-        # Stabilization Checks
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+            print(15)
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 100:
-            print(2)  # CheckRhythm
+            print(2)
             continue
 
-        print(48)  # Finish
+        print(48)
         return
 
-    print(48)  # Finish
+    print(48)
 
 
 if __name__ == "__main__":
