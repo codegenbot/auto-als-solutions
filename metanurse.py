@@ -2,7 +2,7 @@ import sys
 
 def stabilize():
     max_steps = 350
-    examine_completed = False
+    examine_airway = examine_breathing = examine_circulation = examine_disability = examine_exposure = False
     use_sats_probe = use_blood_pressure_cuff = view_monitor = False
 
     for step in range(max_steps):
@@ -29,9 +29,29 @@ def stabilize():
             )
         }
 
-        if step == 0 or not examine_completed:
-            examine_completed = True
+        if step == 0 or not examine_airway:
+            examine_airway = True
             print(3)  # ExamineAirway
+            continue
+
+        if not examine_breathing:
+            examine_breathing = True
+            print(4)  # ExamineBreathing
+            continue
+
+        if not examine_circulation:
+            examine_circulation = True
+            print(5)  # ExamineCirculation
+            continue
+
+        if not examine_disability:
+            examine_disability = True
+            print(6)  # ExamineDisability
+            continue
+
+        if not examine_exposure:
+            examine_exposure = True
+            print(7)  # ExamineExposure
             continue
 
         if not use_sats_probe:
