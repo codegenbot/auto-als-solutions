@@ -16,7 +16,6 @@ def stabilize():
             "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"
         ])}
 
-        # Initial assessment and setup
         if not actions_taken["examine_airway"]:
             actions_taken["examine_airway"] = True
             print(3)  # ExamineAirway
@@ -37,7 +36,6 @@ def stabilize():
             print(16)  # ViewMonitor
             continue
 
-        # Handle critical cases first: Start Chest Compression if needed
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             print(17)  # StartChestCompression
             continue
@@ -46,17 +44,14 @@ def stabilize():
             print(17)  # StartChestCompression
             continue
 
-        # Correct hypoxia
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             print(30)  # UseNonRebreatherMask
             continue
 
-        # Correct hypoventilation
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             print(29)  # UseBagValveMask
             continue
 
-        # Check and manage hypotension
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if vitals["HeartRate"] is not None:
                 if vitals["HeartRate"] > 150 or vitals["HeartRate"] < 50:
@@ -67,16 +62,14 @@ def stabilize():
                     continue
             print(15)  # GiveFluids
             continue
-   
-        # Check if the patient is stabilized
+
         if all(vital is not None and vital >= threshold for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
                 [88, 8, 60])):
-            print(48)  # Finish
+            print(48)
             return
 
-    # Finish if max steps reached
-    print(48)  # Finish
+    print(48)
 
 if __name__ == "__main__":
     stabilize()
