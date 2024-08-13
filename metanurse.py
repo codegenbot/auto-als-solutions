@@ -1,9 +1,9 @@
 import sys
 
+
 def main():
     max_steps = 350
     used_methods = set()
-    initial_examine = False
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -17,17 +17,29 @@ def main():
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
-                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"]
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
-        if step == 0 or not initial_examine:
+        if step == 0:
             print(3)
-            initial_examine = True
             continue
 
-        if not events[3]:  # AirwayClear
+        if not events[3]:
             print(35)
+            continue
+
+        if "ExamineBreathing" not in used_methods:
+            print(4)
+            used_methods.add("ExamineBreathing")
             continue
 
         if "UseSatsProbe" not in used_methods:
@@ -35,44 +47,45 @@ def main():
             used_methods.add("UseSatsProbe")
             continue
 
-        if "UseBloodPressureCuff" not in used_methods:
-            print(27)
-            used_methods.add("UseBloodPressureCuff")
-            continue
-
         if "ViewMonitor" not in used_methods:
             print(16)
             used_methods.add("ViewMonitor")
             continue
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            print(17)  # StartChestCompression
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)  # GiveFluids
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            print(17)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)  # UseNonRebreatherMask
+            print(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)  # UseBagValveMask
+            print(29)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            print(15)
             continue
 
         if vitals["HeartRate"]:
-            if vitals["HeartRate"] < 50:
-                print(12)  # GiveAtropine
+            if vitals["HeartRate"] > 150:
+                print(2)
                 continue
-            elif vitals["HeartRate"] > 150:
-                print(9)  # GiveAdenosine
+            elif vitals["HeartRate"] > 100:
+                print(9)
+                continue
+            elif vitals["HeartRate"] < 50:
+                print(12)
                 continue
 
-        print(48)  # Finish
+        print(48)
         return
 
     print(48)
+
 
 if __name__ == "__main__":
     main()
