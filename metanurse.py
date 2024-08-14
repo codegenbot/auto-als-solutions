@@ -9,10 +9,11 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = {25, 27, 16, 3, 4, 5, 6}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -51,7 +52,7 @@ def stabilize():
         if events[7] > 0 or any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
             take_action(29)
             continue
-
+        
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)
@@ -77,10 +78,6 @@ def stabilize():
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in [18, 16]):
-            take_action(15)
             continue
 
         take_action(48)
