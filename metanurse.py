@@ -3,7 +3,13 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    vital_signs_needed = {"MAP", "Sats", "RespRate"}
+    actions = {
+        "airway": [3, 31, 36, 37],
+        "breathing": [4, 29, 30, 22],
+        "circulation": [5, 15, 27, 16],
+        "disability": [6, 8],
+        "exposure": [7]
+    }
 
     def take_action(action):
         print(action)
@@ -29,72 +35,50 @@ def stabilize():
             )
         }
 
-        if vital_signs_needed:
-            if "MAP" not in actions_taken:
-                if 27 not in actions_taken:
-                    take_action(27)  # UseBloodPressureCuff
-                    continue
-                if 16 not in actions_taken:
-                    take_action(16)  # ViewMonitor
-                    continue
-            
-            if "Sats" not in actions_taken:
-                take_action(25)  # UseSatsProbe
-                continue
-            
-            if 3 not in actions_taken:
-                take_action(3)   # ExamineAirway
-                continue
-
-            if vitals["MAP"] is not None:
-                actions_taken.add("MAP")
-            if vitals["Sats"] is not None:
-                actions_taken.add("Sats")
-            if vitals["RespRate"] is not None:
-                actions_taken.add("RespRate")
-
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)  # UseYankeurSuctionCatheter
+        if 25 not in actions_taken:
+            take_action(25)
             continue
-        
-        if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
-                continue
-            take_action(40)  # DefibrillatorCharge
+        if events[4] > 0 or events[5] > 0 or events[6] > 0:
+            for action in actions["airway"]:
+                if action not in actions_taken:
+                    take_action(action)
+                    break
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
+            continue
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
+        for section in ["airway", "breathing", "circulation"]:
+            for action in actions[section]:
+                if action not in actions_taken:
+                    take_action(action)
+                    break
 
         if step > 200:
-            take_action(48)  # Finish if vitals seem stable
+            take_action(48)
             break
 
-        take_action(48)  # Default to finish at end if everything is stable
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
