@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = {25, 27, 16, 3, 4, 5}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -28,7 +28,7 @@ def stabilize():
 
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-
+        
         if need_measurements():
             take_action(need_measurement_action())
             continue
@@ -40,24 +40,12 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
         if events[6] > 0:
             take_action(36)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -67,13 +55,27 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] >= 60 and vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
-            take_action(48)
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
 
-        if actions_taken == required_measurements:
-            take_action(3)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if any(events[i] > 0 for i in range(28, 33)):
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
