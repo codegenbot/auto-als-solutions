@@ -17,13 +17,13 @@ def stabilize():
 
     def examine():
         if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
         elif 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
         elif 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
+            take_action(16)
         elif 3 not in actions_taken:
-            take_action(3)   # ExamineAirway
+            take_action(3)
 
     for step in range(max_steps):
         if done:
@@ -51,40 +51,42 @@ def stabilize():
             continue
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)   # Use Yankeur Suction Catheter for airway vomit/blood
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)   # Perform Head Tilt Chin Lift for tongue obstruction
+            take_action(36)
             continue
 
-        unstable_tachyarrhythmia_events = [29, 30, 31, 32, 35, 36, 37, 38]
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in unstable_tachyarrhythmia_events)
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)   # Attach defib pads
+                take_action(28)
                 continue
-            take_action(40)       # Defibrillator charge
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compression for extreme hypotension
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # Use Bag Valve Mask for extreme hypoxia
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids for hypotension
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask for hypoxia
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag Valve Mask for low respiration
+            take_action(29)
             continue
 
         take_action(48)
