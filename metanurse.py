@@ -33,6 +33,7 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
+        # AB - Check vitals first
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -42,7 +43,8 @@ def stabilize():
         if 16 not in actions_taken:
             take_action(16)
             continue
-
+        
+        # Conduct necessary examinations
         necessary_examinations = [3, 4, 5, 8, 2]
         for exam in necessary_examinations:
             if exam not in actions_taken:
