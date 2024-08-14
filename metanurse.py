@@ -61,7 +61,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
+        
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)
             continue
@@ -78,9 +78,7 @@ def stabilize():
             take_action(8)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["MAP"] is not None and vitals["MAP"] >= 60 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
-            take_action(48)
-            break
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
