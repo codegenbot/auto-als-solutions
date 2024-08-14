@@ -3,16 +3,15 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+    required_measurements = {25, 27, 16, 24}
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
-    
-    required_measurements = {25, 27, 16, 24}
-    
+
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
-    
+
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
@@ -39,46 +38,46 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(23)  # Resume CPR if critical vitals
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
-                    take_action(24)  # UseMonitorPads
+                    take_action(24)
                 elif 40 not in actions_taken:
-                    take_action(40)  # DefibrillatorCharge
+                    take_action(40)
                 else:
-                    take_action(9)  # GiveAdenosine
+                    take_action(48)
             else:
-                take_action(15)  # GiveFluids
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # UseYankeurSucionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)  # ExamineResponse
+            take_action(8)
             continue
 
-        take_action(48)  # Finish when all tasks are done
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
