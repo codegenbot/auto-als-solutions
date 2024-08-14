@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action, break_action=True):
         nonlocal done
         actions_taken.add(action)
@@ -93,13 +93,12 @@ def stabilize():
                 continue  # UseNonRebreatherMask
 
         if events[28] > 0:  # Tachyarrhythmia detected
-            if 28 not in actions_taken:
-                if take_action(28):
-                    continue  # AttachDefibPads
+            if 28 not in actions_taken and take_action(28):
+                continue  # AttachDefibPads
             if take_action(40):  # DefibrillatorCharge
                 continue
 
-        if take_action(48, False):  # Finish
+        if step >= 349 or take_action(48, False):  # Finish
             break
 
 if __name__ == "__main__":
