@@ -77,9 +77,8 @@ def stabilize():
             continue
 
         if all(measured(vital_sign) for vital_sign in {25, 27, 16, 3}):
-            if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and 
-                vitals["Sats"] is not None and vitals["Sats"] >= 88 and 
-                vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
+            if (vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and 
+                vitals["RespRate"] >= 8):
                 take_action(48)  # Finish when stabilized
 
 if __name__ == "__main__":
