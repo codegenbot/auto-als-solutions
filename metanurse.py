@@ -29,7 +29,7 @@ def stabilize():
         if 3 not in actions_taken:
             return 3  # ExamineAirway
         return None
-
+    
     def update_vitals(vital_signs_times, vital_signs_values):
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
@@ -49,9 +49,9 @@ def stabilize():
             observations[33:40],
             observations[40:],
         )
-
-        vitals = update_vitals(vital_signs_times, vital_signs_values)
         
+        vitals = update_vitals(vital_signs_times, vital_signs_values)
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue  # StartChestCompression
@@ -67,14 +67,14 @@ def stabilize():
                     continue
 
         vitals = update_vitals(vital_signs_times, vital_signs_values)
-        
+
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             if take_action(31):
                 continue  # UseSuction
 
         if events[6] > 0:  # Tongue Obstruction
-            if take_action(36):
-                continue  # HeadTiltChinLift
+            if take_action(35):
+                continue  # PerformAirwayManoeuvres
 
         if events[7] > 0:  # No Breathing
             if take_action(29):
