@@ -33,6 +33,7 @@ def stabilize():
             )
         }
 
+        # Initial actions to obtain essential information
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -46,6 +47,7 @@ def stabilize():
             take_action(3)
             continue
 
+        # Airway assessment and clearing
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -53,6 +55,7 @@ def stabilize():
             take_action(36)
             continue
 
+        # Immediate life threats handling
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -60,6 +63,7 @@ def stabilize():
             take_action(22)
             continue
 
+        # Maintain vitals within stable range
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -70,6 +74,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Handle cardiac arrhythmias properly
         if any(events[i] > 0 for i in [29, 30, 31, 32]):
             if 28 not in actions_taken:
                 take_action(28)
@@ -77,6 +82,7 @@ def stabilize():
             take_action(40)
             continue
 
+        # Finish once stabilized
         take_action(48)
 
 if __name__ == "__main__":
