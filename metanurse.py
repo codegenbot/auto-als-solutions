@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     done = False
@@ -46,9 +45,8 @@ def stabilize():
         }
 
         # Check for cardiac arrest conditions
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or \
+           (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
@@ -99,7 +97,6 @@ def stabilize():
 
         # Finalize
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
