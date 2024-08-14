@@ -28,7 +28,7 @@ def stabilize():
 
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
+
         if need_measurements():
             take_action(need_measurement_action())
             continue
@@ -67,7 +67,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] >= 60 and vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
             take_action(48)
             continue
