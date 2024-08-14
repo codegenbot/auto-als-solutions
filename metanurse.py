@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -85,15 +84,9 @@ def stabilize():
             take_action(29)
             continue
 
-        if (
-            all(measured(vital_sign) for vital_sign in [25, 27, 16, 26])
-            and vitals["MAP"] >= 60
-            and vitals["Sats"] >= 88
-            and vitals["RespRate"] >= 8
-        ):
+        if all(measured(vital_sign) for vital_sign in [25, 27, 16, 26]) and vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
             take_action(48)
             break
-
 
 if __name__ == "__main__":
     stabilize()
