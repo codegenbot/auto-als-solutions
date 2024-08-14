@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -13,45 +13,50 @@ def stabilize():
         )
 
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-            "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None
+            name: value if time > 0 else None
+            for value, time, name in zip(
+                vital_signs_values,
+                vital_signs_times,
+                [
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps"
+                ]
+            )
         }
 
         def take_action(action):
             actions_taken.add(action)
             print(action)
-
-        def examine_if_needed():
-            if 25 not in actions_taken:
-                take_action(25)
-                return True
-            if 27 not in actions_taken:
-                take_action(27)
-                return True
-            if 16 not in actions_taken:
-                take_action(16)
-                return True
-            if 3 not in actions_taken:
-                take_action(3)
-                return True
-            if 4 not in actions_taken:
-                take_action(4)
-                return True
-            if 5 not in actions_taken:
-                take_action(5)
-                return True
-            return False
-
-        if examine_if_needed():
+        
+        # ABCDE Protocol
+        if 25 not in actions_taken:
+            take_action(25)
+            continue
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
             continue
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0 or events[33] > 0 or events[34] > 0 or events[35] > 0 or events[36] > 0
-
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
+        if 4 not in actions_taken:
+            take_action(4)
+            continue
+        if 5 not in actions_taken:
+            take_action(5)
+            continue
+        
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+        
+        # Check critical conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -67,7 +72,8 @@ def stabilize():
             take_action(40)
             continue
         
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        # Treat instability
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
         
@@ -78,7 +84,8 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
+        
+        # Check if stable
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -89,8 +96,7 @@ def stabilize():
             take_action(48)
             return
         
-        take_action(48)
-        return
+        take_action(1)
 
 if __name__ == "__main__":
     stabilize()
