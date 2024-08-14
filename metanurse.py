@@ -111,7 +111,7 @@ def stabilize():
         ):
             print(48)
             return
-        
+
         print(0)
 
 if __name__ == "__main__":
