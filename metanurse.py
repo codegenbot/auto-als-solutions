@@ -51,39 +51,39 @@ def stabilize():
             continue
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)   # Suction for airway vomit/blood
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)   # Perform head tilt chin lift for tongue obstruction
+            take_action(36)
             continue
 
         unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)   # Attach defib pads
+                take_action(28)
                 continue
-            take_action(40)       # Defibrillator charge
+            take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start CPR for extreme hypotension
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # Use bag valve mask for extreme hypoxia
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids for hypotension
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use a non-rebreather mask for hypoxia
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use bag valve mask for low respiration
+            take_action(29)
             continue
 
         take_action(48)
