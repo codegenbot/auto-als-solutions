@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -27,7 +28,11 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -39,16 +44,22 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if (
+            vitals["MAP"] is not None
+            and vitals["MAP"] < 20
+            or vitals["Sats"] is not None
+            and vitals["Sats"] < 65
+        ):
             take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating unstable tachyarrhythmia
-                take_action(28)  # Attach Defib Pads
+            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating arrhythmia
+                take_action(24)  # Use Monitor Pads
+                continue
             else:
                 take_action(15)  # Give Fluids
-            continue
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
@@ -71,6 +82,7 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if stable
+
 
 if __name__ == "__main__":
     stabilize()
