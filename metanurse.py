@@ -1,15 +1,16 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -24,8 +25,8 @@ def stabilize():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "Resps"
-                ]
+                    "Resps",
+                ],
             )
         }
 
@@ -33,7 +34,6 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        # Ensure SatsProbe and BloodPressureCuff are used first
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -41,21 +41,20 @@ def stabilize():
             take_action(27)
             continue
 
-        # Perform complete ABCDE examinations
         necessary_examinations = [3, 4, 5, 6, 7, 8]
         for exam in necessary_examinations:
             if exam not in actions_taken:
                 take_action(exam)
                 continue
 
-        # Read events indicating unstable tachyarrhythmia
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32, 36, 37, 38])
+        unstable_tachyarrhythmia = any(
+            events[i] > 0 for i in [29, 30, 31, 32, 36, 37, 38]
+        )
 
-        # Treat critical conditions immediately
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
@@ -70,28 +69,27 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
-        # If stable, finish assessment
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)
             return
-        
+
         take_action(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
