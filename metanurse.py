@@ -43,38 +43,38 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
-                take_action(24)  # Use Monitor Pads
+                take_action(24)
                 continue
             else:
-                take_action(10)  # Give Adrenaline
+                take_action(10)
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
