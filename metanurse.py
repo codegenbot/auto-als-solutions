@@ -18,19 +18,46 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
-        return any(events[i] > 0 for i in arrhythmia_events)
-    
-    def perform_cardioversion():
-        if 24 not in actions_taken:
-            take_action(24)
-        elif 40 not in actions_taken:
-            take_action(40)
-        elif 47 not in actions_taken:
-            take_action(47)
-        else:
-            take_action(48)
+    def check_vitals(vitals):
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            return 23  # ResumeCPR
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            return 23  # ResumeCPR
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            return 15  # GiveFluids
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            return 30  # UseNonRebreatherMask
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            return 29  # UseBagValveMask
+        return None
+
+    def check_events(events):
+        if any(events[i] > 0 for i in [4, 5]):  # Vomit, Blood
+            return 31  # UseYankeurSucionCatheter
+        if events[6] > 0:  # Tongue
+            return 36  # PerformHeadTiltChinLift
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):  # Breathing issues
+            return 29  # UseBagValveMask
+        if any(events[i] > 0 for i in range(1, 4)):  # Response issues
+            return 8  # ExamineResponse
+        if events[17] > 0:  # RadialPulseNonPalpable
+            return 27  # UseBloodPressureCuff
+        if any(events[i] > 0 for i in [31, 32, 33, 34, 35, 36, 37, 38, 39]):  # Unstable Tachyarrhythmias
+            return 24  # UseMonitorPads
+
+        # Trigger events not occurring spontaneously
+        if 4 not in actions_taken:
+            return 3  # ExamineAirway
+        if 5 not in actions_taken:
+            return 4  # ExamineBreathing
+        if 6 not in actions_taken:
+            return 5  # ExamineCirculation
+        if 7 not in actions_taken:
+            return 6  # ExamineDisability
+        if 8 not in actions_taken:
+            return 7  # ExamineExposure
+
+        return None
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -42,52 +69,21 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
-
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(23)
+        action = check_vitals(vitals)
+        if action is not None:
+            take_action(action)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                perform_cardioversion()
-            else:
-                take_action(15)
+        action = check_events(events)
+        if action is not None:
+            take_action(action)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)
-            continue
-
-        if events[6] > 0:
-            take_action(36)
-            continue
-
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)
-            continue
-
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
