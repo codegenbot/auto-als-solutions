@@ -40,12 +40,14 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
+        # Cardiac arrest conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(23)
             continue
 
+        # MAP treatment sequence
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
@@ -56,26 +58,32 @@ def stabilize():
                 take_action(15)
             continue
 
+        # Oxygen saturation treatment
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
+        # Respiratory rate treatment
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
+        # Suction for blood or vomit in airway
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)
             continue
 
+        # Perform head tilt/chin lift for tongue obstruction
         if events[6] > 0:
             take_action(36)
             continue
 
+        # Bag-mask ventilation for breathing issues
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)
             continue
 
+        # Check response for unclear airway
         if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)
             continue
