@@ -40,14 +40,17 @@ def stabilize():
             take_action(23)  # Resume CPR
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)  # Use Monitor Pads
-                else:
-                    take_action(40)  # Defibrillator Charge
+        if has_unstable_tachyarrhythmia(events):
+            if 24 not in actions_taken:
+                take_action(24)  # Use Monitor Pads
+            elif 40 not in actions_taken:
+                take_action(40)  # Defibrillator Charge
             else:
-                take_action(15)  # Give Fluids
+                take_action(41)  # Defibrillator Current Up (cardioversion step)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -58,8 +61,20 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # Perform Head-Tilt Chin-Lift
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        if any(events[i] > 0 for i in range(1, 4)):
+            take_action(8)  # Examine Response
             continue
 
         take_action(48)  # Finish if stable
