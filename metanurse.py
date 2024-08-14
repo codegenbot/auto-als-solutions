@@ -3,29 +3,25 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    done = False
+    steps_count = 0
 
     def take_action(action):
-        nonlocal done
+        nonlocal steps_count
         actions_taken.add(action)
         print(action)
-        if action == 48:
-            done = True
+        steps_count += 1
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = [25, 27, 16, 3]
 
     def need_measurements():
-        return not required_measurements.issubset(actions_taken)
+        return not all(actions_taken)
 
     def need_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
 
-    for step in range(max_steps):
-        if done:
-            break
-
+    while steps_count < max_steps:
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
@@ -36,34 +32,13 @@ def stabilize():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
+            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
         }
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(16)
-            continue
-
+        # 1. Address airway issues
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -72,11 +47,30 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[28] > 0:
-            take_action(28)
+        # 2. Address breathing issues
+        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
+            take_action(16)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(29)
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        # 3. Address circulation issues
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(23)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
