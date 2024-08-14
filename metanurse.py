@@ -4,21 +4,21 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-    
-    initial_measurements = [25, 27, 16, 3]  # SATs Probe, BP Cuff, Monitor, Airway
-    
+
+    required_measurements = {25, 27, 16, 3}
+
     def need_measurements():
-        return not set(initial_measurements).issubset(actions_taken)
-    
+        return not required_measurements.issubset(actions_taken)
+
     def need_measurement_action():
-        for action in initial_measurements:
+        for action in required_measurements:
             if action not in actions_taken:
                 return action
 
@@ -27,7 +27,11 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -39,39 +43,42 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)  # Resume CPR
+        if any(events[i] > 0 for i in [4, 5, 6]):
+            if events[5] > 0 or events[4] > 0:
+                take_action(31)
+            else:
+                take_action(36 if events[6] > 0 else 32)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating arrhythmia
-                take_action(24)  # Use Monitor Pads
-                continue
-            else:
-                take_action(15)  # Give Fluids
-                continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
 
-        if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if any(events[i] > 0 for i in range(28, 33)):
+                take_action(28)
+                take_action(2)
+                take_action(40)
+                take_action(47)
+                take_action(41)
+            else:
+                take_action(15)
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+        if all(vitals[key] is not None and min_value <= vitals[key] <= max_value for key, min_value, max_value in [
+                ("Sats", 88, 100), ("RespRate", 8, 20), ("MAP", 60, 100)]):
+            take_action(48)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(1)
 
 if __name__ == "__main__":
     stabilize()
