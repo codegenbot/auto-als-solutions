@@ -12,12 +12,12 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Airway, Monitor
-
     def need_measurements():
+        required_measurements = {25, 27, 16, 3}
         return not required_measurements.issubset(actions_taken)
 
     def need_measurement_action():
+        required_measurements = [16, 25, 27, 3]
         for action in required_measurements:
             if action not in actions_taken:
                 return action
@@ -43,54 +43,46 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Cardiac Arrest conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Stabilization actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Airway interventions
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Tachyarrhythmia interventions
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
-                take_action(28)  # Attach Defib Pads
-            elif 40 not in actions_taken:
-                take_action(40)  # Defibrillator Charge
-            elif 43 not in actions_taken:
-                take_action(43)  # Defibrillator Pace
+                take_action(28)
             else:
-                take_action(24)  # Use Monitor Pads
+                take_action(40)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
