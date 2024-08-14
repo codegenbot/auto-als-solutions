@@ -5,13 +5,12 @@ def stabilize():
     actions_taken = set()
     done = False
 
-    def take_action(action, break_action=True):
+    def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-        return break_action
 
     def need_measurements():
         return (
@@ -32,15 +31,6 @@ def stabilize():
             return 3  # ExamineAirway
         return None
 
-    def update_vitals():
-        vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
-        }
-        return vitals
-
     for step in range(max_steps):
         if done:
             break
@@ -55,51 +45,58 @@ def stabilize():
         if need_measurements():
             measurement_action = need_measurement_action()
             if measurement_action is not None:
-                if take_action(measurement_action):
-                    continue
+                take_action(measurement_action)
+                continue
 
-        vitals = update_vitals()
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            if take_action(17):
-                continue  # StartChestCompression
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            if take_action(22):
-                continue  # BagDuringCPR
+        vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+        }
 
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
-            if take_action(31):
-                continue  # UseSuction
+            take_action(31)  # UseSuction
+            continue
 
         if events[6] > 0:  # Tongue Obstruction
-            if take_action(36):
-                continue  # HeadTiltChinLift
+            take_action(36)  # HeadTiltChinLift
+            continue
 
         if events[7] > 0:  # No Breathing
-            if take_action(29):
-                continue  # UseBagValveMask
+            if 29 not in actions_taken:
+                take_action(29)  # UseBagValveMask
+            continue
+
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)  # AttachDefibPads
+                continue
+            take_action(40)  # DefibrillatorCharge
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if take_action(15):
-                continue  # GiveFluids
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            if take_action(29):
-                continue  # UseBagValveMask
+            take_action(15)  # GiveFluids
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if take_action(30):
-                continue  # UseNonRebreatherMask
+            take_action(30)  # UseNonRebreatherMask
+            continue
 
-        if any(events[i] > 0 for i in range(28, 33)):  # Tachyarrhythmia
-            if 28 not in actions_taken and take_action(28):
-                continue  # AttachDefibPads
-            if take_action(40):  # DefibrillatorCharge
-                continue
-        
-        if take_action(48, False):  # Finish
-            break
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
