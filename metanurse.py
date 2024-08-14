@@ -63,11 +63,12 @@ def stabilize():
             take_action(36)  # HeadTiltChinLift
             continue
 
-        if events[7] > 0 or events[8] > 0:  # No Breathing or Snoring
-            take_action(29)  # UseBagValveMask
+        if events[7] > 0:  # No Breathing
+            if 29 not in actions_taken:
+                take_action(29)  # UseBagValveMask
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 38))
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
@@ -82,7 +83,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)  # BagDuringCPR
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
