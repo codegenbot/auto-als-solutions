@@ -12,6 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
+    # Define necessary actions for initial setup
     required_measurements = {25, 27, 38, 16}
 
     def initial_measurements():
@@ -42,42 +43,48 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Handle emergencies:
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)
+            take_action(23)  # ResumeCPR
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
+        # Check and stabilize:
+        # Airway
         if events[3] == 0:
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
 
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(31)
+            take_action(31)  # UseYankeurSuctionCatheter or PerformHeadTiltChinLift
             continue
 
+        # Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if events[7] > 0:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
+        # Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        take_action(2)
+        # Check heart rhythm:
+        take_action(2)  # CheckRhythm
         continue
 
-    take_action(48)
+    take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
