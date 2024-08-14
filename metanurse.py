@@ -32,17 +32,13 @@ def stabilize():
             take_action(need_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
-        if vitals["MAP"] is None or vitals["Sats"] is None or vitals["RespRate"] is None:
-            take_action(16)  # View Monitor
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [28, 30, 31, 32, 34, 35, 36, 37, 38]):  # Significant arrhythmia
-                take_action(24)  # Use Monitor Pads
+            if any(events[i] > 0 for i in [28, 32, 35, 36]):  # Unstable rhythm indications
+                take_action(24)  # Use Monitor Pads for cardioversion
             else:
                 take_action(15)  # Give Fluids
             continue
@@ -55,14 +51,22 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if any(events[i] > 0 for i in [7, 8, 9, 10, 11, 12, 13, 14]):
+        if any(events[i] > 0 for i in [1, 2, 7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Regularly examining airway, breathing, and circulation:
+        if step % 10 == 0:  # Examine every 10 steps
+            for action in [3, 4, 5, 2, 6, 7, 8]:  # Examine Airway, Breathing, Circulation, Rhythm, Disability, Exposure, Response
+                if action not in actions_taken:
+                    take_action(action)
+                    actions_taken.add(action)
+                    break
+        
         take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
