@@ -48,7 +48,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(29)
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
