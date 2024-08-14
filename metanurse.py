@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
@@ -48,8 +48,7 @@ def stabilize():
                     take_action(24)
                 elif 40 not in actions_taken:
                     take_action(40)
-                else:
-                    take_action(23)
+                return
             else:
                 take_action(15)
             continue
