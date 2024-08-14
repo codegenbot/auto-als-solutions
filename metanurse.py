@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -98,7 +97,6 @@ def stabilize():
         if actions_taken == {25, 27, 16, 3}:
             if take_action(48, False):  # Finish only when all measurements are taken
                 break
-
 
 if __name__ == "__main__":
     stabilize()
