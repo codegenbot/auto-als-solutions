@@ -55,7 +55,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for airway obstruction
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             take_action(31)  # UseSuction
             continue
@@ -63,13 +62,11 @@ def stabilize():
             take_action(36)  # HeadTiltChinLift
             continue
 
-        # Check for breathing problems
         if events[7] > 0:  # No Breathing
             if 29 not in actions_taken:
                 take_action(29)  # UseBagValveMask
             continue
 
-        # Check for unstable tachyarrhythmia
         unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
@@ -78,7 +75,6 @@ def stabilize():
             take_action(48)  # Finish
             continue
 
-        # Check critical vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
             continue
@@ -87,7 +83,6 @@ def stabilize():
             take_action(22)  # BagDuringCPR
             continue
 
-        # Manage other vital thresholds
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
