@@ -53,7 +53,7 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-        
+
         if events[6] > 0:
             take_action(36)
             continue
