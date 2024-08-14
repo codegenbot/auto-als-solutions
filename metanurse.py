@@ -63,7 +63,7 @@ def stabilize():
             take_action(36)  # Perform head tilt chin lift for tongue obstruction
             continue
 
-        if events[7] > 0 or vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if events[7] > 0 or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
             take_action(29)  # Use bag-valve mask for no or inadequate breathing
             continue
 
