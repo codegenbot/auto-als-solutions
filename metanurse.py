@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -33,66 +33,55 @@ def stabilize():
             )
         }
 
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
-
-        if events[3] == 0:
-            take_action(3)
-            continue
-
-        if 5 not in actions_taken:
-            take_action(5)
-            continue
-
-        if events[7] > 0:
-            take_action(29)
-            continue
-
-        if 25 not in actions_taken:
-            take_action(25)
-            continue
-
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 20:
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+        
+        if 3 not in actions_taken:  # Airway Check
+            take_action(3)
             continue
+        
+        if events[3] > 0:  # AirwayClear
+            if 25 not in actions_taken:  # UseSatsProbe
+                take_action(25)
+                continue
+            if vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)  # UseNonRebreatherMask
+                continue
+            if 27 not in actions_taken:  # UseBloodPressureCuff
+                take_action(27)
+                continue
+            if 16 not in actions_taken:  # ViewMonitor
+                take_action(16)
+                continue
+            if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+                take_action(29)  # UseBagValveMask
+                continue
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)  # GiveFluids
+                continue
+            
+            if 6 not in actions_taken:  # Disability Check
+                take_action(6)
+                continue
+            
+            if 7 not in actions_taken:  # Exposure Check
+                take_action(7)
+                continue
 
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
+            if all(
+                vitals[vital] is not None and vitals[vital] >= threshold
+                for vital, threshold in [
+                    ("Sats", 88), ("RespRate", 8), ("MAP", 60)
+                ]
+            ):
+                take_action(48)
+                return
 
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
-            )
-        ):
-            take_action(48)
-            return
-
-        take_action(48)
-        return
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
