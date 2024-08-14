@@ -50,6 +50,7 @@ def stabilize():
                 take_action(3)
                 continue
 
+        # Airway assessment
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -57,6 +58,7 @@ def stabilize():
             take_action(36)
             continue
 
+        # Breathing assessment
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -64,11 +66,13 @@ def stabilize():
             take_action(29)
             continue
 
+        # Circulation assessment
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             take_action(14)
             continue
 
+        # Critical conditions
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
                                     events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
@@ -87,6 +91,7 @@ def stabilize():
             take_action(22)
             continue
 
+        # Finish if stabilized
         if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
