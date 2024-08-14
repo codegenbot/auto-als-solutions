@@ -41,10 +41,12 @@ def stabilize():
             actions_taken.add(16)
             print(16)
             continue
+
         if 3 not in actions_taken:
             actions_taken.add(3)
             print(3)
             continue
+        
         if 4 not in actions_taken:
             actions_taken.add(4)
             print(4)
@@ -55,6 +57,7 @@ def stabilize():
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             print(29)
             continue
+        
         if 5 not in actions_taken:
             actions_taken.add(5)
             print(5)
@@ -77,10 +80,12 @@ def stabilize():
         if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             print(15)
             continue
+
         if 6 not in actions_taken:
             actions_taken.add(6)
             print(6)
             continue
+
         if 7 not in actions_taken:
             actions_taken.add(7)
             print(7)
