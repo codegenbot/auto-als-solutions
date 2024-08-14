@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -20,7 +19,6 @@ def stabilize():
             or 27 not in actions_taken
             or 16 not in actions_taken
             or 3 not in actions_taken
-            or 4 not in actions_taken
         )
 
     for step in range(max_steps):
@@ -65,10 +63,7 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
-            if 4 not in actions_taken:
-                take_action(4)
-                continue
-
+        
         if 2 not in actions_taken and (events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0):
             take_action(2)
             continue
@@ -104,7 +99,6 @@ def stabilize():
 
         take_action(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
