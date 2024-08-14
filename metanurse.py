@@ -13,7 +13,6 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
         
-        # Vital signs dictionary
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -24,7 +23,6 @@ def stabilize():
             "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None
         }
 
-        # Perform ABCDE assessment
         if 25 not in actions_taken:
             if take_action(25): break
         if 27 not in actions_taken:
