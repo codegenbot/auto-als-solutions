@@ -3,13 +3,8 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    actions = {
-        "airway": [3, 31, 36, 37],
-        "breathing": [4, 29, 30, 22],
-        "circulation": [5, 15, 27, 16],
-        "disability": [6, 8],
-        "exposure": [7]
-    }
+    examinations_done = set()
+    vital_signs_needed = {"MAP", "Sats"}
 
     def take_action(action):
         print(action)
@@ -35,50 +30,63 @@ def stabilize():
             )
         }
 
-        if 25 not in actions_taken:
-            take_action(25)
+        if vital_signs_needed and not examinations_done:
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
+            examinations_done.add(True)
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
             continue
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-        if 16 not in actions_taken:
-            take_action(16)
+        
+        if events[6] > 0:
+            take_action(36)
             continue
 
-        if events[4] > 0 or events[5] > 0 or events[6] > 0:
-            for action in actions["airway"]:
-                if action not in actions_taken:
-                    take_action(action)
-                    break
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 20:
+                take_action(17)
+                continue
+            elif vitals["MAP"] < 60:
+                take_action(15)
+                continue
+
+        if vitals["Sats"] is not None:
+            if vitals["Sats"] < 65:
+                take_action(22)
+                continue
+            elif vitals["Sats"] < 88:
+                take_action(30)
+                continue
+
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        for section in ["airway", "breathing", "circulation"]:
-            for action in actions[section]:
-                if action not in actions_taken:
-                    take_action(action)
-                    break
-
-        if step > 200:
+        if step > 200 or all(vitals_needed in actions_taken for vitals_needed in [25, 27, 16, 3]):
             take_action(48)
             break
 
-        take_action(48)
+        take_action(1)  # Default action to check signs of life
 
 if __name__ == "__main__":
     stabilize()
