@@ -9,7 +9,7 @@ def stabilize():
         sys.stdout.flush()
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+    required_measurements = {25, 27, 16, 3, 2}  # SATs Probe, BP Cuff, Monitor, Airway, Check Rhythm
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -35,15 +35,21 @@ def stabilize():
             take_action(need_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # Unstable tachyarrhythmia
+            if any(events[i] > 0 for i in range(28, 37)):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
                 continue
             take_action(15)  # Give Fluids
+            continue
+
+        if any(events[i] > 0 for i in range(37, 39)):  # Severe arrhythmia (VF) needs defibrillation
+            take_action(28)  # Attach Defib Pads
+            take_action(40)  # Charge Defibrillator
+            take_action(23)  # Resume CPR
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -54,6 +60,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Airway interventions
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
