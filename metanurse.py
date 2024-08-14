@@ -6,14 +6,8 @@ USE_SATS_PROBE = 25
 USE_BLOOD_PRESSURE_CUFF = 27
 VIEW_MONITOR = 16
 EXAMINE_AIRWAY = 3
-EXAMINE_BREATHING = 4
-EXAMINE_CIRCULATION = 5
-EXAMINE_DISABILITY = 6
-EXAMINE_EXPOSURE = 7
 USE_NON_REBREATHER_MASK = 30
 GIVE_FLUIDS = 15
-USE_MONITOR_PADS = 24
-DEFIBRILLATE_CHARGE = 40
 RESUME_CPR = 23
 FINISH = 48
 
@@ -25,7 +19,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [USE_SATS_PROBE, USE_BLOOD_PRESSURE_CUFF, VIEW_MONITOR, EXAMINE_AIRWAY]
+    required_measurements = [USE_SATS_PROBE, USE_BLOOD_PRESSURE_CUFF, VIEW_MONITOR]
 
     def needs_measurements():
         return any(action not in actions_taken for action in required_measurements)
@@ -67,7 +61,6 @@ def stabilize():
             take_action(USE_NON_REBREATHER_MASK)
             continue
 
-        # Examine Airway, Breathing, Circulation, Disability, and Exposure as part of ABCDE
         if any(events[i] > 0 for i in [1, 2, 4, 5, 6, 7, 10, 11, 12, 13, 14]):
             take_action(EXAMINE_AIRWAY)
             continue
