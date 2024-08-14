@@ -9,11 +9,10 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        sys.stdout.flush()
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3, 4, 5, 6}
+    required_measurements = {25, 27, 16, 3}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -49,10 +48,10 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[7] > 0 or any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
+        if events[7] > 0:
             take_action(29)
             continue
-        
+
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)
@@ -80,7 +79,8 @@ def stabilize():
             take_action(29)
             continue
 
-        take_action(48)
+        if all(v is not None and v >= 60 for v in (vitals["MAP"], vitals["RespRate"])) and vitals["Sats"] >= 88:
+            take_action(48)
 
 if __name__ == "__main__":
     stabilize()
