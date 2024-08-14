@@ -9,7 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish
+        if action == 48:
             done = True
 
     def need_examination():
@@ -27,7 +27,7 @@ def stabilize():
         )
 
         vitals = {
-            name: value if vital_signs_times[idx] > 0 else None
+            name: (value if vital_signs_times[idx] > 0 else None)
             for idx, (name, value) in enumerate(
                 zip(
                     ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
@@ -50,14 +50,6 @@ def stabilize():
                 take_action(3)
                 continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -66,13 +58,19 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
-        if unstable_tachyarrhythmia:
+        if any(events[i] > 0 for i in [29, 30, 31, 32]):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
             take_action(40)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
+            continue
+            
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -86,7 +84,15 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
+
+        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 100:
+            take_action(9 if events[28] > 0 else 24)
+            continue
+
+        if vitals["HeartRate"] is not None and vitals["HeartRate"] < 60:
+            take_action(12 if events[28] > 0 else 24)
+            continue
+
         take_action(48)
 
 if __name__ == "__main__":
