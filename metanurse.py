@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -28,11 +27,7 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -85,7 +80,6 @@ def stabilize():
             continue
 
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
