@@ -63,29 +63,33 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
-        
-        if 2 not in actions_taken and (events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0):
-            take_action(2)
-            continue
+
+        if any(events[idx] > 0 for idx in [29, 30, 31, 32]):
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            if 40 not in actions_taken:
+                take_action(40)
+                continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # BagDuringCPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if all(
