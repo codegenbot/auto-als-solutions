@@ -9,7 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:
+        if action == 48:  # Finish
             done = True
 
     def need_examination():
@@ -50,6 +50,14 @@ def stabilize():
                 take_action(3)
                 continue
 
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
+            continue
+
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -67,14 +75,6 @@ def stabilize():
             take_action(40)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -86,7 +86,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
+        
         take_action(48)
 
 if __name__ == "__main__":
