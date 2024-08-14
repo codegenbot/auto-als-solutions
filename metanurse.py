@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,7 +10,6 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        sys.stdout.flush()
         if action == 48:
             done = True
         return break_action
@@ -35,10 +35,10 @@ def stabilize():
 
     def update_vitals(vital_signs_times, vital_signs_values):
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] != 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] != 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] != 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] != 0 else None,
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
         }
         return vitals
 
@@ -69,6 +69,8 @@ def stabilize():
                 if take_action(measurement_action):
                     continue
 
+        vitals = update_vitals(vital_signs_times, vital_signs_values)
+
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             if take_action(31):
                 continue  # UseSuction
@@ -93,18 +95,18 @@ def stabilize():
             if take_action(30):
                 continue  # UseNonRebreatherMask
 
-        if events[28] > 0:  # Tachyarrhythmia detected
+        if any(
+            events[i] > 0 for i in range(28, 38)
+        ):  # Check for any heart rhythm event
             if 28 not in actions_taken:
                 if take_action(28):
                     continue  # AttachDefibPads
-            if 39 not in actions_taken:
-                if take_action(39):
-                    continue  # TurnOnDefibrillator
-            if take_action(40):  # DefibrillatorCharge
-                continue
+            if take_action(40):
+                continue  # DefibrillatorCharge
 
         if take_action(48, False):  # Finish
             break
+
 
 if __name__ == "__main__":
     stabilize()
