@@ -17,9 +17,19 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
+    
+    def needs_recheck():
+        recheck_actions = {3, 4, 5}
+        return not recheck_actions.issubset(actions_taken)
+
+    def next_recheck_action():
+        recheck_actions = [3, 4, 5]  # Examine Airway, Breathing, Circulation
+        for action in recheck_actions:
+            if action not in actions_taken:
+                return action
 
     def has_unstable_tachyarrhythmia():
-        arrhythmia_events = [30, 31, 32, 33, 34, 35, 36, 37]
+        arrhythmia_events = [28, 30, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -35,8 +45,12 @@ def stabilize():
         if needs_measurements():
             take_action(next_measurement_action())
             continue
+        
+        if needs_recheck():
+            take_action(next_recheck_action())
+            continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
@@ -55,15 +69,15 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):  # AirwayVomit, AirwayBlood
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if events[6] > 0:  # AirwayTongue
+        if events[6] > 0:
             take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):  # BreathingNone, BreathingSeeSaw, BreathingEqualChestExpansion, BreathingBibasalCrepitations, BreathingWheeze, BreathingCoarseCrepitationsAtBase
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
