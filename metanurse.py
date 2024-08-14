@@ -28,18 +28,23 @@ def stabilize():
         return any(events[i] > 0 for i in arrhythmia_events)
 
     def abcde_prioritize(events):
+        # A - Airway
         if events[3] == 0 and not {4, 5, 6, 7}.isdisjoint(actions_taken):
-            return 3
+            return 3  # Examine Airway
         if any(events[i] > 0 for i in [4, 5]):
-            return 31
+            return 31  # Use Yankeur Suction Catheter
         if events[6] > 0:
-            return 36
+            return 36  # Perform Head-Tilt Chin-Lift
+
+        # B - Breathing
         if {8, 9, 10, 11, 12, 13, 14}.isdisjoint(actions_taken):
-            return 4
+            return 4  # Examine Breathing
         if any(events[i] > 0 for i in [7, 10, 13, 14]):
-            return 29
+            return 29  # Use Bag-Valve Mask
+
+        # C - Circulation
         if {16, 17, 18}.isdisjoint(actions_taken):
-            return 5
+            return 5  # Examine Circulation
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -56,25 +61,25 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)
+            take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
-                    take_action(24)
+                    take_action(24)  # Use Monitor Pads
                 else:
-                    take_action(40)
+                    take_action(40)  # Defibrillator Charge
             else:
-                take_action(15)
+                take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
         next_action = abcde_prioritize(events)
@@ -82,7 +87,7 @@ def stabilize():
             take_action(next_action)
             continue
 
-        take_action(48)
+        take_action(48)  # Finish if stable
         break
 
 if __name__ == "__main__":
