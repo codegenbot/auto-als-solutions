@@ -84,23 +84,23 @@ def stabilize():
             take_action(29)
             continue
 
-        if not measured(3):
+        if "AirwayClear" not in actions_taken:
             take_action(3)
             continue
 
-        if not measured(4):
+        if "BreathingEqualChestExpansion" not in actions_taken:
             take_action(4)
             continue
 
-        if not measured(5):
+        if "RadialPulsePalpable" not in actions_taken:
             take_action(5)
             continue
 
-        if not measured(6):
+        if "AVPU_A" not in actions_taken:
             take_action(6)
             continue
 
-        if not measured(7):
+        if "ExposureRash" not in actions_taken:
             take_action(7)
             continue
 
