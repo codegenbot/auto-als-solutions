@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -14,12 +13,7 @@ def stabilize():
             done = True
 
     def need_examination():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-        )
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -29,23 +23,15 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
-                    vital_signs_values,
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                     "MAP", "Sats", "Resps"], vital_signs_values
                 )
             )
         }
@@ -80,30 +66,34 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (
-            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
-        )
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
-            if 24 not in actions_taken:
-                take_action(24)
+            if 28 not in actions_taken:
+                take_action(28)
                 continue
             take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            if 15 in actions_taken:
+                take_action(27)  # Use Blood Pressure Cuff again if fluids given but no improvement
+            else:
+                take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 30 not in actions_taken:
+                take_action(30)  # Use Non-Rebreather Mask 
+                continue
+            take_action(25)  # Re-check Sats
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
+        
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
