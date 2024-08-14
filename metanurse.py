@@ -32,7 +32,7 @@ def stabilize():
             return 3  # ExamineAirway
         return None
 
-    def update_vitals(vital_signs_times, vital_signs_values):
+    def update_vitals():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
@@ -58,7 +58,7 @@ def stabilize():
                 if take_action(measurement_action):
                     continue
 
-        vitals = update_vitals(vital_signs_times, vital_signs_values)
+        vitals = update_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
