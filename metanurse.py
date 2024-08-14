@@ -38,11 +38,9 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if any(events[i] > 0 for i in range(28, 33)):  # Unstable tachyarrhythmia
-                take_action(24)  # Use Monitor Pads
-            elif any(events[i] > 0 for i in [0, 1, 2]):  # Conscious or semi-consciousness
-                take_action(15)  # Give Fluids
+                take_action(24)  # Use Monitor Pads for cardioversion
             else:
-                take_action(17)  # Start Chest Compression
+                take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -65,7 +63,14 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        take_action(48)  # Finish if stable
+        # Check if stabilized
+        if all(
+            (vitals["Sats"] is not None and vitals["Sats"] >= 88,
+             vitals["RespRate"] is not None and vitals["RespRate"] >= 8,
+             vitals["MAP"] is not None and vitals["MAP"] >= 60)
+        ):
+            take_action(48)  # Finish if stable
+            break
 
 if __name__ == "__main__":
     stabilize()
