@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -13,7 +14,12 @@ def stabilize():
             done = True
 
     def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+        return (
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
+        )
 
     for step in range(max_steps):
         if done:
@@ -23,15 +29,23 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
@@ -53,13 +67,14 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-            
+
         if events[6] > 0:
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
+        )
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
@@ -91,6 +106,7 @@ def stabilize():
             continue
 
         take_action(1)
+
 
 if __name__ == "__main__":
     stabilize()
