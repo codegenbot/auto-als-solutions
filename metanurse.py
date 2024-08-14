@@ -58,6 +58,7 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             take_action(31)  # UseSuction
             continue
+
         if events[6] > 0:  # Tongue Obstruction
             take_action(36)  # HeadTiltChinLift
             continue
@@ -67,12 +68,15 @@ def stabilize():
                 take_action(29)  # UseBagValveMask
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
-            take_action(40)  # DefibrillatorCharge
-            take_action(48)  # Finish
+                continue
+            if 40 not in actions_taken:
+                take_action(40)  # DefibrillatorCharge
+                continue
+            take_action(40)  # Assume ready to use Defibrillator for cardioversion
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
