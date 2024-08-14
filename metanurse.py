@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -12,8 +13,13 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+    def need_initial_examination():
+        return (
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
+        )
 
     for step in range(max_steps):
         if done:
@@ -23,20 +29,28 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
 
-        if need_examination():
+        if need_initial_examination():
             if 25 not in actions_taken:
                 take_action(25)
                 continue
@@ -58,10 +72,15 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
+        )
         if unstable_tachyarrhythmia:
             take_action(2)
+            take_action(24)
+            take_action(28)
+            take_action(40)
+            take_action(43)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -88,6 +107,7 @@ def stabilize():
             continue
 
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
