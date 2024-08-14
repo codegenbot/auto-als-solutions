@@ -1,6 +1,7 @@
 import sys
 
 def stabilize():
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
     max_steps = 350
     actions_taken = set()
 
@@ -8,12 +9,10 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
-
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
 
-    def need_measurement_action():
+    def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
@@ -29,15 +28,15 @@ def stabilize():
         }
 
         if need_measurements():
-            take_action(need_measurement_action())
+            take_action(next_measurement_action())
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 38)):
+            if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
                 continue
             else:
