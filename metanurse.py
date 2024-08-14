@@ -8,32 +8,25 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {16, 25, 27, 24, 38}
+    required_measurements = {25, 27, 16, 24}
 
-    def needs_measurements():
-        return not required_measurements.issubset(actions_taken)
-    
-    def next_measurement_action():
-        for action in required_measurements:
-            if action not in actions_taken:
-                return action
-
-    def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
-        return any(events[i] > 0 for i in arrhythmia_events)
-    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
+        if len(observations) != 53:  # Ensure proper input length
+            take_action(48)
+            continue
+
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        if required_measurements - actions_taken:
+            take_action(next(iter(required_measurements - actions_taken)))
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
@@ -43,15 +36,12 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)
-                elif 40 not in actions_taken:
-                    take_action(40)
-                elif 47 not in actions_taken:
-                    take_action(47)
-                else:
-                    take_action(48)
+            if any(events[i] > 0 for i in range(30, 39)):  # Handle unstable tachyarrhythmias
+                actions = [24, 40, 47, 45, 48]
+                for action in actions:
+                    if action not in actions_taken:
+                        take_action(action)
+                        break
             else:
                 take_action(15)
             continue
@@ -64,24 +54,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)
-            continue
-
-        if events[6] > 0:
-            take_action(36)
-            continue
-
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)
-            continue
-
         take_action(48)
-        break
 
 if __name__ == "__main__":
     stabilize()
