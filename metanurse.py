@@ -64,18 +64,15 @@ def stabilize():
             continue
 
         if events[7] > 0:
-            take_action(35)  # Perform airway manoeuvres for no breathing
+            take_action(35)  # Perform airway maneuvers for no breathing
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # Attach defib pads
                 continue
-            if 40 not in actions_taken:
-                take_action(40)  # Defibrillator charge
-                continue
-            take_action(47)  # Defibrillator sync
+            take_action(40)  # Defibrillator charge
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
