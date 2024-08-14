@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -23,6 +22,15 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
+    examine_actions = {
+        "airway": 3,
+        "breathing": 4,
+        "circulation": 5,
+        "disability": 6,
+        "exposure": 7,
+        "response": 8
+    }
+
     for step in range(max_steps):
         if done:
             break
@@ -31,7 +39,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         if need_measurements():
@@ -44,28 +52,36 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if events[3] == 0:
-            take_action(3)
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(23)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(29)
             continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
-        if vitals["Sats"] and vitals["Sats"] < 88:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if events[4] or events[5]:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)
             continue
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(23)
+
+        if events[6] > 0:
+            take_action(36)
             continue
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):
@@ -75,8 +91,11 @@ def stabilize():
             take_action(40)
             continue
 
-        take_action(48)
+        if all(events[:4] == [0]*4):
+            take_action(examine_actions["airway"])
+            continue
 
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
