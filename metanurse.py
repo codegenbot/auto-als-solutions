@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -10,11 +9,11 @@ def stabilize():
         actions_taken.add(action)
 
     required_measurements = {
-        25,
-        27,
-        16,
-        3,
-    }  # Use SATs Probe, BP Cuff, Monitor, Examine Airway
+        25,  # Use SATs Probe
+        27,  # Use BP Cuff
+        16,  # View Monitor
+        3,   # Examine Airway
+    }
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -26,10 +25,8 @@ def stabilize():
 
     def has_unstable_tachyarrhythmia():
         arrhythmia_events = [
-            32,
-            38,
-            35,
-        ]  # HeartRhythmVT, HeartRhythmVF, HeartRhythmTorsades
+            29, 30, 32, 35, 36, 37, 38  # SVT, AF, VT, Mobitz I, Mobitz II, CompleteHeartBlock, VF
+        ]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -37,7 +34,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -50,18 +47,13 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-        ):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia():
-                take_action(24)  # Use Defibrillator Pads
+                take_action(24)  # Use Monitor Pads
                 continue
             else:
                 take_action(15)  # Give Fluids
@@ -75,11 +67,11 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+        if any(events[i] > 0 for i in [4, 5]):  # AirwayVomito or AirwayBlood
+            take_action(31)  # Use Yankaur Suction Catheter
             continue
 
-        if events[6] > 0:
+        if events[6] > 0:  # AirwayTongue
             take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
@@ -88,7 +80,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if stable
-
 
 if __name__ == "__main__":
     stabilize()
