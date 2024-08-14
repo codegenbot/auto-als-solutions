@@ -44,8 +44,10 @@ def stabilize():
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)  # Use Monitor Pads
-                else:
+                elif 40 not in actions_taken:
                     take_action(40)  # Defibrillator Charge
+                else:
+                    take_action(39)  # Turn On Defibrillator
             else:
                 take_action(15)  # Give Fluids
             continue
