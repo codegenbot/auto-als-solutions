@@ -12,8 +12,8 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3, 4, 5}
-    
+    required_measurements = {25, 27, 16, 3, 4, 5, 6, 7}
+
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
 
@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         if need_measurements():
@@ -81,6 +81,10 @@ def stabilize():
                 take_action(28)  # Attach Defib Pads
                 continue
             take_action(40)  # Defibrillator Charge
+            continue
+
+        if 16 not in actions_taken:
+            take_action(16)  # ViewMonitor
             continue
 
         take_action(48)  # Finish if stable
