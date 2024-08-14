@@ -63,8 +63,8 @@ def stabilize():
             take_action(36)  # Perform head tilt chin lift for tongue obstruction
             continue
 
-        if events[7] > 0 or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
-            take_action(29)  # Use bag-valve mask for no or inadequate breathing
+        if events[7] > 0:
+            take_action(35)  # Perform airway maneuvers for no breathing
             continue
 
         unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
@@ -91,10 +91,11 @@ def stabilize():
             take_action(30)  # Use nonrebreather mask
             continue
 
-        if step > 340:
-            take_action(48)  # Ensure to finish before steps run out
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # Use bag-valve mask
+            continue
 
-        take_action(0)  # Default to DoNothing
-
+        take_action(48)  # Finish
+    
 if __name__ == "__main__":
     stabilize()
