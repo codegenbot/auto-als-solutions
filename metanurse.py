@@ -62,7 +62,7 @@ def stabilize():
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
-      
+
         take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
