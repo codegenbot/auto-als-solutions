@@ -32,15 +32,18 @@ def stabilize():
         def take_action(action):
             actions_taken.add(action)
             print(action)
-        
+
         unstable_tachyarrhythmia = any(events[idx] > 0 for idx in [29, 30, 31, 34, 35, 36, 37])
 
+        # ABCDE Protocols
+        # Airway
         necessary_examinations = [3, 4, 5, 8, 2]
         for exam in necessary_examinations:
             if exam not in actions_taken:
                 take_action(exam)
                 break
 
+        # Use Probes and Monitors
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -51,33 +54,39 @@ def stabilize():
             take_action(16)
             continue
 
+        # Check Critical Conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # Bag during CPR for very low sats
             continue
 
+        # MAP Handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
         
+        # Sats Handling
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
         
+        # Respiratory Handling
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
+        # Stabilize Tachyarrhythmia
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)
+                take_action(28)  # Attach defib pads
                 continue
-            take_action(40)
+            take_action(40)      # Charge defibrillator
             continue
 
+        # Check if Stabilization Criteria are Met
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -85,10 +94,10 @@ def stabilize():
                 [88, 8, 60]
             )
         ):
-            take_action(48)
+            take_action(48)  # Finish
             return
 
-        take_action(1)
+        take_action(1)  # CheckSignsOfLife if nothing else to do
 
 if __name__ == "__main__":
     stabilize()
