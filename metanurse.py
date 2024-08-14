@@ -1,10 +1,11 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = []
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.append(action)
@@ -12,10 +13,15 @@ def stabilize():
         sys.stdout.flush()
         if action == 48:
             done = True
-    
+
     def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-    
+        return (
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
+        )
+
     for step in range(max_steps):
         if done:
             break
@@ -24,15 +30,23 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
@@ -83,6 +97,7 @@ def stabilize():
             continue
 
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
