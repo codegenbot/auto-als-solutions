@@ -3,26 +3,24 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [25, 27, 16, 3]  # SatsProbe, BPCuff, ViewMonitor, ExamineAirway
-    measurement_sequence = iter(required_measurements)
+    required_measurements = {25, 27, 16}
     
-    def obtain_initial_measurements():
-        try:
-            next_action = next(measurement_sequence)
-            if next_action not in actions_taken:
-                take_action(next_action)
-                return True
-        except StopIteration:
-            return False
-        return True
+    def needs_measurements():
+        return not required_measurements.issubset(actions_taken)
 
-    def needs_measurements(vitals):
-        return vitals.get("MAP") is None or vitals.get("Sats") is None or vitals.get("RespRate") is None
+    def next_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
+    def has_unstable_tachyarrhythmia(events):
+        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36, 38]
+        return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -34,11 +32,8 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if obtain_initial_measurements():
-            continue
-
-        if needs_measurements(vitals):
-            obtain_initial_measurements()
+        if needs_measurements():
+            take_action(next_measurement_action())
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -46,8 +41,12 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
+            if has_unstable_tachyarrhythmia(events):
+                take_action(24)  # Use Monitor Pads
+                continue
+            else:
+                take_action(15)  # Give Fluids
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
