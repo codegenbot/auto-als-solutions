@@ -42,7 +42,7 @@ def stabilize():
         if not events[3] and any(events[i] > 0 for i in range(4, 7)):
             take_action(31 if any(events[i] > 0 for i in (4, 5)) else 36)
             continue
-        
+
         if any(events[i] > 0 for i in range(7, 15)) or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
             take_action(29 if vitals["RespRate"] < 8 else 30)
             continue
