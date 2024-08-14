@@ -4,7 +4,6 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
 
-    # Initialize actions to ensure measurements are complete early
     required_measurements = {25, 27, 24, 38}
 
     def take_action(action):
