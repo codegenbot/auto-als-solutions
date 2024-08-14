@@ -3,25 +3,20 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
-    def take_action(action):
-        actions_taken.add(action)
-        print(action)
-    
+    examine_order = [3, 4, 5, 6, 7]
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33], 
-            observations[33:40], 
-            observations[40:]
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {name: value if time > 0 else None 
                   for value, time, name in zip(vital_signs_values, vital_signs_times, 
-                  ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                   "MAP", "Sats", "Resps"])}
+                  ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"])}
 
-        # Ensure necessary vitals are up-to-date
+        def take_action(action):
+            actions_taken.add(action)
+            print(action)
+
         if 25 not in actions_taken:
             take_action(25)  # UseSatsProbe
             continue
@@ -32,17 +27,11 @@ def stabilize():
             take_action(16)  # ViewMonitor
             continue
 
-        # Perform ABCDE assessment
-        examinations = [3, 4, 5, 6, 7]
-        for exam in examinations:
+        for exam in examine_order:
             if exam not in actions_taken:
                 take_action(exam)
-                break
-        
-        if exam not in actions_taken:
-            continue
+                continue
 
-        # Handle critical conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
             continue
@@ -59,8 +48,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Check for unstable tachyarrhythmia
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32, 33, 34, 35, 36, 37, 38])
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
@@ -68,13 +56,12 @@ def stabilize():
             take_action(40)  # DefibrillatorCharge
             continue
 
-        # Stabilize patient if all vitals are stable
-        if all(vitals.get(key) is not None for key in ["Sats", "RespRate", "MAP"]) and \
-           vitals["Sats"] >= 88 and vitals["RespRate"] >= 8 and vitals["MAP"] >= 60:
+        if all(vital is not None and vital >= threshold for vital, threshold in 
+               zip([vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
             take_action(48)  # Finish
             return
 
-        take_action(48)  # Finish if no condition found
+        take_action(48)  # Finish
         return
 
 if __name__ == "__main__":
