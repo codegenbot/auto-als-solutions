@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         if need_measurements():
@@ -40,7 +40,7 @@ def stabilize():
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
         }
 
         # Cardiac Arrest conditions
@@ -85,6 +85,11 @@ def stabilize():
                 take_action(43)  # Defibrillator Pace
             else:
                 take_action(24)  # Use Monitor Pads
+            continue
+
+        # General assessment
+        if 8 not in actions_taken:
+            take_action(8)  # Examine Response
             continue
 
         take_action(48)  # Finish if stable
