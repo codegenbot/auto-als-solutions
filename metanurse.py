@@ -53,14 +53,13 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-
+        
         if events[6] > 0:
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
-        if unstable_tachyarrhythmia:
+        if (events[29] > 0 or events[30] > 0 or 
+            events[31] > 0 or events[32] > 0):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
@@ -86,7 +85,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
+
         take_action(48)
 
 if __name__ == "__main__":
