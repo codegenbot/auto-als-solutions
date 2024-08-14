@@ -1,6 +1,5 @@
 import sys
 
-# Define constants for action indices
 DO_NOTHING = 0
 USE_SATS_PROBE = 25
 USE_BLOOD_PRESSURE_CUFF = 27
