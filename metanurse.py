@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -14,12 +13,19 @@ def stabilize():
             done = True
 
     def need_measurements():
-        return not all([25, 27, 16, 3] <= actions_taken)
+        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 3])
+
+    def measured(vital_sign):
+        return vital_sign in actions_taken
 
     def need_measurement_action():
         for action in [25, 27, 16, 3]:
             if action not in actions_taken:
                 return action
+
+    actions_needed = {
+        'ExamineAirway': 3, 'UseSatsProbe': 25, 'UseBloodPressureCuff': 27, 'ViewMonitor': 16
+    }
 
     for step in range(max_steps):
         if done:
@@ -44,17 +50,22 @@ def stabilize():
         }
 
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
-            take_action(31)  # UseYankeurSuctionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:  # Tongue Obstruction
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
-        if (
-            events[7] > 0 or vitals["RespRate"] is not None and vitals["RespRate"] < 8
-        ):  # No Breathing or Low RespRate
-            take_action(29)  # UseBagValveMask
+        if events[7] > 0:  # No Breathing
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(28, 33)):  # Unstable Tachyarrhythmia
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)  # DefibrillatorCharge
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -73,21 +84,12 @@ def stabilize():
             take_action(30)  # UseNonRebreatherMask
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):  # Unstable Tachyarrhythmia
-            if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
-                continue
-            if 40 not in actions_taken:
-                take_action(40)  # DefibrillatorCharge
-                continue
-            take_action(43)  # DefibrillatorPace
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
 
-        take_action(1)  # CheckSignsOfLife
-
-        if actions_taken == {25, 27, 16, 3}:
+        if actions_taken == set(actions_needed.values()):
             take_action(48)  # Finish when all measurements are taken
-
 
 if __name__ == "__main__":
     stabilize()
