@@ -1,5 +1,3 @@
-import sys
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
