@@ -45,6 +45,16 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Check and handle critical conditions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
+
+        # Check and handle airway blocks
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             take_action(31)
             continue
@@ -57,6 +67,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Check and handle unstable tachyarrhythmia
         if any(events[i] > 0 for i in range(28, 33)):  # Unstable Tachyarrhythmia
             if 28 not in actions_taken:
                 take_action(28)
@@ -64,14 +75,7 @@ def stabilize():
             take_action(40)  # DefibrillatorCharge
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
+        # Handle low measurements
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
@@ -84,7 +88,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if actions_taken == {25, 27, 16, 3}:
+        if all(measured(vital_sign) for vital_sign in [25, 27, 16, 3]) and not done:
             take_action(48)  # Finish when all measurements are taken
 
 if __name__ == "__main__":
