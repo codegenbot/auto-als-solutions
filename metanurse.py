@@ -18,6 +18,8 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
+    tachyarrhythmias = {30, 31, 32, 33, 36, 38}  # indices for unstable tachyarrhythmia signs
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
@@ -37,11 +39,12 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [24, 28, 33, 34, 35, 36, 37, 38]):  # Significant arrhythmia
+            if any(events[i] > 0 for i in tachyarrhythmias):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
+                continue
             else:
                 take_action(15)  # Give Fluids
-            continue
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
@@ -51,11 +54,15 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
+        if any(events[i] > 0 for i in [4, 5, 6]):  # Vomit, Blood, Tongue obstructing airway
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if any(events[i] > 0 for i in [1, 2, 7, 10, 11, 12, 13, 14]):
+        if events[6] > 0:
+            take_action(36)  # Perform Head-Tilt Chin-Lift
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
