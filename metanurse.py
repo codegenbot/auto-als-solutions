@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -12,7 +13,12 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Airway, Monitor
+    required_measurements = {
+        25,
+        27,
+        16,
+        3,
+    }  # SATs Probe, BP Cuff, ViewMonitor, ExamineAirway
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -84,15 +90,12 @@ def stabilize():
                 take_action(28)  # Attach Defib Pads
             elif 40 not in actions_taken:
                 take_action(40)  # Defibrillator Charge
-            elif 24 not in actions_taken:
-                take_action(24)  # Use Monitor Pads
-            elif 43 not in actions_taken:
-                take_action(43)  # Defibrillator Pace
             else:
-                take_action(41)  # Increase Defibrillator Current
+                take_action(24)  # Use Monitor Pads
             continue
 
         take_action(48)  # Finish if stable
+
 
 if __name__ == "__main__":
     stabilize()
