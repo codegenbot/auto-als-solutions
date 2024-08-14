@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -69,6 +69,10 @@ def stabilize():
             take_action(17)
             continue
 
+        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
+            take_action(9)
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -79,14 +83,6 @@ def stabilize():
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             take_action(29)
-            continue
-
-        if vitals["HeartRate"] and vitals["HeartRate"] >= 150:
-            take_action(11)
-            continue
-
-        if vitals["MAP"] and events[15] > 0:
-            take_action(22)
             continue
 
         if all(
