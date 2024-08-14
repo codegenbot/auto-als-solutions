@@ -12,14 +12,13 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16])
+    required_measurements = {25, 27, 16, 3}
 
-    def measured(vital_sign):
-        return vital_sign in actions_taken
+    def need_measurements():
+        return not required_measurements.issubset(actions_taken)
 
     def need_measurement_action():
-        for action in [25, 27, 16]:
+        for action in required_measurements:
             if action not in actions_taken:
                 return action
 
@@ -28,12 +27,8 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        
         if need_measurements():
             take_action(need_measurement_action())
             continue
@@ -45,31 +40,19 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if events[1] == 0 and events[2] == 0: 
-            take_action(1)
-            continue
-
-        if events[3] == 0: 
-            take_action(3)
-            continue
-
-        if events[5] > 0 or events[6] > 0: 
+        if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
-        if events[7] > 0: 
-            take_action(22)
+        if events[6] > 0:
+            take_action(36)
             continue
 
-        if events[10] == 0: 
-            take_action(4)
+        if events[7] > 0:
+            take_action(29)
             continue
 
-        if events[18] == 0 and events[19] == 0: 
-            take_action(5)
-            continue
-
-        if any(events[i] > 0 for i in range(28, 33)): 
+        if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
@@ -96,8 +79,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if step == max_steps - 1:
-            take_action(48)
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
