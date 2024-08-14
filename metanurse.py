@@ -45,7 +45,6 @@ def stabilize():
         if any(events[i] > 0 for i in [31, 32, 33, 34, 35, 36, 37, 38, 39]):  # Unstable Tachyarrhythmias
             return 24  # UseMonitorPads
 
-        # Trigger events not occurring spontaneously
         if 4 not in actions_taken:
             return 3  # ExamineAirway
         if 5 not in actions_taken:
