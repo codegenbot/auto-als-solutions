@@ -32,7 +32,7 @@ def stabilize():
             return 3  # ExamineAirway
         return None
 
-    def update_vitals(vital_signs_times, vital_signs_values):
+    def update_vitals():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
@@ -49,19 +49,17 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
-        # Measurement actions
         if need_measurements():
             measurement_action = need_measurement_action()
             if measurement_action is not None:
                 if take_action(measurement_action):
                     continue
 
-        vitals = update_vitals(vital_signs_times, vital_signs_values)
+        vitals = update_vitals()
 
-        # Critical values for immediate actions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue  # StartChestCompression
@@ -95,18 +93,14 @@ def stabilize():
                 continue  # UseNonRebreatherMask
 
         if any(events[i] > 0 for i in range(28, 33)):  # Tachyarrhythmia
-            if 2 not in actions_taken and take_action(2):
-                continue  # CheckRhythm
             if 28 not in actions_taken and take_action(28):
                 continue  # AttachDefibPads
-            if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                if take_action(40):  # DefibrillatorCharge
-                    continue  # Defibrillate
-                if take_action(11):  # GiveAmiodarone
-                    continue
-        
-        if take_action(48, False):  # Finish
-            break
+            if take_action(38):  # TakeBloodPressure to get more info
+                continue  # May need cardioversion
+
+        if all(v is not None and v >= {"MAP": 60, "Sats": 88, "RespRate": 8}[name] for name, v in vitals.items()):
+            if take_action(48, False):  # Finish
+                break
 
 if __name__ == "__main__":
     stabilize()
