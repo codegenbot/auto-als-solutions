@@ -93,7 +93,9 @@ def stabilize():
             take_action(12 if events[28] > 0 else 24)
             continue
 
-        take_action(48)
+        take_action(16)
+
+    take_action(48)
 
 if __name__ == "__main__":
     stabilize()
