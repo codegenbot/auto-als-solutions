@@ -12,12 +12,12 @@ def stabilize():
         if action == 48:
             done = True
 
+    required_measurements = {25, 27, 16, 3, 4, 5, 6}
+
     def need_measurements():
-        required_measurements = {25, 27, 16, 3}
         return not required_measurements.issubset(actions_taken)
 
     def need_measurement_action():
-        required_measurements = [16, 25, 27, 3]
         for action in required_measurements:
             if action not in actions_taken:
                 return action
@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         if need_measurements():
@@ -38,17 +38,18 @@ def stabilize():
             continue
 
         vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -62,8 +63,8 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
-        if any(events[i] > 0 for i in [4, 5]):
+        
+        if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
@@ -71,15 +72,28 @@ def stabilize():
             take_action(36)
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+        if any(events[i] > 0 for i in [4, 5, 6, 7]):
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
-            if 28 not in actions_taken:
-                take_action(28)
-            else:
-                take_action(40)
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
+
+        if 4 not in actions_taken:
+            take_action(4)
+            continue
+
+        if 5 not in actions_taken:
+            take_action(5)
+            continue
+
+        if 6 not in actions_taken:
+            take_action(6)
+            continue
+
+        if 7 not in actions_taken:
+            take_action(7)
             continue
 
         take_action(48)
