@@ -3,58 +3,91 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    done = False
 
     def take_action(action):
-        print(action)
+        nonlocal done
         actions_taken.add(action)
-        return action == 48
+        print(action)
+        if action == 48:
+            done = True
+
+    def need_examination():
+        return (
+            25 not in actions_taken or 27 not in actions_taken or
+            16 not in actions_taken or 3 not in actions_taken or 2 not in actions_taken
+        )
 
     for step in range(max_steps):
+        if done:
+            break
+
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
-        
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:]
+        )
+
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-            "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None
+            name: value if vital_signs_times[idx] > 0 else None
+            for idx, (name, value) in enumerate(
+                zip(
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"],
+                    vital_signs_values
+                )
+            )
         }
 
-        if 25 not in actions_taken:
-            if take_action(25): break
-        if 27 not in actions_taken:
-            if take_action(27): break
-        if 16 not in actions_taken:
-            if take_action(16): break
-        if 3 not in actions_taken:
-            if take_action(3): break
+        if need_examination():
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
+            if 2 not in actions_taken:
+                take_action(2)
+                continue
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
+            continue
 
         if events[6] > 0:
-            if take_action(36): break
-        if events[4] > 0 or events[5] > 0:
-            if take_action(31): break
+            take_action(36)
+            continue
 
-        if any(events[i] > 0 for i in [29, 30, 31, 32]):
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or 
+            events[31] > 0 or events[32] > 0
+        )
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                if take_action(28): break
-            if take_action(40): break
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            if take_action(17): break
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            if take_action(22): break
+                take_action(28)
+                continue
+            take_action(40)
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if take_action(15): break
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if take_action(30): break
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            if take_action(29): break
+            take_action(15)
+            continue
 
-        if take_action(48): break
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
