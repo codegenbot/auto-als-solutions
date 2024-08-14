@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {3, 4, 5, 6, 7, 25, 27, 16}
+    required_measurements = {25, 27, 16, 3, 4, 5, 6, 7}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -45,27 +45,27 @@ def stabilize():
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # Bag During CPR
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [18, 16]):
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if events[4] > 0 or events[5] > 0:
@@ -84,7 +84,7 @@ def stabilize():
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(40)  # DefibrillatorCharge
+            take_action(40)
             continue
 
         take_action(48)
