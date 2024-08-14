@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -14,12 +13,7 @@ def stabilize():
             done = True
 
     def need_examination():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-        )
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -29,23 +23,15 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
-                    vital_signs_values,
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                     "MAP", "Sats", "Resps"], vital_signs_values
                 )
             )
         }
@@ -64,20 +50,16 @@ def stabilize():
                 take_action(3)
                 continue
 
-        # Suction for vomiting or blood in airway
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
-        # Perform head tilt-chin lift for tongue obstruction
         if events[6] > 0:
             take_action(36)
             continue
 
-        # Unstable tachyarrhythmia management
-        unstable_tachyarrhythmia = (
-            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
-        )
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
@@ -85,7 +67,6 @@ def stabilize():
             take_action(40)
             continue
 
-        # CPR if in cardiac arrest
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -94,7 +75,6 @@ def stabilize():
             take_action(22)
             continue
 
-        # Stabilise MAP and SATs
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -108,7 +88,6 @@ def stabilize():
             continue
 
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
