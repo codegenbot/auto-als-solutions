@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -12,24 +12,13 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 2}
+    required_measurements = {25, 27, 38, 16}
 
-    def need_measurements():
-        return not required_measurements.issubset(actions_taken)
-
-    def need_measurement_action():
+    def initial_measurements():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
-    examine_actions = {
-        "airway": 3,
-        "breathing": 4,
-        "circulation": 5,
-        "disability": 6,
-        "exposure": 7,
-        "response": 8
-    }
+        return None
 
     for step in range(max_steps):
         if done:
@@ -42,8 +31,9 @@ def stabilize():
             observations[40:],
         )
 
-        if need_measurements():
-            take_action(need_measurement_action())
+        initial_action = initial_measurements()
+        if initial_action is not None:
+            take_action(initial_action)
             continue
 
         vitals = {
@@ -60,8 +50,12 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if events[3] == 0:
+            take_action(3)
+            continue
+
+        if any(events[i] > 0 for i in [4, 5, 6]):
+            take_action(31)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -72,32 +66,18 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):  # Vomit or Blood in airway
-            take_action(31)  # Use Suction
+        if events[7] > 0:
+            take_action(29)
             continue
 
-        if events[6] > 0:  # AirwayTongue
-            take_action(36)  # Head tilt chin lift
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
-        
-        # Breathing-related issues
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag Valve Mask
-            continue
-        
-        if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):
-            if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
-                continue
-            take_action(40)  # DefibrillatorCharge
-            continue
-        
-        # Ensure airway examination
-        if all(events[i] == 0 for i in [3, 4, 5, 6]):  # If no previous airway events
-            take_action(examine_actions["airway"])  
-            continue
-        
-        take_action(48)  # Finish if everything done
+
+        take_action(2)
+        continue
+
+    take_action(48)
 
 if __name__ == "__main__":
     stabilize()
