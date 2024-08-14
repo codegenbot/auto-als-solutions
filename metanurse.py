@@ -39,14 +39,11 @@ def stabilize():
         if 27 not in actions_taken:
             take_action(27)
             continue
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
-
         if vitals["MAP"] is None or vitals["Sats"] is None:
+            if 38 not in actions_taken:
+                take_action(38)
+            if 16 not in actions_taken:
+                take_action(16)
             continue
 
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
