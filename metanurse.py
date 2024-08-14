@@ -9,6 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
             done = True
 
@@ -50,6 +51,15 @@ def stabilize():
                 take_action(3)
                 continue
 
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            if 40 not in actions_taken:
+                take_action(40)
+                continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -58,20 +68,16 @@ def stabilize():
             take_action(22)
             continue
 
-        if events[7] > 0:
-            take_action(35)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if events[8] > 0 or events[9] > 0:
-            take_action(29)
-            continue
-
-        if (vitals["RespRate"] is not None and vitals["RespRate"] < 8) or vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if all(
@@ -84,8 +90,7 @@ def stabilize():
             take_action(48)
             return
 
-        take_action(48)
-        return
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
