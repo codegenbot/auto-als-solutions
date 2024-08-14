@@ -53,6 +53,7 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
+
         if events[6] > 0:
             take_action(36)
             continue
@@ -63,7 +64,7 @@ def stabilize():
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(40)
+            take_action(39)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
