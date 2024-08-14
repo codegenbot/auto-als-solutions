@@ -12,8 +12,10 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+    def need_examination(actions_needed):
+        return any(action not in actions_taken for action in actions_needed)
+
+    actions_needed = [25, 27, 16, 3]
 
     for step in range(max_steps):
         if done:
@@ -36,7 +38,7 @@ def stabilize():
             )
         }
 
-        if need_examination():
+        if need_examination(actions_needed):
             if 25 not in actions_taken:
                 take_action(25)
                 continue
@@ -50,42 +52,43 @@ def stabilize():
                 take_action(3)
                 continue
 
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
+            continue
+
         if events[6] > 0:
             take_action(36)
             continue
 
-        if events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0:
+        if any(events[i] > 0 for i in range(29, 33)):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
             take_action(40)
             continue
-        
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
-            continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if vitals.get("MAP") is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if vitals.get("Sats") is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals.get("MAP") is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals.get("Sats") is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals.get("RespRate") is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
-        take_action(48)
+        
+        if all(vitals.get(key) is not None for key in ("MAP", "Sats", "RespRate")):
+            take_action(48)
 
 if __name__ == "__main__":
     stabilize()
