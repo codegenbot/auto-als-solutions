@@ -70,7 +70,6 @@ def stabilize():
             take_action(40)
             continue
 
-        
         if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
