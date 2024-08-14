@@ -12,16 +12,16 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3, 4, 5}
-
     def need_measurements():
-        return not required_measurements.issubset(actions_taken)
+        required_measurements = {25, 27, 3, 4, 5, 6}
+        return not all(action in actions_taken for action in required_measurements)
 
     def need_measurement_action():
-        for action in required_measurements:
+        measurement_actions = [25, 27, 16, 3, 5, 4]
+        for action in measurement_actions:
             if action not in actions_taken:
                 return action
-
+    
     for step in range(max_steps):
         if done:
             break
@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         if need_measurements():
@@ -52,29 +52,29 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
+            take_action(23)
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(5)
+            take_action(16)
             continue
-        
+
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-        
+
         if events[6] > 0:
             take_action(36)
             continue
@@ -83,7 +83,15 @@ def stabilize():
             take_action(28)
             continue
 
-        take_action(48)
+        if all([
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,
+            vitals["RespRate"] is not None and vitals["RespRate"] >= 8,
+            vitals["MAP"] is not None and vitals["MAP"] >= 60
+        ]):
+            take_action(48)
+            break
+        
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
