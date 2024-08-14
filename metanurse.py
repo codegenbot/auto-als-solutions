@@ -32,7 +32,7 @@ def stabilize():
         def take_action(action):
             actions_taken.add(action)
             print(action)
-            sys.stdout.flush()
+            sys.stdout.flush() 
 
         if 25 not in actions_taken:
             take_action(25)
@@ -52,8 +52,24 @@ def stabilize():
             take_action(22)
             continue
 
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
+
         if 4 not in actions_taken:
             take_action(4)
+            continue
+
+        if 5 not in actions_taken:
+            take_action(5)
+            continue
+
+        if 6 not in actions_taken:
+            take_action(6)
+            continue
+
+        if 7 not in actions_taken:
+            take_action(7)
             continue
 
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
