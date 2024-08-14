@@ -13,7 +13,7 @@ def stabilize():
             done = True
 
     def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken or 4 not in actions_taken or 5 not in actions_taken or 38 not in actions_taken
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -49,14 +49,8 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
-            if 4 not in actions_taken:
-                take_action(4)
-                continue
-            if 38 not in actions_taken:
-                take_action(38)
-                continue
 
-        if any(events[i] > 0 for i in [4, 5]):
+        if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
