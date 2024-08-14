@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -14,10 +15,10 @@ def stabilize():
 
     def need_measurements():
         return (
-            25 not in actions_taken or
-            27 not in actions_taken or
-            16 not in actions_taken or
-            3 not in actions_taken
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
         )
 
     def need_measurement_action():
@@ -95,8 +96,8 @@ def stabilize():
             take_action(29)  # Use bag-valve mask
             continue
 
-        # After ensuring all stabilizing actions
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
