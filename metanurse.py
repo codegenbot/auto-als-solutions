@@ -32,13 +32,16 @@ def stabilize():
             take_action(need_measurement_action())
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
+        if vitals["MAP"] is None or vitals["Sats"] is None or vitals["RespRate"] is None:
+            take_action(16)  # View Monitor
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            arrhythmia_events = [24, 28, 33, 34, 35, 36, 37, 38]  # Significant arrhythmia events
-            if any(events[i] > 0 for i in arrhythmia_events):
+            if any(events[i] > 0 for i in [28, 30, 31, 32, 34, 35, 36, 37, 38]):  # Significant arrhythmia
                 take_action(24)  # Use Monitor Pads
             else:
                 take_action(15)  # Give Fluids
@@ -52,11 +55,11 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
+        if any(events[i] > 0 for i in [4, 5, 6]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if any(events[i] > 0 for i in [1, 2, 7, 10, 11, 12, 13, 14]):
+        if any(events[i] > 0 for i in [7, 8, 9, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
