@@ -19,7 +19,7 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia():
-        arrhythmia_events = [28, 32, 33, 34, 35, 36, 38]
+        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -36,32 +36,25 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Critical condition handling
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
-        # Detect and handle unstable tachyarrhythmia first
-        if has_unstable_tachyarrhythmia():
-            take_action(2)  # CheckRhythm
-            continue
-
-        # Low MAP handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            if has_unstable_tachyarrhythmia():
+                take_action(2)  # CheckRhythm
+            else:
+                take_action(15)  # Give Fluids
             continue
 
-        # Low Sats handling
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
 
-        # Low RespRate handling
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Airway issues
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
@@ -74,7 +67,9 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        take_action(48)  # Finish if stable
+        if step == max_steps - 1:
+            take_action(1)  # CheckSignsOfLife before ending
+            take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
