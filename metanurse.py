@@ -1,16 +1,15 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -19,14 +18,9 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps",
-                ],
+                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", 
+                    "MAP", "Sats", "Resps"
+                ]
             )
         }
 
@@ -66,7 +60,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
@@ -83,12 +77,12 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         # Address low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
         # Address low respiratory rate
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
@@ -98,16 +92,16 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
             )
         ):
             take_action(48)
             return
-
+        
         # Prevent infinite loop if no exit condition is met
         take_action(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
