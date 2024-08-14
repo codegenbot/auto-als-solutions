@@ -4,23 +4,23 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-
+    
     def need_examination(actions_needed):
         return any(action not in actions_taken for action in actions_needed)
-
+    
     actions_needed = [25, 27, 16, 3]
-
+    
     for step in range(max_steps):
         if done:
             break
-
+        
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -87,7 +87,7 @@ def stabilize():
             take_action(29)
             continue
         
-        if all(vitals.get(key) is not None for key in ("MAP", "Sats", "RespRate")):
+        if vitals.get("MAP") is not None and vitals.get("Sats") is not None and vitals.get("RespRate") is not None:
             take_action(48)
 
 if __name__ == "__main__":
