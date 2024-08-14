@@ -12,31 +12,6 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_measurements():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-            or 5 not in actions_taken
-            or 4 not in actions_taken
-        )
-
-    def need_measurement_action():
-        if 25 not in actions_taken:
-            return 25  # UseSatsProbe
-        if 27 not in actions_taken:
-            return 27  # UseBloodPressureCuff
-        if 16 not in actions_taken:
-            return 16  # ViewMonitor
-        if 3 not in actions_taken:
-            return 3  # ExamineAirway
-        if 5 not in actions_taken:
-            return 5  # ExamineCirculation
-        if 4 not in actions_taken:
-            return 4  # ExamineBreathing
-        return None
-
     for step in range(max_steps):
         if done:
             break
@@ -48,12 +23,19 @@ def stabilize():
             observations[40:],
         )
 
-        if need_measurements():
-            measurement_action = need_measurement_action()
-            if measurement_action is not None:
-                take_action(measurement_action)
-                continue
-        
+        if 3 not in actions_taken:
+            take_action(3)  # ExamineAirway
+            continue
+        if 25 not in actions_taken:
+            take_action(25)  # UseSatsProbe
+            continue
+        if 27 not in actions_taken:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+        if 16 not in actions_taken:
+            take_action(16)  # ViewMonitor
+            continue
+
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -66,19 +48,19 @@ def stabilize():
             if 28 not in actions_taken:
                 take_action(28)  # Attach defib pads
                 continue
-            take_action(40)  # Defibrillator charge
+            take_action(40)  # DefibrillatorCharge
             continue
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)  # Use suction for vomit or blood
+            take_action(31)  # UseYankeurSucionCatheter for vomit or blood
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform head tilt chin lift for tongue obstruction
+            take_action(36)  # PerformHeadTiltChinLift for tongue obstruction
             continue
 
         if events[7] > 0:
-            take_action(35)  # Perform airway manoeuvres for no breathing
+            take_action(35)  # PerformAirwayManoeuvres for no breathing
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -98,7 +80,7 @@ def stabilize():
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use bag-valve mask
+            take_action(29)  # Use bag valve mask
             continue
 
         take_action(48)  # Finish
