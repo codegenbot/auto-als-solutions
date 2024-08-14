@@ -8,87 +8,77 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}
+    def has_observations(vital_signs_times):
+        return all(t > 0 for t in vital_signs_times)
 
-    def needs_measurements():
-        return not required_measurements.issubset(actions_taken)
-
-    def next_measurement_action():
-        for action in required_measurements:
-            if action not in actions_taken:
-                return action
-
-    def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
-        return any(events[i] > 0 for i in arrhythmia_events)
+    def get_unstable_tachyarrhythmia(events):
+        tachy_events = [31, 32, 33, 34, 35, 36, 37, 38]
+        return any(events[i] > 0 for i in tachy_events)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
-        vitals = {
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-        }
-
-        if needs_measurements():
-            take_action(next_measurement_action())
+        if not has_observations(vital_signs_times):
+            for i, action in enumerate([25, 27, 16, 3]):
+                if action not in actions_taken:
+                    take_action(action)
+                    break
             continue
 
-        # Cardiac arrest conditions
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        # Vital Sign Values
+        RespRate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
+        MAP = vital_signs_values[4] if vital_signs_times[4] > 0 else None
+        Sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
+
+        # Check for critical conditions first
+        if (MAP is not None and MAP < 20) or (Sats is not None and Sats < 65):
             take_action(23)
             continue
 
-        # MAP treatment sequence
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
+        if MAP is not None and MAP < 60:
+            if get_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)
                 else:
-                    take_action(40)
+                    take_action(40)  # Cardiovert
             else:
-                take_action(15)
+                take_action(15)  # Give fluids
             continue
 
-        # Oxygen saturation treatment
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if Sats is not None and Sats < 88:
             take_action(30)
             continue
 
-        # Respiratory rate treatment
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if RespRate is not None and RespRate < 8:
             take_action(29)
             continue
 
-        # Suction for blood or vomit in airway
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)
+        # Assess and manage airway
+        if any(events[e] > 0 for e in [4, 5]):
+            take_action(31)  # Use Yankeur Suction Catheter
             continue
-
-        # Perform head tilt/chin lift for tongue obstruction
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # Perform Head Tilt Chin Lift
             continue
 
-        # Bag-mask ventilation for breathing issues
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)
+        # Respond to critical breathing issues
+        if any(events[e] > 0 for e in [7, 10, 11, 12, 13, 14]):
+            take_action(29)  # Use Bag Valve Mask
             continue
 
-        # Check response for unclear airway
-        if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)
+        # Assess responsiveness
+        if any(events[e] > 0 for e in [1, 2, 3]):
+            take_action(8)  # Examine Response
             continue
 
+        # If all checks pass and no critical action needed, finalize
         take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
