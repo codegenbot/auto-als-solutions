@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [25, 27, 16, 3, 5]  # SATs Probe, BP Cuff, View Monitor, Examine Airway, Examine Circulation
+    required_measurements = [25, 27, 16, 3]  # SATs Probe, BP Cuff, View Monitor, Examine Airway
 
     def needs_measurements():
         return not set(required_measurements).issubset(actions_taken)
@@ -17,7 +17,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
+
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
@@ -40,16 +40,17 @@ def stabilize():
             take_action(23)  # Resume CPR
             continue
 
+        if has_unstable_tachyarrhythmia(events):
+            if 24 not in actions_taken:
+                take_action(24)  # Use Monitor Pads
+                continue
+            if 40 not in actions_taken:
+                take_action(40)  # Defibrillator Charge
+                continue
+            take_action(48)  # Finish if ready to defibrillate
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)  # Use Monitor Pads
-                elif 40 not in actions_taken:
-                    take_action(40)  # Defibrillator Charge
-                else:
-                    take_action(41)  # Defibrillator Current Up
-            else:
-                take_action(15)  # Give Fluids
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
