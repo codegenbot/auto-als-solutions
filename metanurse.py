@@ -43,6 +43,7 @@ def stabilize():
             take_action(16)
             continue
 
+        # Prioritize examination based on ABCDE
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -54,7 +55,7 @@ def stabilize():
         if not any(events[3:7]) and 3 not in actions_taken:
             take_action(3)
             continue
-        
+
         if vitals["Sats"] is None or vitals["RespRate"] is None or vitals["MAP"] is None:
             if vitals["Sats"] is None and 25 not in actions_taken:
                 take_action(25)
@@ -75,6 +76,7 @@ def stabilize():
             take_action(40)
             continue
 
+        # Treating based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
