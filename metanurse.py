@@ -34,6 +34,7 @@ def stabilize():
             )
         }
 
+        # Perform ABCDE assessment to gather all necessary information
         if 25 not in actions_taken:
             take_action(25)  # UseSatsProbe
             continue
@@ -52,7 +53,14 @@ def stabilize():
         if 5 not in actions_taken:
             take_action(5)   # ExamineCirculation
             continue
+        if 6 not in actions_taken:
+            take_action(6)   # ExamineDisability
+            continue
+        if 7 not in actions_taken:
+            take_action(7)   # ExamineExposure
+            continue
 
+        # Handle critical conditions first
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
             continue
@@ -60,9 +68,17 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)  # BagDuringCPR
             continue
-        
-        unstable_tachyarrhythmia = events[30] > 0 or events[31] > 0 or events[32] > 0
-        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)  # AttachDefibPads
+                continue
+            take_action(40)      # DefibrillatorCharge
+            continue
+
+        # Stabilization actions for vitals
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
         
@@ -74,17 +90,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
-                continue
-            if 40 not in actions_taken:
-                take_action(40)  # DefibrillatorCharge
-                continue
-            if 47 not in actions_taken:
-                take_action(47)  # DefibrillatorSync
-                continue
-
+        # Check if patient is stable
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -94,9 +100,10 @@ def stabilize():
         ):
             take_action(48)  # Finish
             return
-        
-        take_action(1)  # Default action to avoid infinite loop
-        continue
+
+        # Default action to finish if all conditions met
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
