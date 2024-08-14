@@ -53,7 +53,7 @@ def stabilize():
             if vitals["Sats"] is not None and vitals["Sats"] < 65:
                 take_action(22)  # Bag During CPR
                 continue
-            elif Vitals["Sats"] is not None and vitals["Sats"] < 88:
+            elif vitals["Sats"] is not None and vitals["Sats"] < 88:
                 take_action(30)  # Use Non-Rebreather Mask
                 continue
             elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
