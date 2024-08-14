@@ -17,7 +17,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
+
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
@@ -78,7 +78,7 @@ def stabilize():
             take_action(8)
             continue
 
-        if all(v >= 88 for v in [vitals["Sats"]]) and all(v >= 8 for v in [vitals["RespRate"]]) and all(v >= 60 for v in [vitals["MAP"]]):
+        if vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["MAP"] is not None and vitals["MAP"] >= 60 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
             take_action(48)
             break
 
