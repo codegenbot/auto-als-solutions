@@ -12,14 +12,24 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+    required_measurements = [25, 27, 16, 3]  # SATs Probe, BP Cuff, Monitor, Airway
+    examined_statuses = set()
 
     def need_measurements():
-        return not required_measurements.issubset(actions_taken)
+        return not set(required_measurements).issubset(actions_taken)
 
     def need_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
+                return action
+
+    def need_ABCDE_exams():
+        return len(examined_statuses) < 5
+
+    def get_next_ABCDEF_exam():
+        for action, status in zip([3, 4, 5, 6, 7], "ABCDE"):
+            if status not in examined_statuses:
+                examined_statuses.add(status)
                 return action
 
     for step in range(max_steps):
@@ -31,6 +41,10 @@ def stabilize():
 
         if need_measurements():
             take_action(need_measurement_action())
+            continue
+
+        if need_ABCDE_exams():
+            take_action(get_next_ABCDEF_exam())
             continue
 
         vitals = {
@@ -57,7 +71,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
-            
+
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
