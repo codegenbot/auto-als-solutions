@@ -9,6 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
             done = True
 
@@ -50,47 +51,44 @@ def stabilize():
                 take_action(3)
                 continue
 
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
-            continue
-
-        if events[6] > 0:
-            take_action(36)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # BagDuringCPR
             continue
-
+            
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0 or
-                                    events[33] > 0 or events[34] > 0 or
-                                    events[35] > 0 or events[36] > 0 or
-                                    events[37] > 0 or events[38] > 0)
+                                    events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)
+                take_action(28)  # AttachDefibPads
                 continue
-            take_action(40)
+            take_action(40)  # DefibrillatorCharge
+            continue
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # UseYankeurSucionCatheter
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # PerformHeadTiltChinLift
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
