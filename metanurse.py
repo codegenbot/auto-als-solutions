@@ -80,8 +80,8 @@ def stabilize():
             take_action(6)
             continue
         
-        if last_action is not None and last_action < 25:
-            take_action(last_action + 1)
+        if not measured(7) or last_action == 7:
+            take_action(7)
             continue
 
         take_action(48)
