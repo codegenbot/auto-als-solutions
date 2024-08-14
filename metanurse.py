@@ -2,16 +2,14 @@ import sys
 
 def stabilize():
     max_steps = 350
-    steps = 0
     actions_taken = set()
     done = False
 
     def take_action(action):
-        nonlocal done, steps
+        nonlocal done
         actions_taken.add(action)
         print(action)
-        steps += 1
-        if action == 48:
+        if action == 48:  # Finish
             done = True
 
     def need_examination():
@@ -88,7 +86,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
+        
         take_action(48)
 
 if __name__ == "__main__":
