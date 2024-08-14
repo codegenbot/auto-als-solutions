@@ -2,20 +2,22 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = []
+    steps = 0
     done = False
+    actions_taken = set()
 
     def take_action(action):
-        nonlocal done
-        actions_taken.append(action)
+        nonlocal done, steps
+        steps += 1
+        actions_taken.add(action)
         print(action)
-        if action == 48:
+        if action == 48 or steps >= max_steps:
             done = True
 
     def need_examination():
         return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
-    for step in range(max_steps):
+    for _ in range(max_steps):
         if done:
             break
 
@@ -44,40 +46,12 @@ def stabilize():
             take_action(31)
             continue
 
-        if events[6] > 0:
-            take_action(36)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        unstable_tachyarrhythmia = (
-            events[29] > 0 or events[30] > 0 or
-            events[31] > 0 or events[32] > 0 or
-            events[33] > 0 or events[34] > 0
-        )
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
         if need_examination():
@@ -91,7 +65,39 @@ def stabilize():
                 take_action(16)
                 continue
 
-        take_action(48)
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or
+            events[31] > 0 or events[32] > 0
+        )
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["MAP"] is not None and vitals["Sats"] is not None and vitals["RespRate"] is not None:
+            if vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
+                take_action(48)
+                break
+
+        take_action(1)  # DoNothing placeholder for extra steps
 
 if __name__ == "__main__":
     stabilize()
