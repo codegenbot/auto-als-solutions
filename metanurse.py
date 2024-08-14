@@ -25,7 +25,8 @@ def stabilize():
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
+
+        # Default vitals as None
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
@@ -36,46 +37,48 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(23)  # Perform CPR
+        # Perform ABCDE assessment
+        # Airway
+        if any(events[i] > 0 for i in [4, 5, 6]):  # AirwayVomit, AirwayBlood, AirwayTongue
+            take_action(31)  # UseYankeurSuctionCatheter
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)  # UseMonitorPads
-                elif 40 not in actions_taken:
-                    take_action(40)  # DefibrillatorCharge
-                elif 47 not in actions_taken:
-                    take_action(47)  # DefibrillatorSync
-                else:
-                    take_action(40)  # DefibrillatorCharge (for actual cardioversion)
+        # Breathing
+        if not vitals["Sats"] or vitals["Sats"] < 88:
+            if vitals["Sats"] < 65:
+                take_action(22)  # BagDuringCPR
+            else:
+                take_action(30)  # UseNonRebreatherMask
+            continue
+        if not vitals["RespRate"] or vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
+        # Circulation - MAP and Tachyarrhythmia tests:
+        if not vitals["MAP"] or vitals["MAP"] < 60:
+            if vitals["MAP"] < 20:
+                take_action(23)  # ResumeCPR
+            elif has_unstable_tachyarrhythmia(events):
+                take_action(24) if 24 not in actions_taken else [
+                    take_action(40) if 40 not in actions_taken else [
+                        take_action(47) if 47 not in actions_taken else take_action(41)
+                    ]
+                ]
             else:
                 take_action(15)  # GiveFluids
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # UseYankeurSuctionCatheter
-            continue
-
-        if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
-            continue
-
-        if any(events[i] > 0 for i in range(1, 4)):
+        # Disability - evaluate AVPU scale
+        if any(events[i] > 0 for i in range(21, 24)) or events[2] > 0:  # AVPU_A, AVPU_V, AVPU_U, ResponseNone
             take_action(8)  # ExamineResponse
             continue
 
+        # Exposure evaluation
+        if any(events[i] > 0 for i in range(25, 30)):  # Exposure Events
+            take_action(7)  # ExamineExposure
+            continue
+
+        # If all vitals are stable, finish the scenario
         take_action(48)  # Finish
 
 if __name__ == "__main__":
