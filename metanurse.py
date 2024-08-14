@@ -26,12 +26,12 @@ def stabilize():
     def perform_cardioversion():
         if 24 not in actions_taken:
             take_action(24)
-        elif 41 not in actions_taken:
-            take_action(41)
         elif 40 not in actions_taken:
             take_action(40)
         elif 47 not in actions_taken:
             take_action(47)
+        else:
+            take_action(48)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
