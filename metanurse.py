@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -13,13 +14,13 @@ def stabilize():
             done = True
 
     def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 3])
+        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 26])
 
     def measured(vital_sign):
         return vital_sign in actions_taken
 
     def need_measurement_action():
-        for action in [25, 27, 16, 3]:
+        for action in [25, 27, 16, 26]:
             if action not in actions_taken:
                 return action
 
@@ -84,28 +85,15 @@ def stabilize():
             take_action(29)
             continue
 
-        if "AirwayClear" not in actions_taken:
-            take_action(3)
-            continue
-
-        if "BreathingEqualChestExpansion" not in actions_taken:
-            take_action(4)
-            continue
-
-        if "RadialPulsePalpable" not in actions_taken:
-            take_action(5)
-            continue
-
-        if "AVPU_A" not in actions_taken:
-            take_action(6)
-            continue
-
-        if "ExposureRash" not in actions_taken:
-            take_action(7)
-            continue
-
-        if all(measured(vital_sign) for vital_sign in [25, 27, 16, 3]) and not done:
+        if (
+            all(measured(vital_sign) for vital_sign in [25, 27, 16, 26])
+            and vitals["MAP"] >= 60
+            and vitals["Sats"] >= 88
+            and vitals["RespRate"] >= 8
+        ):
             take_action(48)
+            break
+
 
 if __name__ == "__main__":
     stabilize()
