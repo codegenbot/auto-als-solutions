@@ -12,7 +12,7 @@ def stabilize():
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
-
+    
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
@@ -21,7 +21,7 @@ def stabilize():
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
         return any(events[i] > 0 for i in arrhythmia_events)
-
+    
     def perform_cardioversion():
         if 24 not in actions_taken:
             take_action(24)
@@ -41,6 +41,10 @@ def stabilize():
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
+
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
 
         if needs_measurements():
             take_action(next_measurement_action())
