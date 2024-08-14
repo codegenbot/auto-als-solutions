@@ -13,13 +13,14 @@ def stabilize():
             done = True
 
     def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 26])
+        needed_measurements = {25, 27, 16, 3}
+        return not needed_measurements.issubset(actions_taken)
 
     def measured(vital_sign):
         return vital_sign in actions_taken
 
     def need_measurement_action():
-        for action in [25, 27, 16, 26]:
+        for action in [25, 27, 16, 3]:
             if action not in actions_taken:
                 return action
 
@@ -53,12 +54,18 @@ def stabilize():
             take_action(22)
             continue
 
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
+        if not measured(3):
+            take_action(3)
+            continue
+        if not measured(5):
+            take_action(5)
+            continue
+        if not measured(38):
+            take_action(38)
             continue
 
-        if events[6] > 0:
-            take_action(36)
+        if any(events[event] > 0 for event in [4, 5, 6]):
+            take_action(31)
             continue
 
         if events[7] > 0:
@@ -84,9 +91,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if all(measured(vital_sign) for vital_sign in [25, 27, 16, 26]) and vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
+        if not done:
             take_action(48)
-            break
 
 if __name__ == "__main__":
     stabilize()
