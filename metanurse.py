@@ -9,7 +9,7 @@ def stabilize():
         actions_taken.add(action)
 
     required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events = observations[:33]
@@ -73,5 +73,5 @@ def stabilize():
             take_action(48)  # Finish if stable
             break
 
-for _ in range(max_steps):
+if __name__ == "__main__":
     stabilize()
