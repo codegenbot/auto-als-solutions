@@ -9,14 +9,13 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        sys.stdout.flush()
         if action == 48:
             done = True
 
-    required_measurements = [25, 27, 16, 3]
+    required_measurements = {25, 27, 16, 3}
 
     def need_measurements():
-        return any(action not in actions_taken for action in required_measurements)
+        return not required_measurements.issubset(actions_taken)
 
     def need_measurement_action():
         for action in required_measurements:
@@ -31,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         if need_measurements():
@@ -41,7 +40,7 @@ def stabilize():
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -49,7 +48,7 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
