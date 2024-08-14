@@ -44,7 +44,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Airway checks
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -53,12 +52,10 @@ def stabilize():
             take_action(36)
             continue
 
-        # Breathing checks
         if events[7] > 0:
             take_action(29)
             continue
 
-        # Circulation checks and cardiac arrest
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)
@@ -74,7 +71,6 @@ def stabilize():
             take_action(22)
             continue
 
-        # Stabilization based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -87,7 +83,7 @@ def stabilize():
             take_action(29)
             continue
 
-        take_action(48)  # Finish action to end the scenario
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
