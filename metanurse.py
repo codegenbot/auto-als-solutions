@@ -12,6 +12,9 @@ def stabilize():
         if action == 48:
             done = True
 
+    def need_examination():
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+
     for step in range(max_steps):
         if done:
             break
@@ -33,32 +36,38 @@ def stabilize():
             )
         }
 
-        if 25 not in actions_taken:
-            take_action(25)
-            continue
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
+        if need_examination():
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-
+            
         if events[6] > 0:
             take_action(36)
             continue
 
-        if any(events[i] > 0 for i in [29, 30, 31, 32]):
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(40)
+            if 40 not in actions_taken:
+                take_action(40)
+                continue
+            take_action(41)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
