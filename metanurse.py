@@ -1,7 +1,6 @@
 import sys
 
 def stabilize():
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
     max_steps = 350
     actions_taken = set()
 
@@ -9,10 +8,12 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
 
-    def next_measurement_action():
+    def need_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
@@ -28,7 +29,7 @@ def stabilize():
         }
 
         if need_measurements():
-            take_action(next_measurement_action())
+            take_action(need_measurement_action())
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -36,12 +37,11 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):  # Unstable tachyarrhythmia
+            if any(events[i] > 0 for i in [28, 30, 31, 32]):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
-                continue
             else:
                 take_action(15)  # Give Fluids
-                continue
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
@@ -51,7 +51,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):  # Vomit, Blood, Tongue obstructing airway
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
@@ -62,7 +62,7 @@ def stabilize():
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
-
+      
         take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
