@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -56,16 +55,16 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
-        if unstable_tachyarrhythmia and 28 not in actions_taken:
-            take_action(28)  # Attach defib pads
-            continue
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
         if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)  # Attach defib pads
+                continue
             take_action(40)  # Defibrillator charge
             continue
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)  # Use suction for vomit or blood in airway
+            take_action(31)  # Use suction for vomit or blood
             continue
 
         if events[6] > 0:
@@ -73,13 +72,13 @@ def stabilize():
             continue
 
         if events[7] > 0:
-            take_action(35)  # Perform airway maneuvers for no breathing
+            take_action(35)  # Perform airway manoeuvres for no breathing
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # Start chest compression
             continue
-
+            
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)  # Bag during CPR
             continue
@@ -97,7 +96,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
