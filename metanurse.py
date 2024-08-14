@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -81,7 +82,19 @@ def stabilize():
             take_action(8)
             continue
 
+        if events[6] > 0:
+            take_action(31)
+            continue
+        if any(events[i] > 0 for i in [5, 6]):
+            take_action(36)
+            continue
+
+        if any(events[i] > 0 for i in range(1, 4)):
+            take_action(8)
+            continue
+
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
