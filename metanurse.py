@@ -48,8 +48,6 @@ def stabilize():
                     take_action(24)
                 elif 40 not in actions_taken:
                     take_action(40)
-                elif 47 not in actions_taken:
-                    take_action(47)
                 else:
                     take_action(48)
             else:
