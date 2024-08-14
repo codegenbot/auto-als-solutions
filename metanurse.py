@@ -23,10 +23,6 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    actions_needed = {
-        'ExamineAirway': 3, 'UseSatsProbe': 25, 'UseBloodPressureCuff': 27, 'ViewMonitor': 16
-    }
-
     for step in range(max_steps):
         if done:
             break
@@ -88,7 +84,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if actions_taken == set(actions_needed.values()):
+        if actions_taken == {25, 27, 16, 3}:
             take_action(48)  # Finish when all measurements are taken
 
 if __name__ == "__main__":
