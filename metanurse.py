@@ -21,13 +21,13 @@ def stabilize():
 
     def need_measurement_action():
         if 25 not in actions_taken:
-            return 25
+            return 25  # UseSatsProbe
         if 27 not in actions_taken:
-            return 27
+            return 27  # UseBloodPressureCuff
         if 16 not in actions_taken:
-            return 16
+            return 16  # ViewMonitor
         if 3 not in actions_taken:
-            return 3
+            return 3  # ExamineAirway
         return None
 
     def update_vitals(vital_signs_times, vital_signs_values):
