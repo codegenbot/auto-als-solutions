@@ -10,14 +10,6 @@ def stabilize():
 
     required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
 
-    def need_measurements():
-        return not required_measurements.issubset(actions_taken)
-
-    def need_measurement_action():
-        for action in required_measurements:
-            if action not in actions_taken:
-                return action
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
@@ -28,8 +20,9 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if need_measurements():
-            take_action(need_measurement_action())
+        if required_measurements:
+            next_action = required_measurements.pop()
+            take_action(next_action)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -37,8 +30,8 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [28, 32, 35, 36]):  # Unstable rhythm indications
-                take_action(24)  # Use Monitor Pads for cardioversion
+            if any(events[i] > 0 for i in [32, 35, 38, 42]):  # Check for significant arrhythmia
+                take_action(24)  # Use Monitor Pads, next steps might include defibrillation
             else:
                 take_action(15)  # Give Fluids
             continue
@@ -58,14 +51,6 @@ def stabilize():
         if any(events[i] > 0 for i in [1, 2, 7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
-
-        # Regularly examining airway, breathing, and circulation:
-        if step % 10 == 0:  # Examine every 10 steps
-            for action in [3, 4, 5, 2, 6, 7, 8]:  # Examine Airway, Breathing, Circulation, Rhythm, Disability, Exposure, Response
-                if action not in actions_taken:
-                    take_action(action)
-                    actions_taken.add(action)
-                    break
 
         take_action(48)  # Finish if stable
 
