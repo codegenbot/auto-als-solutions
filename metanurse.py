@@ -82,11 +82,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if step > 200 or all(vitals_needed in actions_taken for vitals_needed in [25, 27, 16, 3]):
-            take_action(48)
-            break
-
-        take_action(1)  # Default action to check signs of life
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
