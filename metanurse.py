@@ -42,7 +42,6 @@ def stabilize():
         if 16 not in actions_taken:
             take_action(16)
             continue
-
         if 3 not in actions_taken:
             take_action(3)
             continue
