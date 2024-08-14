@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -24,23 +23,15 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
-                    vital_signs_values,
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                     "MAP", "Sats", "Resps"], vital_signs_values
                 )
             )
         }
@@ -82,7 +73,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -96,7 +87,6 @@ def stabilize():
             continue
 
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
