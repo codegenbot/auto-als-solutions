@@ -75,7 +75,7 @@ def stabilize():
             if 40 not in actions_taken:
                 take_action(40)  # Defibrillator charge
                 continue
-            take_action(23)  # Resume CPR
+            take_action(47)  # Defibrillator sync
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
