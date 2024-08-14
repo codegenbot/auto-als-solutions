@@ -18,8 +18,13 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature", 
-                    "MAP", "Sats", "Resps"
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps"
                 ]
             )
         }
@@ -28,7 +33,6 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        # Check vitals immediately if not already done
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -39,24 +43,18 @@ def stabilize():
             take_action(16)
             continue
 
-        # Examine ABCDE systematically
-        if 3 not in actions_taken:  # Airway
+        if 3 not in actions_taken:
             take_action(3)
             continue
-        if 4 not in actions_taken:  # Breathing
+        if 4 not in actions_taken:
             take_action(4)
             continue
-        if 5 not in actions_taken:  # Circulation
+        if 5 not in actions_taken:
             take_action(5)
             continue
-        if 6 not in actions_taken:  # Disability
-            take_action(6)
-            continue
-        if 7 not in actions_taken:  # Exposure
-            take_action(7)
-            continue
 
-        # Immediate critical actions
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -65,30 +63,25 @@ def stabilize():
             take_action(22)
             continue
 
-        # Address unstable tachyarrhythmia
-        if any(events[i] > 0 for i in [29, 30, 31]):
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
                 continue
             take_action(40)
             continue
 
-        # Address hypotension
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
         
-        # Address low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
         
-        # Address low respiratory rate
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
-        # Check for stabilization
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -98,10 +91,6 @@ def stabilize():
         ):
             take_action(48)
             return
-        
-        # Prevent infinite loop if no exit condition is met
-        take_action(48)
-        return
 
 if __name__ == "__main__":
     stabilize()
