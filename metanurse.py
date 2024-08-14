@@ -2,32 +2,23 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
-    done = False
-    examination_actions = {3, 4, 5, 6, 7}
 
     def take_action(action):
-        nonlocal done
-        actions_taken.add(action)
         print(action)
         if action == 48:
-            done = True
+            sys.exit()
 
-    def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 3])
+    def need_measurements(actions_taken):
+        required_actions = [25, 27, 16, 3]
+        return not all(action in actions_taken for action in required_actions)
 
-    def measured(vital_sign):
-        return vital_sign in actions_taken
-
-    def need_measurement_action():
+    def get_next_measurement_action(actions_taken):
         for action in [25, 27, 16, 3]:
             if action not in actions_taken:
                 return action
 
+    actions_taken = set()
     for step in range(max_steps):
-        if done:
-            break
-
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -35,16 +26,18 @@ def stabilize():
             observations[40:],
         )
 
-        if need_measurements():
-            take_action(need_measurement_action())
-            continue
-
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
+
+        if need_measurements(actions_taken):
+            next_action = get_next_measurement_action(actions_taken)
+            actions_taken.add(next_action)
+            take_action(next_action)
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
@@ -62,7 +55,7 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[7] > 0 or events[10] > 0:  # No Breathing or See-Saw Sign
+        if events[7] > 0:  # No Breathing
             take_action(29)
             continue
 
@@ -85,12 +78,7 @@ def stabilize():
             take_action(40)  # DefibrillatorCharge
             continue
 
-        if not any(event > 0 for event in examination_actions):  # Ensure all events are examined
-            take_action(3 + step % 4)  # Alternate between ExamineAirway, Breathing, Circulation, Disability
-            continue
-
-        if step == max_steps - 1:  # Ensure termination by max steps
-            take_action(48)  # Finish
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
