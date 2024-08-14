@@ -41,10 +41,6 @@ def stabilize():
             )
         }
 
-        if 1 not in actions_taken:
-            take_action(1)  # CheckSignsOfLife
-            continue
-
         if 2 not in actions_taken:
             take_action(2)  # CheckRhythm
             continue
