@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3, 4, 5}
+    required_measurements = {25, 27, 16, 3}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -28,7 +28,7 @@ def stabilize():
 
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-        
+
         if need_measurements():
             take_action(need_measurement_action())
             continue
@@ -48,14 +48,21 @@ def stabilize():
             take_action(36)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if events[7] > 0:
             take_action(29)
             continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
         
+        if any(events[i] > 0 for i in range(28, 33)):
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(43)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -64,15 +71,12 @@ def stabilize():
             take_action(22)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         take_action(48)
