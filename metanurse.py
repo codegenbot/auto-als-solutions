@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action, break_action=True):
         nonlocal done
         actions_taken.add(action)
@@ -16,10 +15,8 @@ def stabilize():
 
     def need_measurements():
         return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
+            25 not in actions_taken or 27 not in actions_taken or
+            16 not in actions_taken or 3 not in actions_taken
         )
 
     def need_measurement_action():
@@ -54,7 +51,7 @@ def stabilize():
         )
 
         vitals = update_vitals(vital_signs_times, vital_signs_values)
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue  # StartChestCompression
@@ -70,7 +67,7 @@ def stabilize():
                     continue
 
         vitals = update_vitals(vital_signs_times, vital_signs_values)
-
+        
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
             if take_action(31):
                 continue  # UseSuction
@@ -104,7 +101,6 @@ def stabilize():
 
         if take_action(48, False):  # Finish
             break
-
 
 if __name__ == "__main__":
     stabilize()
