@@ -30,12 +30,10 @@ def stabilize():
                     break
             continue
 
-        # Vital Sign Values
         RespRate = vital_signs_values[1] if vital_signs_times[1] > 0 else None
         MAP = vital_signs_values[4] if vital_signs_times[4] > 0 else None
         Sats = vital_signs_values[5] if vital_signs_times[5] > 0 else None
 
-        # Check for critical conditions first
         if (MAP is not None and MAP < 20) or (Sats is not None and Sats < 65):
             take_action(23)
             continue
@@ -45,9 +43,9 @@ def stabilize():
                 if 24 not in actions_taken:
                     take_action(24)
                 else:
-                    take_action(40)  # Cardiovert
+                    take_action(40)
             else:
-                take_action(15)  # Give fluids
+                take_action(15)
             continue
 
         if Sats is not None and Sats < 88:
@@ -58,25 +56,21 @@ def stabilize():
             take_action(29)
             continue
 
-        # Assess and manage airway
         if any(events[e] > 0 for e in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
         if events[6] > 0:
-            take_action(36)  # Perform Head Tilt Chin Lift
+            take_action(36)
             continue
 
-        # Respond to critical breathing issues
         if any(events[e] > 0 for e in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
-        # Assess responsiveness
         if any(events[e] > 0 for e in [1, 2, 3]):
-            take_action(8)  # Examine Response
+            take_action(8)
             continue
 
-        # If all checks pass and no critical action needed, finalize
         take_action(48)
         break
 
