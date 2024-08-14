@@ -2,101 +2,88 @@ import sys
 
 def stabilize():
     max_steps = 350
+    actions_taken = set()
     done = False
 
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:
+        if action == 48:  # Finish action
             done = True
 
-    actions_taken = set()
+    required_measurements = {3, 4, 5, 6, 25, 27}  # Airway, Breathing, Circulation, Disability, Sats Probe, BP Cuff
+
+    def need_measurements():
+        return not required_measurements.issubset(actions_taken)
+
+    def need_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
     for step in range(max_steps):
         if done:
             break
-
+        
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
-        # Ensure initial vital observations
-        if 25 not in actions_taken:
-            take_action(25)
-            continue
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-        if 3 not in actions_taken:
-            take_action(3)
+        if need_measurements():
+            take_action(need_measurement_action())
             continue
 
-        # Extract current vital signs
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
-
-        # Check for cardiac arrest conditions
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or \
-           (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)  # Resume CPR
+        
+        # Cardiac Arrest conditions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # Start Chest Compressions
             continue
 
-        # Treat low MAP
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Treat low oxygen saturation
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        # Treat low respiratory rate
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        # Suction airway for vomit or blood
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)  # UseYankeurSuctionCatheter
-            continue
-
-        # Perform airway maneuver if tongue obstruction
-        if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
-            continue
-
-        # Provide ventilation support if abnormal breathing events occur
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # UseBagValveMask
-            continue
-
-        # Handle heart rhythm abnormalities
-        if any(events[i] > 0 for i in [28, 29, 32]):
+        # Tachyarrhythmia detection and intervention
+        if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
+                take_action(28)  # Attach Defib Pads
             elif 40 not in actions_taken:
-                take_action(40)  # DefibrillatorCharge
-            elif 24 not in actions_taken:
-                take_action(24)  # UseMonitorPads
+                take_action(40)  # Defibrillator Charge
+            elif 47 not in actions_taken:
+                take_action(47)  # Defibrillator Sync
+            else:
+                take_action(24)  # Use Monitor Pads
             continue
 
-        # Administer medication if required by heart rhythm
-        if any(events[i] > 0 for i in range(30, 32)):
-            take_action(9)  # GiveAdenosine
+        # Stabilization actions
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
-        # Finalize
-        take_action(48)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use Non-Rebreather Mask
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        # Airway interventions
+        if events[3] == 0.0:  # Clear Airway first
+            take_action(36)  # Perform Head-Tilt Chin-Lift
+            continue
+
+        if events[7] > 0:  # If breathing issue, handle
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        # If all stable or unknown status, finish after validating
+        take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
