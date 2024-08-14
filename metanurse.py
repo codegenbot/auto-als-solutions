@@ -38,50 +38,46 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Cardiac Arrest Conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
-        # Stabilization Actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Airway Interventions
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Tachyarrhythmia Interventions
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
-                take_action(28)  # Attach Defib Pads
+                take_action(28)
             else:
-                take_action(40)  # Defibrillator Charge
+                take_action(40)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
