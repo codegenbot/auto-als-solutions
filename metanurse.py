@@ -13,7 +13,7 @@ def stabilize():
             done = True
 
     def need_examination():
-        return not all(a in actions_taken for a in [3, 4, 5, 6, 7, 25, 27, 16])
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -49,18 +49,6 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
-            if 4 not in actions_taken:
-                take_action(4)
-                continue
-            if 5 not in actions_taken:
-                take_action(5)
-                continue
-            if 6 not in actions_taken:
-                take_action(6)
-                continue
-            if 7 not in actions_taken:
-                take_action(7)
-                continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
@@ -70,7 +58,7 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
                                     events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
