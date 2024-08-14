@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -13,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+    required_measurements = {25, 27, 16, 3}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -44,44 +43,49 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-        ):
-            take_action(23)  # Resume CPR
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or \
+           vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events
-                take_action(28)  # Attach Defib Pads
-            else:
-                take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        take_action(48)  # Finish if stable
+        if any(events[i] > 0 for i in [28, 29, 32]):
+            if 28 not in actions_taken:
+                take_action(28)
+            elif 40 not in actions_taken:
+                take_action(40)
+            elif 24 not in actions_taken:
+                take_action(24)
+            continue
 
+        if any(events[i] > 0 for i in range(30, 32)):
+            take_action(9)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
