@@ -9,7 +9,7 @@ def stabilize():
         actions_taken.add(action)
 
     required_measurements = {25, 27, 16}
-    
+
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
 
@@ -17,7 +17,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-
+                
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
@@ -39,7 +39,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 take_action(24)  # Use Monitor Pads
