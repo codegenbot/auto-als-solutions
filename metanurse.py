@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -85,6 +86,7 @@ def stabilize():
             return
 
         take_action(0)  # Default action is to do nothing and wait for next input
+
 
 if __name__ == "__main__":
     stabilize()
