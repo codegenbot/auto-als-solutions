@@ -11,8 +11,8 @@ def stabilize():
         print(action)
         if action == 48:
             done = True
-    
-    required_measurements = {25, 27, 16, 3, 5}
+
+    required_measurements = {25, 27, 16, 3}  # UseSatsProbe, UseBloodPressureCuff, ViewMonitor, ExamineAirway
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -27,7 +27,7 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -44,7 +44,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events
+            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating unstable tachyarrhythmia
                 take_action(28)  # Attach Defib Pads
             else:
                 take_action(15)  # Give Fluids
@@ -57,7 +57,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
-
+            
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
@@ -69,13 +69,8 @@ def stabilize():
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
-        
-        # If all readings are within safe limits, and assessments done, Finish
-        if vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8 and vitals["MAP"] is not None and vitals["MAP"] >= 60:
-            take_action(48)  # Finish
-        else:
-            # Continue collecting observations
-            take_action(1)  # CheckSignsOfLife
+
+        take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
