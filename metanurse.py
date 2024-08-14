@@ -3,6 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -10,83 +11,65 @@ def stabilize():
             observations[33:40],
             observations[40:]
         )
-
+        
         vitals = {
             name: value if time > 0 else None
             for value, time, name in zip(
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate",
-                    "RespRate",
-                    "CapillaryGlucose",
-                    "Temperature",
-                    "MAP",
-                    "Sats",
-                    "Resps"
+                    "HeartRate", "RespRate", "CapillaryGlucose",
+                    "Temperature", "MAP", "Sats", "Resps"
                 ]
             )
         }
 
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            print(25)
-            continue
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            print(27)
-            continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            print(16)
-            continue
-        if 3 not in actions_taken:
-            actions_taken.add(3)
-            print(3)
-            continue
-        if 4 not in actions_taken:
-            actions_taken.add(4)
-            print(4)
-            continue
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            print(5)
-            continue
-        if 6 not in actions_taken:
-            actions_taken.add(6)
-            print(6)
-            continue
-        if 7 not in actions_taken:
-            actions_taken.add(7)
-            print(7)
-            continue
+        def take_action(action):
+            actions_taken.add(action)
+            print(action)
+            sys.stdout.flush()
 
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
-            print(17)
-            continue
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            print(30)
-            continue
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            print(29)
-            continue
+        # ABCDE Examination flow
+        examine_order = [25, 27, 16, 3, 4, 5, 8, 2]
+        for exam in examine_order:
+            if exam not in actions_taken:
+                take_action(exam)
+                break
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
-        if unstable_tachyarrhythmia:
+        # Handle immediate life threats
+        if events[29] > 0 or events[30] > 0 or events[31] > 0:  # unstable tachyarrhythmia
             if 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)
+                take_action(28)
                 continue
-            if 40 not in actions_taken:
-                actions_taken.add(40)
-                print(40)
+            take_action(40)
+            continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            if 17 not in actions_taken:
+                take_action(17)
                 continue
-            print(41)
-            continue
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            print(15)
-            continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            if 22 not in actions_taken:
+                take_action(22)
+                continue
 
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if 15 not in actions_taken:
+                take_action(15)
+                continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if 30 not in actions_taken:
+                take_action(30)
+                continue
+        
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            if 29 not in actions_taken:
+                take_action(29)
+                continue
+
+        # Check for stable condition
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -94,10 +77,8 @@ def stabilize():
                 [88, 8, 60]
             )
         ):
-            print(48)
+            take_action(48)
             return
-
-        print(0)
 
 if __name__ == "__main__":
     stabilize()
