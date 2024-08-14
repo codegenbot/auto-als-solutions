@@ -54,7 +54,7 @@ def stabilize():
             take_action(36)
             continue
 
-        if any(events[i] > 0 for i in [29, 30, 31, 32]):
+        if any(events[i] > 0 for i in range(29, 34)):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
