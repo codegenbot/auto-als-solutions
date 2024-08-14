@@ -60,7 +60,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Respond to immediate life-threatening conditions first
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(23)  # Resume CPR
             continue
@@ -69,7 +68,6 @@ def stabilize():
             take_action(29)  # Use Bag Valve Mask
             continue
 
-        # Stabilize conditions according to thresholds
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
