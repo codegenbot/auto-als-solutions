@@ -3,22 +3,16 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    done = False
+    examinations_done = set()
+    vital_signs_needed = {"MAP", "Sats"}
 
     def take_action(action):
-        nonlocal done
-        actions_taken.add(action)
         print(action)
+        actions_taken.add(action)
         if action == 48:
-            done = True
-
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+            sys.exit()
 
     for step in range(max_steps):
-        if done:
-            break
-
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -36,56 +30,63 @@ def stabilize():
             )
         }
 
-        if need_examination():
+        if vital_signs_needed and not examinations_done:
             if 25 not in actions_taken:
-                take_action(25)
+                take_action(25)  # UseSatsProbe
                 continue
             if 27 not in actions_taken:
-                take_action(27)
+                take_action(27)  # UseBloodPressureCuff
                 continue
             if 16 not in actions_taken:
-                take_action(16)
+                take_action(16)  # ViewMonitor
                 continue
             if 3 not in actions_taken:
-                take_action(3)
+                take_action(3)   # ExamineAirway
                 continue
+            examinations_done.add(True)
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)
+            take_action(31)  # UseYankeurSuctionCatheter
             continue
         
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # PerformHeadTiltChinLift
             continue
 
-        if any(events[i] > 0 for i in range(29, 33)):
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)
+                take_action(28)  # AttachDefibPads
                 continue
-            take_action(40)
+            take_action(40)  # DefibrillatorCharge
             continue
 
-        if vitals.get("MAP") is not None and vitals["MAP"] < 20:
-            take_action(17)
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
             continue
 
-        if vitals.get("Sats") is not None and vitals["Sats"] < 65:
-            take_action(22)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
             continue
 
-        if vitals.get("MAP") is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
             continue
 
-        if vitals.get("Sats") is not None and vitals["Sats"] < 88:
-            take_action(30)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
             continue
 
-        if vitals.get("RespRate") is not None and vitals["RespRate"] < 8:
-            take_action(29)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
 
-        take_action(48)
+        if step > 200:
+            take_action(48)  # Finish if vitals seem stable
+            break
+
+        take_action(48)  # Default to finish at end if everything is stable
 
 if __name__ == "__main__":
     stabilize()
