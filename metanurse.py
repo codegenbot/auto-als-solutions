@@ -24,7 +24,7 @@ def stabilize():
                     "Temperature",
                     "MAP",
                     "Sats",
-                    "RespRate"
+                    "Resps"
                 ]
             )
         }
