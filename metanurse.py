@@ -1,10 +1,9 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
-    done = False
     actions_taken = set()
+    done = False
 
     def take_action(action):
         nonlocal done
@@ -20,76 +19,73 @@ def stabilize():
 
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"],
                     vital_signs_values,
                 )
             )
         }
 
+        # Examining Airway
+        if any(events[idx] > 0 for idx in [3, 4, 5, 6, 7]):
+            if events[7] > 0:
+                take_action(29)
+            elif events[4] > 0:
+                take_action(31)
+            elif events[6] > 0:
+                take_action(36)
+            continue
+        
+        # Examining Breathing
+        if any(events[idx] > 0 for idx in [8, 9, 10, 11, 12, 13, 14]):
+            if events[8] > 0:
+                take_action(29)
+            elif events[13] > 0:
+                take_action(30)
+            continue
+        
+        # Examining Circulation
+        if any(events[idx] > 0 for idx in [15, 16, 17, 18, 19, 30, 31, 32, 33, 34, 35, 36, 37, 38]):
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)
+
+            if vitals["MAP"] is not None and vitals["MAP"] < 20:
+                take_action(17)
+
+            if vitals["Sats"] is not None and vitals["Sats"] < 65:
+                take_action(22)
+            continue
+
+        if any(events[idx] > 0 for idx in [20, 21, 22, 23, 24]):
+            take_action(6)
+            continue
+
+        if any(events[idx] > 0 for idx in [25, 26, 27, 28]):
+            take_action(7)
+            continue
+
         if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
-
         if 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
-
         if 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
+            take_action(16)
             continue
-
         if 3 not in actions_taken:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
-            )
-        ):
-            take_action(48)  # Finish
+        if all(vital is not None and vital >= threshold for vital, threshold in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60])):
+            take_action(48)
             return
 
-    take_action(48)  # Finish
-
-
-if __name__ == "__main__":
-    stabilize()
+stabilize()
