@@ -12,63 +12,62 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_measurements():
-        required_measurements = {25, 27, 16, 3, 5, 38}
-        return not required_measurements.issubset(actions_taken)
-
-    def next_measurement_action():
-        for action in {25, 27, 16, 3, 5, 38}:
-            if action not in actions_taken:
-                return action
-
     for step in range(max_steps):
         if done:
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vitals_times, vitals_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
-        if need_measurements():
-            take_action(next_measurement_action())
+        if step == 0:
+            take_action(25)  # UseSatsProbe
+            continue
+        if step == 1:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+        if step == 2:
+            take_action(16)  # ViewMonitor
+            continue
+        if step == 3:
+            take_action(3)   # ExamineAirway
             continue
 
         vitals = {
-            "HeartRate": vitals_values[0] if vitals_times[0] > 0 else None,
-            "RespRate": vitals_values[1] if vitals_times[1] > 0 else None,
-            "MAP": vitals_values[4] if vitals_times[4] > 0 else None,
-            "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if not events[3] and any(events[i] > 0 for i in range(4, 7)):
-            take_action(31 if any(events[i] > 0 for i in (4, 5)) else 36)
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # UseYankeurSucionCatheter
             continue
-
-        if any(events[i] > 0 for i in range(7, 15)) or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
-            take_action(29 if vitals["RespRate"] < 8 else 30)
+        if events[6] > 0:
+            take_action(36)  # PerformHeadTiltChinLift
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
+        if events[7] > 0:
+            take_action(29)  # UseBagValveMask
             continue
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
-        if any(events[i] > 0 for i in range(28, 33)):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(43)
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+        
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["Sats"] is not None:
-            if vitals["Sats"] < 65:
-                take_action(22)
-                continue
-            if vitals["Sats"] < 88:
-                take_action(30)
-                continue
-
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
