@@ -33,61 +33,59 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        if 25 not in actions_taken:  # UseSatsProbe
+        if 25 not in actions_taken:
             take_action(25)
             continue
-        if 27 not in actions_taken:  # UseBloodPressureCuff
+        if 27 not in actions_taken:
             take_action(27)
             continue
-        if 16 not in actions_taken:  # ViewMonitor
+        if 16 not in actions_taken:
             take_action(16)
             continue
 
-        necessary_examinations = [3, 4, 5, 8]  # ExamineAirway, ExamineBreathing, ExamineCirculation, ExamineResponse
-        for exam in necessary_examinations:
-            if exam not in actions_taken:
-                take_action(exam)
-                continue
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in (29, 30, 31))
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
+            take_action(22)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        if (
+            vitals["MAP"] is not None
+            and vitals["MAP"] < 60
+            and not unstable_tachyarrhythmia
+        ):
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:  # AttachDefibPads
-                take_action(28)
-                continue
-            take_action(40)  # DefibrillatorCharge
-            continue
-        
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            take_action(48)  # Finish
+            take_action(48)
             return
 
-        take_action(48)  # If unable to stabilize, finish
+        take_action(48)
         return
 
 if __name__ == "__main__":
