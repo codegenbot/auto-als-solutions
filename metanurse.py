@@ -4,19 +4,19 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-
-    initial_measurements = [25, 27, 16, 3]
-
+    
+    initial_measurements = [25, 27, 16, 3]  # SATs Probe, BP Cuff, Monitor, Airway
+    
     def need_measurements():
         return not set(initial_measurements).issubset(actions_taken)
-
+    
     def need_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
@@ -44,7 +44,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):
+            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating arrhythmia
                 take_action(24)  # Use Monitor Pads
                 continue
             else:
