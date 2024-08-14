@@ -44,7 +44,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(33, 40)):  # HeartRhythm events indicating unstable tachyarrhythmia
+            if any(events[33 + i] > 0 for i in range(7)):  # Heart Rhythm events
                 take_action(28)  # Attach Defib Pads
                 take_action(40)  # DefibrillatorCharge
                 take_action(47)  # DefibrillatorSync
