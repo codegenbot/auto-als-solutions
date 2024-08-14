@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -12,43 +13,48 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return not all(action in actions_taken for action in [25, 27, 16, 3])
+    def need_measurements():
+        return (
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
+        )
+
+    def need_measurement_action():
+        if 25 not in actions_taken:
+            return 25
+        if 27 not in actions_taken:
+            return 27
+        if 16 not in actions_taken:
+            return 16
+        if 3 not in actions_taken:
+            return 3
+        return None
 
     for step in range(max_steps):
         if done:
             break
 
-        observations = list(map(float, sys.stdin.readline().strip().split()))
+        observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
-        vitals = {
-            name: value if vital_signs_times[idx] > 0 else None
-            for idx, (name, value) in enumerate(
-                zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
-                )
-            )
-        }
+        if need_measurements():
+            measurement_action = need_measurement_action()
+            if measurement_action is not None:
+                take_action(measurement_action)
+                continue
 
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
+        vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+        }
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
@@ -58,7 +64,11 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
+        if events[7] > 0:
+            take_action(35)
+            continue
+
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
@@ -73,7 +83,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -87,6 +97,7 @@ def stabilize():
             continue
 
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
