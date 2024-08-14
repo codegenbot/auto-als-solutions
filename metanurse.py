@@ -7,24 +7,20 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-
+        
     def needs_measurements():
-        required_measurements = {25, 27, 16, 3}
+        required_measurements = {25, 27, 16, 3}  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
         return not required_measurements.issubset(actions_taken)
 
     def next_measurement_action():
-        for action in [25, 27, 16, 3]:
+        required_measurements = [25, 27, 16, 3]  # order matters to achieve goal
+        for action in required_measurements:
             if action not in actions_taken:
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        unstable_tachyarrhythmias = [31, 32, 37, 38]
-        defib_actions = [43, 47]
-        for i, event in enumerate(unstable_tachyarrhythmias):
-            if events[event] > 0:
-                take_action(defib_actions[i % len(defib_actions)])
-                return True
-        return False
+        unstable_tachyarrhythmias = [28, 29, 30, 34]
+        return any(events[i] > 0 for i in unstable_tachyarrhythmias)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -44,27 +40,33 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
+        # Critical condition handling
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(23)  # Resume CPR
             continue
 
+        # Handle Unstable tachyarrhythmia
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
+                take_action(24)  # Use Monitor Pads
                 continue
             else:
                 take_action(15)  # Give Fluids
                 continue
 
+        # Handle Low Sats
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
 
+        # Handle Low RespRate
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Handle Airway issues
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
