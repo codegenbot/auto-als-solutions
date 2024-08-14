@@ -39,6 +39,7 @@ def stabilize():
             continue
 
         vitals = {
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
