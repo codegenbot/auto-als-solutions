@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -86,9 +86,6 @@ def stabilize():
         ):
             take_action(48)
             return
-
-        take_action(48)
-        return
 
 if __name__ == "__main__":
     stabilize()
