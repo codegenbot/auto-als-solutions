@@ -9,7 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish
+        if action == 48:
             done = True
 
     def need_examination():
@@ -77,16 +77,16 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 15 in actions_taken:
-                take_action(27)  # Use Blood Pressure Cuff again if fluids given but no improvement
+                take_action(27)
             else:
-                take_action(15)  # Give Fluids
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 30 not in actions_taken:
-                take_action(30)  # Use Non-Rebreather Mask 
+                take_action(30)
                 continue
-            take_action(25)  # Re-check Sats
+            take_action(25)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
