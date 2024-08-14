@@ -80,6 +80,7 @@ def stabilize():
             take_action(8)  # Examine Response
             continue
 
+        # Final validation to ensure John is stabilized
         if vitals["RespRate"] and vitals["MAP"] and vitals["Sats"]:
             if vitals["RespRate"] >= 8 and vitals["MAP"] >= 60 and vitals["Sats"] >= 88:
                 take_action(48)  # Finish if stable
