@@ -65,53 +65,53 @@ def stabilize():
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
+            take_action(22)
             continue
 
         if any([events[3] <= 0, events[11] > 0, events[5] > 0, events[6] > 0]):
-            if events[4] > 0:  # AirwayVomit
-                take_action(31)  # UseYankeurSuctionCatheter
+            if events[4] > 0:
+                take_action(31)
                 continue
-            if events[5] > 0:  # AirwayBlood
-                take_action(32)  # UseGuedelAirway
+            if events[5] > 0:
+                take_action(32)
                 continue
-            if events[6] > 0:  # AirwayTongue
-                take_action(36)  # PerformHeadTiltChinLift
+            if events[6] > 0:
+                take_action(36)
                 continue
             else:
-                take_action(3)  # ExamineAirway
+                take_action(3)
                 continue
 
         if any([events[7] > 0, events[8] > 0, events[9] > 0, events[10] > 0]):
             if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-                take_action(29)  # UseBagValveMask
+                take_action(29)
                 continue
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)  # UseNonRebreatherMask
+                take_action(30)
                 continue
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if any([events[16] > 0, events[17] > 0, events[18] > 0]):
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)  # GiveFluids
+                take_action(15)
                 continue
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
         if any([events[20] > 0, events[21] > 0, events[22] > 0]):
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
 
         if any([events[25] > 0, events[26] > 0, events[27] > 0]):
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
