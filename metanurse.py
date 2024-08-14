@@ -2,13 +2,13 @@ import sys
 
 def stabilize():
     max_steps = 350
-    
+
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
-    actions = []
 
+    actions = {25, 27, 16, 3}  # UseSatsProbe, UseBPCuff, ViewMonitor, ExamineAirway
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_times, vitals = observations[:33], observations[33:40], observations[40:]
@@ -19,50 +19,67 @@ def stabilize():
             "Sats": vitals[5] if vital_times[5] > 0 else None,
         }
 
-        if vital_times[5] == 0 and 25 not in actions:
-            take_action(25)
-            actions.append(25)
+        # Initial setup - use SatProbe, BP Cuff, View Monitor
+        if any(a not in actions for a in [25, 27, 16]):
+            for action in [25, 27, 16]:
+                if action not in actions:
+                    take_action(action)
+                    actions.add(action)
+                    break
             continue
-        if vital_times[4] == 0 and 27 not in actions:
-            take_action(27)
-            actions.append(27)
-            continue
-        if 16 not in actions:
-            take_action(16)
-            actions.append(16)
-            continue
+
+        # Assess Airway
         if 3 not in actions:
-            take_action(3)
-            actions.append(3)
+            take_action(3)  # Examine Airway
+            actions.add(3)
+            continue
+        
+        airway_clear = events[3] > 0
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if measurements["MAP"] is not None and measurements["MAP"] < 20 or measurements["Sats"] is not None and measurements["Sats"] < 65:
-            take_action(23)
-            continue
-
-        if measurements["MAP"] is not None and measurements["MAP"] < 60:
-            take_action(15)
-            continue
-        if measurements["Sats"] is not None and measurements["Sats"] < 88:
-            take_action(30)
-            continue
-        if measurements["RespRate"] is not None and measurements["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)
-            continue
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)
+        # Assess Breathing
+        if 30 not in actions:
+            if measurements["Sats"] is not None and measurements["Sats"] < 88:
+                take_action(30)  # Use Non-Rebreather Mask
+                actions.add(30)
+                continue
+               
+            if measurements["RespRate"] is not None and measurements["RespRate"] < 8:
+                take_action(29)  # Use Bag-Valve Mask
+                actions.add(29)
+                continue
+
+        # Assess Circulation
+        if measurements["MAP"] is not None and measurements["MAP"] < 60:
+            if measurements["MAP"] < 20:
+                take_action(23)  # Resume CPR
+                continue
+
+            # Detect potential arrhythmias
+            arrhythmias = [28, 29, 32, 33, 34, 36, 37, 38]
+            if any(events[i] > 0 for i in arrhythmias):
+                take_action(24)  # Use Monitor Pads
+                continue
+
+            take_action(15)  # Give Fluids
+            continue
+        
+        # Regular monitoring steps to diagnose and stabilize further
+        if 33 not in actions:
+            take_action(33)  # Take Blood for Arterial Blood Gas
+            actions.add(33)
             continue
 
+        # Final check for stability and finish
         if measurements["MAP"] >= 60 and measurements["Sats"] >= 88 and measurements["RespRate"] >= 8:
-            take_action(48)
+            take_action(48)  # Finish if stable
             break
 
 if __name__ == "__main__":
