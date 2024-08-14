@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3, 4, 5, 6}
+    required_measurements = {25, 27, 16, 3}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -43,17 +43,6 @@ def stabilize():
             "RespEffort": vital_signs_values[6] if vital_signs_times[6] > 0 else None
         }
 
-        airway_events = [events[i] for i in [3, 4, 5, 6]]
-        breathing_events = [events[i] for i in [7, 8, 9, 10, 11, 12, 13, 14]]
-
-        if any(breathing_events):
-            take_action(4)
-            continue
-
-        if any(airway_events):
-            take_action(3)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(23)
             continue
@@ -70,8 +59,32 @@ def stabilize():
             take_action(30)
             continue
 
-        if any(events[i] > 0 for i in range(33)):
-            take_action(8)
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
+            take_action(16)
+            continue
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
+            continue
+
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        if events[28] > 0:
+            take_action(28)
+            continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 37:
+            take_action(15)
+            continue
+
+        if events[19] > 0 or events[30] > 0:
+            take_action(30)
             continue
 
         take_action(48)
