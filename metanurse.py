@@ -4,16 +4,12 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
 
-    def take_action(action):
-        actions_taken.add(action)
-        print(action)
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -33,6 +29,10 @@ def stabilize():
             )
         }
 
+        def take_action(action):
+            actions_taken.add(action)
+            print(action)
+
         if 25 not in actions_taken:
             take_action(25)
             continue
@@ -43,19 +43,14 @@ def stabilize():
             take_action(16)
             continue
 
-        necessary_examinations = [3, 4, 5, 8, 2]
+        necessary_examinations = [3, 4, 5, 8]
         for exam in necessary_examinations:
             if exam not in actions_taken:
                 take_action(exam)
                 continue
 
-        if events[29] > 0 or events[30] > 0 or events[31] > 0:
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
-            continue
-
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in (29, 30, 31))
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -75,18 +70,25 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
+
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
         
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)
             return
-        
-        take_action(0)
+
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
