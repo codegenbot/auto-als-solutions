@@ -41,77 +41,63 @@ def stabilize():
             )
         }
 
-        # ABCDE Examination stage
-        if 3 not in actions_taken:
+        # Perform ABCDE assessment
+        if 3 not in actions_taken:  # Examine Airway
             take_action(3)
             continue
-        if 4 not in actions_taken:
+        if 4 not in actions_taken:  # Examine Breathing
             take_action(4)
             continue
-        if 5 not in actions_taken:
+        if 5 not in actions_taken:  # Examine Circulation
             take_action(5)
             continue
-        if 6 not in actions_taken:
+        if 6 not in actions_taken:  # Examine Disability
             take_action(6)
             continue
-        if 7 not in actions_taken:
+        if 7 not in actions_taken:  # Examine Exposure
             take_action(7)
             continue
 
-        # Initial Assessments and Attachments
-        if 25 not in actions_taken:
+        # Attach tools if not done already
+        if 25 not in actions_taken:  # Use Sats Probe
             take_action(25)
             continue
-        if 27 not in actions_taken:
+        if 27 not in actions_taken:  # Use Blood Pressure Cuff
             take_action(27)
             continue
-        if 16 not in actions_taken:
+        if 16 not in actions_taken:  # View Monitor
             take_action(16)
             continue
 
-        # Check Vital Signs
-        if (
-            vitals["MAP"] is None
-            or vitals["RespRate"] is None
-            or vitals["Sats"] is None
-        ):
-            if vitals["MAP"] is None and 38 not in actions_taken:
-                take_action(38)
-                continue
-            if vitals["RespRate"] is None and 4 not in actions_taken:
-                take_action(4)
-                continue
-            if vitals["Sats"] is None and 16 not in actions_taken:
-                take_action(16)
-                continue
+        # Check vital signs (MAP, RespRate, Sats) and intervene if necessary
+        if not vitals["MAP"]:
+            take_action(38)
+            continue
+        if not vitals["RespRate"]:
+            take_action(4)
+            continue
+        if not vitals["Sats"]:
+            take_action(16)
+            continue
 
-        # Immediate Intervention based on critical values
+        # Immediate intervention
         if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
-
         if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # Bag During CPR
             continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
-
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
-
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
-        # Specific intervention for unstable tachyarrhythmia
-        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 100:
-            take_action(10)  # GiveAdrenaline
-            continue
-
-        # Check for stable condition
+        # Stabilize and finish if all conditions are met
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
