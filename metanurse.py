@@ -17,18 +17,18 @@ def stabilize():
             25 not in actions_taken
             or 27 not in actions_taken
             or 16 not in actions_taken
-            or 3 not in actions_taken
+            or 5 not in actions_taken  # Examine airway for fundamental initial check
         )
 
     def need_measurement_action():
         if 25 not in actions_taken:
-            return 25  # UseSatsProbe
+            return 25
         if 27 not in actions_taken:
-            return 27  # UseBloodPressureCuff
+            return 27
         if 16 not in actions_taken:
-            return 16  # ViewMonitor
-        if 3 not in actions_taken:
-            return 3  # ExamineAirway
+            return 16
+        if 5 not in actions_taken:
+            return 5
         return None
 
     for step in range(max_steps):
@@ -96,6 +96,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
-
+    
 if __name__ == "__main__":
     stabilize()
