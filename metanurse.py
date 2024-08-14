@@ -30,58 +30,58 @@ def stabilize():
         }
 
         if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
 
         if 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
         
         if 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
+            take_action(16)
             continue
 
         if 3 not in actions_taken:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             continue
 
         if events[4] > 0 or events[5] > 0:
-            take_action(31)  # UseYankeurSuctionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
         if events[7] > 0 or events[8] > 0 or events[9] > 0:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None:
             if vitals["MAP"] < 20:
-                take_action(17)  # StartChestCompression
+                take_action(17)
                 continue
             elif vitals["MAP"] < 60:
-                take_action(15)  # GiveFluids
+                take_action(15)
                 continue
 
         if vitals["Sats"] is not None:
             if vitals["Sats"] < 65:
-                take_action(22)  # BagDuringCPR
+                take_action(22)
                 continue
             elif vitals["Sats"] < 88:
-                take_action(30)  # UseNonRebreatherMask
+                take_action(30)
                 continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] > 100:
-            take_action(9)  # GiveAdenosine - to handle potential unstable tachyarrhythmia
+            take_action(9)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
