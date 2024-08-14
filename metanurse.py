@@ -15,16 +15,6 @@ def stabilize():
     def need_examination():
         return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
-    def examine():
-        if 25 not in actions_taken:
-            take_action(25)
-        elif 27 not in actions_taken:
-            take_action(27)
-        elif 16 not in actions_taken:
-            take_action(16)
-        elif 3 not in actions_taken:
-            take_action(3)
-
     for step in range(max_steps):
         if done:
             break
@@ -40,15 +30,25 @@ def stabilize():
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", 
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
                      "MAP", "Sats", "Resps"], vital_signs_values
                 )
             )
         }
 
         if need_examination():
-            examine()
-            continue
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
@@ -58,7 +58,8 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
+                                    events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
