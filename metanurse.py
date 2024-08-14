@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -63,12 +64,11 @@ def stabilize():
             take_action(36)  # HeadTiltChinLift
             continue
 
-        if events[7] > 0:  # No Breathing
-            if 29 not in actions_taken:
-                take_action(29)  # UseBagValveMask
+        if events[7] > 0 or events[8] > 0:  # No Breathing or Snoring
+            take_action(29)  # UseBagValveMask
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 35))
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 38))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
@@ -97,6 +97,7 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
