@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -44,14 +44,11 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[33 + i] > 0 for i in range(7)):  # Heart Rhythm events
+            if any(events[i] > 0 for i in range(29, 40)):  # HeartRhythm events indicating tachyarrhythmia
                 take_action(28)  # Attach Defib Pads
-                take_action(40)  # DefibrillatorCharge
-                take_action(47)  # DefibrillatorSync
-                take_action(43)  # DefibrillatorPace
                 continue
             take_action(15)  # Give Fluids
-            continue 
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
