@@ -32,55 +32,55 @@ def stabilize():
                 )
             )
         }
-        
+
         if 3 not in actions_taken:
             take_action(3)
             continue
-        
+
         if events[3] == 0:
             take_action(3)
             continue
-        
+
         if 5 not in actions_taken:
             take_action(5)
             continue
-        
+
         if events[7] > 0:
             take_action(29)
             continue
-        
+
         if 25 not in actions_taken:
             take_action(25)
             continue
-        
+
         if 27 not in actions_taken:
             take_action(27)
             continue
-        
+
         if 16 not in actions_taken:
             take_action(16)
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 65:
             take_action(22)
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RespRate"] and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
