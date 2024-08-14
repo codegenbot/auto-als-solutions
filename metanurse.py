@@ -26,7 +26,6 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
-        # Default vitals as None
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
@@ -37,49 +36,45 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Perform ABCDE assessment
-        # Airway
-        if any(events[i] > 0 for i in [4, 5, 6]):  # AirwayVomit, AirwayBlood, AirwayTongue
-            take_action(31)  # UseYankeurSuctionCatheter
+        if any(events[i] > 0 for i in [4, 5, 6]):
+            take_action(31)
             continue
 
-        # Breathing
         if not vitals["Sats"] or vitals["Sats"] < 88:
             if vitals["Sats"] < 65:
-                take_action(22)  # BagDuringCPR
+                take_action(22)
             else:
-                take_action(30)  # UseNonRebreatherMask
+                take_action(30)
             continue
         if not vitals["RespRate"] or vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # Circulation - MAP and Tachyarrhythmia tests:
         if not vitals["MAP"] or vitals["MAP"] < 60:
             if vitals["MAP"] < 20:
-                take_action(23)  # ResumeCPR
+                take_action(23)
             elif has_unstable_tachyarrhythmia(events):
-                take_action(24) if 24 not in actions_taken else [
-                    take_action(40) if 40 not in actions_taken else [
-                        take_action(47) if 47 not in actions_taken else take_action(41)
-                    ]
-                ]
+                if 24 not in actions_taken:
+                    take_action(24)
+                elif 40 not in actions_taken:
+                    take_action(40)
+                elif 47 not in actions_taken:
+                    take_action(47)
+                else:
+                    take_action(41)
             else:
-                take_action(15)  # GiveFluids
+                take_action(15)
             continue
 
-        # Disability - evaluate AVPU scale
-        if any(events[i] > 0 for i in range(21, 24)) or events[2] > 0:  # AVPU_A, AVPU_V, AVPU_U, ResponseNone
-            take_action(8)  # ExamineResponse
+        if any(events[i] > 0 for i in range(21, 24)) or events[2] > 0:
+            take_action(8)
             continue
 
-        # Exposure evaluation
-        if any(events[i] > 0 for i in range(25, 30)):  # Exposure Events
-            take_action(7)  # ExamineExposure
+        if any(events[i] > 0 for i in range(25, 30)):
+            take_action(7)
             continue
 
-        # If all vitals are stable, finish the scenario
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
