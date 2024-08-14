@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,7 +10,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -18,16 +19,21 @@ def stabilize():
                 vital_signs_values,
                 vital_signs_times,
                 [
-                    "HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                    "MAP", "Sats", "Resps"
-                ]
+                    "HeartRate",
+                    "RespRate",
+                    "CapillaryGlucose",
+                    "Temperature",
+                    "MAP",
+                    "Sats",
+                    "Resps",
+                ],
             )
         }
 
         def take_action(action):
             actions_taken.add(action)
             print(action)
-        
+
         # Step 1: Airway
         if "AirwayClear" not in actions_taken:
             take_action(3)  # ExamineAirway
@@ -43,7 +49,7 @@ def stabilize():
         if "Breathing" not in actions_taken:
             take_action(4)  # ExamineBreathing
             continue
-        
+
         # Step 3: Circulation
         if 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
@@ -76,8 +82,7 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)  # Finish
@@ -85,6 +90,7 @@ def stabilize():
 
         take_action(48)  # Finish
         return
+
 
 if __name__ == "__main__":
     stabilize()
