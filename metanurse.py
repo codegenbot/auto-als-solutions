@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,11 +10,17 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
             done = True
 
     def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+        return (
+            25 not in actions_taken
+            or 27 not in actions_taken
+            or 16 not in actions_taken
+            or 3 not in actions_taken
+        )
 
     for step in range(max_steps):
         if done:
@@ -23,73 +30,79 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
 
-        if not actions_taken:
-            take_action(3)  # Start with airway examination
-            continue
+        if need_examination():
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
 
-        if 25 not in actions_taken:
-            take_action(25)  # Place Sats Probe
-            continue
-
-        if 27 not in actions_taken:
-            take_action(27)  # Use BP Cuff
-            continue
-            
-        if 16 not in actions_taken:
-            take_action(16)  # View monitor
-            continue
-
-        # Check critical conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compressions
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # Bag during CPR
+            take_action(22)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
+            continue
+
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)  # Attach Defib Pads
+                take_action(28)
                 continue
-            take_action(40)  # Charge Defib
+            take_action(40)
             continue
 
-        # Stabilize other vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        if need_examination():
-            if 3 not in actions_taken:
-                take_action(3)  # Re-examine Airway if needed
-                continue
-            take_action(5)  # Default to Examine Breathing
+        take_action(48)
 
-        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
