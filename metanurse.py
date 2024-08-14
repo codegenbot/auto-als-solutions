@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = {25, 27, 16, 3, 26, 38}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -16,7 +16,7 @@ def stabilize():
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
-                return action   
+                return action
 
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
