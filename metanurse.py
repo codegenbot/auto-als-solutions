@@ -17,7 +17,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
+
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
@@ -35,10 +35,8 @@ def stabilize():
         if needs_measurements():
             take_action(next_measurement_action())
             continue
-        
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR if critical vitals
             continue
 
@@ -51,7 +49,7 @@ def stabilize():
                 elif 47 not in actions_taken:
                     take_action(47)  # DefibrillatorSync
                 else:
-                    take_action(43)  # DefibrillatorPace
+                    take_action(9)  # GiveAdenosine
             else:
                 take_action(15)  # GiveFluids
             continue
@@ -76,7 +74,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if any(events[i] > 0 for i in range(1, 4)):
+        if any(events[i] > 0 for i in [0, 1, 2]):
             take_action(8)  # ExamineResponse
             continue
 
