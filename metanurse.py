@@ -55,25 +55,24 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if any(events[i] > 0 for i in range(29, 32)):  # Unstable tachyarrhythmia
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # Use suction for vomit or blood
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # Perform head tilt chin lift for tongue obstruction
+            continue
+
+        if events[7] > 0:
+            take_action(35)  # Perform airway manoeuvres for no breathing
+            continue
+
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 36))
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # Attach defib pads
                 continue
-            if 40 not in actions_taken:
-                take_action(40)  # Defibrillator charge
-                continue
-            continue
-
-        if events[4] > 0 or events[5] > 0:  # Vomit or blood
-            take_action(31)  # Use suction
-            continue
-
-        if events[6] > 0:  # Tongue obstruction
-            take_action(36)  # Perform head tilt chin lift
-            continue
-
-        if events[7] > 0:  # No breathing
-            take_action(35)  # Perform airway manoeuvres
+            take_action(40)  # Defibrillator charge
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
