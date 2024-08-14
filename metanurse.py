@@ -26,18 +26,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if 25 not in actions_taken:
-            take_action(25)
-            continue
-
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-
         if 3 not in actions_taken:
             take_action(3)
             continue
@@ -49,17 +37,9 @@ def stabilize():
         if events[6] > 0:
             take_action(36)
             continue
-
-        if events[7] > 0:
-            take_action(29)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
+        
+        if 25 not in actions_taken:
+            take_action(25)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
@@ -69,9 +49,25 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
+        
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
+            continue
+
+        if 16 not in actions_taken:
+            take_action(16)
             continue
 
         take_action(48)
