@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
+    required_measurements = {25, 27, 16, 3}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -37,39 +37,39 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia():
-                take_action(2)  # CheckRhythm
+                take_action(2)
             else:
-                take_action(15)  # Give Fluids
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if step == max_steps - 1:
-            take_action(1)  # CheckSignsOfLife before ending
-            take_action(48)  # Finish if stable
+            take_action(1)
+            take_action(48)
 
 if __name__ == "__main__":
     stabilize()
