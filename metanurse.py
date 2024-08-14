@@ -20,57 +20,78 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
 
+        # ABCDE Examination stage
         if 3 not in actions_taken:
             take_action(3)
             continue
-
-        if events[3] == 0:
-            take_action(3)
+        if 4 not in actions_taken:
+            take_action(4)
             continue
-
         if 5 not in actions_taken:
             take_action(5)
             continue
-
-        if events[7] > 0:
-            take_action(29)
+        if 6 not in actions_taken:
+            take_action(6)
+            continue
+        if 7 not in actions_taken:
+            take_action(7)
             continue
 
+        # Initial Assessments and Attachments
         if 25 not in actions_taken:
             take_action(25)
             continue
-
         if 27 not in actions_taken:
             take_action(27)
             continue
-
         if 16 not in actions_taken:
             take_action(16)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)
-            continue
+        # Check Vital Signs
+        if (
+            vitals["MAP"] is None
+            or vitals["RespRate"] is None
+            or vitals["Sats"] is None
+        ):
+            if vitals["MAP"] is None and 38 not in actions_taken:
+                take_action(38)
+                continue
+            if vitals["RespRate"] is None and 4 not in actions_taken:
+                take_action(4)
+                continue
+            if vitals["Sats"] is None and 16 not in actions_taken:
+                take_action(16)
+                continue
 
+        # Immediate Intervention based on critical values
         if vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)
             continue
 
-        if vitals["HeartRate"] and vitals["HeartRate"] > 150:
-            take_action(9)
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -85,11 +106,16 @@ def stabilize():
             take_action(29)
             continue
 
+        # Specific intervention for unstable tachyarrhythmia
+        if vitals["HeartRate"] is not None and vitals["HeartRate"] > 100:
+            take_action(10)  # GiveAdrenaline
+            continue
+
+        # Check for stable condition
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)
