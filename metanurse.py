@@ -36,23 +36,18 @@ def stabilize():
             )
         }
 
-        # ABCDE Assessment
-        # A - Airway
         if 3 not in actions_taken:
             take_action(3)
             continue
 
-        # Clearing airway if vomit or blood is detected
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
-        # Clearing obstruction due to tongue
         if events[6] > 0:
             take_action(36)
             continue
 
-        # B - Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
@@ -65,7 +60,6 @@ def stabilize():
             take_action(30)
             continue
 
-        # C - Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -74,7 +68,6 @@ def stabilize():
             take_action(15)
             continue
 
-        # Checking for tachyarrhythmia
         unstable_tachyarrhythmia = (
             events[29] > 0 or events[30] > 0 or
             events[31] > 0 or events[32] > 0 or
@@ -87,7 +80,6 @@ def stabilize():
             take_action(40)
             continue
 
-        # D - Disability, E - Exposure, and Examinations
         if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
@@ -99,7 +91,6 @@ def stabilize():
                 take_action(16)
                 continue
 
-        # Finishing if all checks are stable
         take_action(48)
 
 if __name__ == "__main__":
