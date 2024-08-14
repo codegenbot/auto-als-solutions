@@ -36,49 +36,54 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)  # Resume CPR if critical vitals
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
+            take_action(23)
+            continue
+        
+        if has_unstable_tachyarrhythmia(events):
+            if 24 not in actions_taken:
+                take_action(24)
+            elif 40 not in actions_taken:
+                take_action(40)
+            elif 47 not in actions_taken:
+                take_action(47)
+            else:
+                take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)  # UseMonitorPads
-                elif 40 not in actions_taken:
-                    take_action(40)  # DefibrillatorCharge
-                elif 47 not in actions_taken:
-                    take_action(47)  # DefibrillatorSync
-                else:
-                    take_action(9)  # GiveAdenosine
-            else:
-                take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # UseYankeurSucionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [0, 1, 2]):
-            take_action(8)  # ExamineResponse
+        if any(events[i] > 0 for i in range(1, 4)):
+            take_action(8)
             continue
-
-        take_action(48)  # Finish when all tasks are done
+        
+        if all(v is not None and v >= thresh for v, thresh in zip(vitals.values(), [8, 60, 88])):
+            take_action(48)
+            break
 
 if __name__ == "__main__":
     stabilize()
