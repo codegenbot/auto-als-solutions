@@ -7,6 +7,7 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
+        sys.stdout.flush()
 
     required_measurements = {25, 27, 16, 3}
 
@@ -37,46 +38,45 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)  # Resume CPR to prevent cardiac arrest
+            take_action(23)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)  # Use monitor pads
-                elif 40 not in actions_taken:
-                    take_action(40)  # Charge defibrillator
-                else:
-                    take_action(39)  # Turn on defibrillator
+        if has_unstable_tachyarrhythmia(events):
+            if 24 not in actions_taken:
+                take_action(24)
+            elif 40 not in actions_taken:
+                take_action(40)
+            elif 39 not in actions_taken:
+                take_action(39)
             else:
-                take_action(15)  # Give fluids
+                take_action(47)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+        if vitals["MAP"] is None or vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use bag-valve-mask
+        if vitals["Sats"] is None or vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] is None or vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(31)  # Use yankeur suction catheter
+            take_action(31)
             continue
 
-        if events[6] > 0:
-            take_action(36)  # Perform head tilt chin lift
+        if events[7] > 0:
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use bag-valve-mask
+        if any(events[i] > 0 for i in [1, 2]):
+            take_action(8)
             continue
 
-        if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)  # Examine response
-            continue
-
-        take_action(48)  # Finish successfully
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
