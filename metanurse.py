@@ -61,7 +61,7 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(28)
+            take_action(16)
             continue
 
         if events[4] > 0 or events[5] > 0:
