@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -34,21 +33,23 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        # ABCDE Examination flow
-        examine_order = [25, 27, 16, 3, 4, 5, 8, 2]
-        for exam in examine_order:
+        if 25 not in actions_taken:
+            take_action(25)
+            continue
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+
+        necessary_examinations = [3, 4, 5, 8]
+        for exam in necessary_examinations:
             if exam not in actions_taken:
                 take_action(exam)
-                break
+                continue
 
-        # Handle immediate life threats
-        if (
-            events[29] > 0 or events[30] > 0 or events[31] > 0
-        ):  # unstable tachyarrhythmia
-            if 28 not in actions_taken:
-                take_action(28)
-            take_action(40)
-            continue
+        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
@@ -58,7 +59,11 @@ def stabilize():
             take_action(22)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if (
+            vitals["MAP"] is not None
+            and vitals["MAP"] < 60
+            and not unstable_tachyarrhythmia
+        ):
             take_action(15)
             continue
 
@@ -70,7 +75,13 @@ def stabilize():
             take_action(29)
             continue
 
-        # Check for stable condition
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
+            continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -82,7 +93,6 @@ def stabilize():
 
         take_action(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
