@@ -52,7 +52,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)  # BagDuringCPR
             continue
@@ -64,8 +64,8 @@ def stabilize():
         if events[6] > 0:  # Tongue obstruction
             take_action(36)  # HeadTiltChinLift
             continue
-        
-        if events[7] > 0 or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):  # No Breathing
+
+        if events[7] > 0 or (vitals["RespRate"] is not None and vitals["RespRate"] < 8):
             take_action(29)  # UseBagValveMask
             continue
 
@@ -88,7 +88,7 @@ def stabilize():
                 take_action(40)  # ChargeDefibrillator
                 take_action(11)  # GiveAmiodarone
                 continue
-        
+
         if all([(vitals[key] is not None and vitals[key] >= min_val) for key, min_val in {
             "Sats": 88,
             "RespRate": 8,
@@ -96,7 +96,7 @@ def stabilize():
         }.items()]):
             take_action(48)  # Finish
             break
-        
+
     if not done:
         take_action(48)  # Finish
 
