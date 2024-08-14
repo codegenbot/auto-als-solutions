@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -30,7 +31,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         if need_measurements():
@@ -44,59 +45,64 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Critical conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # Bag During CPR
             continue
 
+        # Stabilization requirements
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag-Valve Mask
             continue
-        
+
+        # Check airway obstructions or issues
         if events[4] > 0 or events[5] > 0:
-            take_action(31)
+            take_action(31)  # Use Yankeur Suction Catheter
             continue
 
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
         if any(events[i] > 0 for i in [4, 5, 6, 7]):
-            take_action(29)
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Examine sequences as per ABCDE
         if 3 not in actions_taken:
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
 
         if 4 not in actions_taken:
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
 
         if 5 not in actions_taken:
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
 
         if 6 not in actions_taken:
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
 
         if 7 not in actions_taken:
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
-        take_action(48)
+        take_action(48)  # Finish if stable
+
 
 if __name__ == "__main__":
     stabilize()
