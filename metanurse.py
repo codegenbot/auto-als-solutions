@@ -28,23 +28,6 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        # Ensure ABCDE reassessment
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
-        if 4 not in actions_taken:
-            take_action(4)
-            continue
-        if 5 not in actions_taken:
-            take_action(5)
-            continue
-        if 6 not in actions_taken:
-            take_action(6)
-            continue
-        if 7 not in actions_taken:
-            take_action(7)
-            continue
-
         # Check vitals immediately if not already done
         if 25 not in actions_taken:
             take_action(25)
@@ -56,6 +39,23 @@ def stabilize():
             take_action(16)
             continue
 
+        # Examine ABCDE systematically
+        if 3 not in actions_taken:  # Airway
+            take_action(3)
+            continue
+        if 4 not in actions_taken:  # Breathing
+            take_action(4)
+            continue
+        if 5 not in actions_taken:  # Circulation
+            take_action(5)
+            continue
+        if 6 not in actions_taken:  # Disability
+            take_action(6)
+            continue
+        if 7 not in actions_taken:  # Exposure
+            take_action(7)
+            continue
+
         # Immediate critical actions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
@@ -65,19 +65,22 @@ def stabilize():
             take_action(22)
             continue
 
-        # Address unstable tachyarrhythmia
-        if any(events[i] > 0 for i in [29, 30, 31]):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
-            continue
-
         # Address hypotension
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
         
+        # Address unstable tachyarrhythmia
+        if any(events[i] > 0 for i in [29, 30, 31, 32, 33]):
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            if 40 not in actions_taken:
+                take_action(40)
+                continue
+            take_action(47)
+            continue
+
         # Address low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
@@ -98,6 +101,10 @@ def stabilize():
         ):
             take_action(48)
             return
+        
+        # Prevent infinite loop if no exit condition is met
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
