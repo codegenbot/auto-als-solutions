@@ -3,16 +3,22 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    examinations_done = set()
-    vital_signs_needed = {"MAP", "Sats"}
+    done = False
 
     def take_action(action):
-        print(action)
+        nonlocal done
         actions_taken.add(action)
+        print(action)
         if action == 48:
-            sys.exit()
+            done = True
+
+    def need_examination():
+        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
+        if done:
+            break
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -30,7 +36,7 @@ def stabilize():
             )
         }
 
-        if vital_signs_needed and not examinations_done:
+        if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
                 continue
@@ -43,12 +49,11 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
-            examinations_done.add(True)
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-        
+
         if events[6] > 0:
             take_action(36)
             continue
@@ -81,10 +86,6 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-
-        if step > 200:
-            take_action(48)
-            break
 
         take_action(48)
 
