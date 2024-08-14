@@ -33,22 +33,18 @@ def stabilize():
             )
         }
 
-        def need_examination():
-            return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
+        if 25 not in actions_taken:
+            take_action(25)
+            continue
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
@@ -58,9 +54,7 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
-        if unstable_tachyarrhythmia:
+        if any(events[i] > 0 for i in [29, 30, 31, 32]):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
@@ -77,7 +71,6 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
-            take_action(14)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
