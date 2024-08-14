@@ -11,18 +11,11 @@ def stabilize():
         print(action)
         if action == 48:
             done = True
-    
-    def check_and_add_action(action, check_conditions):
-        for condition in check_conditions:
-            if condition not in actions_taken:
-                take_action(action)
-                return True
-        return False
 
     for step in range(max_steps):
         if done:
             break
-        
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -39,65 +32,63 @@ def stabilize():
                 )
             )
         }
-        
-        # A – Airways
-        if check_and_add_action(3, [3]):
+
+        if 3 not in actions_taken:
+            take_action(3)
             continue
-        
+
         if events[3] == 0:
+            take_action(3)
             continue
 
-        # B – Breathing
-        if check_and_add_action(4, [4, 14]):
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)  # Bag during CPR for sats < 65%
-            continue
-        
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)  # Use bag valve mask for low Resp Rate
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask for sats < 88%
+        if 5 not in actions_taken:
+            take_action(5)
             continue
 
-        # C – Circulation
-        if check_and_add_action(5, [5, 6]):
+        if events[7] > 0:
+            take_action(29)
             continue
-        
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compression for MAP < 20
+
+        if 25 not in actions_taken:
+            take_action(25)
             continue
-        
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids for MAP < 60
+
+        if 27 not in actions_taken:
+            take_action(27)
             continue
-        
-        # Ensure we've used essential measurement tools
-        if check_and_add_action(25, [25]):  # Use Sats Probe
-            continue
-        if check_and_add_action(27, [27]):  # Use Blood Pressure Cuff
-            continue
-        
+
         if 16 not in actions_taken:
-            take_action(16)  # View Monitor
+            take_action(16)
             continue
 
-        # D – Disability (Handled indirectly by the conditions above)
-        if check_and_add_action(6, [6, 7, 8]):
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(22)
             continue
-        
-        # Making sure AVPU checks
-        if check_and_add_action(8, [21, 22, 23]):
+
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            take_action(17)
             continue
-        
-        # E – Exposure (Handled indirectly by the context)
-        if check_and_add_action(7, [26, 33, 34]):
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
             continue
-        
-        # If all vital signs are stabilised, finish
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["HeartRate"] and vitals["HeartRate"] >= 150:
+            take_action(11)
+            continue
+
+        if vitals["MAP"] and events[15] > 0:
+            take_action(22)
+            continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -107,10 +98,9 @@ def stabilize():
         ):
             take_action(48)
             return
-        
-        take_action(0)  # DoNothing in case no action is applicable
-        
-    take_action(48)  # Ensure the finish action at the end
+
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
