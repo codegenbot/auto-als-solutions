@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Examine Airway
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -49,16 +49,19 @@ def stabilize():
             or vitals["Sats"] is not None
             and vitals["Sats"] < 65
         ):
-            take_action(23)  # Resume CPR
+            take_action(17)  # Start Chest Compression (CPR)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events indicating arrhythmia
-                take_action(24)  # Use Monitor Pads
+            if any(events[i] > 0 for i in range(28, 33)):  # HeartRhythm events
+                take_action(28)  # Attach Defibrillator Pads
+                take_action(2)   # Check Rhythm
+                take_action(40)  # Charge Defibrillator
+                take_action(47)  # Sync
+                take_action(41)  # Defibrillator Current Up
                 continue
-            else:
-                take_action(15)  # Give Fluids
-                continue
+            take_action(15)  # Give Fluids
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
