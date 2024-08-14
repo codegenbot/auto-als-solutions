@@ -45,31 +45,31 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if events[1] == 0 and events[2] == 0:
+        if events[1] == 0 and events[2] == 0: 
             take_action(1)
             continue
 
-        if events[3] == 0:
+        if events[3] == 0: 
             take_action(3)
             continue
 
-        if events[5] > 0 or events[6] > 0:
+        if events[5] > 0 or events[6] > 0: 
             take_action(31)
             continue
 
-        if events[7] > 0:
+        if events[7] > 0: 
             take_action(22)
             continue
 
-        if events[10] == 0:
+        if events[10] == 0: 
             take_action(4)
             continue
 
-        if events[18] == 0 and events[19] == 0:
+        if events[18] == 0 and events[19] == 0: 
             take_action(5)
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
+        if any(events[i] > 0 for i in range(28, 33)): 
             if 28 not in actions_taken:
                 take_action(28)
                 continue
