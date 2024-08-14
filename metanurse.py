@@ -12,9 +12,6 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-
     for step in range(max_steps):
         if done:
             break
@@ -36,6 +33,9 @@ def stabilize():
             )
         }
 
+        def need_examination():
+            return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
+
         if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
@@ -50,29 +50,14 @@ def stabilize():
                 take_action(3)
                 continue
 
-        # Airway assessment
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
+
         if events[6] > 0:
             take_action(36)
             continue
 
-        # Breathing assessment
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        # Circulation assessment
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            take_action(14)
-            continue
-
-        # Critical conditions
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
                                     events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
@@ -80,7 +65,6 @@ def stabilize():
                 take_action(28)
                 continue
             take_action(40)
-            take_action(48)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -91,12 +75,20 @@ def stabilize():
             take_action(22)
             continue
 
-        # Finish if stabilized
-        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
-            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-            vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
-            take_action(48)
-            break
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            take_action(14)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
