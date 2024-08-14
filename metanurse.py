@@ -1,18 +1,19 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 24}
+    required_measurements = {25, 27, 16, 3, 4, 5, 6, 7, 8}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
-    
+
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
@@ -21,10 +22,14 @@ def stabilize():
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -46,10 +51,8 @@ def stabilize():
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)
-                elif 40 not in actions_taken:
-                    take_action(40)
                 else:
-                    take_action(48)
+                    take_action(40)
             else:
                 take_action(15)
             continue
@@ -79,6 +82,7 @@ def stabilize():
             continue
 
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
