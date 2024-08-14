@@ -52,18 +52,6 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Tachyarrhythmia interventions
-        if any(events[i] > 0 for i in range(28, 33)):
-            if 28 not in actions_taken:
-                take_action(28)  # Attach Defib Pads
-            elif 40 not in actions_taken:
-                take_action(40)  # Defibrillator Charge
-            elif 43 not in actions_taken:
-                take_action(43)  # Defibrillator Pace
-            else:
-                take_action(24)  # Use Monitor Pads
-            continue
-
         # Stabilization actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
@@ -88,6 +76,18 @@ def stabilize():
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        # Tachyarrhythmia interventions
+        if any(events[i] > 0 for i in range(28, 33)):
+            if 28 not in actions_taken:
+                take_action(28)  # Attach Defib Pads
+            elif 40 not in actions_taken:
+                take_action(40)  # Defibrillator Charge
+            elif 43 not in actions_taken:
+                take_action(43)  # Defibrillator Pace
+            else:
+                take_action(24)  # Use Monitor Pads
             continue
 
         take_action(48)  # Finish if stable
