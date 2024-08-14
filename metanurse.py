@@ -1,40 +1,28 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    required_measurements = {25, 27, 16, 3}  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
     def needs_measurements():
-        required_measurements = {
-            25,
-            27,
-            16,
-            3,
-        }  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
         return not required_measurements.issubset(actions_taken)
 
     def next_measurement_action():
-        required_measurements = [25, 27, 16, 3]  # order matters to achieve goal
         for action in required_measurements:
             if action not in actions_taken:
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        unstable_tachyarrhythmias = [31, 32, 37, 38]
-        return any(events[i] > 0 for i in unstable_tachyarrhythmias)
+        return any(events[i] > 0 for i in range(28, 39))
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -46,33 +34,30 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Critical condition handling
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        # Critial condition handling
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
-        # Handle Unstable tachyarrhythmia
+        # Low MAP handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 take_action(24)  # Use Monitor Pads
-                continue
             else:
                 take_action(15)  # Give Fluids
-                continue
-
-        # Handle Low Sats
+            continue
+        
+        # Low Sats handling
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
 
-        # Handle Low RespRate
+        # Low RespRate handling
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Handle Airway issues
+        # Airway issues
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
@@ -86,7 +71,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if stable
-
 
 if __name__ == "__main__":
     stabilize()
