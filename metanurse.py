@@ -12,7 +12,7 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        if len(observations) != 53:  # Ensure proper input length
+        if len(observations) != 53:
             take_action(48)
             continue
 
@@ -36,7 +36,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(30, 39)):  # Handle unstable tachyarrhythmias
+            if any(events[i] > 0 for i in range(30, 39)):
                 actions = [24, 40, 47, 45, 48]
                 for action in actions:
                     if action not in actions_taken:
