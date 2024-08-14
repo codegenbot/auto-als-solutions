@@ -55,45 +55,44 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
-            take_action(31)  # UseSuction
-            continue
-
-        if events[6] > 0:  # Tongue Obstruction
-            take_action(36)  # HeadTiltChinLift
-            continue
-
-        if events[7] > 0:  # No Breathing
-            if 29 not in actions_taken:
-                take_action(29)  # UseBagValveMask
-            continue
-
         unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
+                take_action(28)  # Attach defib pads
                 continue
-            take_action(40)  # DefibrillatorCharge
+            take_action(40)  # Defibrillator charge
+            continue
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # Use suction for vomit or blood
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # Perform head tilt chin lift for tongue obstruction
+            continue
+
+        if events[7] > 0:
+            take_action(35)  # Perform airway manoeuvres for no breathing
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)  # Start chest compression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
+            take_action(22)  # Bag during CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)  # Use nonrebreather mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)  # Use bag-valve mask
             continue
 
         take_action(48)  # Finish
