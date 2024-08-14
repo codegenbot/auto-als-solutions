@@ -12,26 +12,29 @@ def stabilize():
         if action == 48:
             done = True
 
-    for step in range(max_steps):
-        if done:
-            break
-
+    def read_observations():
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
+        events, vital_sign_times, vital_sign_values = (
             observations[:33],
             observations[33:40],
             observations[40:]
         )
-
         vitals = {
-            name: value if vital_signs_times[idx] > 0 else None
+            name: value if vital_sign_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
                     ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                     "MAP", "Sats", "Resps"], vital_sign_values
                 )
             )
         }
+        return events, vitals
+
+    for step in range(max_steps):
+        if done:
+            break
+
+        events, vitals = read_observations()
 
         if 25 not in actions_taken:
             take_action(25)
@@ -79,19 +82,6 @@ def stabilize():
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
-            continue
-
-        if events[15] > 0 or events[34] > 0 or events[36] > 0 or events[37] > 0:
-            if 2 not in actions_taken:
-                take_action(2)
-                continue
-            take_action(28)
-            continue
-        elif events[32] > 0:
-            if any(events[i] > 0 for i in [30, 31, 32]):
-                take_action(40)
-                continue
-            take_action(24)
             continue
 
         take_action(48)
