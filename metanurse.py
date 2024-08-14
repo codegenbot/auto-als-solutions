@@ -22,6 +22,16 @@ def stabilize():
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
         return any(events[i] > 0 for i in arrhythmia_events)
     
+    def perform_cardioversion():
+        if 24 not in actions_taken:
+            take_action(24)
+        elif 40 not in actions_taken:
+            take_action(40)
+        elif 47 not in actions_taken:
+            take_action(47)
+        else:
+            take_action(48)
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -32,24 +42,19 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)
-            continue
-
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
+            take_action(23)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
-                if 24 not in actions_taken:
-                    take_action(24)
-                elif 40 not in actions_taken:
-                    take_action(40)
-                elif 47 not in actions_taken:
-                    take_action(47)
+                perform_cardioversion()
             else:
                 take_action(15)
             continue
