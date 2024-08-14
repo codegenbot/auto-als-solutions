@@ -57,6 +57,7 @@ def stabilize():
             if measurement_action is not None:
                 if take_action(measurement_action):
                     continue
+                
         vitals = update_vitals(vital_signs_times, vital_signs_values)
         
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
