@@ -34,51 +34,45 @@ def stabilize():
 
         if needs_measurements(actions_taken):
             action = next_measurement_action(actions_taken)
-            take_action(action)
             actions_taken.add(action)
+            take_action(action)
             continue
         
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(23)
+            take_action(23)  # Perform Chest Compressions
             continue
         
         if has_unstable_tachyarrhythmia(events) and (vitals["MAP"] is not None and vitals["MAP"] < 60):
-            take_action(40)
+            take_action(40)  # Prepare for Cardioversion
             continue
         
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
         
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
         
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag-Valve Mask
             continue
         
         if events[4] > 0 or events[5] > 0:
-            take_action(31)
+            take_action(31)  # Use Yankeur Suction
             continue
 
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # Perform Head Tilt Chin Lift
             continue
 
         if events[7] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
-        if needs_measurements(actions_taken):
-            action = next_measurement_action(actions_taken)
-            take_action(action)
-            actions_taken.add(action)
-            continue
-
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
