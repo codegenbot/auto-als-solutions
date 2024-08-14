@@ -33,42 +33,51 @@ def stabilize():
             )
         }
 
+        # Check for critical conditions first
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
             continue
-        
-        if 3 not in actions_taken:  # Airway Check
+
+        # Airway Check
+        if 3 not in actions_taken:
             take_action(3)
             continue
-        
         if events[3] > 0:  # AirwayClear
-            if 25 not in actions_taken:  # UseSatsProbe
+            # Breathing Check
+            if 25 not in actions_taken:
                 take_action(25)
                 continue
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)  # UseNonRebreatherMask
+                take_action(30)
                 continue
-            if 27 not in actions_taken:  # UseBloodPressureCuff
+            if 27 not in actions_taken:
                 take_action(27)
                 continue
-            if 16 not in actions_taken:  # ViewMonitor
+            if 16 not in actions_taken:
                 take_action(16)
                 continue
             if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-                take_action(29)  # UseBagValveMask
+                take_action(29)
                 continue
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)  # GiveFluids
+                take_action(15)
                 continue
-            
-            if 6 not in actions_taken:  # Disability Check
+
+            # Circulation Check
+            if 6 not in actions_taken:
                 take_action(6)
                 continue
-            
-            if 7 not in actions_taken:  # Exposure Check
+
+            # Disability Check
+            if 6 not in actions_taken:
+                take_action(6)
+                continue
+
+            # Exposure Check
+            if 7 not in actions_taken:
                 take_action(7)
                 continue
 
