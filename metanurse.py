@@ -1,122 +1,82 @@
 import sys
 
-
 def stabilize():
-    max_steps = 350
-    actions_taken = set()
-    done = False
-
     def take_action(action):
-        nonlocal done
-        actions_taken.add(action)
         print(action)
         if action == 48:
-            done = True
+            sys.exit()
 
-    def need_examination():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-            or 4 not in actions_taken
-            or 5 not in actions_taken
-            or 6 not in actions_taken
-            or 7 not in actions_taken
-        )
+    max_steps = 350
+    actions_taken = set()
+    focused_measurements = {"MAP": 27, "Sats": 25}
 
     for step in range(max_steps):
-        if done:
-            break
-
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
-            for idx, (name, value) in enumerate(
-                zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
-                    vital_signs_values,
-                )
+            for idx, name, value in zip(range(7), 
+                ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature", "MAP", "Sats", "Resps"], 
+                vital_signs_values
             )
         }
 
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
-            if 4 not in actions_taken:
-                take_action(4)
-                continue
-            if 5 not in actions_taken:
-                take_action(5)
-                continue
-            if 6 not in actions_taken:
-                take_action(6)
-                continue
-            if 7 not in actions_taken:
-                take_action(7)
+        # Focus on obtaining necessary measurements 
+        for measure, action in focused_measurements.items():
+            if measure not in vitals or vitals[measure] is None:
+                take_action(action)
                 continue
 
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
+        # Clear airway if obstructed
+        if events[1] > 0 or events[2] > 0:
+            take_action(31)  # UseYankeurSuctionCatheter
             continue
-
         if events[6] > 0:
-            take_action(36)
+            take_action(36)  # PerformHeadTiltChinLift
             continue
 
-        if any(events[i] > 0 for i in range(29, 33)):
+        # Address critical conditions first
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
+
+        # Address tachyarrhythmia
+        if any(events[i] > 0 for i in range(29, 36)):
             if 28 not in actions_taken:
-                take_action(28)
+                take_action(28)  # AttachDefibPads
+                actions_taken.add(28)
                 continue
-            take_action(40)
+            take_action(40)  # DefibrillatorCharge
             continue
 
-        if vitals.get("MAP") is not None and vitals["MAP"] < 20:
-            take_action(17)
+        # Stabilize vital signs
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
 
-        if vitals.get("Sats") is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
+        # If vitals seem fine, finish
+        if step > 200 and all(
+            v is not None and v >= t for v, t in zip(
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+            )
+        ):
+            take_action(48)  # Finish
+            break
 
-        if vitals.get("MAP") is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals.get("Sats") is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals.get("RespRate") is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        take_action(48)
-
+        # Default to do nothing
+        take_action(0)  # DoNothing
 
 if __name__ == "__main__":
     stabilize()
