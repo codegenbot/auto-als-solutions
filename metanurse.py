@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -69,17 +69,25 @@ def stabilize():
             print(2)  # CheckRhythm
             continue
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32, 38, 39])
+
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                actions_taken.add(28)
+                print(28)  # AttachDefibPads
+                continue
+            print(40)  # DefibrillatorCharge
+            continue
         
         if vitals["MAP"] and vitals["MAP"] < 20:
             print(17)  # StartChestCompression
             continue
         
         if vitals["Sats"] and vitals["Sats"] < 65:
-            print(22)  # Bag During CPR
+            print(22)  # BagDuringCPR
             continue
         
-        if vitals["MAP"] and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             print(15)  # GiveFluids
             continue
         
@@ -91,14 +99,6 @@ def stabilize():
             print(29)  # UseBagValveMask
             continue
 
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                actions_taken.add(28)
-                print(28)  # AttachDefibPads
-                continue
-            print(40)  # DefibrillatorCharge
-            continue
-        
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -108,7 +108,7 @@ def stabilize():
         ):
             print(48)  # Finish
             return
-    
+        
         print(48)  # Finish
         return
 
