@@ -18,8 +18,8 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [30, 33, 34, 35, 36, 37, 38]
+    def has_unstable_tachyarrhythmia():
+        arrhythmia_events = [28, 30, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -41,10 +41,10 @@ def stabilize():
             take_action(23)  # Resume CPR
             continue
 
-        # Low MAP handling
+        # Low MAP with unstable tachyarrhythmia handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                take_action(24)  # Use Monitor Pads
+            if has_unstable_tachyarrhythmia():
+                take_action(40)  # Defibrillator Charge
             else:
                 take_action(15)  # Give Fluids
             continue
@@ -72,8 +72,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if all(v is not None and v >= 60 for v in [vitals["MAP"]]) and all(v is not None and v >= 88 for v in [vitals["Sats"]]) and all(v is not None and v >= 8 for v in [vitals["RespRate"]]):
-            take_action(48)  # Finish if stable
+        take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
