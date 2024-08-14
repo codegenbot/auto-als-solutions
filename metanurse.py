@@ -1,27 +1,31 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
-    steps = 0
+    actions_taken = set()
     done = False
 
     def take_action(action):
         nonlocal done
+        actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
 
-    checks = {
-        "Airway": False,
-        "Breathing": False,
-        "Circulation": False,
-        "Disability": False,
-        "Exposure": False,
-    }
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
 
-    while steps < max_steps and not done:
-        steps += 1
+    def need_measurements():
+        return not required_measurements.issubset(actions_taken)
+
+    def need_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
+    for step in range(max_steps):
+        if done:
+            break
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -29,29 +33,8 @@ def stabilize():
             observations[40:],
         )
 
-        if not checks["Airway"]:
-            take_action(3)  # Examine Airway
-            checks["Airway"] = True
-            continue
-
-        if not checks["Breathing"]:
-            take_action(4)  # Examine Breathing
-            checks["Breathing"] = True
-            continue
-
-        if not checks["Circulation"]:
-            take_action(5)  # Examine Circulation
-            checks["Circulation"] = True
-            continue
-
-        if not checks["Disability"]:
-            take_action(6)  # Examine Disability
-            checks["Disability"] = True
-            continue
-
-        if not checks["Exposure"]:
-            take_action(7)  # Examine Exposure
-            checks["Exposure"] = True
+        if need_measurements():
+            take_action(need_measurement_action())
             continue
 
         vitals = {
@@ -60,14 +43,13 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+        # Cardiac Arrest conditions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or \
+           vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)  # Use Bag Valve Mask
-            continue
-
+        # Stabilization actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
@@ -77,29 +59,35 @@ def stabilize():
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):  # Airway Vomit or Blood
+        # Airway interventions
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        if events[6] > 0:  # Airway Tongue
-            take_action(36)  # Perform Head Tilt Chin Lift
+        if events[6] > 0:
+            take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
-        if any(
-            events[i] > 0 for i in [7, 10, 11, 12, 13, 14]
-        ):  # Breathing None, Snoring, SeeSaw, etc.
-            take_action(29)  # Use Bag Valve Mask
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):  # Notable HeartRhythms
-            take_action(28)  # Attach Defib Pads
+        # Tachyarrhythmia interventions
+        if any(events[i] > 0 for i in range(28, 33)):
+            if 28 not in actions_taken:
+                take_action(28)  # Attach Defib Pads
+            elif 40 not in actions_taken:
+                take_action(40)  # Defibrillator Charge
+            elif 43 not in actions_taken:
+                take_action(43)  # Defibrillator Pace
+            else:
+                take_action(24)  # Use Monitor Pads
             continue
 
-        take_action(48)  # Finish assessment
-
+        take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
