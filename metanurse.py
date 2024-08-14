@@ -2,29 +2,42 @@ import sys
 
 def stabilize():
     max_steps = 350
+    actions_taken = set()
+    done = False
 
     def take_action(action):
+        nonlocal done
+        actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
-            sys.exit()
+            done = True
 
-    def need_measurements(actions_taken):
-        required_actions = [25, 27, 16, 3]
-        return not all(action in actions_taken for action in required_actions)
+    def need_measurements():
+        return not all(measured(vital_sign) for vital_sign in {25, 27, 16, 3})
 
-    def get_next_measurement_action(actions_taken):
+    def measured(vital_sign):
+        return vital_sign in actions_taken
+
+    def need_measurement_action():
         for action in [25, 27, 16, 3]:
             if action not in actions_taken:
                 return action
 
-    actions_taken = set()
     for step in range(max_steps):
+        if done:
+            break
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
             observations[40:],
         )
+
+        if need_measurements():
+            take_action(need_measurement_action())
+            continue
 
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -33,18 +46,12 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if need_measurements(actions_taken):
-            next_action = get_next_measurement_action(actions_taken)
-            actions_taken.add(next_action)
-            take_action(next_action)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)
+            take_action(22)
             continue
 
         if events[4] > 0 or events[5] > 0:
@@ -71,14 +78,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
-            continue
-
-        take_action(48)
+        if all(measured(vital_sign) for vital_sign in {25, 27, 16, 3}) and not done:
+            take_action(48)
 
 if __name__ == "__main__":
     stabilize()
