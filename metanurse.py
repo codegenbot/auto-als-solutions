@@ -4,16 +4,13 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -35,23 +32,12 @@ def stabilize():
                 )
             )
         }
+        
+        if 3 not in actions_taken:
+            take_action(3)
+            continue
 
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
-
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
-        if unstable_tachyarrhythmia:
+        if events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0:
             if 28 not in actions_taken:
                 take_action(28)
                 continue
@@ -59,23 +45,35 @@ def stabilize():
                 take_action(40)
                 continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+        if 25 not in actions_taken:
+            take_action(25)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+        
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(22)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
