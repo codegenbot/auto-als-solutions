@@ -71,9 +71,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] >= 60 and vitals["Sats"] is not None and vitals["Sats"] >= 88 and vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
+        if (vitals["Sats"] is None or vitals["Sats"] >= 88) and (vitals["RespRate"] is None or vitals["RespRate"] >= 8) and (vitals["MAP"] is None or vitals["MAP"] >= 60):
             take_action(48)
-            break
 
 if __name__ == "__main__":
     stabilize()
