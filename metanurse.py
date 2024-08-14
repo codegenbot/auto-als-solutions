@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Airway, Monitor
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
