@@ -2,16 +2,20 @@ import sys
 
 def stabilize():
     max_steps = 350
-    steps_taken = 0
+    actions_taken = set()
+    done = False
 
     def take_action(action):
+        nonlocal done
+        actions_taken.add(action)
         print(action)
-        nonlocal steps_taken
-        steps_taken += 1
-        if steps_taken >= max_steps or action == 48:
-            exit()
+        if action == 48:
+            done = True
 
     for step in range(max_steps):
+        if done:
+            break
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -29,53 +33,57 @@ def stabilize():
             )
         }
 
-        if events[3] == 0: 
-            take_action(3)
+        # High priority checks for critical conditions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
 
-        if events[7] > 0:
-            take_action(29)
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)
-            continue
-
-        if vitals["RespRate"] is None:
-            take_action(4)
-            continue
-
-        if vitals["MAP"] is None:
-            take_action(27)
-            continue
-
-        if events[30] > 0 or events[31] > 0 or events[32] > 0:
-            if 28 not in steps_taken:
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
                 take_action(28)
                 continue
             take_action(40)
             continue
-
-        if vitals["MAP"] < 20 or vitals["Sats"] < 65:
-            take_action(23)
+        
+        if step % 5 == 0:
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
+        
+        # Treat airway obstructions immediately
+        if any(events[i] > 0 for i in range(4, 7)):
+            take_action(31)
+            continue
+        if events[6] > 0:
+            take_action(36)
             continue
 
-        if vitals["MAP"] < 60:
+        # Respond to moderate issues
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
-        if vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
-        if vitals["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
 
-        if (vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and 
-                vitals["RespRate"] >= 8):
-            take_action(48)
-            continue
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
