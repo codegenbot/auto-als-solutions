@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -50,7 +51,9 @@ def stabilize():
             take_action(36)  # PerformHeadTiltChinLift
             continue
 
-        if events[7] > 0 or vitals["RespRate"] is not None and vitals["RespRate"] < 8:  # No Breathing or Low RespRate
+        if (
+            events[7] > 0 or vitals["RespRate"] is not None and vitals["RespRate"] < 8
+        ):  # No Breathing or Low RespRate
             take_action(29)  # UseBagValveMask
             continue
 
@@ -84,6 +87,7 @@ def stabilize():
 
         if actions_taken == {25, 27, 16, 3}:
             take_action(48)  # Finish when all measurements are taken
+
 
 if __name__ == "__main__":
     stabilize()
