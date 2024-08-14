@@ -71,10 +71,10 @@ def stabilize():
         if any(events[i] > 0 for i in range(28, 33)):  # Unstable Tachyarrhythmia
             if 28 not in actions_taken and take_action(28):
                 continue  # AttachDefibPads
-            if take_action(40):  # DefibrillatorCharge
-                continue
-            if take_action(24):  # UseMonitorPads
-                continue
+            if take_action(40):
+                continue  # DefibrillatorCharge
+            if take_action(24):
+                continue  # UseMonitorPads
         
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
@@ -97,7 +97,7 @@ def stabilize():
                 continue  # UseBagValveMask
 
         if all([vitals.get("MAP", 61) >= 60, vitals.get("Sats", 89) >= 88, vitals.get("RespRate", 9) >= 8]):
-            if take_action(48, False):  # Finish when stabilized
+            if take_action(48, False):
                 break
 
 if __name__ == "__main__":
