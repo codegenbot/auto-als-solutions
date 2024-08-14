@@ -4,23 +4,28 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
         if action == 48:
             done = True
-    
-    def need_examination(actions_needed):
-        return any(action not in actions_taken for action in actions_needed)
-    
-    actions_needed = [25, 27, 16, 3]
+
+    def need_examination():
+        return (25 not in actions_taken or 
+                27 not in actions_taken or 
+                16 not in actions_taken or 
+                3 not in actions_taken or
+                4 not in actions_taken or
+                5 not in actions_taken or
+                6 not in actions_taken or
+                7 not in actions_taken)
     
     for step in range(max_steps):
         if done:
             break
-        
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -38,7 +43,7 @@ def stabilize():
             )
         }
 
-        if need_examination(actions_needed):
+        if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
                 continue
@@ -51,11 +56,23 @@ def stabilize():
             if 3 not in actions_taken:
                 take_action(3)
                 continue
+            if 4 not in actions_taken:
+                take_action(4)
+                continue
+            if 5 not in actions_taken:
+                take_action(5)
+                continue
+            if 6 not in actions_taken:
+                take_action(6)
+                continue
+            if 7 not in actions_taken:
+                take_action(7)
+                continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-
+        
         if events[6] > 0:
             take_action(36)
             continue
@@ -86,9 +103,8 @@ def stabilize():
         if vitals.get("RespRate") is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
-        if vitals.get("MAP") is not None and vitals.get("Sats") is not None and vitals.get("RespRate") is not None:
-            take_action(48)
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
