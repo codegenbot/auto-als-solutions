@@ -59,14 +59,17 @@ def stabilize():
             continue
 
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
+                                    events[31] > 0 or events[32] > 0 or
+                                    events[33] > 0 or events[34] > 0 or
+                                    events[35] > 0 or events[36] > 0 or
+                                    events[37] > 0 or events[38] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
                 continue
             take_action(40)
             continue
-
+          
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
