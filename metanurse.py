@@ -33,7 +33,6 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
-        # AB
         if 25 not in actions_taken:
             take_action(25)
             continue
