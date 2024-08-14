@@ -64,7 +64,8 @@ def stabilize():
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(39)
+            take_action(40)
+            take_action(48)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -77,6 +78,7 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
+            take_action(14)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -88,7 +90,6 @@ def stabilize():
             continue
 
         take_action(48)
-        return
 
 if __name__ == "__main__":
     stabilize()
