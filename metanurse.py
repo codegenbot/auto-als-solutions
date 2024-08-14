@@ -22,11 +22,8 @@ def stabilize():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-            "Resps": vital_signs_values[6] if vital_signs_times[6] > 0 else None,
         }
 
         if 25 not in actions_taken:
@@ -36,7 +33,7 @@ def stabilize():
         if 27 not in actions_taken:
             take_action(27)
             continue
-        
+
         if 16 not in actions_taken:
             take_action(16)
             continue
@@ -53,32 +50,28 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[7] > 0 or events[8] > 0 or events[9] > 0:
+        if events[7] > 0:
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None:
-            if vitals["MAP"] < 20:
-                take_action(17)
-                continue
-            elif vitals["MAP"] < 60:
-                take_action(15)
-                continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
 
-        if vitals["Sats"] is not None:
-            if vitals["Sats"] < 65:
-                take_action(22)
-                continue
-            elif vitals["Sats"] < 88:
-                take_action(30)
-                continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
-            continue
-
-        if vitals["HeartRate"] and vitals["HeartRate"] > 100:
-            take_action(9)
             continue
 
         take_action(48)
