@@ -6,13 +6,14 @@ def stabilize():
 
     def take_action(action):
         print(action)
+        sys.stdout.flush()
         actions_taken.add(action)
 
     required_measurements = {25, 27, 16, 24}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
-
+    
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
@@ -22,13 +23,13 @@ def stabilize():
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
 
-    def examine_order():
-        for action in [3, 4, 5, 6, 7, 8]:
-            if action not in actions_taken:
-                return action
-
-    def perform_initial_exams():
-        return all(action in actions_taken for action in [3, 4, 5])
+    def examine_and_treat():
+        if 5 not in actions_taken:
+            take_action(5)  # ExamineBreathing
+        elif 6 not in actions_taken:
+            take_action(6)  # ExamineCirculation
+        else:
+            take_action(16)  # ViewMonitor
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -44,9 +45,7 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Perform CPR
             continue
 
@@ -80,11 +79,14 @@ def stabilize():
             take_action(36)  # PerformHeadTiltChinLift
             continue
 
-        if not perform_initial_exams() and not any(events[i] > 0 for i in range(1, 4)):
-            take_action(examine_order())  # Perform ABCDE examination in order
+        if any(events[i] > 0 for i in range(1, 4)):
+            take_action(8)  # ExamineResponse
             continue
 
-        take_action(48)  # Finish
+        examine_and_treat()  # Regular examination path
+
+        if step >= max_steps - 1:
+            take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
