@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3, 38, 26}  # SATs Probe, BP Cuff, Monitor, Airway, BP, Aline
+    required_measurements = {25, 27, 16, 3, 38, 26}
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -37,7 +37,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [24, 28, 33, 34, 35, 36, 37, 38]):  # Significant arrhythmia
+            if any(events[i] > 0 for i in [24, 28, 33, 34, 35, 36, 37, 38]):
                 take_action(24)  # Use Monitor Pads
             else:
                 take_action(15)  # Give Fluids
@@ -59,7 +59,6 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
         
-        # If all vitals are stable
         if vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
             take_action(48)  # Finish if stable
         
