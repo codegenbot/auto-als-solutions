@@ -36,46 +36,40 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Critical condition handling
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
-        # Unstable tachyarrhythmia condition and Low MAP handling
         if has_tachyarrhythmia() and (vitals["MAP"] is not None and vitals["MAP"] < 60):
-            take_action(24)  # Use Monitor Pads
-            take_action(10)  # Give Adrenaline
+            take_action(24)
+            take_action(10)
             continue
 
-        # Low MAP handling without tachyarrhythmia
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
-        # Low Sats handling
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
-        # Low RespRate handling
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        # Airway issues
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
