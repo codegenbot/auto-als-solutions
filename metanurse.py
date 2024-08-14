@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -70,7 +69,7 @@ def stabilize():
         if events[7] > 0:
             if take_action(36):
                 continue
-
+        
         if events[8] > 0:
             if take_action(29):
                 continue
@@ -80,7 +79,7 @@ def stabilize():
                 continue
             if take_action(40):
                 continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue
@@ -103,7 +102,6 @@ def stabilize():
 
         if take_action(48, False):
             break
-
 
 if __name__ == "__main__":
     stabilize()
