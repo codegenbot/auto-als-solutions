@@ -11,7 +11,7 @@ def stabilize():
         print(action)
         if action == 48:
             done = True
-            
+
     def need_examination():
         return (25 not in actions_taken or 27 not in actions_taken or 
                 16 not in actions_taken or 3 not in actions_taken)
@@ -68,29 +68,29 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
-            continue
+            continue 
         
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
-            continue
+            continue 
         
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
-            continue
+            continue 
         
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
-            continue
+            continue 
         
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
-            continue
+            continue 
         
         if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and 
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and 
             vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
             take_action(48)
-            continue
+            continue 
         
         take_action(0)
 
