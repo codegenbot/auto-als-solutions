@@ -13,13 +13,13 @@ def stabilize():
             done = True
 
     def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 3])
+        return not all(measured(vital_sign) for vital_sign in [25, 27, 16])
 
     def measured(vital_sign):
         return vital_sign in actions_taken
 
     def need_measurement_action():
-        for action in [25, 27, 16, 3]:
+        for action in [25, 27, 16]:
             if action not in actions_taken:
                 return action
 
@@ -72,10 +72,10 @@ def stabilize():
             take_action(40)  # DefibrillatorCharge
             continue
             
-        if actions_taken == {25, 27, 16, 3}:  # After taking basic measurements
-            take_action(48)
-        else:
-            take_action(3)  # ExamineAirway
+        take_action(3)  # ExamineAirway
+        
+        if actions_taken == {25, 27, 16, 3}:
+            take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
