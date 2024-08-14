@@ -13,22 +13,12 @@ def stabilize():
             done = True
 
     def need_measurements():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-        )
+        return any(i not in actions_taken for i in [25, 27, 16, 3, 4, 5, 6])
 
     def need_measurement_action():
-        if 25 not in actions_taken:
-            return 25
-        if 27 not in actions_taken:
-            return 27
-        if 16 not in actions_taken:
-            return 16
-        if 3 not in actions_taken:
-            return 3
+        for action in [25, 27, 16, 3, 4, 5, 6]:
+            if action not in actions_taken:
+                return action
         return None
 
     for step in range(max_steps):
@@ -67,10 +57,12 @@ def stabilize():
             take_action(35)  # Perform airway maneuvers for no breathing
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
-        if unstable_tachyarrhythmia:
+        if any(events[i] > 0 for i in range(29, 32)):
             if 28 not in actions_taken:
                 take_action(28)  # Attach defib pads
+                continue
+            if 39 not in actions_taken:
+                take_action(39)  # Turn on defibrillator
                 continue
             take_action(40)  # Defibrillator charge
             continue
