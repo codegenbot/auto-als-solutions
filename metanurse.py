@@ -1,27 +1,21 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
 
-    def take_action(action, break_action=True):
+    def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:
-            done = True
-        return break_action
+        return action in [25, 27, 16, 3, 28, 40, 48]
 
     def need_measurements():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-        )
+        return 0 in observations[33:40]
 
-    def need_measurement_action():
+    def measure_vitals():
         if 25 not in actions_taken:
             return 25  # UseSatsProbe
         if 27 not in actions_taken:
@@ -32,7 +26,7 @@ def stabilize():
             return 3  # ExamineAirway
         return None
 
-    def update_vitals():
+    def get_vitals():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
@@ -49,16 +43,13 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
-        if need_measurements():
-            measurement_action = need_measurement_action()
-            if measurement_action is not None:
-                if take_action(measurement_action):
-                    continue
+        if take_action(need_measurements()):
+            continue
 
-        vitals = update_vitals()
+        vitals = get_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
@@ -95,12 +86,11 @@ def stabilize():
         if any(events[i] > 0 for i in range(28, 33)):  # Tachyarrhythmia
             if 28 not in actions_taken and take_action(28):
                 continue  # AttachDefibPads
-            if take_action(38):  # TakeBloodPressure to get more info
-                continue  # May need cardioversion
+            if take_action(40):  # DefibrillatorCharge
+                continue
 
-        if all(v is not None and v >= {"MAP": 60, "Sats": 88, "RespRate": 8}[name] for name, v in vitals.items()):
-            if take_action(48, False):  # Finish
-                break
+        take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
