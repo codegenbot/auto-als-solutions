@@ -13,12 +13,10 @@ def stabilize():
             done = True
 
     def need_measurements():
-        required_measurements = {25, 27, 16, 3, 4, 5, 6}
-        return not required_measurements.issubset(actions_taken)
+        return any(action not in actions_taken for action in [16, 25, 27, 3])
 
     def need_measurement_action():
-        required_measurements = [16, 25, 27, 3, 4, 5, 6]
-        for action in required_measurements:
+        for action in [16, 25, 27, 3]:
             if action not in actions_taken:
                 return action
 
@@ -44,45 +42,45 @@ def stabilize():
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)  # ResumeCPR
+            take_action(23)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # UseYankeurSuctionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
+        if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):
             if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
+                take_action(28)
             else:
-                take_action(40)  # DefibrillatorCharge
+                take_action(40)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
