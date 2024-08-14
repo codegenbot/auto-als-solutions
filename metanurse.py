@@ -31,9 +31,6 @@ def stabilize():
             return 3  # ExamineAirway
         return None
 
-    def check_unstable_tachyarrhythmia(events):
-        return any(events[i] > 0 for i in range(28, 36))
-
     for step in range(max_steps):
         if done:
             break
@@ -58,8 +55,21 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for unstable tachyarrhythmia and take appropriate action
-        if check_unstable_tachyarrhythmia(events):
+        if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
+            take_action(31)  # UseSuction
+            continue
+
+        if events[6] > 0:  # Tongue Obstruction
+            take_action(36)  # HeadTiltChinLift
+            continue
+
+        if events[7] > 0:  # No Breathing
+            if 29 not in actions_taken:
+                take_action(29)  # UseBagValveMask
+            continue
+
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in [31, 32, 37, 38])
+        if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
                 continue
