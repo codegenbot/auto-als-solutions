@@ -61,10 +61,12 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
+        # Airway assessment
         if events[3] == 0:  # Not clear airway
             take_action(3)  # ExamineAirway
             continue
     
+        # Airway suction
         if events[7] > 0:
             take_action(36)  # PerformHeadTiltChinLift
             continue
@@ -73,6 +75,7 @@ def stabilize():
             take_action(31)  # UseYankeurSuctonCatheter
             continue
 
+        # Check Response
         if any(events[i] > 0 for i in [1, 2]):
             take_action(8)  # ExamineResponse
             continue
