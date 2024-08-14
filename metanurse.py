@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 24}
+    required_measurements = {25, 27, 16, 24}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -19,13 +19,13 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
+        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
     
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-
+        
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
@@ -36,9 +36,7 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)
             continue
 
@@ -50,8 +48,6 @@ def stabilize():
                     take_action(40)
                 elif 47 not in actions_taken:
                     take_action(47)
-                else:
-                    take_action(48)
                 continue
             else:
                 take_action(15)
@@ -77,11 +73,12 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [0, 1, 2]):
+        if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)
             continue
 
         take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
