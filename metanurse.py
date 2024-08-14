@@ -12,6 +12,12 @@ def stabilize():
         if action == 48:
             done = True
 
+    def ensure_action_taken(action):
+        if action not in actions_taken:
+            take_action(action)
+            return True
+        return False
+
     for step in range(max_steps):
         if done:
             break
@@ -33,48 +39,56 @@ def stabilize():
             )
         }
 
-        if 25 not in actions_taken:
-            take_action(25)
+        # Action priorities for ABCDE
+        if ensure_action_taken(25):  # UseSatsProbe
             continue
-        if 27 not in actions_taken:
-            take_action(27)
+        if ensure_action_taken(27):  # UseBloodPressureCuff
             continue
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-        if 3 not in actions_taken:
-            take_action(3)
-            continue
-        if vitals["MAP"] is None and 38 not in actions_taken:
-            take_action(38)
-            continue
-        if vitals["RespRate"] is None and 4 not in actions_taken:
-            take_action(4)
-            continue
-        if vitals["Sats"] is None and 16 not in actions_taken:
-            take_action(16)
+        if ensure_action_taken(16):  # ViewMonitor
             continue
 
+        if ensure_action_taken(3):  # ExamineAirway
+            continue
+        if ensure_action_taken(4):  # ExamineBreathing
+            continue
+        if ensure_action_taken(5):  # ExamineCirculation
+            continue
+        if ensure_action_taken(6):  # ExamineDisability
+            continue
+        if ensure_action_taken(7):  # ExamineExposure
+            continue
+
+        # Check if any vital signs are missing
+        if vitals["MAP"] is None and ensure_action_taken(38):  # TakeBloodPressure
+            continue
+        if vitals["RespRate"] is None and ensure_action_taken(4):  # ExamineBreathing
+            continue
+        if vitals["Sats"] is None and ensure_action_taken(16):  # ViewMonitor
+            continue
+
+        # Immediate interventions for critical conditions
         if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)
+            take_action(22)  # BagDuringCPR
             continue
 
+        # Stabilization for deficient parameters
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
+        # Check end condition
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
@@ -82,10 +96,10 @@ def stabilize():
                 [88, 8, 60]
             )
         ):
-            take_action(48)
+            take_action(48)  # Finish
             return
 
-        take_action(1)  # Default action if none above apply
+        take_action(48)  # Fail-safe Finish
 
 if __name__ == "__main__":
     stabilize()
