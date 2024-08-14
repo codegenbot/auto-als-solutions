@@ -1,10 +1,11 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -20,15 +21,23 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
-                     "MAP", "Sats", "Resps"], vital_signs_values
+                    [
+                        "HeartRate",
+                        "RespRate",
+                        "CapillaryGlucose",
+                        "Temperature",
+                        "MAP",
+                        "Sats",
+                        "Resps",
+                    ],
+                    vital_signs_values,
                 )
             )
         }
@@ -97,8 +106,7 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)
@@ -106,6 +114,7 @@ def stabilize():
 
         take_action(48)
         return
+
 
 if __name__ == "__main__":
     stabilize()
