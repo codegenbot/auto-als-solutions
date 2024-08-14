@@ -22,10 +22,8 @@ def stabilize():
         arrhythmia_events = [28, 30, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
     
-    def handle_tachyarrhythmia():
-        take_action(28)  # Attach Defib Pads
-        take_action(24)  # Use Monitor Pads
-        take_action(10)  # Give Adrenaline (or shock if unstable)
+    def is_unstable_map():
+        return vitals["MAP"] is not None and vitals["MAP"] < 60
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -41,31 +39,27 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Critical condition handling
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
-        if has_tachyarrhythmia():
-            handle_tachyarrhythmia()
+        if has_tachyarrhythmia() and is_unstable_map():
+            take_action(24)  # Use Monitor Pads
+            take_action(10)  # Give Adrenaline
             continue
 
-        # Low MAP handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        # Low Sats handling
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
 
-        # Low RespRate handling
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Airway issues
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
