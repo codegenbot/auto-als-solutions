@@ -26,8 +26,8 @@ def stabilize():
             "Sats": vital_sign_values[5] if vital_sign_timestamps[5] > 0 else None,
         }
 
-        if events[6] or events[4] or events[5]:  # Airway issues
-            take_action(3 if 3 not in actions_taken else 35)  # Examining and Maneuvering
+        if events[6] or events[4] or events[5]:
+            take_action(3 if "ExamineAirway" not in actions_taken else 35)
             continue
 
         if measured_vitals["Sats"] is None:
@@ -36,43 +36,42 @@ def stabilize():
         if measured_vitals["MAP"] is None:
             take_action(27)
             continue
-        if 5 not in actions_taken:
+        if "ExamineCirculation" not in actions_taken:
             take_action(5)
             continue
-        if 4 not in actions_taken:
+        if "ExamineBreathing" not in actions_taken:
             take_action(4)
             continue
 
         if any(events[i] for i in range(28, 33)):
             if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
+                take_action(28)
             else:
-                take_action(40)  # DefibrillatorCharge
+                take_action(40)
             continue
 
         if measured_vitals["MAP"] is not None and measured_vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compression
+            take_action(17)
             continue
         
         if measured_vitals["Sats"] is not None and measured_vitals["Sats"] < 65:
-            take_action(22)  # Bag during CPR
+            take_action(22)
             continue
 
         if measured_vitals["MAP"] is not None and measured_vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if measured_vitals["Sats"] is not None and measured_vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
+            take_action(30)
             continue
 
         if measured_vitals["RespRate"] is not None and measured_vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
-        if all(v is not None for v in measured_vitals.values()) \
-                and measured_vitals["Sats"] >= 88 and measured_vitals["RespRate"] >= 8 and measured_vitals["MAP"] >= 60:
-            take_action(48)  # Finish
+        if all(v is not None for v in measured_vitals.values()) and measured_vitals["Sats"] >= 88 and measured_vitals["RespRate"] >= 8 and measured_vitals["MAP"] >= 60:
+            take_action(48)
 
 if __name__ == "__main__":
     stabilize()
