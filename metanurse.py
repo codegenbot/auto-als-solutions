@@ -21,7 +21,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
+
     for step in range(max_steps):
         if done:
             break
@@ -43,25 +43,12 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # A - Airway
-        if any(events[i] > 0 for i in [4, 5, 6]):  # Airway events
-            if events[5] > 0 or events[4] > 0:
-                take_action(31)  # Use Yankeur Suction Catheter
-            else:
-                take_action(36 if events[6] > 0 else 32)  # Perform Head-Tilt Chin-Lift or Use Guedel Airway
-            continue
-
-        # B - Breathing
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
-            continue
-
-        # C - Circulation
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if (
+            vitals["MAP"] is not None
+            and vitals["MAP"] < 20
+            or vitals["Sats"] is not None
+            and vitals["Sats"] < 65
+        ):
             take_action(17)  # Start Chest Compression (CPR)
             continue
 
@@ -72,17 +59,32 @@ def stabilize():
                 take_action(40)  # Charge Defibrillator
                 take_action(47)  # Sync
                 take_action(41)  # Defibrillator Current Up
-            else:
-                take_action(15)  # Give Fluids
+                take_action(43)  # Defibrillator Pace
+                continue
+            take_action(15)  # Give Fluids
             continue
 
-        # Early finish condition if all vitals are stable
-        if all(vitals[key] is not None and min_value <= vitals[key] <= max_value for key, min_value, max_value in [
-                ("Sats", 88, 100), ("RespRate", 8, 20), ("MAP", 60, 100)]):
-            take_action(48)  # Finish
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
-        take_action(1)  # Restart if unsure, CheckSignsOfLife
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        if any(events[i] > 0 for i in [4, 5]):
+            take_action(31)  # Use Yankeur Suction Catheter
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # Perform Head-Tilt Chin-Lift
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
