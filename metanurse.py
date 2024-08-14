@@ -16,8 +16,8 @@ def stabilize():
     def need_examination(category):
         exam_actions = {
             "A": [3],
-            "B": [25, 5, 16],
-            "C": [27, 16],
+            "B": [4, 25, 16],
+            "C": [5, 27, 16],
         }
         return any(action not in actions_taken for action in exam_actions[category])
 
@@ -58,14 +58,27 @@ def stabilize():
             if 25 not in actions_taken:
                 take_action(25)
                 continue
-            take_action(16)
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            take_action(4)
             continue
 
         if need_examination("C"):
             if 27 not in actions_taken:
                 take_action(27)
                 continue
-            take_action(16)
+            if 16 not in actions_taken:
+                take_action(16)
+                continue
+            take_action(5)
+            continue
+
+        if events[6] > 0:  # AirwayTongue
+            take_action(36)
+            continue
+        if events[4] > 0 or events[5] > 0:  # AirwayVomit, AirwayBlood
+            take_action(31)
             continue
 
         unstable_tachyarrhythmia = (
