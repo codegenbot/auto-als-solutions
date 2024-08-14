@@ -88,6 +88,7 @@ def stabilize():
             continue
 
         take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
