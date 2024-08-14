@@ -21,7 +21,6 @@ def stabilize():
 
         vitals = check_vitals(observations)
 
-        # ABCD checks
         if 3 in actions_taken:  # Airway
             if any(events[i] for i in [4, 5]):  # Vomit, Blood
                 take_action(31)
