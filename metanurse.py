@@ -36,6 +36,7 @@ def stabilize():
             )
         }
 
+        # Prioritize essential examinations
         if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
@@ -50,6 +51,7 @@ def stabilize():
                 take_action(3)
                 continue
 
+        # Assess Airway obstructions
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -58,15 +60,17 @@ def stabilize():
             take_action(36)
             continue
 
+        # Treat unstable tachyarrhythmia
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
                                     events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(40)
+            take_action(40)  # Assume defibrillation
             continue
 
+        # Treat hypotension and respiratory issues
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
