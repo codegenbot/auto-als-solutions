@@ -67,6 +67,10 @@ def stabilize():
             take_action(22)  # BagDuringCPR
             continue
 
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
+            take_action(15)  # GiveFluids
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -75,15 +79,12 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
-            take_action(15)  # GiveFluids
-            continue
-        
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:  # AttachDefibPads
                 take_action(28)
                 continue
             take_action(40)  # DefibrillatorCharge
+            take_action(43)  # DefibrillatorPace
             continue
 
         if all(
