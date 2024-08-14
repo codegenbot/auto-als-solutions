@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
@@ -48,8 +48,10 @@ def stabilize():
                     take_action(24)
                 elif 40 not in actions_taken:
                     take_action(40)
+                elif 47 not in actions_taken:
+                    take_action(47)
                 else:
-                    take_action(23)
+                    take_action(48)
             else:
                 take_action(15)
             continue
@@ -61,7 +63,7 @@ def stabilize():
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
             continue
-        
+
         if any(events[i] > 0 for i in [4, 5]):
             take_action(31)
             continue
