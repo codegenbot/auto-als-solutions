@@ -37,12 +37,13 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):  # Unstable tachyarrhythmia
+            if any(events[i] > 0 for i in range(28, 33)):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
-                continue
-            else:
+            elif any(events[i] > 0 for i in [0, 1, 2]):  # Conscious or semi-consciousness
                 take_action(15)  # Give Fluids
-                continue
+            else:
+                take_action(17)  # Start Chest Compression
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
@@ -52,7 +53,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):  # Vomit, Blood, Tongue obstructing airway
+        if any(events[i] > 0 for i in [4, 5]):
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
