@@ -11,7 +11,7 @@ def stabilize():
         actions_taken.add(action)
         print(action)
         steps += 1
-        if action == 48:  # Finish
+        if action == 48:
             done = True
 
     def need_examination():
