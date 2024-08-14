@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -59,8 +58,8 @@ def stabilize():
             if 28 not in actions_taken:
                 take_action(28)
                 continue
-            take_action(40)  # Charge defibrillator
-            take_action(24)  # Pads
+            take_action(40)
+            take_action(24)
             continue
 
         if events[4] > 0 or events[5] > 0:
@@ -89,7 +88,6 @@ def stabilize():
 
         if all(measured(vital_sign) for vital_sign in {25, 27, 16, 3}) and not done:
             take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
