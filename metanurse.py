@@ -13,10 +13,10 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = [25, 27, 16]
 
     def need_measurements():
-        return not required_measurements.issubset(actions_taken)
+        return not all(action in actions_taken for action in required_measurements)
 
     def need_measurement_action():
         for action in required_measurements:
@@ -39,11 +39,19 @@ def stabilize():
             continue
 
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
         }
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
+            continue
 
         if events[4] > 0 or events[5] > 0:
             take_action(31)
@@ -62,14 +70,6 @@ def stabilize():
                 take_action(28)
                 continue
             take_action(40)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
