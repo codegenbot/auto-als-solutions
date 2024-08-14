@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         if need_measurements():
@@ -40,9 +40,10 @@ def stabilize():
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Cardiac arrest thresholds
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(23)  # Resume CPR
             continue
@@ -51,6 +52,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Stabilization thresholds
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
@@ -63,6 +65,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Airway blockages and issues
         if events[4] > 0 or events[5] > 0:
             take_action(31)  # Use Yankeur Suction Catheter
             continue
@@ -71,10 +74,12 @@ def stabilize():
             take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
+        # Breathing issues
         if events[7] > 0 or any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Check for cardiac arrhythmias
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)  # Attach Defib Pads
