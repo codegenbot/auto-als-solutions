@@ -33,6 +33,15 @@ def stabilize():
             actions_taken.add(action)
             print(action)
 
+        # Immediate critical actions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
+
         # Check vitals immediately if not already done
         if 25 not in actions_taken:
             take_action(25)
@@ -61,17 +70,8 @@ def stabilize():
             take_action(7)
             continue
 
-        # Immediate critical actions
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
         # Address unstable tachyarrhythmia
-        if any(events[i] > 0 for i in [29, 30, 31]):  # HeartRhythm
+        if any(events[i] > 0 for i in range(29, 38)):  # HeartRhythm events
             if 28 not in actions_taken:
                 take_action(28)  # AttachDefibPads
                 continue
