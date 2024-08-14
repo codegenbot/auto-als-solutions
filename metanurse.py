@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -28,11 +27,7 @@ def stabilize():
             break
 
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -41,13 +36,8 @@ def stabilize():
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2]
-            if vital_signs_times[2] > 0
-            else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-            "RespEffort": vital_signs_values[6] if vital_signs_times[6] > 0 else None,
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -71,7 +61,7 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(16)
+            take_action(28)
             continue
 
         if events[4] > 0 or events[5] > 0:
@@ -87,7 +77,6 @@ def stabilize():
             continue
 
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
