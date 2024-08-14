@@ -19,6 +19,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
+        # Prioritize checking measurements
         if step == 0:
             take_action(25)  # UseSatsProbe
             continue
