@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3, 19, 5}
+    required_measurements = {25, 27, 16, 3}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -21,7 +21,7 @@ def stabilize():
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
- 
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -31,7 +31,7 @@ def stabilize():
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
-        
+
         if needs_measurements():
             take_action(next_measurement_action())
             continue
@@ -54,10 +54,6 @@ def stabilize():
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use Bag-Valve Mask
-            continue
-        
-        if events[3] == 0:  # AirwayClear check
-            take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
