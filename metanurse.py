@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -54,7 +53,7 @@ def stabilize():
             if measurement_action is not None:
                 take_action(measurement_action)
                 continue
-
+        
         vitals = {
             "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -103,7 +102,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
