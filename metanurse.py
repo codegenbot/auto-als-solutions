@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -8,7 +9,12 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = {
+        25,
+        27,
+        16,
+        3,
+    }  # SATs Probe, BP Cuff, View Monitor, Examine Airway
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -24,7 +30,11 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -36,7 +46,9 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(23)  # Resume CPR
             continue
 
@@ -74,7 +86,15 @@ def stabilize():
             take_action(8)  # Examine Response
             continue
 
-        take_action(48)  # Finish if stable
+        if all(
+            vitals[k] is not None and vitals[k] >= th
+            for k, th in [("MAP", 60), ("Sats", 88), ("RespRate", 8)]
+        ):
+            take_action(48)  # Finish if stable
+            break
+        else:
+            take_action(1)  # Recheck Signs of Life
+
 
 if __name__ == "__main__":
     stabilize()
