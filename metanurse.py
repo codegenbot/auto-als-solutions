@@ -19,9 +19,8 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
-        return any(events[i] > 0 for i in arrhythmia_events)
-    
+        return any(events[i] > 0 for i in list(range(31, 34)) + list(range(35, 39)))
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -36,24 +35,13 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(31)
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65):
+            take_action(23)
             continue
 
-        if not vitals["Sats"] or vitals["Sats"] < 88:
-            if vitals["Sats"] < 65:
-                take_action(22)
-            else:
-                take_action(30)
-            continue
-        if not vitals["RespRate"] or vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        if not vitals["MAP"] or vitals["MAP"] < 60:
-            if vitals["MAP"] < 20:
-                take_action(23)
-            elif has_unstable_tachyarrhythmia(events):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)
                 elif 40 not in actions_taken:
@@ -61,20 +49,37 @@ def stabilize():
                 elif 47 not in actions_taken:
                     take_action(47)
                 else:
-                    take_action(41)
+                    take_action(23)
             else:
                 take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(21, 24)) or events[2] > 0:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in [4, 5]):
+            take_action(31)
+            continue
+
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)
             continue
 
-        if any(events[i] > 0 for i in range(25, 30)):
-            take_action(7)
-            continue
-
         take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
