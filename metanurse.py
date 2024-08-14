@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,12 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {
-        25,
-        27,
-        16,
-        3,
-    }  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
+    required_measurements = {25, 27, 16, 3}  # Use SATs Probe, BP Cuff, View Monitor, Examine Airway
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -27,7 +21,7 @@ def stabilize():
     def has_tachyarrhythmia():
         arrhythmia_events = [28, 30, 33, 34, 35, 36, 37, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
-
+    
     def handle_tachyarrhythmia():
         take_action(28)  # Attach Defib Pads
         take_action(24)  # Use Monitor Pads
@@ -35,11 +29,7 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -52,12 +42,7 @@ def stabilize():
             continue
 
         # Critical condition handling
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-        ):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
@@ -94,7 +79,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if stable
-
 
 if __name__ == "__main__":
     stabilize()
