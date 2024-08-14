@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-    
+
     def take_action(action, break_action=True):
         nonlocal done
         actions_taken.add(action)
@@ -57,9 +57,9 @@ def stabilize():
             if measurement_action is not None:
                 if take_action(measurement_action):
                     continue
-                
+
         vitals = update_vitals(vital_signs_times, vital_signs_values)
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue  # StartChestCompression
@@ -92,11 +92,16 @@ def stabilize():
             if take_action(30):
                 continue  # UseNonRebreatherMask
 
-        if events[28] > 0:  # Tachyarrhythmia detected
+        if any(events[i] > 0 for i in range(28, 33)):  # Tachyarrhythmia
+            if 2 not in actions_taken and take_action(2):
+                continue  # CheckRhythm
             if 28 not in actions_taken and take_action(28):
                 continue  # AttachDefibPads
-            if take_action(40):  # DefibrillatorCharge
-                continue
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                if take_action(40):  # DefibrillatorCharge
+                    continue  # Defibrillate
+                if take_action(11):  # GiveAmiodarone
+                    continue
         
         if take_action(48, False):  # Finish
             break
