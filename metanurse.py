@@ -32,7 +32,6 @@ def stabilize():
         def take_action(action):
             actions_taken.add(action)
             print(action)
-            sys.stdout.flush() 
 
         if 25 not in actions_taken:
             take_action(25)
@@ -52,37 +51,31 @@ def stabilize():
             take_action(22)
             continue
 
-        if 3 not in actions_taken:
+        if not any(events[3:7]) and 3 not in actions_taken:
             take_action(3)
             continue
-
-        if 4 not in actions_taken:
-            take_action(4)
-            continue
-
-        if 5 not in actions_taken:
-            take_action(5)
-            continue
-
-        if 6 not in actions_taken:
-            take_action(6)
-            continue
-
-        if 7 not in actions_taken:
-            take_action(7)
-            continue
+        
+        if vitals["Sats"] is None or vitals["RespRate"] is None or vitals["MAP"] is None:
+            if vitals["Sats"] is None and 25 not in actions_taken:
+                take_action(25)
+                continue
+            if vitals["RespRate"] is None and 5 not in actions_taken:
+                take_action(5)
+                continue
+            if vitals["MAP"] is None and 27 not in actions_taken:
+                take_action(27)
+                continue
 
         unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
 
-        if unstable_tachyarrhythmia and 28 not in actions_taken:
-            take_action(28)
-            continue
-
         if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
             take_action(40)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not unstable_tachyarrhythmia:
             take_action(15)
             continue
 
@@ -97,14 +90,14 @@ def stabilize():
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60],
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
             take_action(48)
             return
 
-        take_action(3)
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
