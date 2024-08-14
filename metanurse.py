@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     def take_action(action):
         print(action)
         actions_taken.add(action)
