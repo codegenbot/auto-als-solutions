@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = {25, 27, 16, 3} 
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -37,18 +37,18 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23)
+            take_action(23) 
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
-                take_action(24)
+                take_action(24) 
             else:
-                take_action(15)
+                take_action(15) 
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30) 
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
