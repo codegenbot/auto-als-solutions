@@ -9,12 +9,12 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish
+        if action == 48:
             done = True
-
+    
     def need_examination():
         return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-
+    
     for step in range(max_steps):
         if done:
             break
