@@ -12,7 +12,7 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_initial_examination():
+    def need_examination():
         return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
     for step in range(max_steps):
@@ -36,7 +36,7 @@ def stabilize():
             )
         }
 
-        if need_initial_examination():
+        if need_examination():
             if 25 not in actions_taken:
                 take_action(25)
                 continue
@@ -61,11 +61,10 @@ def stabilize():
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
                                     events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
-            take_action(2)  # CheckRhythm
-            take_action(24)  # UseMonitorPads
-            take_action(28)  # AttachDefibPads
-            take_action(40)  # DefibrillatorCharge
-            take_action(43)  # DefibrillatorPace
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -77,9 +76,6 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 14 not in actions_taken:
-                take_action(14)
-                continue
             take_action(15)
             continue
 
