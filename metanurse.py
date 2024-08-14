@@ -9,17 +9,17 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish
+        if action == 48:
             done = True
 
     def need_measurements():
-        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 3])
+        return not all(measured(vital_sign) for vital_sign in [25, 27, 16, 36])
 
     def measured(vital_sign):
         return vital_sign in actions_taken
 
     def need_measurement_action():
-        for action in [25, 27, 16, 3]:
+        for action in [25, 27, 16, 36]:
             if action not in actions_taken:
                 return action
 
@@ -46,20 +46,20 @@ def stabilize():
         }
 
         if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
-            take_action(31)  # UseYankeurSuctionCatheter
+            take_action(31)
             continue
 
         if events[6] > 0:  # Tongue Obstruction
-            take_action(36)  # PerformHeadTiltChinLift
+            take_action(36)
             continue
 
-        if events[7] > 0:  # No Breathing
-            take_action(29)  # UseBagValveMask
+        if events[7] > 0:  # BreathingNone
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(28, 33)):  # Unstable Tachyarrhythmia
             if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
+                take_action(28)
                 continue
             take_action(40)  # DefibrillatorCharge
             continue
@@ -84,12 +84,8 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if all(measured(v) for v in [25, 27, 16, 3]) and (
-            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-            vitals["RespRate"] is not None and vitals["RespRate"] >= 8 and
-            vitals["MAP"] is not None and vitals["MAP"] >= 60
-        ):
-            take_action(48)  # Finish
+        if actions_taken >= {25, 27, 16, 36}:
+            take_action(48)  # Finish when all measurements are taken
 
 if __name__ == "__main__":
     stabilize()
