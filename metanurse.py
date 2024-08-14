@@ -33,7 +33,16 @@ def stabilize():
             )
         }
 
-        # ABCD Examination stage
+        if 25 not in actions_taken:
+            take_action(25)
+            continue
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+
         if 3 not in actions_taken:
             take_action(3)
             continue
@@ -50,30 +59,6 @@ def stabilize():
             take_action(7)
             continue
 
-        # Initial Assessments and Attachments
-        if 25 not in actions_taken:
-            take_action(25)
-            continue
-        if 27 not in actions_taken:
-            take_action(27)
-            continue
-        if 16 not in actions_taken:
-            take_action(16)
-            continue
-        
-        # Check Vital Signs
-        if vitals["MAP"] is None or vitals["RespRate"] is None or vitals["Sats"] is None:
-            if vitals["MAP"] is None and 38 not in actions_taken:
-                take_action(38)
-                continue
-            if vitals["RespRate"] is None and 4 not in actions_taken:
-                take_action(4)
-                continue
-            if vitals["Sats"] is None and 16 not in actions_taken:
-                take_action(16)
-                continue
-
-        # Immediate Intervention based on critical values
         if vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -104,8 +89,7 @@ def stabilize():
             take_action(48)
             return
 
-        take_action(48)
-        return
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
