@@ -39,7 +39,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
         
         if step == 0:
-            take_action(1)
+            take_action(1)  # CheckSignsOfLife
             continue
 
         vitals = {
@@ -55,7 +55,7 @@ def stabilize():
         })
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if needs_vitals():
@@ -64,27 +64,27 @@ def stabilize():
 
         if not all(examined.values()):
             action = examine_type()
-            examined.update({"Airway": examined["Airway"] or action == 3,
-                             "Breathing": examined["Breathing"] or action == 4,
-                             "Circulation": examined["Circulation"] or action == 5,
-                             "Disability": examined["Disability"] or action == 6,
-                             "Exposure": examined["Exposure"] or action == 7})
             take_action(action)
+            examined.update({"Airway": True if action == 3 else examined["Airway"],
+                             "Breathing": True if action == 4 else examined["Breathing"],
+                             "Circulation": True if action == 5 else examined["Circulation"],
+                             "Disability": True if action == 6 else examined["Disability"],
+                             "Exposure": True if action == 7 else examined["Exposure"]})
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
     
 if __name__ == "__main__":
     stabilize()
