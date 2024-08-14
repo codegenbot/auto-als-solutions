@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -18,8 +19,8 @@ def stabilize():
             or 27 not in actions_taken
             or 16 not in actions_taken
             or 3 not in actions_taken
-            or 4 not in actions_taken
             or 5 not in actions_taken
+            or 4 not in actions_taken
         )
 
     def need_measurement_action():
@@ -31,10 +32,10 @@ def stabilize():
             return 16  # ViewMonitor
         if 3 not in actions_taken:
             return 3  # ExamineAirway
-        if 4 not in actions_taken:
-            return 4  # ExamineBreathing
         if 5 not in actions_taken:
             return 5  # ExamineCirculation
+        if 4 not in actions_taken:
+            return 4  # ExamineBreathing
         return None
 
     for step in range(max_steps):
@@ -62,47 +63,47 @@ def stabilize():
         }
 
         unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 32))
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)  # Attach defib pads
+                continue
+            take_action(40)  # Defibrillator charge
+            continue
+
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)  # Use suction for vomit or blood
+            continue
+
+        if events[6] > 0:
+            take_action(36)  # Perform head tilt chin lift for tongue obstruction
+            continue
+
+        if events[7] > 0:
+            take_action(35)  # Perform airway manoeuvres for no breathing
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)  # Start chest compression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
-        if events[4] > 0 or events[5] > 0:  # Vomit, Blood in Airway
-            take_action(31)  # UseSuction
-            continue
-
-        if events[6] > 0:  # Tongue Obstruction
-            take_action(36)  # HeadTiltChinLift
-            continue
-
-        if events[7] > 0:  # No Breathing
-            take_action(29)  # UseBagValveMask
+            take_action(22)  # Bag during CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if unstable_tachyarrhythmia:
-            if 28 not in actions_taken:
-                take_action(28)  # AttachDefibPads
-            else:
-                take_action(40)  # DefibrillatorCharge
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)  # Use nonrebreather mask
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)  # Use bag-valve mask
             continue
 
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
