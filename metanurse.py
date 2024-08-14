@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,15 +8,13 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_initial_measurements = [25, 27, 16, 3]
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, View Monitor, Examine Airway
 
     def needs_measurements():
-        return any(
-            action not in actions_taken for action in required_initial_measurements
-        )
+        return not required_measurements.issubset(actions_taken)
 
     def next_measurement_action():
-        for action in required_initial_measurements:
+        for action in required_measurements:
             if action not in actions_taken:
                 return action
 
@@ -27,11 +24,7 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -43,9 +36,7 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)  # Resume CPR
             continue
 
@@ -53,8 +44,12 @@ def stabilize():
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)  # Use Monitor Pads
-                else:
+                elif 40 not in actions_taken:
                     take_action(40)  # Defibrillator Charge
+                elif 39 not in actions_taken:
+                    take_action(39)  # Turn On Defibrillator
+                else:
+                    take_action(41)  # DefibrillatorCurrentUp
             else:
                 take_action(15)  # Give Fluids
             continue
@@ -83,8 +78,10 @@ def stabilize():
             take_action(8)  # Examine Response
             continue
 
-        take_action(48)  # Finish if stable
-
+        if (vitals["MAP"] is not None and vitals["MAP"] >= 60) and \
+           (vitals["Sats"] is not None and vitals["Sats"] >= 88) and \
+           (vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
+            take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
     stabilize()
