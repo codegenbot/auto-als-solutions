@@ -3,12 +3,12 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {3, 4, 5, 6, 25, 27, 16, 24}
+    required_measurements = {25, 27, 16, 24}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -49,7 +49,7 @@ def stabilize():
                 elif 40 not in actions_taken:
                     take_action(40)
                 else:
-                    take_action(48)
+                    take_action(23)
             else:
                 take_action(15)
             continue
