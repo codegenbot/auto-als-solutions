@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -40,7 +41,12 @@ def stabilize():
             continue
 
         # Cardiac arrest checks
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if (
+            vitals["MAP"] is not None
+            and vitals["MAP"] < 20
+            or vitals["Sats"] is not None
+            and vitals["Sats"] < 65
+        ):
             take_action(17)
             take_action(22)
             continue
@@ -77,7 +83,13 @@ def stabilize():
             continue
 
         # Rhythmic issues
-        if events[28] > 0 or events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0:
+        if (
+            events[28] > 0
+            or events[29] > 0
+            or events[30] > 0
+            or events[31] > 0
+            or events[32] > 0
+        ):
             take_action(28)
             continue
         if 28 in actions_taken:
@@ -86,12 +98,15 @@ def stabilize():
             take_action(39)  # Turn on defibrillator
             continue
 
-        if all(x is not None for x in vitals.values()) and (vitals["RespRate"] >= 8 and vitals["Sats"] >= 88 and vitals["MAP"] >= 60):
+        if all(x is not None for x in vitals.values()) and (
+            vitals["RespRate"] >= 8 and vitals["Sats"] >= 88 and vitals["MAP"] >= 60
+        ):
             take_action(48)
             continue
 
         # Default to DoNothing
         take_action(0)
+
 
 if __name__ == "__main__":
     stabilize()
