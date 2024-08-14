@@ -11,7 +11,9 @@ def stabilize():
     required_initial_measurements = [25, 27, 16, 3]
 
     def needs_measurements():
-        return any(action not in actions_taken for action in required_initial_measurements)
+        return any(
+            action not in actions_taken for action in required_initial_measurements
+        )
 
     def next_measurement_action():
         for action in required_initial_measurements:
@@ -19,7 +21,7 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
+        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -27,7 +29,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -41,7 +43,8 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-                vitals["Sats"] is not None and vitals["Sats"] < 65):
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(23)  # Resume CPR
             continue
 
