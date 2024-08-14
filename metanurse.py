@@ -18,8 +18,8 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_tachyarrhythmia():
-        arrhythmia_events = [28, 30, 33, 34, 35, 36, 37, 38]
+    def has_unstable_tachyarrhythmia():
+        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36, 38]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
@@ -43,9 +43,8 @@ def stabilize():
 
         # Low MAP handling
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_tachyarrhythmia():
+            if has_unstable_tachyarrhythmia():
                 take_action(24)  # Use Monitor Pads
-                take_action(10)  # Give Adrenaline
             else:
                 take_action(15)  # Give Fluids
             continue
