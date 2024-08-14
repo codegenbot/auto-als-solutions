@@ -9,12 +9,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {
-        25,
-        27,
-        16,
-        3,
-    }  # Use SATs Probe, BP Cuff, Monitor, Examine Airway
+    required_measurements = {25, 27, 16, 3}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -24,13 +19,61 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_unstable_tachyarrhythmia():
+    def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [
-            32,
-            38,
-            35,
-        ]  # HeartRhythmVT, HeartRhythmVF, HeartRhythmTorsades
+            category_index_map[event]
+            for event in ["HeartRhythmVT", "HeartRhythmVF", "HeartRhythmTorsades"]
+        ]
         return any(events[i] > 0 for i in arrhythmia_events)
+
+    category_index_map = dict(
+        [
+            (category.lower(), index)
+            for index, category in enumerate(
+                [
+                    "ResponseVerbal",
+                    "ResponseGroan",
+                    "ResponseNone",
+                    "AirwayClear",
+                    "AirwayVomit",
+                    "AirwayBlood",
+                    "AirwayTongue",
+                    "BreathingNone",
+                    "BreathingSnoring",
+                    "BreathingSeeSaw",
+                    "BreathingEqualChestExpansion",
+                    "BreathingBibasalCrepitations",
+                    "BreathingWheeze",
+                    "BreathingCoarseCrepitationsAtBase",
+                    "BreathingPneumothoraxSymptoms",
+                    "VentilationResistance",
+                    "RadialPulsePalpable",
+                    "RadialPulseNonPalpable",
+                    "HeartSoundsMuffled",
+                    "HeartSoundsNormal",
+                    "AVPU_A",
+                    "AVPU_U",
+                    "AVPU_V",
+                    "PupilsPinpoint",
+                    "PupilsNormal",
+                    "ExposureRash",
+                    "ExposurePeripherallyShutdown",
+                    "ExposureStainedUnderwear",
+                    "HeartRhythmNSR",
+                    "HeartRhythmSVT",
+                    "HeartRhythmAF",
+                    "HeartRhythmAtrialFlutter",
+                    "HeartRhythmVT",
+                    "HeartRhythmMobitzI",
+                    "HeartRhythmMobitzII",
+                    "HeartRhythmCompleteHeartBlock",
+                    "HeartRhythmTorsades",
+                    "HeartRhythmBigeminy",
+                    "HeartRhythmVF",
+                ]
+            )
+        ]
+    )
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -50,43 +93,40 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(23)  # Resume CPR
+            take_action(23)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia():
-                take_action(24)  # Use Monitor Pads
+            if has_unstable_tachyarrhythmia(events):
+                take_action(24)
             else:
-                take_action(15)  # Give Fluids
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)  # Use Yankeur Suction Catheter
+            take_action(31)
             continue
 
         if events[6] > 0:
-            take_action(36)  # Perform Head-Tilt Chin-Lift
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
-        take_action(48)  # Finish if stable
+        take_action(48)
 
 
 if __name__ == "__main__":
