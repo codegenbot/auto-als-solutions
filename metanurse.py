@@ -54,7 +54,7 @@ def stabilize():
             take_action(36)
             continue
 
-        if any(events[i] > 0 for i in range(29, 34)):
+        if any(events[i] > 0 for i in [29, 30, 31, 32]):
             if 28 not in actions_taken:
                 take_action(28)
                 continue
@@ -79,6 +79,19 @@ def stabilize():
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
+            continue
+
+        if events[15] > 0 or events[34] > 0 or events[36] > 0 or events[37] > 0:
+            if 2 not in actions_taken:
+                take_action(2)
+                continue
+            take_action(28)
+            continue
+        elif events[32] > 0:
+            if any(events[i] > 0 for i in [30, 31, 32]):
+                take_action(40)
+                continue
+            take_action(24)
             continue
 
         take_action(48)
