@@ -44,9 +44,12 @@ def stabilize():
         }
 
         # Cardiac Arrest conditions
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or \
-           vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(23)  # Resume CPR
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
         # Stabilization actions
