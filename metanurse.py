@@ -49,7 +49,9 @@ def stabilize():
                 take_action(exam)
                 continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
+        unstable_tachyarrhythmia = (
+            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
+        )
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
