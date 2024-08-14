@@ -4,22 +4,13 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
         print(action)
-        sys.stdout.flush()
         if action == 48:
             done = True
-
-    def need_examination():
-        return (
-            25 not in actions_taken
-            or 27 not in actions_taken
-            or 16 not in actions_taken
-            or 3 not in actions_taken
-        )
 
     for step in range(max_steps):
         if done:
@@ -29,73 +20,77 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
             name: value if vital_signs_times[idx] > 0 else None
             for idx, (name, value) in enumerate(
                 zip(
-                    [
-                        "HeartRate",
-                        "RespRate",
-                        "CapillaryGlucose",
-                        "Temperature",
-                        "MAP",
-                        "Sats",
-                        "Resps",
-                    ],
-                    vital_signs_values,
+                    ["HeartRate", "RespRate", "CapillaryGlucose", "Temperature",
+                     "MAP", "Sats", "Resps"], vital_signs_values
                 )
             )
         }
 
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
+        # Step-by-step ABCDE assessment
 
-        if any(events[idx] > 0 for idx in [29, 30, 31, 32]):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            if 40 not in actions_taken:
-                take_action(40)
-                continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(15)
+        # Check airway and breathing first
+        if 3 not in actions_taken:
+            take_action(3)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
+        if events[3] == 0:
+            take_action(3)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if 5 not in actions_taken:
+            take_action(5)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+        if 16 not in actions_taken:
+            take_action(16)
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+        if 25 not in actions_taken:
+            take_action(25)
             continue
 
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        
+        # If vital signs are available and some are critical, react accordingly
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(22)  # Bag during CPR (critical sats)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            take_action(17)  # Start chest compression (critical MAP)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids (to raise MAP)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # Use non-rebreather mask (to improve sats)
+            continue
+
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            take_action(29)  # Use bag valve mask (to assist breathing)
+            continue
+
+        if vitals["HeartRate"] and vitals["HeartRate"] >= 150:
+            take_action(11)  # Give amiodarone (to manage tachyarrhythmia)
+            continue
+
+        # If all vital signs are stable, end the simulation
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
+                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
+                [88, 8, 60]
             )
         ):
             take_action(48)
