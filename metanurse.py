@@ -9,6 +9,7 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
+        sys.stdout.flush()
         if action == 48:
             done = True
 
@@ -58,13 +59,10 @@ def stabilize():
             take_action(36)
             continue
 
-        unstable_tachyarrhythmia = any(events[i] > 0 for i in [29, 30, 31, 32])
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 39))
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
                 take_action(28)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
                 continue
             take_action(40)
             continue
