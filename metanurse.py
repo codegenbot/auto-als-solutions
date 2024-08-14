@@ -60,7 +60,7 @@ def stabilize():
             if 47 not in actions_taken:
                 take_action(47)  # DefibrillatorSync
                 continue
-        
+
         # Treat critical conditions
         if vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)  # StartChestCompression
