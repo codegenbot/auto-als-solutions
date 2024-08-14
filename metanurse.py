@@ -12,9 +12,6 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-
     for step in range(max_steps):
         if done:
             break
@@ -36,62 +33,55 @@ def stabilize():
             )
         }
 
-        if need_examination():
-            if 25 not in actions_taken:
-                take_action(25)
-                continue
-            if 27 not in actions_taken:
-                take_action(27)
-                continue
-            if 16 not in actions_taken:
-                take_action(16)
-                continue
-            if 3 not in actions_taken:
-                take_action(3)
-                continue
-
-        if events[4] > 0 or events[5] > 0:  # Airway vomit or blood
-            take_action(31)  # Use Yankeur Suction
+        if 25 not in actions_taken:
+            take_action(25)
+            continue
+        if 27 not in actions_taken:
+            take_action(27)
+            continue
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+        if 3 not in actions_taken:
+            take_action(3)
             continue
 
-        if events[6] > 0:  # Airway tongue obstruction
-            take_action(36)  # Perform Head Tilt Chin Lift
+        if events[4] > 0 or events[5] > 0:
+            take_action(31)
             continue
 
-        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
-                                    events[31] > 0 or events[32] > 0)
-        if unstable_tachyarrhythmia:
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        if any(events[i] > 0 for i in [29, 30, 31, 32]):
             if 28 not in actions_taken:
-                take_action(28)  # Attach Defib Pads
+                take_action(28)
                 continue
-            take_action(40)  # Defibrillator Charge
+            take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # Bag During CPR
+            take_action(22)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
-        # If all vital signs are within stabilised range, finish
-        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
-            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-            vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
-            take_action(48)
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
