@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -44,13 +43,13 @@ def stabilize():
             take_action(16)
             continue
 
-        necessary_examinations = [3, 4, 5, 8]
+        necessary_examinations = [3, 4, 5, 8, 2]
         for exam in necessary_examinations:
             if exam not in actions_taken:
                 take_action(exam)
                 continue
 
-        unstable_tachyarrhythmia = events[29] > 0 or events[30] > 0 or events[31] > 0
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in range(29, 33))
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
@@ -94,7 +93,6 @@ def stabilize():
 
         take_action(48)
         return
-
 
 if __name__ == "__main__":
     stabilize()
