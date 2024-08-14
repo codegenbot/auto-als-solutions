@@ -9,7 +9,7 @@ def stabilize():
         sys.stdout.flush()
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16, 3}  # Sats Probe, BP Cuff, Monitor, Airway
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -21,6 +21,8 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
+        if len(observations) != 53:
+            continue  # Skip if input is not in expected format
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
         
         vitals = {
