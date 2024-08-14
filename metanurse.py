@@ -12,11 +12,8 @@ def stabilize():
         if action == 48:
             done = True
 
-    def ensure_action_taken(action):
-        if action not in actions_taken:
-            take_action(action)
-            return True
-        return False
+    def need_examination():
+        return 3 not in actions_taken or 4 not in actions_taken or 5 not in actions_taken or 6 not in actions_taken or 7 not in actions_taken
 
     for step in range(max_steps):
         if done:
@@ -39,67 +36,65 @@ def stabilize():
             )
         }
 
-        # Action priorities for ABCDE
-        if ensure_action_taken(25):  # UseSatsProbe
+        if need_examination():
+            if 3 not in actions_taken:
+                take_action(3)
+                continue
+            if 4 not in actions_taken:
+                take_action(4)
+                continue
+            if 5 not in actions_taken:
+                take_action(5)
+                continue
+            if 6 not in actions_taken:
+                take_action(6)
+                continue
+            if 7 not in actions_taken:
+                take_action(7)
+                continue
+
+        if events[4] > 0 or events[5] > 0:
+            if 31 not in actions_taken:
+                take_action(31)
+                continue
+        if events[6] > 0:
+            if 36 not in actions_taken:
+                take_action(36)
+                continue
+
+        unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0)
+        if unstable_tachyarrhythmia:
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            if 40 not in actions_taken:
+                take_action(40)
+                continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
-        if ensure_action_taken(27):  # UseBloodPressureCuff
-            continue
-        if ensure_action_taken(16):  # ViewMonitor
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)
             continue
 
-        if ensure_action_taken(3):  # ExamineAirway
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
-        if ensure_action_taken(4):  # ExamineBreathing
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
-        if ensure_action_taken(5):  # ExamineCirculation
-            continue
-        if ensure_action_taken(6):  # ExamineDisability
-            continue
-        if ensure_action_taken(7):  # ExamineExposure
-            continue
-
-        # Check if any vital signs are missing
-        if vitals["MAP"] is None and ensure_action_taken(38):  # TakeBloodPressure
-            continue
-        if vitals["RespRate"] is None and ensure_action_taken(4):  # ExamineBreathing
-            continue
-        if vitals["Sats"] is None and ensure_action_taken(16):  # ViewMonitor
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
-        # Immediate interventions for critical conditions
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
-            continue
-
-        # Stabilization for deficient parameters
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        # Check end condition
-        if all(
-            vital is not None and vital >= threshold
-            for vital, threshold in zip(
-                [vitals["Sats"], vitals["RespRate"], vitals["MAP"]],
-                [88, 8, 60]
-            )
-        ):
-            take_action(48)  # Finish
+        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
+            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
+            vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
+            take_action(48)
             return
-
-        take_action(48)  # Fail-safe Finish
+        
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
