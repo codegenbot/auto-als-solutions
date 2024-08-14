@@ -90,7 +90,7 @@ def stabilize():
             take_action(29)
             continue
 
-        take_action(48)
+        take_action(1)
 
 if __name__ == "__main__":
     stabilize()
