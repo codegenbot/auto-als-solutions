@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     done = False
-
+    
     def take_action(action):
         nonlocal done
         actions_taken.add(action)
@@ -21,7 +21,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-
+    
     examine_actions = {
         "airway": 3,
         "breathing": 4,
@@ -39,7 +39,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         if need_measurements():
@@ -72,30 +72,32 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
-            take_action(31)
+        if any(events[i] > 0 for i in [4, 5]):  # Vomit or Blood in airway
+            take_action(31)  # Use Suction
             continue
 
-        if events[6] > 0:
-            take_action(36)
+        if events[6] > 0:  # AirwayTongue
+            take_action(36)  # Head tilt chin lift
             continue
-
+        
+        # Breathing-related issues
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
-
+        
         if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):
             if 28 not in actions_taken:
-                take_action(28)
+                take_action(28)  # AttachDefibPads
                 continue
-            take_action(40)
+            take_action(40)  # DefibrillatorCharge
             continue
-
-        if all(events[:4] == [0]*4):
-            take_action(examine_actions["airway"])
+        
+        # Ensure airway examination
+        if all(events[i] == 0 for i in [3, 4, 5, 6]):  # If no previous airway events
+            take_action(examine_actions["airway"])  
             continue
-
-        take_action(48)
+        
+        take_action(48)  # Finish if everything done
 
 if __name__ == "__main__":
     stabilize()
