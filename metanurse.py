@@ -66,7 +66,7 @@ def stabilize():
                     take_action(action)
                     actions_taken.add(action)
                     break
-        
+
         take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
