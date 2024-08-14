@@ -36,6 +36,7 @@ def stabilize():
             )
         }
 
+        # Need examination
         if need_examination():
             if 3 not in actions_taken:
                 take_action(3)
@@ -53,6 +54,7 @@ def stabilize():
                 take_action(7)
                 continue
 
+        # Airway interventions
         if events[4] > 0 or events[5] > 0:
             if 31 not in actions_taken:
                 take_action(31)
@@ -62,6 +64,7 @@ def stabilize():
                 take_action(36)
                 continue
 
+        # Tachyarrhythmia
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0)
         if unstable_tachyarrhythmia:
             if 28 not in actions_taken:
@@ -71,6 +74,7 @@ def stabilize():
                 take_action(40)
                 continue
 
+        # Immediate interventions for cardiac arrest
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -78,6 +82,7 @@ def stabilize():
             take_action(22)
             continue
 
+        # Stabilize breathing and circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -88,6 +93,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Check if stabilized
         if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
