@@ -9,13 +9,16 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish
+        if action == 48:
             done = True
 
-    required_initial_actions = {25, 27, 16, 3}
+    required_measurements = [25, 27, 16]
 
-    def need_initial_action():
-        for action in required_initial_actions:
+    def need_measurements():
+        return not all(action in actions_taken for action in required_measurements)
+
+    def perform_ABC():
+        for action in [3, 4, 5, 6, 7]:
             if action not in actions_taken:
                 return action
 
@@ -30,46 +33,53 @@ def stabilize():
             observations[40:],
         )
 
-        if need_initial_action() is not None:
-            take_action(need_initial_action())
-            continue
-
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] else None,
+            "RespRate": vital_signs_values[1] if vital_signs_times[1] else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] else None,
         }
 
-        if events[4] > 0 or events[5] > 0 or events[6] > 0:  # Vomit, Blood, Tongue in Airway
-            take_action(31)  # UseYankeurSucionCatheter
+        if need_measurements():
+            if 25 not in actions_taken:
+                take_action(25)
+                continue
+            if 27 not in actions_taken:
+                take_action(27)
+                continue
+            take_action(16)
             continue
 
-        if events[3] == 0:  # Airway not clear
-            take_action(36)  # PerformHeadTiltChinLift
+        if vitals["MAP"] is None or vitals["Sats"] is None or vitals["RespRate"] is None:
+            action = perform_ABC()
+            take_action(action)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+        if vitals["Sats"] < 65 or vitals["MAP"] < 20:
+            take_action(22 if vitals["Sats"] < 65 else 17)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)  # BagDuringCPR
+        if events[5] > 0 or events[4] > 0:
+            take_action(31)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        if events[6] > 0:
+            take_action(36)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+        if vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+        if vitals["Sats"] < 88:
+            take_action(30)
             continue
 
-        take_action(48)  # Finish
+        if vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
