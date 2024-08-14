@@ -22,6 +22,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
         
+        # Read vital signs if they have been measured
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
