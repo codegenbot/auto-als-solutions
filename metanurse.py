@@ -79,7 +79,7 @@ def stabilize():
             take_action(40)
             continue
 
-        if all(v > 0 for v in vitals.values() if v is not None) and vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
+        if all(v is not None for v in vitals.values()) and vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RespRate"] >= 8:
             take_action(48)
         else:
             take_action(0)
