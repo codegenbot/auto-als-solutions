@@ -9,10 +9,10 @@ def stabilize():
         nonlocal done
         actions_taken.add(action)
         print(action)
-        if action == 48:  # Finish action
+        if action == 48:
             done = True
 
-    required_measurements = {3, 4, 5, 6, 25, 27}  # Airway, Breathing, Circulation, Disability, Sats Probe, BP Cuff
+    required_measurements = {25, 27, 16, 3}  # SATs Probe, BP Cuff, Monitor, Airway
 
     def need_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -25,9 +25,13 @@ def stabilize():
     for step in range(max_steps):
         if done:
             break
-        
+
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         if need_measurements():
             take_action(need_measurement_action())
@@ -38,26 +42,26 @@ def stabilize():
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
-        
+
         # Cardiac Arrest conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)  # Start Chest Compressions
+            take_action(23)  # Resume CPR
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Tachyarrhythmia detection and intervention
-        if any(events[i] > 0 for i in range(28, 33)):
+        # Tachyarrhythmia interventions
+        if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmia
             if 28 not in actions_taken:
                 take_action(28)  # Attach Defib Pads
             elif 40 not in actions_taken:
                 take_action(40)  # Defibrillator Charge
-            elif 47 not in actions_taken:
-                take_action(47)  # Defibrillator Sync
-            else:
+            elif 24 not in actions_taken:
                 take_action(24)  # Use Monitor Pads
+            else:
+                take_action(16)  # View Monitor
             continue
 
         # Stabilization actions
@@ -74,15 +78,18 @@ def stabilize():
             continue
 
         # Airway interventions
-        if events[3] == 0.0:  # Clear Airway first
+        if any(events[i] > 0 for i in [4, 5]):
+            take_action(31)  # Use Yankeur Suction Catheter
+            continue
+
+        if events[6] > 0:
             take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
-        if events[7] > 0:  # If breathing issue, handle
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # If all stable or unknown status, finish after validating
         take_action(48)  # Finish if stable
 
 if __name__ == "__main__":
