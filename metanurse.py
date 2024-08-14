@@ -12,12 +12,12 @@ def stabilize():
         if action == 48:
             done = True
 
-    required_measurements = {25, 27, 16, 3}
+    required_measurements = [16, 25, 27, 3, 4, 5]
 
     def need_measurements():
-        return not required_measurements.issubset(actions_taken)
+        return any(action not in actions_taken for action in required_measurements)
 
-    def need_measurement_action():
+    def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
@@ -30,7 +30,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         if need_measurements():
-            take_action(need_measurement_action())
+            take_action(next_measurement_action())
             continue
 
         vitals = {
@@ -60,10 +60,6 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(16)
-            continue
-
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
@@ -72,8 +68,15 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[28] > 0:
-            take_action(28)
+        if events[7] > 0 or any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(28, 33)):
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            take_action(40)
             continue
 
         take_action(48)
