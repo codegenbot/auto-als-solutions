@@ -52,6 +52,7 @@ def stabilize():
             observations[40:],
         )
 
+        # Measurement actions
         if need_measurements():
             measurement_action = need_measurement_action()
             if measurement_action is not None:
@@ -60,6 +61,7 @@ def stabilize():
 
         vitals = update_vitals(vital_signs_times, vital_signs_values)
 
+        # Critical values for immediate actions
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             if take_action(17):
                 continue  # StartChestCompression
