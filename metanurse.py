@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -8,7 +9,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 16}
+    required_measurements = {25, 27, 16, 3}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -19,21 +20,73 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [33, 36, 32]  # HeartRhythmVT, HeartRhythmVF, HeartRhythmTorsades
+        arrhythmia_events = [
+            category_index_map[event]
+            for event in ["HeartRhythmVT", "HeartRhythmVF", "HeartRhythmTorsades"]
+        ]
         return any(events[i] > 0 for i in arrhythmia_events)
+
+    category_index_map = dict(
+        [
+            (category.lower(), index)
+            for index, category in enumerate(
+                [
+                    "ResponseVerbal",
+                    "ResponseGroan",
+                    "ResponseNone",
+                    "AirwayClear",
+                    "AirwayVomit",
+                    "AirwayBlood",
+                    "AirwayTongue",
+                    "BreathingNone",
+                    "BreathingSnoring",
+                    "BreathingSeeSaw",
+                    "BreathingEqualChestExpansion",
+                    "BreathingBibasalCrepitations",
+                    "BreathingWheeze",
+                    "BreathingCoarseCrepitationsAtBase",
+                    "BreathingPneumothoraxSymptoms",
+                    "VentilationResistance",
+                    "RadialPulsePalpable",
+                    "RadialPulseNonPalpable",
+                    "HeartSoundsMuffled",
+                    "HeartSoundsNormal",
+                    "AVPU_A",
+                    "AVPU_U",
+                    "AVPU_V",
+                    "PupilsPinpoint",
+                    "PupilsNormal",
+                    "ExposureRash",
+                    "ExposurePeripherallyShutdown",
+                    "ExposureStainedUnderwear",
+                    "HeartRhythmNSR",
+                    "HeartRhythmSVT",
+                    "HeartRhythmAF",
+                    "HeartRhythmAtrialFlutter",
+                    "HeartRhythmVT",
+                    "HeartRhythmMobitzI",
+                    "HeartRhythmMobitzII",
+                    "HeartRhythmCompleteHeartBlock",
+                    "HeartRhythmTorsades",
+                    "HeartRhythmBigeminy",
+                    "HeartRhythmVF",
+                ]
+            )
+        ]
+    )
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
         if needs_measurements():
@@ -43,37 +96,38 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(23)  # ResumeCPR
+            take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
-                take_action(24)  # UseMonitorPads
+                take_action(24)
             else:
-                take_action(15)  # GiveFluids
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):  # AirwayVomit, AirwayBlood
-            take_action(31)  # UseYankeurSuctionCatheter
+        if any(events[i] > 0 for i in [4, 5]):
+            take_action(31)
             continue
 
-        if events[6] > 0:  # AirwayTongue
-            take_action(36)  # PerformHeadTiltChinLift
+        if events[6] > 0:
+            take_action(36)
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):  # Breathing issues
-            take_action(29)  # UseBagValveMask
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
