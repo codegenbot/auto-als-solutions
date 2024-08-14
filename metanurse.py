@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -12,16 +13,16 @@ def stabilize():
         if action == 48:
             done = True
 
+    required_measurements = {25, 27, 16, 2}
+
     def need_measurements():
-        required_measurements = {25, 27, 3, 4, 5, 6}
-        return not all(action in actions_taken for action in required_measurements)
+        return not required_measurements.issubset(actions_taken)
 
     def need_measurement_action():
-        measurement_actions = [25, 27, 16, 3, 5, 4]
-        for action in measurement_actions:
+        for action in required_measurements:
             if action not in actions_taken:
                 return action
-    
+
     for step in range(max_steps):
         if done:
             break
@@ -30,7 +31,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         if need_measurements():
@@ -38,60 +39,48 @@ def stabilize():
             continue
 
         vitals = {
-            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "CapillaryGlucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
-            "Temperature": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-            "RespEffort": vital_signs_values[6] if vital_signs_times[6] > 0 else None,
         }
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(23)
+        # ABCDE Assessment
+        # Airway
+        if events[3] == 0:  # AirwayClear not found
+            take_action(3)  # ExamineAirway
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(23)
+        # Breathing
+        if vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(29)  # UseBagValveMask
             continue
-        
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+        if vitals["RespRate"] and vitals["RespRate"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
             continue
 
-        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(16)
+        # Circulation
+        if events[4] or events[5]:  # AirwayVomit or AirwayBlood
+            take_action(31)  # UseYankeurSucionCatheter
+            continue
+        if vitals["MAP"] and vitals["MAP"] < 20:
+            take_action(23)  # ResumeCPR
+            continue
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
             continue
 
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
+        if any(events[i] > 0 for i in [28, 29, 30, 31, 32]):  # HeartRhythm issues
+            if 28 not in actions_taken:
+                take_action(28)  # AttachDefibPads
+                continue
+            take_action(40)  # DefibrillatorCharge
             continue
 
-        if events[6] > 0:
-            take_action(36)
-            continue
+        take_action(48)  # Finish
 
-        if events[28] > 0:
-            take_action(28)
-            continue
-
-        if all([
-            vitals["Sats"] is not None and vitals["Sats"] >= 88,
-            vitals["RespRate"] is not None and vitals["RespRate"] >= 8,
-            vitals["MAP"] is not None and vitals["MAP"] >= 60
-        ]):
-            take_action(48)
-            break
-        
-        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
