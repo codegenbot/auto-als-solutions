@@ -37,7 +37,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(28, 33)):  # Unstable tachyarrhythmia
+            if any(events[i] > 0 for i in range(28, 38)):
                 take_action(24)  # Use Monitor Pads
                 continue
             else:
