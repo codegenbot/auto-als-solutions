@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -22,12 +21,8 @@ def stabilize():
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-
+        events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
+        
         vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
@@ -38,19 +33,12 @@ def stabilize():
             take_action(need_measurement_action())
             continue
 
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-        ):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(23)  # Resume CPR
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(
-                events[i] > 0 for i in [28, 29, 30, 31, 32, 36, 37, 38]
-            ):  # Unstable tachyarrhythmia
+            if any(events[i] > 0 for i in [28, 29, 30, 31, 32, 36, 37, 38]):  # Unstable tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
                 take_action(40)  # DefibrillatorCharge
                 take_action(39)  # TurnOnDefibrillator
@@ -78,7 +66,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if stable
-
 
 if __name__ == "__main__":
     stabilize()
