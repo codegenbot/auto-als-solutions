@@ -40,15 +40,14 @@ def stabilize():
             take_action(23)  # Resume CPR
             continue
 
-        if has_unstable_tachyarrhythmia(events):
-            if 24 not in actions_taken:
-                take_action(24)  # Use Monitor Pads
-            else:
-                take_action(40)  # Defibrillator Charge
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            if has_unstable_tachyarrhythmia(events):
+                if 24 not in actions_taken:
+                    take_action(24)  # Use Monitor Pads
+                else:
+                    take_action(40)  # Defibrillator Charge
+            else:
+                take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -63,7 +62,13 @@ def stabilize():
             take_action(31)  # Use Yankeur Suction Catheter
             continue
 
-        take_action(48)  # Finish if stable
+        if vitals["MAP"] is not None and vitals["MAP"] >= 60 and \
+           vitals["Sats"] is not None and vitals["Sats"] >= 88 and \
+           vitals["RespRate"] is not None and vitals["RespRate"] >= 8:
+            take_action(48)  # Finish if stable
+            continue
+
+        take_action(0)  # DoNothing if no immediate action is required
 
 if __name__ == "__main__":
     stabilize()
