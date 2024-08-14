@@ -33,9 +33,6 @@ def stabilize():
             )
         }
 
-        # Step-by-step ABCDE assessment
-
-        # Check airway and breathing first
         if 3 not in actions_taken:
             take_action(3)
             continue
@@ -48,8 +45,8 @@ def stabilize():
             take_action(5)
             continue
 
-        if 16 not in actions_taken:
-            take_action(16)
+        if events[7] > 0:
+            take_action(29)
             continue
 
         if 25 not in actions_taken:
@@ -59,33 +56,44 @@ def stabilize():
         if 27 not in actions_taken:
             take_action(27)
             continue
-        
-        # If vital signs are available and some are critical, react accordingly
+
+        if 16 not in actions_taken:
+            take_action(16)
+            continue
+
         if vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(22)  # Bag during CPR (critical sats)
+            take_action(22)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)  # Start chest compression (critical MAP)
+            take_action(17)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids (to raise MAP)
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask (to improve sats)
+            take_action(30)
             continue
 
         if vitals["RespRate"] and vitals["RespRate"] < 8:
-            take_action(29)  # Use bag valve mask (to assist breathing)
+            take_action(29)
             continue
 
         if vitals["HeartRate"] and vitals["HeartRate"] >= 150:
-            take_action(11)  # Give amiodarone (to manage tachyarrhythmia)
+            if 28 not in actions_taken:
+                take_action(28)
+                continue
+            if 47 not in actions_taken:
+                take_action(47)
+                continue
             continue
 
-        # If all vital signs are stable, end the simulation
+        if vitals["MAP"] and events[15] > 0:
+            take_action(22)
+            continue
+
         if all(
             vital is not None and vital >= threshold
             for vital, threshold in zip(
