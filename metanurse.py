@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -84,13 +85,14 @@ def stabilize():
                 take_action(28)  # Attach Defib Pads
             elif 40 not in actions_taken:
                 take_action(40)  # Defibrillator Charge
-            elif 43 not in actions_taken:
-                take_action(43)  # Defibrillator Pace
+            elif 47 not in actions_taken:
+                take_action(47)  # Defibrillator Sync
             else:
                 take_action(24)  # Use Monitor Pads
             continue
 
         take_action(48)  # Finish if stable
+
 
 if __name__ == "__main__":
     stabilize()
