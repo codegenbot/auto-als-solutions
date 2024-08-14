@@ -37,8 +37,9 @@ def stabilize():
         }
 
         if needs_measurements(actions_taken):
-            take_action(next_measurement_action(actions_taken))
-            actions_taken.add(next_measurement_action(actions_taken))
+            next_action = next_measurement_action(actions_taken)
+            take_action(next_action)
+            actions_taken.add(next_action)
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
