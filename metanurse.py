@@ -12,9 +12,6 @@ def stabilize():
         if action == 48:
             done = True
 
-    def need_examination():
-        return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
-
     for step in range(max_steps):
         if done:
             break
@@ -35,6 +32,9 @@ def stabilize():
                 )
             )
         }
+
+        def need_examination():
+            return 25 not in actions_taken or 27 not in actions_taken or 16 not in actions_taken or 3 not in actions_taken
 
         if need_examination():
             if 25 not in actions_taken:
@@ -65,28 +65,20 @@ def stabilize():
                 take_action(28)
                 continue
             take_action(40)
-            take_action(48)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
-            take_action(22)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(22)
-            take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 15 not in actions_taken:
                 take_action(15)
-                continue
-            if 14 not in actions_taken:
                 take_action(14)
-                continue
-            if 17 not in actions_taken and observations[41] > 0:
-                take_action(17)
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
