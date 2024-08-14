@@ -36,7 +36,9 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(23)
             continue
 
@@ -49,7 +51,7 @@ def stabilize():
                 elif 47 not in actions_taken:
                     take_action(47)
                 else:
-                    take_action(41)  # Increase defibrillator current
+                    take_action(41)
                 continue
             else:
                 take_action(15)
