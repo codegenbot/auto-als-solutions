@@ -53,9 +53,20 @@ def stabilize():
         if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
-
         if events[6] > 0:
             take_action(36)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            take_action(14)
             continue
 
         unstable_tachyarrhythmia = (events[29] > 0 or events[30] > 0 or 
@@ -65,6 +76,7 @@ def stabilize():
                 take_action(28)
                 continue
             take_action(40)
+            take_action(48)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20:
@@ -75,20 +87,11 @@ def stabilize():
             take_action(22)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            take_action(14)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
-            continue
-
-        take_action(48)
+        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
+            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
+            vitals["RespRate"] is not None and vitals["RespRate"] >= 8):
+            take_action(48)
+            break
 
 if __name__ == "__main__":
     stabilize()
