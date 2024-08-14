@@ -28,7 +28,7 @@ def stabilize():
 
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
-
+        
         if need_measurements():
             take_action(need_measurement_action())
             continue
@@ -48,10 +48,10 @@ def stabilize():
             take_action(36)
             continue
 
-        if events[7] > 0 or any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
+        if events[7] > 0:
             take_action(29)
             continue
-        
+
         if any(events[i] > 0 for i in range(28, 33)):
             if 28 not in actions_taken:
                 take_action(28)
