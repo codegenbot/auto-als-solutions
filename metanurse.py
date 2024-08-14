@@ -15,17 +15,14 @@ def stabilize():
 
     def stabilize_circulation(vitals):
         if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
+            take_action(17)
             return True
-            
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             return True
-
         if vitals["HeartRate"] and vitals["HeartRate"] > 100:
-            take_action(12)  # GiveAmiodarone for tachycardia
+            take_action(12)
             return True
-
         return False
 
     for step in range(max_steps):
