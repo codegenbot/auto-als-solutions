@@ -18,9 +18,9 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_unstable_tachyarrhythmia(events):
+    def has_unstable_tachyarrhythmia(events, heart_rate):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38]
-        return any(events[i] > 0 for i in arrhythmia_events)
+        return heart_rate and any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -30,6 +30,7 @@ def stabilize():
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HeartRate": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
         }
 
         if needs_measurements():
@@ -41,15 +42,13 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
+            if has_unstable_tachyarrhythmia(events, vitals["HeartRate"]):
                 if 24 not in actions_taken:
                     take_action(24)  # Use Monitor Pads
                 elif 40 not in actions_taken:
                     take_action(40)  # Defibrillator Charge
-                elif 39 not in actions_taken:
-                    take_action(39)  # Turn On Defibrillator
                 else:
-                    take_action(41)  # DefibrillatorCurrentUp
+                    take_action(39)  # Turn On Defibrillator
             else:
                 take_action(15)  # Give Fluids
             continue
