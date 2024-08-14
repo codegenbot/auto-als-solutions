@@ -3,11 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
-    def take_action(action):
-        actions_taken.add(action)
-        print(action)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -33,22 +29,9 @@ def stabilize():
             )
         }
 
-        # Immediate critical actions
-        if vitals["MAP"] is not None and vitals["MAP"] < 20:
-            take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(22)
-            continue
-        
-        # Address unstable tachyarrhythmia
-        if any(events[i] > 0 for i in [29, 30, 31]):
-            if 28 not in actions_taken:
-                take_action(28)
-                continue
-            take_action(40)
-            continue
+        def take_action(action):
+            actions_taken.add(action)
+            print(action)
 
         # Check vitals immediately if not already done
         if 25 not in actions_taken:
@@ -78,19 +61,36 @@ def stabilize():
             take_action(7)
             continue
 
+        # Immediate critical actions
+        if vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 65:
+            take_action(22)  # BagDuringCPR
+            continue
+
+        # Address unstable tachyarrhythmia
+        if any(events[i] > 0 for i in [29, 30, 31]):  # HeartRhythm
+            if 28 not in actions_taken:
+                take_action(28)  # AttachDefibPads
+                continue
+            take_action(40)  # DefibrillatorCharge
+            continue
+
         # Address hypotension
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         # Address low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         # Address low respiratory rate
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         # Check for stabilization
@@ -100,11 +100,12 @@ def stabilize():
                 [vitals["Sats"], vitals["RespRate"], vitals["MAP"]], [88, 8, 60]
             )
         ):
-            take_action(48)
+            take_action(48)  # Finish
             return
 
-    # End after max steps
-    take_action(48)
+        # Prevent infinite loop if no exit condition is met
+        take_action(48)
+        return
 
 if __name__ == "__main__":
     stabilize()
