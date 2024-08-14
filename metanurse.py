@@ -16,7 +16,7 @@ def stabilize():
     for step in range(max_steps):
         if done:
             break
-        
+
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
@@ -34,7 +34,7 @@ def stabilize():
         if events[3] == 0:  # Check airway
             take_action(3)
             continue
-        
+
         if events[2] > 0 or events[4] > 0 or events[5] > 0:  # Clear airway obstructions
             take_action(31)
             continue
