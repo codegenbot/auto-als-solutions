@@ -5,7 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
+    actions_taken = set()    
     step = 0
 
     while step < 350:
@@ -61,7 +61,7 @@ def stabilize():
             continue
 
         # C - Circulation
-        if vitals["MAP"] is None and 27 not in actions_taken:
+        if vitals["MAP"] is None and 27 not in actions_taken:  # Use blood pressure cuff
             actions_taken.add(27)
             take_action(27)  # UseBloodPressureCuff
             step += 1
@@ -93,6 +93,7 @@ def stabilize():
                     break
             continue
 
+        # Finish the process if stabilized
         take_action(48)  # Finish
         break
 
