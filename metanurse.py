@@ -7,8 +7,8 @@ def stabilize():
 
     def take_action(action):
         print(action)
-        sys.stdout.flush()
         actions_taken.add(action)
+        sys.stdout.flush()
 
     essential_measurements = [24, 25, 27, 26]
 
