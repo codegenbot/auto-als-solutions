@@ -23,7 +23,7 @@ def stabilize():
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
         }
-
+        
         heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
@@ -45,7 +45,7 @@ def stabilize():
 
         if not actions_taken and any(events[i] > 0 for i in heart_rhythm_indices):
             actions_taken.add(24)
-            take_action(24)
+            take_action(24)  # Attach defib pads to monitor rhythm
             continue
 
         if 27 not in actions_taken:
