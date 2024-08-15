@@ -7,16 +7,16 @@ def stabilize():
 
     def evaluate_critical(vitals):
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Immediate chest compressions
+            take_action(17)
             return True
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask for low sats
+            take_action(30)
             return True
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag-valve mask for low respiratory rate
+            take_action(29)
             return True
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids for low mean arterial pressure
+            take_action(15)
             return True
         return False
 
@@ -46,40 +46,35 @@ def stabilize():
         if evaluate_critical(vitals):
             continue
 
-        # Airway
         if events[3] > 0:
             if events[4] > 0 or events[5] > 0 or events[6] > 0:
-                take_action(31)  # Suction airway if vomit/blood/tongue
+                take_action(31)
             else:
-                take_action(3)  # Examine airway
+                take_action(3)
             continue
 
-        # Breathing
         if events[7] > 0 or any(events[8:15]):
-            take_action(4)  # Examine breathing
+            take_action(4)
             continue
 
         if vitals["Sats"] is None:
-            take_action(25)  # Attach sats probe
+            take_action(25)
             continue
 
-        # Circulation
         if events[15] > 0:
-            take_action(5)  # Examine circulation
+            take_action(5)
             continue
 
         if vitals["MAP"] is None:
-            take_action(27)  # Attach BP cuff
+            take_action(27)
             continue
 
-        # Disability
         if any(events[20:26]):
-            take_action(6)  # Examine disability
+            take_action(6)
             continue
 
-        # Exposure
         if any(events[26:33]):
-            take_action(7)  # Examine exposure
+            take_action(7)
             continue
 
         take_action(48)
