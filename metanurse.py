@@ -28,7 +28,9 @@ def stabilize():
         sys.stdout.flush()
 
     first_checks = ["UseSatsProbe", "UseBloodPressureCuff"]
-    second_checks = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure"]
+    examine_order = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure"]
+
+    actions_taken = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -51,9 +53,13 @@ def stabilize():
             take_action("StartChestCompression")
             continue
 
-        if vitals["Sats"] is None or vitals["MAP"] is None:
-            for check in first_checks:
+        for check in first_checks:
+            if check not in actions_taken:
+                actions_taken.add(check)
                 take_action(check)
+                break
+
+        if vitals["Sats"] is None or vitals["MAP"] is None:
             continue
 
         if vitals["Sats"] < 88:
@@ -63,14 +69,16 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action("UseBagValveMask")
             continue
-        
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action("GiveFluids")
             continue
 
-        for check in second_checks:
-            take_action(check)
-            break
+        for exam in examine_order:
+            if exam not in actions_taken:
+                actions_taken.add(exam)
+                take_action(exam)
+                break
 
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action("ExamineAirway")
