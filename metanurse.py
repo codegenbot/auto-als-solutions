@@ -26,7 +26,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -36,9 +36,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -71,16 +69,16 @@ def stabilize():
             continue
 
         arrhythmia_events = [27, 29, 30, 31, 32, 38]
-        if any(events[i+27] > 0 for i in arrhythmia_events):
-            take_action(24)  # Apply monitor pads
-            take_action(47)  # Sync mode for defibrillator
-            take_action(43)  # Defibrillator pacing
+        if any(events[i + 27] > 0 for i in arrhythmia_events):
+            take_action(24)
+            take_action(47)
+            take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-        
+
         take_action(48)
         break
 
