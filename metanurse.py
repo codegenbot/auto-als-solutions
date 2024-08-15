@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,13 +25,14 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Order: Stabilize vital signs first
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            actions_taken.add(25)
             take_action(30)
             continue
 
@@ -39,15 +41,16 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            actions_taken.add(27)
             take_action(15)
             continue
 
-        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
-        if any(events[i] > 0 for i in significant_heart_rhythm_events):
+        # Handling unstable heart rhythms
+        unstable_rhythms = [32, 33, 30, 34, 31, 28]
+        if any(events[i] > 0 for i in unstable_rhythms):
             take_action(2)
             continue
 
+        # Ensure required tools are used
         if 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)
@@ -65,6 +68,7 @@ def stabilize():
             take_action(38)
             continue
 
+        # Perform ABCDE assessments
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
@@ -81,8 +85,10 @@ def stabilize():
             take_action(7)
             continue
 
+        # Finalize if stable
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
