@@ -8,16 +8,16 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [16, 25, 27]
+    initial_measurements = [24, 25, 27]
 
-    def next_measurement_action():
-        for action in required_measurements:
+    def next_initial_measurement_action():
+        for action in initial_measurements:
             if action not in actions_taken:
                 return action
 
-    def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
-
+    def needs_initial_measurements():
+        return not all(action in actions_taken for action in initial_measurements)
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -41,8 +41,8 @@ def stabilize():
             take_action(17)
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        if needs_initial_measurements():
+            take_action(next_initial_measurement_action())
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -69,17 +69,20 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in [28, 31, 32, 34]):
-            if 24 not in actions_taken:
-                take_action(24)
-                continue
+        tachyarrhythmias = [
+            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+        ]
+        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
+            take_action(24)
+            take_action(47)
             take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-        
+
         take_action(48)
         break
 
