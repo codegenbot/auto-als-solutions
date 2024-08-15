@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,61 +27,64 @@ def stabilize():
 
         heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compression
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in heart_rhythm_indices):
-            take_action(24)  # Use monitor pads
+            take_action(24)
             continue
 
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             continue
         if 25 not in actions_taken:
             actions_taken.add(25)
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)  # View Monitor
+            take_action(16)
             continue
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)  # Take Blood Pressure
+            take_action(38)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
+            take_action(3)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
+            take_action(4)
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
+            take_action(5)
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # Examine Disability
+            take_action(6)
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine Exposure
+            take_action(7)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
