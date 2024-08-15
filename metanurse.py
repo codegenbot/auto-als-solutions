@@ -39,7 +39,7 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions
             continue
 
         if needs_measurements():
@@ -47,27 +47,27 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # Examine airway
             if events[4] > 0 or events[5] > 0:
-                take_action(31)
+                take_action(31)  # Use suction catheter
             elif events[6] > 0:
-                take_action(32)
+                take_action(32)  # Use Guedel airway
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag valve mask
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # Examine breathing
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         tachyarrhythmias = [
@@ -75,15 +75,15 @@ def stabilize():
             "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)
-            take_action(43)
+            take_action(24)  # Use monitor pads
+            take_action(43)  # Defibrillator pace
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # Examine circulation
             continue
 
-        take_action(48)
+        take_action(48)  # Finish scenario
         break
 
 if __name__ == "__main__":
