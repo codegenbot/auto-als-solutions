@@ -4,7 +4,6 @@ def stabilize():
     max_steps = 350
     step = 0
     actions_taken = set()
-    check_interval = 10
 
     def take_action(action):
         print(action)
@@ -37,21 +36,12 @@ def stabilize():
         }
 
         # Immediate cardiac arrest intervention
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)  # Start chest compressions
             step += 1
             continue
 
-        # Recheck measurements at set intervals
-        if step % check_interval == 0 and step != 0:
-            if needs_measurements():
-                take_action(next_measurement_action())
-                step += 1
-                continue
-
-        # Ensure measurements are taken initially
+        # Ensure measurements are taken
         if needs_measurements():
             take_action(next_measurement_action())
             step += 1
@@ -112,7 +102,7 @@ def stabilize():
             continue
 
         # If we have checked all and stabilized, finish
-        if all(v is not None and (vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60) for v in vitals.values()):
+        if not any(v is None or (vitals["Sats"] < 88 or vitals["RR"] < 8 or vitals["MAP"] < 60) for v in vitals.values()):
             take_action(48)  # Finish scenario
             break
 
