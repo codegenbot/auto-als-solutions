@@ -45,54 +45,41 @@ def stabilize():
             (vitals["MAP"] is not None and vitals["MAP"] < 20) or
             (vitals["Sats"] is not None and vitals["Sats"] < 65)
         ):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
-        if any(events[i] > 0 for i in range(20, 24)):
-            take_action(8)  # ExamineResponse
-            continue
-
-        if any(events[i] > 0 for i in range(24, 27)):
-            take_action(6)  # ExamineDisability
-            continue
-
-        if any(events[i] > 0 for i in range(27, 33)):
-            take_action(7)  # ExamineExposure
-            continue
-        
         if step >= 349:
-            take_action(48)  # Finish
-            break
+            take_action(48)
 
-        take_action(0)  # DoNothing
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
