@@ -19,13 +19,13 @@ def stabilize():
                 return action
 
     actions = { 
-        "unstable_tachycardia": [24, 40, 47],
+        "unstable_tachycardia": [24, 40, 47], 
         "open_airway": 36, 
-        "suction_airway": 31, 
-        "non_rebreather": 30, 
-        "bag_mask": 29, 
-        "give_fluids": 15, 
-        "start_compressions": 17, 
+        "suction_airway": 31,
+        "non_rebreather": 30,
+        "bag_mask": 29,
+        "give_fluids": 15,
+        "start_compressions": 17,
         "finish": 48 
     }
 
