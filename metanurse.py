@@ -6,6 +6,9 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
+    
+    map_ready = False
+    sats_ready = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -38,31 +41,26 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 15 not in actions_taken:
-                actions_taken.add(15)
-                take_action(15)
-                continue
-            if any(events[i] > 0 for i in range(26, 33)):
-                take_action(2)
-                continue
-            take_action(9)  # GiveAdenosine for unstable tachyarrhythmia
+            take_action(15)
             continue
 
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
+        if not sats_ready:
+            sats_ready = True
             take_action(25)
             continue
+
+        if not map_ready:
+            map_ready = True
+            take_action(27)
+            continue
+        
         if 16 not in actions_taken:
             actions_taken.add(16)
             take_action(16)
             continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(2)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
