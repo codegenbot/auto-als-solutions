@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,8 +23,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -40,55 +38,60 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
-        if any(events[i] > 0 for i in range(26, 28)):  # Add fluids for poor circulation
-            take_action(15)
-            continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Check airway problems
-            take_action(3)
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):  # Check breathing problems
-            take_action(4)
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):  # Check for circulation issues
-            take_action(5)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)):  # Check for disability issues
-            take_action(6)
-            continue
-
-        if any(events[i] > 0 for i in range(28, 37)):  # Arrhythmia management
-            if events[28] > 0 or events[30] > 0:  # SVT or AF
-                take_action(9)  # Give Adenosine
-            elif events[31] > 0:  # VT
-                take_action(11)  # Give Amiodarone
-            elif events[29] > 0 or events[35] > 0:  # Atrial flutter or Torsades
-                take_action(10)  # Give Adrenaline
+        if 25 not in actions_taken:
+            take_action(25)
+            actions_taken.add(25)
             continue
 
         if 27 not in actions_taken:
+            take_action(27)
             actions_taken.add(27)
-            take_action(27)  # Use Blood Pressure Cuff
-            continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)  # Use Sats Probe
-            continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)  # View Monitor
-            continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)  # Take Blood Pressure
             continue
 
-        take_action(48)  # Finish
-        break
+        if 16 not in actions_taken:
+            take_action(16)
+            actions_taken.add(16)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
+            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
+                take_action(3)
+                continue
+            if events[4] > 0:
+                take_action(31)
+                continue
+            if events[6] > 0:
+                take_action(35)
+                continue
+
+        if times[1] == 0:
+            take_action(4)
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
+        if not vitals["HR"] and 26 not in actions_taken:
+            take_action(26)
+            actions_taken.add(26)
+            continue
+    
+        if step == 349:
+            take_action(48)
+            break
+
+        take_action(0)
+        continue
 
 if __name__ == "__main__":
     stabilize()
