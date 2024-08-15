@@ -2,22 +2,14 @@ import sys
 
 
 def stabilize():
-    max_steps = 350
-    actions_taken = set()
+    max_steps, actions_taken = 350, set()
+    essential_measurements = [24, 25, 27, 26]
 
     def take_action(action):
         print(action)
-        sys.stdout.flush()
         actions_taken.add(action)
 
-    essential_measurements = [24, 25, 27, 26]
-
-    def next_essential_measurement_action():
-        for action in essential_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_essential_measurements():
+    def needs_measurement():
         return not all(action in actions_taken for action in essential_measurements)
 
     for step in range(max_steps):
@@ -44,20 +36,15 @@ def stabilize():
             take_action(17)
             continue
 
-        if needs_essential_measurements():
-            take_action(next_essential_measurement_action())
-            continue
-
-        if 16 not in actions_taken:
-            take_action(16)
+        if needs_measurement():
+            for action in essential_measurements:
+                if action not in actions_taken:
+                    take_action(action)
+                    break
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
