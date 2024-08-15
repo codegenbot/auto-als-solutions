@@ -4,14 +4,15 @@ def stabilize():
     max_steps = 350
     steps_taken = 0
     actions_taken = set()
-
+    vitals_measured = {"HR": False, "RR": False, "MAP": False, "Sats": False}
+    
     def take_action(action):
         nonlocal steps_taken
         print(action)
         steps_taken += 1
         actions_taken.add(action)
 
-    initial_actions = [24, 25, 27, 26, 18, 19, 20, 21]
+    initial_actions = [24, 25, 27, 26]
 
     while steps_taken < max_steps:
         observations = list(map(float, input().strip().split()))
@@ -26,53 +27,57 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_time[5] > 0 else None,
         }
 
-        if any(vitals[m] is None for m in ["RR", "MAP", "Sats"]) and steps_taken < len(initial_actions):
-            if initial_actions[steps_taken] not in actions_taken:
+        if any(vitals[m] is None and not vitals_measured[m] for m in vitals_measured):
+            if steps_taken < len(initial_actions) and initial_actions[steps_taken] not in actions_taken:
                 take_action(initial_actions[steps_taken])
             continue
 
+        for k in vitals_measured:
+            if vitals[k] is not None:
+                vitals_measured[k] = True
+
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)
-            take_action(23)
+            take_action(17)  # StartChestCompression
+            take_action(23)  # ResumeCPR
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # ExamineAirway
             if events[5] > 0:
-                take_action(31)
+                take_action(31)  # UseYankeurSucionCatheter
             if events[6] > 0:
-                take_action(32)
+                take_action(32)  # UseGuedelAirway
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
