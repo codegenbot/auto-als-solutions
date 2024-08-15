@@ -7,10 +7,8 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-        sys.stdout.flush()
 
-    initial_measurements = [25, 26, 27]
-    airway_actions = [32, 31, 35, 36, 37]
+    initial_measurements = [16, 24, 25, 27, 26]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -63,16 +61,24 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            for airway in airway_actions:
-                take_action(airway)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
+            take_action(35)
+            take_action(36)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
+            if events[8] > 0 or events[9] > 0:
+                take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
+            if events[16] == 0 and events[17] > 0:
+                take_action(14)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
@@ -83,11 +89,10 @@ def stabilize():
             take_action(7)
             continue
 
-        if vitals["HR"] and vitals["HR"] > 150:
-            take_action(40)
-            take_action(41)
-            take_action(47)
-            take_action(43)
+        if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 40):
+            take_action(2)
+            take_action(17)
+            take_action(23)
             continue
 
         take_action(48)
