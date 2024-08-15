@@ -1,11 +1,13 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
 
     def take_action(action):
         print(action)
+        sys.stdout.flush()
         actions_taken.add(action)
 
     essential_measurements = [24, 25, 27, 26]
@@ -22,7 +24,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -82,14 +84,16 @@ def stabilize():
             take_action(7)
             continue
 
-        if vitals["HR"] and vitals["HR"] > 150:
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(40)
+            take_action(41)
             take_action(47)
             take_action(43)
             continue
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
