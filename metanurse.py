@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
     
     actions_taken = set()
-    initial_checks = [27, 25, 3, 4, 5, 6, 7, 8]  # UseBloodPressureCuff, UseSatsProbe, Examine(Airway, Breathing, Circulation, Disability, Exposure, Response)
+    initial_checks = [27, 25, 3, 4, 5, 6, 7, 8]
     
     for step in range(350):
         observations = list(map(float, input().strip().split()))
