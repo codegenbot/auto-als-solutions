@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -8,7 +9,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_measurements = [16, 24, 25, 27, 26]
+    initial_measurements = [24, 25, 27, 26]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -26,7 +27,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -47,38 +48,32 @@ def stabilize():
             take_action(next_initial_measurement_action())
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[5] > 0:
                 take_action(31)
             if events[6] > 0:
                 take_action(32)
-            take_action(35)
-            take_action(36)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            if events[8] > 0 or events[9] > 0:
-                take_action(29)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
-            if events[16] == 0 and events[17] > 0:
-                take_action(14)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
@@ -89,14 +84,16 @@ def stabilize():
             take_action(7)
             continue
 
-        if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 40):
-            take_action(2)
-            take_action(17)
-            take_action(23)
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(40)
+            take_action(41)
+            take_action(47)
+            take_action(43)
             continue
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
