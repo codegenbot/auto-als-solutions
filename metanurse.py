@@ -24,14 +24,12 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
 
-        # Handle low saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 actions_taken.add(25)
@@ -43,12 +41,10 @@ def stabilize():
                 take_action(29)
             continue
 
-        # Handle low respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Handle low MAP
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
@@ -57,7 +53,6 @@ def stabilize():
                 take_action(15)
             continue
 
-        # Activate monitoring tools
         if 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)
@@ -78,7 +73,6 @@ def stabilize():
             take_action(38)
             continue
 
-        # Examine areas based on ABCDE protocol
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
@@ -99,7 +93,6 @@ def stabilize():
             take_action(7)
             continue
 
-        # Check and treat arrhythmias last
         if any(events[i] > 0 for i in range(33, 40)):
             take_action(2)
             continue
