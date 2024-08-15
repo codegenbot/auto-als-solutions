@@ -60,7 +60,7 @@ def stabilize():
                 actions_taken.add(exam)
                 take_action(exam)
                 break
-
+        
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             continue
@@ -85,7 +85,7 @@ def stabilize():
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
             continue
-
+        
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
             continue
