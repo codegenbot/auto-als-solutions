@@ -13,21 +13,21 @@ def stabilize():
             take_action(3)
             actions_taken.add("airway")
             return True
-        if vitals["Sats"] is None and "used_sats_probe" not in actions_taken:
-            take_action(25)
-            actions_taken.add("used_sats_probe")
-            return True
-        if "breathing" not in actions_taken:
+        if vitals["RR"] is None and "asked_breathing" not in actions_taken:
             take_action(4)
-            actions_taken.add("breathing")
+            actions_taken.add("asked_breathing")
             return True
-        if vitals["MAP"] is None and "used_bpcuff" not in actions_taken:
+        if vitals["MAP"] is None and "attached_bp_cuff" not in actions_taken:
             take_action(27)
-            actions_taken.add("used_bpcuff")
+            actions_taken.add("attached_bp_cuff")
             return True
-        if "circulation" not in actions_taken:
-            take_action(5)
-            actions_taken.add("circulation")
+        if vitals["MAP"] is None and "viewed_monitor" not in actions_taken:
+            take_action(16)
+            actions_taken.add("viewed_monitor")
+            return True
+        if vitals["Sats"] is None and "attached_sats_probe" not in actions_taken:
+            take_action(25)
+            actions_taken.add("attached_sats_probe")
             return True
         return False
     
@@ -52,10 +52,10 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
+        
         if perform_abcde(vitals, actions_taken):
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -66,6 +66,13 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
+            continue
+        
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(40)
+            take_action(17)
+            take_action(10)
+            take_action(44)
             continue
 
         take_action(48)
