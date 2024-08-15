@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -25,8 +24,7 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -42,13 +40,7 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        # Check signs
-        critical_checks = [
-            25,
-            38,
-            16,
-            27,
-        ]  # SatsProbe, TakeBloodPressure, ViewMonitor, UseBloodPressureCuff
+        critical_checks = [25, 38, 16, 27]  # SatsProbe, TakeBloodPressure, ViewMonitor, UseBloodPressureCuff
         for check in critical_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
@@ -73,7 +65,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
