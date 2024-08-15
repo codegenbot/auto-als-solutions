@@ -5,10 +5,8 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
     steps = 350
-
-    for step in range(steps):
+    for _ in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
@@ -25,37 +23,41 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        if vitals["Sats"] is None:
+            take_action(25)  # UseSatsProbe
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vitals["HR"] is None:
+            take_action(16)  # ViewMonitor
+            continue
+
+        if vitals["RR"] is None:
+            take_action(4)  # ExamineBreathing
+            continue
+
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)  # UseSatsProbe
-            continue
-        elif vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RR"] is None:
-            take_action(4)  # ExamineBreathing
-            continue
-        elif vitals["RR"] < 8:
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is None:
-            take_action(27)  # UseBloodPressureCuff
-            continue
-        elif vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        if vitals["HR"] is None:
-            take_action(5)  # ExamineCirculation
-            continue
-        elif vitals["HR"] > 150:
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(24)  # UseMonitorPads (for synchronized cardioversion)
             continue
 
@@ -63,8 +65,8 @@ def stabilize():
             {"action": 3, "conditions": [3, 4, 5, 6]},  # Airway
             {"action": 4, "conditions": [7, 8, 9, 10, 11, 12, 13, 14]},  # Breathing
             {"action": 5, "conditions": [15, 16, 17, 18, 19]},  # Circulation
-            {"action": 6, "conditions": [20, 21, 22, 23, 24]},  # Disability
-            {"action": 7, "conditions": [25, 26, 27, 28, 29, 30, 31, 32]},  # Exposure
+            {"action": 6, "conditions": [20, 21, 22, 23, 24, 25]},  # Disability
+            {"action": 7, "conditions": [26, 27, 28, 29, 30, 31, 32]},  # Exposure
         ]
 
         action_taken = False
@@ -77,8 +79,7 @@ def stabilize():
                 break
 
         if not action_taken:
-            take_action(48)  # Finish
-            break
+            take_action(0)  # DoNothing
 
 if __name__ == "__main__":
     stabilize()
