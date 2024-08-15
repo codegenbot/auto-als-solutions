@@ -5,9 +5,6 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    def is_vital_missing(vitals, component):
-        return vitals[component] is None
-
     actions_taken = set()
 
     for step in range(350):
@@ -32,18 +29,12 @@ def stabilize():
             take_action(17)
             continue
 
-        if is_vital_missing(vitals, "MAP") and 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-
-        if is_vital_missing(vitals, "Sats") and 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 25 not in actions_taken:
+                actions_taken.add(25)
+                take_action(25)
+            else:
+                take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -51,9 +42,25 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            if 27 not in actions_taken:
+                actions_taken.add(27)
+                take_action(27)
+            else:
+                take_action(15)
             continue
 
+        if 1 not in actions_taken:
+            actions_taken.add(1)
+            take_action(1)
+            continue
+        if 2 not in actions_taken:
+            actions_taken.add(2)
+            take_action(2)
+            continue
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
         if 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
@@ -61,6 +68,10 @@ def stabilize():
         if 16 not in actions_taken:
             actions_taken.add(16)
             take_action(16)
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
