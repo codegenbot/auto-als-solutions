@@ -69,10 +69,10 @@ def stabilize():
             continue
         
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)
-            take_action(17)
-            take_action(10)
-            take_action(44)
+            take_action(40)  # DefibrillatorCharge
+            take_action(17)  # Start chest compressions
+            take_action(10)  # GiveAdrenaline
+            take_action(44)  # DefibrillatorPacePause
             continue
 
         take_action(48)
