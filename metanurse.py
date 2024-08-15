@@ -2,57 +2,44 @@ import sys
 
 def stabilize():
     max_steps = 350
+    steps_taken = 0
     actions_taken = set()
-
+    
     def take_action(action):
+        nonlocal steps_taken
         print(action)
+        steps_taken += 1
         actions_taken.add(action)
 
-    initial_measurements = [24, 25, 27, 26]
-
-    def next_initial_measurement_action():
-        for action in initial_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_initial_measurements():
-        return not all(action in actions_taken for action in initial_measurements)
-
-    for step in range(max_steps):
+    actions_order = [24, 25, 27, 26, 18, 19, 20, 21]
+    
+    while steps_taken < max_steps:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
 
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:]
-        )
-
+        events = observations[:33]
+        vitals_time = observations[33:40]
+        vitals_values = observations[40:]
         vitals = {
-            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HR": vitals_values[0] if vitals_time[0] > 0 else None,
+            "RR": vitals_values[1] if vitals_time[1] > 0 else None,
+            "MAP": vitals_values[4] if vitals_time[4] > 0 else None,
+            "Sats": vitals_values[5] if vitals_time[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if any(vitals[m] is None for m in ("HR", "RR", "MAP", "Sats")) and steps_taken < len(actions_order):
+            if actions_order[steps_taken] not in actions_taken:
+                take_action(actions_order[steps_taken])
+            continue
+
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             take_action(23)
             continue
 
-        if needs_initial_measurements():
-            take_action(next_initial_measurement_action())
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -63,12 +50,16 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
@@ -81,10 +72,6 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            continue
-
-        if any(events[i] > 0 for i in range(28, 38)):
-            take_action(2)
             continue
 
         take_action(48)
