@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    examine_order = [3, 4, 5, 6, 7, 8]
+    examine_order = [3, 4, 5, 6, 7, 8]  # ExamineAirway, ExamineBreathing, ...
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -25,10 +25,14 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        # Immediate critical action
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # StartChestCompression
             continue
 
+        # Check missing essential vitals and act accordingly
         if vitals["MAP"] is None and 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)  # UseBloodPressureCuff
@@ -38,11 +42,39 @@ def stabilize():
             actions_taken.add(25)
             take_action(25)  # UseSatsProbe
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        
+        if None in vitals.values() and 24 not in actions_taken:
+            actions_taken.add(24)
+            take_action(24)  # UseMonitorPads
             continue
 
+        # Examine in ABCDE order
+        for exam in examine_order:
+            if exam not in actions_taken:
+                actions_taken.add(exam)
+                take_action(exam)
+                break
+
+        # Airway management
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+            if events[5] > 0:
+                take_action(31)  # UseYankeurSuctionCatheter
+            elif events[6] > 0:
+                take_action(32)  # UseGuedelAirway
+            else:
+                take_action(3)  # ExamineAirway
+            continue
+
+        # Breathing management
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+            if events[7] > 0:
+                take_action(29)  # UseBagValveMask
+            elif events[14] > 0:
+                take_action(19)  # OpenBreathingDrawer
+            else:
+                take_action(4)  # ExamineBreathing
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -51,45 +83,23 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(9)  # GiveAdenosine
-            continue
-
-        for exam in examine_order:
-            if exam not in actions_taken:
-                actions_taken.add(exam)
-                take_action(exam)
-                break
-        
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
-            continue
-
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSuctionCatheter
-            continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
-            continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
-            continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
+        # Circulation management
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
+            if vitals["HR"] is not None and vitals["HR"] > 150:
+                take_action(9)  # GiveAdenosine
             continue
-        
+
+        # Disability management
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
             continue
 
+        # Exposure management
         if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
             continue
