@@ -40,7 +40,7 @@ def stabilize():
             observations[33:40],
             observations[40:]
         )
-
+        
         if measure_and_examine():
             continue
         
@@ -50,11 +50,11 @@ def stabilize():
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
         }
-
+        
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)  # StartChestCompression
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if any(events[i] > 0 for i in [29, 30, 31, 34, 37]):  # Unstable Tachyarrhythmia
                 take_action(24)  # UseMonitorPads
