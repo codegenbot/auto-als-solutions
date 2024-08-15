@@ -6,8 +6,8 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    
-    for step in range(350):
+
+    for _ in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -24,28 +24,8 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 30 not in actions_taken:
-                actions_taken.add(30)
-                take_action(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
-        if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(2)
             continue
 
         if 27 not in actions_taken:
@@ -64,6 +44,21 @@ def stabilize():
             actions_taken.add(38)
             take_action(38)
             continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+        
+        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
+        if any(events[i] > 0 for i in significant_heart_rhythm_events):
+            take_action(2)
+            continue
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
@@ -80,7 +75,7 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
-
+        
         take_action(48)
         break
 
