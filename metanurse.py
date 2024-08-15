@@ -67,10 +67,6 @@ def stabilize():
             if events[14] > 0:
                 take_action(19)
                 continue
-            
-            if events[9] > 0 or events[10] > 0:
-                take_action(22)
-                continue
 
             if vitals["HR"] is not None and vitals["HR"] > 150:
                 take_action(24)
