@@ -2,21 +2,16 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
+    essential_measurements = [24, 25, 27, 26]
 
     def take_action(action):
         print(action)
-        actions_taken.add(action)
+        sys.stdout.flush()
 
-    essential_measurements = [24, 25, 27, 26]
-
-    def next_essential_measurement_action():
-        for action in essential_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_essential_measurements():
+    def needs_measurements(actions_taken):
         return not all(action in actions_taken for action in essential_measurements)
+
+    actions_taken = set()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -26,24 +21,30 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
+        
+        HR, RR, Glu, Temp, MAP, Sats, Resps = vital_signs_values
+        HR_time, RR_time, Glu_time, Temp_time, MAP_time, Sats_time, Resps_time = vital_signs_times
+        
+        def get_vital(sign_time, sign_value):
+            return sign_value if sign_time > 0 else None
 
         vitals = {
-            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HR": get_vital(HR_time, HR),
+            "RR": get_vital(RR_time, RR),
+            "MAP": get_vital(MAP_time, MAP),
+            "Sats": get_vital(Sats_time, Sats),
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
-        if needs_essential_measurements():
-            take_action(next_essential_measurement_action())
+        if needs_measurements(actions_taken):
+            measurement_action = next(action for action in essential_measurements if action not in actions_taken)
+            take_action(measurement_action)
+            actions_taken.add(measurement_action)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -56,14 +57,10 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            if vitals["Sats"] and vitals["Sats"] < 88:
+                take_action(30)
+            if vitals["RR"] and vitals["RR"] < 8:
+                take_action(29)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -82,7 +79,7 @@ def stabilize():
             take_action(7)
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
+        if vitals["HR"] and vitals["HR"] > 150:
             take_action(40)
             take_action(41)
             take_action(47)
