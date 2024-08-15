@@ -1,11 +1,26 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
+    tasks = [
+        3,
+        25,
+        4,
+        29,
+        27,
+        16,
+        5,
+        15,
+        6,
+        17,
+        48,
+    ]  # ExamineAirway, UseSatsProbe, ExamineBreathing, UseBagValveMask, UseBloodPressureCuff, ViewMonitor, ExamineCirculation, GiveFluids, ExamineDisability, StartChestCompression, Finish
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -38,34 +53,17 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
+            take_action(15)  # GiveFlidscontinue
 
-        if events[3] == 0:  # AirwayClear not confirmed
-            take_action(3)  # ExamineAirway
-            continue
-        if events[7] == 0:  # BreathingNone not examined
-            take_action(4)  # ExamineBreathing
-            continue
-        if events[15] == 0:  # RadialPulsePalpable not examined
-            take_action(5)  # ExamineCirculation
-            continue
-        if events[20] == 0:  # AVPU_A not examined
-            take_action(6)  # ExamineDisability
-            continue
-        if events[26] == 0:  # ExposureRash not examined
-            take_action(7)  # ExamineExposure
-            continue
-        
-        # Perform final checks and reassess, then finish if all criteria are met
-        if vitals["Sats"] is not None and vitals["Sats"] >= 88 and \
-            vitals["RR"] is not None and vitals["RR"] >= 8 and \
-            vitals["MAP"] is not None and vitals["MAP"] >= 60 and \
-            events[3] > 0:
-            take_action(48)  # Finish
+        for task in tasks:
+            if task not in actions_taken:
+                actions_taken.add(task)
+                take_action(task)
+                break
+        else:
+            take_action(48)  # Finish if all tasks done
             break
 
-        take_action(0)  # DoNothing to await further assessment
 
 if __name__ == "__main__":
     stabilize()
