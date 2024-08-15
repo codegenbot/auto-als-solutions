@@ -33,53 +33,51 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Cardiac arrest condition
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compression
             continue
 
+        # Take measurements if needed
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
-        if any(events[i] > 0 for i in range(4, 7)):
-            take_action(3)
-            if events[5] > 0: take_action(31)
-            elif events[6] > 0: take_action(36)
+        # Airway assessment and intervention
+        if any(events[i] > 0 for i in [4, 5, 6]):
+            take_action(3)  # Examine Airway
+            if events[5] > 0:
+                take_action(31)  # Use Yankeur Suction Catheter
+            elif events[6] > 0:
+                take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
+        # Breathing assessment and intervention
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
         elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag-valve mask
+            continue
+        
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(4)  # Examine Breathing
+            if events[7] > 0:
+                take_action(29)  # Use bag-valve mask
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            if events[7] > 0: take_action(29)
-            continue
-
+        # Circulation assessment and intervention
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in range(32, 39)):
-                if 24 not in actions_taken:
-                    take_action(24)
-                elif 40 not in actions_taken:
-                    take_action(40)
-                elif 47 not in actions_taken:
-                    take_action(47)
-                else:
-                    take_action(48)
-            else:
-                take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)
+            take_action(8)  # Examine Response
             continue
 
-        take_action(48)
+        take_action(48)  # Finish if no appropriate action found
 
 if __name__ == "__main__":
     stabilize()
