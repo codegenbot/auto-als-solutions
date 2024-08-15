@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-        
+
     initiate_series = [27, 25, 26, 16, 38, 46]
     examine_series = [3, 4, 5, 6, 7]
     measurement_required = [33, 34, 35, 36, 37, 38, 39]
@@ -48,6 +48,16 @@ def stabilize():
         if evaluate_critical(vitals):
             continue
 
+        measurements_completed = False
+        for measure in measurement_required:
+            if observations[measure] == 0:
+                take_action(measure)
+                measurements_completed = True
+                break
+        
+        if measurements_completed:
+            continue
+
         for measurement in initiate_series:
             if measurement not in actions_taken:
                 actions_taken.add(measurement)
@@ -59,11 +69,6 @@ def stabilize():
                     actions_taken.add(exam)
                     take_action(exam)
                     break
-                
-        for measure in measurement_required:
-            if observations[measure] == 0:
-                take_action(measure)
-                break
 
         if events[5] > 0: 
             take_action(31)
@@ -71,28 +76,28 @@ def stabilize():
         if events[6] > 0: 
             take_action(32)
             continue
-        if any(events[3:7]):   
+        if any(events[3:7]):
             take_action(3)
             continue
-        if any(events[7:15]):  
+        if any(events[7:15]):
             take_action(4)
             continue
-        if events[7] > 0:  
+        if events[7] > 0:
             take_action(29)
             continue
-        if events[14] > 0:  
+        if events[14] > 0:
             take_action(19)
             continue
         if vitals["HR"] is not None and vitals["HR"] > 150: 
             take_action(24)
             continue
-        if any(events[15:20]):  
+        if any(events[15:20]):
             take_action(5)
             continue
-        if any(events[20:26]): 
+        if any(events[20:26]):
             take_action(6)
             continue
-        if any(events[26:33]):  
+        if any(events[26:33]):
             take_action(7)
             continue
 
