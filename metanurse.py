@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -25,11 +24,7 @@ def stabilize():
         if len(observations) != 53:
             continue
 
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -38,9 +33,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23 if 23 not in actions_taken else 17)
             continue
 
@@ -82,7 +75,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
