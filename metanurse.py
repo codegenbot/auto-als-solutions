@@ -36,16 +36,19 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Check for critical conditions requiring immediate CPR
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
             continue
 
+        # Perform initial measurements if needed
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
+        # Airway management
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
@@ -54,6 +57,7 @@ def stabilize():
                 take_action(32)
             continue
 
+        # Breathing management
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -66,6 +70,7 @@ def stabilize():
             take_action(4)
             continue
 
+        # Circulation management
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -84,18 +89,21 @@ def stabilize():
             take_action(5)
             continue
 
+        # Disability management
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
 
+        # Exposure management
         take_action(7)
 
+        # Stabilization condition
         if (
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RR"] is not None and vitals["RR"] >= 8 and
             vitals["MAP"] is not None and vitals["MAP"] >= 60
         ):
-            take_action(48)
+            take_action(48)  # Output "Finish" action to complete the scenario
             break
 
 if __name__ == "__main__":
