@@ -9,7 +9,6 @@ def stabilize():
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
-        
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
@@ -42,7 +41,7 @@ def stabilize():
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)  # UseYankeurSuctionCatheter
             elif events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
