@@ -3,7 +3,8 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    required_measurements = [24, 25, 27]
+    required_measurements = {24, 25, 27, 16}
+    unstable_tach_arrhythmias = {36, 37, 38, 41, 42, 43, 47}
 
     def take_action(action):
         print(action)
@@ -15,13 +16,10 @@ def stabilize():
                 return action
 
     def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
+        return not required_measurements.issubset(actions_taken)
 
     for step in range(max_steps):
-        observations = list(map(float, input().strip().split()))
-        if len(observations) != 53:
-            continue
-        
+        observations = list(map(float, sys.stdin.readline().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -53,6 +51,12 @@ def stabilize():
                 take_action(32)
             continue
 
+        if any(events[i] > 0 for i in range(32, 39)):
+            take_action(28)
+            take_action(40)
+            take_action(43)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -73,9 +77,11 @@ def stabilize():
             take_action(5)
             continue
 
-        if any(events[i] > 0 for i in [31, 32, 34, 37, 38]):
-            take_action(24)
-            continue
+        if step % 5 == 0:
+            take_action(1)
+
+        if step % 10 == 0:
+            take_action(2)
 
         take_action(48)
         break
