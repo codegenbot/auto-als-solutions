@@ -74,10 +74,9 @@ def stabilize():
             continue
 
         tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+            28, 29, 30, 31, 34, 37
         ]
-        if any(events[27 + i] > 0 for i in range(len(tachyarrhythmias))):
+        if any(events[i] > 0 for i in tachyarrhythmias):
             take_action(24)
             take_action(47)
             take_action(43)
