@@ -40,16 +40,16 @@ def stabilize():
             take_action(15)
             continue
 
-        if times[0] == 0 or (vitals["HR"] is None):
+        if times[0] == 0 or (times[0] > 0 and vitals["HR"] is None):
             take_action(24)
             continue
-        if times[1] == 0 or (vitals["RR"] is None):
+        if times[1] == 0 or (times[1] > 0 and vitals["RR"] is None):
             take_action(3)
             continue
-        if times[4] == 0 or (vitals["MAP"] is None):
+        if times[4] == 0 or (times[4] > 0 and vitals["MAP"] is None):
             take_action(27)
             continue
-        if times[5] == 0 or (vitals["Sats"] is None):
+        if times[5] == 0 or (times[5] > 0 and vitals["Sats"] is None):
             take_action(25)
             continue
 
