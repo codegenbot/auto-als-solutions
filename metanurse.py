@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
 
@@ -19,12 +20,12 @@ def stabilize():
         return (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         )
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -36,7 +37,7 @@ def stabilize():
         if check_cardiac_arrest(vitals):
             take_action(17)  # Start chest compressions
             continue
-        
+
         if vital_signs_times[5] == 0:
             take_action(25)  # UseSatsProbe
             continue
@@ -50,7 +51,12 @@ def stabilize():
         if any(events[i] == 0 for i in range(7, 15)):
             take_action(4)  # Examine Breathing
             continue
-        if any(events[i] == 0 for i in range(15, 37)) or vital_signs_times[0] == 0 or vital_signs_times[1] == 0 or vital_signs_times[4] == 0:
+        if (
+            any(events[i] == 0 for i in range(15, 37))
+            or vital_signs_times[0] == 0
+            or vital_signs_times[1] == 0
+            or vital_signs_times[4] == 0
+        ):
             take_action(5)  # Examine Circulation
             continue
         if any(events[i] == 0 for i in range(21, 25)):
@@ -66,11 +72,11 @@ def stabilize():
             elif events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
@@ -78,7 +84,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
-        
+
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(24)  # UseMonitorPads
             take_action(43)  # DefibrillatorPace
@@ -86,6 +92,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
