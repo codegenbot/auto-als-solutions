@@ -7,9 +7,18 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    steps = 350
 
-    for step in range(steps):
+    observation_checks = [27, 25, 38, 24, 3, 4, 5]  # BloodPressureCuff, SatsProbe...
+
+    ABCDE_steps = [
+        {"action": 3, "conditions": [3, 4, 5, 6]},  # Airway
+        {"action": 4, "conditions": [7, 8, 9, 10, 11, 12, 13, 14]},  # Breathing
+        {"action": 5, "conditions": [15, 16, 17, 18, 19]},  # Circulation
+        {"action": 6, "conditions": [20, 21, 22, 23, 24, 25]},  # Disability
+        {"action": 7, "conditions": [26, 27, 28, 29, 30, 31, 32]},  # Exposure
+    ]
+
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
@@ -32,41 +41,43 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
-            continue
-
-        ABCDE_steps = [
-            {"action": 3, "conditions": [3, 4, 5, 6]},  # Airway
-            {"action": 4, "conditions": [7, 8, 9, 10, 11, 12, 13, 14]},  # Breathing
-            {"action": 5, "conditions": [15, 16, 17, 18, 19]},  # Circulation
-            {"action": 6, "conditions": [20, 21, 22, 23, 24, 25]},  # Disability
-            {"action": 7, "conditions": [26, 27, 28, 29, 30, 31, 32]},  # Exposure
-        ]
-
-        for step in ABCDE_steps:
-            action = step["action"]
-            conditions = step["conditions"]
-            if any(events[i] > 0 for i in conditions):
-                take_action(action)
+        for check in observation_checks:
+            if check not in actions_taken:
+                actions_taken.add(check)
+                take_action(check)
                 break
+        else:
+            if vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)  # UseNonRebreatherMask
+                continue
 
-        continue
+            if vitals["RR"] is not None and vitals["RR"] < 8:
+                take_action(29)  # UseBagValveMask
+                continue
 
-        take_action(48)  # Finish
-        break
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)  # GiveFluids
+                continue
+
+            if vitals["HR"] is not None and vitals["HR"] > 150:
+                take_action(24)  # UseMonitorPads (for synchronized cardioversion)
+                continue
+
+            for step in ABCDE_steps:
+                action = step["action"]
+                conditions = step["conditions"]
+                if any(events[i] > 0 for i in conditions):
+                    take_action(action)
+
+        if all(
+            [
+                vitals["Sats"] is not None and vitals["Sats"] >= 88,
+                vitals["RR"] is not None and vitals["RR"] >= 8,
+                vitals["MAP"] is not None and vitals["MAP"] >= 60,
+            ]
+        ):
+            take_action(48)  # Finish
+            break
 
 
 if __name__ == "__main__":
