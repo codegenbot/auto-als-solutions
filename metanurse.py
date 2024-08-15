@@ -25,6 +25,7 @@ def stabilize():
             continue
 
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -54,6 +55,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
+
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
@@ -61,6 +63,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
+
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
