@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -11,7 +10,6 @@ def stabilize():
         actions_taken.add(action)
 
     initial_measurements = [24, 25, 27, 26]
-
     def next_initial_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
@@ -83,7 +81,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
