@@ -21,7 +21,7 @@ def stabilize():
     def has_unstable_tachyarrhythmia(events):
         arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
         return any(events[i] > 0 for i in arrhythmia_events)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
@@ -53,10 +53,7 @@ def stabilize():
                 else:
                     take_action(48)  # Finish
             else:
-                if 14 not in actions_taken:
-                    take_action(14)  # Use Venflon IV
-                else:
-                    take_action(15)  # Give fluids
+                take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
