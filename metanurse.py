@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-
+    
     # Initial checks
     initial_checks = [27, 25]  # Blood Pressure Cuff, Sats Probe
 
