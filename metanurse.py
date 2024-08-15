@@ -7,7 +7,6 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-        sys.stdout.flush()  # Ensure the action is output immediately
 
     initial_measurements = [24, 25, 27, 26]
 
@@ -40,8 +39,8 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression
-            take_action(23)  # Resume CPR
+            take_action(17)
+            take_action(23)
             continue
 
         if needs_initial_measurements():
@@ -49,44 +48,46 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine airway
-            if events[5] > 0:  # AirwayBlood
-                take_action(31)  # Use Yankeur suction catheter
-            if events[6] > 0:  # AirwayTongue
-                take_action(32)  # Use Guedel airway
+            take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine breathing
+            take_action(4)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine circulation
-            if events[17] > 0:  # RadialPulseNonPalpable
-                take_action(22)  # Bag during CPR
+            take_action(5)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # Examine disability
+            take_action(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine exposure
+            take_action(7)
             continue
 
-        take_action(48)  # Finish
+        if any(events[i] > 0 for i in range(28, 38)):
+            take_action(2)
+            continue
+
+        take_action(48)
         break
 
 if __name__ == "__main__":
