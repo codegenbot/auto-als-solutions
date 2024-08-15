@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -23,68 +24,56 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        if 25 not in actions_taken:
-            take_action(25)
-            actions_taken.add(25)
-            continue
+        # Check signs
+        critical_checks = [
+            25,
+            38,
+            16,
+            27,
+        ]  # SatsProbe, TakeBloodPressure, ViewMonitor, UseBloodPressureCuff
+        for check in critical_checks:
+            if check not in actions_taken:
+                actions_taken.add(check)
+                take_action(check)
+                break
+        else:
+            if events[3] == 0:  # AirwayClear not confirmed
+                take_action(3)  # ExamineAirway
+                continue
+            if events[7] == 0:  # BreathingNone not examined
+                take_action(4)  # ExamineBreathing
+                continue
+            if events[15] == 0:  # RadialPulsePalpable not examined
+                take_action(5)  # ExamineCirculation
+                continue
+            if events[20] == 0:  # AVPU_A not examined
+                take_action(6)  # ExamineDisability
+                continue
+            if events[26] == 0:  # ExposureRash not examined
+                take_action(7)  # ExamineExposure
+                continue
 
-        if 27 not in actions_taken:
-            take_action(27)
-            actions_taken.add(27)
-            continue
+        take_action(48)  # Finish
+        break
 
-        if 16 not in actions_taken:
-            take_action(16)
-            actions_taken.add(16)
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            continue
-
-        if times[1] == 0:
-            take_action(4)
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
-
-        if not vitals["HR"] and 26 not in actions_taken:
-            take_action(26)
-            actions_taken.add(26)
-            continue
-
-        if step == 349:
-            take_action(48)
-            break
-
-        take_action(0)
-        continue
 
 if __name__ == "__main__":
     stabilize()
