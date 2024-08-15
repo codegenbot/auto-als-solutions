@@ -37,6 +37,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Immediate life-threatening conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
@@ -47,6 +48,7 @@ def stabilize():
             take_action(next_essential_measurement_action())
             continue
 
+        # Airway
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[5] > 0:
@@ -55,6 +57,7 @@ def stabilize():
                 take_action(32)
             continue
 
+        # Breathing
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -71,6 +74,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -83,10 +87,12 @@ def stabilize():
                 take_action(43)
             continue
 
+        # Disability
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
 
+        # Exposure
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
