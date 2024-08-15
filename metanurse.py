@@ -24,50 +24,58 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
-        heart_rhythm_events = ["HeartRhythmNSR", "HeartRhythmSVT", "HeartRhythmAF", "HeartRhythmAtrialFlutter", "HeartRhythmVT", "HeartRhythmVF"]
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        # Check for cardiac arrest
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+        # Check airway first
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
+            take_action(3)
+            actions_taken.add(3)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        # Check and manage breathing
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if 25 not in actions_taken:
+                take_action(25)
+                actions_taken.add(25)
+                continue
+            else:
+                take_action(30)
+                continue
+        elif vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
+        # Check and manage circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
+            if 27 not in actions_taken:
+                take_action(27)
+                actions_taken.add(27)
+                continue
+            else:
+                take_action(15)
+                continue
 
-        if any(events[i] > 0 for i in heart_rhythm_indices if heart_rhythm_events[i - 27] != "HeartRhythmNSR"):
-            take_action(28)
-            take_action(40)  # Charge defibrillator
-            take_action(43)  # Pace defibrillator
-            take_action(41)  # Increase current
-            continue
-        
         if 27 not in actions_taken:
-            actions_taken.add(27)
             take_action(27)
+            actions_taken.add(27)
             continue
         if 25 not in actions_taken:
-            actions_taken.add(25)
             take_action(25)
+            actions_taken.add(25)
             continue
         if 16 not in actions_taken:
-            actions_taken.add(16)
             take_action(16)
+            actions_taken.add(16)
             continue
         if 38 not in actions_taken:
-            actions_taken.add(38)
             take_action(38)
+            actions_taken.add(38)
             continue
 
+        # Continue systematic examination
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
