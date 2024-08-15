@@ -44,7 +44,7 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in heart_rhythm_indices):
-            take_action(24)
+            take_action(24)  # Attach defib pads to monitor rhythm
             continue
 
         if 27 not in actions_taken:
