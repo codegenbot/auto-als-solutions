@@ -4,6 +4,10 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
+        
+    initiate_series = [27, 25, 26, 16, 38, 46]
+    examine_series = [3, 4, 5, 6, 7]
+    measurement_required = [33, 34, 35, 36, 37, 38, 39]
 
     def evaluate_critical(vitals):
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
@@ -20,14 +24,18 @@ def stabilize():
             return True
         return False
 
-    def get_observations():
+    actions_taken = set()
+
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
-            return None, None, None
+            continue
+
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
+        
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -36,44 +44,55 @@ def stabilize():
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
-        return events, vital_signs_times, vitals
 
-    for step in range(350):
-        events, vital_signs_times, vitals = get_observations()
-        if vitals is None:
-            continue
-        
         if evaluate_critical(vitals):
             continue
 
-        if events[3] > 0:
-            if events[4] > 0 or events[5] > 0 or events[6] > 0:
-                take_action(31)
-            else:
-                take_action(3)
-            continue
+        for measurement in initiate_series:
+            if measurement not in actions_taken:
+                actions_taken.add(measurement)
+                take_action(measurement)
+                break
+        else:
+            for exam in examine_series:
+                if exam not in actions_taken:
+                    actions_taken.add(exam)
+                    take_action(exam)
+                    break
+                
+        for measure in measurement_required:
+            if observations[measure] == 0:
+                take_action(measure)
+                break
 
-        if events[7] > 0 or any(events[8:15]):
+        if events[5] > 0: 
+            take_action(31)
+            continue
+        if events[6] > 0: 
+            take_action(32)
+            continue
+        if any(events[3:7]):   
+            take_action(3)
+            continue
+        if any(events[7:15]):  
             take_action(4)
             continue
-
-        if vitals["Sats"] is None:
-            take_action(25)
+        if events[7] > 0:  
+            take_action(29)
             continue
-
-        if events[15] > 0:
+        if events[14] > 0:  
+            take_action(19)
+            continue
+        if vitals["HR"] is not None and vitals["HR"] > 150: 
+            take_action(24)
+            continue
+        if any(events[15:20]):  
             take_action(5)
             continue
-
-        if vitals["MAP"] is None:
-            take_action(27)
-            continue
-
-        if any(events[20:26]):
+        if any(events[20:26]): 
             take_action(6)
             continue
-
-        if any(events[26:33]):
+        if any(events[26:33]):  
             take_action(7)
             continue
 
