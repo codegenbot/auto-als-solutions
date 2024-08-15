@@ -47,7 +47,6 @@ def stabilize():
             take_action(next_initial_measurement_action())
             continue
 
-        # Airway assessment and management
         if not any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # Examine airway
             continue
@@ -58,7 +57,6 @@ def stabilize():
             take_action(32)  # Use Guedel Airway
             continue
         
-        # Breathing assessment and management
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
@@ -69,7 +67,6 @@ def stabilize():
             take_action(4)  # Examine Breathing
             continue
 
-        # Circulation assessment and management
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
@@ -77,12 +74,10 @@ def stabilize():
             take_action(5)  # Examine Circulation
             continue
 
-        # Disability assessment and management
         if not any(events[i] > 0 for i in range(20, 26)):
             take_action(6)  # Examine Disability
             continue
 
-        # Exposure assessment and management
         if not any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine Exposure
             continue
