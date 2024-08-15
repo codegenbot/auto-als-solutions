@@ -3,13 +3,12 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    initial_measurements = [24, 25, 27, 26]
 
     def take_action(action):
         print(action)
         sys.stdout.flush()
         actions_taken.add(action)
-
-    initial_measurements = [24, 25, 27, 26]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -34,33 +33,37 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(23 if 23 not in actions_taken else 17)
+            take_action(17)
+            take_action(23)
             continue
 
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
-        if events[3] + events[4] + events[5] + events[6] > 0:
-            take_action(18 if 18 not in actions_taken else 3)
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(19 if 19 not in actions_taken else 4)
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(10)
             continue
-
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
