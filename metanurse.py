@@ -3,27 +3,27 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    required_measurements = [24, 25, 27]  # MonitorPads, SatsProbe, BP Cuff
 
     def take_action(action):
         print(action)
         sys.stdout.flush()
         actions_taken.add(action)
 
-    required_measurements = [24, 25, 27]
+    def needs_measurements():
+        return not all(action in actions_taken for action in required_measurements)
 
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-        return None
-
-    def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
+            take_action(0)  # Do nothing if input is improperly formatted
             continue
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -37,55 +37,56 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if needs_measurements():
-            next_action = next_measurement_action()
-            if next_action:
-                take_action(next_action)
-            continue
-
+        # Immediate critical conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-                vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
+            take_action(17)  # Start chest compression immediately
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+        # Take necessary measurements
+        if needs_measurements():
+            take_action(next_measurement_action())
+            continue
+
+        # Assess and stabilize Airway
+        if any(events[i] > 0 for i in range(3, 7)):  # Check airway events
+            take_action(3)  # Examine Airway
             if events[4] > 0 or events[5] > 0:
-                take_action(31)
+                take_action(31)  # Use Yankeur suction catheter
             elif events[6] > 0:
-                take_action(32)
+                take_action(32)  # Use Guedel airway
             continue
 
+        # Assess and stabilize Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag-valve mask
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # Examine Breathing
             continue
 
+        # Assess and stabilize Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Administer fluids
             continue
 
-        tachyarrhythmias = [
-            "HeartRhythmSVT",
-            "HeartRhythmVT",
-            "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter",
-            "HeartRhythmTorsades",
-            "HeartRhythmVF",
-        ]
-        if any(events[i + 27] > 0 for i in range(len(tachyarrhythmias))):
-            take_action(24)
-            take_action(43)
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)  # Examine Circulation
             continue
 
-        take_action(48)
+        # Check for abnormal heart rhythms
+        if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 40)):
+            take_action(24)  # Use Monitor Pads
+            take_action(2)   # Check rhythm
+            continue
+
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
