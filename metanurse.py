@@ -14,7 +14,7 @@ def stabilize():
         for action in initial_measurements:
             if action not in actions_taken:
                 return action
-
+    
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
     
