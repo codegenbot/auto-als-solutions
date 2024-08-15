@@ -62,15 +62,19 @@ def stabilize():
             take_action(4)  # Examine Breathing
             if events[7] > 0:
                 take_action(29)
-            continue
+            else:
+                break  # Wait for new input after examining
 
         # Circulation check
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)  # Give Adenosine
+            continue
 
         # Disability check
-        if any(events[i] > 0 for i in range(1, 4)):
+        if any(events[i] > 0 for i in [21, 22, 23]):
             take_action(8)  # Examine Response
             continue
 
@@ -80,8 +84,9 @@ def stabilize():
             continue
 
         # If stabilized
-        take_action(48)
-        break
+        if all(v is not None and v >= t for t, v in zip([8, 60, 88], [vitals["RR"], vitals["MAP"], vitals["Sats"]])):
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
