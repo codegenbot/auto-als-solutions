@@ -9,7 +9,14 @@ def stabilize():
         print(action)
         actions_taken.add(action)
         attached_devices.add(action)
-        sys.stdout.flush()
+
+    required_measurements = [24, 25, 27]
+
+    def attach_devices():
+        for action in required_measurements:
+            if action not in attached_devices:
+                return action
+        return None
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -28,21 +35,20 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for cardiac arrest condition first
+        # Attach necessary devices first
+        device_action = attach_devices()
+        if device_action:
+            take_action(device_action)
+            continue
+
+        # Detect and treat cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)  # Start chest compression immediately
             continue
 
-        # Attach necessary devices first
-        required_devices = [24, 25, 27]
-        for device in required_devices:
-            if device not in attached_devices:
-                take_action(device)
-                continue
-
-        # Perform A - Airway assessment
+        # Ensure the airway is clear
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
@@ -51,37 +57,39 @@ def stabilize():
                 take_action(32)  # Use airway if tongue obstruction
             continue
 
-        # Perform B - Breathing assessment and treatment
+        # Ensure oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use non-rebreather mask
-        elif vitals["RR"] is not None and vitals["RR"] < 8:
+            continue
+
+        # Ensure respiratory rate
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use bag-valve mask
+            continue
+
+        # Examine breathing if abnormal
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
-        # Perform C - Circulation assessment and treatment
+        # Ensure mean arterial pressure is sufficient
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Administer fluids to raise MAP
-        if any(events[27+i] > 0 for i in range(9)):
+            continue
+
+        # Check for tachyarrhythmias and cardiovert
+        tachyarrhythmias_indices = [28, 30, 29, 31, 36, 37]
+        if any(events[i] > 0 for i in tachyarrhythmias_indices):
             take_action(24)  # Use defibrillator pads
             take_action(43)  # Defibrillator pace (cardioversion)
+            continue
+
+        # Examine circulation if abnormal
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
-        # Perform D - Disability assessment
-        if any(events[21 + i] > 0 for i in range(4)):
-            take_action(6)
-            continue
-
-        # Perform E - Exposure assessment
-        if any(events[25 + i] > 0 for i in range(3)):
-            take_action(7)
-            continue
-
-        # Finish Assessment
-        take_action(48)
+        take_action(48)  # Finish action
         break
 
 if __name__ == "__main__":
