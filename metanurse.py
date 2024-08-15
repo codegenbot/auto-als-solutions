@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,7 +27,8 @@ def stabilize():
 
         # Immediate checks for critical conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # StartChestCompression
             continue
 
@@ -41,8 +43,12 @@ def stabilize():
             continue
 
         # AIRWAY checks and interventions
-        if events[4] > 0 or events[5] > 0 or events[6] > 0:  # AirwayVomit, AirwayBlood, AirwayTongue
-            take_action(32 if events[6] > 0 else 31)  # UseGuedelAirway or UseYankeurSucionCatheter
+        if (
+            events[4] > 0 or events[5] > 0 or events[6] > 0
+        ):  # AirwayVomit, AirwayBlood, AirwayTongue
+            take_action(
+                32 if events[6] > 0 else 31
+            )  # UseGuedelAirway or UseYankeurSucionCatheter
             continue
 
         # BREATHING checks and interventions
@@ -85,6 +91,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
