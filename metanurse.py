@@ -78,10 +78,6 @@ def stabilize():
             take_action(9)  # GiveAdenosine
             continue
 
-        if events[26:33]:
-            take_action(6)  # ExamineDisability
-            continue
-
         if events[20:26]:  # Disability events
             take_action(6)  # ExamineDisability
             continue
