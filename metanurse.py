@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_measurements = [24, 25, 27, 1]
+    initial_measurements = [24, 25, 27]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
