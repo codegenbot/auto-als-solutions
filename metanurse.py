@@ -20,7 +20,7 @@ def stabilize():
         6,
         7,
         8,
-    ]  # Examine sections: Airway, Breathing, Circulation, Disability, Exposure, Response
+    ]  # Examine sections in order: Airway, Breathing, Circulation, Disability, Exposure, Response
 
     actions_taken = set()
 
