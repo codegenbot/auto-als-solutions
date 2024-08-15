@@ -24,12 +24,10 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Check for cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Stabilize saturation levels
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 actions_taken.add(25)
@@ -38,12 +36,10 @@ def stabilize():
                 take_action(30)
             continue
 
-        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Stabilize MAP (mean arterial pressure)
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
@@ -52,7 +48,6 @@ def stabilize():
                 take_action(15)
             continue
 
-        # Perform examinations ABCDE sequentially
         if 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
