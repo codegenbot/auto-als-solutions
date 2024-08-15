@@ -38,53 +38,46 @@ def stabilize():
         }
 
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
-            take_action(17)  # Cardiac arrest, start CPR
+            take_action(17)
             continue
 
-        # ABCDE Assessment
-        # A: Airways
         if events[1] > 0 or events[2] > 0:
-            take_action(3)  # Examine airway
+            take_action(3)
             continue
         if events[4] > 0 or events[5] > 0 or events[6] > 0:
-            take_action(31)  # Use suction
+            take_action(31)
             continue
-        
-        # B: Breathing
+
         if events[7] > 0:
-            take_action(4)  # Examine breathing
+            take_action(4)
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
-        
-        # C: Circulation
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
         if events[16] <= 0 and events[17] <= 0:
-            take_action(5)  # Examine circulation
+            take_action(5)
             continue
    
-        # D: Disability
         if events[22] > 0 or events[21] > 0:
-            take_action(6)  # Examine disability
+            take_action(6)
             continue
 
-        # E: Exposure
         if events[25] <= 0:
-            take_action(7)  # Examine exposure
+            take_action(7)
             continue
 
-        # If step >= 349 then finish
         if step >= 349:
             take_action(48)
             break
         
-        take_action(0)  # Do nothing
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
