@@ -9,18 +9,22 @@ def stabilize():
         actions_taken.add(action)
 
     required_measurements = {24, 25, 27}
-    examine_order = [3, 4, 8, 5, 6, 7]
 
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-        for action in examine_order:
-            if action not in actions_taken:
-                return action
-
+        return None
+    
     def needs_measurements():
-        return not (required_measurements.issubset(actions_taken) and examine_order.issubset(actions_taken))
+        return not required_measurements.issubset(actions_taken)
+
+    def prioritize_action_for_airway(events):
+        if events[4] > 0:
+            return 31  # UseYankeurSucionCatheter
+        if events[6] > 0:
+            return 32  # UseGuedelAirway
+        return None
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -41,16 +45,15 @@ def stabilize():
             take_action(17)
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        measurement_action = next_measurement_action()
+        if measurement_action:
+            take_action(measurement_action)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
+        airway_action = prioritize_action_for_airway(events)
+        if airway_action:
+            take_action(3)  # ExamineAirway
+            take_action(airway_action)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -61,7 +64,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             take_action(4)
             continue
 
@@ -69,19 +72,11 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)
             continue
 
-        if any(events[i] > 0 for i in range(20, 24)):
-            take_action(6)
-            continue
-
-        if any(events[i] > 0 for i in range(24, 27)):
-            take_action(7)
-            continue
-
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
