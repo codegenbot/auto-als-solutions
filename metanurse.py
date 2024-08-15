@@ -72,7 +72,7 @@ def stabilize():
             take_action(action)
             continue
 
-        take_action(0)
+        take_action(0)  # DoNothing if there's nothing urgent
 
 if __name__ == "__main__":
     stabilize()
