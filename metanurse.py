@@ -5,6 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    actions_taken = set()
     examined_vitals = {"MAP": False, "Sats": False, "RR": False, "HR": False}
     final_check = False
 
@@ -39,14 +40,14 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
+        if not examined_vitals["HR"] and vital_signs_times[0] == 0:
+            examined_vitals["HR"] = True
+            take_action(2)  # CheckRhythm
+            continue
+
         if not examined_vitals["RR"] and vital_signs_times[1] == 0:
             examined_vitals["RR"] = True
             take_action(4)  # ExamineBreathing
-            continue
-
-        if not examined_vitals["HR"] and vital_signs_times[0] == 0:
-            examined_vitals["HR"] = True
-            take_action(5)  # ExamineCirculation
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
@@ -59,10 +60,6 @@ def stabilize():
 
         if events[7] > 0:
             take_action(29)  # UseBagValveMask
-            continue
-
-        if events[14] > 0:
-            take_action(19)  # OpenBreathingDrawer
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -81,11 +78,15 @@ def stabilize():
             take_action(9)  # GiveAdenosine
             continue
 
-        if any(events[20:26]):  # Disability events
+        if events[26:33]:
             take_action(6)  # ExamineDisability
             continue
 
-        if any(events[26:33]):  # Exposure events
+        if events[20:26]:  # Disability events
+            take_action(6)  # ExamineDisability
+            continue
+
+        if events[26:33]:  # Exposure events
             take_action(7)  # ExamineExposure
             continue
 
