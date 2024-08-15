@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,8 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_measurements = [25, 27, 16]
-    examine_actions = [3, 4, 5, 6, 7]
+    initial_measurements = [24, 25, 27, 26, 18, 19, 20, 21, 37]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -59,10 +57,7 @@ def stabilize():
 
         # Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if vitals["Sats"] < 85:
-                take_action(29)
-            else:
-                take_action(30)
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -78,23 +73,14 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(33, 40)):
-            take_action(16)
-            continue
-
         tachyarrhythmias = [
-            "HeartRhythmSVT",
-            "HeartRhythmVT",
-            "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter",
-            "HeartRhythmTorsades",
-            "HeartRhythmVF",
+            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[27 + i] > 0 for i in range(len(tachyarrhythmias))):
             take_action(24)
             take_action(47)
             take_action(43)
-            take_action(40)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
@@ -107,13 +93,11 @@ def stabilize():
             continue
 
         # Exposure
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
+        take_action(7)
+        continue
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
