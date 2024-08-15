@@ -44,9 +44,14 @@ def stabilize():
                 take_action(15)
                 continue
             if any(events[i] > 0 for i in range(26, 33)):
-                take_action(2)
+                take_action(9)
                 continue
             take_action(9)
+            continue
+
+        if "tachyarrhythmia" not in actions_taken and values[0] > 150:
+            actions_taken.add("tachyarrhythmia")
+            take_action(11)
             continue
 
         if 27 not in actions_taken:
