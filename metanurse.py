@@ -1,16 +1,15 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    last_action = None
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
     initial_measurements = [24, 25, 27, 26, 18, 19, 20, 21, 37]
-    last_action = None
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -39,8 +38,7 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+            vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -51,7 +49,6 @@ def stabilize():
                 last_action = next_action
             continue
 
-        # Airway
         if any(events[i] > 0 for i in range(3, 7)):
             if last_action != 3:
                 take_action(3)
@@ -62,13 +59,12 @@ def stabilize():
                 take_action(32)
             continue
 
-        if not any(events[i] > 0 for i in range(3, 7)):
+        if events[3] == 0:
             if last_action != 3:
                 take_action(3)
                 last_action = 3
             continue
 
-        # Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 30 not in actions_taken:
                 take_action(30)
@@ -85,21 +81,12 @@ def stabilize():
                 last_action = 4
             continue
 
-        # Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 15 not in actions_taken:
                 take_action(15)
                 continue
 
-        tachyarrhythmias = [
-            "HeartRhythmSVT",
-            "HeartRhythmVT",
-            "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter",
-            "HeartRhythmTorsades",
-            "HeartRhythmVF",
-        ]
-        if any(events[27 + i] > 0 for i in range(len(tachyarrhythmias))):
+        if any(events[i] > 0 for i in range(27, 33)):
             take_action(24)
             take_action(47)
             take_action(43)
@@ -111,14 +98,12 @@ def stabilize():
                 last_action = 5
             continue
 
-        # Disability
         if any(events[i] > 0 for i in range(20, 26)):
             if last_action != 6:
                 take_action(6)
                 last_action = 6
             continue
 
-        # Exposure
         if any(events[i] > 0 for i in range(26, 33)):
             if last_action != 7:
                 take_action(7)
@@ -127,7 +112,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
