@@ -44,7 +44,7 @@ def stabilize():
             actions_taken.add(38)
             take_action(38)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -54,7 +54,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in significant_heart_rhythm_events):
             take_action(2)
