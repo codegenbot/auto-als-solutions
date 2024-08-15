@@ -24,79 +24,65 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Check for cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Initial ABCDE assessment
-        if 3 not in actions_taken:
+        if times[1] == 0 and 25 not in actions_taken:
+            take_action(25)
+            actions_taken.add(25)
+            continue
+        if times[4] == 0 and 27 not in actions_taken:
+            take_action(27)
+            actions_taken.add(27)
+            continue
+        if (vitals["MAP"] is None or vitals["Sats"] is None) and 16 not in actions_taken:
+            take_action(16)
+            actions_taken.add(16)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
             take_action(3)
             actions_taken.add(3)
             continue
-        if 4 not in actions_taken:
-            take_action(4)
-            actions_taken.add(4)
-            continue
-        if 5 not in actions_taken:
-            take_action(5)
-            actions_taken.add(5)
-            continue
-        if 6 not in actions_taken:
-            take_action(6)
-            actions_taken.add(6)
-            continue
-        if 7 not in actions_taken:
-            take_action(7)
-            actions_taken.add(7)
-            continue
 
-        # Manage breathing with checks
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 25 not in actions_taken:
-                take_action(25)
-                actions_taken.add(25)
-                continue
-            else:
+            if 30 not in actions_taken:
                 take_action(30)
                 continue
         elif vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Manage circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 27 not in actions_taken:
-                take_action(27)
-                actions_taken.add(27)
-                continue
-            else:
-                take_action(15)
-                continue
-
-        # Check for arrhythmias
-        if any(events[i] > 0 for i in range(28, 39)):
-            take_action(2)
+            take_action(15)
             continue
 
-        # Use necessary instruments if not used yet
-        if 27 not in actions_taken:
-            take_action(27)
-            actions_taken.add(27)
-            continue
-        if 25 not in actions_taken:
+        if times[1] == 0 and 25 not in actions_taken:
             take_action(25)
             actions_taken.add(25)
             continue
-        if 16 not in actions_taken:
+        if times[2] == 0 and 16 not in actions_taken:
             take_action(16)
             actions_taken.add(16)
             continue
-        if 38 not in actions_taken:
-            take_action(38)
-            actions_taken.add(38)
+        if not any(events[i] > 0 for i in range(7, 15)) and 4 not in actions_taken:
+            take_action(4)
+            actions_taken.add(4)
             continue
-        
+        if not any(events[i] > 0 for i in range(15, 20)) and 5 not in actions_taken:
+            take_action(5)
+            actions_taken.add(5)
+            continue
+        if not any(events[i] > 0 for i in range(20, 26)) and 6 not in actions_taken:
+            take_action(6)
+            actions_taken.add(6)
+            continue
+        if not any(events[i] > 0 for i in range(26, 33)) and 7 not in actions_taken:
+            take_action(7)
+            actions_taken.add(7)
+            continue
+
         take_action(48)
         break
 
