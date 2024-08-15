@@ -7,7 +7,7 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-    
+
     initial_measurements = [24, 25, 27, 26]
 
     def next_initial_measurement_action():
@@ -36,15 +36,15 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        if needs_initial_measurements():
+            take_action(next_initial_measurement_action())
+            continue
+
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
             take_action(23)
-            continue
-
-        if needs_initial_measurements():
-            take_action(next_initial_measurement_action())
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
