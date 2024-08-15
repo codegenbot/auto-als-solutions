@@ -62,36 +62,36 @@ def stabilize():
                 break
 
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
+            take_action(3)
             continue
 
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSuctionCatheter
+        if events[5] > 0:
+            take_action(31)
             continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
+        if events[6] > 0:
+            take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
+        if events[7] > 0:
+            take_action(29)
             continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
+        if events[14] > 0:
+            take_action(19)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
 
         take_action(48)  # Finish
