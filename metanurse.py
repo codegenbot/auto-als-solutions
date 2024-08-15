@@ -5,7 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    critical_checks = [27, 25, 38, 16]
+    critical_checks = [27, 25, 38, 16]  # Attach BP cuff, Sats probe, Take BP, View Monitor
     actions_taken = set()
 
     for step in range(350):
@@ -48,7 +48,7 @@ def stabilize():
                 take_action(check)
                 break
         else:
-            if any(events[i] > 0 for i in range(3, 7)):
+            if any(events[i] > 0 for i in range(3, 7)): # Airway events
                 take_action(3)
                 continue
             if events[5] > 0:
@@ -58,7 +58,7 @@ def stabilize():
                 take_action(32)
                 continue
 
-            if any(events[i] > 0 for i in range(7, 15)):
+            if any(events[i] > 0 for i in range(7, 15)): # Breathing events
                 take_action(4)
                 continue
             if events[7] > 0:
@@ -72,15 +72,15 @@ def stabilize():
                 take_action(24)
                 continue
 
-            if any(events[i] > 0 for i in range(15, 20)):
+            if any(events[i] > 0 for i in range(15, 20)): # Circulation events
                 take_action(5)
                 continue
 
-            if any(events[i] > 0 for i in range(20, 26)):
+            if any(events[i] > 0 for i in range(20, 26)): # Disability events
                 take_action(6)
                 continue
 
-            if any(events[i] > 0 for i in range(26, 33)):
+            if any(events[i] > 0 for i in range(26, 33)): # Exposure events
                 take_action(7)
                 continue
 
