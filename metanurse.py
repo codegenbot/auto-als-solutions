@@ -6,9 +6,8 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    max_steps = 350
-
-    for step in range(max_steps):
+    
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -25,64 +24,72 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+        # Check for critical conditions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # Start chest compressions
             continue
 
-        if all(vitals[k] is not None for k in ["Sats", "RR", "MAP"]) and \
-           vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
-            take_action(48)
-            break
-
+        # Stabilize oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 30 not in actions_taken:
+                actions_taken.add(30)
+                take_action(30)  # Use non-rebreather mask
             continue
 
+        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
+        # Stabilize mean arterial pressure
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
+        # Check and Treat cardiac arrhythmias
+        significant_heart_rhythm_events = [27, 28, 29, 30, 31, 32]
+        if any(events[i] > 0 for i in significant_heart_rhythm_events):
+            take_action(24)  # Apply monitor pads for closer rhythm examination
             continue
-
+        
+        # Ensure required tools are used
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             continue
-        
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)  # Use Sats Probe
+            continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)
+            take_action(16)  # View Monitor
             continue
-        
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)
+            take_action(38)  # Take Blood Pressure
             continue
 
+        # Perform ABCDE assessments
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # Examine Airway
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # Examine Breathing
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # Examine Circulation
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # Examine Disability
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # Examine Exposure
             continue
-        
-        take_action(0)
-    
+
+        take_action(48)  # Finish
+        break
+
 if __name__ == "__main__":
     stabilize()
