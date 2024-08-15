@@ -1,12 +1,20 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    examine_order = [3, 4, 5, 6, 7, 8]  # ExamineAirway, ExamineBreathing, ...
+    examine_order = [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+    ]  # ExamineAirway, ExamineBreathing, ExamineCirculation, ...
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -32,6 +40,15 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
+        # Airway management
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+            if events[5] > 0:
+                take_action(31)  # UseYankeurSuctionCatheter
+                continue
+            elif events[6] > 0:
+                take_action(32)  # UseGuedelAirway
+                continue
+
         # Properly account for vital sign measurements
         if vitals["MAP"] is None and 27 not in actions_taken:
             actions_taken.add(27)
@@ -42,7 +59,7 @@ def stabilize():
             actions_taken.add(25)
             take_action(25)  # UseSatsProbe
             continue
-        
+
         if None in vitals.values() and 24 not in actions_taken:
             actions_taken.add(24)
             take_action(24)  # UseMonitorPads
@@ -65,15 +82,6 @@ def stabilize():
                 take_action(4)  # ExamineBreathing
                 continue
 
-        # Airway management
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            if events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
-                continue
-            elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
-                continue
-
         # Circulation management
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
@@ -83,10 +91,10 @@ def stabilize():
             take_action(5)  # ExamineCirculation
             if vitals["HR"] is not None and vitals["HR"] > 150:
                 take_action(17)  # StartChestCompression (initiate immediate actions)
-                take_action(9)   # GiveAdenosine (address tachyarrhythmia)
+                take_action(9)  # GiveAdenosine (address tachyarrhythmia)
             continue
 
-        # Disability and Exposure assessment
+        # Disability and Exposure assessment (left as is from previous code)
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
             continue
@@ -98,6 +106,7 @@ def stabilize():
         # Finalize if all necessary actions are taken
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
