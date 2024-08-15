@@ -1,30 +1,32 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     measurements_taken = set()
+
     examine_series = [3, 4, 5, 6, 7]
     initiate_series = [27, 25, 26, 16]
-    critical_vital_limits = {'Sats': 65, 'MAP': 20, 'RR': 8}
-    stable_vital_limits = {'Sats': 88, 'MAP': 60}
-    
+
     def evaluate_critical(vitals):
-        if vitals["Sats"] is not None and vitals["Sats"] < critical_vital_limits['Sats']:
-            take_action(22)
-            return True
-        if vitals["MAP"] is not None and vitals["MAP"] < critical_vital_limits['MAP']:
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             return True
-        if vitals["Sats"] is not None and vitals["Sats"] < stable_vital_limits['Sats']:
+        return False
+
+    def evaluate_stabilization(vitals):
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             return True
-        if vitals["RR"] is not None and vitals["RR"] < critical_vital_limits['RR']:
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             return True
-        if vitals["MAP"] is not None and vitals["MAP"] < stable_vital_limits['MAP']:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             return True
         return False
@@ -34,7 +36,7 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)
             continue
-        
+
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
@@ -45,43 +47,51 @@ def stabilize():
             "Glucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
             "Temp": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
         if evaluate_critical(vitals):
             continue
-        
-        completed_series = all(m in measurements_taken for m in initiate_series)
-        if not completed_series:
-            for measurement in initiate_series:
-                if measurement not in measurements_taken:
-                    measurements_taken.add(measurement)
-                    take_action(measurement)
-                    break
+
+        if evaluate_stabilization(vitals):
             continue
-        
-        for exam in examine_series:
-            if exam not in measurements_taken:
-                measurements_taken.add(exam)
-                take_action(exam)
+
+        for measurement in initiate_series:
+            if measurement not in measurements_taken:
+                measurements_taken.add(measurement)
+                take_action(measurement)
                 break
-        
+        else:
+            for exam in examine_series:
+                if exam not in measurements_taken:
+                    measurements_taken.add(exam)
+                    take_action(exam)
+                    break
+
         if events[5] > 0:
             take_action(31)
             continue
         if events[6] > 0:
             take_action(32)
             continue
-        
+
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(35)
+            take_action(3)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(19)
+            take_action(4)
             continue
         if events[7] > 0:
             take_action(29)
             continue
+        if events[14] > 0:
+            take_action(19)
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(24)
+            continue
+
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
@@ -91,9 +101,12 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
-        
-        take_action(48)
-        break
+
+        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
+            take_action(48)
+        else:
+            take_action(0)
+
 
 if __name__ == "__main__":
     stabilize()
