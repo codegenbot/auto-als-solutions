@@ -6,9 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    
-    map_ready = False
-    sats_ready = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -44,37 +41,49 @@ def stabilize():
             take_action(15)
             continue
 
-        if not sats_ready:
-            sats_ready = True
-            take_action(25)
-            continue
+        if vitals["MAP"] is None:
+            if 27 not in actions_taken:
+                actions_taken.add(27)
+                take_action(27)
+                continue
+            if 38 not in actions_taken:
+                actions_taken.add(38)
+                take_action(38)
+                continue
 
-        if not map_ready:
-            map_ready = True
-            take_action(27)
-            continue
-        
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
+        if vitals["Sats"] is None:
+            if 25 not in actions_taken:
+                actions_taken.add(25)
+                take_action(25)
+                continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if 2 not in actions_taken:
+            actions_taken.add(2)
             take_action(2)
             continue
+
+        if 13 not in actions_taken:
+            if events[29] > 0 or events[30] > 0 or events[31] > 0:
+                take_action(40)
+                actions_taken.add(13)
+                continue
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
+
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
+
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
+
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
+
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
