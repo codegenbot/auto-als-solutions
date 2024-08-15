@@ -1,13 +1,16 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    examine_order = [2, 3, 4, 5, 6, 7, 8]
+    airway_checked = False
+    breathing_checked = False
+    circulation_checked = False
+    disability_checked = False
+    exposure_checked = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -42,13 +45,8 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
-        for exam in examine_order:
-            if exam not in actions_taken:
-                actions_taken.add(exam)
-                take_action(exam)
-                break
-
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+        if not airway_checked:
+            airway_checked = True
             take_action(3)  # ExamineAirway
             continue
 
@@ -59,7 +57,8 @@ def stabilize():
             take_action(32)  # UseGuedelAirway
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+        if not breathing_checked:
+            breathing_checked = True
             take_action(4)  # ExamineBreathing
             continue
         if events[7] > 0:  # BreathingNone
@@ -81,24 +80,26 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+        if not circulation_checked:
+            circulation_checked = True
             take_action(5)  # ExamineCirculation
             continue
         if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(9)  # GiveAdenosine
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
+        if not disability_checked:
+            disability_checked = True
             take_action(6)  # ExamineDisability
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
+        if not exposure_checked:
+            exposure_checked = True
             take_action(7)  # ExamineExposure
             continue
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
