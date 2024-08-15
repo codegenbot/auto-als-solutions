@@ -43,7 +43,8 @@ def stabilize():
                 take_action(next_action)
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+                vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -72,8 +73,12 @@ def stabilize():
             continue
 
         tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+            "HeartRhythmSVT",
+            "HeartRhythmVT",
+            "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter",
+            "HeartRhythmTorsades",
+            "HeartRhythmVF",
         ]
         if any(events[i + 27] > 0 for i in range(len(tachyarrhythmias))):
             take_action(24)
