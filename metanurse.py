@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,11 +9,13 @@ def stabilize():
     actions_taken = set()
     first_checks = [27, 25]  # UseBloodPressureCuff, UseSatsProbe
     examine_order = [3, 4, 5, 6, 7, 8]
+    step = 0
 
-    for step in range(350):
+    while step < 350:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
+            step += 1
             continue
 
         events = observations[:33]
@@ -26,73 +29,92 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # StartChestCompression
+            step += 1
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
+            step += 1
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
+            step += 1
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
+            step += 1
             continue
 
         for check in first_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
                 take_action(check)
+                step += 1
                 break
         else:
             for exam in examine_order:
                 if exam not in actions_taken:
                     actions_taken.add(exam)
                     take_action(exam)
+                    step += 1
                     break
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            step += 1
             continue
 
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSuctionCatheter
+        if events[5] > 0:
+            take_action(31)
+            step += 1
             continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
-            continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
-            continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
+        if events[6] > 0:
+            take_action(32)
+            step += 1
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
-            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            step += 1
+            continue
+        if events[7] > 0:
+            take_action(29)
+            step += 1
+            continue
+        if events[14] > 0:
+            take_action(19)
+            step += 1
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(24)
+            step += 1
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            step += 1
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            step += 1
             continue
 
-        take_action(48)  # Finish
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            step += 1
+            continue
+
+        take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
