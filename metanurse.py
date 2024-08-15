@@ -11,7 +11,7 @@ def stabilize():
 
     essential_measurements = [24, 25, 27, 26]
 
-    def next_essential_measurement_action():
+    def next_essential_measurement():
         for action in essential_measurements:
             if action not in actions_taken:
                 return action
@@ -23,11 +23,11 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -37,7 +37,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Immediate life-threatening conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
@@ -45,25 +44,11 @@ def stabilize():
             continue
 
         if needs_essential_measurements():
-            take_action(next_essential_measurement_action())
+            take_action(next_essential_measurement())
             continue
 
-        # Airway
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
-            continue
-
-        # Breathing
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)
-            if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -74,9 +59,16 @@ def stabilize():
             take_action(29)
             continue
 
-        # Circulation
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
@@ -87,12 +79,10 @@ def stabilize():
                 take_action(43)
             continue
 
-        # Disability
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
 
-        # Exposure
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
