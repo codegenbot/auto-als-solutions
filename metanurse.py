@@ -1,21 +1,24 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing if incorrect input length
             continue
 
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
 
+        # Vital signs with measurements only if timing > 0
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -23,48 +26,52 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Respond to cardiac arrest scenario
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)
             continue
 
+        # Check and stabilize vital signs
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
-
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        critical_checks = [25, 38, 16, 27]  # SatsProbe, TakeBloodPressure, ViewMonitor, UseBloodPressureCuff
-        for check in critical_checks:
+        # Perform initial critical checks
+        initial_checks = [
+            27,
+            25,
+            38,
+            16,
+        ]  # BP cuff, Sats probe, BP measure, ViewMonitor
+        for check in initial_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
                 take_action(check)
                 break
         else:
-            if events[3] == 0:  # AirwayClear not confirmed
-                take_action(3)  # ExamineAirway
-                continue
-            if events[7] == 0:  # BreathingNone not examined
-                take_action(4)  # ExamineBreathing
-                continue
-            if events[15] == 0:  # RadialPulsePalpable not examined
-                take_action(5)  # ExamineCirculation
-                continue
-            if events[20] == 0:  # AVPU_A not examined
-                take_action(6)  # ExamineDisability
-                continue
-            if events[26] == 0:  # ExposureRash not examined
-                take_action(7)  # ExamineExposure
-                continue
+            # ABCDE Assessment sequence
+            for indices, action in [
+                (range(3, 7), 3),  # Airway events
+                (range(7, 15), 4),  # Breathing events
+                (range(15, 20), 5),  # Circulation events
+                (range(20, 26), 6),  # Disability events
+                (range(26, 33), 7),  # Exposure events
+            ]:
+                if any(events[i] > 0 for i in indices):
+                    take_action(action)
+                    break
+            else:
+                take_action(48)  # Finish assessment
+                break
 
-        take_action(48)  # Finish
-        break
 
 if __name__ == "__main__":
     stabilize()
