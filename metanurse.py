@@ -6,8 +6,9 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
+    max_steps = 350
 
-    for step in range(350):
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -25,64 +26,63 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compressions immediately
+            take_action(17)
             continue
 
+        if all(vitals[k] is not None for k in ["Sats", "RR", "MAP"]) and \
+           vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
+            take_action(48)
+            break
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 25 not in actions_taken:
-                actions_taken.add(25)
-                take_action(25)  # UseSatsProbe
-            else:
-                take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 27 not in actions_taken:
-                actions_taken.add(27)
-                take_action(27)  # UseBloodPressureCuff
-            else:
-                take_action(15)  # GiveFluids
+            take_action(15)
+            continue
+
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
             continue
 
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)  # UseSatsProbe
-            continue
+        
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)  # ViewMonitor
+            take_action(16)
             continue
+        
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)  # TakeBloodPressure
+            take_action(38)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
-
-        take_action(48)  # Finish
-        break
-
+        
+        take_action(0)
+    
 if __name__ == "__main__":
     stabilize()
