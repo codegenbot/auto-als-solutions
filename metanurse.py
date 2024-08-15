@@ -5,9 +5,9 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    # Priority actions
     initial_checks = [27, 25, 38, 16]
     examine_order = [3, 4, 5, 6, 7, 8]
+
     actions_taken = set()
     critical_vitals = ('Sats', 'MAP', 'RR')
 
@@ -28,7 +28,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Immediate critical actions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
@@ -47,21 +46,18 @@ def stabilize():
                 take_action(action)
                 continue
 
-        # Perform initial checks
         for check in initial_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
                 take_action(check)
                 break
         else:
-            # Examine in order
             for exam in examine_order:
                 if exam not in actions_taken:
                     actions_taken.add(exam)
                     take_action(exam)
                     break
 
-        # Handle specific events
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
@@ -92,7 +88,6 @@ def stabilize():
             take_action(7)
             continue
 
-    # Finish the scenario if 350 steps are reached
     take_action(48)
 
 if __name__ == "__main__":
