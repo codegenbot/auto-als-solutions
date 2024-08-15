@@ -28,26 +28,6 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
-
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
-            continue
-        
-        if vitals["MAP"] is None and 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
-            continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
         
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
@@ -65,6 +45,26 @@ def stabilize():
                 take_action(30)  # UseNonRebreatherMask
             continue
 
+        if vitals["MAP"] is None and 27 not in actions_taken:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vitals["Sats"] is None and 25 not in actions_taken:
+            take_action(25)  # UseSatsProbe
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
             continue
@@ -75,6 +75,11 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
+            continue
+        
+        # Ensure to check for unstable tachyarrhythmia and address it
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)  # GiveAdenosine
             continue
 
         take_action(48)  # Finish
