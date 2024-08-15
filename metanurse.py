@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
 
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -26,7 +27,8 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65):
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(17)  # Start chest compressions
             continue
 
@@ -81,6 +83,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
