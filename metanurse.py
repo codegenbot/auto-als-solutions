@@ -53,36 +53,36 @@ def stabilize():
         # Ensure required tools are used
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             continue
         if 25 not in actions_taken:
             actions_taken.add(25)
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)
+            take_action(16)  # ViewMonitor
             continue
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)
+            take_action(38)  # Take Blood Pressure
             continue
 
         # Perform ABCDE assessments
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
         # Finalize if stable
