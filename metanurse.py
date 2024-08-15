@@ -9,7 +9,7 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    initial_measurements = [25, 26, 27, 28]
+    initial_measurements = [25, 26, 27, 38]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
