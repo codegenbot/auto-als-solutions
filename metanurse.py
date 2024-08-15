@@ -47,9 +47,7 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(23)
             continue
 
@@ -68,27 +66,27 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[6] > 0:  # Airway obstruction (tongue)
+        if events[6] > 0:
             take_action(36)
             continue
 
-        if events[4] > 0 or events[5] > 0:  # Airway obstruction (vomit, blood)
+        if events[4] > 0 or events[5] > 0:
             take_action(31)
             continue
 
-        if events[7] > 0 or events[13] > 0 or events[14] > 0:  # Breathing issues
+        if events[7] > 0 or events[13] > 0 or events[14] > 0:
             take_action(29)
             continue
 
-        if events[10] > 0 or events[11] > 0 or events[12] > 0:  # Breathing auscultation findings
+        if events[10] > 0 or events[11] > 0 or events[12] > 0:
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(1, 4)):  # Response checks
+        if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
