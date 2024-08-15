@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -38,7 +39,7 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression immediately
+            take_action(17)
             continue
 
         if needs_measurements():
@@ -48,17 +49,17 @@ def stabilize():
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # Use suction catheter for vomit or blood
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # Use airway if tongue obstruction
+                take_action(32)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag-valve mask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
@@ -66,15 +67,16 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Administer fluids to raise MAP
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
-        take_action(48)  # Finish action
+        take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
