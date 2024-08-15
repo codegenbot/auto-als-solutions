@@ -7,7 +7,6 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-        sys.stdout.flush()
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
