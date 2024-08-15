@@ -63,9 +63,9 @@ def stabilize():
                 continue
 
             if vitals["HR"] is not None and vitals["HR"] > 150:
-                take_action(24)  # UseMonitorPads
+                take_action(24)  # UseMonitorPads (for synchronized cardioversion)
                 continue
-
+    
         take_action(48)  # Finish
         break
 
