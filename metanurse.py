@@ -1,28 +1,13 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    # Prioritize critical checks and examinations
-    critical_checks = [
-        27,
-        25,
-        38,
-        16,
-    ]  # Attach BP cuff, Sats probe, Take BP, View Monitor
-    examine_order = [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-    ]  # Examine sections in order: Airway, Breathing, Circulation, Disability, Exposure, Response
-
     actions_taken = set()
+    first_checks = [27, 25]  # UseBloodPressureCuff, UseSatsProbe
+    examine_order = [3, 4, 5, 6, 7, 8]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -41,10 +26,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for immediate critical actions
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -60,8 +42,7 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        # Perform initial critical checks
-        for check in critical_checks:
+        for check in first_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
                 take_action(check)
@@ -73,7 +54,6 @@ def stabilize():
                     take_action(exam)
                     break
 
-        # Specific events
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             continue
@@ -113,7 +93,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
