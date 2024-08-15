@@ -5,11 +5,14 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    def is_vital_missing(vitals, component):
+        return vitals[component] is None
+
     actions_taken = set()
-    measurements_needed = {27: "MAP", 25: "Sats", 16: "Monitor"}
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+        
         if len(observations) != 53:
             take_action(0)
             continue
@@ -24,33 +27,44 @@ def stabilize():
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
         }
-        
-        # Immediate CPR if critical
+
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Check necessary vitals first
-        for action, vital in measurements_needed.items():
-            if vital not in actions_taken and (vitals[vital] is None or values[measurements_needed[action]] <= 0):
-                take_action(action)
-                actions_taken.add(vital)
-                continue
-
-        # Check and stabilize
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+        if is_vital_missing(vitals, "MAP") and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
             continue
-        elif vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+
+        if is_vital_missing(vitals, "Sats") and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
+            continue
+
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
+            take_action(3)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
@@ -65,7 +79,7 @@ def stabilize():
             take_action(7)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
