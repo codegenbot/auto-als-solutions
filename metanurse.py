@@ -12,7 +12,7 @@ def stabilize():
         steps_taken += 1
         actions_taken.add(action)
 
-    actions_order = [24, 25, 27, 26, 18, 19, 20, 21]
+    actions_order = [24, 25, 27, 26, 18, 19, 20, 21, 35, 36, 37]
 
     while steps_taken < max_steps:
         observations = list(map(float, input().strip().split()))
@@ -27,8 +27,8 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_time[5] > 0 else None,
         }
 
-        if any(vitals[m] is None for m in measured) and steps_taken < len(actions_order):
-            if actions_order[steps_taken] not in actions_taken:
+        if steps_taken < len(actions_order):
+            if steps_taken < len(actions_order) and actions_order[steps_taken] not in actions_taken:
                 take_action(actions_order[steps_taken])
             continue
 
