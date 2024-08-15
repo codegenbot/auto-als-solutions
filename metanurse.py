@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -28,8 +27,7 @@ def stabilize():
         heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -45,7 +43,8 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in heart_rhythm_indices):
+        if not actions_taken and any(events[i] > 0 for i in heart_rhythm_indices):
+            actions_taken.add(24)
             take_action(24)
             continue
 
@@ -84,7 +83,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
