@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,67 +24,70 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Check for cardiac arrest conditions
+        # Critical condition check
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compressions
+            take_action(17)
             continue
 
-        # Stabilize vital signs
+        # Action based on missing measurements
+        if vitals["RR"] is None and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+
+        if vitals["MAP"] is None and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
+
+        if vitals["Sats"] is None and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+
+        # Stabilizing actions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
-        # Check and Treat cardiac arrhythmias
-        significant_heart_rhythm_events = [31, 32, 33, 34, 35, 36, 37]
+        # Significant heart rhythm events
+        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(2)  # Check Rhythm
+            take_action(2)
             continue
 
-        # Ensure measurements tools are used
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)  # Use Blood Pressure Cuff
+        # Perform ABCDE assessment
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway
+            take_action(3)
             continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)  # Use Sats Probe
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing
+            take_action(4)
             continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)  # View Monitor
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation
+            take_action(5)
             continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)  # Take Blood Pressure
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability
+            take_action(6)
             continue
-
-        # Perform ABCDE assessments
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
-            continue
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
-            continue
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # Examine Disability
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine Exposure
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure
+            take_action(7)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
