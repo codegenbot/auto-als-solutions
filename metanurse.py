@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
 
@@ -15,7 +14,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -32,33 +31,34 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions
             continue
 
         if all(v > 0 for v in vital_signs_times):
+            # Prioritize treatments in ABCDE order
             if any(events[i] > 0 for i in range(3, 7)):
-                take_action(3)
+                take_action(3)  # Examine Airway
                 if events[4] > 0 or events[5] > 0:
-                    take_action(31)
+                    take_action(31)  # Suction
                 elif events[6] > 0:
-                    take_action(32)
+                    take_action(32)  # Guedel airway
                 continue
 
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)
+                take_action(30)  # Use non-rebreather mask
                 continue
 
             if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)
+                take_action(29)  # Use bag valve mask
                 continue
 
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)
+                take_action(15)  # Give fluids
                 continue
 
             if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-                take_action(24)
-                take_action(43)
+                take_action(24)  # Use monitor pads
+                take_action(43)  # Defibrillator pace
                 continue
         else:
             for action in required_measurements:
@@ -67,9 +67,8 @@ def stabilize():
                     actions_taken.add(action)
                     break
 
-        take_action(48)
+        take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
