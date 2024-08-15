@@ -34,7 +34,7 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compressions
+            take_action(17)
             continue
 
         if needs_measurements():
@@ -44,44 +44,44 @@ def stabilize():
             continue
 
         if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
-            take_action(3)  # Examine airway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # Use suction catheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # Use Guedel airway
+                take_action(32)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine breathing
+            take_action(4)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine circulation
+            take_action(5)
             continue
 
         tachyarrhythmia_events = {28, 30, 31, 32, 34, 35}
         if any(events[i] > 0 for i in tachyarrhythmia_events):
-            take_action(24)  # Use monitor pads
-            take_action(43)  # Defibrillator pace
+            take_action(24)
+            take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(20, 27)):
-            take_action(6)  # Examine disability
+            take_action(6)
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine circulation
+            take_action(5)
             continue
 
-        take_action(48)  # Finish scenario
+        take_action(48)
         break
 
 if __name__ == "__main__":
