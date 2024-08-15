@@ -75,9 +75,9 @@ def stabilize():
             "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)  # Apply monitor pads
-            take_action(47)  # Sync mode for defibrillator
-            take_action(43)  # Defibrillator pacing
+            take_action(24)
+            take_action(47)
+            take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
