@@ -7,7 +7,7 @@ def stabilize():
 
     actions_taken = set()
     examine_steps = [3, 4, 5, 6, 7]
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -27,8 +27,8 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 92:
             if 25 not in actions_taken:
                 actions_taken.add(25)
                 take_action(25)
@@ -39,7 +39,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
