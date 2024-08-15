@@ -8,21 +8,21 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    essential_measurements = [24, 25, 27, 26]
+    initial_measurements = [24, 25, 27, 26]
 
-    def next_essential_measurement_action():
-        for action in essential_measurements:
+    def next_initial_measurement_action():
+        for action in initial_measurements:
             if action not in actions_taken:
                 return action
 
-    def needs_essential_measurements():
-        return not all(action in actions_taken for action in essential_measurements)
+    def needs_initial_measurements():
+        return not all(action in actions_taken for action in initial_measurements)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -40,10 +40,23 @@ def stabilize():
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
+            take_action(23)
             continue
 
-        if needs_essential_measurements():
-            take_action(next_essential_measurement_action())
+        if needs_initial_measurements():
+            take_action(next_initial_measurement_action())
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -56,18 +69,6 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
