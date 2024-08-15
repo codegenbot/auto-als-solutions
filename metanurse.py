@@ -7,7 +7,6 @@ def stabilize():
 
     actions_taken = set()
     
-    # Initial checks
     initial_checks = [27, 25]  # Blood Pressure Cuff, Sats Probe
 
     for check in initial_checks:
@@ -21,12 +20,10 @@ def stabilize():
             take_action(0)  # DoNothing
             continue
 
-        # Split the observations into sections
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        # Parse vital signs
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -34,12 +31,10 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for critical conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
-        # Stabilization actions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
@@ -52,7 +47,6 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        # Action for high heart rate indicating unstable tachyarrhythmia
         if vitals["HR"] is not None and vitals["HR"] > 150:
             if 24 not in actions_taken:
                 take_action(24)  # Use Monitor Pads
@@ -61,7 +55,6 @@ def stabilize():
             take_action(43)  # DefibrillatorPace (Synchronized Cardioversion)
             continue
 
-        # ABCDE examination sequence
         examine_order = [3, 4, 5, 6, 7, 8]
         for action in examine_order:
             if action not in actions_taken:
