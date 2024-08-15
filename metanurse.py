@@ -23,11 +23,8 @@ def stabilize():
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
         }
-        
-        heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -43,15 +40,10 @@ def stabilize():
             take_action(15)
             continue
 
+        heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
+
         if any(events[i] > 0 for i in heart_rhythm_indices):
             take_action(24)
-            continue
-        
-        if any(events[i] > 0 for i in heart_rhythm_indices if i != 27):
-            take_action(28)
-            take_action(40)
-            take_action(41)
-            take_action(43)
             continue
 
         if 27 not in actions_taken:
@@ -86,6 +78,9 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(40)
 
         take_action(48)
         break
