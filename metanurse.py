@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -28,7 +27,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -44,9 +43,7 @@ def stabilize():
                 take_action(next_action)
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -75,21 +72,15 @@ def stabilize():
             continue
 
         unstable_tachyarrhythmias = [
-            28,
-            31,
-            27,
-            32,
-            36,
-            37,  # Event indices for arrhythmias
+            28, 31, 27, 32, 36, 37  # Event indices for arrhythmias
         ]
         if any(events[i] > 0 for i in unstable_tachyarrhythmias):
             take_action(24)  # UseMonitorPads
             take_action(43)  # DefibrillatorPace
             continue
-
+        
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
