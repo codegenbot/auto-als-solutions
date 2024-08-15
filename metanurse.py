@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps, actions_taken = 350, set()
     essential_measurements = [24, 25, 27, 26]
@@ -33,7 +32,7 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions
             continue
 
         if needs_measurement():
@@ -44,46 +43,45 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
         if vitals["HR"] and vitals["HR"] > 150:
-            take_action(40)
-            take_action(47)
-            take_action(43)
+            take_action(40)  # DefibrillatorCharge
+            take_action(47)  # DefibrillatorSync
+            take_action(43)  # DefibrillatorPace
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
