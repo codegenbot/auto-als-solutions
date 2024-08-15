@@ -73,40 +73,35 @@ def stabilize():
             take_action(actions["bag_mask"])
             continue
         
-        # Airway assessment and intervention
         if events[3] == 0:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
                 take_action(actions["suction_airway"])
             elif events[6] > 0:
                 take_action(actions["open_airway"])
             continue
         
-        # Breathing assessment and intervention
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             if events[7] > 0:
                 take_action(actions["bag_mask"])
             if events[13] > 0:
-                take_action(5)  # ExamineCirculation
+                take_action(5)
             continue
         
-        # Circulation assessment and intervention
         if events[17] == 0:
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
-        # Disability assessment and intervention
         if events[20] == 0:
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
 
-        # Exposure assessment and intervention
         if events[27] == 0:
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
         
-        take_action(actions["finish"])  # Finish if all conditions are met
+        take_action(actions["finish"])
 
 if __name__ == "__main__":
     stabilize()
