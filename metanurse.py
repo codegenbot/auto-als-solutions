@@ -25,13 +25,11 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Cardiac arrest trigger
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
                 vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # A - Airway
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
@@ -54,7 +52,6 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # C - Circulation
         if vitals["MAP"] is None and 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)  # UseBloodPressureCuff
@@ -74,17 +71,14 @@ def stabilize():
             take_action(43)  # DefibrillatorPace
             continue
 
-        # D - Disability
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
             continue
 
-        # E - Exposure
         if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
             continue
 
-        # Ensure all essential observations
         for action in [24, 25, 26, 27]:
             if action not in actions_taken:
                 actions_taken.add(action)
