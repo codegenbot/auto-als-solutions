@@ -5,28 +5,16 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    critical_checks = [
-        24,  # UseMonitorPads
-        27,  # Attach BP cuff
-        25,  # Attach Sats Probe
-        38,  # Measure Blood Pressure
-        16,  # View Monitor
-    ]
-    examine_order = [
-        3,  # Examine Airway
-        4,  # Examine Breathing
-        5,  # Examine Circulation
-        6,  # Examine Disability
-        7,  # Examine Exposure
-        8,  # Check Response
-    ]
-
+    # Priority actions
+    initial_checks = [27, 25, 38, 16]
+    examine_order = [3, 4, 5, 6, 7, 8]
     actions_taken = set()
+    critical_vitals = ('Sats', 'MAP', 'RR')
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -40,80 +28,72 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Handle critical conditions first
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+        # Immediate critical actions
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+        if vitals["HR"] and vitals["HR"] > 150:
+            take_action(24)
             continue
-        
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-        
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # UseMonitorPads for cardioversion
-            continue
-        
-        # Perform initial critical checks
-        for check in critical_checks:
+
+        actions_orders = [
+            (vitals["Sats"], 88, 30),
+            (vitals["RR"], 8, 29),
+            (vitals["MAP"], 60, 15),
+        ]
+        for vital, threshold, action in actions_orders:
+            if vital is not None and vital < threshold:
+                take_action(action)
+                continue
+
+        # Perform initial checks
+        for check in initial_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
                 take_action(check)
                 break
         else:
+            # Examine in order
             for exam in examine_order:
                 if exam not in actions_taken:
                     actions_taken.add(exam)
                     take_action(exam)
                     break
 
-        # Handle specific events after initial checks
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
-            continue
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSucionCatheter
-            continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
-            continue
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
-            continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
-            continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
-            continue
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
+        # Handle specific events
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
             continue
 
-        # Finish only if conditions are met or maximum steps reached
-        if all(
-            vitals["Sats"] is not None and vitals["Sats"] >= 88,
-            vitals["RR"] is not None and vitals["RR"] >= 8,
-            vitals["MAP"] is not None and vitals["MAP"] >= 60,
-        ):
-            take_action(48)  # Finish
-            break
+        if events[5] > 0:
+            take_action(31)
+            continue
+        if events[6] > 0:
+            take_action(32)
+            continue
 
-    if actions_taken:
-        take_action(48)  # Finish
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+        if events[14] > 0:
+            take_action(19)
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
+    # Finish the scenario if 350 steps are reached
+    take_action(48)
 
 if __name__ == "__main__":
     stabilize()
