@@ -34,45 +34,40 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
         vitals = get_vital_signs(vital_signs_times, vital_signs_values)
 
-        # Immediate cardiac arrest treatment
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        # Check if monitors need to be attached
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
-        # Airway assessment and intervention
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
-        # Breathing assessment and intervention
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # Circulation assessment and intervention
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
