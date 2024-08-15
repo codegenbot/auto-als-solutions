@@ -2,7 +2,6 @@ import sys
 
 def stabilize():
     max_steps = 350
-    steps = 0
     actions_taken = set()
 
     def take_action(action):
@@ -19,7 +18,7 @@ def stabilize():
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
 
-    while steps < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
@@ -37,16 +36,25 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             take_action(23)
             continue
 
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
-            steps += 1
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -55,56 +63,33 @@ def stabilize():
                 take_action(31)
             if events[6] > 0:
                 take_action(32)
-            steps += 1
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            steps += 1
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            steps += 1
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            steps += 1
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            steps += 1
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
+        
+        if any(events[i] > 0 for i in range(15, 19)):
             take_action(5)
-            steps += 1
             continue
-
-        if any(events[i] > 0 for i in range(20, 26)):
+        
+        if any(events[i] > 0 for i in range(20, 25)):
             take_action(6)
-            steps += 1
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            steps += 1
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)
-            take_action(41)
-            take_action(47)
-            take_action(43)
-            steps += 4
+        if vitals['HR'] is not None and vitals['HR'] > 150:
+            take_action(40)  # Turn On Defibrillator
+            take_action(41)  # Increase Current
+            take_action(47)  # Sync
+            take_action(43)  # Pace
             continue
 
         take_action(48)
         break
-
-        steps += 1
 
 if __name__ == "__main__":
     stabilize()
