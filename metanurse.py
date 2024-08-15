@@ -30,7 +30,7 @@ def stabilize():
             take_action(41)
         elif 40 not in actions_taken:
             take_action(40)
-        else:
+        elif 47 not in actions_taken:
             take_action(47)
 
     for step in range(max_steps):
@@ -68,23 +68,27 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[6] > 0:
+        if events[6] > 0:  # Airway obstruction (tongue)
             take_action(36)
             continue
 
-        if any(events[i] > 0 for i in [4, 5]):
+        if events[4] > 0 or events[5] > 0:  # Airway obstruction (vomit, blood)
             take_action(31)
             continue
 
-        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+        if events[7] > 0 or events[13] > 0 or events[14] > 0:  # Breathing issues
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(1, 4)):
+        if events[10] > 0 or events[11] > 0 or events[12] > 0:  # Breathing auscultation findings
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(1, 4)):  # Response checks
             take_action(8)
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
