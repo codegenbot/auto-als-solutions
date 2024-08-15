@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
+    examine_steps = [3, 4, 5, 6, 7]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -16,7 +17,6 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -48,45 +48,14 @@ def stabilize():
                 take_action(15)
             continue
 
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)
-            continue
-        if 3 not in actions_taken:
-            actions_taken.add(3)
-            take_action(3)
-            continue
-        if 4 not in actions_taken:
-            actions_taken.add(4)
-            take_action(4)
-            continue
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            take_action(5)
-            continue
-        if 6 not in actions_taken:
-            actions_taken.add(6)
-            take_action(6)
-            continue
-        if 7 not in actions_taken:
-            actions_taken.add(7)
-            take_action(7)
-            continue
-
-        take_action(48)
-        break
+        for action in examine_steps:
+            if action not in actions_taken:
+                actions_taken.add(action)
+                take_action(action)
+                break
+        else:
+            take_action(48)
+            break
 
 if __name__ == "__main__":
     stabilize()
