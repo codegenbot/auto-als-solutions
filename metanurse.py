@@ -4,12 +4,12 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-        actions_taken.add(action)
 
     actions_taken = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+        
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
@@ -29,11 +29,21 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
+        if vitals["MAP"] is None and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vitals["Sats"] is None and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)  # UseSatsProbe
+            continue
+
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
-            if events[6] > 0:
+                take_action(31)  # UseYankeurSucionCatheter
+            elif events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
 
@@ -41,18 +51,10 @@ def stabilize():
             take_action(4)  # ExamineBreathing
             if events[7] > 0:
                 take_action(29)  # UseBagValveMask
-            if events[14] > 0:
+            elif events[14] > 0:
                 take_action(30)  # UseNonRebreatherMask
             continue
-
-        if vitals["MAP"] is None and 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
-            continue
-
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
-            continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -78,6 +80,7 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
+        break
 
 if __name__ == "__main__":
     stabilize()
