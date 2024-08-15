@@ -24,61 +24,53 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Step 1: Attach monitoring devices initially
         if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
         if 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
         if 24 not in actions_taken:
-            take_action(24)  # UseMonitorPads
+            take_action(24)
             continue
         
-        # Airway assessment
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(36)  # PerformHeadTiltChinLift
+                take_action(36)
             continue
 
-        # Critical intervention if close to cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        # Check signs of life if unconscious
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(1)  # CheckSignsOfLife
-            take_action(2)  # CheckRhythm
+            take_action(1)
+            take_action(2)
             continue
 
-        # Breathing assessment and treatment
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # Further Breathing assessment
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             if events[7] > 0:
-                take_action(29)  # UseBagValveMask
+                take_action(29)
             continue
 
-        # Circulation assessment and treatment
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        # Finish if stabilized and all checks complete
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
