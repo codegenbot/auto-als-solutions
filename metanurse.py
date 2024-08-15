@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,23 +10,27 @@ def stabilize():
         sys.stdout.flush()
         actions_taken.add(action)
 
-    required_measurements = [25, 26, 27, 3, 4, 5, 8]
+    initial_measurements = [24, 25, 27]
 
-    def next_measurement_action():
-        for action in required_measurements:
+    def next_initial_measurement_action():
+        for action in initial_measurements:
             if action not in actions_taken:
                 return action
-        return None
 
-    def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
+    def needs_initial_measurements():
+        return not all(action in actions_taken for action in initial_measurements)
+
+    tachy_arrhythmia_indices = [28, 29, 30, 31, 34, 38]
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-
-        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -34,21 +39,21 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if needs_measurements():
-            next_action = next_measurement_action()
-            if next_action:
-                take_action(next_action)
-            continue
-
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(17)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Examine Airway actions
+        if needs_initial_measurements():
+            take_action(next_initial_measurement_action())
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            if events[4] > 0 or events[5] > 0:  # Vomit or Blood
+            if events[4] > 0 or events[5] > 0:
                 take_action(31)
-            elif events[6] > 0:  # Tongue obstruction
+            elif events[6] > 0:
                 take_action(32)
             continue
 
@@ -60,7 +65,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Examine Breathing actions
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
@@ -68,17 +73,19 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(27, 33)):  # Heart Rhythm issues
-            take_action(24)  # UseMonitorPads
-            take_action(43)  # DefibrillatorPacePause --> Pacemaker to stabilize rhythm
+        if any(events[i] > 0 for i in tachy_arrhythmia_indices):
+            take_action(24)
+            take_action(47)
+            take_action(43)
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(15)  # Give fluids
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
             continue
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
