@@ -48,13 +48,13 @@ def stabilize():
                 take_action(15)
             continue
 
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
         if 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
+            continue
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
