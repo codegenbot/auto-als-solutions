@@ -33,6 +33,7 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
         }
 
+        # Airway examination
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
@@ -41,35 +42,43 @@ def stabilize():
                 take_action(32)
             continue
 
+        # Ensure vital sign measurements
         measurement_action = get_measurements()
         if measurement_action:
             take_action(measurement_action)
             continue
 
+        # Check for critical conditions and address them
         if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(17)
             continue
 
+        # Address oxygen saturation if below 88%
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
+        # Address respiration rate if below 8
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
+        # Examine breathing if necessary
         if any(events[i] > 0 for i in range(7, 14)):
             take_action(4)
             continue
 
+        # Maintain minimum MAP level
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
+        # Examine circulation if needed
         if any(events[i] > 0 for i in range(14, 21)):
             take_action(5)
             continue
 
+        # Finish if step limit reached
         if step >= 349:
             take_action(48)
             break
