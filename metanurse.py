@@ -41,7 +41,7 @@ def stabilize():
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
+                take_action(31)  # UseYankeurSucionCatheter
             if events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
@@ -78,8 +78,15 @@ def stabilize():
             take_action(7)  # ExamineExposure
             continue
 
-        take_action(48)  # Finish
-        break
+        if all([
+            vitals["MAP"] is not None and vitals["MAP"] >= 60,
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,
+            vitals["RR"] is not None and vitals["RR"] >= 8
+        ]):
+            take_action(48)  # Finish
+            break
+
+        take_action(1)  # Perform a generic check for changes, fallback action
 
 if __name__ == "__main__":
     stabilize()
