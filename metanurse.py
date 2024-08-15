@@ -17,12 +17,11 @@ def stabilize():
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
-        # Check if we received the correct number of observations
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
 
-        # Split the observations into the relevant sections
+        # Split the observations into sections
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
@@ -35,23 +34,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Perform necessary measurements if values are missing
-        if vitals["MAP"] is None and 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
-            actions_taken.add(27)
-            continue
-        
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
-            actions_taken.add(25)
-            continue
-
-        if (vitals["MAP"] is None or vitals["Sats"] is None) and 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
-            actions_taken.add(16)
-            continue
-
-        # Check vital signs for critical conditions
+        # Check for critical conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
@@ -69,9 +52,13 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        # Action for suspected unstable tachyarrhythmia
+        # Action for high heart rate indicating unstable tachyarrhythmia
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # Use Monitor Pads
+            if 24 not in actions_taken:
+                take_action(24)  # Use Monitor Pads
+                actions_taken.add(24)
+                continue
+            take_action(43)  # DefibrillatorPace (Synchronized Cardioversion)
             continue
 
         # ABCDE examination sequence
