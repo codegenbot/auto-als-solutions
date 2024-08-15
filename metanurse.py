@@ -7,8 +7,9 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
+        sys.stdout.flush()
 
-    initial_measurements = [24, 25, 27, 26, 18, 19, 20, 21, 37]
+    initial_measurements = [25, 26, 27, 28]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -22,11 +23,11 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -36,26 +37,17 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)
-            continue
-
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
-        # Airway
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
+        if (
+            (vitals["MAP"] is not None and vitals["MAP"] < 20) or
+            (vitals["Sats"] is not None and vitals["Sats"] < 65)
+        ):
+            take_action(17)
             continue
 
-        # Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -64,40 +56,30 @@ def stabilize():
             take_action(29)
             continue
 
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)
+            elif events[6] > 0:
+                take_action(32)
+            continue
+
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
-        # Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
-            continue
-
-        tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
-        ]
-        if any(events[27 + i] > 0 for i in range(len(tachyarrhythmias))):
-            take_action(24)
-            take_action(47)
-            take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
-        # Disability
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
-            continue
+        if step >= 349:
+            take_action(48)
 
-        # Exposure
-        take_action(7)
-        continue
-
-        take_action(48)
-        break
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
