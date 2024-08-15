@@ -40,7 +40,7 @@ def stabilize():
         for device in required_devices:
             if device not in attached_devices:
                 take_action(device)
-                break
+                continue
 
         # Perform A - Airway assessment
         if any(events[i] > 0 for i in range(3, 7)):
