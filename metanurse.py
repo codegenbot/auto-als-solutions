@@ -1,10 +1,9 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     def take_action(action):
         print(action)
         actions_taken.add(action)
@@ -15,7 +14,7 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-
+    
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
 
@@ -24,7 +23,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -34,9 +33,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -74,7 +71,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
