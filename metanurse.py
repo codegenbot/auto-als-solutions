@@ -5,8 +5,8 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    essential_measurements = [24, 25, 27, 26]
-    observed_measurements = set()
+    initial_measurements = [24, 25, 27, 26]
+    examined_parts = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -25,60 +25,72 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        if not observed_measurements.issuperset(essential_measurements):
-            for action in essential_measurements:
-                if action not in observed_measurements:
-                    observed_measurements.add(action)
+        if not examined_parts.issuperset(initial_measurements):
+            for action in initial_measurements:
+                if action not in examined_parts:
+                    examined_parts.add(action)
                     take_action(action)
                     break
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
+        if not examined_parts.issuperset({3, 4, 5, 6, 7}):
+            if 3 not in examined_parts:
+                examined_parts.add(3)
+                take_action(3)
+                continue
+            if 4 not in examined_parts:
+                examined_parts.add(4)
+                take_action(4)
+                continue
+            if 5 not in examined_parts:
+                examined_parts.add(5)
+                take_action(5)
+                continue
+            if 6 not in examined_parts:
+                examined_parts.add(6)
+                take_action(6)
+                continue
+            if 7 not in examined_parts:
+                examined_parts.add(7)
+                take_action(7)
+                continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
             if events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             if events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
+        if any(events[i] > 0 for i in range(7, 15)):
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
+        if any(events[i] > 0 for i in range(15, 20)):
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
+        if any(events[i] > 0 for i in range(20, 26)):
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
+        if any(events[i] > 0 for i in range(26, 33)):
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)  # DefibrillatorCharge
-            take_action(47)  # DefibrillatorSync
-            take_action(43)  # DefibrillatorPace
-            continue
-
-    take_action(48)  # Finish
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
