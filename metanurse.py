@@ -25,7 +25,7 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if not examined_parts.issuperset(initial_measurements):
@@ -39,57 +39,57 @@ def stabilize():
         if not examined_parts.issuperset({3, 4, 5, 6, 7}):
             if 3 not in examined_parts:
                 examined_parts.add(3)
-                take_action(3)
+                take_action(3)  # ExamineAirway
                 continue
             if 4 not in examined_parts:
                 examined_parts.add(4)
-                take_action(4)
+                take_action(4)  # ExamineBreathing
                 continue
             if 5 not in examined_parts:
                 examined_parts.add(5)
-                take_action(5)
+                take_action(5)  # ExamineCirculation
                 continue
             if 6 not in examined_parts:
                 examined_parts.add(6)
-                take_action(6)
+                take_action(6)  # ExamineDisability
                 continue
             if 7 not in examined_parts:
                 examined_parts.add(7)
-                take_action(7)
+                take_action(7)  # ExamineExposure
                 continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             if events[5] > 0:
-                take_action(31)
+                take_action(31)  # UseYankeurSucionCatheter
             if events[6] > 0:
-                take_action(32)
+                take_action(32)  # UseGuedelAirway
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
