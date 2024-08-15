@@ -26,60 +26,65 @@ def stabilize():
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if "MAP" not in vitals or vitals["MAP"] is None:
-            if 27 not in actions_taken:
-                actions_taken.add(27)
-                take_action(27)  # UseBloodPressureCuff
-                continue
-            if 38 not in actions_taken:
-                actions_taken.add(38)
-                take_action(38)  # TakeBloodPressure
-                continue
-
-        if "Sats" not in vitals or vitals["Sats"] is None:
-            if 25 not in actions_taken:
-                actions_taken.add(25)
-                take_action(25)  # UseSatsProbe
-                continue
-
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)  # ViewMonitor
+            take_action(15)
             continue
         
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+        if any(events[i] > 0 for i in range(26, 28)):  # Add fluids for poor circulation
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+        if any(events[i] > 0 for i in range(3, 7)):  # Check airway problems
+            take_action(3)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+        if any(events[i] > 0 for i in range(7, 15)):  # Check breathing problems
+            take_action(4)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
+        if any(events[i] > 0 for i in range(15, 20)):  # Check for circulation issues
+            take_action(5)
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
+        if any(events[i] > 0 for i in range(20, 26)):  # Check for disability issues
+            take_action(6)
+            continue
+
+        if any(events[i] > 0 for i in range(28, 37)):  # Arrhythmia management
+            if events[28] > 0 or events[30] > 0:  # SVT or AF
+                take_action(9)  # Give Adenosine
+            elif events[31] > 0:  # VT
+                take_action(11)  # Give Amiodarone
+            elif events[29] > 0 or events[35] > 0:  # Atrial flutter or Torsades
+                take_action(10)  # Give Adrenaline
+            continue
+
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)  # Use Blood Pressure Cuff
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)  # Use Sats Probe
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)  # View Monitor
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)  # Take Blood Pressure
             continue
 
         take_action(48)  # Finish
