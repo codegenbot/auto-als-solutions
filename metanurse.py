@@ -6,6 +6,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    # Actions to be taken initially to gather critical measurements
     initial_actions = [25, 27, 16]  # UseSatsProbe, UseBloodPressureCuff, ViewMonitor
     initial_actions_taken = 0
 
@@ -26,42 +27,57 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
-        if not any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+        # Check Airway
+        if not any(events[i] > 0 for i in range(3, 7)):  # No recent airway check events
+            take_action(3)  # ExamineAirway
             continue
-        if not any(events[i] > 0 for i in range(7, 15)) and initial_actions_taken >= 3:
-            take_action(4)
+        # Check Breathing
+        if (
+            not any(events[i] > 0 for i in range(7, 15)) and initial_actions_taken >= 3
+        ):  # No recent breathing check events and initial actions completed
+            take_action(4)  # ExamineBreathing
             continue
-        if not any(events[i] > 0 for i in range(15, 20)) and initial_actions_taken >= 3:
-            take_action(5)
+        # Check Circulation
+        if (
+            not any(events[i] > 0 for i in range(15, 20)) and initial_actions_taken >= 3
+        ):  # No recent circulation check events and initial actions completed
+            take_action(5)  # ExamineCirculation
             continue
-        if not any(events[i] > 0 for i in range(20, 26)) and initial_actions_taken >= 3:
-            take_action(6)
+        # Check Disability
+        if (
+            not any(events[i] > 0 for i in range(20, 26)) and initial_actions_taken >= 3
+        ):  # No recent disability check events and initial actions completed
+            take_action(6)  # ExamineDisability
             continue
-        if not any(events[i] > 0 for i in range(26, 33)) and initial_actions_taken >= 3:
-            take_action(7)
+        # Check Exposure
+        if (
+            not any(events[i] > 0 for i in range(26, 33)) and initial_actions_taken >= 3
+        ):  # No recent exposure check events and initial actions completed
+            take_action(7)  # ExamineExposure
             continue
 
+        # Address vitals
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] > 150 or vitals["HR"] < 60):
-            take_action(24)
+            take_action(24)  # UseMonitorPads
             continue
 
         if initial_actions_taken < 3:
@@ -69,7 +85,7 @@ def stabilize():
             initial_actions_taken += 1
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 
