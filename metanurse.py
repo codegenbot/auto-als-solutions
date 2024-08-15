@@ -39,8 +39,8 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression
-            take_action(23)  # Resume CPR
+            take_action(17)
+            take_action(23)
             continue
 
         if needs_initial_measurements():
@@ -48,33 +48,33 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)  # DefibrillatorCharge
-            take_action(41)  # DefibrillatorCurrentUp
-            take_action(47)  # DefibrillatorSync
-            take_action(43)  # DefibrillatorPace
+            take_action(40)
+            take_action(41)
+            take_action(47)
+            take_action(43)
             continue
 
-        if all(v is not None and vitals[v] >= thresholds for v, thresholds in {
+        if all(v is not None and vitals[v] >= thresholds[v] for v, thresholds in {
             "MAP": 60,
             "Sats": 88,
             "RR": 8,
         }.items()):
-            take_action(48)  # Finish
+            take_action(48)
             break
         
-        take_action(0)  # DoNothing
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
