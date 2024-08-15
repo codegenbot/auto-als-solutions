@@ -5,8 +5,6 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,73 +22,65 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+        def check_critical():
+            if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+                vitals["MAP"] is not None and vitals["MAP"] < 20):
+                take_action(17)
+                return True
+            return False
+
+        if check_critical():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 25 not in actions_taken:
-                take_action(25)  # UseSatsProbe
-                actions_taken.add(25)
-            else:
-                take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 27 not in actions_taken:
-                take_action(27)  # UseBloodPressureCuff
-                actions_taken.add(27)
-            else:
-                take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
-        if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(2)  # CheckRhythm
+        if any(events[i] > 0 for i in range(27, 33)):  # Check heart rhythm
+            take_action(24)  # Use monitor pads
+            take_action(16)  # View monitor
+            take_action(28)  # Attach defib pads
+            take_action(43)  # Defibrillator pace
             continue
 
-        if 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
-            actions_taken.add(27)
+        if times[4] == 0:
+            take_action(27)
+            continue
+        if times[5] == 0:
+            take_action(25)
+            continue
+        if times[6] == 0:
+            take_action(16)
+            continue
+        if times[4] == 0:
+            take_action(38)
             continue
 
-        if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
-            actions_taken.add(25)
+        if any(events[3:7]):
+            take_action(3)
+            continue
+        if any(events[7:15]):
+            take_action(4)
+            continue
+        if any(events[15:20]):
+            take_action(5)
+            continue
+        if any(events[20:26]):
+            take_action(6)
+            continue
+        if any(events[26:33]):
+            take_action(7)
             continue
 
-        if 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
-            actions_taken.add(16)
-            continue
-
-        if 38 not in actions_taken:
-            take_action(38)  # TakeBloodPressure
-            actions_taken.add(38)
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
-            continue
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
-            continue
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
-            continue
-
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
