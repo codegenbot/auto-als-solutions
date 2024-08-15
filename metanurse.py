@@ -25,7 +25,6 @@ def stabilize():
         }
         
         heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
-        heart_rhythm_events = ["HeartRhythmNSR", "HeartRhythmSVT", "HeartRhythmAF", "HeartRhythmAtrialFlutter", "HeartRhythmVT", "HeartRhythmVF"]
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
@@ -48,7 +47,7 @@ def stabilize():
             take_action(24)
             continue
         
-        if any(events[i] > 0 for i in heart_rhythm_indices if heart_rhythm_events[i-27] != "HeartRhythmNSR"):
+        if any(events[i] > 0 for i in heart_rhythm_indices if i != 27):
             take_action(28)
             take_action(40)
             take_action(41)
