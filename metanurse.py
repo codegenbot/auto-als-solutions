@@ -40,33 +40,32 @@ def stabilize():
                 take_action(action)
                 break
 
-        else:
-            # Address specific critical events
-            if events[4] > 0 or events[5] > 0:  # Vomit, Blood
-                take_action(31)  # UseYankeurSuctionCatheter (Use Suction)
-            elif events[6] > 0:  # Tongue obstruction
-                take_action(32)  # UseGuedelAirway
+        # Address specific critical events
+        if events[4] > 0 or events[5] > 0:  # Vomit, Blood
+            take_action(31)  # UseYankeurSuctionCatheter (Use Suction)
+        elif events[6] > 0:  # Tongue obstruction
+            take_action(32)  # UseGuedelAirway
 
-            # Check vitals should be stable
-            if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)  # UseNonRebreatherMask
+        # Check vitals should be stable
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
 
-            if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)  # UseBagValveMask
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
 
-            if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)  # GiveFluids
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
 
-            # Assess detailed breathing issues
-            any_critical_breathing = any(events[i] > 0 for i in range(7, 15))
-            if any_critical_breathing:
-                take_action(4)  # ExamineBreathing
-                continue
+        # Assess detailed breathing issues
+        any_critical_breathing = any(events[i] > 0 for i in range(7, 15))
+        if any_critical_breathing:
+            take_action(4)  # ExamineBreathing
+            continue
 
-            if step >= 349:
-                take_action(48)  # Finish in the final step
-                
-            take_action(0)  # Default action: DoNothing
+        if step >= 349:
+            take_action(48)  # Finish in the final step
+            
+        take_action(0)  # Default action: DoNothing
 
 if __name__ == "__main__":
     stabilize()
