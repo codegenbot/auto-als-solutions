@@ -9,7 +9,8 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    initial_measurements = [24, 25, 27, 26]
+    initial_measurements = [25, 26, 27]
+    airway_actions = [32, 31, 35, 36, 37]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -27,7 +28,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -41,34 +42,29 @@ def stabilize():
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
+            take_action(23)
             continue
 
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
-        if vitals["MAP"] is None or vitals["Sats"] is None or vitals["RR"] is None:
-            take_action(16)
-            continue
-
-        if vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
+            for airway in airway_actions:
+                take_action(airway)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
