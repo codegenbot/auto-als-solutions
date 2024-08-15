@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [24, 25, 27]  # MonitorPads, SatsProbe, BloodPressureCuff
+    required_measurements = [24, 25, 27]
 
     def next_measurement_action():
         for action in required_measurements:
@@ -38,45 +38,45 @@ def stabilize():
             continue
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             if events[7] > 0:
-                take_action(29)  # UseBagValveMask
+                take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(8)  # ExamineResponse
+            take_action(8)
             continue
 
         cardiac_events = [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
         if any(events[i] > 0 for i in cardiac_events):
-            take_action(24)  # UseMonitorPads
+            take_action(24)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
