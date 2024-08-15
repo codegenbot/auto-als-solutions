@@ -28,29 +28,24 @@ def stabilize():
             take_action(17)
             continue
 
-        if times[1] == 0 and 25 not in actions_taken:
-            take_action(25)
-            actions_taken.add(25)
-            continue
-        if times[4] == 0 and 27 not in actions_taken:
-            take_action(27)
-            actions_taken.add(27)
-            continue
-        if (vitals["MAP"] is None or vitals["Sats"] is None) and 16 not in actions_taken:
-            take_action(16)
-            actions_taken.add(16)
-            continue
-
         if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
             take_action(3)
             actions_taken.add(3)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if 25 not in actions_taken:
+                take_action(25)
+                actions_taken.add(25)
+                continue
             if 30 not in actions_taken:
                 take_action(30)
+                actions_taken.add(30)
                 continue
-        elif vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
@@ -58,29 +53,37 @@ def stabilize():
             take_action(15)
             continue
 
-        if times[1] == 0 and 25 not in actions_taken:
+        if 27 not in actions_taken:
+            take_action(27)
+            actions_taken.add(27)
+            continue
+        if 25 not in actions_taken:
             take_action(25)
             actions_taken.add(25)
             continue
-        if times[2] == 0 and 16 not in actions_taken:
+        if 16 not in actions_taken:
             take_action(16)
             actions_taken.add(16)
             continue
-        if not any(events[i] > 0 for i in range(7, 15)) and 4 not in actions_taken:
+        if 38 not in actions_taken:
+            take_action(38)
+            actions_taken.add(38)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            continue
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            actions_taken.add(4)
             continue
-        if not any(events[i] > 0 for i in range(15, 20)) and 5 not in actions_taken:
+        if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
-            actions_taken.add(5)
             continue
-        if not any(events[i] > 0 for i in range(20, 26)) and 6 not in actions_taken:
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
-            actions_taken.add(6)
             continue
-        if not any(events[i] > 0 for i in range(26, 33)) and 7 not in actions_taken:
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            actions_taken.add(7)
             continue
 
         take_action(48)
