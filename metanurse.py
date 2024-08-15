@@ -2,56 +2,24 @@ import sys
 
 ACTIONS = {
     "DoNothing": 0,
-    "CheckSignsOfLife": 1,
-    "CheckRhythm": 2,
+    "StartChestCompression": 17,
+    "UseBloodPressureCuff": 27,
+    "UseSatsProbe": 25,
     "ExamineAirway": 3,
     "ExamineBreathing": 4,
     "ExamineCirculation": 5,
     "ExamineDisability": 6,
     "ExamineExposure": 7,
     "ExamineResponse": 8,
-    "GiveAdenosine": 9,
-    "GiveAdrenaline": 10,
-    "GiveAmiodarone": 11,
-    "GiveAtropine": 12,
-    "GiveMidazolam": 13,
-    "UseVenflonIVCatheter": 14,
-    "GiveFluids": 15,
-    "ViewMonitor": 16,
-    "StartChestCompression": 17,
-    "OpenAirwayDrawer": 18,
-    "OpenBreathingDrawer": 19,
-    "OpenCirculationDrawer": 20,
-    "OpenDrugsDrawer": 21,
-    "BagDuringCPR": 22,
-    "ResumeCPR": 23,
-    "UseMonitorPads": 24,
-    "UseSatsProbe": 25,
-    "UseAline": 26,
-    "UseBloodPressureCuff": 27,
-    "AttachDefibPads": 28,
-    "UseBagValveMask": 29,
-    "UseNonRebreatherMask": 30,
     "UseYankeurSuctionCatheter": 31,
     "UseGuedelAirway": 32,
-    "TakeBloodForArtherialBloodGas": 33,
-    "TakeRoutineBloods": 34,
-    "PerformAirwayManoeuvres": 35,
-    "PerformHeadTiltChinLift": 36,
-    "PerformJawThrust": 37,
-    "TakeBloodPressure": 38,
-    "TurnOnDefibrillator": 39,
-    "DefibrillatorCharge": 40,
-    "DefibrillatorCurrentUp": 41,
-    "DefibrillatorCurrentDown": 42,
-    "DefibrillatorPace": 43,
-    "DefibrillatorPacePause": 44,
-    "DefibrillatorRateUp": 45,
-    "DefibrillatorRateDown": 46,
-    "DefibrillatorSync": 47,
-    "Finish": 48,
+    "UseBagValveMask": 29,
+    "UseNonRebreatherMask": 30,
+    "GiveFluids": 15,
+    "GiveAdenosine": 9,
+    "UseMonitorPads": 24,
+    "Finish": 48
 }
-
 
 def stabilize():
     def take_action(action):
@@ -60,14 +28,7 @@ def stabilize():
 
     actions_taken = set()
     first_checks = ["UseBloodPressureCuff", "UseSatsProbe"]
-    examine_order = [
-        "ExamineAirway",
-        "ExamineBreathing",
-        "ExamineCirculation",
-        "ExamineDisability",
-        "ExamineExposure",
-        "ExamineResponse",
-    ]
+    examine_order = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure", "ExamineResponse"]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -80,15 +41,13 @@ def stabilize():
         vital_signs_values = observations[40:]
 
         vitals = {
-            "HR": vital_signs_values[0] if vital_signs_times[0] != 0 else None,
-            "RR": vital_signs_values[1] if vital_signs_times[1] != 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] != 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] != 0 else None,
+            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action("StartChestCompression")
             continue
 
@@ -155,16 +114,8 @@ def stabilize():
             take_action("ExamineExposure")
             continue
 
-        if all(
-            [
-                vitals["Sats"] and vitals["Sats"] >= 88,
-                vitals["RR"] and vitals["RR"] >= 8,
-                vitals["MAP"] and vitals["MAP"] >= 60,
-            ]
-        ):
-            take_action("Finish")
-            break
-
+        take_action("Finish")
+        break
 
 if __name__ == "__main__":
     stabilize()
