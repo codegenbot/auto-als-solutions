@@ -41,7 +41,7 @@ def stabilize():
             take_action(15)
             continue
 
-        if vitals["MAP"] is None:
+        if vitals["HR"] is None:
             if 27 not in actions_taken:
                 actions_taken.add(27)
                 take_action(27)
@@ -62,10 +62,10 @@ def stabilize():
             take_action(2)
             continue
 
-        if 13 not in actions_taken:
+        if 13 not in actions_taken:  # Check for tachyarrhythmia and treat
             if events[29] > 0 or events[30] > 0 or events[31] > 0:
                 take_action(40)
-                actions_taken.add(13)
+                actions_taken.add(13)  # Mark cardioversion attempted
                 continue
 
         if any(events[i] > 0 for i in range(3, 7)):
