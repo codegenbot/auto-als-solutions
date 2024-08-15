@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = {25, 27, 24}
+    required_measurements = {24, 25, 27}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -19,14 +19,16 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36]
+        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
         return any(events[i] > 0 for i in arrhythmia_events)
 
     def perform_cardioversion():
-        if 28 not in actions_taken:
-            take_action(28)
+        if 24 not in actions_taken:
+            take_action(24)
         elif 40 not in actions_taken:
             take_action(40)
+        elif 47 not in actions_taken:
+            take_action(47)
         else:
             take_action(48)
 
@@ -50,16 +52,11 @@ def stabilize():
             take_action(23)
             continue
 
-        if events[4] > 0 or events[5] > 0:
-            take_action(31)
-            continue
-
-        if events[7] > 0:
-            take_action(36)
-            continue
-
-        if any(events[i] > 0 for i in [10, 11, 12, 13, 14]):
-            take_action(29)
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if has_unstable_tachyarrhythmia(events):
+                perform_cardioversion()
+            else:
+                take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -70,11 +67,16 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                perform_cardioversion()
-            else:
-                take_action(15)
+        if any(events[i] > 0 for i in [4, 5]):
+            take_action(31)
+            continue
+
+        if events[6] > 0:
+            take_action(36)
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
