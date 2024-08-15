@@ -50,10 +50,12 @@ def stabilize():
             break
 
         for action in measure_actions:
+            measure_actions.remove(action)
             take_action(action)
             break
 
         for action in examine_actions:
+            examine_actions.remove(action)
             take_action(action)
             break
 
