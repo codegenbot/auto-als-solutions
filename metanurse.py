@@ -3,26 +3,25 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    required_measurements = {24, 25, 27, 16}
-
+    
     def take_action(action):
         print(action)
         actions_taken.add(action)
+
+    required_measurements = {24, 25, 27}
 
     def next_measurement_action():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-
-    def needs_measurements():
-        return not required_measurements.issubset(actions_taken)
+        return None
 
     for step in range(max_steps):
-        observations = list(map(float, sys.stdin.readline().strip().split()))
+        observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
-            observations[:40],
-            observations[40:47],
-            observations[47:],
+            observations[:33],
+            observations[33:40],
+            observations[40:]
         )
 
         vitals = {
@@ -32,58 +31,59 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)
+        # Cardiac Arrest Check
+        if (vitals["MAP"] and vitals["MAP"] < 20) or (vitals["Sats"] and vitals["Sats"] < 65):
+            take_action(17)  # StartChestCompression
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        # Measurement Action
+        measurement_action = next_measurement_action()
+        if measurement_action:
+            take_action(measurement_action)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
+        # Check Airway Regularly
+        if any(events[i] > 0 for i in [3, 4, 5, 6]):  # Airway events
+            take_action(3)  # ExamineAirway
+            if events[4] > 0:
+                take_action(31)  # UseYankeurSucionCatheter
+            if events[6] > 0:
+                take_action(32)  # UseGuedelAirway
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+        # Breathing Check
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+            take_action(4)  # ExamineBreathing
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        # Circulation Check
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+            take_action(5)  # ExamineCirculation
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
             continue
 
-        if events[28] > 0 or events[29] > 0:
-            take_action(28)
-            take_action(40)
-            take_action(41)
-            take_action(43)
+        # Disability Check
+        if any(events[i] > 0 for i in range(20, 25)):  # Disability events
+            take_action(6)  # ExamineDisability
             continue
 
-        if step % 5 == 0:
-            take_action(1)
+        # Exposure Check
+        if any(events[i] > 0 for i in range(25, 33)):  # Exposure events
+            take_action(7)  # ExamineExposure
+            continue
 
-        if step % 10 == 0:
-            take_action(2)
-
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
