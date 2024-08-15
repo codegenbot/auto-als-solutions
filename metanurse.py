@@ -39,12 +39,10 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            
             if events[4] > 0 or events[5] > 0:
                 take_action(31)
             elif events[6] > 0:
                 take_action(32)
-                
             continue
         
         if needs_initial_measurements():
