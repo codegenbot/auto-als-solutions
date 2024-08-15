@@ -18,21 +18,6 @@ def stabilize():
             if action not in actions_taken:
                 return action
 
-    def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
-        return any(events[i] > 0 for i in arrhythmia_events)
-    
-    actions = { 
-        "unstable_tachycardia": [24, 40, 47], 
-        "open_airway": 36, 
-        "suction_airway": 31,
-        "non_rebreather": 30,
-        "bag_mask": 29,
-        "give_fluids": 15,
-        "start_compressions": 17,
-        "finish": 48 
-    }
-
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         events, vital_signs_times, vital_signs_values = (
@@ -47,57 +32,61 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Cardiac arrest condition
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(actions["start_compressions"])
+            take_action(17)  # Start chest compression
             continue
 
+        # Take measurements if needed
         if needs_measurements():
             take_action(next_measurement_action())
-            continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if has_unstable_tachyarrhythmia(events):
-                for action in actions["unstable_tachycardia"]:
-                    if action not in actions_taken:
-                        take_action(action)
-                        break
-            else:
-                take_action(actions["give_fluids"])
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(actions["non_rebreather"])
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(actions["bag_mask"])
             continue
 
         # Airway assessment and intervention
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)  # ExamineAirway
-            if events[4] > 0 or events[5] > 0:
-                take_action(actions["suction_airway"])
+            take_action(3)  # Examine Airway
+            if events[5] > 0:
+                take_action(31)  # Use Yankeur Suction Catheter
             elif events[6] > 0:
-                take_action(actions["open_airway"])
+                take_action(36)  # Perform Head-Tilt Chin-Lift
             continue
 
         # Breathing assessment and intervention
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use non-rebreather mask
+            continue
+        elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)  # Use bag-valve mask
+            continue
+        
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)  # ExamineBreathing
+            take_action(4)  # Examine Breathing
             if events[7] > 0:
-                take_action(actions["bag_mask"])
-            if events[13] > 0:
-                take_action(5)  # ExamineCirculation
+                take_action(29)  # Use bag-valve mask
+            continue
+
+        # Circulation assessment and intervention
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if any(events[i] > 0 for i in range(31, 39)):
+                if 24 not in actions_taken:
+                    take_action(24)
+                elif 40 not in actions_taken:
+                    take_action(40)
+                elif 47 not in actions_taken:
+                    take_action(47)
+                else:
+                    take_action(48)
+            else:
+                take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)  # ExamineResponse
             continue
 
-        take_action(actions["finish"])  # Finish if no appropriate actions found
+        take_action(48)  # Finish if no appropriate action found
 
 if __name__ == "__main__":
     stabilize()
