@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_measurements = [1, 24, 25, 27]
+    initial_measurements = [24, 25, 27, 1]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -18,7 +17,7 @@ def stabilize():
 
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -71,12 +70,8 @@ def stabilize():
             continue
 
         tachyarrhythmias = [
-            "HeartRhythmSVT",
-            "HeartRhythmVT",
-            "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter",
-            "HeartRhythmTorsades",
-            "HeartRhythmVF",
+            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
             take_action(24)
@@ -90,7 +85,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
