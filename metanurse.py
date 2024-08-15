@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,62 +24,70 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        # Check for critical conditions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Stabilize oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             actions_taken.add(25)
             take_action(30)
             continue
 
+        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
+        # Stabilize mean arterial pressure
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             actions_taken.add(27)
             take_action(15)
             continue
 
+        # Check cardiac rhythm if any critical heart rhythm events
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(2)
             continue
 
+        # Ensure required tools are used
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             continue
         if 25 not in actions_taken:
             actions_taken.add(25)
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)
+            take_action(16)  # ViewMonitor
             continue
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)
+            take_action(38)  # Take Blood Pressure
             continue
 
+        # Perform ABCDE assessments
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
