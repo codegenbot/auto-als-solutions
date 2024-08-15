@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,9 +25,7 @@ def stabilize():
         }
 
         # Cardiac Arrest Conditions
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -60,7 +57,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
-
+            
         if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             take_action(4)  # ExamineBreathing
             continue
@@ -70,9 +67,7 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        if vitals["HR"] is not None and (
-            vitals["HR"] > 100 or events[28] > 0
-        ):  # Unstable tachyarrhythmia
+        if vitals["HR"] is not None and (vitals["HR"] > 100 or events[28] > 0):  # Unstable tachyarrhythmia
             take_action(40)  # DefibrillatorCharge
             actions_taken.add(40)
             continue
@@ -94,7 +89,6 @@ def stabilize():
         # No remaining actions, complete the function
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
