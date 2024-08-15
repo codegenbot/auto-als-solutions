@@ -6,16 +6,17 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    examine_order = [3, 4, 5, 6, 7, 8]  # ABCDE sequence
+    initial_checks = [27, 25]  # Attach Blood Pressure Cuff, Sats Probe
 
-    # Initial checks: BP Cuff and Sats Probe
-    initial_checks = [27, 25]
     for check in initial_checks:
         take_action(check)
         actions_taken.add(check)
 
+    bp_checked = sats_checked = False
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
@@ -31,14 +32,22 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Critical conditions
+        if not bp_checked and 27 in actions_taken:
+            take_action(16)  # View Monitor
+            bp_checked = True
+            continue
+
+        if not sats_checked and 25 in actions_taken:
+            take_action(16)  # View Monitor
+            sats_checked = True
+            continue
+
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)  # Start Chest Compression
             continue
 
-        # Stabilization actions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
@@ -52,20 +61,18 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # Use Monitor Pads
-            actions_taken.add(24)  # Ensure monitor pads are used
-            take_action(28)  # Attach Defib Pads
-            actions_taken.add(28)  # Attach Defib Pads
-            take_action(2)  # CheckRhythm
+            if 24 not in actions_taken:
+                take_action(24)  # Use Monitor Pads
+                actions_taken.add(24)
+            else:
+                take_action(40)  # DefibrillatorCharge
             continue
 
-        # ABCDE examination sequence
-        do_examination = any(vitals[vital] is None for vital in ["HR", "RR", "MAP", "Sats"])
+        examine_order = [3, 4, 5, 6, 7, 8]
         for action in examine_order:
             if action not in actions_taken:
-                if do_examination:
-                    take_action(action)
-                    actions_taken.add(action)
+                take_action(action)
+                actions_taken.add(action)
                 break
         else:
             take_action(48)  # Finish
