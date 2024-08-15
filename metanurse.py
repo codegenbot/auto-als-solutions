@@ -1,11 +1,14 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
+    initial_actions = [25, 27, 16]  # UseSatsProbe, UseBloodPressureCuff, ViewMonitor
+    initial_actions_taken = 0
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -23,54 +26,52 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Respond to cardiac arrest scenario
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        # Stabilize oxygen saturation
+        if not any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            continue
+        if not any(events[i] > 0 for i in range(7, 15)) and initial_actions_taken >= 3:
+            take_action(4)
+            continue
+        if not any(events[i] > 0 for i in range(15, 20)) and initial_actions_taken >= 3:
+            take_action(5)
+            continue
+        if not any(events[i] > 0 for i in range(20, 26)) and initial_actions_taken >= 3:
+            take_action(6)
+            continue
+        if not any(events[i] > 0 for i in range(26, 33)) and initial_actions_taken >= 3:
+            take_action(7)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Stabilize mean arterial pressure
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        # Initial critical checks
-        critical_checks = [27, 25, 38, 16]
-        for check in critical_checks:
-            if check not in actions_taken:
-                actions_taken.add(check)
-                take_action(check)
-                break
-        else:
-            # ABCDE sequence
-            if any(events[i] > 0 for i in range(3, 7)):
-                take_action(3)
-                continue
-            if any(events[i] > 0 for i in range(7, 15)):
-                take_action(4)
-                continue
-            if any(events[i] > 0 for i in range(15, 20)):
-                take_action(5)
-                continue
-            if any(events[i] > 0 for i in range(20, 26)):
-                take_action(6)
-                continue
-            if any(events[i] > 0 for i in range(26, 33)):
-                take_action(7)
-                continue
+        if vitals["HR"] is not None and (vitals["HR"] > 150 or vitals["HR"] < 60):
+            take_action(24)
+            continue
+
+        if initial_actions_taken < 3:
+            take_action(initial_actions[initial_actions_taken])
+            initial_actions_taken += 1
+            continue
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
