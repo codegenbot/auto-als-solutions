@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -29,9 +28,7 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             step += 1
             continue
@@ -65,56 +62,56 @@ def stabilize():
                     step += 1
                     break
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+            take_action(3)  # ExamineAirway
             step += 1
             continue
 
-        if events[5] > 0:
-            take_action(31)
+        if events[5] > 0:  # AirwayVomit
+            take_action(31)  # UseYankeurSuctionCatheter
             step += 1
             continue
-        if events[6] > 0:
-            take_action(32)
-            step += 1
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            step += 1
-            continue
-        if events[7] > 0:
-            take_action(29)
-            step += 1
-            continue
-        if events[14] > 0:
-            take_action(19)
+        if events[6] > 0:  # AirwayTongue
+            take_action(32)  # UseGuedelAirway
             step += 1
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+            take_action(4)  # ExamineBreathing
+            step += 1
+            continue
+        if events[7] > 0:  # BreathingNone
+            take_action(29)  # UseBagValveMask
+            step += 1
+            continue
+        if events[14] > 0:  # BreathingPneumothoraxSymptoms
+            take_action(19)  # OpenBreathingDrawer
             step += 1
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+        if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
+            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
             step += 1
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+            take_action(5)  # ExamineCirculation
             step += 1
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
+            take_action(6)  # ExamineDisability
             step += 1
             continue
 
-        take_action(48)
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
+            take_action(7)  # ExamineExposure
+            step += 1
+            continue
+
+        take_action(48)  # Finish
         break
-
+        step += 1
 
 if __name__ == "__main__":
     stabilize()
