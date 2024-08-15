@@ -1,15 +1,13 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    required_measurements = {24, 25, 27, 16}
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
-
-    required_measurements = [24, 25, 27]
 
     def next_measurement_action():
         for action in required_measurements:
@@ -17,12 +15,10 @@ def stabilize():
                 return action
 
     def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
+        return not required_measurements.issubset(actions_taken)
 
     for step in range(max_steps):
-        observations = list(map(float, input().strip().split()))
-        if len(observations) != 53:
-            continue
+        observations = list(map(float, sys.stdin.readline().strip().split()))
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -74,9 +70,14 @@ def stabilize():
             take_action(5)
             continue
 
+        if step % 5 == 0:
+            take_action(1)
+
+        if step % 10 == 0:
+            take_action(2)
+
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
