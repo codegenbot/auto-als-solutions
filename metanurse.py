@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -9,8 +10,12 @@ def stabilize():
         return list(map(float, input().strip().split()))
 
     def needs_measurements(vitals):
-        return (vitals["HR"] is None or vitals["RR"] is None or 
-                vitals["MAP"] is None or vitals["Sats"] is None)
+        return (
+            vitals["HR"] is None
+            or vitals["RR"] is None
+            or vitals["MAP"] is None
+            or vitals["Sats"] is None
+        )
 
     def perform_abcde(events, vitals):
         if any(events[i] > 0 for i in range(3, 7)):  # Airway issues
@@ -44,7 +49,7 @@ def stabilize():
         # Checking abnormal heart rhythms
         if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 40)):
             take_action(24)  # Use Monitor Pads
-            take_action(2)   # Check Rhythm
+            take_action(2)  # Check Rhythm
             return
 
         take_action(48)  # Finish action
@@ -58,7 +63,10 @@ def stabilize():
             continue
 
         events, vital_signs_times, vital_signs_values = (
-            observations[:33], observations[33:40], observations[40:])
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] else None,
@@ -68,7 +76,8 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65):
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(17)  # Start chest compression immediately
             continue
 
@@ -77,11 +86,11 @@ def stabilize():
                 if action not in actions_taken:
                     take_action(action)
                     actions_taken.add(action)
-                    break  # Continue from here after this action
+                    continue
 
         perform_abcde(events, vitals)
-        if vitals["HR"] is not None and vitals["RR"] is not None and vitals["MAP"] is not None and vitals["Sats"] is not None:
-            break  # End loop as we issue 'Finish' inside perform_abcde
+        break
+
 
 if __name__ == "__main__":
     stabilize()
