@@ -9,11 +9,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [
-        25,
-        27,
-        24,
-    ]  # Oxygen saturation, Blood pressure cuff, Heart rhythm monitor
+    required_measurements = [24, 25, 27]
 
     def next_measurement_action():
         for action in required_measurements:
@@ -41,63 +37,53 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check and set up necessary measurements
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
-        # Detect and treat cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression immediately
+            take_action(17)
             continue
 
-        # Respond to unstable tachyarrhythmias
         if any(events[i] > 0 for i in [30, 31, 32, 33, 34, 35, 36]):
-            take_action(24)  # Use defibrillator pads
-            take_action(39)  # Turn on defibrillator
-            take_action(40)  # Charge defibrillator
-            take_action(47)  # Sync defibrillator
-            take_action(45)  # Increase defibrillator rate
+            take_action(24)
+            take_action(39)
+            take_action(40)
+            take_action(47)
+            take_action(45)
             continue
 
-        # Ensure the airway is clear
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # Use suction catheter for vomit or blood
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # Use airway if tongue obstruction
+                take_action(32)
             continue
 
-        # Ensure oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
-        # Ensure respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag-valve mask
+            take_action(29)
             continue
 
-        # Examine breathing if abnormal
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
+            take_action(4)
             continue
 
-        # Ensure mean arterial pressure is sufficient
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Administer fluids to raise MAP
+            take_action(15)
             continue
 
-        # Examine circulation if abnormal
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
+            take_action(5)
             continue
 
-        # If everything is stabilized, finish
-        take_action(48)  # Finish action
+        take_action(48)
         break
 
 
