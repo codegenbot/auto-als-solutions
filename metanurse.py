@@ -10,15 +10,12 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    initial_measurements = [24, 25, 27, 26]
+    initial_measurements = [3, 4, 5, 27, 26, 25]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
                 return action
-
-    def needs_initial_measurements():
-        return not all(action in actions_taken for action in initial_measurements)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -45,49 +42,38 @@ def stabilize():
             take_action(23)
             continue
 
-        if needs_initial_measurements():
+        if any(vitals[k] is None for k in ["MAP", "Sats", "RR"]):
             take_action(next_initial_measurement_action())
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
+        if not (events[3] > 0):  # No AirwayClear event observed
             take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if events[5] > 0:  # AirwayVomit
+            take_action(31)
+            continue
+        if events[6] > 0:  # AirwayTongue
+            take_action(32)
+            continue
+
+        if vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
+        if vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            if events[17] > 0:
-                take_action(22)
+        if events[29] > 0:  # Unstable heart rhythm like SVT
+            take_action(9)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
-
-        take_action(48)
+        take_action(48)  # Finish if the patient is stable
         break
 
 
