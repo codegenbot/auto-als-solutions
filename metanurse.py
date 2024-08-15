@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
+    abcde_assessments = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure"]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -67,11 +68,11 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
+        # Circulation assessment
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Circulation assessment
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
             continue
