@@ -7,6 +7,7 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
+        sys.stdout.flush()
 
     initial_measurements = [24, 25, 27, 26]
 
@@ -40,26 +41,53 @@ def stabilize():
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
-            take_action(23)
             continue
 
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if vitals["MAP"] is None or vitals["Sats"] is None or vitals["RR"] is None:
+            take_action(16)
+            continue
+
+        if vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
+        if vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
+        if vitals["HR"] and vitals["HR"] > 150:
             take_action(40)
             take_action(41)
             take_action(47)
