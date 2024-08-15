@@ -65,7 +65,7 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        if any(events[i] > 0 for i in range(27, 33)):
+        if any(events[i] > 0 for i in range(27, 33)):  # Unstable tachyarrhythmia events
             tachyarrhythmia_events = [28, 29, 30, 31]
             if any(events[i] > 0 for i in tachyarrhythmia_events):
                 take_action(24)  # UseMonitorPads
