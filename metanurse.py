@@ -55,15 +55,8 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
-                take_action(3)
-                continue
-            if events[4] > 0:
-                take_action(31)
-                continue
-            if events[6] > 0:
-                take_action(35)
-                continue
+            take_action(3)
+            continue
 
         if times[1] == 0:
             take_action(4)
@@ -85,7 +78,7 @@ def stabilize():
             take_action(26)
             actions_taken.add(26)
             continue
-    
+
         if step == 349:
             take_action(48)
             break
