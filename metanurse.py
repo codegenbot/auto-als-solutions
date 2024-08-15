@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_setup_actions = [24, 25, 27, 26, 18, 19, 20, 21]
+    initial_setup_actions = [24, 25, 27, 26, 18, 19, 20, 21] 
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -19,7 +18,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -53,11 +52,11 @@ def stabilize():
             continue
 
         # Breathing
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             take_action(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if (vitals["RR"] is not None and vitals["RR"] < 8):
             take_action(29)  # UseBagValveMask
             continue
 
@@ -66,7 +65,7 @@ def stabilize():
             continue
 
         # Circulation
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
             take_action(15)  # GiveFluids
             continue
 
@@ -85,13 +84,12 @@ def stabilize():
             continue
 
         if (
-            (vitals["MAP"] is not None and vitals["MAP"] >= 60)
-            and (vitals["Sats"] is not None and vitals["Sats"] >= 88)
-            and (vitals["RR"] is not None and vitals["RR"] >= 8)
+            (vitals["MAP"] is not None and vitals["MAP"] >= 60) and
+            (vitals["Sats"] is not None and vitals["Sats"] >= 88) and
+            (vitals["RR"] is not None and vitals["RR"] >= 8)
         ):
             take_action(48)  # Finish
             break
-
 
 if __name__ == "__main__":
     stabilize()
