@@ -5,18 +5,18 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
-    examine_steps = [3, 4, 5, 6, 7]
-    
-    for step in range(350):
+    steps = 0
+
+    while steps < 350:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
+
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -28,34 +28,34 @@ def stabilize():
             take_action(17)
             continue
         
-        if vitals["Sats"] is not None and vitals["Sats"] < 92:
-            if 25 not in actions_taken:
-                actions_taken.add(25)
-                take_action(25)
-            else:
-                take_action(30)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 27 not in actions_taken:
-                actions_taken.add(27)
-                take_action(27)
-            else:
-                take_action(15)
+            take_action(15)
             continue
 
-        for action in examine_steps:
-            if action not in actions_taken:
-                actions_taken.add(action)
-                take_action(action)
-                break
+        if times[6] == 0:
+            take_action(3)
+        elif times[1] == 0:
+            take_action(4)
+        elif times[4] == 0:
+            take_action(5)
+        elif times[2] == 0:
+            take_action(6)
+        elif times[3] == 0:
+            take_action(7)
         else:
-            take_action(48)
-            break
+            steps += 1
+            if steps >= 350:
+                take_action(48)
+            else:
+                take_action(0)
 
 if __name__ == "__main__":
     stabilize()
