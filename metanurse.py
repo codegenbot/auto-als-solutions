@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -25,10 +24,8 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-            or (vitals["MAP"] is not None and vitals["MAP"] < 20)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
@@ -56,70 +53,33 @@ def stabilize():
                 take_action(15)
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(9)
-            continue
-
-        if any(events[i] > 0 for i in range(33, 53)):
-            if events[35] > 0:
-                take_action(11)
-            elif events[36] > 0:
-                take_action(11)
-            elif events[37] > 0:
-                take_action(11)
-            elif events[38] > 0:
-                take_action(12)
-            elif events[39] > 0:
-                take_action(11)
-            elif events[40] > 0:
-                take_action(2)
-            else:
-                take_action(2)
-            continue
-
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
-
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
+        if 3 not in actions_taken:
+            actions_taken.add(3)
             take_action(3)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if 4 not in actions_taken:
+            actions_taken.add(4)
             take_action(4)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
+        if 5 not in actions_taken:
+            actions_taken.add(5)
             take_action(5)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
+        if 6 not in actions_taken:
+            actions_taken.add(6)
             take_action(6)
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if 7 not in actions_taken:
+            actions_taken.add(7)
             take_action(7)
             continue
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
