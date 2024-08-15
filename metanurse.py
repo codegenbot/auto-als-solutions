@@ -33,6 +33,9 @@ def stabilize():
             if action not in actions_taken:
                 take_action(action)
                 break
+                
+        if step < max_steps - 1:
+            continue
         
         if any(events[i] > 0 for i in range(3, 7)):  # Airway-related events
             take_action(3)  # ExamineAirway
