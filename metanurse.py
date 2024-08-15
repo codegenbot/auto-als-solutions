@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -19,16 +18,16 @@ def stabilize():
 
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -49,13 +48,14 @@ def stabilize():
             elif events[6] > 0:
                 take_action(35)
             continue
-
+        
         if needs_initial_measurements():
             take_action(next_initial_measurement_action())
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
+        if (
+            (vitals["MAP"] is not None and vitals["MAP"] < 20) or
+            (vitals["Sats"] is not None and vitals["Sats"] < 65)
         ):
             take_action(17)
             continue
@@ -71,20 +71,19 @@ def stabilize():
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-
+            
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+            
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-
+        
         if step >= 349:
             take_action(48)
-
+            
         take_action(0)
-
 
 if __name__ == "__main__":
     stabilize()
