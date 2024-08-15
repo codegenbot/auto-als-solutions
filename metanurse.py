@@ -41,7 +41,7 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60 and 24 in actions_taken:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
@@ -52,7 +52,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if any(events[i] > 0 for i in [4, 5, 6]):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
