@@ -7,7 +7,6 @@ def stabilize():
         'sats_probe_used': False,
         'aline_used': False,
         'bp_cuff_used': False,
-        'defib_pads_used': False,
         'monitor_used': False
     }
 
@@ -28,7 +27,6 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
         }
 
-        # Step 1: Attach necessary monitoring tools
         if not actions_taken['sats_probe_used']:
             take_action(25)
             actions_taken['sats_probe_used'] = True
@@ -46,7 +44,6 @@ def stabilize():
             actions_taken['monitor_used'] = True
             continue
 
-        # Step 2: Handle critical conditions
         if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
             take_action(17)
             continue
@@ -59,7 +56,6 @@ def stabilize():
             take_action(29)
             continue
 
-        # Step 3: ABCDE assessment
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
