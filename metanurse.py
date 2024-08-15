@@ -25,10 +25,12 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Check for cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
+        # Handle Airway
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
@@ -37,6 +39,7 @@ def stabilize():
                 take_action(32)  # UseGuedelAirway
             continue
 
+        # Handle Breathing
         if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             take_action(4)  # ExamineBreathing
             if events[7] > 0:
@@ -45,6 +48,7 @@ def stabilize():
                 take_action(30)  # UseNonRebreatherMask
             continue
 
+        # Ensure MAP and Sats are measured properly
         if vitals["MAP"] is None and 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
             continue
@@ -53,6 +57,7 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
+        # Interventions based on measured vitals
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -65,6 +70,11 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
+        if vitals["HR"] is not None and (events[29] > 0 or events[30] > 0 or events[31] > 0):  # Handle tachyarrhythmia
+            take_action(24)  # UseMonitorPads
+            continue
+
+        # Handle other assessment areas
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
             continue
@@ -75,10 +85,6 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(9)  # GiveAdenosine
             continue
 
         take_action(48)  # Finish
