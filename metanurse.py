@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
     required_measurements = {24, 25, 27, 16}
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
@@ -13,7 +13,9 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-        return None
+
+    def needs_measurements():
+        return not required_measurements.issubset(actions_taken)
 
     for step in range(max_steps):
         observations = list(map(float, sys.stdin.readline().strip().split()))
@@ -36,9 +38,8 @@ def stabilize():
             take_action(17)
             continue
 
-        measurement_action = next_measurement_action()
-        if measurement_action:
-            take_action(measurement_action)
+        if needs_measurements():
+            take_action(next_measurement_action())
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -67,6 +68,10 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
+            continue
+
+        if any(events[i] > 0 for i in [28, 29, 31, 32, 35]):
+            take_action(9)
             continue
 
         if step % 5 == 0:
