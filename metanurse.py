@@ -5,8 +5,9 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    examine_order = [3, 4, 5, 6, 7, 8]
     actions_taken = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -16,7 +17,6 @@ def stabilize():
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
-
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -53,39 +53,15 @@ def stabilize():
         if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(9)  # GiveAdenosine
             continue
-        
-        if events[3] > 0:
-            if events[4] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
-                continue
-            if events[6] > 0:
-                take_action(32)  # UseGuedelAirway
-                continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            if events[7] > 0:
-                take_action(29)  # UseBagValveMask
-                continue
-            if events[14] > 0:
-                take_action(19)  # OpenBreathingDrawer
-                continue
-            take_action(4)  # ExamineBreathing
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
-            continue
-
-        take_action(48)  # Finish
-        break
+        for exam in examine_order:
+            if exam not in actions_taken:
+                actions_taken.add(exam)
+                take_action(exam)
+                break
+        else:
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
