@@ -1,13 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -28,8 +27,7 @@ def stabilize():
 
         # Respond to cardiac arrest scenario
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -45,12 +43,7 @@ def stabilize():
             continue
 
         # Perform initial critical checks
-        initial_checks = [
-            27,
-            25,
-            38,
-            16,
-        ]  # BP cuff, Sats probe, BP measure, ViewMonitor
+        initial_checks = [27, 25, 38, 16]  # BP cuff, Sats probe, BP measure, ViewMonitor
         for check in initial_checks:
             if check not in actions_taken:
                 actions_taken.add(check)
@@ -63,7 +56,7 @@ def stabilize():
                 (range(7, 15), 4),  # Breathing events
                 (range(15, 20), 5),  # Circulation events
                 (range(20, 26), 6),  # Disability events
-                (range(26, 33), 7),  # Exposure events
+                (range(26, 33), 7)  # Exposure events
             ]:
                 if any(events[i] > 0 for i in indices):
                     take_action(action)
@@ -71,7 +64,6 @@ def stabilize():
             else:
                 take_action(48)  # Finish assessment
                 break
-
 
 if __name__ == "__main__":
     stabilize()
