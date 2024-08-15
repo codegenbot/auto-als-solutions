@@ -5,67 +5,85 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    taken_measurements = set()
+    def evaluate_critical(vitals):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # Immediate chest compressions
+            return True
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use non-rebreather mask for low sats
+            return True
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use bag-valve mask for low respiratory rate
+            return True
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids for low mean arterial pressure
+            return True
+        return False
 
-    for step in range(350):
+    def get_observations():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing if invalid input length
-            continue
-
+            take_action(0)
+            return None, None, None
         events = observations[:33]
-        times = observations[33:40]
-        values = observations[40:]
-
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
         vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
+            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "Glucose": vital_signs_values[2] if vital_signs_times[2] > 0 else None,
+            "Temp": vital_signs_values[3] if vital_signs_times[3] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
+        return events, vital_signs_times, vitals
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+    for step in range(350):
+        events, vital_signs_times, vitals = get_observations()
+        if vitals is None:
             continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if not vitals["Sats"]:
-            if 25 not in taken_measurements:
-                take_action(25)  # UseSatsProbe
-                taken_measurements.add(25)
-                continue
-
-        if not vitals["MAP"]:
-            if 27 not in taken_measurements:
-                take_action(27)  # UseBloodPressureCuff
-                taken_measurements.add(27)
-                continue
-            elif 16 not in taken_measurements:
-                take_action(16)  # ViewMonitor
-                taken_measurements.add(16)
-                continue
-
-        for action in [3, 4, 5, 6, 7, 8]:
-            if action not in taken_measurements:
-                take_action(action)  # Examine steps
-                taken_measurements.add(action)
-                break
         
-        if len(taken_measurements) == 6:
-            take_action(48)  # Finish if all examinations are done
-            break
+        if evaluate_critical(vitals):
+            continue
+
+        # Airway
+        if events[3] > 0:
+            if events[4] > 0 or events[5] > 0 or events[6] > 0:
+                take_action(31)  # Suction airway if vomit/blood/tongue
+            else:
+                take_action(3)  # Examine airway
+            continue
+
+        # Breathing
+        if events[7] > 0 or any(events[8:15]):
+            take_action(4)  # Examine breathing
+            continue
+
+        if vitals["Sats"] is None:
+            take_action(25)  # Attach sats probe
+            continue
+
+        # Circulation
+        if events[15] > 0:
+            take_action(5)  # Examine circulation
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(27)  # Attach BP cuff
+            continue
+
+        # Disability
+        if any(events[20:26]):
+            take_action(6)  # Examine disability
+            continue
+
+        # Exposure
+        if any(events[26:33]):
+            take_action(7)  # Examine exposure
+            continue
+
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
