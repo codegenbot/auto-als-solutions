@@ -24,13 +24,12 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        def check_critical():
-            if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-                take_action(17)
-                return True
-            return False
+        heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
+        heart_rhythm_events = ["HeartRhythmNSR", "HeartRhythmSVT", "HeartRhythmAF", "HeartRhythmAtrialFlutter", "HeartRhythmVT", "HeartRhythmVF"]
 
-        if check_critical():
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -45,8 +44,28 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(27, 33)):
-            take_action(24)
+        if any(events[i] > 0 for i in heart_rhythm_indices if heart_rhythm_events[i - 27] != "HeartRhythmNSR"):
+            take_action(28)
+            take_action(40)
+            take_action(43)
+            take_action(41)
+            continue
+        
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -63,23 +82,6 @@ def stabilize():
             continue
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            continue
-
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)
             continue
 
         take_action(48)
