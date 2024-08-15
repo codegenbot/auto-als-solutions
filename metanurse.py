@@ -1,11 +1,11 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
+    actions_taken = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -56,21 +56,16 @@ def stabilize():
         if events[26] == 0:  # ExposureRash not examined
             take_action(7)  # ExamineExposure
             continue
-
-        if (
-            vitals["Sats"] is not None
-            and vitals["Sats"] >= 88
-            and vitals["RR"] is not None
-            and vitals["RR"] >= 8
-            and vitals["MAP"] is not None
-            and vitals["MAP"] >= 60
-            and events[3] > 0
-        ):
+        
+        # Perform final checks and reassess, then finish if all criteria are met
+        if vitals["Sats"] is not None and vitals["Sats"] >= 88 and \
+            vitals["RR"] is not None and vitals["RR"] >= 8 and \
+            vitals["MAP"] is not None and vitals["MAP"] >= 60 and \
+            events[3] > 0:
             take_action(48)  # Finish
             break
 
         take_action(0)  # DoNothing to await further assessment
-
 
 if __name__ == "__main__":
     stabilize()
