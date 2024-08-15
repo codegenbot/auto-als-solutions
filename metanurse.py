@@ -35,7 +35,6 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Detect and treat cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
@@ -46,7 +45,6 @@ def stabilize():
             take_action(next_measurement_action())
             continue
 
-        # Check for tachyarrhythmias and use defibrillator
         tachyarrhythmias = [
             "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
             "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
@@ -59,7 +57,6 @@ def stabilize():
             take_action(45)  # Increase defibrillator rate
             continue
 
-        # Ensure the airway is clear
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
@@ -68,27 +65,22 @@ def stabilize():
                 take_action(32)  # Use airway if tongue obstruction
             continue
 
-        # Ensure oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use non-rebreather mask
             continue
 
-        # Ensure respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use bag-valve mask
             continue
 
-        # Examine breathing if abnormal
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
-        # Ensure mean arterial pressure is sufficient
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Administer fluids to raise MAP
             continue
 
-        # Examine circulation if abnormal
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
