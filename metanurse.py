@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
 
@@ -29,12 +28,14 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Check for life-threatening conditions first
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions
             continue
 
+        # Request missing measurements
         for action in required_measurements:
             if action not in actions_taken:
                 take_action(action)
@@ -42,36 +43,38 @@ def stabilize():
                 break
 
         if all(v > 0 for v in vital_signs_times):
+            # Airway
             if any(events[i] > 0 for i in range(3, 7)):
-                take_action(3)
+                take_action(3)  # Examine Airway
                 if events[4] > 0 or events[5] > 0:
-                    take_action(31)
+                    take_action(31)  # Suction
                 elif events[6] > 0:
-                    take_action(32)
+                    take_action(32)  # Guedel airway
                 continue
-
+            
+            # Breathing
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)
+                take_action(30)  # Use non-rebreather mask
                 continue
 
             if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)
+                take_action(29)  # Use bag valve mask
                 continue
 
+            # Circulation
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)
+                take_action(15)  # Give fluids
                 continue
 
             if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-                take_action(24)
-                take_action(43)
+                take_action(24)  # Use monitor pads
+                take_action(43)  # Defibrillator pace
                 continue
         else:
-            continue
+            continue  # Keep taking measurements until all are obtained
 
-        take_action(48)
+        take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
