@@ -1,17 +1,18 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
 
     def take_action(action):
         print(action)
-        actions_taken.add(action)
         sys.stdout.flush()
+        actions_taken.add(action)
 
     essential_measurements = [24, 25, 27, 26]
 
-    def next_essential_measurement():
+    def next_essential_measurement_action():
         for action in essential_measurements:
             if action not in actions_taken:
                 return action
@@ -44,19 +45,11 @@ def stabilize():
             continue
 
         if needs_essential_measurements():
-            take_action(next_essential_measurement())
+            take_action(next_essential_measurement_action())
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        if 16 not in actions_taken:
+            take_action(16)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
@@ -71,12 +64,20 @@ def stabilize():
             take_action(4)
             continue
 
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
-            if vitals["HR"] is not None and vitals["HR"] > 150:
-                take_action(40)
-                take_action(47)
-                take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
@@ -87,8 +88,15 @@ def stabilize():
             take_action(7)
             continue
 
+        if vitals["HR"] and vitals["HR"] > 150:
+            take_action(40)
+            take_action(47)
+            take_action(43)
+            continue
+
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
