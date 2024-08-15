@@ -41,7 +41,7 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
                 take_action(31)  # UseYankeurSuctionCatheter
@@ -54,7 +54,7 @@ def stabilize():
             take_action(4)  # ExamineBreathing
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             if events[7] > 0:
                 take_action(29)  # UseBagValveMask
             if events[14] > 0:
@@ -78,11 +78,11 @@ def stabilize():
             take_action(5)  # ExamineCirculation
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
             continue
 
