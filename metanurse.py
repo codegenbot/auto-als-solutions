@@ -37,47 +37,47 @@ def stabilize():
                 vitals_measured[k] = True
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
-            take_action(23)  # ResumeCPR
+            take_action(17)
+            take_action(23)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             if events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
