@@ -1,17 +1,16 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    actions_taken = set()
+    essential_measurements = [24, 25, 27, 26]
+    observed_measurements = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -25,34 +24,14 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Cardiac arrest conditions
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] is None and 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)  # UseBloodPressureCuff
-            continue
-
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)  # UseSatsProbe
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)  # DefibrillatorCharge
-            take_action(47)  # DefibrillatorSync
-            take_action(43)  # DefibrillatorPace
-            continue
-
-        if not all(action in actions_taken for action in [24, 26, 27, 25]):
-            essential_measurements = [24, 25, 27, 26]
+        if not observed_measurements.issuperset(essential_measurements):
             for action in essential_measurements:
-                if action not in actions_taken:
-                    actions_taken.add(action)
+                if action not in observed_measurements:
+                    observed_measurements.add(action)
                     take_action(action)
                     break
             continue
@@ -67,22 +46,22 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             take_action(4)  # ExamineBreathing
+            if vitals["Sats"] and vitals["Sats"] < 88:
+                take_action(30)  # UseNonRebreatherMask
+            if vitals["RR"] and vitals["RR"] < 8:
+                take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
             take_action(5)  # ExamineCirculation
+            if vitals["HR"] and vitals["HR"] > 150:
+                take_action(40)  # DefibrillatorCharge
+                take_action(43)  # DefibrillatorPace
+                continue
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
@@ -95,7 +74,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
