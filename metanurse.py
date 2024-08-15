@@ -7,8 +7,6 @@ def stabilize():
 
     actions_taken = set()
 
-    reassess_countdown = 5  # Cycle through all assessments every 5 steps
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -26,68 +24,66 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Cardiac arrest condition
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Actions to ensure airway is managed
-        if events[3] > 0 and "exam_airway" not in actions_taken:
+        if vitals["MAP"] is None and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vitals["Sats"] is None and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)  # UseSatsProbe
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
-            actions_taken.add("exam_airway")
             continue
-        if events[4] > 0:
-            take_action(31)  # UseYankeurSucionCatheter
+
+        if events[5] > 0:  # AirwayVomit
+            take_action(31)  # UseYankeurSuctionCatheter
             continue
-        if events[6] > 0:
+        if events[6] > 0:  # AirwayTongue
             take_action(32)  # UseGuedelAirway
             continue
 
-        # Start examination cycles over each reassess_countdown steps
-        reassess_countdown -= 1
-        if reassess_countdown <= 0:
-            take_action(3)  # ExamineAirway
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+            take_action(4)  # ExamineBreathing
+            continue
+        if events[7] > 0:  # BreathingNone
+            take_action(29)  # UseBagValveMask
+            continue
+        if events[14] > 0:  # BreathingPneumothoraxSymptoms
+            take_action(19)  # OpenBreathingDrawer
             continue
 
-        # Check vitals: measured priorities (MAP, Sats first)
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Ensure essential equipment is attached
-        if 27 not in actions_taken:
-            take_action(27)  # UseBloodPressureCuff
-            actions_taken.add(27)
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+            take_action(5)  # ExamineCirculation
             continue
-        if 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
-            actions_taken.add(25)
-            continue
-        if 24 not in actions_taken:
-            take_action(24)  # UseMonitorPads
-            actions_taken.add(24)
-            continue
-        if 26 not in actions_taken:
-            take_action(26)  # UseAline
-            actions_taken.add(26)
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)  # GiveAdenosine
             continue
 
-        # Perform a full ABCDE cycle
-        if reassess_countdown == 0:
-            take_action(3)  # ExamineAirway
-            take_action(4)  # ExamineBreathing
-            take_action(5)  # ExamineCirculation
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
             take_action(6)  # ExamineDisability
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
             take_action(7)  # ExamineExposure
-            reassess_countdown = 5
             continue
 
         take_action(48)  # Finish
