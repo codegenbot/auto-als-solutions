@@ -12,7 +12,7 @@ def stabilize():
         steps_taken += 1
         actions_taken.add(action)
 
-    actions_order = [24, 25, 27, 26, 18, 19, 20, 21, 35, 36, 37]  # Initialization actions in correct order
+    actions_order = [24, 25, 27, 26, 18, 19, 20, 21, 35, 36, 37]
 
     while steps_taken < max_steps:
         observations = list(map(float, input().strip().split()))
