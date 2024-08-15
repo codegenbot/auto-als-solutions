@@ -3,21 +3,21 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-
+    
     def take_action(action):
         print(action)
         actions_taken.add(action)
-
+    
     initial_measurements = [24, 25, 27]
-
+    
     def next_initial_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
                 return action
-
+    
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
