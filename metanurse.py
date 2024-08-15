@@ -10,7 +10,7 @@ def stabilize():
         sys.stdout.flush()
 
     initial_measurements = [25, 26, 27, 28]
-
+    
     def next_initial_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
@@ -18,7 +18,7 @@ def stabilize():
 
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
-    
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -46,48 +46,52 @@ def stabilize():
             take_action(next_initial_measurement_action())
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
+        if any(events[i] > 0 for i in range(3, 7)):  # Check airway events
             take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
+            if events[4] > 0 or events[5] > 0:  # Vomit, Blood
+                take_action(31)  # UseSuction
+            elif events[6] > 0:  # Tongue obstruction
+                take_action(32)  # UseGuedelAirway
             continue
 
+        # Breathing assessment and treatment
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Check breathing events
             take_action(4)
             continue
 
+        # Circulatory support
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
-
+        
+        # Cardioversion for unstable tachyarrhythmia
         tachyarrhythmias = [
             "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
             "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)
-            take_action(47)
-            take_action(43)
+            take_action(24)  # UseMonitorPads
+            take_action(47)  # DefibrillatorSync
+            take_action(43)  # DefibrillatorPace (for unstable rhythms)
             continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
+        
+        # Examination substeps for other protocol categories
+        if any(events[i] > 0 for i in range(15, 20)):  # Check circulation events
             take_action(5)
             continue
 
         if step >= 349:
-            take_action(48)
+            take_action(48)  # Finish in the last step if not stabilized
         
-        take_action(0)
+        take_action(0)  # Default to DoNothing when no immediate action needed
 
 if __name__ == "__main__":
     stabilize()
