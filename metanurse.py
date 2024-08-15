@@ -9,7 +9,11 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [24, 25, 27]
+    required_measurements = [
+        25,
+        27,
+        24,
+    ]  # Oxygen saturation, Blood pressure cuff, Heart rhythm monitor
 
     def next_measurement_action():
         for action in required_measurements:
@@ -23,6 +27,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -36,6 +41,11 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        # Check and set up necessary measurements
+        if needs_measurements():
+            take_action(next_measurement_action())
+            continue
+
         # Detect and treat cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
@@ -43,13 +53,18 @@ def stabilize():
             take_action(17)  # Start chest compression immediately
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        # Respond to unstable tachyarrhythmias
+        if any(events[i] > 0 for i in [30, 31, 32, 33, 34, 35, 36]):
+            take_action(24)  # Use defibrillator pads
+            take_action(39)  # Turn on defibrillator
+            take_action(40)  # Charge defibrillator
+            take_action(47)  # Sync defibrillator
+            take_action(45)  # Increase defibrillator rate
             continue
 
         # Ensure the airway is clear
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # Examine Airway
             if events[4] > 0 or events[5] > 0:
                 take_action(31)  # Use suction catheter for vomit or blood
             elif events[6] > 0:
@@ -68,7 +83,7 @@ def stabilize():
 
         # Examine breathing if abnormal
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # Examine Breathing
             continue
 
         # Ensure mean arterial pressure is sufficient
@@ -76,25 +91,12 @@ def stabilize():
             take_action(15)  # Administer fluids to raise MAP
             continue
 
-        # Check for tachyarrhythmias and cardiovert
-        tachyarrhythmias = [
-            "HeartRhythmSVT",
-            "HeartRhythmVT",
-            "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter",
-            "HeartRhythmTorsades",
-            "HeartRhythmVF",
-        ]
-        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)  # Use defibrillator pads
-            take_action(43)  # Defibrillator pace (cardioversion)
-            continue
-
         # Examine circulation if abnormal
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # Examine Circulation
             continue
 
+        # If everything is stabilized, finish
         take_action(48)  # Finish action
         break
 
