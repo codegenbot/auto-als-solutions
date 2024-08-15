@@ -5,8 +5,10 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    actions_taken = set()
     steps = 350
-    for _ in range(steps):
+
+    for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
