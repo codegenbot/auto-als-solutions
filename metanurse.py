@@ -1,12 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
+    assessments = [("A", 3, "Airway"), ("B", 4, "Breathing"), ("C", 5, "Circulation"), ("D", 6, "Disability"), ("E", 7, "Exposure")]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -58,17 +58,14 @@ def stabilize():
             actions_taken.add(27)
             take_action(27)
             continue
-
         if 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
             continue
-
         if 16 not in actions_taken:
             actions_taken.add(16)
             take_action(16)
             continue
-
         if 38 not in actions_taken:
             actions_taken.add(38)
             take_action(38)
@@ -77,26 +74,21 @@ def stabilize():
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
-
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
-
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
