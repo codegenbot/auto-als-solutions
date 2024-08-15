@@ -28,11 +28,11 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)
             continue
-        
+
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
-        
+
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
