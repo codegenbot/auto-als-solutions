@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -23,7 +22,7 @@ def stabilize():
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-
+        
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
@@ -47,12 +46,16 @@ def stabilize():
             take_action(next_essential_measurement_action())
             continue
 
-        if events[3] == 0:
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
+            if events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -67,38 +70,27 @@ def stabilize():
             take_action(15)
             continue
 
-        if vitals["MAP"] is None:
-            take_action(27)
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
             continue
 
-        if vitals["RR"] is None:
-            take_action(25)
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
             continue
 
-        if vitals["HR"] is None:
-            take_action(2)
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
             continue
 
-        if vitals["HR"] and vitals["HR"] > 150:
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(40)
             take_action(41)
             take_action(47)
             take_action(43)
             continue
 
-        if all(
-            [
-                vitals["HR"] and 60 <= vitals["HR"] <= 100,
-                vitals["RR"] and 12 <= vitals["RR"] <= 20,
-                vitals["MAP"] and vitals["MAP"] >= 60,
-                vitals["Sats"] and vitals["Sats"] >= 88,
-            ]
-        ):
-            take_action(48)
-            break
-
-        take_action(1)
-
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
