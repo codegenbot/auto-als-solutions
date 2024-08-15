@@ -1,38 +1,25 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
-    actions_taken = set()
 
     def take_action(action):
         print(action)
-        actions_taken.add(action)
+        sys.stdout.flush()
 
     required_measurements = [24, 25, 27]
-    examine_actions = [3, 4, 5, 6, 7, 8]
+    actions_taken = set()
 
-    def next_measurement_action():
-        for action in required_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_measurements():
-        return not all(action in actions_taken for action in required_measurements)
-
-    def prioritize_exams():
-        for action in examine_actions:
-            if action not in actions_taken:
-                return action
-    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -43,55 +30,46 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65):
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(17)
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
-            continue
+        if all(v > 0 for v in vital_signs_times):
+            if any(events[i] > 0 for i in range(3, 7)):
+                take_action(3)
+                if events[4] > 0 or events[5] > 0:
+                    take_action(31)
+                elif events[6] > 0:
+                    take_action(32)
+                continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
-            continue
+            if vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)
+                continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
+            if vitals["RR"] is not None and vitals["RR"] < 8:
+                take_action(29)
+                continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)
+                continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        rhythm_events = [27 + i for i in range(len(events[27:40]))]
-        if any(events[i] > 0 for i in rhythm_events if i in [27, 28, 31, 32, 36]):
-            take_action(24)
-            take_action(43)
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            continue
-
-        next_exam = prioritize_exams()
-        if next_exam:
-            take_action(next_exam)
-            continue
+            if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+                take_action(24)
+                take_action(43)
+                continue
+        else:
+            for action in required_measurements:
+                if action not in actions_taken:
+                    take_action(action)
+                    actions_taken.add(action)
+                    break
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
