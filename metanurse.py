@@ -35,63 +35,52 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Attach necessary devices first
         device_action = attach_devices()
         if device_action:
             take_action(device_action)
             continue
 
-        # Detect and treat cardiac arrest
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression immediately
+            take_action(17)
             continue
 
-        # Ensure the airway is clear
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # Use suction catheter for vomit or blood
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # Use airway if tongue obstruction
+                take_action(32)
             continue
 
-        # Ensure oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
-        # Ensure respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag-valve mask
+            take_action(29)
             continue
 
-        # Examine breathing if abnormal
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
-        # Ensure mean arterial pressure is sufficient
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Administer fluids to raise MAP
+            take_action(15)
             continue
 
-        # Detect and treat tachyarrhythmias immediately
-        tachyarrhythmias = [
-            27, 28, 29, 30, 34, 38
-        ]
+        tachyarrhythmias = [27, 28, 29, 30, 34, 38]
         if any(events[i] > 0 for i in tachyarrhythmias):
-            take_action(24)  # Use defibrillator pads
-            take_action(43)  # Defibrillator pace (cardioversion)
+            take_action(24)
+            take_action(43)
             continue
 
-        # Examine circulation if abnormal
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
-        take_action(48)  # Finish action
+        take_action(48)
         break
 
 if __name__ == "__main__":
