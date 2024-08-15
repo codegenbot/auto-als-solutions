@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -9,81 +10,81 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    def get_measurements():
-        if 25 not in actions_taken:
-            return 25
-        if 26 not in actions_taken:
-            return 26
-        if 27 not in actions_taken:
-            return 27
-        if 28 not in actions_taken:
-            return 28
-        return None
+    initial_measurements = [25, 26, 27, 28]
+
+    def next_initial_measurement_action():
+        for action in initial_measurements:
+            if action not in actions_taken:
+                return action
+
+    def needs_initial_measurements():
+        return not all(action in actions_taken for action in initial_measurements)
 
     for step in range(max_steps):
-        observations = list(map(float, sys.stdin.readline().strip().split()))
+        observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
 
-        events, vitals_times, vitals_values = observations[:33], observations[33:40], observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+
         vitals = {
-            "HR": vitals_values[0] if vitals_times[0] > 0 else None,
-            "RR": vitals_values[1] if vitals_times[1] > 0 else None,
-            "MAP": vitals_values[4] if vitals_times[4] > 0 else None,
-            "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
+            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Airway examination
+        if events[7] > 0:
+            take_action(29)
+            continue
+
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
                 take_action(31)
-            if events[6] > 0:
-                take_action(32)
+            elif events[6] > 0:
+                take_action(35)
             continue
 
-        # Ensure vital sign measurements
-        measurement_action = get_measurements()
-        if measurement_action:
-            take_action(measurement_action)
+        if needs_initial_measurements():
+            take_action(next_initial_measurement_action())
             continue
 
-        # Check for critical conditions and address them
-        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
             take_action(17)
             continue
 
-        # Address oxygen saturation if below 88%
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        # Address respiration rate if below 8
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Examine breathing if necessary
-        if any(events[i] > 0 for i in range(7, 14)):
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
-        # Maintain minimum MAP level
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        # Examine circulation if needed
-        if any(events[i] > 0 for i in range(14, 21)):
+        if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
-        # Finish if step limit reached
         if step >= 349:
             take_action(48)
-            break
 
         take_action(0)
+
 
 if __name__ == "__main__":
     stabilize()
