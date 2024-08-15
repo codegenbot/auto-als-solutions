@@ -5,7 +5,7 @@ def stabilize():
     actions_taken = set()
 
     def take_action(action):
-        if action not in actions_taken:  # Ensure an action isn't repeated unnecessarily 
+        if action not in actions_taken:
             print(action)
             actions_taken.add(action)
             sys.stdout.flush()
@@ -49,12 +49,12 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compressions for cardiac arrest
+            take_action(17)
             continue
         
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(1)  # CheckSignsOfLife
-            take_action(2)  # CheckRhythm
+            take_action(1)
+            take_action(2)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -72,10 +72,10 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give IV Fluids
+            take_action(15)
             continue
         
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
