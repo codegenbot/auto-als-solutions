@@ -1,41 +1,16 @@
 import sys
 
-ACTIONS = {
-    "DoNothing": 0,
-    "CheckSignsOfLife": 1,
-    "CheckRhythm": 2,
-    "ExamineAirway": 3,
-    "ExamineBreathing": 4,
-    "ExamineCirculation": 5,
-    "ExamineDisability": 6,
-    "ExamineExposure": 7,
-    "ExamineResponse": 8,
-    "UseYankeurSuctionCatheter": 31,
-    "UseGuedelAirway": 32,
-    "UseBagValveMask": 29,
-    "UseNonRebreatherMask": 30,
-    "GiveFluids": 15,
-    "UseMonitorPads": 24,
-    "StartChestCompression": 17,
-    "UseSatsProbe": 25,
-    "UseBloodPressureCuff": 27,
-    "Finish": 48
-}
-
 def stabilize():
     def take_action(action):
-        print(ACTIONS[action])
+        print(action)
         sys.stdout.flush()
 
-    first_checks = ["UseSatsProbe", "UseBloodPressureCuff"]
-    examine_order = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure"]
+    steps = 350
 
-    actions_taken = set()
-
-    for step in range(350):
+    for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action("DoNothing")
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -49,52 +24,60 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action("StartChestCompression")
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)  # StartChestCompression
             continue
 
-        for check in first_checks:
-            if check not in actions_taken:
-                actions_taken.add(check)
-                take_action(check)
+        if vitals["Sats"] is None:
+            take_action(25)  # UseSatsProbe
+            continue
+        elif vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RR"] is None:
+            take_action(4)  # ExamineBreathing
+            continue
+        elif vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+        elif vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        if vitals["HR"] is None:
+            take_action(5)  # ExamineCirculation
+            continue
+        elif vitals["HR"] > 150:
+            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
+            continue
+
+        ABCDE_steps = [
+            {"action": 3, "conditions": [3, 4, 5, 6]},  # Airway
+            {"action": 4, "conditions": [7, 8, 9, 10, 11, 12, 13, 14]},  # Breathing
+            {"action": 5, "conditions": [15, 16, 17, 18, 19]},  # Circulation
+            {"action": 6, "conditions": [20, 21, 22, 23, 24]},  # Disability
+            {"action": 7, "conditions": [25, 26, 27, 28, 29, 30, 31, 32]},  # Exposure
+        ]
+
+        action_taken = False
+        for step in ABCDE_steps:
+            action = step["action"]
+            conditions = step["conditions"]
+            if any(events[i] > 0 for i in conditions):
+                take_action(action)
+                action_taken = True
                 break
 
-        if vitals["Sats"] is None or vitals["MAP"] is None:
-            continue
-
-        if vitals["Sats"] < 88:
-            take_action("UseNonRebreatherMask")
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action("UseBagValveMask")
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action("GiveFluids")
-            continue
-
-        for exam in examine_order:
-            if exam not in actions_taken:
-                actions_taken.add(exam)
-                take_action(exam)
-                break
-
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action("ExamineAirway")
-            continue
-        if events[5] > 0:  # AirwayVomit
-            take_action("UseYankeurSuctionCatheter")
-            continue
-        if events[6] > 0:  # AirwayTongue
-            take_action("UseGuedelAirway")
-            continue
-        if events[7] > 0:  # BreathingNone
-            take_action("UseBagValveMask")
-            continue
-
-        take_action("Finish")
-        break
+        if not action_taken:
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
