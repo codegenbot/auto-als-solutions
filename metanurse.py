@@ -19,7 +19,7 @@ def stabilize():
                 return action
 
     def has_unstable_tachyarrhythmia(events):
-        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
+        arrhythmia_events = [28, 29, 30, 31, 32, 33, 34, 35, 36]
         return any(events[i] > 0 for i in arrhythmia_events)
     
     for step in range(max_steps):
