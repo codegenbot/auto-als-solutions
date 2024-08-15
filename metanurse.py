@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    examine_order = [3, 4, 5, 6, 7, 8]  # ExamineAirway, ExamineBreathing, ...
+    examine_order = [3, 4, 5, 6, 7, 8]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
