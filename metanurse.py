@@ -53,33 +53,47 @@ def stabilize():
                 take_action(15)
             continue
 
-        if 3 not in actions_taken:
-            actions_taken.add(3)
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
-
-        if 4 not in actions_taken:
-            actions_taken.add(4)
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-
-        if 5 not in actions_taken:
-            actions_taken.add(5)
-            take_action(5)
+        if any(events[i] > 0 for i in range(15, 20)):
+            if events[30] > 0 or events[32] > 0:
+                take_action(9)
+            else:
+                take_action(5)
             continue
-
-        if 6 not in actions_taken:
-            actions_taken.add(6)
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
-
-        if 7 not in actions_taken:
-            actions_taken.add(7)
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
 
-        take_action(48)
-        break
+        if all([vitals["Sats"] >= 88, vitals["RR"] >= 8, vitals["MAP"] >= 60]):
+            take_action(48)
+            break
+
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
