@@ -21,7 +21,7 @@ def stabilize():
         vitals = {
             "RespRate": get_vital_sign(1),
             "MAP": get_vital_sign(4),
-            "Sats": get_vital_sign(5)
+            "Sats": get_vital_sign(5),
         }
 
         if 25 not in actions_taken: take_action(25); continue  # UseSatsProbe
@@ -34,17 +34,22 @@ def stabilize():
         if vitals["MAP"] is None: take_action(38); continue  # Take Blood Pressure
 
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)  # Examine Airway
+            take_action(3);  # Examine Airway
             if events[5] > 0: take_action(31); continue  # Use Yankeur Suction Catheter
             if events[6] > 0: take_action(36); continue  # Perform Head-Tilt Chin-Lift
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88: take_action(30); continue  # Use Non-Rebreather Mask
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8: take_action(29); continue  # Use Bag-Valve Mask
         if any(events[i] > 0 for i in [7, 11, 12, 13, 14]):
-            take_action(4)  # Examine Breathing
+            take_action(4);  # Examine Breathing
             if events[7] > 0: take_action(29); continue  # Use Bag-Valve Mask
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60: take_action(15); continue  # Give Fluids
+        if 39 in actions_taken:
+            if any(events[i] > 0 for i in [28, 32, 33, 34, 35, 37, 38, 41]):
+                take_action(24); continue  # UseMonitorPads
+            else:
+                take_action(40); continue  # DefibrillatorCharge
 
         take_action(48)  # Finish
 
