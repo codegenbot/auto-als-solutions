@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,20 +25,22 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            take_action(25)  # UseSatsProbe
+        if vital_signs_times[1] == 0 and 4 not in actions_taken:
+            take_action(4)  # ExamineBreathing
             continue
 
-        if vitals["MAP"] is None and 27 not in actions_taken:
+        if vital_signs_times[4] == 0 and 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
             continue
-
+        
+        if vital_signs_times[5] == 0 and 25 not in actions_taken:
+            take_action(25)  # UseSatsProbe
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -59,7 +60,7 @@ def stabilize():
             if events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
-
+        
         if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
             take_action(4)  # ExamineBreathing
             if events[7] > 0:
@@ -68,8 +69,12 @@ def stabilize():
                 take_action(30)  # UseNonRebreatherMask
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
+        if any(events[i] in (1, 29, 30, 31, 32, 33, 34, 35, 36) for i in range(28, 39)):  # Circulation events indicating arrhythmias
+            take_action(2)  # CheckRhythm
+            if events[30] > 0 or events[32] > 0:  # SVT, VT cases
+                take_action(10)  # GiveAdrenaline
+            if events[34] > 0:  # VF case
+                take_action(24)  # UseMonitorPads
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):  # Disability events
@@ -81,7 +86,6 @@ def stabilize():
             continue
 
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
