@@ -1,15 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     def evaluate_critical(vitals):
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             return True
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -93,8 +90,6 @@ def stabilize():
             continue
 
         take_action(48)
-        break
-
 
 if __name__ == "__main__":
     stabilize()
