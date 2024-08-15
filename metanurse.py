@@ -23,12 +23,10 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Step 1: Check critical conditions for cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Step 2: Ensure all vitals are measured
         if vitals["MAP"] is None:
             take_action(27)  # UseBloodPressureCuff
             continue
@@ -37,16 +35,14 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
-        # Step 3: Airway assessment and actions
         if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
             take_action(3)  # ExamineAirway
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter (vomit or blood)
+                take_action(31)  # UseYankeurSucionCatheter
             elif events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
 
-        # Step 4: Breathing assessment and actions
         if events[7] > 0 or events[8] > 0 or events[9] > 0 or events[10] > 0 or events[11] > 0 or events[12] > 0 or events[13] > 0 or events[14] > 0:
             take_action(4)  # ExamineBreathing
             if events[7] > 0:
@@ -63,7 +59,6 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Step 5: Circulation assessment and actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
