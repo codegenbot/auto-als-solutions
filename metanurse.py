@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    assessments = [("A", 3, "Airway"), ("B", 4, "Breathing"), ("C", 5, "Circulation"), ("D", 6, "Disability"), ("E", 7, "Exposure")]
+    critical_events = set(range(26, 33))  # Events indicating rhythm
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -28,67 +28,53 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 actions_taken.add(25)
-                take_action(25)
-            elif 30 not in actions_taken:
-                actions_taken.add(30)
-                take_action(30)
+                take_action(25)  # Use Sats Probe
             else:
-                take_action(29)
+                take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
-                take_action(27)
+                take_action(27)  # Use Blood Pressure Cuff
             else:
-                take_action(15)
+                take_action(15)  # Give Fluids
             continue
 
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
-        if 38 not in actions_taken:
-            actions_taken.add(38)
-            take_action(38)
+        if any(events[i] > 0 for i in critical_events):
+            take_action(2)  # Check Rhythm
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            continue
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            continue
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
+        examinations = [(27, 38), (25, 16), (16, 5), (38, 3)]
+        for action1, action2 in examinations:
+            if action1 not in actions_taken:
+                actions_taken.add(action1)
+                take_action(action1)
+                break
+            elif action2 not in actions_taken:
+                actions_taken.add(action2)
+                take_action(action2)
+                break
+        else:
+            if any(events[i] > 0 for i in range(3, 7)):
+                take_action(3)  # Examine Airway
+                continue
+            if any(events[i] > 0 for i in range(7, 15)):
+                take_action(4)  # Examine Breathing
+                continue
 
-        take_action(48)
-        break
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
