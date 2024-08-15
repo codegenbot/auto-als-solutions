@@ -36,7 +36,7 @@ def stabilize():
         if step < len(initial_actions):
             take_action(initial_actions[step])
             continue
-        
+
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if any(events[i] > 0 for i in [4, 5]):
@@ -44,19 +44,19 @@ def stabilize():
             elif events[6] > 0:
                 take_action(32)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
