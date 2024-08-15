@@ -4,7 +4,7 @@ def stabilize():
     max_steps = 350
     actions_taken = set()
 
-    def take_action(action, actions_taken):
+    def take_action(action):
         print(action)
         actions_taken.add(action)
 
@@ -39,44 +39,44 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17, actions_taken)
+            take_action(17)
             continue
 
         if needs_initial_measurements():
-            take_action(next_initial_measurement_action(), actions_taken)
+            take_action(next_initial_measurement_action())
             continue
 
         # Airway
         if not any(events[i] > 0 for i in range(3, 7)):
-            take_action(3, actions_taken)
+            take_action(3)
             continue
         
         if events[4] > 0 or events[5] > 0:
-            take_action(31, actions_taken)
+            take_action(31)
             continue
         if events[6] > 0:
-            take_action(32, actions_taken)
+            take_action(32)
             continue
         
         # Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 30 not in actions_taken:
-                take_action(30, actions_taken)
+                take_action(30)
                 continue
         
         if vitals["RR"] is not None and vitals["RR"] < 8:
             if 29 not in actions_taken:
-                take_action(29, actions_taken)
+                take_action(29)
                 continue
 
         if not any(events[i] > 0 for i in range(7, 15)):
-            take_action(4, actions_taken)
+            take_action(4)
             continue
 
         # Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 15 not in actions_taken:
-                take_action(15, actions_taken)
+                take_action(15)
                 continue
 
         tachyarrhythmias = [
@@ -84,26 +84,26 @@ def stabilize():
             "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
         ]
         if any(events[27 + i] > 0 for i in range(len(tachyarrhythmias))):
-            take_action(24, actions_taken)
-            take_action(47, actions_taken)
-            take_action(43, actions_taken)
+            take_action(24)
+            take_action(47)
+            take_action(43)
             continue
 
         if not any(events[i] > 0 for i in range(15, 20)):
-            take_action(5, actions_taken)
+            take_action(5)
             continue
 
         # Disability
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6, actions_taken)
+            take_action(6)
             continue
 
         # Exposure
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7, actions_taken)
+            take_action(7)
             continue
 
-        take_action(48, actions_taken)
+        take_action(48)
         break
 
 if __name__ == "__main__":
