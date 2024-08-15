@@ -36,67 +36,59 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Check for cardiac arrest conditions first
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # Start chest compression
+            take_action(17)
             continue
 
-        # Ensure essential measurements are taken
         if needs_essential_measurements():
             take_action(next_essential_measurement_action())
             continue
 
-        # Start ABCDE algorithm
-        # A – Airway
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             if events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
-        # B – Breathing
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # C – Circulation
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
-        # D – Disability
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
 
-        # E – Exposure
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
 
         if vitals["HR"] and vitals["HR"] > 150:
-            take_action(40)  # DefibrillatorCharge
-            take_action(47)  # DefibrillatorSync
-            take_action(43)  # DefibrillatorPace
+            take_action(40)
+            take_action(47)
+            take_action(43)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
