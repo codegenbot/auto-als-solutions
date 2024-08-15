@@ -1,33 +1,21 @@
 import sys
 
 def stabilize():
-    max_steps = 350
-    actions_taken = set()
-
     def take_action(action):
         print(action)
-        actions_taken.add(action)
+        sys.stdout.flush()
 
-    initial_measurements = [24, 25, 27, 26]
+    essential_measurements = [24, 25, 27, 26]
+    observed_measurements = set()
 
-    def next_initial_measurement_action():
-        for action in initial_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_initial_measurements():
-        return not all(action in actions_taken for action in initial_measurements)
-
-    for step in range(max_steps):
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
 
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -36,45 +24,61 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)
-            take_action(23)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # StartChestCompression
             continue
 
-        if needs_initial_measurements():
-            take_action(next_initial_measurement_action())
+        if not observed_measurements.issuperset(essential_measurements):
+            for action in essential_measurements:
+                if action not in observed_measurements:
+                    observed_measurements.add(action)
+                    take_action(action)
+                    break
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+            take_action(3)  # ExamineAirway
+            if events[5] > 0:
+                take_action(31)  # UseYankeurSucionCatheter
+            if events[6] > 0:
+                take_action(32)  # UseGuedelAirway
             continue
 
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+            take_action(4)  # ExamineBreathing
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+            take_action(5)  # ExamineCirculation
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
+            take_action(6)  # ExamineDisability
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
+            take_action(7)  # ExamineExposure
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)
-            take_action(41)
-            take_action(47)
-            take_action(43)
+            take_action(40)  # DefibrillatorCharge
+            take_action(47)  # DefibrillatorSync
+            take_action(43)  # DefibrillatorPace
             continue
 
-        if all(v is not None and vitals[v] >= thresholds[v] for v, thresholds in {
-            "MAP": 60,
-            "Sats": 88,
-            "RR": 8,
-        }.items()):
-            take_action(48)
-            break
-        
-        take_action(0)
+    take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
