@@ -7,8 +7,9 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
+        sys.stdout.flush()
 
-    required_measurements = {24, 25, 27}
+    required_measurements = {25, 27, 24}
 
     def needs_measurements():
         return not required_measurements.issubset(actions_taken)
@@ -17,17 +18,6 @@ def stabilize():
         for action in required_measurements:
             if action not in actions_taken:
                 return action
-
-    actions = { 
-        "unstable_tachycardia": [24, 40, 47], 
-        "open_airway": 36, 
-        "suction_airway": 31,
-        "non_rebreather": 30,
-        "bag_mask": 29,
-        "give_fluids": 15,
-        "start_compressions": 17,
-        "finish": 48 
-    }
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -46,55 +36,53 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(actions["start_compressions"])
+            take_action(17)
             continue
 
         if needs_measurements():
             take_action(next_measurement_action())
             continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(actions["give_fluids"])
-            if any(events[i] > 0 for i in range(31, 39)):
-                for action in actions["unstable_tachycardia"]:
-                    if action not in actions_taken:
-                        take_action(action)
-                        break
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(actions["non_rebreather"])
-            continue
-
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(actions["bag_mask"])
-            continue
 
         if any(events[i] > 0 for i in [4, 5, 6]):
             take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(actions["suction_airway"])
+            if events[5] > 0:
+                take_action(31)
             elif events[6] > 0:
-                take_action(actions["open_airway"])
+                take_action(36)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+        elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(4)
             if events[7] > 0:
-                take_action(actions["bag_mask"])
-            if events[13] > 0:
-                take_action(5)
+                take_action(29)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if any(events[i] > 0 for i in range(31, 39)):
+                if 24 not in actions_taken:
+                    take_action(24)
+                elif 40 not in actions_taken:
+                    take_action(40)
+                elif 47 not in actions_taken:
+                    take_action(47)
+                else:
+                    take_action(48)
+            else:
+                take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
             take_action(8)
             continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] >= 88) and \
-           (vitals["RespRate"] is not None and vitals["RespRate"] >= 8) and \
-           (vitals["MAP"] is not None and vitals["MAP"] >= 60):
-            take_action(actions["finish"])
-            break
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
