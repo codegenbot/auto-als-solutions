@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [24, 25, 27, 38, 2]
+    required_measurements = [16, 25, 27]
 
     def next_measurement_action():
         for action in required_measurements:
@@ -25,7 +25,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -69,19 +69,17 @@ def stabilize():
             take_action(15)
             continue
 
-        tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
-        ]
-        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)
+        if any(events[i] > 0 for i in [28, 31, 32, 34]):
+            if 24 not in actions_taken:
+                take_action(24)
+                continue
             take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-
+        
         take_action(48)
         break
 
