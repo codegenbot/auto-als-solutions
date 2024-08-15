@@ -1,37 +1,14 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    step_count = 0
 
-    def perform_abcde(vitals, actions_taken):
-        if "airway" not in actions_taken:
-            take_action(3)
-            actions_taken.add("airway")
-            return True
-        if vitals["RR"] is None and "asked_breathing" not in actions_taken:
-            take_action(4)
-            actions_taken.add("asked_breathing")
-            return True
-        if vitals["MAP"] is None and "attached_bp_cuff" not in actions_taken:
-            take_action(27)
-            actions_taken.add("attached_bp_cuff")
-            return True
-        if vitals["MAP"] is None and "viewed_monitor" not in actions_taken:
-            take_action(16)
-            actions_taken.add("viewed_monitor")
-            return True
-        if vitals["Sats"] is None and "attached_sats_probe" not in actions_taken:
-            take_action(25)
-            actions_taken.add("attached_sats_probe")
-            return True
-        return False
-    
-    while step_count < 350:
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -49,15 +26,17 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
-        
-        if perform_abcde(vitals, actions_taken):
-            continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 25 not in actions_taken:
+                actions_taken.add(25)
+                take_action(25)
+            else:
+                take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -65,20 +44,53 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            if 27 not in actions_taken:
+                actions_taken.add(27)
+                take_action(27)
+            else:
+                take_action(15)
             continue
-        
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)  # DefibrillatorCharge
-            take_action(17)  # Start chest compressions
-            take_action(10)  # GiveAdrenaline
-            take_action(44)  # DefibrillatorPacePause
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(2)
+            continue
+
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            continue
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            continue
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            continue
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
             continue
 
         take_action(48)
         break
 
-        step_count += 1
 
 if __name__ == "__main__":
     stabilize()
