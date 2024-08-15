@@ -2,17 +2,23 @@ import sys
 
 def stabilize():
     max_steps = 350
-
-    actions_taken = {
-        'sats_probe_used': False,
-        'aline_used': False,
-        'bp_cuff_used': False,
-        'monitor_used': False
-    }
+    actions_taken = set()
 
     def take_action(action):
-        print(action)
-        sys.stdout.flush()
+        print(action, flush=True)
+        actions_taken.add(action)
+
+    def ensure_measurements():
+        if 25 not in actions_taken:
+            take_action(25)
+            return True
+        if 26 not in actions_taken:
+            take_action(26)
+            return True
+        if 27 not in actions_taken:
+            take_action(27)
+            return True
+        return False
 
     for step in range(max_steps):
         observations = list(map(float, sys.stdin.readline().strip().split()))
@@ -27,24 +33,18 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
         }
 
-        if not actions_taken['sats_probe_used']:
-            take_action(25)
-            actions_taken['sats_probe_used'] = True
-            continue
-        if not actions_taken['aline_used']:
-            take_action(26)
-            actions_taken['aline_used'] = True
-            continue
-        if not actions_taken['bp_cuff_used']:
-            take_action(27)
-            actions_taken['bp_cuff_used'] = True
-            continue
-        if not actions_taken['monitor_used']:
-            take_action(16)
-            actions_taken['monitor_used'] = True
+        # Address critical conditions immediately
+        if vitals["RR"] is None and any(events[i] > 0 for i in range(7, 14)):
+            take_action(4)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+        if vitals["RR"] == 0:
+            take_action(29)
+            if vitals["HR"] and vitals["HR"] == 0:
+                take_action(17)
+            continue
+
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
@@ -56,6 +56,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Airway examination
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
@@ -64,19 +65,26 @@ def stabilize():
                 take_action(32)
             continue
 
-        if any(events[i] > 0 for i in range(7, 14)):
-            take_action(4)
+        # Ensure vital sign measurements
+        if ensure_measurements():
             continue
 
+        # Maintain minimum MAP level
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(14, 21)):
-            take_action(5)
+        # Circulation/Exposure/Disability if needed
+        if any(events[i] > 0 for i in range(7, 21)):
+            if any(events[i] > 0 for i in range(14, 21)):
+                take_action(5)
+            elif any(events[i] > 0 for i in range(21, 28)):
+                take_action(6)
+            elif any(events[i] > 0 for i in range(28, 33)):
+                take_action(7)
             continue
 
-        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
+        if step >= 349:
             take_action(48)
             break
 
