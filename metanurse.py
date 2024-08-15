@@ -4,15 +4,14 @@ def stabilize():
     max_steps = 350
     steps_taken = 0
     actions_taken = set()
-    measured = {"HR": False, "RR": False, "MAP": False, "Sats": False}
-    
+
     def take_action(action):
         nonlocal steps_taken
         print(action)
         steps_taken += 1
         actions_taken.add(action)
 
-    actions_order = [24, 25, 27, 26, 18, 19, 20, 21, 35, 36, 37]  # Initialization actions in correct order
+    initial_actions = [24, 25, 27, 26, 18, 19, 20, 21]
 
     while steps_taken < max_steps:
         observations = list(map(float, input().strip().split()))
@@ -27,19 +26,16 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_time[5] > 0 else None,
         }
 
-        # Perform initialization actions
-        if steps_taken < len(actions_order):
-            if steps_taken < len(actions_order) and actions_order[steps_taken] not in actions_taken:
-                take_action(actions_order[steps_taken])
+        if any(vitals[m] is None for m in ["RR", "MAP", "Sats"]) and steps_taken < len(initial_actions):
+            if initial_actions[steps_taken] not in actions_taken:
+                take_action(initial_actions[steps_taken])
             continue
 
-        # Check for cardiac arrest conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             take_action(23)
             continue
 
-        # Stabilization checks and actions
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -76,7 +72,6 @@ def stabilize():
             take_action(7)
             continue
 
-        # If all stabilization criteria met, finish
         take_action(48)
         break
 
