@@ -1,21 +1,16 @@
 import sys
-import math
-
 
 def stabilize():
     max_steps = 350
     step = 0
     actions_taken = set()
+    check_interval = 10
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [
-        24,
-        25,
-        27,
-    ]  # UseMonitorPads, UseSatsProbe, UseBloodPressureCuff
+    required_measurements = [24, 25, 27]  # UseMonitorPads, UseSatsProbe, UseBloodPressureCuff
 
     def next_measurement_action():
         for action in required_measurements:
@@ -34,17 +29,14 @@ def stabilize():
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
-        def valid_vital(index):
-            return vital_signs_times[index] > 0
-
         vitals = {
-            "HR": vital_signs_values[0] if valid_vital(0) else None,
-            "RR": vital_signs_values[1] if valid_vital(1) else None,
-            "MAP": vital_signs_values[4] if valid_vital(4) else None,
-            "Sats": vital_signs_values[5] if valid_vital(5) else None,
+            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
+            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Immediate critical interventions
+        # Immediate cardiac arrest intervention
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
@@ -52,7 +44,14 @@ def stabilize():
             step += 1
             continue
 
-        # Ensure critical measurements
+        # Recheck measurements at set intervals
+        if step % check_interval == 0 and step != 0:
+            if needs_measurements():
+                take_action(next_measurement_action())
+                step += 1
+                continue
+
+        # Ensure measurements are taken initially
         if needs_measurements():
             take_action(next_measurement_action())
             step += 1
@@ -68,10 +67,8 @@ def stabilize():
             step += 1
             continue
 
-        # Breathing
-        if (vitals["Sats"] is not None and vitals["Sats"] < 88) or (
-            vitals["RR"] is not None and vitals["RR"] < 8
-        ):
+        # Breathing - stabilize before moving to the next steps
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88) or (vitals["RR"] is not None and vitals["RR"] < 8):
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
                 take_action(30)  # Use non-rebreather mask
             if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -90,18 +87,10 @@ def stabilize():
             step += 1
             continue
 
-        tachyarrhythmias = [
-            events[28],
-            events[30],
-            events[31],
-            events[32],
-            events[34],
-            events[36],
-        ]
-        if any(tachyarrhythmias):
-            take_action(24)  # Use monitor pads
-            take_action(41)  # Defibrillator current up
-            take_action(43)  # Defibrillator pace
+        tachyarrhythmias = [27, 28, 29, 30, 33, 35]
+        if any(events[i] > 0 for i in tachyarrhythmias):
+            take_action(28)  # Attach Defib Pads
+            take_action(43)  # Defibrillator Pace
             step += 1
             continue
 
@@ -109,13 +98,13 @@ def stabilize():
             take_action(5)  # Examine circulation
             step += 1
             continue
-
+        
         # Disability
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)  # Examine disability
             step += 1
             continue
-
+            
         # Exposure
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine exposure
@@ -123,11 +112,11 @@ def stabilize():
             continue
 
         # If we have checked all and stabilized, finish
-        take_action(48)  # Finish scenario
-        break
+        if all(v is not None and (vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60) for v in vitals.values()):
+            take_action(48)  # Finish scenario
+            break
 
         step += 1
-
 
 if __name__ == "__main__":
     stabilize()
