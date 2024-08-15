@@ -46,9 +46,9 @@ def stabilize():
 
         if any(events[i] > 0 for i in heart_rhythm_indices if heart_rhythm_events[i - 27] != "HeartRhythmNSR"):
             take_action(28)
-            take_action(40)
-            take_action(43)
-            take_action(41)
+            take_action(40)  # Charge defibrillator
+            take_action(43)  # Pace defibrillator
+            take_action(41)  # Increase current
             continue
         
         if 27 not in actions_taken:
