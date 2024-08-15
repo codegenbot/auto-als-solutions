@@ -4,11 +4,10 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     actions_taken = set()
-    mandatory_actions = [27, 25, 38, 25]  # UseBloodPressureCuff, UseSatsProbe, TakeBloodPressure, UseSatsProbe
-    examine_order = [3, 4, 5, 6, 7, 8]
-
+    initial_checks = [27, 25, 3, 4, 5, 6, 7, 8]  # UseBloodPressureCuff, UseSatsProbe, Examine(Airway, Breathing, Circulation, Disability, Exposure, Response)
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -42,56 +41,51 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
-            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
-            continue
-
-        for action in mandatory_actions:
-            if action not in actions_taken:
-                actions_taken.add(action)
-                take_action(action)
+        for check in initial_checks:
+            if check not in actions_taken:
+                actions_taken.add(check)
+                take_action(check)
                 break
         else:
-            for exam in examine_order:
-                if exam not in actions_taken:
-                    actions_taken.add(exam)
-                    take_action(exam)
-                    break
+            if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+                take_action(3)  # ExamineAirway
+                continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
-            continue
+            if events[5] > 0:  # AirwayVomit
+                take_action(31)  # UseYankeurSuctionCatheter
+                continue
+            if events[6] > 0:  # AirwayTongue
+                take_action(32)  # UseGuedelAirway
+                continue
 
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSuctionCatheter
-            continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
-            continue
+            if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+                take_action(4)  # ExamineBreathing
+                continue
+            if events[7] > 0:  # BreathingNone
+                take_action(29)  # UseBagValveMask
+                continue
+            if events[14] > 0:  # BreathingPneumothoraxSymptoms
+                take_action(19)  # OpenBreathingDrawer
+                continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
-            continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
-            continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
-            continue
+            if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
+                take_action(24)  # UseMonitorPads (for synchronized cardioversion)
+                continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
-            continue
+            if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+                take_action(5)  # ExamineCirculation
+                continue
 
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
-            continue
+            if any(events[i] > 0 for i in range(20, 26)):  # Disability events
+                take_action(6)  # ExamineDisability
+                continue
 
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
-            continue
+            if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
+                take_action(7)  # ExamineExposure
+                continue
 
-        take_action(0)  # DoNothing
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
