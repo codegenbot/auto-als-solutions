@@ -64,10 +64,10 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
-        if events[15] > 0: # VentilationResistance
+        if events[15] > 0:  # VentilationResistance
             take_action(2)  # CheckRhythm
             continue
-        if events[20] > 0: # HeartSoundsMuffled
+        if events[20] > 0:  # HeartSoundsMuffled
             take_action(40)  # DefibrillatorCharge
             continue
             
