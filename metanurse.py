@@ -3,7 +3,6 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    next_action = 0
     
     def take_action(action):
         print(action)
@@ -14,59 +13,59 @@ def stabilize():
         if len(observations) != 53:
             continue
         
-        events, vital_signs_times, vital_signs_values = (observations[:33], observations[33:40], observations[40:])
-        vital_signs = {
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
+        vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vital_signs["MAP"] is not None and vital_signs["MAP"] < 20) or (vital_signs["Sats"] is not None and vital_signs["Sats"] < 65):
-            take_action(17)  # Start Chest Compression
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+            take_action(17)
             continue
-        
+
         if 24 not in actions_taken:
-            take_action(24)  # Use Monitor Pads
+            take_action(24)
             continue
-        
+
         if 27 not in actions_taken:
-            take_action(27)  # Use BP Cuff
+            take_action(27)
             continue
             
         if 25 not in actions_taken:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # Use Yankeur Suction
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # Use Guedel Airway
+                take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
+            take_action(4)
             continue
         
-        if vital_signs["Sats"] is not None and vital_signs["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
-        if vital_signs["RR"] is not None and vital_signs["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
+            take_action(5)
             continue
 
-        if vital_signs["MAP"] is not None and vital_signs["MAP"] < 60:
-            take_action(15)  # Give Fluids
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
