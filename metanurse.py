@@ -1,32 +1,39 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examine_actions = [3, 4, 5, 6, 7]
-    measure_actions = [27, 25, 26, 16]
-
     def evaluate_critical(vitals):
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)
             return True
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             return True
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             return True
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             return True
         return False
 
-    for step in range(350):
+    initiate_series = [27, 25, 26, 16]
+    exam_series = [3, 4, 5, 6, 7]
+
+    for measurement in initiate_series:
+        take_action(measurement)
+        sys.stdin.read()
+
+    for step in range(345):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -45,19 +52,49 @@ def stabilize():
         if evaluate_critical(vitals):
             continue
 
-        if all(v in vitals and vitals[v] is not None for v in ["Sats", "RR", "MAP"]):
-            take_action(48)  # Finish
-            break
+        measurements_taken = set()
 
-        for action in measure_actions:
-            measure_actions.remove(action)
-            take_action(action)
-            break
+        for exam in exam_series:
+            if exam not in measurements_taken:
+                measurements_taken.add(exam)
+                take_action(exam)
+                sys.stdin.read()
+                break
 
-        for action in examine_actions:
-            examine_actions.remove(action)
-            take_action(action)
-            break
+        if events[5] > 0:
+            take_action(31)
+            continue
+        if events[6] > 0:
+            take_action(32)
+            continue
+        if any(events[3:7]):
+            take_action(3)
+            continue
+        if any(events[7:15]):
+            take_action(4)
+            continue
+        if events[7] > 0:
+            take_action(29)
+            continue
+        if events[14] > 0:
+            take_action(19)
+            continue
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(24)
+            continue
+        if any(events[15:20]):
+            take_action(5)
+            continue
+        if any(events[20:26]):
+            take_action(6)
+            continue
+        if any(events[26:33]):
+            take_action(7)
+            continue
+
+        take_action(48)
+        break
+
 
 if __name__ == "__main__":
     stabilize()
