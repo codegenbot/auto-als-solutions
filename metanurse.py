@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [16, 25, 27]
+    required_measurements = [24, 25, 27]
 
     def next_measurement_action():
         for action in required_measurements:
@@ -35,50 +35,51 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
-            continue
-
+        # Handle Emergency Conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
-
+        
+        # Check if all necessary measurements have been taken
         if needs_measurements():
             take_action(next_measurement_action())
             continue
-
-        if vitals["Sats"] is None:
-            take_action(25)
-            take_action(4)
+        
+        # A - Airway
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)  # ExamineAirway
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)  # UseYankeurSucionCatheter
+            elif events[6] > 0:
+                take_action(32)  # UseGuedelAirway
             continue
-
+        
+        # B - Breathing
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
-
+        
+        # C - Circulation
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        if (vitals["HR"] is not None and
-            (events[27] > 0 or events[28] > 0 or events[29] > 0 or
-             events[30] > 0 or events[31] > 0 or events[32] > 0 or
-             events[33] > 0 or events[34] > 0 or events[35] > 0 or
-             events[36] > 0 or events[37] > 0)):
-            take_action(24)
-            take_action(2)
+        # Electrical issues requiring inspection
+        if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 38)):
+            take_action(24)  # UseMonitorPads
+            take_action(2)  # CheckRhythm
             continue
 
-        take_action(48)
-        break
+        # Final check if stabilized
+        if (vitals["Sats"] is not None and vitals["Sats"] >= 88 and 
+            vitals["RR"] is not None and vitals["RR"] >= 8 and 
+            vitals["MAP"] is not None and vitals["MAP"] >= 60):
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
