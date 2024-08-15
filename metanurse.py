@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
+    examined = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -28,32 +29,38 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if vitals["MAP"] is None and 27 not in actions_taken:
+        if "MAP" not in examined and 27 not in actions_taken:
             actions_taken.add(27)
+            examined.add("MAP")
             take_action(27)  # UseBloodPressureCuff
             continue
 
-        if vitals["Sats"] is None and 25 not in actions_taken:
+        if "Sats" not in examined and 25 not in actions_taken:
             actions_taken.add(25)
+            examined.add("Sats")
             take_action(25)  # UseSatsProbe
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # ExamineAirway
             if events[5] > 0:
                 take_action(31)  # UseYankeurSuctionCatheter
-            elif events[6] > 0:
+            if events[6] > 0:
                 take_action(32)  # UseGuedelAirway
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
+        if "Breathing" not in examined:
+            examined.add("Breathing")
             take_action(4)  # ExamineBreathing
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
             if events[7] > 0:
                 take_action(29)  # UseBagValveMask
-            elif events[14] > 0:
+            if events[14] > 0:
                 take_action(30)  # UseNonRebreatherMask
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -66,15 +73,16 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
+        if "Circulation" not in examined:
+            examined.add("Circulation")
             take_action(5)  # ExamineCirculation
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)  # ExamineDisability
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # ExamineExposure
             continue
 
