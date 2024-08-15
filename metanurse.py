@@ -9,7 +9,6 @@ def stabilize():
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
-        
         if len(observations) != 53:
             take_action(0)
             continue
@@ -49,14 +48,6 @@ def stabilize():
                 take_action(15)
             continue
 
-        if 1 not in actions_taken:
-            actions_taken.add(1)
-            take_action(1)
-            continue
-        if 2 not in actions_taken:
-            actions_taken.add(2)
-            take_action(2)
-            continue
         if 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)
