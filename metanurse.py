@@ -56,18 +56,17 @@ def stabilize():
             {"action": 7, "conditions": [26, 27, 28, 29, 30, 31, 32]},  # Exposure
         ]
 
-        action_taken = False
         for step in ABCDE_steps:
             action = step["action"]
             conditions = step["conditions"]
             if any(events[i] > 0 for i in conditions):
                 take_action(action)
-                action_taken = True
                 break
 
-        if not action_taken:
-            take_action(48)  # Finish
-            break
+        continue
+
+        take_action(48)  # Finish
+        break
 
 
 if __name__ == "__main__":
