@@ -12,7 +12,7 @@ def stabilize():
     initial_measurements_steps = [
         (25, 27, 26, 28)  # UseSatsProbe, UseBloodPressureCuff, UseAline, AttachDefibPads
     ]
-
+    
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements_steps[0])
 
