@@ -44,11 +44,11 @@ def stabilize():
             take_action(17)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
+        if any(events[i] > 0 for i in range(3, 7)):  # Examine Airway actions
             take_action(3)
-            if events[4] > 0 or events[5] > 0:
+            if events[4] > 0 or events[5] > 0:  # Vomit or Blood
                 take_action(31)
-            elif events[6] > 0:
+            elif events[6] > 0:  # Tongue obstruction
                 take_action(32)
             continue
 
@@ -60,7 +60,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Examine Breathing actions
             take_action(4)
             continue
 
@@ -68,13 +68,13 @@ def stabilize():
             take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(27, 33)):
-            take_action(24)
-            take_action(43)
+        if any(events[i] > 0 for i in range(27, 33)):  # Heart Rhythm issues
+            take_action(24)  # UseMonitorPads
+            take_action(43)  # DefibrillatorPacePause --> Pacemaker to stabilize rhythm
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         take_action(48)
