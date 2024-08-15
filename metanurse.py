@@ -53,8 +53,10 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFlidscontinue
+            take_action(15)  # GiveFluids
+            continue
 
+        # Next logical check and actions in the ABCDE steps
         for task in tasks:
             if task not in actions_taken:
                 actions_taken.add(task)
