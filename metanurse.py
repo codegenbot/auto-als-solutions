@@ -1,40 +1,26 @@
 import sys
-import math
-
 
 def stabilize():
     max_steps = 350
-    step = 0
-    actions_taken = set()
+
+    actions_taken = {
+        'sats_probe_used': False,
+        'aline_used': False,
+        'bp_cuff_used': False,
+        'defib_pads_used': False,
+        'monitor_used': False
+    }
 
     def take_action(action):
         print(action)
         sys.stdout.flush()
-        actions_taken.add(action)
 
-    def measure_vitals():
-        if 25 not in actions_taken:
-            return 25
-        if 26 not in actions_taken:
-            return 26
-        if 27 not in actions_taken:
-            return 27
-        if 16 not in actions_taken:
-            return 16
-        return None
-
-    while step < max_steps:
+    for step in range(max_steps):
         observations = list(map(float, sys.stdin.readline().strip().split()))
-        step += 1
-
         if len(observations) != 53:
             continue
 
-        events, vitals_times, vitals_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events, vitals_times, vitals_values = observations[:33], observations[33:40], observations[40:]
         vitals = {
             "HR": vitals_values[0] if vitals_times[0] > 0 else None,
             "RR": vitals_values[1] if vitals_times[1] > 0 else None,
@@ -42,62 +28,63 @@ def stabilize():
             "Sats": vitals_values[5] if vitals_times[5] > 0 else None,
         }
 
-        if (
-            vitals["MAP"] is not None
-            and vitals["MAP"] < 20
-            or vitals["Sats"] is not None
-            and vitals["Sats"] < 65
-        ):
-            take_action(17)  # Start Chest Compression
+        # Step 1: Attach necessary monitoring tools
+        if not actions_taken['sats_probe_used']:
+            take_action(25)
+            actions_taken['sats_probe_used'] = True
+            continue
+        if not actions_taken['aline_used']:
+            take_action(26)
+            actions_taken['aline_used'] = True
+            continue
+        if not actions_taken['bp_cuff_used']:
+            take_action(27)
+            actions_taken['bp_cuff_used'] = True
+            continue
+        if not actions_taken['monitor_used']:
+            take_action(16)
+            actions_taken['monitor_used'] = True
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway issues
-            take_action(3)
-            if any(events[i] > 0 for i in [4, 5, 6]):  # Vomit, Blood, Tongue
-                take_action(31)  # Use Suction
-            elif events[6] > 0:
-                take_action(32)  # Use Guedel Airway
-            continue
-
-        measurement_action = measure_vitals()
-        if measurement_action:
-            take_action(measurement_action)
+        # Step 2: Handle critical conditions
+        if vitals["Sats"] is not None and vitals["Sats"] < 65 or vitals["MAP"] is not None and vitals["MAP"] < 20:
+            take_action(17)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(7, 14)):  # Breathing issues
+        # Step 3: ABCDE assessment
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)
+            if events[6] > 0:
+                take_action(32)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 14)):
             take_action(4)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(14, 21)):  # Circulation issues
+        if any(events[i] > 0 for i in range(14, 21)):
             take_action(5)
             continue
 
-        if (
-            25 in actions_taken
-            and 26 in actions_taken
-            and 27 in actions_taken
-            and 16 in actions_taken
-            and vitals["Sats"] >= 88
-            and vitals["RR"] >= 8
-            and vitals["MAP"] >= 60
-        ):
-            take_action(48)  # Finish
+        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
+            take_action(48)
             break
 
-        take_action(0)  # Do Nothing
-
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
