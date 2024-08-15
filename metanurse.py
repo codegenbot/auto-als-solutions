@@ -1,12 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     initial_measurements = [24, 25, 27, 26, 18, 19, 20, 21, 37]
+    actions_taken = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -14,18 +14,14 @@ def stabilize():
             continue
 
         events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
+            observations[:33], observations[33:40], observations[40:]
         )
-
-        actions_taken = set()
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
@@ -35,7 +31,9 @@ def stabilize():
             continue
 
         if initial_measurements:
-            take_action(initial_measurements.pop(0))
+            next_measurement_action = initial_measurements.pop(0)
+            actions_taken.add(next_measurement_action)
+            take_action(next_measurement_action)
             continue
 
         # Airway
@@ -80,7 +78,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
