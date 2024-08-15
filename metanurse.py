@@ -32,29 +32,29 @@ def stabilize():
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compression
+            take_action(17)
             continue
 
         if vitals["MAP"] is None and 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)  # Use blood pressure cuff
+            take_action(27)
             continue
 
         if vitals["Sats"] is None and 25 not in actions_taken:
             actions_taken.add(25)
-            take_action(25)  # Use sats probe
+            take_action(25)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
 
         for check in critical_checks:
