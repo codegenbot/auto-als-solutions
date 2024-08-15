@@ -35,50 +35,43 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        # Handle Emergency Conditions
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
-        
-        # Check if all necessary measurements have been taken
+
         if needs_measurements():
             take_action(next_measurement_action())
             continue
-        
-        # A - Airway
+
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSucionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
-        
-        # B - Breathing
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
-        
-        # C - Circulation
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        # Electrical issues requiring inspection
         if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 38)):
-            take_action(24)  # UseMonitorPads
-            take_action(2)  # CheckRhythm
+            take_action(24)
+            take_action(2)
             continue
 
-        # Final check if stabilized
         if (vitals["Sats"] is not None and vitals["Sats"] >= 88 and 
             vitals["RR"] is not None and vitals["RR"] >= 8 and 
             vitals["MAP"] is not None and vitals["MAP"] >= 60):
-            take_action(48)  # Finish
+            take_action(48)
             break
 
 if __name__ == "__main__":
