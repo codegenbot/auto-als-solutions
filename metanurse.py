@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    
+
     # Initial checks
     initial_checks = [27, 25]  # Blood Pressure Cuff, Sats Probe
 
@@ -36,7 +37,9 @@ def stabilize():
         }
 
         # Check for critical conditions
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -68,6 +71,7 @@ def stabilize():
         else:
             take_action(48)  # Finish
             break
+
 
 if __name__ == "__main__":
     stabilize()
