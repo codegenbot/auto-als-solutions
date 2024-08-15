@@ -5,6 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    actions_taken = set()
     steps = 350
 
     for step in range(steps):
