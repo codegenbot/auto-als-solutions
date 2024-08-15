@@ -42,16 +42,6 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             continue
 
-        if not examined_vitals["RR"] and vital_signs_times[1] == 0:
-            examined_vitals["RR"] = True
-            take_action(4)  # ExamineBreathing
-            continue
-
-        if not examined_vitals["HR"] and vital_signs_times[0] == 0:
-            examined_vitals["HR"] = True
-            take_action(5)  # ExamineCirculation
-            continue
-
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             continue
@@ -63,7 +53,6 @@ def stabilize():
         if events[7] > 0:
             take_action(29)  # UseBagValveMask
             continue
-        
         if events[14] > 0:
             take_action(19)  # OpenBreathingDrawer
             continue
