@@ -62,8 +62,7 @@ def stabilize():
             take_action(4)  # Examine Breathing
             if events[7] > 0:
                 take_action(29)
-            else:
-                break  # Wait for new input after examining
+            continue
 
         # Circulation check
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
