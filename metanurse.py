@@ -8,7 +8,15 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    initial_actions = [24, 25, 27]
+    required_measurements = [24, 25, 27]
+
+    def next_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
+    def needs_measurements():
+        return not all(action in actions_taken for action in required_measurements)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -33,13 +41,13 @@ def stabilize():
             take_action(17)
             continue
 
-        if step < len(initial_actions):
-            take_action(initial_actions[step])
+        if needs_measurements():
+            take_action(next_measurement_action())
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            if any(events[i] > 0 for i in [4, 5]):
+            if events[4] > 0 or events[5] > 0:
                 take_action(31)
             elif events[6] > 0:
                 take_action(32)
@@ -61,8 +69,11 @@ def stabilize():
             take_action(15)
             continue
 
-        tachyarrhythmias_indices = [27, 28, 29, 30, 34, 35]
-        if any(events[i] > 0 for i in tachyarrhythmias_indices):
+        tachyarrhythmias = [
+            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+        ]
+        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
             take_action(24)
             take_action(43)
             continue
@@ -71,9 +82,8 @@ def stabilize():
             take_action(5)
             continue
 
-        if all(vitals[key] is not None and vitals[key] >= threshold for key, threshold in zip(["MAP", "Sats", "RR"], [60, 88, 8])):
-            take_action(48)
-            break
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
