@@ -3,7 +3,7 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    required_measurements = [24, 25, 27]
+    required_measurements = [24, 25, 27] # MonitorPads, SatsProbe, BP Cuff
 
     def take_action(action):
         print(action)
@@ -38,47 +38,51 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)
+            take_action(17)  # Start chest compression immediately
             continue
 
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
+        # Airway Checks and Actions
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)
+                take_action(31)  # Use suction catheter
             elif events[6] > 0:
-                take_action(32)
+                take_action(32)  # Use guedel airway
             continue
 
+        # Breathing Checks and Actions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag-valve mask
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
 
+        # Circulation Checks and Actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Administer fluids
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
 
+        # Check abnormal heart rhythms
         if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 40)):
             take_action(24)
             take_action(2)
             continue
 
-        take_action(48)
+        take_action(48)  # Finish action
         break
 
 if __name__ == "__main__":
