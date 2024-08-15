@@ -24,10 +24,12 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Check for cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Stabilize saturation levels
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 actions_taken.add(25)
@@ -36,10 +38,12 @@ def stabilize():
                 take_action(30)
             continue
 
+        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
+        # Stabilize MAP (mean arterial pressure)
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
@@ -48,13 +52,14 @@ def stabilize():
                 take_action(15)
             continue
 
-        if 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
+        # Perform examinations ABCDE sequentially
         if 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
+            continue
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
@@ -64,20 +69,24 @@ def stabilize():
             actions_taken.add(38)
             take_action(38)
             continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
+        if 3 not in actions_taken:
+            actions_taken.add(3)
             take_action(3)
             continue
-        if any(events[i] > 0 for i in range(7, 15)):
+        if 4 not in actions_taken:
+            actions_taken.add(4)
             take_action(4)
             continue
-        if any(events[i] > 0 for i in range(15, 20)):
+        if 5 not in actions_taken:
+            actions_taken.add(5)
             take_action(5)
             continue
-        if any(events[i] > 0 for i in range(20, 26)):
+        if 6 not in actions_taken:
+            actions_taken.add(6)
             take_action(6)
             continue
-        if any(events[i] > 0 for i in range(26, 33)):
+        if 7 not in actions_taken:
+            actions_taken.add(7)
             take_action(7)
             continue
 
