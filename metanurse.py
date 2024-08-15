@@ -76,7 +76,6 @@ def stabilize():
             take_action(40)  # DefibrillatorCharge
             take_action(47)  # DefibrillatorSync
             take_action(43)  # DefibrillatorPace
-            continue
 
         take_action(48)  # Finish
         break
