@@ -3,20 +3,13 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
+    state = "initial_measurements"
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
 
-    initial_actions = [16, 25, 27, 26]  # ViewMonitor, UseSatsProbe, UseBloodPressureCuff, UseAline
-
-    def next_initial_action():
-        for action in initial_actions:
-            if action not in actions_taken:
-                return action
-
-    def needs_initial_actions():
-        return not all(action in actions_taken for action in initial_actions)
+    initial_measurements = [24, 25, 27, 26, 18, 19, 20, 21]
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -26,7 +19,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -39,51 +32,61 @@ def stabilize():
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)  # StartChestCompression
-            take_action(23)  # ResumeCPR
+            take_action(17)
             continue
 
-        if needs_initial_actions():
-            take_action(next_initial_action())
+        if state == "initial_measurements":
+            if not all(action in actions_taken for action in initial_measurements):
+                for action in initial_measurements:
+                    if action not in actions_taken:
+                        take_action(action)
+                        break
+            else:
+                state = "airway"
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
-            if events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+        if state == "airway":
+            if any(events[i] > 0 for i in range(3, 7)):
+                if events[4] > 0 or events[5] > 0:
+                    take_action(31)
+                elif events[6] > 0:
+                    take_action(32)
+                state = "breathing"
+            else:
+                take_action(3)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+        if state == "breathing":
+            if vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)
+            elif vitals["RR"] is not None and vitals["RR"] < 8:
+                take_action(29)
+            else:
+                take_action(4)
+                state = "circulation"
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+        if state == "circulation":
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)
+            else:
+                take_action(5)
+                state = "disability"
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+        if state == "disability":
+            if any(events[i] > 0 for i in range(20, 26)):
+                take_action(6)
+            else:
+                state = "exposure"
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
-            continue
-
-    take_action(48)  # Finish
+        if state == "exposure":
+            if any(events[i] > 0 for i in range(26, 33)):
+                take_action(7)
+            else:
+                take_action(48)
+                break
 
 if __name__ == "__main__":
     stabilize()
