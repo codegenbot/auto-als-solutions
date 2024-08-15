@@ -1,80 +1,111 @@
 import sys
+import math
 
 def stabilize():
     max_steps = 350
+    step = 0
+    actions_taken = set()
 
     def take_action(action):
         print(action)
-        sys.stdout.flush()
+        actions_taken.add(action)
 
     required_measurements = [24, 25, 27]
-    actions_taken = set()
 
-    for step in range(max_steps):
+    def next_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
+    def needs_measurements():
+        return not all(action in actions_taken for action in required_measurements)
+
+    while step < max_steps:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
 
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events = observations[:33]
+        vital_signs_times = observations[33:40]
+        vital_signs_values = observations[40:]
+
+        def valid_vital(index):
+            return vital_signs_times[index] > 0
 
         vitals = {
-            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
+            "HR": vital_signs_values[0] if valid_vital(0) else None,
+            "RR": vital_signs_values[1] if valid_vital(1) else None,
+            "MAP": vital_signs_values[4] if valid_vital(4) else None,
+            "Sats": vital_signs_values[5] if valid_vital(5) else None,
         }
 
-        # Check for life-threatening conditions first
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)  # Start chest compressions
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+            take_action(17)
+            step += 1
             continue
 
-        # Request missing measurements
-        for action in required_measurements:
-            if action not in actions_taken:
-                take_action(action)
-                actions_taken.add(action)
-                break
+        if needs_measurements():
+            take_action(next_measurement_action())
+            step += 1
+            continue
 
-        if all(v > 0 for v in vital_signs_times):
-            # Airway
-            if any(events[i] > 0 for i in range(3, 7)):
-                take_action(3)  # Examine Airway
-                if events[4] > 0 or events[5] > 0:
-                    take_action(31)  # Suction
-                elif events[6] > 0:
-                    take_action(32)  # Guedel airway
-                continue
-            
-            # Breathing
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)
+            elif events[6] > 0:
+                take_action(32)
+            step += 1
+            continue
+
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88) or (vitals["RR"] is not None and vitals["RR"] < 8):
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)  # Use non-rebreather mask
-                continue
-
+                take_action(30)
             if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)  # Use bag valve mask
-                continue
+                take_action(29)
+            step += 1
+            continue
 
-            # Circulation
-            if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)  # Give fluids
-                continue
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            step += 1
+            continue
 
-            if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-                take_action(24)  # Use monitor pads
-                take_action(43)  # Defibrillator pace
-                continue
-        else:
-            continue  # Keep taking measurements until all are obtained
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            step += 1
+            continue
 
-        take_action(48)  # Finish
+        tachyarrhythmias = [
+            events[28], events[30], events[31],
+            events[32], events[34], events[36]
+        ]
+        if any(tachyarrhythmias):
+            take_action(24)
+            take_action(41)
+            take_action(43)
+            step += 1
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            step += 1
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            step += 1
+            continue
+            
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            step += 1
+            continue
+
+        take_action(48)
         break
+      
+        step += 1
 
 if __name__ == "__main__":
     stabilize()
