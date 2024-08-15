@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,72 +25,73 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
+                take_action(25)  # UseSatsProbe
                 actions_taken.add(25)
-                take_action(25)
-                continue
-            take_action(30)
+            else:
+                take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
+                take_action(27)  # UseBloodPressureCuff
                 actions_taken.add(27)
-                take_action(27)
-                continue
-            take_action(15)
+            else:
+                take_action(15)  # GiveFluids
             continue
 
         significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(2)
+            take_action(2)  # CheckRhythm
             continue
 
         if 27 not in actions_taken:
+            take_action(27)  # UseBloodPressureCuff
             actions_taken.add(27)
-            take_action(27)
             continue
+
         if 25 not in actions_taken:
+            take_action(25)  # UseSatsProbe
             actions_taken.add(25)
-            take_action(25)
             continue
+
         if 16 not in actions_taken:
+            take_action(16)  # ViewMonitor
             actions_taken.add(16)
-            take_action(16)
             continue
+
         if 38 not in actions_taken:
+            take_action(38)  # TakeBloodPressure
             actions_taken.add(38)
-            take_action(38)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # ExamineAirway
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
+            take_action(5)  # ExamineCirculation
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+            take_action(6)  # ExamineDisability
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # ExamineExposure
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
