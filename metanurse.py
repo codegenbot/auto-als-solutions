@@ -29,14 +29,14 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if any(events[i] > 0 for i in range(28, 37)) and 40 not in actions_taken:
-            actions_taken.add(40)
-            take_action(40)  # DefibrillatorCharge
-            continue
-
-        if 40 in actions_taken and any(events[i] > 0 for i in range(28, 37)):
-            take_action(39)  # TurnOnDefibrillator
-            continue
+        if any(events[i] > 0 for i in range(28, 37)):
+            if 40 not in actions_taken:
+                actions_taken.add(40)
+                take_action(40)  # DefibrillatorCharge
+                continue
+            if 40 in actions_taken:
+                take_action(39)  # TurnOnDefibrillator
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
