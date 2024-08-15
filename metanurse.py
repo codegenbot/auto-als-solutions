@@ -2,91 +2,61 @@ import sys
 
 def stabilize():
     max_steps = 350
-    actions_taken = set()
 
     def take_action(action):
         print(action)
         sys.stdout.flush()
-        actions_taken.add(action)
-
-    initial_measurements = [24, 25, 26, 27]
-
-    def next_initial_measurement_action():
-        for action in initial_measurements:
-            if action not in actions_taken:
-                return action
-
-    def needs_initial_measurements():
-        return not all(action in actions_taken for action in initial_measurements)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
+        
+        events, vitals_time, vitals_value = observations[:33], observations[33:40], observations[40:]
+        
+        HR = vitals_value[0] if vitals_time[0] > 0 else None
+        RR = vitals_value[1] if vitals_time[1] > 0 else None
+        MAP = vitals_value[4] if vitals_time[4] > 0 else None
+        Sats = vitals_value[5] if vitals_time[5] > 0 else None
 
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
-
-        vitals = {
-            "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
-            "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
-        }
-
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
-            take_action(17)
-            take_action(23)
+        if (MAP is not None and MAP < 20) or (Sats is not None and Sats < 65):
+            take_action(17)  # StartChestCompression
+            take_action(23)  # ResumeCPR
             continue
-
-        if needs_initial_measurements():
-            take_action(next_initial_measurement_action())
+        
+        if Sats and Sats < 88:
+            take_action(30)  # UseNonRebreatherMask
             continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            if events[5] > 0:
-                take_action(31)
-            if events[6] > 0:
-                take_action(32)
+        
+        if RR and RR < 8:
+            take_action(29)  # UseBagValveMask
             continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+        
+        if MAP and MAP < 60:
+            take_action(15)  # GiveFluids
             continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        
+        if events[3] > 0 or events[4] > 0 or events[5] > 0 or events[6] > 0:
+            take_action(3)  # ExamineAirway
             continue
-
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
+        
+        if events[7] > 0 or any(events[8:15]):
+            take_action(4)  # ExamineBreathing
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        
+        if events[15] > 0 or any(events[16:20]):
+            take_action(5)  # ExamineCirculation
             continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            if events[17] > 0:
-                take_action(2)
+        
+        if events[20] > 0 or any(events[21:26]):
+            take_action(6)  # ExamineDisability
             continue
-
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
+        
+        if any(events[26:33]):
+            take_action(7)  # ExamineExposure
             continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
-
-        take_action(48)
+        
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
