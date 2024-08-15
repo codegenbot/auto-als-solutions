@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    critical_events = set(range(26, 33))  # Events indicating rhythm
+    critical_events = set(range(26, 33)) 
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -28,31 +28,31 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start Chest Compression
+            take_action(17) 
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 actions_taken.add(25)
-                take_action(25)  # Use Sats Probe
+                take_action(25) 
             else:
-                take_action(30)  # Use Non-Rebreather Mask
+                take_action(30) 
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)  
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if 27 not in actions_taken:
                 actions_taken.add(27)
-                take_action(27)  # Use Blood Pressure Cuff
+                take_action(27) 
             else:
-                take_action(15)  # Give Fluids
+                take_action(15) 
             continue
 
-        if any(events[i] > 0 for i in critical_events):
-            take_action(2)  # Check Rhythm
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(2) 
             continue
 
         examinations = [(27, 38), (25, 16), (16, 5), (38, 3)]
@@ -67,13 +67,13 @@ def stabilize():
                 break
         else:
             if any(events[i] > 0 for i in range(3, 7)):
-                take_action(3)  # Examine Airway
+                take_action(3)  
                 continue
             if any(events[i] > 0 for i in range(7, 15)):
-                take_action(4)  # Examine Breathing
+                take_action(4)  
                 continue
 
-            take_action(48)  # Finish
+            take_action(48)  
             break
 
 if __name__ == "__main__":
