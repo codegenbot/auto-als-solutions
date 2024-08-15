@@ -24,9 +24,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -51,6 +49,27 @@ def stabilize():
                 take_action(27)
             else:
                 take_action(15)
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)
+            continue
+
+        if any(events[i] > 0 for i in range(33, 53)):
+            if events[35] > 0:
+                take_action(11)
+            elif events[36] > 0:
+                take_action(11)
+            elif events[37] > 0:
+                take_action(11)
+            elif events[38] > 0:
+                take_action(12)
+            elif events[39] > 0:
+                take_action(11)
+            elif events[40] > 0:
+                take_action(2)
+            else:
+                take_action(2)
             continue
 
         if 27 not in actions_taken:
@@ -91,10 +110,6 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            continue
-
-        if any(events[i] > 0 for i in range(33, 40)):
-            take_action(2)
             continue
 
         take_action(48)
