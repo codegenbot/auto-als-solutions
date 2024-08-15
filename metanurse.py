@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
 
@@ -7,15 +8,18 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    required_measurements = [24, 25, 27]
+    actions_taken = set()
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        
+
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:]
+            observations[40:],
         )
 
         vitals = {
@@ -31,55 +35,43 @@ def stabilize():
             take_action(17)
             continue
 
-        if vital_signs_times[5] == 0:
-            take_action(25)
-            continue
-        if vital_signs_times[4] == 0:
-            take_action(27)
-            continue
+        for action in required_measurements:
+            if action not in actions_taken:
+                take_action(action)
+                actions_taken.add(action)
+                break
 
-        if any(events[i] == 0 for i in range(3, 7)) or vital_signs_times[1] == 0:
-            take_action(3)
-            continue
-        if any(events[i] == 0 for i in range(7, 15)):
-            take_action(4)
-            continue
-        if vital_signs_times[0] == 0 or vital_signs_times[1] == 0 or vital_signs_times[4] == 0 or any(events[i] == 0 for i in range(15, 37)):
-            take_action(5)
-            continue
-        if any(events[i] == 0 for i in range(21, 25)):
-            take_action(6)
-            continue
-        if any(events[i] == 0 for i in range(25, 33)):
-            take_action(7)
-            continue
+        if all(v > 0 for v in vital_signs_times):
+            if any(events[i] > 0 for i in range(3, 7)):
+                take_action(3)
+                if events[4] > 0 or events[5] > 0:
+                    take_action(31)
+                elif events[6] > 0:
+                    take_action(32)
+                continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            if events[4] > 0 or events[5] > 0:
-                take_action(31)
-            elif events[6] > 0:
-                take_action(32)
-            continue
+            if vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)
+                continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
+            if vitals["RR"] is not None and vitals["RR"] < 8:
+                take_action(29)
+                continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
+                take_action(15)
+                continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(24)
-            take_action(43)
+            if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+                take_action(24)
+                take_action(43)
+                continue
+        else:
             continue
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
