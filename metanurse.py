@@ -49,8 +49,9 @@ ACTIONS = {
     "DefibrillatorRateUp": 45,
     "DefibrillatorRateDown": 46,
     "DefibrillatorSync": 47,
-    "Finish": 48
+    "Finish": 48,
 }
+
 
 def stabilize():
     def take_action(action):
@@ -59,7 +60,14 @@ def stabilize():
 
     actions_taken = set()
     first_checks = ["UseBloodPressureCuff", "UseSatsProbe"]
-    examine_order = ["ExamineAirway", "ExamineBreathing", "ExamineCirculation", "ExamineDisability", "ExamineExposure", "ExamineResponse"]
+    examine_order = [
+        "ExamineAirway",
+        "ExamineBreathing",
+        "ExamineCirculation",
+        "ExamineDisability",
+        "ExamineExposure",
+        "ExamineResponse",
+    ]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -78,7 +86,9 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] != 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action("StartChestCompression")
             continue
 
@@ -145,13 +155,16 @@ def stabilize():
             take_action("ExamineExposure")
             continue
 
-        if all([
-            vitals["Sats"] and vitals["Sats"] >= 88,
-            vitals["RR"] and vitals["RR"] >= 8,
-            vitals["MAP"] and vitals["MAP"] >= 60,
-        ]):
+        if all(
+            [
+                vitals["Sats"] and vitals["Sats"] >= 88,
+                vitals["RR"] and vitals["RR"] >= 8,
+                vitals["MAP"] and vitals["MAP"] >= 60,
+            ]
+        ):
             take_action("Finish")
             break
+
 
 if __name__ == "__main__":
     stabilize()
