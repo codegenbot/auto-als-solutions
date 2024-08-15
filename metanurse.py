@@ -59,7 +59,7 @@ def stabilize():
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
             take_action(4)
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
