@@ -17,7 +17,7 @@ def stabilize():
 
     def needs_measurements():
         return not all(action in actions_taken for action in required_measurements)
-
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
