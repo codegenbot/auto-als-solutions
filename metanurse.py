@@ -48,15 +48,26 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
-        if any(events[i] > 0 for i in significant_heart_rhythm_events):
+        unstable_rhythms = [27, 28, 29, 32]
+        if any(events[i] > 0 for i in unstable_rhythms):
+            take_action(24)
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)
+            continue
+
+        arrhythmias_needing_attention = [26, 30, 31]
+        if any(events[i] > 0 for i in arrhythmias_needing_attention):
             take_action(2)
             continue
 
@@ -75,9 +86,14 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
-        
-        take_action(48)
-        break
+
+        if (vitals["Sats"] is not None and vitals["Sats"] >= 88 and
+           vitals["RR"] is not None and vitals["RR"] >= 8 and
+           vitals["MAP"] is not None and vitals["MAP"] >= 60):
+            take_action(48)
+            break
+
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
