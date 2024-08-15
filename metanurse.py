@@ -3,35 +3,29 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    examined = {"airway": False, "breathing": False, "circulation": False, "disability": False, "exposure": False}
-    
+
     def take_action(action):
         print(action)
         sys.stdout.flush()
         actions_taken.add(action)
 
-    def need_examination():
-        if not examined["airway"]:
-            return 3, "airway"
-        if not examined["breathing"]:
-            return 4, "breathing"
-        if not examined["circulation"]:
-            return 5, "circulation"
-        if not examined["disability"]:
-            return 6, "disability"
-        if not examined["exposure"]:
-            return 7, "exposure"
-        return None, None
-    
+    required_measurements = [25, 26, 27, 3, 4, 5, 8]
+
+    def next_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+        return None
+
+    def needs_measurements():
+        return not all(action in actions_taken for action in required_measurements)
+
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:]
-        )
+
+        events, vital_signs_times, vital_signs_values = observations[:33], observations[33:40], observations[40:]
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -40,18 +34,22 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        if needs_measurements():
+            next_action = next_measurement_action()
+            if next_action:
+                take_action(next_action)
+            continue
+
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)
             continue
 
-        next_action, to_examine = need_examination()
-        if next_action:
-            take_action(next_action)
-            examined[to_examine] = True
-            continue
-
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)
+            elif events[6] > 0:
+                take_action(32)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -62,12 +60,21 @@ def stabilize():
             take_action(29)
             continue
 
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
         if any(events[i] > 0 for i in range(27, 33)):
+            take_action(24)
             take_action(43)
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+            take_action(15)
             continue
 
         take_action(48)
