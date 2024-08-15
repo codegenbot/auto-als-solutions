@@ -8,7 +8,7 @@ def stabilize():
         print(action)
         actions_taken.add(action)
 
-    required_measurements = [24, 25, 27]
+    required_measurements = [24, 25, 27]  # MonitorPads, SatsProbe, BP Cuff
 
     def next_measurement_action():
         for action in required_measurements:
@@ -35,36 +35,26 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65
-        ):
+        # Immediate checks for critical conditions
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
             take_action(17)  # Start chest compression immediately
             continue
 
+        # Ensure all required measurements are taken
         if needs_measurements():
             take_action(next_measurement_action())
             continue
 
-        tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
-        ]
-        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
-            take_action(24)  # Use defibrillator pads
-            take_action(39)  # Turn on defibrillator
-            take_action(40)  # Charge defibrillator
-            take_action(47)  # Sync defibrillator
-            take_action(45)  # Increase defibrillator rate
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
+        # Handle Airway problems
+        if any(events[i] > 0 for i in range(3, 7)):  # Airway assessment
             take_action(3)
             if events[4] > 0 or events[5] > 0:
                 take_action(31)  # Use suction catheter for vomit or blood
             elif events[6] > 0:
-                take_action(32)  # Use airway if tongue obstruction
+                take_action(32)  # Use guedel airway for tongue obstruction
             continue
-
+        
+        # Check and handle breathing issues
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use non-rebreather mask
             continue
@@ -73,16 +63,23 @@ def stabilize():
             take_action(29)  # Use bag-valve mask
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)):
+        if any(events[i] > 0 for i in range(7, 15)):  # Breathing assessment
             take_action(4)
             continue
 
+        # Check and handle circulation issues
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Administer fluids to raise MAP
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):
+        if any(events[i] > 0 for i in range(15, 20)):  # Circulation assessment
             take_action(5)
+            continue
+
+        # Check rhythm and tachyarrhythmia
+        if vitals["HR"] is not None and any(events[i] > 0 for i in range(27, 40)):  # Abnormal heart rhythms
+            take_action(24)  # Use defib pads
+            take_action(2)   # Check rhythm
             continue
 
         take_action(48)  # Finish action
