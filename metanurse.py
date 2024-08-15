@@ -7,31 +7,16 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-    
-    def measure_and_examine():
-        measurement_actions = [24, 25, 27]  # Monitor, SatsProbe, BP Cuff
-        for action in measurement_actions:
-            if action not in actions_taken:
-                take_action(action)
-                return True
-        return False
 
-    def next_action_based_on_events(events):
-        if events[8] > 0 or events[5] > 0 or events[6] > 0:  # ResponseNone or Airway issues
-            take_action(3)  # ExamineAirway
-            if events[5] > 0 or events[6] > 0:  # Vomit or Blood
-                take_action(31)  # UseYankeurSuctionCatheter
-            elif events[8] > 0:  # None
-                take_action(32)  # UseGuedelAirway
-        elif events[7] > 0:  # BreathingNone
-            take_action(4)  # ExamineBreathing
-            take_action(29)  # UseBagValveMask
-        elif events[17] == 0 or events[18] > 0:  # No Radial Pulse or Non-palpable Pulse
-            take_action(5)  # ExamineCirculation
-            take_action(15)  # GiveFluids
-        else:
-            return False
-        return True
+    required_measurements = {24, 25, 27}
+
+    def next_measurement_action():
+        for action in required_measurements:
+            if action not in actions_taken:
+                return action
+
+    def needs_measurements():
+        return not required_measurements.issubset(actions_taken)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
@@ -40,46 +25,53 @@ def stabilize():
             observations[33:40],
             observations[40:]
         )
-        
-        if measure_and_examine():
-            continue
-        
+
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
-            "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
+            "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
-            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None
+            "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
-        
+
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if any(events[i] > 0 for i in [29, 30, 31, 34, 37]):  # Unstable Tachyarrhythmia
-                take_action(24)  # UseMonitorPads
-                take_action(40)  # DefibrillatorCharge
-                take_action(47)  # DefibrillatorSync
-            else:
-                take_action(15)  # GiveFluids
+
+        if needs_measurements():
+            take_action(next_measurement_action())
             continue
-        
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and 24 in actions_taken:
+            take_action(15)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-        
-        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-        
-        if next_action_based_on_events(events):  # Perform assessment or interventions based on events
+            take_action(30)
             continue
 
-        if step > 300:  # Avoid infinite loop, ensure to finalize decision
-            take_action(48)  # Finish
-            break
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
 
-    take_action(48)  # Finish if max_steps reached
+        if any(events[i] > 0 for i in [4, 5, 6]):
+            take_action(3)
+            if events[4] > 0 or events[5] > 0:
+                take_action(31)
+            elif events[6] > 0:
+                take_action(32)
+            continue
+
+        if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
+            take_action(4)
+            if events[7] > 0:
+                take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(1, 4)):
+            take_action(8)
+            continue
+
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
