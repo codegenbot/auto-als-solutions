@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,36 +24,15 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Critical condition check
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Action based on missing measurements
-        if vitals["RR"] is None and 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-
-        if vitals["MAP"] is None and 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-
-        if vitals["Sats"] is None and 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
-            continue
-
-        # Stabilizing actions
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 30 not in actions_taken:
+                actions_taken.add(30)
+                take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -64,26 +43,41 @@ def stabilize():
             take_action(15)
             continue
 
-        # Significant heart rhythm events
         significant_heart_rhythm_events = [26, 27, 28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in significant_heart_rhythm_events):
             take_action(2)
             continue
 
-        # Perform ABCDE assessment
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway
+        if 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
+            continue
+        if 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)
+            continue
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+        if 38 not in actions_taken:
+            actions_taken.add(38)
+            take_action(38)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation
+        if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
 
