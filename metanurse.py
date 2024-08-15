@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    first_checks = [27, 25]  # UseBloodPressureCuff, UseSatsProbe
     examine_order = [3, 4, 5, 6, 7, 8]
 
     for step in range(350):
@@ -30,17 +29,37 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        for check in first_checks:
-            if check not in actions_taken:
-                actions_taken.add(check)
-                take_action(check)
+        if vitals["MAP"] is None and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vitals["Sats"] is None and 25 not in actions_taken:
+            actions_taken.add(25)
+            take_action(25)  # UseSatsProbe
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)  # GiveAdenosine
+            continue
+
+        for exam in examine_order:
+            if exam not in actions_taken:
+                actions_taken.add(exam)
+                take_action(exam)
                 break
-        else:
-            for exam in examine_order:
-                if exam not in actions_taken:
-                    actions_taken.add(exam)
-                    take_action(exam)
-                    break
 
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
@@ -61,25 +80,6 @@ def stabilize():
             continue
         if events[14] > 0:  # BreathingPneumothoraxSymptoms
             take_action(19)  # OpenBreathingDrawer
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
-            if "MAP" in vitals and vitals["MAP"] < 60:
-                take_action(24)  # UseMonitorPads (for synchronized cardioversion)
-            else:
-                take_action(9)  # GiveAdenosine
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
