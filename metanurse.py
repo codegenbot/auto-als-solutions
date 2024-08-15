@@ -9,10 +9,10 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    required_measurements = [25, 27, 24]
+    required_measurements = {25, 27, 24}
 
     def needs_measurements():
-        return not set(required_measurements).issubset(actions_taken)
+        return not required_measurements.issubset(actions_taken)
 
     def next_measurement_action():
         for action in required_measurements:
@@ -54,6 +54,11 @@ def stabilize():
             continue
         elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            if events[7] > 0: take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
