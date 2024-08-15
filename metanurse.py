@@ -9,7 +9,7 @@ def stabilize():
         actions_taken.add(action)
         sys.stdout.flush()
 
-    essential_measurements = [25, 27, 26]
+    essential_measurements = [24, 25, 27, 26]
 
     def next_essential_measurement_action():
         for action in essential_measurements:
@@ -37,52 +37,52 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
+        if needs_essential_measurements():
+            take_action(next_essential_measurement_action())
+            continue
+
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)
             continue
-        
-        if needs_essential_measurements():
-            take_action(next_essential_measurement_action())
-            continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
+            take_action(3)
             if events[5] > 0:
-                take_action(31)  # Use Yankeur Suction
+                take_action(31)
             if events[6] > 0:
-                take_action(32)  # Insert Guedel Airway
+                take_action(32)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
+            take_action(4)
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)  # Use Non-Rebreather Mask
+                take_action(30)
             if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)  # Use Bag Valve Mask
+                take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(27, 33)) or (vitals["HR"] is not None and vitals["HR"] > 150):
-            take_action(24)  # Use Monitor Pads
-            take_action(40)  # Defibrillator Charge
-            take_action(47)  # Defibrillator Sync
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+            take_action(24)
+            take_action(40)
+            take_action(47)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
+            take_action(5)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # Examine Disability
+            take_action(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine Exposure
+            take_action(7)
             continue
 
         take_action(48)
