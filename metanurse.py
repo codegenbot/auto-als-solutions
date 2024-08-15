@@ -1,51 +1,38 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    measurements_taken = set()
-
+    initiate_series = [27, 25, 26, 16]
     examine_series = [3, 4, 5, 6, 7]
-    initiate_series = [
-        27,
-        25,
-        26,
-        16,
-    ]  # UseBloodPressureCuff, UseSatsProbe, UseAline, ViewMonitor
 
     def evaluate_critical(vitals):
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # StartChestCompression
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             return True
-        return False
-
-    def evaluate_stabilization(vitals):
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             return True
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             return True
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             return True
         return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
-
+        
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
-
+        
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -58,8 +45,7 @@ def stabilize():
         if evaluate_critical(vitals):
             continue
 
-        if evaluate_stabilization(vitals):
-            continue
+        measurements_taken = set()
 
         for measurement in initiate_series:
             if measurement not in measurements_taken:
@@ -73,45 +59,39 @@ def stabilize():
                     take_action(exam)
                     break
 
-        if events[5] > 0:  # AirwayVomit
-            take_action(31)  # UseYankeurSuctionCatheter
+        if events[5] > 0:
+            take_action(31)
             continue
-        if events[6] > 0:  # AirwayTongue
-            take_action(32)  # UseGuedelAirway
+        if events[6] > 0:
+            take_action(32)
             continue
-
-        if any(events[i] > 0 for i in range(3, 7)):  # Airway events
-            take_action(3)  # ExamineAirway
+        if any(events[3:7]):
+            take_action(3)
             continue
-        if any(events[i] > 0 for i in range(7, 15)):  # Breathing events
-            take_action(4)  # ExamineBreathing
+        if any(events[7:15]):
+            take_action(4)
             continue
-        if events[7] > 0:  # BreathingNone
-            take_action(29)  # UseBagValveMask
+        if events[7] > 0:
+            take_action(29)
             continue
-        if events[14] > 0:  # BreathingPneumothoraxSymptoms
-            take_action(19)  # OpenBreathingDrawer
+        if events[14] > 0:
+            take_action(19)
             continue
-
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # UseMonitorPads (for synchronized cardioversion)
+            take_action(24)
+            continue
+        if any(events[15:20]):
+            take_action(5)
+            continue
+        if any(events[20:26]):
+            take_action(6)
+            continue
+        if any(events[26:33]):
+            take_action(7)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
-            take_action(5)  # ExamineCirculation
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):  # Disability events
-            take_action(6)  # ExamineDisability
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):  # Exposure events
-            take_action(7)  # ExamineExposure
-            continue
-
-        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
-            take_action(48)  # Finish
-        else:
-            take_action(0)  # DoNothing
-
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
