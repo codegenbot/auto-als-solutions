@@ -57,6 +57,11 @@ def stabilize():
                 take_action(25)
                 continue
 
+        if 16 not in actions_taken:
+            actions_taken.add(16)
+            take_action(16)
+            continue
+        
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
