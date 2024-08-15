@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -46,7 +47,7 @@ def stabilize():
 
         # Airway assessment and intervention
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)  # Examine Airway
+            take_action(3)  # ExamineAirway
             if events[5] > 0:
                 take_action(31)  # Use Yankeur Suction Catheter
             elif events[6] > 0:
@@ -60,9 +61,9 @@ def stabilize():
         elif vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use bag-valve mask
             continue
-        
+
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)  # Examine Breathing
+            take_action(4)  # ExamineBreathing
             if events[7] > 0:
                 take_action(29)  # Use bag-valve mask
             continue
@@ -87,6 +88,7 @@ def stabilize():
             continue
 
         take_action(48)  # Finish if no appropriate action found
+
 
 if __name__ == "__main__":
     stabilize()
