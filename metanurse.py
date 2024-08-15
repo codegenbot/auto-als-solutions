@@ -39,43 +39,43 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(3)             # ExamineAirway
+            take_action(3)
             if events[5] > 0:
-                take_action(31)        # UseYankeurSucionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(36)        # PerformHeadTiltChinLift
+                take_action(36)
             continue
         
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
             vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
-            take_action(17)            # StartChestCompression
+            take_action(17)
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):
-            take_action(1)             # CheckSignsOfLife
-            take_action(2)             # CheckRhythm
+            take_action(1)
+            take_action(2)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)             # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
-            take_action(29)             # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in [7, 10, 11, 12, 13, 14]):
-            take_action(4)             # ExamineBreathing
+            take_action(4)
             if events[7] > 0:
-                take_action(29)        # UseBagValveMask
+                take_action(29)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)            # GiveFluids
+            take_action(15)
             continue
 
-        take_action(48)                # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
