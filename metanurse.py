@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     max_steps = 350
     actions_taken = set()
@@ -7,43 +8,44 @@ def stabilize():
     def take_action(action):
         print(action)
         actions_taken.add(action)
-    
-    def needs_measurements():
-        required_measurements = {25, 27, 24}
-        return not required_measurements <= actions_taken
 
-    def next_measurement_action():
-        for action in {25, 27, 24}:
-            if action not in actions_taken:
-                return action
+    def need_flags(flag_set):
+        return not flag_set <= actions_taken
+
+    def realize_flags(flag_set):
+        for f in flag_set:
+            if f not in actions_taken:
+                return f
 
     def has_unstable_tachyarrhythmia(events):
-        tachyarrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
-        return any(events[i] > 0 for i in tachyarrhythmia_events)
+        arrhythmia_events = [31, 32, 33, 34, 35, 36, 37, 38, 39]
+        return any(events[i] > 0 for i in arrhythmia_events)
 
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
-        events = observations[:33]
-        vital_signs_times = observations[33:40]
-        vital_signs_values = observations[40:]
+        events, vital_signs_times, vital_signs_values = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
-        measurements = {
+        vitals = {
             "RespRate": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
             "MAP": vital_signs_values[4] if vital_signs_times[4] > 0 else None,
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (measurements["MAP"] is not None and measurements["MAP"] < 20) or (
-            measurements["Sats"] is not None and measurements["Sats"] < 65
+        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
+            vitals["Sats"] is not None and vitals["Sats"] < 65
         ):
             take_action(17)  # Start chest compression
             continue
 
-        if needs_measurements():
-            take_action(next_measurement_action())
+        if need_flags({25, 27, 24}):
+            take_action(realize_flags({25, 27, 24}))
             continue
 
-        if measurements["MAP"] is not None and measurements["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if has_unstable_tachyarrhythmia(events):
                 if 24 not in actions_taken:
                     take_action(24)  # Use monitor pads
@@ -57,11 +59,11 @@ def stabilize():
                 take_action(15)  # Give fluids
             continue
 
-        if measurements["Sats"] is not None and measurements["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use non-rebreather mask
             continue
 
-        if measurements["RespRate"] is not None and measurements["RespRate"] < 8:
+        if vitals["RespRate"] is not None and vitals["RespRate"] < 8:
             take_action(29)  # Use bag-valve mask
             continue
 
@@ -76,7 +78,7 @@ def stabilize():
             if events[7] > 0:
                 take_action(29)  # Use bag-valve mask
             if events[13] > 0:
-                take_action(5)   # Perform needle decompression
+                take_action(5)  # Perform needle decompression
             continue
 
         if any(events[i] > 0 for i in range(1, 4)):  # Examine response
@@ -84,6 +86,7 @@ def stabilize():
             continue
 
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
