@@ -28,7 +28,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
-        
+
         if any(events[i] > 0 for i in range(3, 7)):  # Airway events
             take_action(3)  # ExamineAirway
             if events[5] > 0:
