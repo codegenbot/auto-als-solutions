@@ -6,10 +6,10 @@ def stabilize():
 
     def take_action(action):
         print(action)
-        sys.stdout.flush()
         actions_taken.add(action)
+        sys.stdout.flush()
 
-    initial_measurements = [24, 25, 27]
+    initial_measurements = [25, 26, 27, 28]
 
     def next_initial_measurement_action():
         for action in initial_measurements:
@@ -19,8 +19,6 @@ def stabilize():
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
     
-    tachy_arrhythmia_indices = [28, 29, 30, 31, 34, 38]
-    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -28,7 +26,7 @@ def stabilize():
         events, vital_signs_times, vital_signs_values = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[40:]
         )
 
         vitals = {
@@ -39,8 +37,9 @@ def stabilize():
         }
 
         if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (
-            vitals["Sats"] is not None and vitals["Sats"] < 65):
-            take_action(17)  # StartChestCompression
+            vitals["Sats"] is not None and vitals["Sats"] < 65
+        ):
+            take_action(17)
             continue
 
         if needs_initial_measurements():
@@ -48,41 +47,47 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             if events[4] > 0 or events[5] > 0:
-                take_action(31)  # UseYankeurSuctionCatheter
+                take_action(31)
             elif events[6] > 0:
-                take_action(32)  # UseGuedelAirway
+                take_action(32)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in tachy_arrhythmia_indices):
-            take_action(24)  # UseMonitorPads
-            take_action(47)  # DefibrillatorSync
-            take_action(43)  # DefibrillatorPace
+        tachyarrhythmias = [
+            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
+            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+        ]
+        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
+            take_action(24)
+            take_action(47)
+            take_action(43)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
 
-        take_action(48)  # Finish
-        break
+        if step >= 349:
+            take_action(48)
+        
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
