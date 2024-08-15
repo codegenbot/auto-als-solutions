@@ -3,22 +3,19 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    initial_measurements = [25, 26, 27]
 
     def take_action(action):
         print(action)
         actions_taken.add(action)
         sys.stdout.flush()
 
+    measurement_actions = [25, 26, 27, 28]
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             continue
-        events, vital_signs_times, vital_signs_values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+            
+        events, vital_signs_times, vital_signs_values = observations[:39], observations[39:46], observations[46:]
 
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
@@ -27,39 +24,34 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 20) or (vitals["Sats"] is not None and vitals["Sats"] < 65):
+        if vitals["MAP"] is not None and vitals["MAP"] < 20 or vitals["Sats"] is not None and vitals["Sats"] < 65:
             take_action(17)
             continue
-
-        for action in initial_measurements:
+        
+        for action in measurement_actions:
             if action not in actions_taken:
                 take_action(action)
                 break
 
-        if events[4] > 0 or events[5] > 0:
+        # Airway assessment and actions
+        if events[3] > 0 and any(events[i] > 0 for i in range(4, 7)):
             take_action(31)
-        elif events[6] > 0:
-            take_action(32)
-        elif events[3] <= 0:
-            take_action(3)
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(35)
+        
+        # Breathing assessment and actions
+        if events[7] > 0:
+            take_action(4)
             take_action(29)
-
+        elif vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+        
+        # Circulation assessment and actions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
 
-        any_critical_breathing = any(events[i] > 0 for i in range(7, 14))
-        if any_critical_breathing:
-            take_action(4)
-            continue
-
-        if step >= max_steps - 1:
+        if step == max_steps - 1:
             take_action(48)
-
+        
         take_action(0)
 
 if __name__ == "__main__":
