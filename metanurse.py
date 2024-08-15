@@ -76,7 +76,7 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 150:  # Tachyarrhythmia
-            take_action(24)  # UseMonitorPads
+            take_action(24)  # UseMonitorPads for synchronized cardioversion
             continue
 
         if any(events[i] > 0 for i in range(15, 20)):  # Circulation events
