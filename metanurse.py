@@ -3,18 +3,23 @@ import sys
 def stabilize():
     max_steps = 350
     actions_taken = set()
-    
+
     def take_action(action):
         print(action)
         actions_taken.add(action)
-    
+
     initial_measurements = [24, 25, 27]
-    
+    measurement_actions = {
+        24: 26,  # UseAline
+        25: 25,  # UseSatsProbe
+        27: 27,  # UseBloodPressureCuff
+    }
+
     def next_initial_measurement_action():
         for action in initial_measurements:
             if action not in actions_taken:
-                return action
-    
+                return measurement_actions[action]
+
     def needs_initial_measurements():
         return not all(action in actions_taken for action in initial_measurements)
     
@@ -45,6 +50,13 @@ def stabilize():
             take_action(next_initial_measurement_action())
             continue
 
+        if vitals["Sats"] is None or vitals["MAP"] is None:
+            if 'MAP' in vitals and vitals['MAP'] is None:
+                take_action(5)  # ExamineCirculation
+            if 'Sats' in vitals and vitals['Sats'] is None:
+                take_action(4)  # ExamineBreathing
+            continue
+
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # ExamineAirway
             if events[4] > 0 or events[5] > 0:
@@ -70,10 +82,16 @@ def stabilize():
             continue
 
         tachyarrhythmias = [
-            "HeartRhythmSVT", "HeartRhythmVT", "HeartRhythmAF",
-            "HeartRhythmAtrialFlutter", "HeartRhythmTorsades", "HeartRhythmVF"
+            29, # SVT
+            31, # VT
+            30, # AF
+            32, # AtrialFlutter
+            34, # Torsades
+            36  # VF
         ]
-        if any(events[i] > 0 for i in [27 + i for i in range(len(tachyarrhythmias))]):
+
+        if any(events[i] > 0 for i in tachyarrhythmias):
+            take_action(2)  # CheckRhythm
             take_action(24)  # UseMonitorPads
             take_action(47)  # DefibrillatorSync
             take_action(43)  # DefibrillatorPace
@@ -83,9 +101,8 @@ def stabilize():
             take_action(5)  # ExamineCirculation
             continue
 
-        if step >= max_steps - 1:
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
 
 if __name__ == "__main__":
     stabilize()
