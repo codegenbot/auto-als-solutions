@@ -5,22 +5,29 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    initial_checks = [27, 25, 38, 16]
-    examine_order = [3, 4, 5, 6, 7, 8]
-
     actions_taken = set()
-    critical_vitals = ('Sats', 'MAP', 'RR')
+    
+    # Initial checks
+    initial_checks = [27, 25]  # Blood Pressure Cuff, Sats Probe
+
+    for check in initial_checks:
+        take_action(check)
+        actions_taken.add(check)
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+
+        # Check if we received the correct number of observations
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
+        # Split the observations into the relevant sections
         events = observations[:33]
         vital_signs_times = observations[33:40]
         vital_signs_values = observations[40:]
 
+        # Parse vital signs
         vitals = {
             "HR": vital_signs_values[0] if vital_signs_times[0] > 0 else None,
             "RR": vital_signs_values[1] if vital_signs_times[1] > 0 else None,
@@ -28,67 +35,39 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+        # Check for critical conditions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # Start Chest Compression
             continue
 
-        if vitals["HR"] and vitals["HR"] > 150:
-            take_action(24)
+        # Stabilization actions
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
-        actions_orders = [
-            (vitals["Sats"], 88, 30),
-            (vitals["RR"], 8, 29),
-            (vitals["MAP"], 60, 15),
-        ]
-        for vital, threshold, action in actions_orders:
-            if vital is not None and vital < threshold:
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use Bag Valve Mask
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
+            continue
+
+        # Action for suspected unstable tachyarrhythmia
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(24)  # Use Monitor Pads
+            continue
+
+        # ABCDE examination sequence
+        examine_order = [3, 4, 5, 6, 7, 8]
+        for action in examine_order:
+            if action not in actions_taken:
                 take_action(action)
-                continue
-
-        for check in initial_checks:
-            if check not in actions_taken:
-                actions_taken.add(check)
-                take_action(check)
+                actions_taken.add(action)
                 break
         else:
-            for exam in examine_order:
-                if exam not in actions_taken:
-                    actions_taken.add(exam)
-                    take_action(exam)
-                    break
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            continue
-
-        if events[5] > 0:
-            take_action(31)
-            continue
-        if events[6] > 0:
-            take_action(32)
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)
-            continue
-        if events[14] > 0:
-            take_action(19)
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
-
-    take_action(48)
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
