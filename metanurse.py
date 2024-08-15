@@ -2,7 +2,7 @@ import sys
 
 ACTIONS = {
     "DoNothing": 0,
-    "CheckSignsOfLife": 1,
+    "StartChestCompression": 17,
     "UseBloodPressureCuff": 27,
     "UseSatsProbe": 25,
     "ExamineAirway": 3,
@@ -18,8 +18,9 @@ ACTIONS = {
     "GiveFluids": 15,
     "GiveAdenosine": 9,
     "UseMonitorPads": 24,
-    "Finish": 48
+    "Finish": 48,
 }
+
 
 def stabilize():
     def take_action(action):
@@ -28,7 +29,7 @@ def stabilize():
 
     actions_taken = set()
     first_checks = ["UseBloodPressureCuff", "UseSatsProbe"]
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -46,7 +47,9 @@ def stabilize():
             "Sats": vital_signs_values[5] if vital_signs_times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action("StartChestCompression")
             continue
 
@@ -106,6 +109,7 @@ def stabilize():
 
             take_action("Finish")
             break
+
 
 if __name__ == "__main__":
     stabilize()
