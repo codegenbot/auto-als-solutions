@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -24,11 +23,12 @@ def stabilize():
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
         }
+        
+        heart_rhythm_indices = [27, 28, 29, 30, 31, 32]
+        heart_rhythm_events = ["HeartRhythmNSR", "HeartRhythmSVT", "HeartRhythmAF", "HeartRhythmAtrialFlutter", "HeartRhythmVT", "HeartRhythmVF"]
 
-        # Order: Stabilize vital signs first
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -44,51 +44,52 @@ def stabilize():
             take_action(15)
             continue
 
-        # Handling unstable heart rhythms
-        unstable_rhythms = [32, 33, 30, 34, 31, 28]
-        if any(events[i] > 0 for i in unstable_rhythms):
-            take_action(2)
+        if any(events[i] > 0 for i in heart_rhythm_indices):
+            take_action(24)
+            continue
+        
+        if any(events[i] > 0 for i in heart_rhythm_indices if heart_rhythm_events[i-27] != "HeartRhythmNSR"):
+            take_action(28)
+            take_action(40)
+            take_action(41)
+            take_action(43)
             continue
 
-        # Ensure required tools are used
         if 27 not in actions_taken:
             actions_taken.add(27)
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
         if 25 not in actions_taken:
             actions_taken.add(25)
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
         if 16 not in actions_taken:
             actions_taken.add(16)
-            take_action(16)  # ViewMonitor
+            take_action(16)
             continue
         if 38 not in actions_taken:
             actions_taken.add(38)
-            take_action(38)  # Take Blood Pressure
+            take_action(38)
             continue
 
-        # Perform ABCDE assessments
         if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # ExamineAirway
+            take_action(3)
             continue
         if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
         if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             continue
         if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # ExamineDisability
+            take_action(6)
             continue
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # ExamineExposure
+            take_action(7)
             continue
 
-        # Finalize if stable
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
