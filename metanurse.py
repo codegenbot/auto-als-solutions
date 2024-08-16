@@ -9,7 +9,7 @@ def stabilize():
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -37,14 +37,9 @@ def stabilize():
             observed.add(25)
             continue
 
-        if vitals["RR"] is None:
+        if vitals["RR"] is None and 4 not in observed:
             take_action(4)  # ExamineBreathing
             observed.add(4)
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in observed:
-            take_action(3)  # ExamineAirway
-            observed.add(3)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -58,6 +53,16 @@ def stabilize():
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in observed:
+            take_action(3)  # ExamineAirway
+            observed.add(3)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)) and 4 not in observed:
+            take_action(4)  # ExamineBreathing
+            observed.add(4)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)) and 5 not in observed:
@@ -75,8 +80,12 @@ def stabilize():
             observed.add(7)
             continue
 
-        take_action(48)  # Finish
-        break
+        if "Sats" in vitals and "MAP" in vitals and "RR" in vitals:
+            if vitals["Sats"] >= 88 and vitals["MAP"] >= 60 and vitals["RR"] >= 8:
+                take_action(48)  # Finish
+                break
+
+        take_action(0)  # DoNothing if not finished yet
 
 if __name__ == "__main__":
     stabilize()
