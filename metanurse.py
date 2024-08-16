@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+    given_fluids_steps = 0
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -31,10 +32,6 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)  # Start CPR
-            continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
             continue
 
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
@@ -70,12 +67,21 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
-        if "MAP" in examined_vitals and "ViewMonitor" not in examined_vitals:
+        if "MAP" in examined_vitals and "SecondViewMonitor" not in examined_vitals:
             take_action(16)  # View monitor to get MAP value
-            examined_vitals.add("ViewMonitor")
+            examined_vitals.add("SecondViewMonitor")
             continue
 
-        if events[15] > 0 and "circulation" not in examined_vitals:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if given_fluids_steps < 2:
+                take_action(15)  # Give fluids
+                given_fluids_steps += 1
+                continue
+            elif given_fluids_steps >= 2:
+                take_action(2)  # Check rhythm (for possible cardioversion)
+                continue
+
+        if any(events[i] > 0 for i in range(15, 18)) and "circulation" not in examined_vitals:
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
