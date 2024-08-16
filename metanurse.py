@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -48,11 +49,6 @@ def stabilize():
             examined.add("Circulation")
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
@@ -61,6 +57,11 @@ def stabilize():
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
+            continue
+
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -90,6 +91,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
