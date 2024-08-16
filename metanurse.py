@@ -31,11 +31,11 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmia
-            if "DefibPads" not in examined_vitals:
-                take_action(28)   # Attach defibrillator pads
-                examined_vitals.add("DefibPads")
-            else:
-                take_action(39)   # Turn on defibrillator
+            take_action(39)   # Turn on defibrillator
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):  # Check for cardiovascular issues
+            take_action(2)   # Check rhythm
             continue
 
         if "monitor" not in examined_vitals:
