@@ -11,16 +11,15 @@ def stabilize():
         if "Monitor" not in examined:
             take_action(16)  # View Monitor
             examined.add("Monitor")
-            return True
+            return
         if "SatsProbe" not in examined:
             take_action(25)  # Use Sats Probe
             examined.add("SatsProbe")
-            return True
+            return
         if "BPCuff" not in examined:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("BPCuff")
-            return True
-        return False
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -50,13 +49,16 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[3] and not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
-            examined.add("Breathing")
-            continue
+        if events[3]:
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)  # Examine Breathing
+                examined.add("Breathing")
+                continue
+            if events[8]:  # BreathingSnoring
+                take_action(36)  # Perform Head Tilt Chin Lift
+                continue
 
-        if examine_vitals():
-            continue
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
@@ -70,12 +72,13 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation)
+            continue
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                if vitals["MAP"] and vitals["MAP"] < 60:
-                    take_action(24)  # Use Monitor Pads (for cardioversion)
-                    continue
-                take_action(9)  # Give Adenosine
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
