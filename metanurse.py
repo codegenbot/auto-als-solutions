@@ -20,7 +20,7 @@ def stabilize():
         elif "HR" not in examined:
             take_action(16)  # ViewMonitor
             examined.add("HR")
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -41,21 +41,26 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
+        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        # Assess Airway
+        if events[3] == 0 and "Airway" not in examined:  # Ensure airway is clear
             take_action(3)  # ExamineAirway
             examined.add("Airway")
             continue
 
+        # Check vital signs
         measure_vitals()
 
+        # Circulation intervention
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
+        # Breathing intervention
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -64,6 +69,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
+        # Handle unstable rhythm and tachyarrhythmias
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)  # AttachDefibPads
             continue
