@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -11,16 +12,15 @@ def stabilize():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return False
+            return
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return False
+            return
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
-            return False
-        return True
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -42,33 +42,50 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
-            continue
-        
+        # Start with airway assessment
         if "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
-        
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
+
+        if events[3] > 0:  # AirwayClear
+            # Proceed to Breathing
+            if "Breathing" not in examined:
+                take_action(4)
+                examined.add("Breathing")
+                continue
+
+            examine_vitals()
+
+            if (
+                vitals["Sats"]
+                and vitals["Sats"] < 65
+                or vitals["MAP"]
+                and vitals["MAP"] < 20
+            ):
+                take_action(17)
+                continue
+
+            if vitals["Sats"] and vitals["Sats"] < 88:
+                take_action(30)
+                continue
+
+            if vitals["RR"] and vitals["RR"] < 8:
+                take_action(29)
+                continue
+
+        if events[7] > 0:  # BreathingNone
+            take_action(29)
             continue
 
-        if not examine_vitals():
+        # Proceed to Circulation
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
             continue
 
         if vitals["HR"]:
@@ -82,10 +99,22 @@ def stabilize():
                 take_action(12)
                 continue
 
+        # Disability and Exposure assessments
+        if "Disability" not in examined:
+            take_action(6)
+            examined.add("Disability")
+            continue
+
+        if "Exposure" not in examined:
+            take_action(7)
+            examined.add("Exposure")
+            continue
+
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
