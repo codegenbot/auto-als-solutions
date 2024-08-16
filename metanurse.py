@@ -6,8 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    oxygen_given = False
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -28,77 +26,68 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        # Handle cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
-        
-        # Airway assessment
+
         if "airway" not in examined_vitals:
             take_action(3)
             examined_vitals.add("airway")
             continue
 
-        # Breathing assessment and intervention
+        if events[3] > 0:  # AirwayClear
+            take_action(8)  # Check response
+            continue
+
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals.add("Sats")
             continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88 and not oxygen_given:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
-            oxygen_given = True
             continue
-        
+
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)
             examined_vitals.add("RR")
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
-        # Circulation assessment and intervention
+
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)
             examined_vitals.add("MAP")
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
-        if events[15] > 0 and "circulation" not in examined_vitals:
+
+        if "circulation" not in examined_vitals:
             take_action(5)
             examined_vitals.add("circulation")
             continue
-        
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(2)
-            continue
-        
-        if events[28] > 0 or events[30] > 0:
-            take_action(9)
-            continue
 
-        # Disability and exposure assessment
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "disability" not in examined_vitals
-        ):
+        if "disability" not in examined_vitals:
             take_action(6)
             examined_vitals.add("disability")
             continue
-        
-        if any(events[i] > 0 for i in range(26, 33)):
+
+        if "exposure" not in examined_vitals:
             take_action(7)
+            examined_vitals.add("exposure")
             continue
 
-        take_action(48)
-        break
+        if all(v is not None for v in [vitals["Sats"], vitals["RR"], vitals["MAP"]]):
+            take_action(48)
+            break
+
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
