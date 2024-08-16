@@ -53,7 +53,7 @@ def stabilize():
         measure_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)  # GiveFlids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
