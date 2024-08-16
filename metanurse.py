@@ -5,14 +5,21 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    first_steps = [27, 25, 4, 2]
-
-    for action in first_steps:
-        take_action(action)
+    actions_taken = set()
+    examined_vitals = set()
+    
+    def need_examine(event_indices):
+        return any(events[i] > 0 for i in event_indices)
+    
+    def check_vital(vital, action, idx):
+        if vital is None and idx not in examined_vitals:
+            take_action(action)
+            examined_vitals.add(idx)
+            return True
+        return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
-        
         if len(observations) != 53:
             take_action(0)
             continue
@@ -31,24 +38,41 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
-        if times[4] == 0:
-            take_action(27)
-            continue
-        if times[5] == 0:
-            take_action(25)
+        
+        if check_vital(vitals["MAP"], 27, 4) or check_vital(vitals["Sats"], 25, 5):
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            if 30 not in actions_taken:
+                take_action(30)
+                actions_taken.add(30)
+                continue
+            take_action(29)
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
+        if need_examine(range(3, 7)) and 3 not in actions_taken:
+            take_action(3)
+            actions_taken.add(3)
+            continue
+        if need_examine(range(7, 15)):
+            take_action(4)
+            continue
+        if need_examine(range(15, 20)):
+            take_action(5)
+            continue
+        if need_examine(range(20, 26)):
+            take_action(6)
+            continue
+        if need_examine(range(26, 33)):
+            take_action(7)
+            continue
+        
         take_action(48)
         break
 
