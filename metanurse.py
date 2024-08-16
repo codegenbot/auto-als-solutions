@@ -1,11 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
+    gave_fluids = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -30,6 +32,11 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and not gave_fluids:
+            take_action(15)  # GiveFluids
+            gave_fluids = True
+            continue
+
         if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
             take_action(3)  # ExamineAirway
             actions_taken.add(3)
@@ -51,27 +58,11 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        heart_rhythm_abnormalities = [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
-        if any(events[i] > 0 for i in heart_rhythm_abnormalities):
-            if events[32] > 0:  # VT or other life-threatening arrhythmia
-                take_action(39)  # TurnOnDefibrillator
-                continue
-            elif events[30] > 0:  # SVT or similar
-                take_action(9)  # GiveAdenosine
-                continue
-            elif events[29] > 0:  # Unstable tachyarrhythmia
-                take_action(28)  # AttachDefibPads
-                continue
-
         if 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
             actions_taken.add(27)
             continue
-        if 25 not in actions_taken:
+        if 25 not in actions_taken and vitals["Sats"] is None:
             take_action(25)  # UseSatsProbe
             actions_taken.add(25)
             continue
@@ -102,6 +93,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
