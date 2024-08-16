@@ -5,13 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
-
     def examine_vitals():
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            return
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
@@ -20,7 +14,13 @@ def stabilize():
             take_action(27)
             examined.add("BPCuff")
             return
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+            return
 
+    examined = set()
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -50,17 +50,14 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "AirwayClear" in events:
+        if events[3]:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
-        
-        if "BreathingSnoring" in events:
-            take_action(36)
-            continue
-        elif "BreathingPneumothoraxSymptoms" in events:
-            take_action(19)
+
+        if events[11]:
+            take_action(30)
             continue
 
         examine_vitals()
@@ -76,15 +73,17 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
+                continue
             elif vitals["HR"] > 100:
                 take_action(9)
+                continue
             elif vitals["HR"] < 50:
                 take_action(12)
-            continue
+                continue
 
         take_action(48)
         break
