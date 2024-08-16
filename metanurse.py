@@ -5,101 +5,93 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
-    actions_taken = set()
-
-    def examine_vitals():
-        if "Monitor" not in examined:
-            take_action(16)  # View Monitor
-            examined.add("Monitor")
-            return True
-        if "SatsProbe" not in examined:
-            take_action(25)  # Use Sats Probe
-            examined.add("SatsProbe")
-            return True
-        if "BPCuff" not in examined:
-            take_action(27)  # Use Blood Pressure Cuff
-            examined.add("BPCuff")
-            return True
-        return False
-
+    vitals_collected = {
+        "Monitor": False,
+        "SatsProbe": False,
+        "BPCuff": False
+    }
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # Do Nothing
+            take_action(0)
             continue
 
-        events = observations[:33] 
-        measurements_time = observations[33:40]
-        values = observations[40:47]
+        events = observations[:40]
+        measurements_present = observations[40:47]
+        values = observations[46:]
 
-        vitals = {
-            "HR": values[0] if measurements_time[0] > 0 else None,
-            "RR": values[1] if measurements_time[1] > 0 else None,
-            "Glucose": values[2] if measurements_time[2] > 0 else None,
-            "Temp": values[3] if measurements_time[3] > 0 else None,
-            "MAP": values[4] if measurements_time[4] > 0 else None,
-            "Sats": values[5] if measurements_time[5] > 0 else None,
-            "Resps": values[6] if measurements_time[6] > 0 else None,
-        }
+        vitals = dict(
+            HR=values[0] if measurements_present[0] else None,
+            RR=values[1] if measurements_present[1] else None,
+            Glucose=values[2] if measurements_present[2] else None,
+            Temp=values[3] if measurements_present[3] else None,
+            MAP=values[4] if measurements_present[4] else None,
+            Sats=values[5] if measurements_present[5] else None,
+            Resps=values[6] if measurements_present[6] else None,
+        )
 
-        # Critical checks for cardiac arrest
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # Start Chest Compression
+            take_action(17)
             continue
 
-        # Airway
-        if not events[3]:  # AirwayClear
-            if "ExamineAirway" not in actions_taken:
-                take_action(3)  # Examine Airway
-                actions_taken.add("ExamineAirway")
-                continue
-
-        # Breathing
-        if events[3]:  # AirwayClear
-            if "ExamineBreathing" not in actions_taken:
-                take_action(4)  # Examine Breathing
-                actions_taken.add("ExamineBreathing")
-                continue
-            if any(events[7:15]):  # Breathing issues
-                if events[8]:  # BreathingSnoring
-                    take_action(36)  # Perform Head Tilt Chin Lift
-                else:
-                    take_action(29)  # Use Bag-Valve Mask
-                continue
-
-        # Examine vitals (attach monitor, sats probe, BP cuff)
-        if examine_vitals():
+        if not any(events[3:7]):  # Check airway events (4 states)
+            take_action(3)
             continue
 
-        # Circulation stabilization
+        if "AirwayClear" in events:
+            if not any(events[7:15]):  # Check breathing events (8 states)
+                take_action(4)
+                continue
+            if "BreathingSnoring" in events:
+                take_action(36)
+                continue
+
+        if not vitals_collected["Monitor"]:
+            take_action(16)
+            vitals_collected["Monitor"] = True
+            continue
+        if not vitals_collected["SatsProbe"]:
+            take_action(25)
+            vitals_collected["SatsProbe"] = True
+            continue
+        if not vitals_collected["BPCuff"]:
+            take_action(27)
+            vitals_collected["BPCuff"] = True
+            continue
+
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
+            continue
+
+        if any(events[28:32]):  # Detect irregular heart rhythms
+            take_action(24)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
+                take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)  # Give Adenosine
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
+                take_action(12)
                 continue
 
-        take_action(48)  # Finish
-        break
-    else:
-        take_action(48)  # Finish
+        if all(vitals[k] and vitals[k] >= v for k, v in [("RR", 8), ("Sats", 88), ("MAP", 60)]):
+            take_action(48)
+            break
+
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
