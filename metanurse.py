@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)  # View Monitor
