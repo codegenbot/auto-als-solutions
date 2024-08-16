@@ -76,10 +76,7 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if step == 349:
-            take_action(48)  # Finish (last step)
-    else:
-        take_action(48)  # Finish (beyond max steps)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
