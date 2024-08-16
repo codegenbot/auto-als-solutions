@@ -28,28 +28,6 @@ def stabilize():
             take_action(17)
             continue
 
-        if vitals["Sats"] is None:
-            if 25 not in actions_taken:
-                take_action(25)
-                actions_taken.add(25)
-                continue
-
-            if 16 not in actions_taken:
-                take_action(16)
-                actions_taken.add(16)
-                continue
-
-        if vitals["MAP"] is None:
-            if 27 not in actions_taken:
-                take_action(27)
-                actions_taken.add(27)
-                continue
-
-            if 16 not in actions_taken:
-                take_action(16)
-                actions_taken.add(16)
-                continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -71,18 +49,38 @@ def stabilize():
             actions_taken.add(3)
             continue
 
+        if 27 not in actions_taken:
+            take_action(27)
+            actions_taken.add(27)
+            continue
+
+        if 25 not in actions_taken:
+            take_action(25)
+            actions_taken.add(25)
+            continue
+
+        if 16 not in actions_taken:
+            take_action(16)
+            actions_taken.add(16)
+            continue
+
+        if 38 not in actions_taken:
+            take_action(38)
+            actions_taken.add(38)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            continue
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
-
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
             continue
-
         if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             continue
-
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
