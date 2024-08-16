@@ -1,23 +1,27 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     def measure_all_vitals(examined):
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
+        if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
         elif "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
         return examined
 
     examined = set()
@@ -64,7 +68,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -73,6 +77,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
