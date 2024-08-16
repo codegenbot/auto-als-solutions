@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -15,7 +16,6 @@ def stabilize():
 
     examined = set()
     drawers_opened = set()
-    respiratory_check_needed = True
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -37,7 +37,9 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -46,9 +48,9 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if respiratory_check_needed:
+        if "Breathing" not in examined:
             take_action(4)
-            respiratory_check_needed = False
+            examined.add("Breathing")
             continue
 
         if "Circulation" not in examined:
@@ -78,18 +80,26 @@ def stabilize():
             take_action(29)
             continue
 
-        if (events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))):
+        rhythm_events = [
+            events[29], events[30], events[31],
+            events[32], events[33], events[34],
+            events[35], events[36], events[37], events[38]
+        ]
+        if any(event > 0 for event in rhythm_events) or (
+            vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)
+        ):
             if "DefibPads" not in drawers_opened:
                 take_action(28)
                 drawers_opened.add("DefibPads")
                 continue
             take_action(2)
             continue
-            
+
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
