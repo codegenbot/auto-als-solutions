@@ -27,46 +27,27 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
-        
-        if "airway" not in examined_vitals:
-            if any(events[i] > 0 for i in [3, 7, 8, 9]):
-                take_action(3)
-                examined_vitals.add("airway")
-                continue
-            if any(events[i] > 0 for i in [5, 6, 10]):
-                take_action(18)
-                continue
-            take_action(35)
-            continue
 
+        if "airway" not in examined_vitals:
+            take_action(3)
+            examined_vitals.add("airway")
+            continue
+        
         if "breathing" not in examined_vitals:
-            if vitals["Sats"] is None:
-                take_action(25)
-                continue
-            if vitals["Sats"] < 88:
-                take_action(30)
-                continue
-            if vitals["RR"] < 8:
-                take_action(29)
-                continue
             take_action(4)
             examined_vitals.add("breathing")
             continue
 
         if "circulation" not in examined_vitals:
-            if vitals["MAP"] is None:
-                take_action(27)
-                continue
-            if vitals["MAP"] < 60:
-                take_action(15)
-                continue
             take_action(5)
             examined_vitals.add("circulation")
             continue
-
+        
         if "disability" not in examined_vitals:
             take_action(6)
             examined_vitals.add("disability")
@@ -76,7 +57,35 @@ def stabilize():
             take_action(7)
             examined_vitals.add("exposure")
             continue
-            
+
+        if vitals["Sats"] is None:
+            take_action(25)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(27)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["HR"] is None or (vitals["HR"] < 60 or vitals["HR"] > 100):
+            take_action(2)
+            continue
+
+        if events[28] > 0 or events[30] > 0:
+            take_action(9)
+            continue
+
         take_action(48)
         break
 
