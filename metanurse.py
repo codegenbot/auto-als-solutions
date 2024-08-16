@@ -9,22 +9,22 @@ def stabilize():
 
     def measure_vitals():
         if "Monitor" not in examined:
-            take_action(16)
+            take_action(16)  # ViewMonitor
             examined.add("Monitor")
         elif "BP" not in examined:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             examined.add("BP")
         elif "SatsProbe" not in examined:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
         elif "RespRate" not in examined:
-            take_action(4)
+            take_action(4)   # ExamineBreathing
             examined.add("RespRate")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -41,12 +41,13 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
+        # Check for critical thresholds
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if "airway" not in examined:
-            take_action(3)
+            take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
 
@@ -56,28 +57,28 @@ def stabilize():
         measure_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if events[29] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(28)
-            take_action(40)
-            take_action(41)
-            take_action(43)
+            take_action(28)  # AttachDefibPads
+            take_action(40)  # DefibrillatorCharge
+            take_action(41)  # DefibrillatorCurrentUp
+            take_action(43)  # DefibrillatorPace
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
