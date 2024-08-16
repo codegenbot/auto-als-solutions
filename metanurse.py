@@ -8,9 +8,9 @@ def stabilize():
     examined = set()
     
     def examine_vitals():
-        if "BreathingDrawer" not in examined:
-            take_action(19)  # OpenBreathingDrawer
-            examined.add("BreathingDrawer")
+        if "Monitor" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("Monitor")
             return
         if "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
@@ -19,10 +19,6 @@ def stabilize():
         if "BP" not in examined:
             take_action(27)  # UseBloodPressureCuff
             examined.add("BP")
-            return
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
             return
 
     for step in range(350):
@@ -49,14 +45,14 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        if events[3] == 0 and "AirwayExamined" not in examined:
             take_action(3)  # ExamineAirway
-            examined.add("Airway")
+            examined.add("AirwayExamined")
             continue
         
-        if events[9] == 0 and "Breathing" not in examined:
+        if "BreathingExamined" not in examined:
             take_action(4)  # ExamineBreathing
-            examined.add("Breathing")
+            examined.add("BreathingExamined")
             continue
 
         examine_vitals()
