@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -46,48 +45,46 @@ def stabilize():
         }
 
         critical = False
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if ((vitals["Sats"] is not None and vitals["Sats"] < 65) or 
+            (vitals["MAP"] is not None and vitals["MAP"] < 20)):
             take_action(17)
             critical = True
-
+        
         if critical:
             continue
-
+        
+        # Airway
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
-
+        
         if events[3] > 0:
             examined.add("airway")
-
+        
+        # Measure all vitals
         examined = measure_all_vitals(examined)
-
+        
+        # Circulation: Check BP (MAP)
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
+        # Breathing: Check Sats
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
+        # Breathing: Check RR
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
+        # Heart rhythm check, administer Adenosine if SVT
         heart_rhythms = {
-            28: "SVT",
-            29: "AF",
-            30: "AtrialFlutter",
-            31: "VT",
-            32: "MobitzI",
-            33: "MobitzII",
-            34: "CompleteHeartBlock",
-            35: "Torsades",
-            36: "Bigeminy",
-            37: "VF",
+            28: "SVT", 29: "AF", 30: "AtrialFlutter", 31: "VT", 
+            32: "MobitzI", 33: "MobitzII", 34: "CompleteHeartBlock",
+            35: "Torsades", 36: "Bigeminy", 37: "VF"
         }
         for idx, rhythm in heart_rhythms.items():
             if events[idx] > 0:
@@ -98,12 +95,11 @@ def stabilize():
                     take_action(40)
                     take_action(43)
                 continue
-
+        
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
