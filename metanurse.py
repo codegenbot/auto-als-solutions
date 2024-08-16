@@ -34,24 +34,32 @@ def stabilize():
             continue
 
         if not all(key in examined_vitals for key in ["airway", "breathing", "circulation"]):
-            if not "airway" in examined_vitals:
+            if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
                 take_action(3)
                 examined_vitals.add("airway")
                 continue
 
-            if not "breathing" in examined_vitals:
+            if "breathing" not in examined_vitals:
                 take_action(4)
                 examined_vitals.add("breathing")
                 continue
 
-            if not "MAP" in examined_vitals:
-                take_action(27)
-                examined_vitals.add("MAP")
+            if "circulation" not in examined_vitals:
+                take_action(5)
+                examined_vitals.add("circulation")
                 continue
 
-            if vitals["HR"] is None and "HR" not in examined_vitals:
-                take_action(5)
-                examined_vitals.add("HR")
+        if not all(vitals[key] is not None for key in ["HR", "RR", "MAP", "Sats"]):
+            if vitals["Sats"] is None:
+                take_action(25)
+                continue
+
+            if vitals["MAP"] is None:
+                take_action(27)
+                continue
+
+            if vitals["HR"] is None:
+                take_action(2)
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -67,19 +75,12 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None:
-            if vitals["HR"] > 150:
-                take_action(40)
-                take_action(41)
-                take_action(47)
-                take_action(43)
-                continue
-            elif vitals["HR"] < 60:
-                take_action(10)
+            if vitals["HR"] < 60 or vitals["HR"] > 150:
+                take_action(11 if vitals["HR"] > 150 else 10)
                 continue
 
-        if all(vitals[v] is not None for v in ["Sats", "RR", "MAP"]) and vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
-            take_action(48)
-            break
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
