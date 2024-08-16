@@ -8,10 +8,6 @@ def stabilize():
     examined = set()
 
     def examine_vitals():
-        if "BreathingDrawer" not in examined:
-            take_action(19)
-            examined.add("BreathingDrawer")
-            return
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
@@ -56,6 +52,15 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
+
+        if "SatsProbe" in examined and "Monitor" in examined:
+            if vitals["RR"] and vitals["RR"] >= 8:
+                if vitals["MAP"] and vitals["MAP"] >= 60:
+                    if vitals["Sats"] and vitals["Sats"] >= 88:
+                        if vitals["HR"]:
+                            if vitals["HR"] < 50 or vitals["HR"] > 150:
+                                take_action(2)
+                                continue
 
         examine_vitals()
 
