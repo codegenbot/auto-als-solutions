@@ -9,19 +9,10 @@ def stabilize():
     max_steps = 350
 
     def measure_vitals():
-        if "Monitor" not in steps_taken:
-            take_action(16)  # ViewMonitor
-            steps_taken.add("Monitor")
-        elif "BP" not in steps_taken:
-            take_action(27)  # UseBloodPressureCuff
-            steps_taken.add("BP")
-        elif "SatsProbe" not in steps_taken:
-            take_action(25)  # UseSatsProbe
-            steps_taken.add("SatsProbe")
-        elif "RespRate" not in steps_taken:
-            take_action(4)  # ExamineBreathing
-            steps_taken.add("RespRate")
-
+        vitals_checks = [16, 27, 25, 4]
+        for check in vitals_checks:
+            take_action(check)
+    
     for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -46,10 +37,9 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        measure_vitals()
-
-        if events[3] == 0:
-            take_action(3)  # ExamineAirway
+        if "vitals_checked" not in steps_taken:
+            measure_vitals()
+            steps_taken.add("vitals_checked")
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -64,11 +54,15 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
+        if events[3] or (events[6] and not events[3]):
+            take_action(3)  # ExamineAirway
+            continue
+
         if vitals["HR"]:
             if vitals["HR"] < 50:
                 take_action(12)  # GiveAtropine
                 continue
-            elif vitals["HR"] > 150 or events[29] > 0 or events[30] > 0:
+            elif vitals["HR"] > 150 or events[29]:
                 take_action(28)  # AttachDefibPads
                 take_action(40)  # DefibrillatorCharge
                 take_action(41)  # DefibrillatorCurrentUp
