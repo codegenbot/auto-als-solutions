@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -38,7 +37,7 @@ def stabilize():
                 take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
-
+        
         if "signsOfLife" not in examined_vitals:
             take_action(1)  # CheckSignsOfLife
             examined_vitals.add("signsOfLife")
@@ -92,28 +91,18 @@ def stabilize():
             examined_vitals.add("disability")
             continue
 
-        if (
-            any(events[i] > 0 for i in range(26, 33))
-            and "exposure" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
             take_action(7)  # Examine exposure
             examined_vitals.add("exposure")
             continue
 
-        if all(
-            vitals[k] is not None
-            and (
-                (k == "Sats" and vitals[k] >= 88)
-                or (k == "RR" and vitals[k] >= 8)
-                or (k == "MAP" and vitals[k] >= 60)
-            )
-            for k in ["Sats", "RR", "MAP"]
-        ):
+        if all([vitals["Sats"] is not None and vitals["Sats"] >= 88, 
+                vitals["RR"] is not None and vitals["RR"] >= 8, 
+                vitals["MAP"] is not None and vitals["MAP"] >= 60]):
             take_action(48)  # Finish
             break
 
         take_action(0)  # DoNothing
-
 
 if __name__ == "__main__":
     stabilize()
