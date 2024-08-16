@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -29,27 +28,26 @@ def stabilize():
             continue
 
         events = observations[:33]
-        measurements_recency = observations[33:40]
         values = observations[46:]
 
         vitals = {
-            "HR": values[0] if measurements_recency[0] > 0 else None,
-            "RR": values[1] if measurements_recency[1] > 0 else None,
-            "Glucose": values[2] if measurements_recency[2] > 0 else None,
-            "Temp": values[3] if measurements_recency[3] > 0 else None,
-            "MAP": values[4] if measurements_recency[4] > 0 else None,
-            "Sats": values[5] if measurements_recency[5] > 0 else None,
-            "Resps": values[6] if measurements_recency[6] > 0 else None,
+            "HR": values[0] if observations[33] > 0 else None,
+            "RR": values[1] if observations[34] > 0 else None,
+            "Glucose": values[2] if observations[35] > 0 else None,
+            "Temp": values[3] if observations[36] > 0 else None,
+            "MAP": values[4] if observations[37] > 0 else None,
+            "Sats": values[5] if observations[38] > 0 else None,
+            "Resps": values[6] if observations[39] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
-        
+
         if not any(events[3:7]):
             take_action(3)
             continue
-        
+
         if events[3]:
             if not any(events[7:15]):
                 take_action(4)
@@ -73,10 +71,10 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[28:33]):
+        if any(events[i] for i in range(28, 33)):
             take_action(24)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
@@ -92,7 +90,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
