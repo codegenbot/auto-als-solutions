@@ -53,7 +53,7 @@ def stabilize():
             take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
-
+        
         if "airway" in examined_vitals and any(events[i] > 0 for i in [4, 5, 6]):
             take_action(31)  # Use Yankeur suction catheter
             continue
