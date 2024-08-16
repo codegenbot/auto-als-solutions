@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -29,14 +28,8 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
-            continue
-
-        if any(events[3:7]) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
-            examined_vitals.add("airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
@@ -48,14 +41,14 @@ def stabilize():
             take_action(30)  # Use NonRebreatherMask
             continue
 
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)  # Examine airway
+            examined_vitals.add("airway")
+            continue
+
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
             examined_vitals.add("RR")
-            continue
-
-        if any(events[7:15]) and "breathing_event" not in examined_vitals:
-            take_action(4)  # Examine breathing if there's a breathing event
-            examined_vitals.add("breathing_event")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -68,7 +61,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)  # Give Fluids
             continue
 
         if events[15] > 0 and "circulation" not in examined_vitals:
@@ -84,23 +77,20 @@ def stabilize():
             take_action(9)  # Give adenosine for SVT or amiodarone for AF
             continue
 
-        if any(events[20:26]) and "disability" not in examined_vitals:
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
-        if any(events[26:33]):
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine exposure
             continue
 
-        if "viewed_monitor" not in examined_vitals:
-            take_action(16)  # View monitor to see sats
-            examined_vitals.add("viewed_monitor")
-            continue
+        if set(vitals.values()).issuperset({88, 8, 60}):
+            take_action(48)  # Finish
+            break
 
-        take_action(48)  # Finish
-        break
-
+        take_action(0)  # Do Nothing
 
 if __name__ == "__main__":
     stabilize()
