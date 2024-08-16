@@ -32,31 +32,32 @@ def stabilize():
             take_action(17)
             continue
 
-        if "airway" not in examined:
-            take_action(3)
-            examined.add("airway")
-            continue
+        if not all(k in examined for k in ["airway", "breathing", "circulation"]):
+            if "airway" not in examined:
+                take_action(3)
+                examined.add("airway")
+                continue
+            
+            if vitals["Sats"] is None and "Sats" not in examined:
+                take_action(25)
+                examined.add("Sats")
+                continue
 
-        if "Sats" not in examined:
-            take_action(25)
-            examined.add("Sats")
-            continue
-
-        if "RR" not in examined:
-            take_action(4)
-            examined.add("RR")
-            continue
-
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-            continue
-
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-            continue
-
+            if vitals["RR"] is None and "RR" not in examined:
+                take_action(4)
+                examined.add("RR")
+                continue
+            
+            if vitals["MAP"] is None and "BP" not in examined:
+                take_action(27)
+                examined.add("BP")
+                continue
+            
+            if "HR" not in examined:
+                take_action(24)
+                examined.add("HR")
+                continue
+                
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -77,10 +78,6 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
             take_action(7)
             examined.add("exposure")
-            continue
-
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)
             continue
 
         take_action(48)
