@@ -5,8 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set()
-
+    examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -33,34 +32,23 @@ def stabilize():
             take_action(17)
             continue
 
-        if not all(key in examined_vitals for key in ["airway", "breathing", "circulation"]):
-            if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-                take_action(3)
-                examined_vitals.add("airway")
-                continue
+        if "airway" not in examined:
+            take_action(3)
+            examined.add("airway")
+            continue
 
-            if "breathing" not in examined_vitals:
-                take_action(4)
-                examined_vitals.add("breathing")
-                continue
+        if "breathing" not in examined:
+            take_action(4)
+            examined.add("breathing")
+            continue
 
-            if "circulation" not in examined_vitals:
-                take_action(5)
-                examined_vitals.add("circulation")
-                continue
+        if vitals["Sats"] is None:
+            take_action(25)
+            continue
 
-        if not all(vitals[key] is not None for key in ["HR", "RR", "MAP", "Sats"]):
-            if vitals["Sats"] is None:
-                take_action(25)
-                continue
-
-            if vitals["MAP"] is None:
-                take_action(27)
-                continue
-
-            if vitals["HR"] is None:
-                take_action(2)
-                continue
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
@@ -70,14 +58,24 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if "circ" not in examined:
+            take_action(5)
+            examined.add("circ")
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] < 60 or vitals["HR"] > 150:
-                take_action(11 if vitals["HR"] > 150 else 10)
-                continue
+        if "disability" not in examined:
+            take_action(6)
+            examined.add("disability")
+            continue
+
+        if "exposure" not in examined:
+            take_action(7)
+            examined.add("exposure")
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+            take_action(9)
+            continue
 
         take_action(48)
         break
