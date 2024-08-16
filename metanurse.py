@@ -2,8 +2,8 @@ import sys
 
 def stabilize():
     def take_action(action):
-            print(action)
-            sys.stdout.flush()
+        print(action)
+        sys.stdout.flush()
 
     examined = set()
 
@@ -80,11 +80,13 @@ def stabilize():
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
+                continue
             elif vitals["HR"] > 100:
                 take_action(9)
+                continue
             elif vitals["HR"] < 50:
                 take_action(12)
-            continue
+                continue
 
         rhythms = {
             29: "SVT",
