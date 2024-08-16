@@ -6,8 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    vitals_measurements = {"MAP": False, "Sats": False, "HR": False, "RR": False}
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -34,26 +32,47 @@ def stabilize():
             take_action(17)
             continue
 
-        if not all(examined_vitals):  # Ensure all sections are examined
-            if not vitals_measurements["Sats"]:
-                take_action(25)  # Use Sats Probe
-                vitals_measurements["Sats"] = True
+        if not all(key in examined_vitals for key in ["airway", "breathing", "circulation"]):
+            if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+                take_action(3)
+                examined_vitals.add("airway")
+                continue
+            
+            if vitals["Sats"] is None and "Sats" not in examined_vitals:
+                take_action(25)
+                examined_vitals.add("Sats")
+                continue
+            
+            if vitals["RR"] is None and "RR" not in examined_vitals:
+                take_action(4)
+                examined_vitals.add("RR")
+                continue
+            
+            if vitals["MAP"] is None and "BP" not in examined_vitals:
+                take_action(27)
+                examined_vitals.add("BP")
+                continue
+            elif vitals["MAP"] is None and times[4] > 0:
+                take_action(16)
+                continue
+                
+            if vitals["HR"] is None and "HR" not in examined_vitals:
+                take_action(24)
+                examined_vitals.add("HR")
+                continue
+            elif vitals["HR"] is None and times[0] > 0:
+                take_action(16)
                 continue
 
-            if not vitals_measurements["RR"]:
-                take_action(4)  # Examine Breathing
-                vitals_measurements["RR"] = True
-                continue
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+            take_action(6)
+            examined_vitals.add("disability")
+            continue
 
-            if not vitals_measurements["MAP"]:
-                take_action(27)  # Use Blood Pressure Cuff
-                vitals_measurements["MAP"] = True
-                continue
-
-            if not vitals_measurements["HR"]:
-                take_action(24)  # Use Monitor Pads
-                vitals_measurements["HR"] = True
-                continue
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
+            take_action(7)
+            examined_vitals.add("exposure")
+            continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
