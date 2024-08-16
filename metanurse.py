@@ -78,7 +78,7 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 100 and vitals["MAP"] < 60:
-            take_action(9)  # Give adenosine
+            take_action(9)  # Give adenosine (suspected unstable tachyarrhythmia)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
