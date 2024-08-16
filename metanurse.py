@@ -54,13 +54,11 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        examine_vitals()
-
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
-        
+
         examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -74,13 +72,13 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(11)  # Give Amiodarone
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
