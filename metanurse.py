@@ -24,7 +24,9 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start CPR
             continue
 
@@ -51,7 +53,10 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "circulation" not in examined_vitals
+        ):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
@@ -61,7 +66,10 @@ def stabilize():
             examined_vitals.add("HR")
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "disability" not in examined_vitals
+        ):
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
