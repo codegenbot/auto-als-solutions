@@ -50,16 +50,12 @@ def stabilize():
             take_action(17)
             continue
 
-        if "airway" not in examined:
-            take_action(3)
-            examined.add("airway")
+        examined = measure_all_vitals(examined)
+        
+        if "HR" in vitals and vitals["HR"] and (vitals["HR"] > 100 or vitals["HR"] < 40):
+            take_action(9)
             continue
         
-        if events[3] > 0:
-            examined.add("airway")
-
-        examined = measure_all_vitals(examined)
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -72,10 +68,17 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[31:38]):
-            take_action(40)
+        if "airway" not in examined:
+            take_action(3)
+            examined.add("airway")
             continue
         
+        if events[3] > 0:
+            examined.add("airway")
+
+        # Recheck vitals after treatment
+        examined = measure_all_vitals(examined)
+
         take_action(48)
         break
     else:
