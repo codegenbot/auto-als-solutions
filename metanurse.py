@@ -6,8 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-    steps = 0
-    while steps < 350:
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -37,27 +36,29 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-        
-        if vitals["Sats"] is None:
+        if "Sats" not in examined:
             take_action(25)
+            examined.add("Sats")
             continue
-            
-        if vitals["RR"] is None:
+        if "RR" not in examined:
             take_action(4)
+            examined.add("RR")
             continue
-
-        if vitals["MAP"] is None:
+        if "BP" not in examined:
             take_action(27)
+            examined.add("BP")
+            continue
+        if "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -74,8 +75,6 @@ def stabilize():
 
         take_action(48)
         break
-
-        steps += 1
 
 if __name__ == "__main__":
     stabilize()
