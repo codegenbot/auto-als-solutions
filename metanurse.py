@@ -55,7 +55,7 @@ def stabilize():
             take_action(27)  # UseBloodPressureCuff
             examined.add("BP")
             continue
-        
+
         if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
             examined.add("Monitor")
@@ -68,7 +68,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
