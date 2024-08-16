@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,7 +7,6 @@ def stabilize():
 
     actions_taken = set()
     given_fluids = False
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -26,9 +24,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -36,8 +32,6 @@ def stabilize():
             if not given_fluids:
                 take_action(15)
                 given_fluids = True
-            else:
-                take_action(16)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -45,20 +39,15 @@ def stabilize():
                 take_action(25)
                 actions_taken.add(25)
                 continue
-            if 30 not in actions_taken:
-                take_action(30)
-                actions_taken.add(30)
-                continue
-            take_action(29)
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
-            actions_taken.add(3)
             continue
 
         if 27 not in actions_taken:
@@ -78,26 +67,8 @@ def stabilize():
             actions_taken.add(38)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)) and 4 not in actions_taken:
-            take_action(4)
-            actions_taken.add(4)
-            continue
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in actions_taken:
-            take_action(5)
-            actions_taken.add(5)
-            continue
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in actions_taken:
-            take_action(6)
-            actions_taken.add(6)
-            continue
-        if any(events[i] > 0 for i in range(26, 33)) and 7 not in actions_taken:
-            take_action(7)
-            actions_taken.add(7)
-            continue
-
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
