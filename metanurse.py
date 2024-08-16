@@ -39,14 +39,17 @@ def stabilize():
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
+        if vitals["MAP"] is not None and "monitor" not in examined_vitals:
+            take_action(24)  # Use monitor pads
+            examined_vitals.add("monitor")
+            continue
 
         if vitals["MAP"] is not None:
             if vitals["MAP"] < 60:
                 take_action(15)  # Give fluids
                 continue
-            if vitals["MAP"] < 100 and "monitor" not in examined_vitals:
+            if vitals["MAP"] < 100:
                 take_action(16)  # View monitor for arrhythmia
-                examined_vitals.add("monitor")
                 continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
