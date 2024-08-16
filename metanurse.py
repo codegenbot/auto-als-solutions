@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -7,7 +8,7 @@ def stabilize():
 
     examined = set()
 
-    def measure_vitals():
+    def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
@@ -21,17 +22,15 @@ def stabilize():
             take_action(4)
             examined.add("RespRate")
 
-    actions = 0
-    while actions < 350:
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
-            actions += 1
+            take_action(0)
             continue
 
-        events = observations[:33]
-        times = observations[33:40]
-        values = observations[40:]
+        events = observations[:39]
+        times = observations[39:46]
+        values = observations[46:]
 
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
@@ -40,45 +39,57 @@ def stabilize():
             "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None
+            "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
-            break
-
-        if events[3] == 0:  # Check if airway clear
-            take_action(3)  # ExamineAirway
-            actions += 1
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            take_action(17)
             continue
 
-        measure_vitals()
-        actions += 1
+        if events[3] == 0:
+            take_action(3)
+            continue
+
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            actions += 1
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            actions += 1
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            actions += 1
+            take_action(29)
             continue
 
-        hr = vitals["HR"]
-        if hr and (hr < 50 or hr > 150):
-            take_action(28)  # AttachDefibPads
-            actions += 1
+        if (
+            events[29] > 0
+            or events[30] > 0
+            or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))
+        ):
+            take_action(28)
             continue
-        
-        break
 
-    take_action(48)  # Finish the assessment
+        if step >= 349:
+            take_action(48)
+            break
+
+        continue_task = (
+            (vitals["Sats"] and vitals["Sats"] >= 88)
+            and (vitals["MAP"] and vitals["MAP"] >= 60)
+            and (vitals["RR"] and vitals["RR"] >= 8)
+        )
+        if continue_task:
+            take_action(48)
+            break
+
+    else:
+        take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
