@@ -53,7 +53,7 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-        
+
         examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -67,7 +67,7 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150 or vitals["HR"] < 50:
                 take_action(2)
