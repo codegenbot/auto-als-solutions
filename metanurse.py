@@ -35,13 +35,30 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            take_action(27)  # Use blood pressure cuff
+            examined_vitals.add("MAP")
+            continue
+
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
 
+        if vitals["MAP"] is None or vitals["Sats"] is None:
+            take_action(16)  # View monitor
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
+            if "oxygen" not in examined_vitals:
+                take_action(30)  # Use NonRebreatherMask
+                examined_vitals.add("oxygen")
+            else:
+                take_action(29)  # Use BagValveMask if oxygen drops further
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
@@ -53,13 +70,9 @@ def stabilize():
             take_action(29)  # Use BagValveMask
             continue
 
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("MAP")
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
+            take_action(4)  # Examine breathing
+            examined_vitals.add("breathing")
             continue
 
         if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
