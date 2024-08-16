@@ -1,30 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    def measure_all_vitals(examined):
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-        return examined
-
     examined = set()
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -51,15 +33,42 @@ def stabilize():
             take_action(17)
             continue
 
+        if "lifesigns" not in examined:
+            take_action(1)
+            examined.add("lifesigns")
+            continue
+
+        if "rhythm" not in examined:
+            take_action(2)
+            examined.add("rhythm")
+            continue
+
+        if (events[30] > 0 or events[32] > 0) and "cardioversion" not in examined:
+            take_action(24)
+            take_action(28)
+            take_action(40)
+            take_action(41)
+            take_action(39)
+            examined.add("cardioversion")
+            continue
+
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
 
-        if events[3] > 0:
-            examined.add("airway")
+        if "breathing" not in examined:
+            take_action(4)
+            examined.add("breathing")
+            continue
 
-        examined = measure_all_vitals(examined)
+        if "circulation" not in examined:
+            take_action(5)
+            examined.add("circulation")
+            take_action(27)
+            examined.add("BP")
+            take_action(16)
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
@@ -77,7 +86,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
