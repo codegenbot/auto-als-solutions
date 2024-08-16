@@ -12,10 +12,6 @@ def stabilize():
             take_action(19)
             examined.add("BreathingDrawer")
             return
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            return
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
@@ -24,11 +20,6 @@ def stabilize():
             take_action(27)
             examined.add("BP")
             return
-        
-    def check_stability(vitals):
-        return (vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-                vitals["RR"] is not None and vitals["RR"] >= 8 and
-                vitals["MAP"] is not None and vitals["MAP"] >= 60)
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -54,18 +45,15 @@ def stabilize():
             take_action(17)
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        if events[3] == 0 and "Airway" not in examined:  # AirwayClear
             take_action(3)
             examined.add("Airway")
             continue
 
-        if events[9] == 0 and "Breathing" not in examined:
+        if events[9] == 0 and "Breathing" not in examined:  # BreathingEqualChestExpansion
             take_action(4)
             examined.add("Breathing")
             continue
-        
-        if not check_stability(vitals):
-            examine_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
@@ -79,21 +67,26 @@ def stabilize():
             take_action(29)
             continue
 
+        if events[16] == 0 and "Circulation" not in examined:  # RadialPulsePalpable
+            take_action(5)
+            examined.add("Circulation")
+            continue
+
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(9)  # GiveAdenosine
                 continue
-            elif vitals["HR"] > 100:
-                take_action(9)
+            elif vitals["HR"] > 100 and "Rhythm" not in examined:
+                take_action(2)  # CheckRhythm
+                examined.add("Rhythm")
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # GiveAtropine
                 continue
-        
-        if check_stability(vitals):
-            take_action(48)
-            break
 
+        examine_vitals()
+        take_action(48)
+        break
     else:
         take_action(48)
 
