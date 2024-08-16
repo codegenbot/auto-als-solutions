@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+    monitor_viewed = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -39,8 +40,13 @@ def stabilize():
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use Sats Probe
+            take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
+            continue
+
+        if "Sats" in examined_vitals and not monitor_viewed:
+            take_action(16)  # View monitor to get actual Sats value
+            monitor_viewed = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -48,7 +54,7 @@ def stabilize():
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
+            take_action(4)  # Examine breathing for RR evaluation
             examined_vitals.add("RR")
             continue
 
@@ -59,6 +65,11 @@ def stabilize():
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
+            continue
+
+        if "MAP" in examined_vitals and not monitor_viewed:
+            take_action(16)  # View monitor to get MAP value
+            monitor_viewed = True
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
