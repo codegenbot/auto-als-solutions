@@ -40,20 +40,24 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use BagValveMask
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use NonRebreatherMask
             continue
 
-        if vitals["RR"] is None and "breathing" not in examined_vitals:
+        if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
-            examined_vitals.add("breathing")
+            examined_vitals.add("RR")
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use BagValveMask
             continue
         
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
