@@ -5,8 +5,27 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
-
+    examined = {"Monitor": False, "BP": False, "SatsProbe": False, "RespRate": False, "airway": False}
+    
+    def check_all_vitals():
+        if not examined["Monitor"]:
+            take_action(16)
+            examined["Monitor"] = True
+            return True
+        elif not examined["BP"]:
+            take_action(27)
+            examined["BP"] = True
+            return True
+        elif not examined["SatsProbe"]:
+            take_action(25)
+            examined["SatsProbe"] = True
+            return True
+        elif not examined["RespRate"]:
+            take_action(4)
+            examined["RespRate"] = True
+            return True
+        return False
+        
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -26,29 +45,18 @@ def stabilize():
             "Sats": values[5] if times[5] != 0 else None,
             "Resps": values[6] if times[6] != 0 else None,
         }
-        
+
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if "airway" not in examined:
+        if not examined["airway"]:
             take_action(3)
-            examined.add("airway")
+            if events[3] > 0:
+                examined["airway"] = True
             continue
 
-        if events[3] > 0 and "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-        
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-            continue
-
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
+        if check_all_vitals():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -58,12 +66,12 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+        if events[28] or events[29] or events[30] or events[31] or events[32]:
             take_action(40)
             take_action(41)
             take_action(43)
