@@ -30,6 +30,11 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)  # Examine airway
+            examined_vitals.add("airway")
+            continue
+
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
@@ -44,16 +49,12 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
-        if "ViewMonitor" not in examined_vitals:
-            take_action(16)  # View monitor
-            examined_vitals.add("ViewMonitor")
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(
-                30 if "mask" in examined_vitals else 29
-            )  # Use NonRebreatherMask or Use bag valve mask
-            examined_vitals.add("mask")
+            if "mask" not in examined_vitals:
+                take_action(30)  # Use NonRebreatherMask
+                examined_vitals.add("mask")
+            else:
+                take_action(29)  # Use BagValveMask if oxygen drops further
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
@@ -62,12 +63,7 @@ def stabilize():
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
-            examined_vitals.add("airway")
+            take_action(29)  # Use BagValveMask
             continue
 
         if (
@@ -98,14 +94,8 @@ def stabilize():
             take_action(7)  # Examine exposure
             continue
 
-        # End the scenario if patient is stabilized
-        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
-            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-            vitals["RR"] is not None and vitals["RR"] >= 8):
-            take_action(48)  # Finish
-            break
-
-        take_action(0)  # Do nothing if no specific action is needed
+        take_action(48)  # Finish
+        break
 
 if __name__ == "__main__":
     stabilize()
