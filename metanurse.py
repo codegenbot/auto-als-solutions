@@ -5,6 +5,21 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    def measure_all_vitals(examined):
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+        return examined
+
     examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -37,30 +52,10 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-            continue
-        
-        if "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-            continue
+        if events[3] > 0:
+            examined.add("airway")
 
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-            continue
-
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-            continue
+        examined = measure_all_vitals(examined)
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
