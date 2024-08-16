@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -21,6 +20,13 @@ def stabilize():
             return
 
     examined = set()
+    steps = {
+        'airway': False,
+        'breathing': False,
+        'circulation': False,
+        'disability': False,
+        'exposure': False
+    }
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -41,25 +47,23 @@ def stabilize():
         vitals["Sats"] = values[5] if times[5] > 0 else None
         vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if "Airway" not in examined:
+        if not steps['airway']:
             take_action(3)
-            examined.add("Airway")
+            steps['airway'] = True
             continue
 
-        if "Breathing" not in examined:
+        if not steps['breathing']:
             take_action(4)
-            examined.add("Breathing")
+            steps['breathing'] = True
             continue
 
-        if "Circulation" not in examined:
+        if not steps['circulation']:
             take_action(5)
-            examined.add("Circulation")
+            steps['circulation'] = True
             continue
 
         examine_vitals()
@@ -81,7 +85,7 @@ def stabilize():
                 take_action(9)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
@@ -91,7 +95,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
