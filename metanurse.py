@@ -51,7 +51,7 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-        
+
         if events[3] > 0:
             examined.add("airway")
 
@@ -73,7 +73,7 @@ def stabilize():
             take_action(40)
             take_action(41)
             take_action(43)
-
+        
         if events[31] > 0 or events[33] > 0 or events[35] > 0:
             take_action(9)
             continue
