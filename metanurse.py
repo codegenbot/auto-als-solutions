@@ -40,23 +40,24 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60:
+                take_action(15)  # Give fluids
+                continue
+            if vitals["MAP"] < 100 and "monitor" not in examined_vitals:
+                take_action(16)  # View monitor for arrhythmia
+                examined_vitals.add("monitor")
+                continue
+
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
 
-        if vitals["MAP"] is None or vitals["Sats"] is None:
-            take_action(16)  # View monitor
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if "oxygen" not in examined_vitals:
+            if "mask" not in examined_vitals:
                 take_action(30)  # Use NonRebreatherMask
-                examined_vitals.add("oxygen")
+                examined_vitals.add("mask")
             else:
                 take_action(29)  # Use BagValveMask if oxygen drops further
             continue
