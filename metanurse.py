@@ -1,12 +1,14 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-    for step in range(350):
+    steps = 0
+    while steps < 350:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
@@ -26,8 +28,10 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if step == 0:
-            take_action(1)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)
             continue
 
         if "airway" not in examined:
@@ -35,30 +39,16 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined:
+        if vitals["Sats"] is None:
             take_action(25)
-            examined.add("Sats")
             continue
 
-        if vitals["RR"] is None and "RR" not in examined:
+        if vitals["RR"] is None:
             take_action(4)
-            examined.add("RR")
             continue
 
-        if vitals["MAP"] is None and "BP" not in examined:
+        if vitals["MAP"] is None:
             take_action(27)
-            examined.add("BP")
-            continue
-
-        if vitals["HR"] is None and "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-            continue
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -68,7 +58,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -83,12 +73,11 @@ def stabilize():
             examined.add("exposure")
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)
-            continue
-
         take_action(48)
         break
+
+        steps += 1
+
 
 if __name__ == "__main__":
     stabilize()
