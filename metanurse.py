@@ -1,18 +1,11 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
-    examined = {
-        "Airway": False,
-        "Breathing": False,
-        "Circulation": False,
-        "Disability": False,
-        "Exposure": False,
-    }
+    
+    examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
     vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False}
 
     for step in range(350):
@@ -35,9 +28,7 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -50,7 +41,7 @@ def stabilize():
             take_action(4)
             examined["Breathing"] = True
             continue
-
+        
         if not examined["Circulation"]:
             take_action(5)
             examined["Circulation"] = True
@@ -98,14 +89,13 @@ def stabilize():
                 take_action(24)
                 vitals_checked["HR"] = True
                 continue
-
+        
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
             take_action(40)
             continue
-
+        
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
