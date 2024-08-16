@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+        
     examined = set()
 
     def measure_vitals():
@@ -41,21 +41,25 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
+        # Immediate CPR check.
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
+        # Check and clear airway.
         if events[3] > 0:
-            examined.add("Airway")
+            examined.add("airway")
 
-        if "Airway" not in examined:
+        if "airway" not in examined:
             take_action(3)
-            examined.add("Airway")
             continue
 
+        # Measure vitals systematically.
         measure_vitals()
 
+        # Treat based on measurements.
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -68,7 +72,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and vitals["HR"] > 150):
+        # Check for heart issue and address tachyarrhythmia.
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(28)
             take_action(40)
             take_action(41)
