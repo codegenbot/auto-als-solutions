@@ -17,9 +17,9 @@ def stabilize():
             take_action(25)
             examined.add("SatsProbe")
             return
-        if "BP" not in examined:
+        if "BPCuff" not in examined:
             take_action(27)
-            examined.add("BP")
+            examined.add("BPCuff")
             return
 
     for step in range(350):
@@ -28,63 +28,56 @@ def stabilize():
             take_action(0)
             continue
 
-        events = observations[:40]
+        events = observations[:33]
+        times = observations[33:40]
         values = observations[40:]
 
         vitals = {
-            "HR": values[0] if observations[33] > 0 else None,
-            "RR": values[1] if observations[34] > 0 else None,
-            "Glucose": values[2] if observations[35] > 0 else None,
-            "Temp": values[3] if observations[36] > 0 else None,
-            "MAP": values[4] if observations[37] > 0 else None,
-            "Sats": values[5] if observations[38] > 0 else None,
-            "Resps": values[6] if observations[39] > 0 else None,
+            "HR": values[0] if times[0] > 0 else None,
+            "RR": values[1] if times[1] > 0 else None,
+            "Glucose": values[2] if times[2] > 0 else None,
+            "Temp": values[3] if times[3] > 0 else None,
+            "MAP": values[4] if times[4] > 0 else None,
+            "Sats": values[5] if times[5] > 0 else None,
+            "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Start with airway assessment
-        if "Airway" not in examined:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            take_action(17)
+            continue
+
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
-            # Proceed to Breathing
-            if "Breathing" not in examined:
+        if "AirwayClear" in events:
+            if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
 
-            examine_vitals()
-
-            if (
-                vitals["Sats"]
-                and vitals["Sats"] < 65
-                or vitals["MAP"]
-                and vitals["MAP"] < 20
-            ):
-                take_action(17)
+            if "BreathingSnoring" in events:
+                take_action(36)
+                continue
+            elif "BreathingPneumothoraxSymptoms" in events:
+                take_action(19)
                 continue
 
-            if vitals["Sats"] and vitals["Sats"] < 88:
-                take_action(30)
-                continue
-
-            if vitals["RR"] and vitals["RR"] < 8:
-                take_action(29)
-                continue
-
-        if events[7] > 0:  # BreathingNone
-            take_action(29)
-            continue
-
-        # Proceed to Circulation
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if vitals["HR"]:
@@ -97,17 +90,6 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
-
-        # Disability and Exposure assessments
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-            continue
 
         take_action(48)
         break
