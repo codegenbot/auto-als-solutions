@@ -5,13 +5,12 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined_sections = set()
-    vitals_measurements = {"MAP": False, "Sats": False, "HR": False, "RR": False}
+    vitals_measurements = {"Airway": False, "Sats": False, "RR": False, "MAP": False, "HR": False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0) # DoNothing
             continue
 
         events = observations[:33]
@@ -20,7 +19,7 @@ def stabilize():
 
         vitals = {
             "HR": values[0] if times[0] != 0 else None,
-            "RR": values[1] if times[1] != 0 else None,
+            "RR" : values[1] if times[1] != 0 else None,
             "Glucose": values[2] if times[2] != 0 else None,
             "Temp": values[3] if times[3] != 0 else None,
             "MAP": values[4] if times[4] != 0 else None,
@@ -28,70 +27,55 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17) # StartChestCompression
             continue
 
-        if "Airway" not in examined_sections:
-            take_action(3)  # Examine Airway
-            examined_sections.add("Airway")
+        if not vitals_measurements["Airway"]:
+            take_action(3)  # ExamineAirway
+            vitals_measurements["Airway"] = True
             continue
 
-        if "Breathing" not in examined_sections:
-            take_action(4)  # Examine Breathing
-            examined_sections.add("Breathing")
-            continue
-
-        if "Circulation" not in examined_sections:
-            take_action(5)  # Examine Circulation
-            examined_sections.add("Circulation")
-            continue
-
-        if "Disability" not in examined_sections:
-            take_action(6)  # Examine Disability
-            examined_sections.add("Disability")
-            continue
-
-        if "Exposure" not in examined_sections:
-            take_action(7)  # Examine Exposure
-            examined_sections.add("Exposure")
-            continue
+        if events[3] != 0: # AirwayClear
+            vitals_measurements["Airway"] = True
 
         if not vitals_measurements["Sats"]:
-            take_action(25)  # Use Sats Probe
+            take_action(25)  # UseSatsProbe
             vitals_measurements["Sats"] = True
             continue
 
         if not vitals_measurements["RR"]:
-            take_action(4)  # Examine Breathing
+            take_action(4)  # ExamineBreathing
             vitals_measurements["RR"] = True
             continue
 
         if not vitals_measurements["MAP"]:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)  # UseBloodPressureCuff
             vitals_measurements["MAP"] = True
             continue
 
         if not vitals_measurements["HR"]:
-            take_action(24)  # Use Monitor Pads
+            take_action(24)  # UseMonitorPads
             vitals_measurements["HR"] = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        take_action(48)
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+            take_action(9)  # GiveAdenosine
+            continue
+
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
