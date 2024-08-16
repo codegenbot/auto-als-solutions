@@ -55,7 +55,7 @@ def stabilize():
         vitals["Sats"] = values[5] if times[5] > 0 else None
         vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
