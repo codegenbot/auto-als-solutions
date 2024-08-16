@@ -29,57 +29,47 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if "airway" not in examined:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             examined.add("airway")
             continue
 
         if "breathing" not in examined:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             examined.add("breathing")
             continue
 
-        if "circulation" not in examined:
-            take_action(5)  # ExamineCirculation
-            examined.add("circulation")
-            continue
-
         if "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             examined.add("SatsProbe")
             continue
 
         if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             examined.add("BP")
             continue
 
         if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
+            take_action(16)
             examined.add("Monitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if "rhythm" not in examined and (vitals["MAP"] is not None and vitals["MAP"] < 60):
-            take_action(2)  # CheckRhythm
-            examined.add("rhythm")
-            continue
-        
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
         take_action(48)
