@@ -5,6 +5,21 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    def measure_all_vitals(examined):
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+        return examined
+
     examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -30,7 +45,7 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
-            continue
+            continue 
 
         if "airway" not in examined:
             take_action(3)
@@ -40,43 +55,18 @@ def stabilize():
         if events[3] > 0:
             examined.add("airway")
 
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-            continue
+        heart_rhythm_indices = (28, 29, 30, 31, 32, 33, 34, 35, 36, 37)
+        unstable_tachyarrhythmia = any(events[i] > 0 for i in heart_rhythm_indices)
 
-        if "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-            continue
+        examined = measure_all_vitals(examined)
 
-        if events[10] > 0:
-            examined.add("RespRate")
-
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-            continue
-        
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
+        if unstable_tachyarrhythmia:
+            take_action(40)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
-        if vitals["HR"] is not None and vitals["HR"] > 100:  # Adjust threshold if needed
-            take_action(2)  # Check rhythm
-            if events[28] > 0 or events[30] > 0:  # SVT or AF
-                take_action(9)  # Give Adenosine for SVT, example logic
-                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
