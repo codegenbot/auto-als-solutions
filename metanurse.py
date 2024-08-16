@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
+    
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -17,7 +17,7 @@ def stabilize():
             examined.add("SatsProbe")
             return
         if "BP" not in examined:
-            take_action(27)
+            take_action(38)
             examined.add("BP")
             return
 
@@ -49,7 +49,7 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
+        if events[9] == 0 and "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
@@ -78,14 +78,13 @@ def stabilize():
                 take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(11)  # Give Amiodarone
+                take_action(11)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        take_action(48)
-        break
+        take_action(0)
     else:
         take_action(48)
 
