@@ -98,7 +98,6 @@ def stabilize():
             take_action(29)
             continue
 
-        # Check for rhythm as instructed
         if vitals["HR"] is not None and vitals["HR"] > 100:
             take_action(2)
             continue
