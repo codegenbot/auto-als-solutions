@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined_vitals = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -37,8 +37,8 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
-            take_action(8)  # Check response
+        if events[3] > 0: # AirwayClear
+            take_action(8) # Check response
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
