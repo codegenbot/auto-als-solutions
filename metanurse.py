@@ -36,44 +36,44 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start chest compressions immediately
             continue
         
         if check_vital(vitals["MAP"], 27, 4) or check_vital(vitals["Sats"], 25, 5):
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 30 not in actions_taken:
-                take_action(30)
+                take_action(30)  # Use non-rebreather mask
                 actions_taken.add(30)
                 continue
-            take_action(29)
+            take_action(29)  # Use bag-valve mask
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag-valve mask
             continue
         
         if need_examine(range(3, 7)) and 3 not in actions_taken:
-            take_action(3)
+            take_action(3)  # Examine airway
             actions_taken.add(3)
             continue
         if need_examine(range(7, 15)):
-            take_action(4)
+            take_action(4)  # Examine breathing
             continue
         if need_examine(range(15, 20)):
-            take_action(5)
+            take_action(5)  # Examine circulation
             continue
         if need_examine(range(20, 26)):
-            take_action(6)
+            take_action(6)  # Examine disability
             continue
         if need_examine(range(26, 33)):
-            take_action(7)
+            take_action(7)  # Examine exposure
             continue
         
-        take_action(48)
+        take_action(48)  # Finish action
         break
 
 if __name__ == "__main__":
