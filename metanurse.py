@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -29,40 +28,39 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
-
+        
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
+        if events[3] > 0:
             examined.add("airway_clear")
         elif "airway_clear" not in examined:
-            take_action(3)  # Re-examineAirway if not clear
+            take_action(3)
             continue
 
-        if "monitor" not in examined:
+        if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
-            examined.add("monitor")
+            examined.add("Monitor")
             continue
-
+        
         if "BP" not in examined:
             take_action(27)  # UseBloodPressureCuff
             examined.add("BP")
             continue
 
-        if "sats_probe" not in examined:
+        if "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
-            examined.add("sats_probe")
+            examined.add("SatsProbe")
             continue
 
-        if "breathing_exam" not in examined:
-            take_action(4)  # ExamineBreathing
-            examined.add("breathing_exam")
+        if "RespRate" not in examined:
+            take_action(4)   # ExamineBreathing
+            examined.add("RespRate")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -77,20 +75,15 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if (
-            (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150))
-            or events[29] > 0
-            or events[30] > 0
-        ):
+        if (vitals["HR"] is not None and (vitals["HR"] > 150 or events[29] > 0 or events[30] > 0)):
             take_action(28)  # AttachDefibPads
             continue
 
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-
+        
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
