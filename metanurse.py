@@ -5,11 +5,9 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = {"airway"}
-    
-    for _ in range(350):
+    examined = set()
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
-        
         if len(observations) != 53:
             take_action(0)
             continue
@@ -39,40 +37,32 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if "SatsProbe" not in examined:
+        if events[3] > 0:
+            examined.add("airway")
+
+        if "examined_vitals" not in examined:
             take_action(25)
-            examined.add("SatsProbe")
-            continue
-
-        if "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-            continue
-
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-            continue
-
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
+            examined.add("examined_vitals")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
-        if vitals["HR"] is not None and (events[31] > 0 or events[35] > 0 or events[37] > 0):
+
+        if any(events[31:38]):
             take_action(40)
+            continue
+
+        if vitals["RR"] is None:
+            take_action(4)
             continue
 
         take_action(48)
