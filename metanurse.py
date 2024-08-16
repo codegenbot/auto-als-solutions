@@ -1,10 +1,11 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-        
+
     examined = set()
 
     def measure_vitals():
@@ -41,14 +42,12 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        # Immediate CPR check.
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
 
-        # Check and clear airway.
         if events[3] > 0:
             examined.add("airway")
 
@@ -56,10 +55,8 @@ def stabilize():
             take_action(3)
             continue
 
-        # Measure vitals systematically.
         measure_vitals()
 
-        # Treat based on measurements.
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -72,7 +69,6 @@ def stabilize():
             take_action(29)
             continue
 
-        # Check for heart issue and address tachyarrhythmia.
         if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(28)
             take_action(40)
@@ -84,6 +80,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
