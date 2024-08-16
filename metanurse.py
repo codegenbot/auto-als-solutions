@@ -25,14 +25,12 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
-        
-        # Hypotension and Tachyarrhythmia
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if "MAP" in examined_vitals:
                 take_action(15)
@@ -45,13 +43,11 @@ def stabilize():
             take_action(24)
             continue
         
-        # Ensure airway is clear
         if any(events[i] > 0 for i in range(3, 7)) and not used_airway:
             take_action(3)
             examined_vitals.add("airway")
             continue
         
-        # Check oxygen saturation
         if vitals["Sats"] is None:
             if "Sats" not in examined_vitals:
                 take_action(25)
@@ -67,7 +63,6 @@ def stabilize():
                 take_action(29)
             continue
         
-        # Check other vital signs
         if vitals["RR"] is None or vitals["RR"] < 8:
             take_action(4)
             continue
