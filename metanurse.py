@@ -30,7 +30,7 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-        
+
         vitals = dict()
         vitals["HR"] = values[0] if times[0] > 0 else None
         vitals["RR"] = values[1] if times[1] > 0 else None
