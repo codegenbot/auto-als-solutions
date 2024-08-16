@@ -57,7 +57,7 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if "MAP" in examined and "Sats" in examined and "RR" in examined:
+        if "MAP" in examined and "HR" in examined:
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
                 take_action(15)
                 continue
@@ -68,6 +68,10 @@ def stabilize():
 
             if vitals["RR"] is not None and vitals["RR"] < 8:
                 take_action(29)
+                continue
+
+            if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+                take_action(9)
                 continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
