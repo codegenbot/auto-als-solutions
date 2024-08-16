@@ -46,16 +46,15 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if "SignsOfLifeChecked" not in examined:
-            take_action(1)  # CheckSignsOfLife
-            examined.add("SignsOfLifeChecked")
-            continue
-
-        if events[3] > 0:
-            examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
+            continue
+
+        if "airway" in examined and events[3] > 0:
+            examined.add("airway_clear")
+        elif "airway_clear" not in examined:
+            take_action(3)  # Re-examineAirway if not clear
             continue
 
         measure_vitals()
@@ -79,7 +78,7 @@ def stabilize():
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-
+        
         take_action(48)  # Finish
 
 if __name__ == "__main__":
