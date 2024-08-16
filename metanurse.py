@@ -2,8 +2,8 @@ import sys
 
 def stabilize():
     def take_action(action):
-        print(action)
-        sys.stdout.flush()
+            print(action)
+            sys.stdout.flush()
 
     examined = set()
 
@@ -50,25 +50,25 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "AirwayClear" in events:
+        if events[3] > 0:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
         
-        if "BreathingSnoring" in events:
+        if events[7] > 0 and events[9] > 0:
             take_action(36)
             continue
-        elif "BreathingPneumothoraxSymptoms" in events:
+        elif events[14] > 0:
             take_action(19)
             continue
 
         examine_vitals()
-
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -76,29 +76,38 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
             elif vitals["HR"] > 100:
                 take_action(9)
-                continue
             elif vitals["HR"] < 50:
                 take_action(12)
-                continue
-            
-            if "ViewMonitor" not in examined:
-                take_action(16)
-                examined.add("ViewMonitor")
-                continue
+            continue
 
-            if any(events[31:34] or events[36:39]):
-                take_action(40)
-                take_action(41)
-                take_action(43)
+        rhythms = {
+            29: "SVT",
+            30: "AF",
+            31: "AtrialFlutter",
+            32: "VT",
+            33: "MobitzI",
+            34: "MobitzII",
+            35: "CompleteHeartBlock",
+            36: "Torsades",
+            37: "Bigeminy",
+            38: "VF"
+        }
 
-        take_action(48)
-        break
+        for i in range(29, 39):
+            if events[i] > 0:
+                take_action(2)
+                if i in rhythms:
+                    take_action(41)
+                break
+        else:
+            take_action(48)
+            break
     else:
         take_action(48)
 
