@@ -27,7 +27,11 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start chest compression
+            continue
+
+        if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmia
+            take_action(39)   # Turn on defibrillator
             continue
 
         if "monitor" not in examined_vitals:
@@ -88,20 +92,16 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Administer fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
+            take_action(30 if 30 not in examined_vitals else 29)  # Non-rebreather or BVM
             examined_vitals.add(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[28:33]):
-            take_action(2)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
         take_action(48)
