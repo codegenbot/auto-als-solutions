@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,20 +7,10 @@ def stabilize():
 
     examined = set()
     actions = {
-        "Airway": 3,
-        "Breathing": 4,
-        "Circulation": 5,
-        "Disability": 6,
-        "Exposure": 7,
-        "MeasureHR": 25,
-        "MeasureMAP": 27,
-        "MeasureSats": 25,
-        "NonRebreatherMask": 30,
-        "GiveFluids": 15,
-        "BagValveMask": 29,
-        "AttachDefibPads": 28,
-        "ChestCompression": 17,
-        "Finish": 48,
+        "Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6,
+        "Exposure": 7, "MeasureHR": 25, "MeasureMAP": 27, "MeasureSats": 25,
+        "NonRebreatherMask": 30, "GiveFluids": 15, "BagValveMask": 29,
+        "AttachDefibPads": 28, "ChestCompression": 17, "Finish": 48
     }
 
     def initial_checks():
@@ -61,17 +50,12 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Check emergency conditions first
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(actions["ChestCompression"])
             continue
 
-        # Perform initial checks (ABCDE)
         initial_checks()
 
-        # Take measurements if needed
         if vitals["HR"] is None:
             take_action(actions["MeasureHR"])
             continue
@@ -84,7 +68,6 @@ def stabilize():
             take_action(actions["MeasureSats"])
             continue
 
-        # Stabilize based on vital signs
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(actions["GiveFluids"])
             continue
@@ -101,12 +84,10 @@ def stabilize():
             take_action(actions["AttachDefibPads"])
             continue
 
-        # If all is well, finish
         take_action(actions["Finish"])
         break
     else:
         take_action(actions["Finish"])
-
 
 if __name__ == "__main__":
     stabilize()
