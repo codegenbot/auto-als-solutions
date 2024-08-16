@@ -30,7 +30,7 @@ def stabilize():
            (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
+        
         if "monitor" not in examined_vitals:
             take_action(16)
             examined_vitals.add("monitor")
@@ -71,12 +71,14 @@ def stabilize():
             examined_vitals.add("disability")
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            examined_vitals.add("exposure")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if any(events[i] > 0 for i in range(28, 38)):
+                take_action(2)
+                continue
             take_action(15)
             continue
 
@@ -87,10 +89,6 @@ def stabilize():
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 100:
-            take_action(24)
             continue
 
         take_action(48)
