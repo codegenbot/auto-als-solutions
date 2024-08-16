@@ -6,7 +6,15 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
+    examined = {
+        "Airway": False,
+        "Breathing": False,
+        "Circulation": False,
+        "Disability": False,
+        "Exposure": False,
+    }
+    vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False}
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -33,62 +41,66 @@ def stabilize():
             take_action(17)
             continue
 
-        if not all(k in examined for k in ["airway", "breathing", "circulation"]):
-            if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined:
-                take_action(3)
-                examined.add("airway")
-                continue
+        if not examined["Airway"]:
+            take_action(3)
+            examined["Airway"] = True
+            continue
 
-            if vitals["Sats"] is None and "Sats" not in examined:
-                take_action(25)
-                examined.add("Sats")
-                continue
+        if not examined["Breathing"]:
+            take_action(4)
+            examined["Breathing"] = True
+            continue
 
-            if vitals["RR"] is None and "RR" not in examined:
+        if not examined["Circulation"]:
+            take_action(5)
+            examined["Circulation"] = True
+            continue
+
+        if not examined["Disability"]:
+            take_action(6)
+            examined["Disability"] = True
+            continue
+
+        if not examined["Exposure"]:
+            take_action(7)
+            examined["Exposure"] = True
+            continue
+
+        if vitals["RR"] is None:
+            if not vitals_checked["RR"]:
                 take_action(4)
-                examined.add("RR")
+                vitals_checked["RR"] = True
                 continue
-
-            if vitals["MAP"] is None and "BP" not in examined:
-                take_action(27)
-                examined.add("BP")
-                continue
-            elif vitals["MAP"] is None and times[4] > 0:
-                take_action(16)
-                continue
-
-            if vitals["HR"] is None and "HR" not in examined:
-                take_action(24)
-                examined.add("HR")
-                continue
-            elif vitals["HR"] is None and times[0] > 0:
-                take_action(16)
-                continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        elif vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
-            take_action(6)
-            examined.add("disability")
+        if vitals["MAP"] is None:
+            if not vitals_checked["MAP"]:
+                take_action(27)
+                vitals_checked["MAP"] = True
+                continue
+        elif vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
-            take_action(7)
-            examined.add("exposure")
+        if vitals["Sats"] is None:
+            if not vitals_checked["Sats"]:
+                take_action(25)
+                vitals_checked["Sats"] = True
+                continue
+        elif vitals["Sats"] < 88:
+            take_action(30)
             continue
+
+        if vitals["HR"] is None:
+            if not vitals_checked["HR"]:
+                take_action(24)
+                vitals_checked["HR"] = True
+                continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)
+            take_action(40)
             continue
 
         take_action(48)
