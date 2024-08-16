@@ -25,18 +25,15 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Deliver CPR if critical
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Treat hypotension with fluids
         if vitals["MAP"] and vitals["MAP"] < 60 and not gave_fluids:
             take_action(15)  # GiveFluids
             gave_fluids = True
             continue
 
-        # Treat low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             if 25 not in actions_taken:
                 take_action(25)  # UseSatsProbe
@@ -49,12 +46,10 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Treat low respiratory rate
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
 
-        # Perform actions to gather necessary observations if lacking
         if 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
             actions_taken.add(27)
@@ -76,7 +71,6 @@ def stabilize():
             actions_taken.add(26)
             continue
 
-        # ABCDE Assessments
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # ExamineAirway
             continue
