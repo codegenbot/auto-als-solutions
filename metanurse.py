@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    all_examinations_done = {"HR": False, "RR": False, "MAP": False, "Sats": False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -25,64 +24,64 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Step 1: Attach monitoring devices if necessary
-        if vitals["MAP"] is None and not all_examinations_done["MAP"]:
-            take_action(27)
-            all_examinations_done["MAP"] = True
-            continue
-
-        if vitals["Sats"] is None and not all_examinations_done["Sats"]:
-            take_action(25)
-            all_examinations_done["Sats"] = True
-            continue
-
-        if vitals["RR"] is None and not all_examinations_done["RR"]:
-            take_action(4)
-            all_examinations_done["RR"] = True
-            continue
-
-        # Step 2: Cardiac arrest
+        # Handle cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start CPR due to cardiac arrest
             continue
 
-        # Step 3: Check if further examination of ABCDE is needed
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
-            take_action(3)
-            examined_vitals.add(3)
+        # Attach necessary monitoring devices
+        if vitals["MAP"] is None and 27 not in examined_vitals:
+            take_action(27)  # Use blood pressure cuff
+            examined_vitals.add(27)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)) and 4 not in examined_vitals:
-            take_action(4)
+        if vitals["Sats"] is None and 25 not in examined_vitals:
+            take_action(25)  # Use sats probe
+            examined_vitals.add(25)
+            continue
+
+        if vitals["RR"] is None and 4 not in examined_vitals:
+            take_action(4)  # Examine breathing
             examined_vitals.add(4)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in examined_vitals:
-            take_action(5)
-            examined_vitals.add(5)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in examined_vitals:
-            take_action(6)
-            examined_vitals.add(6)
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
-            continue
-
-        # Step 4: Treat unstable vitals
+        # Treating unstable vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
+            take_action(30 if 30 not in examined_vitals else 29)  # Use oxygen mask or BVM
             examined_vitals.add(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use BVM
+            continue
+
+        # ABCDE sequence of examination based on events
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
+            take_action(3)  # Examine airway
+            examined_vitals.add(3)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)) and 4 not in examined_vitals:
+            take_action(4)  # Examine breathing
+            examined_vitals.add(4)
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)) and 5 not in examined_vitals:
+            take_action(5)  # Examine circulation
+            examined_vitals.add(5)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and 6 not in examined_vitals:
+            take_action(6)  # Examine disability
+            examined_vitals.add(6)
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)  # Examine exposure
             continue
 
         # Final action after stabilization
