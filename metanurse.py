@@ -28,30 +28,25 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None
         }
 
-        # Cardiac arrest conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Airway
         if events[3] == 0 and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        # Breathing
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        # Circulation
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
 
-        # Measure vitals
         if not vitals["MAP"] or not vitals["Sats"]:
             for check in ["BP", "SatsProbe", "RespRate", "HeartRate"]:
                 if check not in examined:
@@ -60,7 +55,6 @@ def stabilize():
                     examined.add(check)
                     return
 
-        # Treat hypotension
         if vitals["MAP"] and vitals["MAP"] < 60:
             if "CirculationDrawer" not in drawers_opened:
                 take_action(20)
@@ -69,7 +63,6 @@ def stabilize():
             take_action(15)
             continue
 
-        # Treat low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             if "BreathingDrawer" not in drawers_opened:
                 take_action(19)
@@ -78,12 +71,10 @@ def stabilize():
             take_action(30)
             continue
 
-        # Treat low respiratory rate
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Tachyarrhythmia
         if vitals["HR"] and (vitals["HR"] > 150):
             if "DefibPads" not in drawers_opened:
                 take_action(28)
