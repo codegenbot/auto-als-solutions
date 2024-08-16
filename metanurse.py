@@ -33,7 +33,7 @@ def stabilize():
             continue
 
         if "airway" not in examined_vitals:
-            if events[3] > 0: 
+            if events[3] > 0:
                 examined_vitals.add("airway")
             else:
                 take_action(3)
