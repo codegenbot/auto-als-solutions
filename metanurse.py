@@ -5,13 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set()
-    actions = {
-        "airway": 3, "breathing": 4, "circulation": 5, "disability": 6, "exposure": 7,
-        "SatsProbe": 25, "BPCuff": 27,
-        "NonRebreatherMask": 30, "BagValveMask": 29, "GiveFluids": 15,
-        "ChestCompression": 17
-    }
+    examined_vitals = {}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -36,52 +30,58 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(actions["ChestCompression"])
+            take_action(17)
             continue
 
         if "airway" not in examined_vitals:
-            take_action(actions["airway"])
-            examined_vitals.add("airway")
+            take_action(3)
+            examined_vitals["airway"] = True
             continue
         
+        if "Sats" not in examined_vitals:
+            take_action(25)
+            examined_vitals["Sats"] = True
+            continue
+
         if "breathing" not in examined_vitals:
-            take_action(actions["breathing"])
-            examined_vitals.add("breathing")
-            continue
-        
-        if vitals["Sats"] is None:
-            take_action(actions["SatsProbe"])
+            take_action(4)
+            examined_vitals["breathing"] = True
             continue
 
-        if vitals["MAP"] is None:
-            take_action(actions["BPCuff"])
-            continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(actions["NonRebreatherMask"])
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(actions["BagValveMask"])
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(actions["GiveFluids"])
+        if "MAP" not in examined_vitals:
+            take_action(27)
+            examined_vitals["MAP"] = True
             continue
 
         if "circulation" not in examined_vitals:
-            take_action(actions["circulation"])
-            examined_vitals.add("circulation")
+            take_action(5)
+            examined_vitals["circulation"] = True
             continue
 
         if "disability" not in examined_vitals:
-            take_action(actions["disability"])
-            examined_vitals.add("disability")
+            take_action(6)
+            examined_vitals["disability"] = True
             continue
 
         if "exposure" not in examined_vitals:
-            take_action(actions["exposure"])
-            examined_vitals.add("exposure")
+            take_action(7)
+            examined_vitals["exposure"] = True
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+            take_action(2)
             continue
 
         take_action(48)
