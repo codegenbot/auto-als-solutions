@@ -6,82 +6,70 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
+    actions = {
+        "Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6,
+        "Exposure": 7, "MeasureHR": 16, "MeasureMap": 27, "MeasureSats": 25,
+        "NonRebreatherMask": 30, "GiveFluids": 15, "BagValveMask": 29,
+        "AttachDefibPads": 28, "ChestCompression": 17, "Finish": 48
+    }
 
-    def measure_vitals():
+    def initial_checks():
         if "Airway" not in examined:
-            take_action(3)
+            take_action(actions["Airway"])
             examined.add("Airway")
         elif "Breathing" not in examined:
-            take_action(4)
+            take_action(actions["Breathing"])
             examined.add("Breathing")
         elif "Circulation" not in examined:
-            take_action(5)
+            take_action(actions["Circulation"])
             examined.add("Circulation")
-        elif "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-        elif "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-        elif "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
 
-        vitals = dict()
-        vitals["HR"] = values[0] if times[0] > 0 else None
-        vitals["RR"] = values[1] if times[1] > 0 else None
-        vitals["Glucose"] = values[2] if times[2] > 0 else None
-        vitals["Temp"] = values[3] if times[3] > 0 else None
-        vitals["MAP"] = values[4] if times[4] > 0 else None
-        vitals["Sats"] = values[5] if times[5] > 0 else None
-        vitals["Resps"] = values[6] if times[6] > 0 else None
+        vitals = {
+            "HR": values[0] if times[0] > 0 else None,
+            "RR": values[1] if times[1] > 0 else None,
+            "Glucose": values[2] if times[2] > 0 else None,
+            "Temp": values[3] if times[3] > 0 else None,
+            "MAP": values[4] if times[4] > 0 else None,
+            "Sats": values[5] if times[5] > 0 else None,
+            "Resps": values[6] if times[6] > 0 else None,
+        }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(actions["ChestCompression"])
             continue
 
-        measure_vitals()
+        initial_checks()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(actions["GiveFluids"])
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(actions["NonRebreatherMask"])
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(actions["BagValveMask"])
             continue
 
-        heart_rhythm_event_indices = range(29, 39)
-        if any(events[i] > 0 for i in heart_rhythm_event_indices):
-            take_action(28)
+        if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
+            take_action(actions["AttachDefibPads"])
             continue
 
-        take_action(48)
+        take_action(actions["Finish"])
         break
     else:
-        take_action(48)
+        take_action(actions["Finish"])
 
 if __name__ == "__main__":
     stabilize()
