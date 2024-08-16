@@ -1,12 +1,20 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
-    examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
+
+    examined = {
+        "Airway": False,
+        "Breathing": False,
+        "Circulation": False,
+        "Disability": False,
+        "Exposure": False,
+    }
     vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False}
+    drawers_opened = {"Breathing": False, "Circulation": False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -28,7 +36,9 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -41,7 +51,7 @@ def stabilize():
             take_action(4)
             examined["Breathing"] = True
             continue
-        
+
         if not examined["Circulation"]:
             take_action(5)
             examined["Circulation"] = True
@@ -57,45 +67,50 @@ def stabilize():
             examined["Exposure"] = True
             continue
 
-        if vitals["RR"] is None:
-            if not vitals_checked["RR"]:
-                take_action(4)
-                vitals_checked["RR"] = True
-                continue
-        elif vitals["RR"] < 8:
+        if vitals["RR"] is None and not vitals_checked["RR"]:
+            take_action(4)
+            vitals_checked["RR"] = True
+            continue
+        elif vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["MAP"] is None:
-            if not vitals_checked["MAP"]:
-                take_action(27)
-                vitals_checked["MAP"] = True
+        if vitals["MAP"] is None and not vitals_checked["MAP"]:
+            if not drawers_opened["Circulation"]:
+                take_action(20)
+                drawers_opened["Circulation"] = True
                 continue
-        elif vitals["MAP"] < 60:
+            take_action(27)
+            vitals_checked["MAP"] = True
+            continue
+        elif vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] is None:
-            if not vitals_checked["Sats"]:
-                take_action(25)
-                vitals_checked["Sats"] = True
+        if vitals["Sats"] is None and not vitals_checked["Sats"]:
+            if not drawers_opened["Breathing"]:
+                take_action(19)
+                drawers_opened["Breathing"] = True
                 continue
-        elif vitals["Sats"] < 88:
+            take_action(25)
+            vitals_checked["Sats"] = True
+            continue
+        elif vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["HR"] is None:
-            if not vitals_checked["HR"]:
-                take_action(24)
-                vitals_checked["HR"] = True
-                continue
-        
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(40)
+        if vitals["HR"] is None and not vitals_checked["HR"]:
+            take_action(24)
+            vitals_checked["HR"] = True
             continue
-        
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)
+            continue
+
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
