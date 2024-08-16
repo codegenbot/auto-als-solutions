@@ -5,30 +5,26 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
+    assessed = {
+        "Airway": False,
+        "Breathing": False,
+        "Circulation": False,
+        "Disability": False,
+        "Exposure": False,
+    }
     actions = {
-        "Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6,
-        "Exposure": 7, "MeasureHR": 25, "MeasureMAP": 27, "MeasureSats": 25,
-        "NonRebreatherMask": 30, "GiveFluids": 15, "BagValveMask": 29,
-        "AttachDefibPads": 28, "ChestCompression": 17, "Finish": 48
+        "Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6, "Exposure": 7,
+        "MeasureHR": 16, "MeasureMAP": 27, "MeasureSats": 25, "NonRebreatherMask": 30,
+        "GiveFluids": 15, "BagValveMask": 29, "AttachDefibPads": 28, "ChestCompression": 17,
+        "Finish": 48
     }
 
     def initial_checks():
-        if "Airway" not in examined:
-            take_action(actions["Airway"])
-            examined.add("Airway")
-        elif "Breathing" not in examined:
-            take_action(actions["Breathing"])
-            examined.add("Breathing")
-        elif "Circulation" not in examined:
-            take_action(actions["Circulation"])
-            examined.add("Circulation")
-        elif "Disability" not in examined:
-            take_action(actions["Disability"])
-            examined.add("Disability")
-        elif "Exposure" not in examined:
-            take_action(actions["Exposure"])
-            examined.add("Exposure")
+        for key in assessed:
+            if not assessed[key]:
+                take_action(actions[key])
+                assessed[key] = True
+                return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -56,18 +52,6 @@ def stabilize():
 
         initial_checks()
 
-        if vitals["HR"] is None:
-            take_action(actions["MeasureHR"])
-            continue
-
-        if vitals["MAP"] is None:
-            take_action(actions["MeasureMAP"])
-            continue
-
-        if vitals["Sats"] is None:
-            take_action(actions["MeasureSats"])
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(actions["GiveFluids"])
             continue
@@ -78,10 +62,6 @@ def stabilize():
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(actions["BagValveMask"])
-            continue
-
-        if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
-            take_action(actions["AttachDefibPads"])
             continue
 
         take_action(actions["Finish"])
