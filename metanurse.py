@@ -29,21 +29,15 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 25 not in actions_taken:
-                actions_taken.add(25)
-                take_action(25)
-            else:
-                take_action(30)
+            take_action(30)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 15 not in actions_taken:
-                actions_taken.add(15)
-                take_action(15)
             continue
 
         if 25 not in actions_taken:
