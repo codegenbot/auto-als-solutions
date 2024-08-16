@@ -1,51 +1,32 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    def assess_airway():
-        if not events[3]:
-            take_action(3)  # ExamineAirway
+    def examine_vitals():
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
             return
-
-    def assess_breathing():
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
             return
-        if not events[11]:
-            take_action(4)  # ExamineBreathing
-            return
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            return
-
-    def assess_circulation():
-        if not events[16] or not events[17]:
-            take_action(5)  # ExamineCirculation
-            return
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            return
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(9)  # GiveAdenosine
-                return
-            elif vitals["HR"] > 100:
-                take_action(9)  # GiveAdenosine
-                return
-            elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
-                return
-
-    def assess_disability():
-        if not events[6]:
-            take_action(6)  # ExamineDisability
+        if "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
             return
 
     examined = set()
+    steps = {
+        'airway': False,
+        'breathing': False,
+        'circulation': False,
+        'disability': False,
+        'exposure': False
+    }
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -66,23 +47,56 @@ def stabilize():
         vitals["Sats"] = values[5] if times[5] > 0 else None
         vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            take_action(17)  # StartChestCompression
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
-        assess_airway()
-        assess_breathing()
-        assess_circulation()
-        assess_disability()
+        if not steps['airway']:
+            take_action(3)
+            steps['airway'] = True
+            continue
 
-        examined.add('ABCDE')
+        if "AirwayClear" in events:
+            if not steps['breathing']:
+                take_action(4)
+                steps['breathing'] = True
+                continue
+
+            if "BreathingEqualChestExpansion" in events or "BreathingBibasalCrepitations" in events:
+                if vitals["Sats"] and vitals["Sats"] < 88:
+                    take_action(30)
+                    continue
+
+                if vitals["RR"] and vitals["RR"] < 8:
+                    take_action(29)
+                    continue
+
+            if not steps['circulation']:
+                take_action(5)
+                steps['circulation'] = True
+                continue
+
+            if vitals["MAP"] and vitals["MAP"] < 60:
+                take_action(15)
+                continue
+
+            if vitals["HR"]:
+                if vitals["HR"] > 150:
+                    take_action(24)
+                    continue
+                elif vitals["HR"] > 100:
+                    take_action(24)
+                    continue
+                elif vitals["HR"] < 50:
+                    take_action(12)
+                    continue
+
+            examine_vitals()
+
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
