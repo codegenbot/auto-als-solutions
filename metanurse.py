@@ -65,39 +65,39 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
-            take_action(4)
+            take_action(4)  # Examine breathing
             examined_vitals.add("breathing")
             continue
 
         if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
-            take_action(5)
+            take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
-            take_action(6)
+            take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7)  # Examine exposure
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" not in examined_vitals else 29)
+            take_action(30 if "mask" not in examined_vitals else 29)  # Oxygen therapy
             examined_vitals.add("mask")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag valve mask
             continue
 
         if all(v != None and ((v >= 88 if k == "Sats" else v >= 8 if k == "RR" else v >= 60)) for k, v in vitals.items()):
-            take_action(48)
+            take_action(48)  # Finish
             break
 
 if __name__ == "__main__":
