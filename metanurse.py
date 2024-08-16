@@ -6,7 +6,8 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    
+    examined_vitals = set()
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,53 +25,58 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if vitals["MAP"] is None:
+        if vitals["MAP"] is None and 27 not in examined_vitals:
             take_action(27)
+            examined_vitals.add(27)
             continue
-        if vitals["Sats"] is None:
+
+        if vitals["Sats"] is None and 25 not in examined_vitals:
             take_action(25)
-            continue
-        if vitals["RR"] is None:
-            take_action(4)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 30 not in actions_taken:
-                actions_taken.add(30)
-                take_action(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            examined_vitals.add(25)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        significant_heart_rhythm_events = [27, 28, 29, 30, 31, 32]
-        if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(24)
-            continue
-        
-        clear_assessments = [
-            ("Examine Airway", 3, range(3, 7)),
-            ("Examine Breathing", 4, range(7, 15)),
-            ("Examine Circulation", 5, range(15, 20)),
-            ("Examine Disability", 6, range(20, 26)),
-            ("Examine Exposure", 7, range(26, 33)),
-        ]
-        
-        for name, action, event_range in clear_assessments:
-            if any(events[i] > 0 for i in event_range):
-                take_action(action)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if 25 not in actions_taken:
+                take_action(25)
+                actions_taken.add(25)
                 continue
-        
+            if 30 not in actions_taken:
+                take_action(30)
+                actions_taken.add(30)
+                continue
+            take_action(29)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
+            take_action(3)
+            actions_taken.add(3)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4)
+            continue
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)
+            continue
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6)
+            continue
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
         take_action(48)
         break
 
