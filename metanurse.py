@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    monitor_viewed = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -44,9 +43,9 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
-        if "Sats" in examined_vitals and not monitor_viewed:
+        if "Sats" in examined_vitals and "ViewMonitor" not in examined_vitals:
             take_action(16)  # View monitor to get actual Sats value
-            monitor_viewed = True
+            examined_vitals.add("ViewMonitor")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -67,9 +66,9 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
-        if "MAP" in examined_vitals and not monitor_viewed:
+        if "MAP" in examined_vitals and "ViewMonitor" not in examined_vitals:
             take_action(16)  # View monitor to get MAP value
-            monitor_viewed = True
+            examined_vitals.add("ViewMonitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
