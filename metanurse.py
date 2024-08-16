@@ -78,7 +78,7 @@ def stabilize():
                 take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(11)  # Give Amiodarone
+                take_action(11)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
