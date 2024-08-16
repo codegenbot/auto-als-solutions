@@ -6,11 +6,11 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -24,14 +24,13 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
-           (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
             continue
 
-        if "monitor" not in examined_vitals:
-            take_action(16)  # View monitor
-            examined_vitals.add("monitor")
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)  # Examine airway
+            examined_vitals.add("airway")
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
@@ -39,9 +38,29 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
+        if "MAP" in examined_vitals and vitals["MAP"] is None:
+            take_action(16)  # View monitor for MAP
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
+            continue
+
+        if "Sats" in examined_vitals and vitals["Sats"] is None:
+            take_action(16)  # View monitor for Sats
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if "mask" not in examined_vitals:
+                take_action(30)  # Use NonRebreatherMask
+                examined_vitals.add("mask")
+            else:
+                take_action(29)  # Use BagValveMask if oxygen drops further
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
@@ -49,9 +68,8 @@ def stabilize():
             examined_vitals.add("RR")
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
-            examined_vitals.add("airway")
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use BagValveMask
             continue
 
         if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
@@ -64,6 +82,10 @@ def stabilize():
             examined_vitals.add("circulation")
             continue
 
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and vitals["HR"] > 100):
+            take_action(43)  # Cardioversion
+            continue
+
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
@@ -71,24 +93,6 @@ def stabilize():
 
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine exposure
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
-        if vitals["HR"] is not None and vitals["HR"] > 100:
-            take_action(2)  # Check rhythm
-            if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmias
-                take_action(9)  # Give adenosine
-                continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
             continue
 
         take_action(48)  # Finish
