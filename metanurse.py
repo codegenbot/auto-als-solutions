@@ -32,7 +32,7 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+        if "airway" not in examined_vitals:
             take_action(3)  # ExamineAirway
             examined_vitals.add("airway")
             continue
@@ -59,7 +59,7 @@ def stabilize():
             take_action(27)  # UseBloodPressureCuff
             examined_vitals.add("MAP")
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
@@ -73,11 +73,12 @@ def stabilize():
             take_action(2)  # CheckRhythm
             continue
         
-        if events[28] > 0 or events[30] > 0:
+        if any(events[i] > 0 for i in range(23, 28)) and "cardiac" not in examined_vitals:
             take_action(9)  # GiveAdenosine
+            examined_vitals.add("cardiac")
             continue
         
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+        if any(events[i] > 0 for i in range(20, 23)) and "disability" not in examined_vitals:
             take_action(6)  # ExamineDisability
             examined_vitals.add("disability")
             continue
