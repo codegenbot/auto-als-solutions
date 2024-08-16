@@ -30,7 +30,6 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
-        # Re-check vital measurements if any are None
         if "monitor" not in examined_vitals:
             take_action(16)  # View monitor
             examined_vitals.add("monitor")
