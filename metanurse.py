@@ -1,18 +1,26 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-    measurements = {
-        "BP": False,
-        "Sats": False,
-        "RespRate": False,
-        "HR": False,
-    }
+    actions_taken = []
+
+    def measure_vitals():
+        if "BP" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("RespRate")
+        elif "HR" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("HR")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -35,9 +43,7 @@ def stabilize():
         }
 
         # Immediate cardiac arrest check
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -47,25 +53,15 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[6] > 0:  # Airway obstruction by tongue
-            take_action(36)  # PerformHeadTiltChinLift
-            continue
+        # Check vital signs and take further appropriate actions
+        measure_vitals()
 
-        if events[4] > 0 or events[5] > 0:  # Airway obstruction by vomit or blood
-            take_action(31)  # UseYankeurSucionCatheter
+        # Circulation intervention
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
             continue
 
         # Breathing intervention
-        if not measurements["RespRate"]:
-            take_action(4)  # ExamineBreathing
-            measurements["RespRate"] = True
-            continue
-
-        if not measurements["Sats"]:
-            take_action(25)  # UseSatsProbe
-            measurements["Sats"] = True
-            continue
-
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -74,35 +70,17 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Circulation intervention
-        if not measurements["BP"]:
-            take_action(27)  # UseBloodPressureCuff
-            measurements["BP"] = True
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if not measurements["HR"]:
-            take_action(16)  # ViewMonitor
-            measurements["HR"] = True
-            continue
-
-        # Handle unstable rhythm and tachyarrhythmias
-        if (
-            events[29] > 0
-            or events[30] > 0
-            or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))
-        ):
+        # Handle unstable rhythm and tachyarrhythmia
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)  # AttachDefibPads
             continue
 
-        take_action(48)  # Finish
-        break
+        if "Airway" in examined and "BP" in examined and "SatsProbe" in examined and "RespRate" in examined and "HR" in examined:
+            take_action(48)  # Finish
+            break
+
     else:
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
