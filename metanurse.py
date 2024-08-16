@@ -77,7 +77,7 @@ def stabilize():
         assess_circulation()
         assess_disability()
 
-        examined.add("ABCDE")
+        examined.add('ABCDE')
         take_action(48)
         break
     else:
