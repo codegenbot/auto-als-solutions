@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-    
+
     def examine_vitals():
         if "BI" not in examined:
             take_action(18)  # OpenAirwayDrawer
@@ -42,10 +43,12 @@ def stabilize():
             "Temp": values[3] if times[3] else None,
             "MAP": values[4] if times[4] else None,
             "Sats": values[5] if times[5] else None,
-            "Resps": values[6] if times[6] else None
+            "Resps": values[6] if times[6] else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # StartChestCompression
             continue
 
@@ -88,6 +91,7 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
