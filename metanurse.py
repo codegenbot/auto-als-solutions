@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined = set()
 
     def measure_vitals():
@@ -20,7 +20,7 @@ def stabilize():
         elif "RespRate" not in examined:
             take_action(4)   # ExamineBreathing
             examined.add("RespRate")
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -79,7 +79,7 @@ def stabilize():
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-        
+
         take_action(48)  # Finish
 
 if __name__ == "__main__":
