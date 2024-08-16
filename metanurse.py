@@ -7,7 +7,15 @@ def stabilize():
 
     actions = 0
     examined = set()
-    need_check = {"Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6, "Exposure": 7, "SignsOfLife": 1}
+    need_check = {"ExamineAirway": 3, "ExamineBreathing": 4, "ExamineCirculation": 5, "ExamineDisability": 6, "ExamineExposure": 7, "CheckSignsOfLife": 1}
+
+    def examination_cycle():
+        for key, action in need_check.items():
+            if key not in examined:
+                take_action(action)
+                examined.add(key)
+                return True
+        return False
 
     while actions < 350:
         observations = list(map(float, input().strip().split()))
@@ -15,7 +23,7 @@ def stabilize():
             take_action(0)
             actions += 1
             continue
-        
+
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -29,38 +37,35 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
             "Resps": values[6] if times[6] > 0 else None
         }
-        
+
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             break
-        
+
         if events[3] == 0:
             take_action(3)
             actions += 1
             continue
-        
-        for key, action in need_check.items():
-            if key not in examined:
-                take_action(action)
-                examined.add(key)
-                actions += 1
-                break
-        
-        if vitals["MAP"] and vitals["MAP"] < 60:
+
+        if examination_cycle():
+            actions += 1
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             actions += 1
             continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             actions += 1
             continue
-        
-        if vitals["RR"] and vitals["RR"] < 8:
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             actions += 1
             continue
-        
+
         hr = vitals["HR"]
         if hr and (hr < 50 or hr > 150):
             take_action(28)
