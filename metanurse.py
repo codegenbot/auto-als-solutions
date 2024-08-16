@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
     vitals_measured = set()
 
@@ -44,8 +43,7 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -75,20 +73,15 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if (
-            events[29] > 0
-            or events[30] > 0
-            or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150))
-        ):
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)  # AttachDefibPads
             continue
 
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-
+        
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
