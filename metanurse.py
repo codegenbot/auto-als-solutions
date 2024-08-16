@@ -28,66 +28,66 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start Chest Compressions
             continue
-
+        
         if "airway" not in examined_vitals and any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+            take_action(3)  # Examine Airway
             examined_vitals.add("airway")
             continue
 
         if "breathing" not in examined_vitals:
-            take_action(4)
+            take_action(4)  # Examine Breathing
             examined_vitals.add("breathing")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)
+            take_action(25)  # Use Sats Probe
             examined_vitals.add("Sats")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             examined_vitals.add("MAP")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
         if "circulation" not in examined_vitals:
-            take_action(5)
+            take_action(5)  # Examine Circulation
             examined_vitals.add("circulation")
             continue
 
         if vitals["HR"] is None and "HR" not in examined_vitals:
-            take_action(2)
+            take_action(2)  # Check Rhythm
             examined_vitals.add("HR")
             continue
 
         if "disability" not in examined_vitals:
-            take_action(6)
+            take_action(6)  # Examine Disability
             examined_vitals.add("disability")
             continue
 
         if "exposure" not in examined_vitals:
-            take_action(7)
+            take_action(7)  # Examine Exposure
             examined_vitals.add("exposure")
             continue
 
         if step >= 349:
-            take_action(48)
+            take_action(48)  # Finish
             break
 
-        take_action(0)
+        take_action(0)  # Default Do Nothing
 
 if __name__ == "__main__":
     stabilize()
