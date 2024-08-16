@@ -6,25 +6,26 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
+    
     def examine_vitals():
         if "Monitor" not in examined:
-            take_action(16)
+            take_action(16)  # View Monitor
             examined.add("Monitor")
-            return
+            return True
         if "SatsProbe" not in examined:
-            take_action(25)
+            take_action(25)  # Use Sats Probe
             examined.add("SatsProbe")
-            return
+            return True
         if "BPCuff" not in examined:
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             examined.add("BPCuff")
-            return
+            return True
+        return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -41,55 +42,52 @@ def stabilize():
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
 
-        if not any(events[3:7]):
-            take_action(3)
+        if not any(events[3:7]) and "Airway" not in examined:
+            take_action(3)  # Examine Airway
+            examined.add("Airway")
             continue
 
-        if events[3]:
-            if not any(events[7:15]):
-                take_action(4)
-                continue
-
-        if events[8]:
-            take_action(36)
+        if events[3] and not any(events[7:15]) and "Breathing" not in examined:
+            take_action(4)  # Examine Breathing
+            examined.add("Breathing")
             continue
 
-        examine_vitals()
+        if examine_vitals():
+            continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non Rebreather Mask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[i] for i in range(28, 33)):
-            take_action(24)
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                if vitals["MAP"] and vitals["MAP"] < 60:
+                    take_action(24)  # Use Monitor Pads (for cardioversion)
+                    continue
+                take_action(9)  # Give Adenosine
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(9)  # Give Adenosine
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # Give Atropine
                 continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
