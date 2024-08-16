@@ -4,20 +4,19 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined_vitals = set()
     oxygen_given = False
-    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
             continue
-        
+
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-        
+
         vitals = {
             "HR": values[0] if times[0] != 0 else None,
             "RR": values[1] if times[1] != 0 else None,
@@ -31,7 +30,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-        
+
         if "airway" not in examined_vitals:
             take_action(3)
             examined_vitals.add("airway")
@@ -69,16 +68,16 @@ def stabilize():
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(2)
             continue
-        
+
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)
             examined_vitals.add("disability")
             continue
-        
+
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
-        
+
         if all([
             vitals["Sats"] and vitals["Sats"] >= 88,
             vitals["RR"] and vitals["RR"] >= 8,
