@@ -29,61 +29,61 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start CPR
             continue
 
         if "airway" not in examined:
-            take_action(3)
+            take_action(3)  # Examine Airway
             examined.add("airway")
             continue
 
         if "Sats" not in examined:
-            take_action(25)
+            take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
         if "RR" not in examined:
-            take_action(4)
+            take_action(4)  # Examine Breathing
             examined.add("RR")
             continue
 
         if "BP" not in examined:
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             examined.add("BP")
             continue
 
         if "HR" not in examined:
-            take_action(24)
+            take_action(24)  # Use Monitor Pads
             examined.add("HR")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
-            take_action(6)
+            take_action(6)  # Examine Disability
             examined.add("disability")
             continue
 
         if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
-            take_action(7)
+            take_action(7)  # Examine Exposure
             examined.add("exposure")
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(2)
+            take_action(2)  # Check Rhythm
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
