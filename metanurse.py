@@ -53,6 +53,11 @@ def stabilize():
             examined_vitals.add("RR")
             continue
 
+        if any(events[7:15]) and "breathing_event" not in examined_vitals:
+            take_action(4)  # Examine breathing if there's a breathing event
+            examined_vitals.add("breathing_event")
+            continue
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
