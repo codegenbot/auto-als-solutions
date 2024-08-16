@@ -41,7 +41,7 @@ def stabilize():
             take_action(25)
             examined.add("SatsProbe")
             continue
-
+        
         if "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
@@ -57,14 +57,28 @@ def stabilize():
             examined.add("Monitor")
             continue
 
+        if "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
+            continue
+
+        if "Aline" not in examined:
+            take_action(26)
+            examined.add("Aline")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
+            continue
+
+        if vitals["MAP"] is not None and events[29] > 0.7:
+            take_action(9 if vitals["MAP"] < 60 else 40)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
