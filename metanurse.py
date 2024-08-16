@@ -32,6 +32,10 @@ def stabilize():
         ):
             take_action(17)  # Start CPR
             continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
 
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
             take_action(3)  # Examine airway
@@ -69,10 +73,6 @@ def stabilize():
         if "MAP" in examined_vitals and "ViewMonitor" not in examined_vitals:
             take_action(16)  # View monitor to get MAP value
             examined_vitals.add("ViewMonitor")
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
             continue
 
         if events[15] > 0 and "circulation" not in examined_vitals:
