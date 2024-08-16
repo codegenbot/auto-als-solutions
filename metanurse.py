@@ -20,7 +20,7 @@ def stabilize():
         elif "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
