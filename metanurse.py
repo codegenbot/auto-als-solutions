@@ -4,28 +4,11 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
+    observation_count = 0
 
-    def examine_vitals():
-        if "Drawer" not in examined:
-            take_action(18)  # OpenAirwayDrawer
-            examined.add("Drawer")
-            return
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
-            return
-        if "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-            return
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-            return
-
-    for step in range(350):
+    for _ in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
@@ -36,18 +19,16 @@ def stabilize():
         values = observations[40:]
 
         vitals = {
-            "HR": values[0] if times[0] != 0 else None,
-            "RR": values[1] if times[1] != 0 else None,
-            "Glucose": values[2] if times[2] != 0 else None,
-            "Temp": values[3] if times[3] != 0 else None,
-            "MAP": values[4] if times[4] != 0 else None,
-            "Sats": values[5] if times[5] != 0 else None,
-            "Resps": values[6] if times[6] != 0 else None,
+            "HR": values[0] if times[0] else None,
+            "RR": values[1] if times[1] else None,
+            "Glucose": values[2] if times[2] else None,
+            "Temp": values[3] if times[3] else None,
+            "MAP": values[4] if times[4] else None,
+            "Sats": values[5] if times[5] else None,
+            "Resps": values[6] if times[6] else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
@@ -61,7 +42,20 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        examine_vitals()
+        if "Circulation" not in examined:
+            take_action(5)  # ExamineCirculation
+            examined.add("Circulation")
+            continue
+
+        if "Disability" not in examined:
+            take_action(6)  # ExamineDisability
+            examined.add("Disability")
+            continue
+
+        if "Exposure" not in examined:
+            take_action(7)  # ExamineExposure
+            examined.add("Exposure")
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
@@ -85,12 +79,16 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)  # GiveAtropine
                 continue
-
-        take_action(48)  # Finish
-        break
-
-    else:
-        take_action(48)  # Finish
+        
+        if all([
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,
+            vitals["RR"] is not None and vitals["RR"] >= 8,
+            vitals["MAP"] is not None and vitals["MAP"] >= 60
+        ]):
+            take_action(48)  # Finish
+            break
+    
+    take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
