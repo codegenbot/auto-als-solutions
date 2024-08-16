@@ -49,8 +49,11 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in actions_taken else 29)
-            actions_taken.add(30)
+            if 30 not in actions_taken:
+                take_action(30)
+                actions_taken.add(30)
+                continue
+            take_action(29)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -62,19 +65,16 @@ def stabilize():
             actions_taken.add(3)
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)) and 4 not in actions_taken:
+        if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
-            actions_taken.add(4)
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in actions_taken:
+        if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)
-            actions_taken.add(5)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in actions_taken:
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
-            actions_taken.add(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
