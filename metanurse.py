@@ -27,13 +27,11 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        # Check for cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Airway assessment
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
@@ -45,7 +43,6 @@ def stabilize():
             take_action(35)  # PerformAirwayManoeuvres if not clear
             continue
 
-        # Breathing assessment and treatment
         if "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
@@ -54,7 +51,6 @@ def stabilize():
             take_action(30)  # UseNonRebreatherMask
             continue
 
-        # Circulation assessment and treatment
         if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
             examined.add("Monitor")
@@ -67,7 +63,6 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
 
-        # Respiratory rate management
         if "RespRate" not in examined:
             take_action(4)   # ExamineBreathing
             examined.add("RespRate")
@@ -76,7 +71,6 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Finish if all vitals checked and stable
         if all(
             key in examined
             for key in ["airway_clear", "SatsProbe", "Monitor", "BP", "RespRate"]
