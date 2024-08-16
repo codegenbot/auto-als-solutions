@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -35,30 +36,11 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("MAP")
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-        
-        if vitals["MAP"] is None and "MAP-monitor" not in examined_vitals:
-            take_action(16)  # View monitor after blood pressure cuff
-            examined_vitals.add("MAP-monitor")
-            continue
-
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
-        
-        if vitals["Sats"] is None and "monitor" not in examined_vitals:
-            take_action(16)  # View monitor after sats probe
-            examined_vitals.add("monitor")
-            continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if "mask" not in examined_vitals:
                 take_action(30)  # Use NonRebreatherMask
@@ -77,19 +59,20 @@ def stabilize():
             continue
 
         if (
-            any(events[i] > 0 for i in range(7, 15))
-            and "breathing" not in examined_vitals
-        ):
-            take_action(4)  # Examine breathing
-            examined_vitals.add("breathing")
-            continue
-
-        if (
             any(events[i] > 0 for i in range(15, 20))
             and "circulation" not in examined_vitals
         ):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
+            continue
+
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            take_action(27)  # Use blood pressure cuff
+            examined_vitals.add("MAP")
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
             continue
 
         if (
@@ -106,6 +89,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
