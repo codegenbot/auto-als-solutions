@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -31,6 +30,7 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
+        # Check for arrhythmia and treat if needed
         arrhythmia_events = [28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in arrhythmia_events):
             if events[29] > 0:  # SVT
@@ -45,7 +45,7 @@ def stabilize():
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
-
+        
         if vitals["MAP"] is None:
             take_action(16)  # View monitor
             continue
@@ -114,7 +114,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
