@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -54,14 +53,6 @@ def stabilize():
             take_action(29)  # Use BagValveMask
             continue
 
-        if (
-            any(events[i] > 0 for i in range(15, 20))
-            and "circulation" not in examined_vitals
-        ):
-            take_action(5)  # Examine circulation
-            examined_vitals.add("circulation")
-            continue
-
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
@@ -71,10 +62,12 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "disability" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+            take_action(5)  # Examine circulation
+            examined_vitals.add("circulation")
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
@@ -85,7 +78,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
