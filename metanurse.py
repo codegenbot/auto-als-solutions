@@ -30,6 +30,7 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
+        # Re-check vital measurements if any are None
         if "monitor" not in examined_vitals:
             take_action(16)  # View monitor
             examined_vitals.add("monitor")
@@ -85,6 +86,11 @@ def stabilize():
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use bag valve mask
+            continue
+
+        # Check for unstable tachyarrhythmia events
+        if any(events[i] > 0 for i in range(30, 32)):
+            take_action(24)  # Use monitor pads
             continue
 
         take_action(48)  # Finish
