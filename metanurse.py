@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -37,7 +38,7 @@ def stabilize():
             take_action(3)
             examined_vitals["airway"] = True
             continue
-        
+
         if "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals["Sats"] = True
@@ -86,6 +87,7 @@ def stabilize():
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
