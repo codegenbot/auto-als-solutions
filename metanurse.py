@@ -1,13 +1,11 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set()
-
+    observed = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -25,75 +23,65 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Handle cardiac arrest
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-                vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # Start CPR
             continue
 
-        # Attach and measure vitals in ABCDE sequence
-        if vitals["MAP"] is None and 27 not in examined_vitals:
-            take_action(27)
-            examined_vitals.add(27)
+        if vitals["MAP"] is None and 27 not in observed:
+            take_action(27)  # UseBloodPressureCuff
+            observed.add(27)
             continue
 
-        if vitals["Sats"] is None and 25 not in examined_vitals:
-            take_action(25)
-            examined_vitals.add(25)
+        if vitals["Sats"] is None and 25 not in observed:
+            take_action(25)  # UseSatsProbe
+            observed.add(25)
             continue
 
-        if vitals["RR"] is None and 4 not in examined_vitals:
-            take_action(4)
-            examined_vitals.add(4)
+        if vitals["RR"] is None and 4 not in observed:
+            take_action(4)  # ExamineBreathing
+            observed.add(4)
             continue
 
-        # Treat if measured vitals are not stabilized
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
-            examined_vitals.add(30)
+            take_action(30 if 30 not in observed else 29)  # UseNonRebreatherMask -> UseBagValveMask
+            observed.add(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        # Examine airway if relevant
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
-            take_action(3)
-            examined_vitals.add(3)
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in observed:
+            take_action(3)  # ExamineAirway
+            observed.add(3)
             continue
 
-        # Examine breathing if relevant
-        if any(events[i] > 0 for i in range(7, 15)) and 4 not in examined_vitals:
-            take_action(4)
-            examined_vitals.add(4)
+        if any(events[i] > 0 for i in range(7, 15)) and 4 not in observed:
+            take_action(4)  # ExamineBreathing
+            observed.add(4)
             continue
 
-        # Examine circulation if relevant
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in examined_vitals:
-            take_action(5)
-            examined_vitals.add(5)
+        if any(events[i] > 0 for i in range(15, 20)) and 5 not in observed:
+            take_action(5)  # ExamineCirculation
+            observed.add(5)
             continue
 
-        # Examine disability if relevant
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in examined_vitals:
-            take_action(6)
-            examined_vitals.add(6)
+        if any(events[i] > 0 for i in range(20, 26)) and 6 not in observed:
+            take_action(6)  # ExamineDisability
+            observed.add(6)
             continue
 
-        # Examine exposure if relevant
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+        if any(events[i] > 0 for i in range(26, 33)) and 7 not in observed:
+            take_action(7)  # ExamineExposure
+            observed.add(7)
             continue
 
-        # Final action to finish
-        take_action(48)
+        take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
