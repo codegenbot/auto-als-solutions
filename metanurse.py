@@ -72,10 +72,10 @@ def stabilize():
             take_action(15)
             continue
         
-        if vitals["HR"] is not None and vitals["HR"] > 100:
-            take_action(2)
-            if events[28] > 0 or events[30] > 0:
-                take_action(9)
+        if vitals["HR"] is not None and vitals["HR"] > 100:  # Adjust threshold if needed
+            take_action(2)  # Check rhythm
+            if events[28] > 0 or events[30] > 0:  # SVT or AF
+                take_action(9)  # Give Adenosine for SVT, example logic
                 continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
