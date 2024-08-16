@@ -33,35 +33,45 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
-        # Airway check
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
             take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
 
-        if not vitals["Sats"]:
+        if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
+            examined_vitals.add("Sats")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if "Sats" in examined_vitals and "ViewMonitor" not in examined_vitals:
+            take_action(16)  # View monitor to get actual Sats value
+            examined_vitals.add("ViewMonitor")
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
 
-        # Breathing check
-        if not vitals["RR"]:
-            take_action(4)  # Examine breathing
+        if vitals["RR"] is None and "RR" not in examined_vitals:
+            take_action(4)  # Examine breathing for RR evaluation
+            examined_vitals.add("RR")
             continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
 
-        # Circulation check
-        if not vitals["MAP"]:
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
+            examined_vitals.add("MAP")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if "MAP" in examined_vitals and "ViewMonitor" not in examined_vitals:
+            take_action(16)  # View monitor to get MAP value
+            examined_vitals.add("ViewMonitor")
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
 
@@ -70,7 +80,7 @@ def stabilize():
             examined_vitals.add("circulation")
             continue
 
-        if vitals["HR"] and (vitals["HR"] < 60 or vitals["HR"] > 100):
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(2)  # Check rhythm
             continue
 
