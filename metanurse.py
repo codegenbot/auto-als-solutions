@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
     def examine_vitals():
         if "Monitor" not in examined:
@@ -47,14 +47,14 @@ def stabilize():
             take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
-
-        if events[3]:
+        
+        if events[3]:  # AirwayClear
+            if events[8]:  # BreathingSnoring
+                take_action(36)  # Perform Head Tilt Chin Lift
+                continue
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)  # Examine Breathing
                 examined.add("Breathing")
-                continue
-            if events[8]:  # BreathingSnoring
-                take_action(36)  # Perform Head Tilt Chin Lift
                 continue
 
         examine_vitals()
@@ -71,18 +71,11 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if events[28:33]:  # Check for heart arrhythmia events
-            if "HR" not in examined:
-                take_action(2)  # Check Rhythm
-                examined.add("HR")
-                continue
-        
-            if vitals["HR"] and vitals["HR"] > 150 and vitals["MAP"] and vitals["MAP"] < 60:
-                take_action(28)  # Attach Defib Pads
-                take_action(39)  # Turn on Defibrillator
-                take_action(24)  # Use Defibrillator (Cardioversion)
-                continue
-        
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation)
+            continue
+
+        if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
@@ -93,9 +86,10 @@ def stabilize():
                 take_action(12)  # Give Atropine
                 continue
 
-        if step == 349:
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
