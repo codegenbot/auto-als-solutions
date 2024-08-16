@@ -38,18 +38,18 @@ def stabilize():
                 take_action(3)
                 examined_vitals.add("airway")
                 continue
-
-            if vitals["Sats"] is None and "Sats" not in examined_vitals:
+            
+            if vitals["Sats"] is None:
                 take_action(25)
                 examined_vitals.add("Sats")
                 continue
 
-            if vitals["RR"] is None and "RR" not in examined_vitals:
+            if vitals["RR"] is None:
                 take_action(4)
                 examined_vitals.add("RR")
                 continue
 
-            if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            if vitals["MAP"] is None:
                 take_action(27)
                 examined_vitals.add("MAP")
                 continue
@@ -57,7 +57,7 @@ def stabilize():
                 take_action(16)
                 continue
 
-            if vitals["HR"] is None and "HR" not in examined_vitals:
+            if vitals["HR"] is None:
                 take_action(5)
                 examined_vitals.add("HR")
                 continue
