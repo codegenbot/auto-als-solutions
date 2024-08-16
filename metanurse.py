@@ -6,11 +6,11 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -82,7 +82,8 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
+            take_action(29 if "mask" not in examined_vitals else 30)  # Use bag valve mask or Use NonRebreatherMask
+            examined_vitals.add("mask")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
