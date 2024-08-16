@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -34,21 +34,21 @@ def stabilize():
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
-
+          
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
-
+        
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
             examined_vitals.add("RR")
             continue
-
+        
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # Examine airway
             continue
-
+        
         if not any(events[i] > 0 for i in range(3, 7)):
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
                 take_action(30 if "mask" not in examined_vitals else 29)
