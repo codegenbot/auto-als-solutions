@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined_vitals = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -33,13 +33,11 @@ def stabilize():
             continue
 
         if "airway" not in examined_vitals:
-            take_action(3)
-            examined_vitals.add("airway")
-            continue
-
-        if events[3] > 0: # AirwayClear
-            take_action(8) # Check response
-            continue
+            if events[3] > 0: 
+                examined_vitals.add("airway")
+            else:
+                take_action(3)
+                continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
@@ -68,26 +66,30 @@ def stabilize():
             take_action(15)
             continue
 
-        if "circulation" not in examined_vitals:
+        if events[15] > 0 and "circulation" not in examined_vitals:
             take_action(5)
             examined_vitals.add("circulation")
             continue
 
-        if "disability" not in examined_vitals:
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+            take_action(2)
+            continue
+
+        if events[28] > 0 or events[30] > 0:
+            take_action(9)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)
             examined_vitals.add("disability")
             continue
 
-        if "exposure" not in examined_vitals:
+        if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
-            examined_vitals.add("exposure")
             continue
 
-        if all(v is not None for v in [vitals["Sats"], vitals["RR"], vitals["MAP"]]):
-            take_action(48)
-            break
-
-        take_action(0)
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
