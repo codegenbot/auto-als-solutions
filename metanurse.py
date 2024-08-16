@@ -4,32 +4,22 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined = set()
 
-    def initial_examination():
+    def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return True
+            return
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return True
+            return
         if "BPCuff" not in examined:
             take_action(27)
             examined.add("BPCuff")
-            return True
-
-        if "Airway" not in examined:
-            take_action(3)
-            examined.add("Airway")
-            return True
-        if "Breathing" not in examined and "AirwayClear" in events:
-            take_action(4)
-            examined.add("Breathing")
-            return True
-        return False
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -55,42 +45,46 @@ def stabilize():
             take_action(17)
             continue
 
-        if initial_examination():
+        if not any(events[3:7]) and "Airway" not in examined:
+            take_action(3)
+            examined.add("Airway")
             continue
 
-        if not events[3]:
-            take_action(3)
-            continue
+        if "AirwayClear" in events:
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)
+                examined.add("Breathing")
+                continue
         
-        if events[7]:
+        if "BreathingSnoring" in events:
             take_action(36)
             continue
-        if events[14]:
+        elif "BreathingPneumothoraxSymptoms" in events:
             take_action(19)
             continue
-        
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-        
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
+
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
+            continue
+        
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
-                continue
             elif vitals["HR"] > 100:
                 take_action(9)
-                continue
             elif vitals["HR"] < 50:
                 take_action(12)
-                continue
+            continue
 
         take_action(48)
         break
