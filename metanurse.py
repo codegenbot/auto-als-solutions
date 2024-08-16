@@ -17,17 +17,20 @@ def stabilize():
         elif "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)   # ExamineBreathing
+            examined.add("RespRate")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
-        
+
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-        
+
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -38,23 +41,36 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
+        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
+        # Airway assessment
         if events[3] > 0:
             examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
-        
+
+        # Check vital signs
         measure_vitals()
 
+        # Circulation intervention
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
+        
+        # Unstable rhythm check
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(28)  # AttachDefibPads
+            take_action(40)  # DefibrillatorCharge
+            take_action(41)  # DefibrillatorCurrentUp
+            take_action(43)  # DefibrillatorPace
+            continue
 
+        # Breathing intervention
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -63,19 +79,8 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(28)  # AttachDefibPads
-            take_action(40)  # DefibrillatorCharge
-            take_action(41)  # DefibrillatorCurrentUp
-            take_action(43)  # DefibrillatorPace
-            continue
-
-        if all((vitals["MAP"] and vitals["MAP"] >= 60,
-                vitals["RR"] and vitals["RR"] >= 8,
-                vitals["Sats"] and vitals["Sats"] >= 88,
-                events[3] > 0)):
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
     else:
         take_action(48)  # Finish
 
