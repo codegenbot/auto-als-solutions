@@ -8,9 +8,9 @@ def stabilize():
     examined = set()
 
     def examine_vitals():
-        if "BreathingDrawer" not in examined:
-            take_action(19)
-            examined.add("BreathingDrawer")
+        if "Drawer" not in examined:
+            take_action(18)
+            examined.add("Drawer")
             return
         if "Monitor" not in examined:
             take_action(16)
@@ -42,10 +42,12 @@ def stabilize():
             "Temp": values[3] if times[3] != 0 else None,
             "MAP": values[4] if times[4] != 0 else None,
             "Sats": values[5] if times[5] != 0 else None,
-            "Resps": values[6] if times[6] != 0 else None
+            "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -86,6 +88,7 @@ def stabilize():
 
         take_action(48)
         break
+
     else:
         take_action(48)
 
