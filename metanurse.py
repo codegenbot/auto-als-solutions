@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-    actions_taken = []
 
     def measure_vitals():
         if "BP" not in examined:
@@ -21,7 +20,7 @@ def stabilize():
         elif "HR" not in examined:
             take_action(16)  # ViewMonitor
             examined.add("HR")
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
