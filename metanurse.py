@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,10 +25,26 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
+           (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30 if "mask" in examined_vitals else 29)
+            examined_vitals.add("mask")
+            continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 100:
+            take_action(24)
             continue
 
         if "monitor" not in examined_vitals:
@@ -48,7 +63,7 @@ def stabilize():
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(5)
+            take_action(4)
             examined_vitals.add("RR")
             continue
 
@@ -77,22 +92,8 @@ def stabilize():
             examined_vitals.add("exposure")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" in examined_vitals else 29)
-            examined_vitals.add("mask")
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
