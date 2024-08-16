@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -44,29 +43,66 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["MAP"] is None:
+        if "monitor" not in examined_vitals:
+            take_action(16)
+            examined_vitals.add("monitor")
+            continue
+
+        if vitals["MAP"] is None and "BP" not in examined_vitals:
             take_action(27)
+            examined_vitals.add("BP")
             continue
 
-        if vitals["Sats"] is None:
+        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
             take_action(25)
+            examined_vitals.add("SatsProbe")
             continue
 
-        if vitals["RR"] is None:
+        if vitals["RR"] is None and "Breathing" not in examined_vitals:
             take_action(4)
+            examined_vitals.add("Breathing")
             continue
 
-        if any(events[28:33]):
+        if any(events[i] > 0 for i in range(3, 7)) and "Airway" not in examined_vitals:
+            take_action(3)
+            examined_vitals.add("Airway")
+            continue
+
+        if any(events[28:33]):  # Check for abnormal heart rhythms
             take_action(2)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+        if (
+            any(events[i] > 0 for i in range(7, 15))
+            and "Breathing" not in examined_vitals
+        ):
+            take_action(4)
+            examined_vitals.add("Breathing")
             continue
 
-        take_action(16)
-        break
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "Circulation" not in examined_vitals
+        ):
+            take_action(5)
+            examined_vitals.add("Circulation")
+            continue
 
+        if in_range > 20 and any(events[i] > 0 for i in range(20, 26))and "Disability" not in examined_vitals:
+            take_action(6)
+            examined_vitals.add("Disability")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(26, 33))
+            and "Exposure" not in examined_vitals
+        ):
+            take_action(7)
+            examined_vitals.add("Exposure")
+            continue
+
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
