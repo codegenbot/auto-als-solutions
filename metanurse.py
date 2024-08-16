@@ -7,20 +7,6 @@ def stabilize():
 
     examined = set()
 
-    def measure_vitals():
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
-            examined.add("RespRate")
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -48,22 +34,29 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        # Airway assessment
-        if events[3] > 0:
-            examined.add("airway")
+        # Airway assessment and intervention
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
 
-        measure_vitals()
+        if events[3] > 0:
+            examined.add("airway")
 
-        # Circulation intervention if needed
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        # Breathing assessment and intervention
+        if "breathing" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("breathing")
             continue
 
-        # Breathing intervention if needed
+        if vitals["Sats"] is None:
+            take_action(25)  # UseSatsProbe
+            continue
+
+        if vitals["RR"] is None:
+            take_action(4)  # ExamineBreathing again to measure RR
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -72,22 +65,28 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Check for unstable rhythm and defibrillate if needed
-        if any(events[29 + i] > 0 for i in range(8)) or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(28)  # AttachDefibPads
-            take_action(40)  # DefibrillatorCharge
-            take_action(41)  # DefibrillatorCurrentUp
-            take_action(43)  # DefibrillatorPace
+        # Circulation assessment and intervention
+        if "circulation" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("circulation")
             continue
 
-        # If fully stabilized
-        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
-                vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-                vitals["RR"] is not None and vitals["RR"] >= 8):
+        if vitals["MAP"] is None:
+            take_action(27)  # UseBloodPressureCuff for MAP
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        # Disability and Exposure can be assessed but are less critical for stabilization
+        # Checking ending criteria to decide Finish action
+        if "airway" in examined and "breathing" in examined and "circulation" in examined:
             take_action(48)  # Finish
             break
+
     else:
-        take_action(48)  # Finish
+        take_action(48)  # Finish at the end if not broken out
 
 if __name__ == "__main__":
     stabilize()
