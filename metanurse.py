@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,7 +7,7 @@ def stabilize():
 
     actions_taken = set()
     examined_vitals = set()
-    exam_steps = [4, 25, 27, 26, 38, 16]
+    exam_steps = [27, 25, 4, 38, 26, 16]  # BP Cuff, Sats Probe, Resp Rate, BP Measurement, Attach A-Line, View Monitor
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -27,9 +26,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -80,7 +77,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
