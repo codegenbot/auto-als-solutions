@@ -27,43 +27,53 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
 
         if "monitor" not in examined_vitals:
-            take_action(16)
+            take_action(16)  # View Monitor
             examined_vitals.add("monitor")
             continue
 
-        if vitals["MAP"] is None:
-            take_action(27)
+        if vitals["MAP"] is None and "BP" not in examined_vitals:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined_vitals.add("BP")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)
+        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
+            take_action(25)  # Use Sats Probe
+            examined_vitals.add("SatsProbe")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            action = 30 if 30 not in examined_vitals else 29
+            take_action(action)  # Use Non Rebreather Mask or Use Bag Valve Mask
+            examined_vitals.add(action)
             continue
 
-        if vitals["RR"] is None:
-            take_action(4)
+        if vitals["RR"] is None and "Breathing" not in examined_vitals:
+            take_action(4)  # Examine Breathing
+            examined_vitals.add("Breathing")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
-        if any(events[i] > 0 for i in range(28, 33)):
-            take_action(2)
+        if any(events[i] > 0 for i in range(28, 33)):  # Check for arrhythmias
+            if any(events[i] > 0 for i in [31, 32]):  # If VT or VF
+                take_action(10)  # Give Adrenaline
+            elif any(events[i] > 0 for i in [29, 30]):  # If SVT or Atrial Flutter
+                take_action(9)  # Give Adenosine
+            else:
+                take_action(2)  # Check Rhythm
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
 
 if __name__ == "__main__":
