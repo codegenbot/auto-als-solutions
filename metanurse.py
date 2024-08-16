@@ -1,12 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined_vitals = set()
+    all_examinations_done = {"HR": False, "RR": False, "MAP": False, "Sats": False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -25,92 +25,64 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Immediate cardiac arrest condition
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if vitals["MAP"] is None and not all_examinations_done["MAP"]:
+            take_action(27)
+            all_examinations_done["MAP"] = True
+            continue
+
+        if vitals["Sats"] is None and not all_examinations_done["Sats"]:
+            take_action(25)
+            all_examinations_done["Sats"] = True
+            continue
+
+        if vitals["RR"] is None and not all_examinations_done["RR"]:
+            take_action(4)
+            all_examinations_done["RR"] = True
+            continue
+
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Vital signs examination
-        if "monitor" not in examined_vitals:
-            take_action(16)
-            examined_vitals.add("monitor")
-            continue
-        if vitals["MAP"] is None and "BP" not in examined_vitals:
-            take_action(27)
-            examined_vitals.add("BP")
-            continue
-        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
-            take_action(25)
-            examined_vitals.add("SatsProbe")
-            continue
-        if vitals["RR"] is None and "Breathing" not in examined_vitals:
-            take_action(4)
-            examined_vitals.add("Breathing")
-            continue
-
-        # Perform ABCDE assessment
-        if any(events[i] > 0 for i in range(3, 7)) and "Airway" not in examined_vitals:
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
             take_action(3)
-            examined_vitals.add("Airway")
-            continue
-        if (
-            any(events[i] > 0 for i in range(7, 15))
-            and "Breathing" not in examined_vitals
-        ):
-            take_action(4)
-            examined_vitals.add("Breathing")
-            continue
-        if (
-            any(events[i] > 0 for i in range(15, 20))
-            and "Circulation" not in examined_vitals
-        ):
-            take_action(5)
-            examined_vitals.add("Circulation")
-            continue
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "Disability" not in examined_vitals
-        ):
-            take_action(6)
-            examined_vitals.add("Disability")
-            continue
-        if (
-            any(events[i] > 0 for i in range(26, 33))
-            and "Exposure" not in examined_vitals
-        ):
-            take_action(7)
-            examined_vitals.add("Exposure")
+            examined_vitals.add(3)
             continue
 
-        # Stabilize using actions
+        if any(events[i] > 0 for i in range(7, 15)) and 4 not in examined_vitals:
+            take_action(4)
+            examined_vitals.add(4)
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)) and 5 not in examined_vitals:
+            take_action(5)
+            examined_vitals.add(5)
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and 6 not in examined_vitals:
+            take_action(6)
+            examined_vitals.add(6)
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30 if 30 not in examined_vitals else 29)
             examined_vitals.add(30)
             continue
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        # Address tachyarrhythmia
-        if (
-            any(events[i] > 0 for i in range(31, 39))
-            and vitals["MAP"]
-            and vitals["MAP"] < 90
-        ):
-            take_action(39)
-            take_action(47)
-            take_action(41)
-            take_action(40)
-            continue
-
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
