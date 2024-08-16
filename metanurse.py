@@ -5,24 +5,6 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    def measure_all_vitals(examined):
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-        return examined
-
     examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -44,58 +26,52 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        critical = False
-        if ((vitals["Sats"] is not None and vitals["Sats"] < 65) or 
-            (vitals["MAP"] is not None and vitals["MAP"] < 20)):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
-            critical = True
-        
-        if critical:
             continue
         
-        # Airway
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
-        
-        if events[3] > 0:
+
+        if events[3] > 0:  # Airway is clear
             examined.add("airway")
+
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+            continue
         
-        # Measure all vitals
-        examined = measure_all_vitals(examined)
+        if "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+            continue
         
-        # Circulation: Check BP (MAP)
+        if "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+            continue
+        
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+            continue
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
         
-        # Breathing: Check Sats
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
         
-        # Breathing: Check RR
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
-        # Heart rhythm check, administer Adenosine if SVT
-        heart_rhythms = {
-            28: "SVT", 29: "AF", 30: "AtrialFlutter", 31: "VT", 
-            32: "MobitzI", 33: "MobitzII", 34: "CompleteHeartBlock",
-            35: "Torsades", 36: "Bigeminy", 37: "VF"
-        }
-        for idx, rhythm in heart_rhythms.items():
-            if events[idx] > 0:
-                if rhythm == "SVT":
-                    take_action(9)
-                elif rhythm in ["VT", "VF"]:
-                    take_action(24)
-                    take_action(40)
-                    take_action(43)
-                continue
-        
+
         take_action(48)
         break
     else:
