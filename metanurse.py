@@ -64,9 +64,9 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
-        if "MAP" in examined_vitals and "viewed_monitor_bpcuff" not in examined_vitals:
+        if "MAP" in examined_vitals and "viewed_monitor" not in examined_vitals:
             take_action(16)  # View monitor
-            examined_vitals.add("viewed_monitor_bpcuff")
+            examined_vitals.add("viewed_monitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -102,19 +102,8 @@ def stabilize():
             examined_vitals.add("HR")
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(9)  # Give adenosine
-            continue
-
-        if (
-            vitals["RR"] is not None
-            and vitals["RR"] >= 8
-            and all(vitals.get(key, 0) >= 60 for key in ["HR", "MAP"])
-        ):
-            take_action(48)  # Finish
-            break
-
-        take_action(0)  # DoNothing
+        take_action(48)  # Finish
+        break
 
 
 if __name__ == "__main__":
