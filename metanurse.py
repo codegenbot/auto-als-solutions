@@ -1,32 +1,50 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
+    actions = {
+        "Airway": 3,
+        "Breathing": 4,
+        "Circulation": 5,
+        "Disability": 6,
+        "Exposure": 7,
+        "MeasureHR": 25,
+        "MeasureMAP": 27,
+        "MeasureSats": 25,
+        "NonRebreatherMask": 30,
+        "GiveFluids": 15,
+        "BagValveMask": 29,
+        "AttachDefibPads": 28,
+        "ChestCompression": 17,
+        "Finish": 48,
+    }
 
-    def measure_vitals():
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
+    def initial_checks():
+        if "Airway" not in examined:
+            take_action(actions["Airway"])
+            examined.add("Airway")
+        elif "Breathing" not in examined:
+            take_action(actions["Breathing"])
+            examined.add("Breathing")
+        elif "Circulation" not in examined:
+            take_action(actions["Circulation"])
+            examined.add("Circulation")
+        elif "Disability" not in examined:
+            take_action(actions["Disability"])
+            examined.add("Disability")
+        elif "Exposure" not in examined:
+            take_action(actions["Exposure"])
+            examined.add("Exposure")
 
-    actions = 0
-    while actions < 350:
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
-            actions += 1
             continue
 
         events = observations[:33]
@@ -40,42 +58,55 @@ def stabilize():
             "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None
+            "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
-            break
-
-        if events[3] == 0:  # Check if airway clear
-            take_action(3)  # ExamineAirway
-            actions += 1
+        # Check emergency conditions first
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            take_action(actions["ChestCompression"])
             continue
 
-        measure_vitals()
-        actions += 1
+        # Perform initial checks (ABCDE)
+        initial_checks()
 
+        # Take measurements if needed
+        if vitals["HR"] is None:
+            take_action(actions["MeasureHR"])
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(actions["MeasureMAP"])
+            continue
+
+        if vitals["Sats"] is None:
+            take_action(actions["MeasureSats"])
+            continue
+
+        # Stabilize based on vital signs
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(actions["GiveFluids"])
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(actions["NonRebreatherMask"])
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(actions["BagValveMask"])
             continue
 
-        hr = vitals["HR"]
-        if hr and (hr < 50 or hr > 150):
-            take_action(28)  # AttachDefibPads
-            actions += 1
+        if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
+            take_action(actions["AttachDefibPads"])
             continue
-        
+
+        # If all is well, finish
+        take_action(actions["Finish"])
         break
+    else:
+        take_action(actions["Finish"])
 
-    take_action(48)  # Finish the assessment
 
 if __name__ == "__main__":
     stabilize()
