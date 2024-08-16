@@ -29,7 +29,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start chest compression
             continue
 
         if "airway" not in examined:
@@ -37,7 +37,7 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:
+        if events[3] > 0:  # AirwayClear
             examined.add("airway")
 
         if "SatsProbe" not in examined:
@@ -50,7 +50,7 @@ def stabilize():
             examined.add("RespRate")
             continue
 
-        if events[10] > 0:
+        if events[10] > 0:  # BreathingEqualChestExpansion
             examined.add("RespRate")
 
         if "BP" not in examined:
@@ -63,41 +63,26 @@ def stabilize():
             examined.add("Monitor")
             continue
 
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
-            take_action(6)
-            examined.add("disability")
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
-            take_action(7)
-            examined.add("exposure")
+            take_action(29)  # Use bag valve mask
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(10)  # Consider an appropriate action based on identified arrhythmia
+            take_action(10)  # Give adrenaline for tachyarrhythmia
             continue
 
-        take_action(48)
+        take_action(48)  # Finish and stabilize
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish if 350 steps are exceeded
 
 if __name__ == "__main__":
     stabilize()
