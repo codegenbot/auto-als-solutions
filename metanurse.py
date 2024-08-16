@@ -41,59 +41,54 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Airway assessment
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        if events[3] > 0:  # AirwayClear event occurred
-            # Breathing assessment
+        if events[3] > 0:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
 
-            if events[14] > 0:  # BreathingPneumothoraxSymptoms event
+            if events[14] > 0:
                 take_action(19)
                 continue
 
-        # Check vitals
         if not all(vitals[k] is not None for k in ["MAP", "Sats", "RR"]):
             examine_vitals()
             continue
 
-        # Stabilize based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)  # UseMonitorPads for cardioverting
+                take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)  # GiveAdenosine
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
+                take_action(12)
                 continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
         take_action(48)
