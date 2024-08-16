@@ -1,13 +1,18 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
-    vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False}
-
+    vitals_checked = {
+        "Sats": False,
+        "RR": False,
+        "MAP": False,
+        "HR": False,
+        "ViewMonitor": False,
+    }
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -28,73 +33,53 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
-            continue
-
-        if not examined["Airway"]:
-            take_action(3)
-            examined["Airway"] = True
-            continue
-
-        if not examined["Breathing"]:
-            take_action(4)
-            examined["Breathing"] = True
-            continue
-
-        if not examined["Circulation"]:
-            take_action(5)
-            examined["Circulation"] = True
-            continue
-
-        if not examined["Disability"]:
-            take_action(6)
-            examined["Disability"] = True
-            continue
-
-        if not examined["Exposure"]:
-            take_action(7)
-            examined["Exposure"] = True
+        # Check vitals for immediate cardiac arrest conditions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)  # StartChestCompression
             continue
 
         if vitals["Sats"] is None and not vitals_checked["Sats"]:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             vitals_checked["Sats"] = True
             continue
 
         if vitals["RR"] is None and not vitals_checked["RR"]:
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             vitals_checked["RR"] = True
             continue
 
         if vitals["MAP"] is None and not vitals_checked["MAP"]:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             vitals_checked["MAP"] = True
             continue
 
         if vitals["HR"] is None and not vitals_checked["HR"]:
-            take_action(24)
+            take_action(24)  # UseMonitorPads
             vitals_checked["HR"] = True
             continue
 
+        if not vitals_checked["ViewMonitor"]:
+            take_action(16)  # ViewMonitor
+            vitals_checked["ViewMonitor"] = True
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)
-            continue
-        
-        take_action(48)
+        take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
