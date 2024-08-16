@@ -1,35 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-
-    def measure_all_vitals():
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-
-    def administer_fluids():
-        take_action(15)
-
-    def perform_cardioversion():
-        take_action(40)  # DefibrillatorCharge
-        take_action(41)  # DefibrillatorCurrentUp
-        take_action(43)  # DefibrillatorPace
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -49,43 +26,65 @@ def stabilize():
             "Sats": values[5] if times[5] != 0 else None,
             "Resps": values[6] if times[6] != 0 else None,
         }
-
+        
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
-
-        if events[3] > 0:
-            examined.add("airway")
 
         if "airway" not in examined:
-            take_action(3)
+            take_action(3)  # ExamineAirway
+            examined.add("airway")
             continue
 
-        measure_all_vitals()
+        if "response" not in examined:
+            take_action(8)  # ExamineResponse
+            examined.add("response")
+            continue
+
+        if "breathing" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("breathing")
+            continue
+
+        if "bp_cuff" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("bp_cuff")
+            continue
+
+        if "monitor" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("monitor")
+            continue
+
+        if "sats_probe" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("sats_probe")
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            administer_fluids()
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150):
-            perform_cardioversion()
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(40)  # DefibrillatorCharge
+            take_action(41)  # DefibrillatorCurrentUp
+            take_action(43)  # DefibrillatorPace
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
-
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
