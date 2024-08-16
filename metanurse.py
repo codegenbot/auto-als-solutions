@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -55,6 +56,26 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
+        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
+            take_action(4)
+            examined_vitals.add("breathing")
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+            take_action(5)
+            examined_vitals.add("circulation")
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+            take_action(6)
+            examined_vitals.add("disability")
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
+            take_action(7)
+            examined_vitals.add("exposure")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -69,13 +90,9 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 100:
-            take_action(24)
+            take_action(9)
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(40)
-            continue
-        
         take_action(48)
         break
 
