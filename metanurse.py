@@ -27,47 +27,48 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)
+                vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # StartChestCompression
             continue
 
-        if "breathing" not in examined:
-            take_action(4)
-            examined.add("breathing")
-            continue
-
-        if events[3] > 0:
+        if "airway" not in examined:
+            take_action(3)  # ExamineAirway
             examined.add("airway")
+            continue
 
         if "SatsProbe" not in examined:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
             continue
 
+        if "RespRate" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("RespRate")
+            continue
+
         if "BP" not in examined:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             examined.add("BP")
             continue
 
         if "Monitor" not in examined:
-            take_action(16)
+            take_action(16)  # ViewMonitor
             examined.add("Monitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
         take_action(48)
