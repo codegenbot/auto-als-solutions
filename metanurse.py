@@ -50,9 +50,6 @@ def stabilize():
             examined.add("RespRate")
             continue
 
-        if events[10] > 0:
-            examined.add("RespRate")
-
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
@@ -63,6 +60,11 @@ def stabilize():
             examined.add("Monitor")
             continue
 
+        if "lungs" not in examined:
+            take_action(4)
+            examined.add("lungs")
+            continue
+        
         if "HR" not in examined:
             take_action(24)
             examined.add("HR")
@@ -75,11 +77,15 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
         
+        if vitals["HR"] is not None and (events[28] > 0 or events[29] > 0 or events[34] > 0 or events[35] > 0):
+            take_action(40)
+            continue
+
         take_action(48)
         break
     else:
