@@ -1,12 +1,11 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examined = set()
+    examined_vitals = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -30,45 +29,56 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
-        if "airway" not in examined:
+        if "airway" not in examined_vitals:
             take_action(3)  # Examine airway
-            examined.add("airway")
+            examined_vitals.add("airway")
             continue
 
-        if "Sats" not in examined:
+        if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use Sats Probe
-            examined.add("Sats")
-            continue
-
-        if "MAP" not in examined:
-            take_action(27)  # Use Blood Pressure Cuff
-            examined.add("MAP")
-            continue
-
-        if "breathing" not in examined and "Sats" in examined:
-            take_action(4)  # Examine breathing
-            examined.add("breathing")
+            examined_vitals.add("Sats")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
 
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined_vitals.add("MAP")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        if vitals["RR"] is None:
+        if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
+            examined_vitals.add("RR")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
 
+        if vitals["HR"] is None and "HR" not in examined_vitals:
+            take_action(2)  # Check Rhythm
+            examined_vitals.add("HR")
+            continue
+
+        if vitals["HR"] is not None:
+            if events[30]:  # HeartRhythm SVT
+                take_action(9)  # Give adenosine
+                continue
+            elif events[37]:  # VT
+                take_action(10)  # Give adrenaline
+                continue
+            elif events[32]:  # HeartRhythm AF
+                take_action(11)  # Give amiodarone
+                continue
+
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
