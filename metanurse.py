@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,8 +24,8 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
-           (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
             continue
 
@@ -63,17 +63,26 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 100:
-            take_action(10)  # Give Adrenaline or Amiodarone
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" not in examined_vitals else 29)  # Use NonRebreatherMask or Bag Valve Mask
+            take_action(30 if "mask" not in examined_vitals else 29)
             examined_vitals.add("mask")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use bag valve mask
+            continue
+
+        if vitals["HR"] is not None and (values[0] > 150 or values[0] < 50):
+            take_action(2)  # Check rhythm
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)  # Examine exposure
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5)  # Examine circulation
+            examined_vitals.add("circulation")
             continue
 
         take_action(48)  # Finish
