@@ -51,7 +51,7 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
+        if "airway" in examined and events[3] > 0:
             examined.add("airway_clear")
         elif "airway_clear" not in examined:
             take_action(3)  # Re-examineAirway if not clear
@@ -59,9 +59,12 @@ def stabilize():
 
         measure_vitals()
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60:
+                take_action(15)  # GiveFluids
+                continue
+            else:
+                examined.add("stable_MAP")
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
@@ -71,9 +74,10 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(28)  # AttachDefibPads
-            continue
+        if vitals["HR"] is not None:
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(28)  # AttachDefibPads
+                continue
 
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
