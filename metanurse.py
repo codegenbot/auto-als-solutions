@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     actions_taken = set()
-    
+
     vitals_checked = False
 
     for step in range(350):
@@ -41,7 +42,9 @@ def stabilize():
                 continue
             vitals_checked = True
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # StartChestCompression
             continue
 
@@ -80,6 +83,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
