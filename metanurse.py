@@ -37,7 +37,7 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-		
+        
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
