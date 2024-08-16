@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-
+        
     for step in range(350):
         observations = list(map(float, input().strip().split()))
 
@@ -28,37 +28,51 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start CPR
+            take_action(17)
             continue
 
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
+        if "monitor" not in examined_vitals:
+            take_action(16)
+            examined_vitals.add("monitor")
+            continue
+        
+        if "MAP" not in examined_vitals:
+            take_action(27)
             examined_vitals.add("MAP")
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use sats probe
+        if "Sats" not in examined_vitals:
+            take_action(25)
             examined_vitals.add("Sats")
             continue
 
-        if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
+        if "RR" not in examined_vitals:
+            take_action(4)
             examined_vitals.add("RR")
             continue
 
+        if "airway" not in examined_vitals and any(events[3:7]):
+            take_action(3)
+            examined_vitals.add("airway")
+            continue
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
 
-        take_action(48)  # Finish
+        if any(events[28:33]):
+            take_action(2)
+            continue
+        
+        take_action(48)
         break
 
 if __name__ == "__main__":
