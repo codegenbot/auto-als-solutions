@@ -28,7 +28,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start chest compressions
+            take_action(17)  # Start CPR
             continue
 
         # Airway examination
@@ -75,6 +75,17 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
+        # Check for abnormal heart rhythms
+        if any(events[i] > 0 for i in range(28, 37)) and "rhythm" not in examined_vitals:
+            take_action(2)  # Check rhythm
+            examined_vitals.add("rhythm")
+            continue
+
+        # Address tachyarrhythmias or bradyarrhythmias
+        if any(events[28:31]) or any(events[32:34]):
+            take_action(9 if events[30] > 0 else 10)  # Give Adenosine for SVT, Adrenaline otherwise
+            continue
+
         # Disability examination
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
@@ -85,11 +96,6 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
             take_action(7)  # Examine exposure
             examined_vitals.add("exposure")
-            continue
-
-        # Rhythm check if MAP low or HR abnormal
-        if (vitals["MAP"] is not None and vitals["MAP"] < 60) or (vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100)):
-            take_action(2)  # Check Rhythm
             continue
 
         take_action(48)  # Finish
