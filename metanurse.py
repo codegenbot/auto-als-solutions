@@ -5,21 +5,21 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps_taken = set()
+    examined = set()
 
     def measure_vitals():
-        if "Monitor" not in steps_taken:
+        if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
-            steps_taken.add("Monitor")
-        elif "BP" not in steps_taken:
+            examined.add("Monitor")
+        elif "BP" not in examined:
             take_action(27)  # UseBloodPressureCuff
-            steps_taken.add("BP")
-        elif "SatsProbe" not in steps_taken:
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
-            steps_taken.add("SatsProbe")
-        elif "RespRate" not in steps_taken:
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
             take_action(4)  # ExamineBreathing
-            steps_taken.add("RespRate")
+            examined.add("RespRate")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -50,10 +50,10 @@ def stabilize():
 
         # Assess Airway
         if events[3] > 0:
-            steps_taken.add("airway")
-        if "airway" not in steps_taken:
+            examined.add("airway")
+        if "airway" not in examined:
             take_action(3)  # ExamineAirway
-            steps_taken.add("airway")
+            examined.add("airway")
             continue
 
         # Circulation intervention
