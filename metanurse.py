@@ -37,7 +37,7 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-		
+        
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
@@ -66,21 +66,21 @@ def stabilize():
             continue
         
         if events[31] > 0 or events[32] > 0 or events[33] > 0 or events[36] > 0:
-            take_action(40)  # Turn on defibrillator
-            take_action(41)  # DefibrillatorCurrentUp
-            take_action(43)  # DefibrillatorPace
+            take_action(40)
+            take_action(41)
+            take_action(43)
             continue
-
+        
         if vitals["HR"] is None:  
-            take_action(2)  # CheckRhythm
+            take_action(2)
             continue
         
         if vitals["MAP"] is None:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
         
         if vitals["Sats"] is None:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
 
         take_action(48)
