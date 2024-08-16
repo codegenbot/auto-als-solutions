@@ -7,42 +7,20 @@ def stabilize():
 
     examined = set()
 
-    def examine_step():
-        if "Airway" not in examined:
-            take_action(3)
-            examined.add("Airway")
-            return True
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            return True
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            return True
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-            return True
-        if "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-            return True
-        return False
-
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return
+            return False
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return
+            return False
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
-            return
+            return False
+        return True
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -67,11 +45,19 @@ def stabilize():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
-
-        if examine_step():
+        
+        if "Airway" not in examined:
+            take_action(3)
+            examined.add("Airway")
+            continue
+        
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
             continue
 
-        examine_vitals()
+        if not examine_vitals():
+            continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
