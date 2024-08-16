@@ -23,61 +23,59 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Start CPR
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
         if "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
+            take_action(3)
             examined_vitals.add("airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             examined_vitals.add("Sats")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             examined_vitals.add("MAP")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
+            take_action(4)
             examined_vitals.add("RR")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use BagValveMask
+            take_action(29)
             continue
 
         if vitals["HR"] is None and "HR" not in examined_vitals:
-            take_action(2)  # Check Rhythm
+            take_action(2)
             examined_vitals.add("HR")
             continue
 
         if vitals["HR"] is not None:
-            if events[30]:  # HeartRhythm SVT
-                take_action(9)  # Give adenosine
+            if events[30]:
+                take_action(9)
                 continue
-            elif events[37]:  # VT
-                take_action(10)  # Give adrenaline
+            elif events[37]:
+                take_action(10)
                 continue
-            elif events[32]:  # HeartRhythm AF
-                take_action(11)  # Give amiodarone
+            elif events[32]:
+                take_action(11)
                 continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
