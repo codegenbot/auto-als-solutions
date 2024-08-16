@@ -1,5 +1,5 @@
 import sys
-
+import math
 
 def stabilize():
     def take_action(action):
@@ -57,7 +57,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
-
+            
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine Breathing
             examined_vitals.add("RR")
@@ -84,7 +84,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
