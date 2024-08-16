@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -24,11 +24,13 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Check for cardiac arrest conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
            (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
             continue
 
+        # Monitor vital signs
         if "monitor" not in examined_vitals:
             take_action(16)  # View monitor
             examined_vitals.add("monitor")
@@ -73,16 +75,17 @@ def stabilize():
             take_action(7)  # Examine exposure
             continue
 
+        # Take actions based on vital signs
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 100 and vitals["MAP"] < 60:
+        if vitals["HR"] is not None and vitals["HR"] > 100:
             take_action(9)  # Give adenosine (suspected unstable tachyarrhythmia)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(29 if "mask" not in examined_vitals else 30)  # Use bag valve mask or Use NonRebreatherMask
+            take_action(30 if "mask" in examined_vitals else 29)  # Use NonRebreatherMask or bag valve mask
             examined_vitals.add("mask")
             continue
 
