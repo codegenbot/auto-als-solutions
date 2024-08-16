@@ -26,59 +26,55 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Start chest compression (assume cardiac arrest)
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17) 
             continue
 
-        # Airway - A
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
-            take_action(3)
-            actions_taken.add(3)
-            continue
-
-        # Breathing - B
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 30 not in actions_taken:
-                take_action(30)  # UseNonRebreatherMask
-                actions_taken.add(30)
-                continue
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["RR"] is None and 4 not in examined_vitals:
-            take_action(4)
-            examined_vitals.add(4)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        # Circulation - C
         if vitals["MAP"] is None and 27 not in examined_vitals:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27) 
             examined_vitals.add(27)
             continue
 
+        if vitals["Sats"] is None and 25 not in examined_vitals:
+            take_action(25) 
+            examined_vitals.add(25)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15) 
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in actions_taken:
-            take_action(5)
-            actions_taken.add(5)
-            continue
-        
-        # Disability - D
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in actions_taken:
-            take_action(6)
-            actions_taken.add(6)
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            if 30 not in actions_taken:
+                take_action(30) 
+                actions_taken.add(30)
+                continue
+            take_action(29) 
             continue
 
-        # Exposure - E
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29) 
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in actions_taken:
+            take_action(3) 
+            actions_taken.add(3)
+            continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            take_action(4) 
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)):
+            take_action(5) 
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)):
+            take_action(6) 
+            continue
+
         if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
+            take_action(7) 
             continue
 
         take_action(48)
