@@ -9,6 +9,7 @@ def stabilize():
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
