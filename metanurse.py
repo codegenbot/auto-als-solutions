@@ -64,7 +64,7 @@ def stabilize():
             take_action(15)  # GiveFluids
             continue
         
-        if events[15] > 0 and "circulation" not in examined_vitals:
+        if any(events[i] > 0 for i in range(16, 19)) and "circulation" not in examined_vitals:
             take_action(5)  # ExamineCirculation
             examined_vitals.add("circulation")
             continue
@@ -73,12 +73,12 @@ def stabilize():
             take_action(2)  # CheckRhythm
             continue
         
-        if any(events[i] > 0 for i in range(23, 28)) and "cardiac" not in examined_vitals:
+        if any(events[i] > 0 for i in range(28, 32)) and "cardiac" not in examined_vitals:
             take_action(9)  # GiveAdenosine
             examined_vitals.add("cardiac")
             continue
         
-        if any(events[i] > 0 for i in range(20, 23)) and "disability" not in examined_vitals:
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # ExamineDisability
             examined_vitals.add("disability")
             continue
