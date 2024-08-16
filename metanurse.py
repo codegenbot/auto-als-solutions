@@ -100,8 +100,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[28:33]):  # Check for abnormal heart rhythms
-            take_action(2)  # Check rhythm
+        if any(events[28:33]):
+            take_action(2)
             continue
 
         take_action(48)
