@@ -6,6 +6,21 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
+
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -32,39 +47,33 @@ def stabilize():
             take_action(17)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60 and "fluids_given" not in examined:
-            take_action(15)
-            examined.add("fluids_given")
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88 and "oxygen_given" not in examined:
-            take_action(30)
-            examined.add("oxygen_given")
-            continue
+        if events[3] > 0:
+            examined.add("airway")
 
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
 
-        if "breathing" not in examined:
-            take_action(4)
-            examined.add("breathing")
+        measure_vitals()
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(28)
+            take_action(40)
+            take_action(41)
+            take_action(43)
             continue
 
         take_action(48)
