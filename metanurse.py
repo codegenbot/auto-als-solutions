@@ -60,16 +60,14 @@ def stabilize():
         measure_vitals()
 
         if vitals["MAP"] is not None:
-            if vitals["MAP"] < 60:
-                if "fluids_given" not in examined:
-                    take_action(15)  # GiveFluids
-                    examined.add("fluids_given")
-                elif "monitor_check" not in examined:
-                    take_action(16)  # ViewMonitor
-                    examined.add("monitor_check")
-                elif vitals["MAP"] < 60:
-                    take_action(28)  # AttachDefibPads (consider circulatory support)
+            if vitals["MAP"] < 60 and "fluids_given" not in examined:
+                take_action(15)  # GiveFluids
+                examined.add("fluids_given")
                 continue
+            if vitals["MAP"] < 60:
+                take_action(28)  # AttachDefibPads (considering circulatory support)
+                continue
+            examined.add("stable_MAP")
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
@@ -87,7 +85,7 @@ def stabilize():
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-        
+
         take_action(48)  # Finish
 
 if __name__ == "__main__":
