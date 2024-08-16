@@ -59,14 +59,14 @@ def stabilize():
             continue
         
         clear_assessments = [
-            (3, range(3, 7)),
-            (4, range(7, 15)),
-            (5, range(15, 20)),
-            (6, range(20, 26)),
-            (7, range(26, 33)),
+            ("Examine Airway", 3, range(3, 7)),
+            ("Examine Breathing", 4, range(7, 15)),
+            ("Examine Circulation", 5, range(15, 20)),
+            ("Examine Disability", 6, range(20, 26)),
+            ("Examine Exposure", 7, range(26, 33)),
         ]
         
-        for action, event_range in clear_assessments:
+        for name, action, event_range in clear_assessments:
             if any(events[i] > 0 for i in event_range):
                 take_action(action)
                 continue
