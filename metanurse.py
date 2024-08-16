@@ -57,17 +57,17 @@ def stabilize():
         
         if events[3] > 0:
             examined.add("airway")
-        
+
         examined = measure_all_vitals(examined)
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
