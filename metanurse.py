@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -11,16 +12,15 @@ def stabilize():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return True
+            return
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return True
+            return
         if "BPCuff" not in examined:
             take_action(27)
             examined.add("BPCuff")
-            return True
-        return False
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -42,29 +42,31 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if not any(events[3:7]):
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
+            examined.add("Airway")
             continue
 
-        if any(events[:4]):
+        if "AirwayClear" in events:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
 
-        if events[8]:
+        if "BreathingSnoring" in events:
             take_action(36)
             continue
-        elif events[14]:
+        elif "BreathingPneumothoraxSymptoms" in events:
             take_action(19)
             continue
 
-        if examine_vitals():
-            continue
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
@@ -89,9 +91,22 @@ def stabilize():
                 take_action(12)
                 continue
 
-        take_action(0)
+            if "ViewMonitor" not in examined:
+                take_action(16)
+                examined.add("ViewMonitor")
+                continue
 
-    take_action(48)
+            if any(events[31:34] or events[36:39]):
+                take_action(40)
+                take_action(41)
+                take_action(43)
+                continue
+
+        take_action(48)
+        break
+    else:
+        take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
