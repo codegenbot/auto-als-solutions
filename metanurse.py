@@ -37,21 +37,15 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:
-            examined.add("airway")
-
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
             continue
-
-        if "Breathing" not in examined:
+            
+        if "RespRate" not in examined:
             take_action(4)
-            examined.add("Breathing")
+            examined.add("RespRate")
             continue
-
-        if events[10] > 0:
-            examined.add("Breathing")
 
         if "BP" not in examined:
             take_action(27)
@@ -61,14 +55,6 @@ def stabilize():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            continue
-
-        if events[13] > 0:
-            examined.add("Monitor")
-
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -83,8 +69,9 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(2)
+        if "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
@@ -95,6 +82,10 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
             take_action(7)
             examined.add("exposure")
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+            take_action(2)
             continue
 
         take_action(48)  # Finish
