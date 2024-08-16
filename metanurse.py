@@ -6,23 +6,12 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    actions_map = {
-        "CPR": 17,
-        "MAP_Cuff": 27,
-        "Sats_Probe": 25,
-        "Breathing": 4,
-        "Airway": 3,
-        "Fluids": 15,
-        "NonRebreather": 30,
-        "BagValveMask": 29,
-        "ViewMonitor": 16,
-        "Finish": 48
-    }
-
+    used_actions = set()
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(actions_map["Finish"])
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -36,45 +25,77 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(actions_map["CPR"])
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
+           (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
-
+        
+        if "monitor" not in examined_vitals:
+            take_action(16)
+            examined_vitals.add("monitor")
+            continue
+        
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(actions_map["MAP_Cuff"])
+            take_action(27)
             examined_vitals.add("MAP")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(actions_map["Sats_Probe"])
+            take_action(25)
             examined_vitals.add("Sats")
             continue
-
+        
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(actions_map["Breathing"])
+            take_action(4)
             examined_vitals.add("RR")
             continue
 
-        if not all(events[3:7]):
-            take_action(actions_map["Airway"])
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)
+            examined_vitals.add("airway")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(actions_map["NonRebreather"])
+        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
+            take_action(4)
+            examined_vitals.add("breathing")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(actions_map["Fluids"])
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+            take_action(5)
+            examined_vitals.add("circulation")
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(actions_map["BagValveMask"])
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+            take_action(6)
+            examined_vitals.add("disability")
             continue
 
-        take_action(actions_map["Finish"])
-        break
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60 and 15 not in used_actions:
+            take_action(15)
+            used_actions.add(15)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88 and 30 not in used_actions:
+            take_action(30)
+            used_actions.add(30)
+            continue
+        
+        if vitals["RR"] is not None and vitals["RR"] < 8 and 29 not in used_actions:
+            take_action(29)
+            used_actions.add(29)
+            continue
+        
+        if (vitals["MAP"] is not None and vitals["MAP"] >= 60) and \
+           (vitals["RR"] is not None and vitals["RR"] >= 8) and \
+           (vitals["Sats"] is not None and vitals["Sats"] >= 88):
+            take_action(48)
+            break
+        
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
