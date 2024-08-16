@@ -59,51 +59,51 @@ def stabilize():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
         if not "Airway" in examined:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             examined.add("Airway")
             continue
         if not "Breathing" in examined:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             examined.add("Breathing")
             continue
         if not "Circulation" in examined:
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             examined.add("Circulation")
             continue
 
         examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # UseMonitorPads
+                take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(11)  # GiveAmiodarone
+                take_action(11)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
+                take_action(12)
                 continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish after max steps
+        take_action(48)
 
 
 if __name__ == "__main__":
