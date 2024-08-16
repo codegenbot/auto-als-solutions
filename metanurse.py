@@ -89,7 +89,7 @@ def stabilize():
             continue
 
         # Check for unstable tachyarrhythmia events
-        if any(events[i] > 0 for i in range(30, 33)):
+        if any(events[i] > 0 for i in range(30, 32)):
             take_action(24)  # Use monitor pads
             continue
 
