@@ -1,11 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined_vitals = set()
+    iv_accessed = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -62,6 +64,10 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            if not iv_accessed:
+                take_action(14)  # Use Venflon IV Catheter
+                iv_accessed = True
+                continue
             take_action(15)  # Give fluids
             continue
 
@@ -70,16 +76,16 @@ def stabilize():
             examined_vitals.add("circulation")
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] < 60:
-                take_action(12)  # Give Atropine
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
+            if not iv_accessed:
+                take_action(14)  # Use Venflon IV Catheter
+                iv_accessed = True
                 continue
-            if vitals["HR"] > 100:
-                take_action(2)  # Check rhythm
-                continue
+            take_action(2)  # Check rhythm
+            continue
 
         if events[28] > 0 or events[30] > 0:
-            take_action(9)  # Give adenosine for SVT or amiodarone for AF
+            take_action(9)  # Give adenosine for SVT
             continue
 
         if any(events[20:26]) and "disability" not in examined_vitals:
@@ -98,6 +104,7 @@ def stabilize():
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
