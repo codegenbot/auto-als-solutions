@@ -47,7 +47,7 @@ def stabilize():
             examined_vitals.add("RR")
             continue
 
-        if not any(events[i] > 0 for i in range(3, 7)):
+        if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)  # Examine airway
             continue
 
@@ -61,7 +61,7 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" not in examined_vitals else 29)  # Use NonRebreatherMask or UseBagValveMask
+            take_action(30 if "mask" not in examined_vitals else 29)  # Use Non Rebreather Mask
             examined_vitals.add("mask")
             continue
 
