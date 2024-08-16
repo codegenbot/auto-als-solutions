@@ -1,12 +1,12 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -81,12 +81,17 @@ def stabilize():
 
         # Disability and Exposure can be assessed but are less critical for stabilization
         # Checking ending criteria to decide Finish action
-        if "airway" in examined and "breathing" in examined and "circulation" in examined:
+        if (
+            "airway" in examined
+            and "breathing" in examined
+            and "circulation" in examined
+        ):
             take_action(48)  # Finish
             break
 
     else:
         take_action(48)  # Finish at the end if not broken out
+
 
 if __name__ == "__main__":
     stabilize()
