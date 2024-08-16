@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -30,7 +31,6 @@ def stabilize():
             take_action(17)  # Start CPR
             continue
 
-        # Re-check vital measurements if any are None
         if "monitor" not in examined_vitals:
             take_action(16)  # View monitor
             examined_vitals.add("monitor")
@@ -56,23 +56,36 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
-        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(7, 15))
+            and "breathing" not in examined_vitals
+        ):
             take_action(4)  # Examine breathing
             examined_vitals.add("breathing")
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "circulation" not in examined_vitals
+        ):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "disability" not in examined_vitals
+        ):
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if (
+            any(events[i] > 0 for i in range(26, 33))
+            and "exposure" not in examined_vitals
+        ):
             take_action(7)  # Examine exposure
+            examined_vitals.add("exposure")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -88,13 +101,13 @@ def stabilize():
             take_action(29)  # Use bag valve mask
             continue
 
-        # Check for unstable tachyarrhythmia events
-        if any(events[i] > 0 for i in range(28, 33)):
+        if any(events[i] > 0 for i in range(30, 32)):
             take_action(24)  # Use monitor pads
             continue
 
         take_action(48)  # Finish
         break
+
 
 if __name__ == "__main__":
     stabilize()
