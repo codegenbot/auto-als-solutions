@@ -19,7 +19,7 @@ def stabilize():
 
         events = observations[:33]
         times = observations[33:40]
-        values = observations[40:47]
+        values = observations[40:]
 
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
@@ -31,43 +31,31 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
-        if is_vital_missing(vitals, "MAP") and 27 not in actions_taken:
-            actions_taken.add(27)
-            take_action(27)
-            continue
-
+        
         if is_vital_missing(vitals, "Sats") and 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
             continue
-
-        if is_vital_missing(vitals, "RR") and 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
+        if is_vital_missing(vitals, "MAP") and 27 not in actions_taken:
+            actions_taken.add(27)
+            take_action(27)
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
+        
         if 16 not in actions_taken:
             actions_taken.add(16)
             take_action(16)
             continue
-
+        
         if any(events[i] > 0 for i in range(3, 7)):
             take_action(3)
             continue
