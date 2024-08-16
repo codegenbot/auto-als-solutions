@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -87,8 +88,8 @@ def stabilize():
             continue
 
         # Rhythm check if MAP low or HR abnormal
-        if (vitals["MAP"] is not None and vitals["MAP"] < 60) or (vitals["HR"] and (vitals["HR"] < 60 or vitals["HR"] > 100)):
-            take_action(2)  # CheckRhythm
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60) or (vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100)):
+            take_action(2)  # Check Rhythm
             continue
 
         take_action(48)  # Finish
