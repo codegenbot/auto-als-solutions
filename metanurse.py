@@ -65,7 +65,6 @@ def stabilize():
             examined.add("breathing_exam")
             continue
 
-        # Recheck vitals if they are not at operational ranges
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
@@ -78,7 +77,6 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # handle tachyarrhythmia
         if (
             (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150))
             or events[29] > 0
