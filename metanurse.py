@@ -1,76 +1,60 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-
+    
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
             return
         if "SatsProbe" not in examined:
-            examine_drawers("Breathing")
             take_action(25)
             examined.add("SatsProbe")
             return
         if "BP" not in examined:
-            examine_drawers("Circulation")
-            take_action(38)
+            take_action(27)
             examined.add("BP")
             return
 
-    def examine_drawers(system):
-        if system == "Airway":
-            take_action(18)
-        elif system == "Breathing":
-            take_action(19)
-        elif system == "Circulation":
-            take_action(20)
-        elif system == "Drugs":
-            take_action(21)
-
-    for _ in range(350):
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
             continue
 
-        events, times, values = (
-            observations[:33],
-            observations[33:40],
-            observations[40:],
-        )
+        events = observations[:33]
+        times = observations[33:40]
+        values = observations[40:]
 
-        vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
-        }
+        vitals = dict()
+        vitals["HR"] = values[0] if times[0] > 0 else None
+        vitals["RR"] = values[1] if times[1] > 0 else None
+        vitals["Glucose"] = values[2] if times[2] > 0 else None
+        vitals["Temp"] = values[3] if times[3] > 0 else None
+        vitals["MAP"] = values[4] if times[4] > 0 else None
+        vitals["Sats"] = values[5] if times[5] > 0 else None
+        vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if not "Airway" in examined:
+        if events[3] == 0 and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
-        if not "Breathing" in examined:
+
+        if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
-        if not "Circulation" in examined:
+
+        if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
@@ -104,7 +88,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
