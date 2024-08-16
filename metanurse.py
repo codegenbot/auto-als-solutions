@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
     
     def examine_vitals():
@@ -20,17 +20,17 @@ def stabilize():
             take_action(38)
             examined.add("BP")
             return
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
+        
         vitals = dict()
         vitals["HR"] = values[0] if times[0] > 0 else None
         vitals["RR"] = values[1] if times[1] > 0 else None
@@ -76,6 +76,8 @@ def stabilize():
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
+                if (vitals["MAP"] and vitals["MAP"] < 60) or (vitals["Sats"] and vitals["Sats"] < 88):
+                    take_action(23)
                 continue
             elif vitals["HR"] > 100:
                 take_action(11)
