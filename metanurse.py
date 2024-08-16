@@ -43,6 +43,7 @@ def stabilize():
 
         if any(v is None for v in [vitals["Sats"], vitals["MAP"], vitals["RR"], vitals["HR"]]):
             if measure_vitals():
+                examined.add("Vitals")
                 continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
