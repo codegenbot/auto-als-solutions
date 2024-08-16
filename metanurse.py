@@ -35,35 +35,29 @@ def stabilize():
         vitals["Sats"] = values[5] if times[5] > 0 else None
         vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        # Immediate action if critical vitals
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
 
-        # Airway assessment
         if events[3] == 0 and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        # Breathing assessment
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        # Circulation assessment
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
 
-        # Perform measures for stabilization
         measure_vitals()
 
-        # Check vitals and stabilize
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
