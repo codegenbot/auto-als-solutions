@@ -61,7 +61,7 @@ def stabilize():
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
-        
+
         # Unstable rhythm check
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)  # AttachDefibPads
