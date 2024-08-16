@@ -49,14 +49,13 @@ def stabilize():
                 examined_vitals.add("Sats")
                 continue
 
-            if vitals["RR"] is None and "RR" not in examined_vitals:
+            if vitals["RR"] is None and "RR" not in examined_vitals and "Monitor" not in examined_vitals:
                 take_action(4)
-                examined_vitals.add("RR")
+                examined_vitals.add("Monitor")
                 continue
 
-            if "Monitor" not in examined_vitals:
+            if "Monitor" in examined_vitals and vitals["Sats"] is None:
                 take_action(16)
-                examined_vitals.add("Monitor")
                 continue
 
             if vitals["MAP"] is None and "MAP" not in examined_vitals:
@@ -64,9 +63,17 @@ def stabilize():
                 examined_vitals.add("MAP")
                 continue
 
+            if "MAP" in examined_vitals and vitals["MAP"] is None:
+                take_action(16)
+                continue
+
             if vitals["HR"] is None and "HR" not in examined_vitals:
                 take_action(5)
                 examined_vitals.add("HR")
+                continue
+
+            if "HR" in examined_vitals and vitals["HR"] is None:
+                take_action(16)
                 continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
@@ -93,7 +100,7 @@ def stabilize():
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(28)
+                take_action(28)  # Attach defib pads for cardioversion
                 continue
 
         take_action(48)
