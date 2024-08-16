@@ -24,22 +24,26 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Check if John is going into cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
 
+        # Examine Airway (A)
         if any(events[i] > 0 for i in range(3, 7)) and "AirwayExamined" not in examined_vitals:
             take_action(3)
             examined_vitals.add("AirwayExamined")
             continue
 
+        # Examine Breathing (B)
         if any(events[i] > 0 for i in range(7, 15)) and "BreathingExamined" not in examined_vitals:
             take_action(4)
             examined_vitals.add("BreathingExamined")
             continue
 
+        # Examine Circulation (C)
         if any(events[i] > 0 for i in range(15, 20)) and "CirculationExamined" not in examined_vitals:
             take_action(5)
             examined_vitals.add("CirculationExamined")
@@ -55,32 +59,36 @@ def stabilize():
             examined_vitals.add("SatsProbeApplied")
             continue
         
+        # Examine vitals if measurements are not recent
         if vitals["RR"] is None and "BreathingExamined" not in examined_vitals:
             take_action(4)
             examined_vitals.add("BreathingExamined")
             continue
         
+        # Check if we have the measurements
         if 'monitor' not in examined_vitals:
             take_action(16)
             examined_vitals.add('monitor')
             continue
         
+        # Stabilize based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask
             continue
 
+        # If all vital signs are stable, finish
         if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RR"] is not None and vitals["RR"] >= 8):
-            take_action(48)
+            take_action(48)  # Finish
             break
 
 if __name__ == "__main__":
