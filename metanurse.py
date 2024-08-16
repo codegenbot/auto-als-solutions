@@ -6,20 +6,12 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
-    def measure_vitals():
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
-            examined.add("RespRate")
-        elif "HR" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("HR")
+    measurements = {
+        "BP": False,
+        "Sats": False,
+        "RespRate": False,
+        "HR": False,
+    }
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -41,29 +33,60 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
+        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        # Assess Airway
+        if events[3] == 0 and "Airway" not in examined:  # Ensure airway is clear
             take_action(3)  # ExamineAirway
             examined.add("Airway")
             continue
 
-        measure_vitals()
+        if events[6] > 0:  # Airway obstruction by tongue
+            take_action(36)  # PerformHeadTiltChinLift
+            continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFlids
+        if events[4] > 0 or events[5] > 0:  # Airway obstruction by vomit or blood
+            take_action(31)  # UseYankeurSucionCatheter
+            continue
+
+        # Breathing intervention
+        if not measurements["RespRate"]:
+            take_action(4)  # ExamineBreathing
+            measurements["RespRate"] = True
+            continue
+        
+        if not measurements["Sats"]:
+            take_action(25)  # UseSatsProbe
+            measurements["Sats"] = True
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
-
+        
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
 
+        # Circulation intervention
+        if not measurements["BP"]:
+            take_action(27)  # UseBloodPressureCuff
+            measurements["BP"] = True
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        if not measurements["HR"]:
+            take_action(16)  # ViewMonitor
+            measurements["HR"] = True
+            continue
+
+        # Handle unstable rhythm and tachyarrhythmias
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)  # AttachDefibPads
             continue
