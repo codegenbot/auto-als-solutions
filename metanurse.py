@@ -50,18 +50,19 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[3]:
+        if "AirwayClear" in events or "AirwayVomit" in events or "AirwayBlood" in events or "AirwayTongue" in events:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
-        
-        if events[8]:
-            take_action(36)
-            continue
-        elif events[14]:
-            take_action(19)
-            continue
+
+            if "BreathingSnoring" in events:
+                take_action(36)
+                continue
+
+            if "BreathingPneumothoraxSymptoms" in events:
+                take_action(19)
+                continue
 
         examine_vitals()
 
@@ -76,7 +77,7 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
