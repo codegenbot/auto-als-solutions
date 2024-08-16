@@ -7,6 +7,17 @@ def stabilize():
 
     examined = set()
 
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("SatsProbe")
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -16,7 +27,7 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
+        
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -27,43 +38,23 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Airway assessment
+        if events[3] > 0:
+            examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
-
-        # Breathing assessment
-        if "breathing" not in examined:
-            take_action(4)  # ExamineBreathing
-            examined.add("breathing")
-            continue
-
-        # Check vital signs via instruments after initial assessments
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
-            continue
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-            continue
-        if "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-            continue
         
-        # Circulation intervention
+        measure_vitals()
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Breathing intervention
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -72,19 +63,21 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # For Vitals Check
-        if "HR" not in examined:
-            take_action(5)  # ExamineCirculation
-            examined.add("HR")
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(28)  # AttachDefibPads
+            take_action(40)  # DefibrillatorCharge
+            take_action(41)  # DefibrillatorCurrentUp
+            take_action(43)  # DefibrillatorPace
             continue
 
-        # Stable check and finish
-        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60:
+        if all((vitals["MAP"] and vitals["MAP"] >= 60,
+                vitals["RR"] and vitals["RR"] >= 8,
+                vitals["Sats"] and vitals["Sats"] >= 88,
+                events[3] > 0)):
             take_action(48)  # Finish
             break
-
-        # Fallback
-        take_action(0)  # DoNothing
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
