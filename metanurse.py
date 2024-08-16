@@ -49,6 +49,10 @@ def stabilize():
             examined.add("RespRate")
             continue
 
+        if events[11] > 0 or events[13] > 0 or events[14] > 0:
+            take_action(30)
+            continue
+
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
@@ -59,6 +63,11 @@ def stabilize():
             examined.add("Monitor")
             continue
 
+        if "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
+            continue
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -71,17 +80,12 @@ def stabilize():
             take_action(29)
             continue
         
-        if vitals["HR"] is not None and (events[14] > 0 or events[21] > 0):
-            take_action(40)
-            continue
-        
-        if vitals["HR"] is not None and (events[28] > 0 or events[29] > 0 or events[34] > 0 or events[35] > 0):
+        if vitals["HR"] is not None and (events[28] > 0 or events[29] > 0 or events[34] > 0 or events[35] > 0 or events[30] > 0):
             take_action(40)
             continue
 
         take_action(48)
         break
-
     else:
         take_action(48)
 
