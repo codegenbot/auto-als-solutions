@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -83,6 +84,7 @@ def stabilize():
         # If all actions are exhausted, finish
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
