@@ -1,22 +1,48 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    def examine_vitals():
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
+    def assess_airway():
+        if not events[3]:
+            take_action(3)  # ExamineAirway
             return
-        if "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
+
+    def assess_breathing():
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
             return
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
+        if not events[11]:
+            take_action(4)  # ExamineBreathing
+            return
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
+            return
+
+    def assess_circulation():
+        if not events[16] or not events[17]:
+            take_action(5)  # ExamineCirculation
+            return
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            return
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(9)  # GiveAdenosine
+                return
+            elif vitals["HR"] > 100:
+                take_action(9)  # GiveAdenosine
+                return
+            elif vitals["HR"] < 50:
+                take_action(12)  # GiveAtropine
+                return
+
+    def assess_disability():
+        if not events[6]:
+            take_action(6)  # ExamineDisability
             return
 
     examined = set()
@@ -43,50 +69,20 @@ def stabilize():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (
             vitals["MAP"] and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
-        if "Airway" not in examined:
-            take_action(3)
-            examined.add("Airway")
-            continue
+        assess_airway()
+        assess_breathing()
+        assess_circulation()
+        assess_disability()
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
-
-        examine_vitals()
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(10)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-
+        examined.add("ABCDE")
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
