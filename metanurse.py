@@ -35,73 +35,32 @@ def stabilize():
             examined_vitals.add("monitor")
             continue
 
-        if vitals["MAP"] is None and "BP" not in examined_vitals:
+        if vitals["MAP"] is None:
             take_action(27)
-            examined_vitals.add("BP")
-            continue
-
-        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
-            take_action(25)
-            examined_vitals.add("SatsProbe")
-            continue
-
-        if vitals["RR"] is None and "Breathing" not in examined_vitals:
-            take_action(4)
-            examined_vitals.add("Breathing")
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)) and "Airway" not in examined_vitals:
-            take_action(3)
-            examined_vitals.add("Airway")
-            continue
-
-        if (
-            any(events[i] > 0 for i in range(7, 15))
-            and "Breathing" not in examined_vitals
-        ):
-            take_action(4)
-            examined_vitals.add("Breathing")
-            continue
-
-        if (
-            any(events[i] > 0 for i in range(15, 20))
-            and "Circulation" not in examined_vitals
-        ):
-            take_action(5)
-            examined_vitals.add("Circulation")
-            continue
-
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "Disability" not in examined_vitals
-        ):
-            take_action(6)
-            examined_vitals.add("Disability")
-            continue
-
-        if (
-            any(events[i] > 0 for i in range(26, 33))
-            and "Exposure" not in examined_vitals
-        ):
-            take_action(7)
-            examined_vitals.add("Exposure")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
+        if vitals["Sats"] is None:
+            take_action(25)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
-            examined_vitals.add(30)
+            take_action(30)
+            continue
+
+        if vitals["RR"] is None:
+            take_action(4)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[28:33]):  # Check for abnormal heart rhythms
-            take_action(2)  # Check rhythm
+        if any(events[i] > 0 for i in range(28, 33)):
+            take_action(2)
             continue
 
         take_action(48)
