@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined_vitals = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
