@@ -7,6 +7,20 @@ def stabilize():
 
     examined = set()
 
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)   # ExamineBreathing
+            examined.add("RespRate")
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -31,41 +45,30 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
-        
+
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
+        if "airway" in examined and events[3] > 0:
             examined.add("airway_clear")
         elif "airway_clear" not in examined:
             take_action(3)  # Re-examineAirway if not clear
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
-            continue
-        
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-            continue
+        measure_vitals()
 
-        if "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-            continue
-
-        if "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
-            examined.add("RespRate")
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60 and "fluids_given" not in examined:
+                take_action(15)  # GiveFluids
+                examined.add("fluids_given")
+                continue
+            elif vitals["MAP"] < 60:
+                take_action(28)  # AttachDefibPads (considering circulatory support)
+                continue
+            else:
+                examined.add("stable_MAP")
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
@@ -75,9 +78,10 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        if (vitals["HR"] is not None and (vitals["HR"] > 150 or events[29] > 0 or events[30] > 0)):
-            take_action(28)  # AttachDefibPads
-            continue
+        if vitals["HR"] is not None:
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(28)  # AttachDefibPads
+                continue
 
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
