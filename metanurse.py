@@ -1,25 +1,21 @@
 import sys
-import math
 
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
-    vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False}
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing for invalid input
+            take_action(0)
             continue
 
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
-        vitals = {
+        
+        vital_signs = {
             "HR": values[0] if times[0] != 0 else None,
             "RR": values[1] if times[1] != 0 else None,
             "Glucose": values[2] if times[2] != 0 else None,
@@ -29,72 +25,51 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        # Immediate life-threatening conditions
+        if (vital_signs["Sats"] is not None and vital_signs["Sats"] < 65) or (vital_signs["MAP"] is not None and vital_signs["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if not examined["Airway"]:
+        # Airway
+        if not any(events[3:7]):  # Airway events
             take_action(3)  # ExamineAirway
-            examined["Airway"] = True
             continue
 
-        if not examined["Breathing"]:
-            take_action(4)  # ExamineBreathing
-            examined["Breathing"] = True
+        if events[2]:  # Check response
+            take_action(8)  # ExamineResponse
+            continue
+
+        # Breathing
+        if vital_signs["Sats"] is None:
+            take_action(25)  # UseSatsProbe
             continue
         
-        if not examined["Circulation"]:
-            take_action(5)  # ExamineCirculation
-            examined["Circulation"] = True
+        if vital_signs["RR"] is None:
+            take_action(4)  # ExamineBreathing
             continue
 
-        if not examined["Disability"]:
-            take_action(6)  # ExamineDisability
-            examined["Disability"] = True
-            continue
-
-        if not examined["Exposure"]:
-            take_action(7)  # ExamineExposure
-            examined["Exposure"] = True
-            continue
-
-        if vitals["RR"] is None:
-            if not vitals_checked["RR"]:
-                take_action(4)  # ExamineBreathing
-                vitals_checked["RR"] = True
-                continue
-        elif vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["MAP"] is None:
-            if not vitals_checked["MAP"]:
-                take_action(27)  # UseBloodPressureCuff
-                vitals_checked["MAP"] = True
-                continue
-        elif vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["Sats"] is None:
-            if not vitals_checked["Sats"]:
-                take_action(25)  # UseSatsProbe
-                vitals_checked["Sats"] = True
-                continue
-        elif vitals["Sats"] < 88:
+        if vital_signs["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
 
-        if vitals["HR"] is None:
-            if not vitals_checked["HR"]:
-                take_action(24)  # UseMonitorPads
-                vitals_checked["HR"] = True
-                continue
-        
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)  # GiveAdenosine
+        if vital_signs["RR"] and vital_signs["RR"] < 8:
+            take_action(29)  # UseBagValveMask
             continue
-        
+
+        # Circulation
+        if vital_signs["MAP"] is None:
+            take_action(27)  # UseBloodPressureCuff
+            continue
+
+        if vital_signs["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        # Ensure all vitals are checked before finishing
+        if None in vital_signs.values():
+            take_action(24)  # UseMonitorPads
+            continue
+
         take_action(48)  # Finish
         break
 
