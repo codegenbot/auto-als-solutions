@@ -24,14 +24,12 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None && vitals["Sats"] < 65) or (vitals["MAP"] is not None && vitals["MAP"] < 20):
             take_action(17)  # Start chest compression
             continue
 
         if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmia
-            take_action(39)   # Turn on defibrillator
+            take_action(39)  # Turn on defibrillator
             continue
 
         if "monitor" not in examined_vitals:
