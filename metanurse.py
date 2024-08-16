@@ -5,7 +5,9 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    vitals_measurements = {"Airway": False, "Sats": False, "RR": False, "MAP": False, "HR": False}
+    examined_vitals = set()
+    vitals_measurements = {"MAP": False, "Sats": False, "HR": False, "RR": False}
+    initial_actions_done = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -27,36 +29,33 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if not vitals_measurements["Airway"]:
-            take_action(3)
-            vitals_measurements["Airway"] = True
+        if not initial_actions_done:
+            take_action(1)
+            initial_actions_done = True
             continue
 
-        if events[3] != 0:
-            vitals_measurements["Airway"] = True
+        if not all(examined_vitals):  # Ensure all sections are examined
+            if not vitals_measurements["Sats"]:
+                take_action(25)  # Use Sats Probe
+                vitals_measurements["Sats"] = True
+                continue
 
-        if not vitals_measurements["Sats"]:
-            take_action(25)
-            vitals_measurements["Sats"] = True
+            take_action(3)  # Examine Airway
             continue
 
-        if not vitals_measurements["RR"]:
-            take_action(4)
-            vitals_measurements["RR"] = True
+            take_action(4)  # Examine Breathing
             continue
 
-        if not vitals_measurements["MAP"]:
-            take_action(27)
-            vitals_measurements["MAP"] = True
+            take_action(5)  # Examine Circulation
             continue
 
-        if not vitals_measurements["HR"]:
-            take_action(24)
-            vitals_measurements["HR"] = True
+            take_action(6)  # Examine Disability
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
