@@ -28,18 +28,17 @@ def stabilize():
             take_action(0)
             continue
 
-        events = observations[:33]
-        times = observations[33:40]
+        events = observations[:40]
         values = observations[40:]
 
         vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
+            "HR": values[0] if observations[33] > 0 else None,
+            "RR": values[1] if observations[34] > 0 else None,
+            "Glucose": values[2] if observations[35] > 0 else None,
+            "Temp": values[3] if observations[36] > 0 else None,
+            "MAP": values[4] if observations[37] > 0 else None,
+            "Sats": values[5] if observations[38] > 0 else None,
+            "Resps": values[6] if observations[39] > 0 else None,
         }
 
         # Start with airway assessment
