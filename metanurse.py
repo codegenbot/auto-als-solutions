@@ -48,6 +48,11 @@ def stabilize():
                 take_action(29)  # Use BagValveMask if oxygen drops further
             continue
 
+        if "Monitor" not in examined_vitals:
+            take_action(16)  # View Monitor
+            examined_vitals.add("Monitor")
+            continue
+
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
             examined_vitals.add("RR")
@@ -69,11 +74,6 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
-            continue
-        
-        if "Monitor" not in examined_vitals:
-            take_action(16)  # View Monitor
-            examined_vitals.add("Monitor")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
