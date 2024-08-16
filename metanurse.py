@@ -20,11 +20,8 @@ def stabilize():
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
@@ -65,7 +62,7 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if events[15] > 0 and "circulation" not in examined_vitals:
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
