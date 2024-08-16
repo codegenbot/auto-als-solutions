@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -10,7 +11,7 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)
             continue
-        
+
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -19,7 +20,7 @@ def stabilize():
             values[0] if times[0] > 0 else None,
             values[1] if times[1] > 0 else None,
             values[4] if times[4] > 0 else None,
-            values[5] if times[5] > 0 else None
+            values[5] if times[5] > 0 else None,
         )
 
         if (Sats is not None and Sats < 65) or (MAP is not None and MAP < 20):
@@ -70,6 +71,7 @@ def stabilize():
 
         take_action(48)
         break
+
 
 if __name__ == "__main__":
     stabilize()
