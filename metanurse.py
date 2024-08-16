@@ -20,11 +20,21 @@ def stabilize():
     }
 
     def initial_checks():
-        for key in assessed:
-            if not assessed[key]:
-                take_action(actions[key])
-                assessed[key] = True
-                return
+        if not assessed["Airway"]:
+            take_action(actions["Airway"])
+            assessed["Airway"] = True
+        elif not assessed["Breathing"]:
+            take_action(actions["Breathing"])
+            assessed["Breathing"] = True
+        elif not assessed["Circulation"]:
+            take_action(actions["Circulation"])
+            assessed["Circulation"] = True
+        elif not assessed["Disability"]:
+            take_action(actions["Disability"])
+            assessed["Disability"] = True
+        elif not assessed["Exposure"]:
+            take_action(actions["Exposure"])
+            assessed["Exposure"] = True
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
