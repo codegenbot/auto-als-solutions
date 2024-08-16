@@ -1,4 +1,4 @@
-import sys, math
+import sys
 
 def stabilize():
     def take_action(action):
@@ -6,6 +6,22 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+
+    actions_priority = [
+        (32, "events[4]", None, None),       # OpenAirway if AirwayVomit
+        (31, "events[5]", None, None),       # Suction if AirwayBlood
+        (36, "events[6]", None, None),       # HeadTiltChinLift if AirwayTongue 
+        (25, "vitals['Sats'] is None", None, None),  # Use Sats Probe if Sats not measured
+        (3, "True", None, None),             # Examine Airway
+        (30, "vitals['Sats'] < 88", None, None),  # Use NonRebreatherMask if Sats < 88
+        (4, "vitals['RR'] is None", None, None),   # Examine Breathing
+        (29, "vitals['RR'] < 8", None, None),      # Use BagValveMask if RR < 8
+        (5, "vitals['MAP'] is None", None, None),  # Examine Circulation
+        (27, "vitals['MAP'] < 60", None, None),    # Use Blood Pressure Cuff if MAP < 60
+        (15, "vitals['MAP'] < 60", None, None),    # Give Fluids if MAP < 60
+        (6, "events[20]", None, None),       # Examine Disability if AVPU_A event
+        (7, "events[26]", None, None),       # Examine Exposure if ExposureRash
+    ]
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -24,68 +40,19 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Start CPR
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # Start Chest Compression
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
-            examined_vitals.add("airway")
-            continue
-
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("MAP")
-            continue
-
-        take_action(16)  # View monitor to get updated values
-        continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
-        if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use sats probe
-            examined_vitals.add("Sats")
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
-            continue
-
-        if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
-            examined_vitals.add("RR")
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use BagValveMask
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
-            take_action(4)  # Examine breathing
-            examined_vitals.add("breathing")
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
-            take_action(5)  # Examine circulation
-            examined_vitals.add("circulation")
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
-            take_action(6)  # Examine disability
-            examined_vitals.add("disability")
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine exposure
-            continue
-
-        take_action(48)  # Finish
-        break
+        for action, condition, fallback, dependent in actions_priority:
+            if eval(condition):
+                take_action(action)
+                if fallback is not None:
+                    examined_vitals.add(fallback)
+                break
+        else:
+            take_action(48)
+            break
 
 if __name__ == "__main__":
     stabilize()
