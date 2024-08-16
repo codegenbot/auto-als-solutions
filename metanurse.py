@@ -24,8 +24,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
             continue
 
@@ -43,15 +42,6 @@ def stabilize():
             take_action(30)  # Use NonRebreatherMask
             continue
 
-        if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
-            examined_vitals.add("RR")
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use BagValveMask
-            continue
-
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
@@ -64,6 +54,11 @@ def stabilize():
         if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
+            continue
+
+        if vitals["HR"] is None and "HR" not in examined_vitals:
+            take_action(2)  # CheckRhythm
+            examined_vitals.add("HR")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
