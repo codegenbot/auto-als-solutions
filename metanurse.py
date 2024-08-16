@@ -16,17 +16,17 @@ def stabilize():
                 examined.add(check)
                 return True
         return False
-
+        
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
+        
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -36,15 +36,15 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
             "Resps": values[6] if times[6] > 0 else None
         }
-
+        
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
-
+        
         if any(v is None for v in [vitals["Sats"], vitals["MAP"], vitals["RR"], vitals["HR"]]):
             if measure_vitals():
                 continue
-
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
             if "OpenCirculationDrawer" not in drawers_opened:
                 take_action(20)
@@ -52,7 +52,7 @@ def stabilize():
                 continue
             take_action(15)
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             if "OpenBreathingDrawer" not in drawers_opened:
                 take_action(19)
@@ -60,11 +60,11 @@ def stabilize():
                 continue
             take_action(30)
             continue
-
+        
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
             if "DefibPads" not in drawers_opened:
                 take_action(28)
@@ -72,7 +72,7 @@ def stabilize():
                 continue
             take_action(2)
             continue
-
+        
         take_action(48)
         break
     else:
