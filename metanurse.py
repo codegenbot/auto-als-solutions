@@ -30,19 +30,6 @@ def stabilize():
             take_action(17)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
-            examined_vitals.add(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
         if "monitor" not in examined_vitals:
             take_action(16)
             examined_vitals.add("monitor")
@@ -68,10 +55,6 @@ def stabilize():
             examined_vitals.add("Airway")
             continue
 
-        if any(events[28:33]):  # Check for abnormal heart rhythms
-            take_action(2)
-            continue
-
         if (
             any(events[i] > 0 for i in range(7, 15))
             and "Breathing" not in examined_vitals
@@ -88,7 +71,10 @@ def stabilize():
             examined_vitals.add("Circulation")
             continue
 
-        if in_range > 20 and any(events[i] > 0 for i in range(20, 26))and "Disability" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "Disability" not in examined_vitals
+        ):
             take_action(6)
             examined_vitals.add("Disability")
             continue
@@ -99,6 +85,23 @@ def stabilize():
         ):
             take_action(7)
             examined_vitals.add("Exposure")
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30 if 30 not in examined_vitals else 29)
+            examined_vitals.add(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
+        if any(events[28:33]):  # Check for abnormal heart rhythms
+            take_action(2)  # Check rhythm
             continue
 
         take_action(48)
