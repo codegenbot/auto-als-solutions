@@ -51,6 +51,7 @@ def stabilize():
             examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
+            examined.add("airway")
             continue
 
         # Check vital signs
