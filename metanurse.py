@@ -7,20 +7,6 @@ def stabilize():
 
     examined = set()
     
-    def measure_all_vitals():
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -40,19 +26,32 @@ def stabilize():
             "Sats": values[5] if times[5] != 0 else None,
             "Resps": values[6] if times[6] != 0 else None,
         }
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if events[3] > 0:
-            examined.add("airway")
-
         if "airway" not in examined:
             take_action(3)
+            examined.add("airway")
+            continue
+		
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
             continue
 
-        measure_all_vitals()
+        if "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+            continue
+
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
@@ -65,7 +64,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(40)
             take_action(41)
