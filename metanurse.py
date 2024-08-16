@@ -18,7 +18,7 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
         elif "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
+            take_action(4)  # ExamineBreathing
             examined.add("RespRate")
 
     for step in range(350):
