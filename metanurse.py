@@ -31,7 +31,6 @@ def stabilize():
             take_action(17)  # Start chest compressions
             continue
 
-        # Start with fundamental examinations
         if "response" not in examined_vitals:
             take_action(8)  # Examine Response
             examined_vitals.add("response")
@@ -62,7 +61,6 @@ def stabilize():
             examined_vitals.add("exposure")
             continue
 
-        # Ensure monitoring
         if "monitor" not in examined_vitals:
             take_action(16)  # View Monitor
             examined_vitals.add("monitor")
@@ -83,7 +81,6 @@ def stabilize():
             examined_vitals.add("RR")
             continue
 
-        # Check for treatments based on vital measurements
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
