@@ -32,19 +32,37 @@ def stabilize():
             take_action(17)
             continue
 
+        # First examine Airway only if not already done
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
 
+        # Check for airway clearance events
         if events[3] > 0:
             examined.add("airway")
 
+        # Examine all vitals if not already examined
         if "examined_vitals" not in examined:
-            take_action(25)
+            if "SatsProbe" not in examined:
+                take_action(25)
+                examined.add("SatsProbe")
+                continue
+            if "RespRate" not in examined:
+                take_action(4)
+                examined.add("RespRate")
+                continue
+            if "BP" not in examined:
+                take_action(27)
+                examined.add("BP")
+                continue
+            if "Monitor" not in examined:
+                take_action(16)
+                examined.add("Monitor")
+                continue
             examined.add("examined_vitals")
-            continue
 
+        # Fix vital thresholds
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -57,12 +75,9 @@ def stabilize():
             take_action(29)
             continue
 
+        # Check for arrhythmias and need for cardioversion
         if any(events[31:38]):
             take_action(40)
-            continue
-
-        if vitals["RR"] is None:
-            take_action(4)
             continue
 
         take_action(48)
