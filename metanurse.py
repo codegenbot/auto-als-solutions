@@ -1,24 +1,10 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
-    def measure_all_vitals(examined):
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-        elif "BP" not in examined:
-            take_action(27)
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)
-            examined.add("RespRate")
-        return examined
 
     examined = set()
     for step in range(350):
@@ -47,15 +33,27 @@ def stabilize():
             take_action(17)
             continue
 
+        if events[8] > 0 or events[9] > 0 or events[10] > 0:
+            take_action(35)
+            continue
+
+        if events[6] > 0:
+            take_action(32)
+            continue
+
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
             continue
 
-        if events[3] > 0:
-            examined.add("airway")
+        if events[1] > 0 or events[2] > 0:
+            take_action(29)
+            continue
 
-        examined = measure_all_vitals(examined)
+        if "breathing" not in examined:
+            take_action(4)
+            examined.add("breathing")
+            continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
@@ -64,7 +62,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -73,6 +71,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
