@@ -37,7 +37,7 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:
+        if events[3] > 0:  # AirwayClear confirmed
             examined.add("airway")
 
         if "SatsProbe" not in examined:
@@ -50,7 +50,7 @@ def stabilize():
             examined.add("RespRate")
             continue
 
-        if events[10] > 0:
+        if events[10] > 0:  # BreathingEqualChestExpansion confirmed
             examined.add("RespRate")
 
         if "BP" not in examined:
@@ -63,7 +63,7 @@ def stabilize():
             examined.add("Monitor")
             continue
 
-        if events[13] > 0:
+        if events[13] > 0:  # BreathingBibasalCrepitations confirmed
             examined.add("Monitor")
 
         if "HR" not in examined:
@@ -72,15 +72,15 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids action to address hypotension
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-rebreather Mask action to improve oxygenation
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag Valve Mask action to improve respirations
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
@@ -97,10 +97,10 @@ def stabilize():
             take_action(2)
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish after 350 steps
 
 if __name__ == "__main__":
     stabilize()
