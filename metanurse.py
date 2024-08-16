@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
     
     examined = set()
-    observation_count = 0
 
     for _ in range(350):
         observations = list(map(float, input().strip().split()))
