@@ -37,10 +37,10 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:
+        if events[3] > 0:  # AirwayClear
             examined.add("airway_clear")
         elif "airway_clear" not in examined:
-            take_action(3)
+            take_action(3)  # Re-examineAirway if not clear
             continue
 
         if "Monitor" not in examined:
