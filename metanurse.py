@@ -24,26 +24,71 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
+        if "monitor" not in examined_vitals:
+            take_action(16)
+            examined_vitals.add("monitor")
             continue
 
-        if "breathing" not in examined_vitals:
-            take_action(4)
-            examined_vitals.add("breathing")
+        if vitals["MAP"] is None and "BP" not in examined_vitals:
+            take_action(27)
+            examined_vitals.add("BP")
             continue
 
-        if vitals["Sats"] is None and 25 not in examined_vitals:
+        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
             take_action(25)
-            examined_vitals.add(25)
+            examined_vitals.add("SatsProbe")
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        if vitals["RR"] is None and "Breathing" not in examined_vitals:
+            take_action(4)
+            examined_vitals.add("Breathing")
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)) and "Airway" not in examined_vitals:
+            take_action(3)
+            examined_vitals.add("Airway")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(7, 15))
+            and "Breathing" not in examined_vitals
+        ):
+            take_action(4)
+            examined_vitals.add("Breathing")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "Circulation" not in examined_vitals
+        ):
+            take_action(5)
+            examined_vitals.add("Circulation")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "Disability" not in examined_vitals
+        ):
+            take_action(6)
+            examined_vitals.add("Disability")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(26, 33))
+            and "Exposure" not in examined_vitals
+        ):
+            take_action(7)
+            examined_vitals.add("Exposure")
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -51,33 +96,16 @@ def stabilize():
             examined_vitals.add(30)
             continue
 
-        if "circulation" not in examined_vitals:
-            take_action(5)
-            examined_vitals.add("circulation")
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
-        if vitals["MAP"] is None and 27 not in examined_vitals:
-            take_action(27)
-            examined_vitals.add(27)
+        if any(events[28:33]):  # Check for abnormal heart rhythms
+            take_action(2)  # Check rhythm
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if "disability" not in examined_vitals:
-            take_action(6)
-            examined_vitals.add("disability")
-            continue
-
-        if "exposure" not in examined_vitals:
-            take_action(7)
-            examined_vitals.add("exposure")
-            continue
-
-        if all(vitals[k] is not None for k in ["Sats", "RR", "MAP"]):
-            take_action(48)
-            break
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
