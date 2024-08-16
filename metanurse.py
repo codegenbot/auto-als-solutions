@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,45 +7,19 @@ def stabilize():
 
     examined = set()
 
-    def examine_airway():
-        if "airway" not in examined:
-            take_action(3)
-            examined.add("airway")
-            return True
-        return False
-
-    def examine_breathing():
-        if "breathing" not in examined:
-            take_action(4)
-            examined.add("breathing")
-            return True
-        return False
-
-    def examine_circulation():
-        if "circulation" not in examined:
-            take_action(5)
-            examined.add("circulation")
-            return True
-        return False
-
     def measure_all_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return True
         elif "BP" not in examined:
             take_action(27)
             examined.add("BP")
-            return True
         elif "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return True
         elif "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
-            return True
-        return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -67,47 +40,49 @@ def stabilize():
             "Sats": values[5] if times[5] != 0 else None,
             "Resps": values[6] if times[6] != 0 else None,
         }
-
+        
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Cardiac arrest, start CPR
+            take_action(17)
+            continue
+        
+        if "airway" not in examined:
+            take_action(3)
+            examined.add("airway")
             continue
 
-        if examine_airway():
-            continue
-
-        if events[3] > 0:  # AirwayClear
+        if events[3] > 0:
             examined.add("airway")
 
-        if measure_all_vitals():
-            continue
+        measure_all_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if examine_breathing() or examine_circulation():
+        if "breathing" not in examined:
+            take_action(4)
+            examined.add("breathing")
             continue
-
+        
         if any([events[28], events[29], events[30], events[31], events[32]]):
-            take_action(40)  # Prepare for defibrillation
+            take_action(40)
             take_action(41)
             take_action(43)
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish
-
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
