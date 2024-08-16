@@ -1,16 +1,17 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set(["monitor"])
+    examined_vitals = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -28,19 +29,6 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)  # Start CPR
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in examined_vitals else 29)
-            examined_vitals.add(30)
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
             continue
 
         if "monitor" not in examined_vitals:
@@ -83,12 +71,38 @@ def stabilize():
             examined_vitals.add(6)
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if any(events[i] > 0 for i in range(26, 33)) and 7 not in examined_vitals:
             take_action(7)  # Examine exposure
+            examined_vitals.add(7)
             continue
 
-        take_action(48)  # Finish
-        break
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
+        if vitals["HR"] is None and 2 not in examined_vitals:
+            take_action(2)  # Check rhythm
+            examined_vitals.add(2)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30 if 30 not in examined_vitals else 29)
+            examined_vitals.add(30)
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use bag valve mask
+            continue
+
+        # Finish if all vitals are examined and stable
+        if all(
+            value is not None
+            and (vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RR"] >= 8)
+            for value in vitals.values()
+        ):
+            take_action(48)  # Finish
+            break
+
 
 if __name__ == "__main__":
     stabilize()
