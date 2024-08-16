@@ -24,6 +24,7 @@ def stabilize():
             take_action(27)
             examined.add('BP')
             return
+            
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
@@ -32,7 +33,7 @@ def stabilize():
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -48,76 +49,73 @@ def stabilize():
         vitals["Sats"] = values[5] if times[5] > 0 else None
         vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        # Cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        # ABCDE assessments
         if not steps['airway']:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             steps['airway'] = True
             continue
 
-        if events[3]:  # AirwayClear
+        if events[3]:
             steps['airway'] = True
         
         if not steps['breathing']:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             steps['breathing'] = True
             continue
         
-        if events[10]:  # BreathingEqualChestExpansion
+        if events[10]:
             steps['breathing'] = True
         
         if not steps['circulation']:
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             steps['circulation'] = True
             continue
         
-        if events[18]:  # RadialPulseNonPalpable
+        if events[18]:
             continue
         
         if not steps['disability']:
-            take_action(6)  # ExamineDisability
+            take_action(6)
             steps['disability'] = True
             continue
 
         if not steps['exposure']:
-            take_action(7)  # ExamineExposure
+            take_action(7)
             steps['exposure'] = True
             continue
 
         examine_vitals()
 
-        # Stability check and interventions
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)  # GiveAdenosine
+                take_action(9)
                 continue
             elif vitals["HR"] > 100:
-                take_action(24)  # UseMonitorPads
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
+                take_action(12)
                 continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
