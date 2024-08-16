@@ -6,14 +6,10 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    def is_vital_missing(vitals, component):
-        return vitals[component] is None
-
     actions_taken = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
-
         if len(observations) != 53:
             take_action(0)
             continue
@@ -35,15 +31,23 @@ def stabilize():
             take_action(17)
             continue
 
-        if is_vital_missing(vitals, "MAP") and 27 not in actions_taken:
+        if vitals["MAP"] is None and 27 not in actions_taken:
             actions_taken.add(27)
             take_action(27)
             continue
-
-        if is_vital_missing(vitals, "Sats") and 25 not in actions_taken:
+        if vitals["Sats"] is None and 25 not in actions_taken:
             actions_taken.add(25)
             take_action(25)
             continue
+        if vitals["MAP"] is None or vitals["Sats"] is None:
+            if 16 not in actions_taken:
+                actions_taken.add(16)
+                take_action(16)
+                continue
+            if 38 not in actions_taken:
+                actions_taken.add(38)
+                take_action(38)
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
@@ -55,16 +59,6 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
-            continue
-
-        if 25 not in actions_taken:
-            actions_taken.add(25)
-            take_action(25)
-            continue
-
-        if 16 not in actions_taken:
-            actions_taken.add(16)
-            take_action(16)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)):
