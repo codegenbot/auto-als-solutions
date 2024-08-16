@@ -7,11 +7,6 @@ def stabilize():
 
     examined_vitals = set()
     oxygen_given = False
-    actions_to_examine = {
-        "airway": 3, "breathing": 4, "circulation": 5, "disability": 6, "exposure": 7
-    }
-    critical_actions = {"airway", "breathing", "circulation"}
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         assert len(observations) == 53
@@ -34,18 +29,17 @@ def stabilize():
             take_action(17)
             continue
 
-        for examination in critical_actions:
-            if examination not in examined_vitals:
-                take_action(actions_to_examine[examination])
-                examined_vitals.add(examination)
-                break
+        if "airway" not in examined_vitals:
+            take_action(3)
+            examined_vitals.add("airway")
+            continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals.add("Sats")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88 and not oxygen_given:
             take_action(30)
             oxygen_given = True
             continue
@@ -68,26 +62,9 @@ def stabilize():
             take_action(15)
             continue
 
-        if events[15] > 0 and "circulation" not in examined_vitals:
-            take_action(5)
-            examined_vitals.add("circulation")
-            continue
-
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(2)
-            continue
-
-        if events[28] > 0 or events[30] > 0:
-            take_action(9)
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+        if any(events[i] > 0 for i in range(20, 26)):
             take_action(6)
             examined_vitals.add("disability")
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
             continue
 
         take_action(48)
