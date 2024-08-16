@@ -5,14 +5,24 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set()
+    vital_checks = {
+        "airway": {"action": 3, "examined": False},
+        "breathing": {"action": 4, "examined": False},
+        "circulation": {"action": 5, "examined": False},
+        "disability": {"action": 6, "examined": False},
+        "exposure": {"action": 7, "examined": False},
+        "bp_cuff": {"action": 27, "used": False},
+        "sats_probe": {"action": 25, "used": False},
+        "use_monitor": {"action": 24, "used": False},
+    }
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+        
         if len(observations) != 53:
             take_action(0)
             continue
-
+            
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -24,52 +34,53 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
-            examined_vitals.add("airway")
+        if vitals["MAP"] is None and not vital_checks["bp_cuff"]["used"]:
+            take_action(27)  # Use blood pressure cuff
+            vital_checks["bp_cuff"]["used"] = True
             continue
-        
-        if vitals["Sats"] is None and "Sats" not in examined_vitals:
+
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60:
+                take_action(15)  # Give fluids
+                continue
+
+        if vitals["Sats"] is None and not vital_checks["sats_probe"]["used"]:
             take_action(25)  # Use sats probe
-            examined_vitals.add("Sats")
+            vital_checks["sats_probe"]["used"] = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
-
-        if vitals["RR"] is None and "RR" not in examined_vitals:
+        
+        if vitals["RR"] is None and not vital_checks["breathing"]["examined"]:
             take_action(4)  # Examine breathing
-            examined_vitals.add("RR")
+            vital_checks["breathing"]["examined"] = True
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
+
+        if any(events[i] > 0 for i in range(7, 15)):
+            if not vital_checks["breathing"]["examined"]:
+                take_action(4)  # Examine breathing
+                vital_checks["breathing"]["examined"] = True
+                continue
+            
+        if any(events[i] > 0 for i in range(15, 20)):
+            if not vital_checks["circulation"]["examined"]:
+                take_action(5)  # Examine circulation
+                vital_checks["circulation"]["examined"] = True
+                continue
         
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("MAP")
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
-            take_action(5)  # Examine circulation
-            examined_vitals.add("circulation")
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
-            take_action(6)  # Examine disability
-            examined_vitals.add("disability")
+        if vitals["HR"] is not None and not vital_checks["use_monitor"]["used"]:
+            take_action(24)  # Use monitor pads
+            vital_checks["use_monitor"]["used"] = True
             continue
 
         if any(events[i] > 0 for i in range(26, 33)):
