@@ -5,7 +5,8 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    observed = set()
+    examined_vitals = set()
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -22,24 +23,24 @@ def stabilize():
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
         }
-
+        
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if vitals["MAP"] is None and 27 not in observed:
-            take_action(27)
-            observed.add(27)
-            continue
-
-        if vitals["Sats"] is None and 25 not in observed:
+        if 25 not in examined_vitals:
             take_action(25)
-            observed.add(25)
+            examined_vitals.add(25)
             continue
 
-        if vitals["RR"] is None and 4 not in observed:
-            take_action(4)
-            observed.add(4)
+        if vitals["MAP"] is None and 27 not in examined_vitals:
+            take_action(27)
+            examined_vitals.add(27)
+            continue
+
+        if "monitor" not in examined_vitals:
+            take_action(16)
+            examined_vitals.add("monitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -47,45 +48,30 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in observed else 29)
-            observed.add(30)
+            take_action(30)
+            examined_vitals.add(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and 3 not in observed:
+        if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
             take_action(3)
-            observed.add(3)
+            examined_vitals.add(3)
             continue
-
-        if any(events[i] > 0 for i in range(7, 15)) and 4 not in observed:
-            take_action(4)
-            observed.add(4)
-            continue
-
-        if any(events[i] > 0 for i in range(15, 20)) and 5 not in observed:
+            
+        if any(events[i] > 0 for i in range(15, 20)) and 5 not in examined_vitals:
             take_action(5)
-            observed.add(5)
+            examined_vitals.add(5)
             continue
 
-        if any(events[i] > 0 for i in range(20, 26)) and 6 not in observed:
-            take_action(6)
-            observed.add(6)
+        if any(events[i] > 0 for i in [29, 30, 31, 32, 33, 34, 35, 36, 37]):
+            take_action(47)
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)) and 7 not in observed:
-            take_action(7)
-            observed.add(7)
-            continue
-
-        if "Sats" in vitals and "MAP" in vitals and "RR" in vitals:
-            if vitals["Sats"] >= 88 and vitals["MAP"] >= 60 and vitals["RR"] >= 8:
-                take_action(48)
-                break
-
-        take_action(0)
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
