@@ -5,18 +5,23 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    actions = 0
     examined = set()
-    need_check = {"ExamineAirway": 3, "ExamineBreathing": 4, "ExamineCirculation": 5, "ExamineDisability": 6, "ExamineExposure": 7, "CheckSignsOfLife": 1}
 
-    def examination_cycle():
-        for key, action in need_check.items():
-            if key not in examined:
-                take_action(action)
-                examined.add(key)
-                return True
-        return False
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
 
+    actions = 0
     while actions < 350:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -47,23 +52,19 @@ def stabilize():
             actions += 1
             continue
 
-        if examination_cycle():
-            actions += 1
-            continue
+        measure_vitals()
+        actions += 1
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
-            actions += 1
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
-            actions += 1
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
-            actions += 1
             continue
 
         hr = vitals["HR"]
@@ -71,7 +72,7 @@ def stabilize():
             take_action(28)
             actions += 1
             continue
-
+        
         break
 
     take_action(48)
