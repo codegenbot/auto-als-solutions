@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,6 +7,7 @@ def stabilize():
 
     examined_vitals = set()
     oxygen_given = False
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -33,54 +33,49 @@ def stabilize():
         ):
             take_action(17)
             continue
-
+        
         if "airway" not in examined_vitals:
             take_action(3)
             examined_vitals.add("airway")
-            if any(events[i] > 0 for i in [5, 6, 4]):
-                take_action(31)
-                continue
-            if events[6] > 0:
-                take_action(32)
-                continue
+            continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals.add("Sats")
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88 and not oxygen_given:
             take_action(30)
             oxygen_given = True
             continue
-
+        
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)
             examined_vitals.add("RR")
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)
             examined_vitals.add("MAP")
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         if events[15] > 0 and "circulation" not in examined_vitals:
             take_action(5)
             examined_vitals.add("circulation")
             continue
-
+        
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(2)
             continue
-
+        
         if events[28] > 0 or events[30] > 0:
             take_action(9)
             continue
@@ -92,14 +87,13 @@ def stabilize():
             take_action(6)
             examined_vitals.add("disability")
             continue
-
+        
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)
             continue
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
