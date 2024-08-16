@@ -7,13 +7,27 @@ def stabilize():
 
     examined = set()
     
+    def examine_vitals():
+        if "Monitor" not in examined:
+            take_action(16)  # View Monitor
+            examined.add("Monitor")
+            return
+        if "SatsProbe" not in examined:
+            take_action(25)  # Use Sats Probe
+            examined.add("SatsProbe")
+            return
+        if "BPCuff" not in examined:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined.add("BPCuff")
+            return
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
 
-        events = observations[:40]
+        events = observations[:33]
         values = observations[46:]
 
         vitals = {
@@ -26,64 +40,45 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        # Emergency checks
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
-        # Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
 
         if events[3]:
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)  # Examine Breathing
+                examined.add("Breathing")
+                continue
             if events[8]:  # BreathingSnoring
                 take_action(36)  # Perform Head Tilt Chin Lift
                 continue
 
-        # Breathing
-        if not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
-            examined.add("Breathing")
-            continue
+        examine_vitals()
 
-        # Circulation
-        if ("Monitor" not in examined) or ("BPCuff" not in examined):
-            if "Monitor" not in examined:
-                take_action(16)  # View Monitor
-                examined.add("Monitor")
-                continue
-            if "BPCuff" not in examined:
-                take_action(27)  # Use Blood Pressure Cuff
-                examined.add("BPCuff")
-                continue
-
-        if not any(observations[13:20]) and "HeartRhythm" not in examined:
-            take_action(5)  # Examine Circulation
-            examined.add("HeartRhythm")
-            continue
-
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(2)  # Check Rhythm
-            continue
-
-        # From vitals
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)  # Use Non Rebreather Mask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation)
+            continue
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(10)  # Give Adrenaline
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
@@ -94,7 +89,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
     else:
         take_action(48)  # Finish
 
