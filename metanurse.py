@@ -50,7 +50,7 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "AirwayClear" in events or "AirwayVomit" in events or "AirwayBlood" in events or "AirwayTongue" in events:
+        if any(events[3:7]):
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
