@@ -32,22 +32,22 @@ def stabilize():
             take_action(15)  # GiveFluids
             actions_taken.add(15)
             continue
-
+        
         if vitals["MAP"] is None and 27 not in actions_taken:
             take_action(27)  # UseBloodPressureCuff
             actions_taken.add(27)
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 25 not in actions_taken:
-                take_action(25)  # UseSatsProbe
+                take_action(25)  # UseSatsProbe 
                 actions_taken.add(25)
                 continue
             if 30 not in actions_taken:
-                take_action(30)  # UseNonRebreatherMask
+                take_action(30)  # UseNonRebreatherMask 
                 actions_taken.add(30)
                 continue
-            take_action(29)  # UseBagValveMask
+            take_action(29)  # UseBagValveMask 
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -55,20 +55,20 @@ def stabilize():
             continue
 
         if 3 not in actions_taken:
-            take_action(3)  # ExamineAirway
+            take_action(3)  # ExamineAirway 
             actions_taken.add(3)
             continue
-
+        
         if 4 not in actions_taken:
             take_action(4)  # ExamineBreathing
             actions_taken.add(4)
             continue
-
+        
         if 5 not in actions_taken:
             take_action(5)  # ExamineCirculation
             actions_taken.add(5)
             continue
-
+        
         if 6 not in actions_taken:
             take_action(6)  # ExamineDisability
             actions_taken.add(6)
@@ -78,12 +78,12 @@ def stabilize():
             take_action(7)  # ExamineExposure
             actions_taken.add(7)
             continue
-
+        
         if 16 not in actions_taken:
-            take_action(16)  # ViewMonitor
+            take_action(16)  # ViewMonitor 
             actions_taken.add(16)
             continue
-
+        
         if 38 not in actions_taken:
             take_action(38)  # TakeBloodPressure
             actions_taken.add(38)
