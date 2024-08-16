@@ -6,9 +6,23 @@ def stabilize():
         sys.stdout.flush()
 
     steps_taken = set()
-    assessment_steps = ["Monitor", "BP", "SatsProbe", "RespRate"]
+    max_steps = 350
 
-    for step in range(350):
+    def measure_vitals():
+        if "Monitor" not in steps_taken:
+            take_action(16)  # ViewMonitor
+            steps_taken.add("Monitor")
+        elif "BP" not in steps_taken:
+            take_action(27)  # UseBloodPressureCuff
+            steps_taken.add("BP")
+        elif "SatsProbe" not in steps_taken:
+            take_action(25)  # UseSatsProbe
+            steps_taken.add("SatsProbe")
+        elif "RespRate" not in steps_taken:
+            take_action(4)  # ExamineBreathing
+            steps_taken.add("RespRate")
+
+    for step in range(max_steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
@@ -28,38 +42,20 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        if any(step not in steps_taken for step in assessment_steps):
-            if "Monitor" not in steps_taken:
-                take_action(16)  # ViewMonitor
-                steps_taken.add("Monitor")
-            elif "BP" not in steps_taken:
-                take_action(27)  # UseBloodPressureCuff
-                steps_taken.add("BP")
-            elif "SatsProbe" not in steps_taken:
-                take_action(25)  # UseSatsProbe
-                steps_taken.add("SatsProbe")
-            elif "RespRate" not in steps_taken:
-                take_action(4)  # ExamineBreathing
-                steps_taken.add("RespRate")
-            continue
+        measure_vitals()
 
-        # Airway - always start by examining the airway
-        if "airway" not in steps_taken:
+        if events[3] == 0:
             take_action(3)  # ExamineAirway
-            steps_taken.add("airway")
             continue
 
-        # Circulation intervention
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Breathing intervention
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -68,12 +64,11 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Handle unstable rhythm and arrhythmias
         if vitals["HR"]:
             if vitals["HR"] < 50:
                 take_action(12)  # GiveAtropine
                 continue
-            elif vitals["HR"] > 150:
+            elif vitals["HR"] > 150 or events[29] > 0 or events[30] > 0:
                 take_action(28)  # AttachDefibPads
                 take_action(40)  # DefibrillatorCharge
                 take_action(41)  # DefibrillatorCurrentUp
