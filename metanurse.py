@@ -5,8 +5,8 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = {key: False for key in ["Airway", "Breathing", "Circulation", "Disability", "Exposure"]}
-    vitals_checked = {key: False for key in ["Sats", "RR", "MAP", "HR"]}
+    examined = {"Airway": False, "Breathing": False, "Circulation": False, "Disability": False, "Exposure": False}
+    vitals_checked = {"Sats": False, "RR": False, "MAP": False, "HR": False, "BP": False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -40,20 +40,11 @@ def stabilize():
         if not examined["Breathing"]:
             take_action(4)
             examined["Breathing"] = True
-            if not vitals_checked["Sats"]:
-                take_action(25)
-                vitals_checked["Sats"] = True
             continue
 
         if not examined["Circulation"]:
             take_action(5)
             examined["Circulation"] = True
-            if not vitals_checked["MAP"]:
-                take_action(27)
-                vitals_checked["MAP"] = True
-            if not vitals_checked["HR"]:
-                take_action(24)
-                vitals_checked["HR"] = True
             continue
 
         if not examined["Disability"]:
@@ -64,6 +55,21 @@ def stabilize():
         if not examined["Exposure"]:
             take_action(7)
             examined["Exposure"] = True
+            continue
+
+        if vitals["Sats"] is None and not vitals_checked["Sats"]:
+            take_action(25)
+            vitals_checked["Sats"] = True
+            continue
+
+        if vitals["MAP"] is None and not vitals_checked["MAP"]:
+            take_action(27)
+            vitals_checked["MAP"] = True
+            continue
+
+        if vitals["HR"] is None and not vitals_checked["HR"]:
+            take_action(24)
+            vitals_checked["HR"] = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -78,8 +84,13 @@ def stabilize():
             take_action(15)
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(9)
+            continue
+
+        if vitals["BP"] is None and not vitals_checked["BP"]:
+            take_action(27)
+            vitals_checked["BP"] = True
             continue
         
         take_action(48)
