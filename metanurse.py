@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -30,7 +29,7 @@ def stabilize():
             take_action(0)  # Do Nothing
             continue
 
-        events = observations[:33]
+        events = observations[:33] 
         measurements_time = observations[33:40]
         values = observations[40:47]
 
@@ -44,18 +43,19 @@ def stabilize():
             "Resps": values[6] if measurements_time[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        # Critical checks for cardiac arrest
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
+        # Airway
         if not events[3]:  # AirwayClear
             if "ExamineAirway" not in actions_taken:
                 take_action(3)  # Examine Airway
                 actions_taken.add("ExamineAirway")
                 continue
 
+        # Breathing
         if events[3]:  # AirwayClear
             if "ExamineBreathing" not in actions_taken:
                 take_action(4)  # Examine Breathing
@@ -68,9 +68,11 @@ def stabilize():
                     take_action(29)  # Use Bag-Valve Mask
                 continue
 
+        # Examine vitals (attach monitor, sats probe, BP cuff)
         if examine_vitals():
             continue
 
+        # Circulation stabilization
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
@@ -98,7 +100,6 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
