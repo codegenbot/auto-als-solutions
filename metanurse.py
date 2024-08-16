@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -39,12 +38,10 @@ def stabilize():
             "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
             "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
+            "Resps": values[6] if times[6] > 0 else None
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -66,11 +63,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if (
-            events[29] > 0
-            or events[30] > 0
-            or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))
-        ):
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)
             continue
 
@@ -78,18 +71,15 @@ def stabilize():
             take_action(48)
             break
 
-        continue_task = (
-            (vitals["Sats"] and vitals["Sats"] >= 88)
-            and (vitals["MAP"] and vitals["MAP"] >= 60)
-            and (vitals["RR"] and vitals["RR"] >= 8)
-        )
+        continue_task = (vitals["Sats"] and vitals["Sats"] >= 88) and \
+                        (vitals["MAP"] and vitals["MAP"] >= 60) and \
+                        (vitals["RR"] and vitals["RR"] >= 8)
         if continue_task:
             take_action(48)
             break
 
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
