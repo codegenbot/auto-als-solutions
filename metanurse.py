@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -10,23 +9,22 @@ def stabilize():
 
     def examine_vitals():
         if "Monitor" not in examined:
-            take_action(16)  # View Monitor
+            take_action(16)
             examined.add("Monitor")
-            return True
+            return
         if "SatsProbe" not in examined:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             examined.add("SatsProbe")
-            return True
+            return
         if "BPCuff" not in examined:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             examined.add("BPCuff")
-            return True
-        return False
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -43,59 +41,62 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Start chest compressions
+        # Cardiac arrest conditions
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
+        # Airway assessment
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             examined.add("Airway")
             continue
 
-        if events[3]:  # AirwayClear
+        if events[3] > 0:  # AirwayClear event occurred
+            # Breathing assessment
             if not any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)  # ExamineBreathing
+                take_action(4)
                 examined.add("Breathing")
                 continue
 
-        if events[11]:  # BreathingBibasalCrepitations
-            take_action(29)  # UseBagValveMask
-            continue
-        elif events[12]:  # BreathingWheeze
-            take_action(19)  # Open Breathing Drawer
+            if events[14] > 0:  # BreathingPneumothoraxSymptoms event
+                take_action(19)
+                continue
+
+        # Check vitals
+        if not all(vitals[k] is not None for k in ["MAP", "Sats", "RR"]):
+            examine_vitals()
             continue
 
-        if examine_vitals():
-            continue
-
-        # Treat based on vitals
+        # Stabilize based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(9)  # Give Adenosine for unstable tachyarrhythmia
+                take_action(24)  # UseMonitorPads for cardioverting
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # GiveAdenosine
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine for bradycardia
+                take_action(12)  # GiveAtropine
                 continue
 
         take_action(48)  # Finish
         break
     else:
-        take_action(48)  # Finish
-
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
