@@ -1,13 +1,11 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -39,12 +37,6 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:
-            examined.add("airway_clear")
-        elif events[4] > 0 or events[5] > 0 or events[6] > 0:
-            take_action(35)
-            continue
-
         if "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
@@ -63,6 +55,26 @@ def stabilize():
         if "HR" not in examined:
             take_action(24)
             examined.add("HR")
+            continue
+
+        if vitals["Sats"] is None:
+            take_action(16)
+            continue
+
+        if vitals["RR"] is None:
+            take_action(16)
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(16)
+            continue
+
+        if vitals["HR"] is not None and 150 < vitals["HR"] < 180:
+            take_action(9)
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] >= 180:
+            take_action(17)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -87,13 +99,8 @@ def stabilize():
             examined.add("exposure")
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(2)
-            continue
-
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
