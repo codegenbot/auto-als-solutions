@@ -37,7 +37,7 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             if any(events[i] > 0 for i in range(28, 33)):
-                take_action(24)  # Use Monitor Pads (preparing for cardioversion)
+                take_action(24)  # Use Monitor Pads
                 continue
             take_action(15)  # Give Fluids
             continue
