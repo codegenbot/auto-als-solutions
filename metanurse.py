@@ -42,37 +42,37 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Cardiac Arrest, start CPR
+            take_action(17)
             continue
 
         if events[3] > 0:
             examined.add("airway")
 
         if "airway" not in examined:
-            take_action(3)  # Examine Airway
+            take_action(3)
             continue
 
         measure_all_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
         
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(40)  # Defibrillator Charge
-            take_action(41)  # Defibrillator Current Up
-            take_action(43)  # Defibrillator Pace
+            take_action(40)
+            take_action(41)
+            take_action(43)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
         take_action(48)
