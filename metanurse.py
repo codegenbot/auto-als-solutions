@@ -37,15 +37,21 @@ def stabilize():
             examined.add("airway")
             continue
 
+        if events[3] > 0:
+            examined.add("airway")
+
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
             continue
-            
+
         if "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
             continue
+
+        if events[10] > 0:
+            examined.add("RespRate")
 
         if "BP" not in examined:
             take_action(27)
@@ -55,6 +61,14 @@ def stabilize():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
+            continue
+
+        if events[13] > 0:
+            examined.add("Monitor")
+
+        if "HR" not in examined:
+            take_action(24)
+            examined.add("HR")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -67,11 +81,6 @@ def stabilize():
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        if "HR" not in examined:
-            take_action(24)
-            examined.add("HR")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
@@ -88,10 +97,10 @@ def stabilize():
             take_action(2)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish after 350 steps
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
