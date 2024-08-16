@@ -31,9 +31,8 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(18)  # Open Airway Drawer
-            examined_vitals.add("airway")
             take_action(3)  # Examine airway
+            examined_vitals.add("airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
@@ -59,9 +58,8 @@ def stabilize():
             continue
 
         if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
-            take_action(19)  # Open Circulation Drawer
-            examined_vitals.add("circulation")
             take_action(5)  # Examine circulation
+            examined_vitals.add("circulation")
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
@@ -71,6 +69,11 @@ def stabilize():
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
+            continue
+        
+        if "Monitor" not in examined_vitals:
+            take_action(16)  # View Monitor
+            examined_vitals.add("Monitor")
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
