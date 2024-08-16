@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -43,8 +42,7 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -69,13 +67,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if (
-            events[28] > 0
-            or events[29] > 0
-            or events[30] > 0
-            or events[31] > 0
-            or events[32] > 0
-        ):
+        if any([events[28], events[29], events[30], events[31], events[32]]):
             take_action(28)
             take_action(40)
             take_action(41)
@@ -86,7 +78,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
