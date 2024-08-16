@@ -83,11 +83,10 @@ def stabilize():
             continue
 
         # If all conditions are good, finish the scenario
-        if vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RR"] >= 8:
+        if vitals["MAP"] and vitals["MAP"] >= 60 and vitals["Sats"] and vitals["Sats"] >= 88 and vitals["RR"] and vitals["RR"] >= 8:
             take_action(48)  # Finish
             break
-
-    if steps >= 350:
+    else:
         take_action(48)  # Finish
 
 if __name__ == "__main__":
