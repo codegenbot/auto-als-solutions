@@ -20,7 +20,7 @@ def stabilize():
         elif "RespRate" not in examined:
             take_action(4)   # ExamineBreathing
             examined.add("RespRate")
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -72,25 +72,20 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Check for unstable rhythm (HR < 50 or > 150) and defibrillate if needed
-        unstable_rhythm = events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150))
-        if unstable_rhythm:
-            take_action(24)  # UseMonitorPads
+        # Check for unstable rhythm and defibrillate if needed
+        if any(events[29 + i] > 0 for i in range(8)) or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(28)  # AttachDefibPads
             take_action(40)  # DefibrillatorCharge
             take_action(41)  # DefibrillatorCurrentUp
             take_action(43)  # DefibrillatorPace
             continue
 
-        # Conclude the scenario if stabilized
-        if (
-            "airway" in examined and
-            vitals["MAP"] is not None and vitals["MAP"] >= 60 and
-            vitals["Sats"] is not None and vitals["Sats"] >= 88 and
-            vitals["RR"] is not None and vitals["RR"] >= 8
-        ):
+        # If fully stabilized
+        if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
+                vitals["Sats"] is not None and vitals["Sats"] >= 88 and
+                vitals["RR"] is not None and vitals["RR"] >= 8):
             take_action(48)  # Finish
             break
-        
     else:
         take_action(48)  # Finish
 
