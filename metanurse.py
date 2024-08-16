@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -41,8 +42,9 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -57,27 +59,29 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
+            if events[8] > 0:
+                take_action(36)
+                continue
+
             if events[14] > 0:
                 take_action(19)
                 continue
 
-        if not all(vitals[k] is not None for k in ["MAP", "Sats", "RR"]):
-            examine_vitals()
-            continue
+        examine_vitals()
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"] is not None:
+        if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
                 continue
@@ -87,11 +91,11 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
+        
+        take_action(0)
+        
+    take_action(48)
 
-        take_action(48)
-        break
-    else:
-        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
