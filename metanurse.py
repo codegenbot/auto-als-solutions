@@ -21,18 +21,18 @@ def stabilize():
             take_action(4)   # ExamineBreathing
             examined.add("RespRate")
 
-    def intervene(vitals):
-        if vitals["MAP"] and vitals["MAP"] < 20:
-            take_action(17)  # StartChestCompression
-        elif vitals["Sats"] and vitals["Sats"] < 65:
-            take_action(17)  # StartChestCompression
-        elif vitals["MAP"] and vitals["MAP"] < 60:
+    def intervene():
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
         elif vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
         elif vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
-        if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
+        elif vitals["MAP"] and vitals["MAP"] < 20:
+            take_action(17)  # StartChestCompression
+        elif vitals["Sats"] and vitals["Sats"] < 65:
+            take_action(17)  # StartChestCompression
+        elif vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
             take_action(28)  # AttachDefibPads
             take_action(40)  # DefibrillatorCharge
             take_action(41)  # DefibrillatorCurrentUp
@@ -59,8 +59,9 @@ def stabilize():
         }
 
         measure_vitals()
-        intervene(vitals)
+        intervene()
 
+        # Airway assessment
         if events[3] > 0:  # AirwayClear
             examined.add("airway")
         if "airway" not in examined:
