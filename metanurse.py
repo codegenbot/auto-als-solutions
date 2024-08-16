@@ -27,60 +27,61 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        # Cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-                vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        # Examination and measurement steps
-        if "airway" not in examined_vitals:
-            take_action(3)
-            examined_vitals.add("airway")
-            continue
+        if not all(key in examined_vitals for key in ["airway", "breathing", "circulation", "disability", "exposure"]):
+            if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+                take_action(3)
+                examined_vitals.add("airway")
+                continue
+            
+            if vitals["Sats"] is None and "Sats" not in examined_vitals:
+                take_action(25)
+                examined_vitals.add("Sats")
+                continue
+            
+            if vitals["RR"] is not None and vitals["RR"] > 0 and "breathing" not in examined_vitals:
+                take_action(4)
+                examined_vitals.add("breathing")
+                continue
+                
+            if vitals["MAP"] is None and "MAP" not in examined_vitals:
+                take_action(27)
+                examined_vitals.add("MAP")
+                continue
+            
+            if vitals["HR"] is not None and "circulation" not in examined_vitals:
+                take_action(5)
+                examined_vitals.add("circulation")
+                continue
+                
+            if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+                take_action(6)
+                examined_vitals.add("disability")
+                continue
 
-        if "breathing" not in examined_vitals:
-            take_action(4)
-            examined_vitals.add("breathing")
-            continue
+            if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
+                take_action(7)
+                examined_vitals.add("exposure")
+                continue
 
-        if "circulation" not in examined_vitals:
-            take_action(5)
-            examined_vitals.add("circulation")
-            continue
-        
-        if "disability" not in examined_vitals:
-            take_action(6)
-            examined_vitals.add("disability")
-            continue
-        
-        if "exposure" not in examined_vitals:
-            take_action(7)
-            examined_vitals.add("exposure")
-            continue
-
-        # Assessment and intervention steps
-        if vitals["Sats"] is None:
-            take_action(25)
-            continue
-        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
-            continue
-
-        if vitals["MAP"] is None:
-            take_action(27)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"] is None or (vitals["HR"] < 60 or vitals["HR"] > 100):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(2)
             continue
 
