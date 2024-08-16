@@ -28,12 +28,10 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Immediate checks for critical condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Examination and check vitals
         if times[4] == 0:
             take_action(27)
             continue
