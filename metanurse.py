@@ -72,7 +72,7 @@ def stabilize():
             take_action(29)  # Use bag valve mask
             continue
 
-        if vitals["HR"] is not None and (values[0] > 150 or values[0] < 50):
+        if vitals["HR"] is not None and (vitals["HR"] > 150 or vitals["HR"] < 50):
             take_action(2)  # Check rhythm
             continue
 
