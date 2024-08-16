@@ -46,45 +46,30 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        if "airway" not in examined:
+        if not ("airway" in examined and "airway_clear" in examined):
             take_action(3)  # ExamineAirway
             examined.add("airway")
-            continue
-
-        if "airway" in examined and events[3] > 0:
-            examined.add("airway_clear")
-        elif "airway_clear" not in examined:
-            take_action(3)  # Re-examineAirway if not clear
+            if events[3] > 0:
+                examined.add("airway_clear")
             continue
 
         measure_vitals()
 
-        if vitals["MAP"] is not None:
-            if vitals["MAP"] < 60 and "fluids_given" not in examined:
+        if "Monitor" in examined and "BP" in examined and "SatsProbe" in examined and "RespRate" in examined:
+            if vitals["MAP"] is not None and vitals["MAP"] < 60:
                 take_action(15)  # GiveFluids
                 examined.add("fluids_given")
                 continue
-            if vitals["MAP"] < 60:
-                take_action(28)  # AttachDefibPads (considering circulatory support)
+            elif vitals["Sats"] is not None and vitals["Sats"] < 88:
+                take_action(30)  # UseNonRebreatherMask
                 continue
-            examined.add("stable_MAP")
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
-            continue
-
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(28)  # AttachDefibPads
+            elif vitals["RR"] is not None and vitals["RR"] < 8:
+                take_action(29)  # UseBagValveMask
                 continue
 
-        if "all_vitals_checked" not in examined:
-            examined.add("all_vitals_checked")
-            continue
+            if "all_vitals_checked" not in examined:
+                examined.add("all_vitals_checked")
+                continue
 
         take_action(48)  # Finish
 
