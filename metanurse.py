@@ -6,20 +6,24 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
+    vital_checks = 0
+    
     def examine_vitals():
+        global vital_checks
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
-            return
+            return True
         if "SatsProbe" not in examined:
             take_action(25)
             examined.add("SatsProbe")
-            return
-        if "BP" not in examined:
+            return True
+        if "BPCuff" not in examined:
             take_action(27)
-            examined.add("BP")
-            return
+            examined.add("BPCuff")
+            return True
+        vital_checks += 1
+        return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -31,41 +35,31 @@ def stabilize():
         times = observations[33:40]
         values = observations[40:]
 
-        vitals = {"HR": values[0] if times[0] > 0 else None,
-                  "RR": values[1] if times[1] > 0 else None,
-                  "Glucose": values[2] if times[2] > 0 else None,
-                  "Temp": values[3] if times[3] > 0 else None,
-                  "MAP": values[4] if times[4] > 0 else None,
-                  "Sats": values[5] if times[5] > 0 else None,
-                  "Resps": values[6] if times[6] > 0 else None}
+        vitals = {
+            "HR": values[0] if times[0] > 0 else None,
+            "RR": values[1] if times[1] > 0 else None,
+            "Glucose": values[2] if times[2] > 0 else None,
+            "Temp": values[3] if times[3] > 0 else None,
+            "MAP": values[4] if times[4] > 0 else None,
+            "Sats": values[5] if times[5] > 0 else None,
+            "Resps": values[6] if times[6] > 0 else None,
+        }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        if not any(events[3:7]):
             take_action(3)
-            examined.add("Airway")
             continue
 
-        if events[9] == 0 and "Breathing" not in examined:
+        if any([events[1], events[2], events[7]]) and "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if "SatsProbe" in examined and "Monitor" in examined:
-            if vitals["RR"] and vitals["RR"] >= 8:
-                if vitals["MAP"] and vitals["MAP"] >= 60:
-                    if vitals["Sats"] and vitals["Sats"] >= 88:
-                        if vitals["HR"]:
-                            if vitals["HR"] < 50 or vitals["HR"] > 150:
-                                take_action(2)
-                                continue
-
-        examine_vitals()
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+        if events[7]:
+            take_action(29)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -76,13 +70,26 @@ def stabilize():
             take_action(29)
             continue
 
+        examine_vitals()
+        
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
+            continue
+
         if vitals["HR"]:
-            if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(2)
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
                 continue
 
-        take_action(48)
-        break
+        if vital_checks >= 3:
+            take_action(48)
+            break
     else:
         take_action(48)
 
