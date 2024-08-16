@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -49,6 +49,11 @@ def stabilize():
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)
             examined_vitals.add("RR")
+            continue
+        
+        if vitals["HR"] is None and "HR" not in examined_vitals:
+            take_action(2)
+            examined_vitals.add("HR")
             continue
 
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
