@@ -1,11 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     examined = set()
+
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)  # View Monitor
@@ -39,7 +41,9 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -47,7 +51,7 @@ def stabilize():
             take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
-        
+
         if events[3]:  # AirwayClear
             if events[8]:  # BreathingSnoring
                 take_action(36)  # Perform Head Tilt Chin Lift
@@ -62,7 +66,7 @@ def stabilize():
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
@@ -90,6 +94,7 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
