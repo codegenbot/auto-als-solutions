@@ -30,62 +30,67 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
+        # Cardiac Arrest Check
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions
             continue
 
+        # Airway Assessment
         if not handled_airway:
             if "airway" not in examined:
-                take_action(3)
+                take_action(3)  # Examine airway
                 examined.add("airway")
                 continue
             
-            if any(events[i] > 0 for i in [4, 5, 6]):
-                take_action(35)
+            if any(events[i] > 0 for i in [4, 5, 6]):  # Vomit, Blood, Tongue
+                take_action(35)  # Perform airway manoeuvres
                 continue
             
             handled_airway = True
 
+        # Breathing Assessment
         if not handled_breathing:
             if "SatsProbe" not in examined:
-                take_action(25)
+                take_action(25)  # Use SatsProbe
                 examined.add("SatsProbe")
                 continue
 
             if "Breathing" not in examined:
-                take_action(4)
+                take_action(4)  # Examine breathing
                 examined.add("Breathing")
                 continue
 
             if vitals["Sats"] is not None and vitals["Sats"] < 88:
-                take_action(30)
+                take_action(30)  # UseNonRebreatherMask
                 continue
 
             if vitals["RR"] is not None and vitals["RR"] < 8:
-                take_action(29)
+                take_action(29)  # Use Bag Valve Mask
                 continue
             
             handled_breathing = True
         
+        # Circulation Assessment
         if not handled_circulation:
             if "BP" not in examined:
-                take_action(27)
+                take_action(27)  # Use Blood Pressure Cuff
                 examined.add("BP")
                 continue
 
             if "Monitor" not in examined:
-                take_action(16)
+                take_action(16)  # View Monitor
                 examined.add("Monitor")
                 continue
 
             if vitals["MAP"] is not None and vitals["MAP"] < 60:
-                take_action(15)
+                take_action(15)  # Give Fluids
                 continue
 
             handled_circulation = True
 
+        # If all assessments are handled and vitals are stable, finish
         take_action(48)
         break
     else:
