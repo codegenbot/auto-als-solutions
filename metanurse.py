@@ -4,9 +4,9 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
-    examined = set()
 
+    examined = set()
+    
     def measure_all_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -21,6 +21,14 @@ def stabilize():
             take_action(4)
             examined.add("RespRate")
 
+    def administer_fluids():
+        take_action(15)
+
+    def perform_cardioversion():
+        take_action(40)  # DefibrillatorCharge
+        take_action(41)  # DefibrillatorCurrentUp
+        take_action(43)  # DefibrillatorPace
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -55,7 +63,7 @@ def stabilize():
         measure_all_vitals()
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            administer_fluids()
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -66,10 +74,8 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(40)
-            take_action(41)
-            take_action(43)
+        if vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150):
+            perform_cardioversion()
             continue
 
         take_action(48)
