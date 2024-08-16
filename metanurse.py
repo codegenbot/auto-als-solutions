@@ -20,27 +20,30 @@ def stabilize():
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
+            "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
+            "Sats": values[5] if times[5] > 0 else None
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        if 25 not in actions_taken:
+            take_action(25)
+            actions_taken.add(25)
+            continue
+
+        if 27 not in actions_taken:
+            take_action(27)
+            actions_taken.add(27)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if 18 not in actions_taken:
-                take_action(18)
-                actions_taken.add(18)
-                continue
             take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if 25 not in actions_taken:
-                take_action(25)
-                actions_taken.add(25)
-                continue
             if 30 not in actions_taken:
                 take_action(30)
                 actions_taken.add(30)
@@ -57,26 +60,6 @@ def stabilize():
             actions_taken.add(3)
             continue
 
-        if 27 not in actions_taken:
-            take_action(27)
-            actions_taken.add(27)
-            continue
-        if 25 not in actions_taken:
-            take_action(25)
-            actions_taken.add(25)
-            continue
-        if 16 not in actions_taken:
-            take_action(16)
-            actions_taken.add(16)
-            continue
-        if 38 not in actions_taken:
-            take_action(38)
-            actions_taken.add(38)
-            continue
-
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)
-            continue
         if any(events[i] > 0 for i in range(7, 15)):
             take_action(4)
             continue
