@@ -6,6 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
+    monitor_pads_used = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -31,28 +32,33 @@ def stabilize():
             continue
 
         if "monitor" not in examined_vitals:
-            take_action(16)  # View monitor
+            take_action(16)  # View Monitor
             examined_vitals.add("monitor")
             continue
 
-        if vitals["Sats"] is None and "SatsProbe" not in examined_vitals:
-            take_action(25)  # Use sats probe
-            examined_vitals.add("SatsProbe")
+        if not monitor_pads_used:
+            take_action(24)  # Use Monitor Pads
+            monitor_pads_used = True
             continue
 
-        if vitals["MAP"] is None and "BPCuff" not in examined_vitals:
-            take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("BPCuff")
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined_vitals.add("MAP")
+            continue
+
+        if vitals["Sats"] is None and "Sats" not in examined_vitals:
+            take_action(25)  # Use Sats Probe
+            examined_vitals.add("Sats")
+            continue
+
+        if vitals["RR"] is None and "RR" not in examined_vitals:
+            take_action(4)  # Examine Breathing
+            examined_vitals.add("RR")
             continue
 
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
+            take_action(3)  # Examine Airway
             examined_vitals.add("airway")
-            continue
-
-        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
-            take_action(4)  # Examine breathing
-            examined_vitals.add("breathing")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -65,7 +71,7 @@ def stabilize():
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)  # Use Bag Valve Mask
             continue
 
         take_action(48)  # Finish
