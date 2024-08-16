@@ -24,68 +24,68 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start CPR
+            take_action(17)
             continue
 
         if vitals["MAP"] is None and 27 not in observed:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             observed.add(27)
             continue
 
         if vitals["Sats"] is None and 25 not in observed:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             observed.add(25)
             continue
 
         if vitals["RR"] is None and 4 not in observed:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             observed.add(4)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if 30 not in observed else 29)  # UseNonRebreatherMask -> UseBagValveMask
+            take_action(30 if 30 not in observed else 29)
             observed.add(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if any(events[i] > 0 for i in range(3, 7)) and 3 not in observed:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             observed.add(3)
             continue
 
         if any(events[i] > 0 for i in range(7, 15)) and 4 not in observed:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             observed.add(4)
             continue
 
         if any(events[i] > 0 for i in range(15, 20)) and 5 not in observed:
-            take_action(5)  # ExamineCirculation
+            take_action(5)
             observed.add(5)
             continue
 
         if any(events[i] > 0 for i in range(20, 26)) and 6 not in observed:
-            take_action(6)  # ExamineDisability
+            take_action(6)
             observed.add(6)
             continue
 
         if any(events[i] > 0 for i in range(26, 33)) and 7 not in observed:
-            take_action(7)  # ExamineExposure
+            take_action(7)
             observed.add(7)
             continue
 
         if "Sats" in vitals and "MAP" in vitals and "RR" in vitals:
             if vitals["Sats"] >= 88 and vitals["MAP"] >= 60 and vitals["RR"] >= 8:
-                take_action(48)  # Finish
+                take_action(48)
                 break
 
-        take_action(0)  # DoNothing if not finished yet
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
