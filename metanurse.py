@@ -29,7 +29,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start chest compression
+            take_action(17)
             continue
 
         if "airway" not in examined:
@@ -37,7 +37,7 @@ def stabilize():
             examined.add("airway")
             continue
 
-        if events[3] > 0:  # AirwayClear
+        if events[3] > 0:
             examined.add("airway")
 
         if "SatsProbe" not in examined:
@@ -50,7 +50,7 @@ def stabilize():
             examined.add("RespRate")
             continue
 
-        if events[10] > 0:  # BreathingEqualChestExpansion
+        if events[10] > 0:
             examined.add("RespRate")
 
         if "BP" not in examined:
@@ -64,25 +64,25 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(10)  # Give adrenaline for tachyarrhythmia
+            take_action(10)
             continue
 
-        take_action(48)  # Finish and stabilize
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish if 350 steps are exceeded
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
