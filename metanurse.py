@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -67,26 +66,17 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
-        if (
-            any(events[i] > 0 for i in range(7, 15))
-            and "breathing" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
             take_action(4)
             examined_vitals.add("breathing")
             continue
 
-        if (
-            any(events[i] > 0 for i in range(15, 20))
-            and "circulation" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
             take_action(5)
             examined_vitals.add("circulation")
             continue
 
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "disability" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)
             examined_vitals.add("disability")
             continue
@@ -101,7 +91,6 @@ def stabilize():
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
