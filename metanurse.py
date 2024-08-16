@@ -40,7 +40,7 @@ def stabilize():
                 take_action(31)  # Use Yankeur suction catheter
                 continue
             elif events[4] > 0:
-                take_action(18)  # Open Airway drawer
+                take_action(18)  # Open Airways drawer
                 continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
