@@ -73,7 +73,7 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] > 100 or vitals["HR"] < 60):
-            take_action(2)
+            take_action(2) 
 
         if "Monitor" not in examined:
             take_action(16)
