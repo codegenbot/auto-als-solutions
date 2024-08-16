@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
 
     def initial_examination():
@@ -21,11 +20,12 @@ def stabilize():
             take_action(27)
             examined.add("BPCuff")
             return True
+
         if "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             return True
-        if "Breathing" not in examined and events[3]:
+        if "Breathing" not in examined and "AirwayClear" in events:
             take_action(4)
             examined.add("Breathing")
             return True
@@ -51,9 +51,7 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -63,18 +61,18 @@ def stabilize():
         if not events[3]:
             take_action(3)
             continue
-
+        
         if events[7]:
             take_action(36)
             continue
         if events[14]:
             take_action(19)
             continue
-
+        
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -98,7 +96,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
