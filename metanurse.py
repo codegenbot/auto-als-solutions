@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -41,11 +40,6 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
-        if "Sats" in examined_vitals and "viewed_monitor" not in examined_vitals:
-            take_action(16)  # View monitor
-            examined_vitals.add("viewed_monitor")
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
@@ -62,11 +56,6 @@ def stabilize():
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
-            continue
-
-        if "MAP" in examined_vitals and "viewed_monitor" not in examined_vitals:
-            take_action(16)  # View monitor
-            examined_vitals.add("viewed_monitor")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -89,22 +78,13 @@ def stabilize():
             examined_vitals.add("disability")
             continue
 
-        if (
-            any(events[i] > 0 for i in range(26, 33))
-            and "exposure" not in examined_vitals
-        ):
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
             take_action(7)  # Examine exposure
             examined_vitals.add("exposure")
             continue
 
-        if vitals["HR"] is None and "HR" not in examined_vitals:
-            take_action(2)  # Check rhythm
-            examined_vitals.add("HR")
-            continue
-
         take_action(48)  # Finish
         break
-
 
 if __name__ == "__main__":
     stabilize()
