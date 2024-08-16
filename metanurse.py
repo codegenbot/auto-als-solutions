@@ -6,22 +6,21 @@ def stabilize():
         sys.stdout.flush()
     
     examined = set()
-    vitals_measured = set()
 
     def measure_vitals():
-        if "Monitor" not in vitals_measured:
+        if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
-            vitals_measured.add("Monitor")
-        elif "BP" not in vitals_measured:
+            examined.add("Monitor")
+        elif "BP" not in examined:
             take_action(27)  # UseBloodPressureCuff
-            vitals_measured.add("BP")
-        elif "SatsProbe" not in vitals_measured:
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
             take_action(25)  # UseSatsProbe
-            vitals_measured.add("SatsProbe")
-        elif "RR" not in vitals_measured:
-            take_action(4)  # ExamineBreathing
-            vitals_measured.add("RR")
-
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)   # ExamineBreathing
+            examined.add("RespRate")
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
