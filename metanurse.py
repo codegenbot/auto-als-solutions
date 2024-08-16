@@ -7,7 +7,7 @@ def stabilize():
 
     examined = set()
 
-    def measure_vitals():
+    def perform_assessment():
         if "Monitor" not in examined:
             take_action(16)  # ViewMonitor
             examined.add("Monitor")
@@ -41,27 +41,29 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        measure_vitals()
-
-        # Assess Airway
-        if events[3] > 0:
-            examined.add("airway")
-        if "airway" not in examined:
+        if "Airway" not in examined:
             take_action(3)  # ExamineAirway
-            examined.add("airway")
+            examined.add("Airway")
+            continue
+        
+        if events[3] > 0 and "AirwayClear" not in examined:
+            examined.add("AirwayClear")
+
+        if "Breathing" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("Breathing")
             continue
 
-        # Circulation intervention
+        perform_assessment()
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Breathing intervention
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -70,17 +72,12 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Handle unstable rhythm and arrhythmias
-        if vitals["HR"]:
-            if vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
-                continue
-            elif vitals["HR"] > 150 or events[29] > 0 or events[30] > 0:
-                take_action(28)  # AttachDefibPads
-                take_action(40)  # DefibrillatorCharge
-                take_action(41)  # DefibrillatorCurrentUp
-                take_action(43)  # DefibrillatorPace
-                continue
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+            take_action(28)  # AttachDefibPads
+            take_action(40)  # DefibrillatorCharge
+            take_action(41)  # DefibrillatorCurrentUp
+            take_action(43)  # DefibrillatorPace
+            continue
 
         take_action(48)  # Finish
         break
