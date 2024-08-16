@@ -6,14 +6,14 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-    monitor_pads_used = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -36,11 +36,6 @@ def stabilize():
             examined_vitals.add("monitor")
             continue
 
-        if not monitor_pads_used:
-            take_action(24)  # Use monitor pads
-            monitor_pads_used = True
-            continue
-
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
@@ -61,12 +56,32 @@ def stabilize():
             examined_vitals.add("airway")
             continue
 
+        if any(events[i] > 0 for i in range(7, 15)) and "breathing" not in examined_vitals:
+            take_action(4)  # Examine breathing
+            examined_vitals.add("breathing")
+            continue
+
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+            take_action(5)  # Examine circulation
+            examined_vitals.add("circulation")
+            continue
+
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+            take_action(6)  # Examine disability
+            examined_vitals.add("disability")
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)  # Examine exposure
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" not in examined_vitals else 29)
+            action = 30 if "mask" not in examined_vitals else 29
+            take_action(action)  # Use Non-rebreather mask or BVM
             examined_vitals.add("mask")
             continue
 
