@@ -8,19 +8,19 @@ def stabilize():
     examined = set()
 
     def measure_vitals():
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-        elif "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-        elif "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
-            examined.add("RespRate")
-        elif "HR" not in examined:
+        if "monitor" not in examined:
             take_action(16)  # ViewMonitor
-            examined.add("HR")
-    
+            examined.add("monitor")
+        elif "bp" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("bp")
+        elif "sats" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("sats")
+        elif "resp_rate" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("resp_rate")
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -47,20 +47,21 @@ def stabilize():
             continue
 
         # Assess Airway
-        if events[3] == 0 and "Airway" not in examined:  # Ensure airway is clear
+        if events[3] > 0:
+            examined.add("airway")
+        if "airway" not in examined:
             take_action(3)  # ExamineAirway
-            examined.add("Airway")
             continue
 
         # Check vital signs
         measure_vitals()
 
-        # Circulation intervention
+        # Circulation intervention for hypotension
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Breathing intervention
+        # Breathing intervention for low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -69,15 +70,18 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Handle unstable rhythm and tachyarrhythmias
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+        # Check for unstable rhythm
+        if (events[29] > 0 or events[30] > 0 or events[32] > 0 or 
+            (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))):
             take_action(28)  # AttachDefibPads
+            take_action(40)  # DefibrillatorCharge
+            take_action(43)  # DefibrillatorPace
             continue
-        
-        take_action(48)  # Finish
-        break
-    else:
-        take_action(48)  # Finish
+
+        # Continue ABCDE assessment
+        if "airway" in examined and "monitor" in examined and "bp" in examined and "sats" in examined and "resp_rate" in examined:
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
