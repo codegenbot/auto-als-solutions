@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -29,48 +29,58 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17) # CPR
             continue
 
         if "airway" not in examined:
-            take_action(3)
+            take_action(3) # ExamineAirway
             examined.add("airway")
             continue
 
-        if any(events[i] > 0 for i in [4, 5, 6]):
-            take_action(35)
-            continue
-
         if "SatsProbe" not in examined:
-            take_action(25)
+            take_action(25) # UseSatsProbe
             examined.add("SatsProbe")
             continue
 
         if "RespRate" not in examined:
-            take_action(4)
+            take_action(4) # ExamineBreathing
             examined.add("RespRate")
             continue
 
         if "BP" not in examined:
-            take_action(27)
+            take_action(27) # UseBloodPressureCuff
             examined.add("BP")
             continue
 
         if "Monitor" not in examined:
-            take_action(16)
+            take_action(16) # ViewMonitor
             examined.add("Monitor")
             continue
 
+        if "HR" not in examined:
+            take_action(24) # UseMonitorPads
+            examined.add("HR")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15) # GiveFluids
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30) # UseNonRebreatherMask
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29) # UseBagValveMask
+            continue
+
+        # Check for unstable heart rhythms
+        if events[28] > 0: # HeartRhythmSVT
+            take_action(9) # GiveAdenosine
+            continue
+        
+        if vitals["MAP"] is not None and vitals["MAP"] < 40:
+            take_action(47) # DefibrillatorSync
             continue
 
         take_action(48)
