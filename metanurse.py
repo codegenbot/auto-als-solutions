@@ -1,17 +1,26 @@
 import sys
-import math
 
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    observed = set()
+    examined = set()
+    drawers_opened = set()
+    
+    def measure_vitals():
+        for check in ["BP", "SatsProbe", "RespRate", "HeartRate"]:
+            if check not in examined:
+                action_map = {"BP": 27, "SatsProbe": 25, "RespRate": 4, "HeartRate": 16}
+                take_action(action_map[check])
+                examined.add(check)
+                return True
+        return False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -29,43 +38,45 @@ def stabilize():
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        if not vitals["Sats"]:
-            if "SatsProbe" not in observed:
-                take_action(25)  # UseSatsProbe
-                observed.add("SatsProbe")
-                continue
-
-        if not vitals["MAP"]:
-            if "BP" not in observed:
-                take_action(27)  # UseBloodPressureCuff
-                observed.add("BP")
+        if any(v is None for v in [vitals["Sats"], vitals["MAP"], vitals["RR"], vitals["HR"]]):
+            if measure_vitals():
                 continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            if "OpenCirculationDrawer" not in drawers_opened:
+                take_action(20)
+                drawers_opened.add("OpenCirculationDrawer")
+                continue
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            if "OpenBreathingDrawer" not in drawers_opened:
+                take_action(19)
+                drawers_opened.add("OpenBreathingDrawer")
+                continue
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        if not vitals["RR"]:
-            take_action(4)  # ExamineBreathing
+        if vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150):
+            if "DefibPads" not in drawers_opened:
+                take_action(28)
+                drawers_opened.add("DefibPads")
+                continue
+            take_action(2)
             continue
 
-        if not vitals["HR"]:
-            take_action(16)  # ViewMonitor
-            continue
-
-        take_action(48)  # Finish
+        take_action(48)
         break
+    else:
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
