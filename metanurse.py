@@ -23,7 +23,7 @@ def stabilize():
             "Temp": values[3] if times[3] != 0 else None,
             "MAP": values[4] if times[4] != 0 else None,
             "Sats": values[5] if times[5] != 0 else None,
-            "Resps": values[6] if times[6] != 0 else None
+            "Resps": values[6] if times[6] != 0 else None,
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
@@ -63,6 +63,9 @@ def stabilize():
             examined.add("Monitor")
             continue
 
+        if events[13] > 0:
+            examined.add("Monitor")
+
         if "HR" not in examined:
             take_action(24)
             examined.add("HR")
@@ -91,13 +94,13 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(9)
+            take_action(2)
             continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish after 350 steps
 
 if __name__ == "__main__":
     stabilize()
