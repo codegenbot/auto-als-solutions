@@ -25,6 +25,7 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
+        # Step 1: Attach monitoring devices if necessary
         if vitals["MAP"] is None and not all_examinations_done["MAP"]:
             take_action(27)
             all_examinations_done["MAP"] = True
@@ -40,10 +41,12 @@ def stabilize():
             all_examinations_done["RR"] = True
             continue
 
+        # Step 2: Cardiac arrest
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Step 3: Check if further examination of ABCDE is needed
         if any(events[i] > 0 for i in range(3, 7)) and 3 not in examined_vitals:
             take_action(3)
             examined_vitals.add(3)
@@ -68,6 +71,7 @@ def stabilize():
             take_action(7)
             continue
 
+        # Step 4: Treat unstable vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -81,6 +85,7 @@ def stabilize():
             take_action(29)
             continue
 
+        # Final action after stabilization
         take_action(48)
         break
 
