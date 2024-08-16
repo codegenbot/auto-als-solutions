@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -40,6 +41,11 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
+        if "Sats" in examined_vitals and "viewed_monitor" not in examined_vitals:
+            take_action(16)  # View monitor
+            examined_vitals.add("viewed_monitor")
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
@@ -58,34 +64,58 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
+        if "MAP" in examined_vitals and "viewed_monitor_bpcuff" not in examined_vitals:
+            take_action(16)  # View monitor
+            examined_vitals.add("viewed_monitor_bpcuff")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
 
-        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "circulation" not in examined_vitals
+        ):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(2)  # Check rhythm
-            continue
-
-        if events[28] > 0 or events[30] > 0:
-            take_action(9)  # Give adenosine for SVT or amiodarone for AF
-            continue
-
-        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "disability" not in examined_vitals
+        ):
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
-        if any(events[i] > 0 for i in range(26, 33)):
+        if (
+            any(events[i] > 0 for i in range(26, 33))
+            and "exposure" not in examined_vitals
+        ):
             take_action(7)  # Examine exposure
+            examined_vitals.add("exposure")
             continue
 
-        take_action(48)  # Finish
-        break
+        if vitals["HR"] is None and "HR" not in examined_vitals:
+            take_action(2)  # Check rhythm
+            examined_vitals.add("HR")
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
+            take_action(9)  # Give adenosine
+            continue
+
+        if (
+            vitals["RR"] is not None
+            and vitals["RR"] >= 8
+            and all(vitals.get(key, 0) >= 60 for key in ["HR", "MAP"])
+        ):
+            take_action(48)  # Finish
+            break
+
+        take_action(0)  # DoNothing
+
 
 if __name__ == "__main__":
     stabilize()
