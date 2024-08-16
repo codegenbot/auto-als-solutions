@@ -5,13 +5,21 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    examined = set()
+    
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
             return
-
-    examined = set()
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+            return
+        if "BP" not in examined:
+            take_action(38)
+            examined.add("BP")
+            return
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -22,7 +30,7 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
+        
         vitals = dict()
         vitals["HR"] = values[0] if times[0] > 0 else None
         vitals["RR"] = values[1] if times[1] > 0 else None
@@ -41,24 +49,14 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
+        if events[9] == 0 and "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
-            continue
-        elif "SatsProbe" not in examined:
-            take_action(19)
-            examined.add("SatsProbe")
-            take_action(25)
             continue
 
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
-            continue
-        elif "BP" not in examined:
-            take_action(20)
-            examined.add("BP")
-            take_action(27)
             continue
 
         examine_vitals()
@@ -77,10 +75,10 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(24)
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
