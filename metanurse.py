@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     actions_taken = set()
-    given_fluids = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -30,11 +29,7 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if not given_fluids:
-                take_action(15)
-                given_fluids = True
-            else:
-                take_action(16)
+            take_action(15)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
