@@ -44,8 +44,8 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
-            continue 
+            take_action(17)  # Start chest compression, suspecting cardiac arrest
+            continue
 
         if "airway" not in examined:
             take_action(3)
@@ -61,25 +61,25 @@ def stabilize():
         examined = measure_all_vitals(examined)
 
         if unstable_tachyarrhythmia:
-            take_action(40)
+            take_action(40)  # DefibrillatorCharge
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids for hypotension
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask for low oxygen
             continue
         
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag valve mask for low respiratory rate
             continue
 
-        take_action(48)
+        take_action(48)  # Finish action
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish action after max steps
 
 if __name__ == "__main__":
     stabilize()
