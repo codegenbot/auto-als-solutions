@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -38,11 +37,11 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-
+        
         if vitals["Sats"] is None:
             take_action(25)
             continue
-
+            
         if vitals["RR"] is None:
             take_action(4)
             continue
@@ -77,7 +76,6 @@ def stabilize():
         break
 
         steps += 1
-
 
 if __name__ == "__main__":
     stabilize()
