@@ -41,12 +41,14 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
         
+        # Check for immediate critical issues
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
         
+        # Examine Airway if not already examined
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
@@ -57,10 +59,11 @@ def stabilize():
 
         measure_all_vitals()
 
+        # Take actions based on vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -74,6 +77,7 @@ def stabilize():
             examined.add("breathing")
             continue
         
+        # Handle arrhythmias
         if any([events[28], events[29], events[30], events[31], events[32]]):
             take_action(40)
             take_action(41)
