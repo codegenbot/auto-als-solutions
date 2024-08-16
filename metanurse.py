@@ -41,49 +41,42 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Immediate critical stabilization
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        if "AirwayClear" in events:
+        if events[3]:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
         
-        # Breathing treatments
-        if "BreathingSnoring" in events:
+        if events[8]:
             take_action(36)
             continue
-        elif "BreathingPneumothoraxSymptoms" in events:
+        elif events[14]:
             take_action(19)
             continue
 
         examine_vitals()
 
-        # Circulation
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        # Manage Sats
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        # Respiratory rate
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
         
-        # Heart rate treatments
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
