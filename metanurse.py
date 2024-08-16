@@ -5,8 +5,6 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = set()
-    
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -17,9 +15,11 @@ def stabilize():
             examined.add("SatsProbe")
             return
         if "BP" not in examined:
-            take_action(38)
+            take_action(27)
             examined.add("BP")
             return
+
+    examined = set()
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -34,22 +34,19 @@ def stabilize():
         vitals = dict()
         vitals["HR"] = values[0] if times[0] > 0 else None
         vitals["RR"] = values[1] if times[1] > 0 else None
-        vitals["Glucose"] = values[2] if times[2] > 0 else None
-        vitals["Temp"] = values[3] if times[3] > 0 else None
         vitals["MAP"] = values[4] if times[4] > 0 else None
         vitals["Sats"] = values[5] if times[5] > 0 else None
-        vitals["Resps"] = values[6] if times[6] > 0 else None
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if events[3] == 0 and "Airway" not in examined:
+        if "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        if events[9] == 0 and "Breathing" not in examined:
+        if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
@@ -74,14 +71,8 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(11)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(9 if vitals["HR"] > 150 else 12)
                 continue
 
         take_action(48)
