@@ -7,8 +7,23 @@ def stabilize():
 
     examined = set()
 
-    def examine_vitals():
-        if "Monitor" not in examined:
+    def measure_vitals():
+        if "Airway" not in examined:
+            take_action(3)
+            examined.add("Airway")
+        elif "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
+        elif "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
+        elif "Disability" not in examined:
+            take_action(6)
+            examined.add("Disability")
+        elif "Exposure" not in examined:
+            take_action(7)
+            examined.add("Exposure")
+        elif "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
         elif "BP" not in examined:
@@ -27,29 +42,24 @@ def stabilize():
             take_action(0)
             continue
 
-        events = observations[:39]
-        times = observations[39:46]
-        values = observations[46:]
+        events = observations[:33]
+        times = observations[33:40]
+        values = observations[40:]
 
-        vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None
-        }
+        vitals = dict()
+        vitals["HR"] = values[0] if times[0] > 0 else None
+        vitals["RR"] = values[1] if times[1] > 0 else None
+        vitals["Glucose"] = values[2] if times[2] > 0 else None
+        vitals["Temp"] = values[3] if times[3] > 0 else None
+        vitals["MAP"] = values[4] if times[4] > 0 else None
+        vitals["Sats"] = values[5] if times[5] > 0 else None
+        vitals["Resps"] = values[6] if times[6] > 0 else None
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if vitals["Sats"] and vitals["Sats"] < 65 or vitals["MAP"] and vitals["MAP"] < 20:
             take_action(17)
             continue
 
-        if events[3] == 0:
-            take_action(3)
-            continue
-
-        examine_vitals()
+        measure_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
@@ -63,21 +73,13 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
+        heart_rhythm_event_indices = range(29, 39)
+        if any(events[i] > 0 for i in heart_rhythm_event_indices):
             take_action(28)
             continue
 
-        if step >= 349:
-            take_action(48)
-            break
-
-        continue_task = (vitals["Sats"] and vitals["Sats"] >= 88) and \
-                        (vitals["MAP"] and vitals["MAP"] >= 60) and \
-                        (vitals["RR"] and vitals["RR"] >= 8)
-        if continue_task:
-            take_action(48)
-            break
-
+        take_action(48)
+        break
     else:
         take_action(48)
 
