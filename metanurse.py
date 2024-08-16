@@ -46,6 +46,12 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
+        # Attach defib pads early
+        if "DefibPads" not in examined:
+            take_action(28)  # AttachDefibPads
+            examined.add("DefibPads")
+            continue
+
         # Assess Airway
         if events[3] == 0:  # Ensure airway is clear by checking relevant event
             take_action(3)  # ExamineAirway
@@ -68,17 +74,13 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Check unstable rhythm and handle arrhythmias
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150)):
-            take_action(28)  # AttachDefibPads
-            continue
+        # If all stabilizing criteria are met, finish
+        if (vitals["Sats"] and vitals["Sats"] >= 88 and
+            vitals["RR"] and vitals["RR"] >= 8 and
+            vitals["MAP"] and vitals["MAP"] >= 60):
+            take_action(48)  # Finish
+            break
 
-        if events[34] > 0:  # HeartRhythmAF event indicates possible arrhythmia, give Amiodarone
-            take_action(11)  # GiveAmiodarone
-            continue
-
-        take_action(48)  # Finish
-        break
     else:
         take_action(48)  # Finish
 
