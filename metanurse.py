@@ -10,7 +10,7 @@ def stabilize():
 
     actions_taken = set()
     examined_vitals = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -20,7 +20,7 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-        
+
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
