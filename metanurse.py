@@ -9,10 +9,11 @@ def stabilize():
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
+
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -79,7 +80,8 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" not in examined_vitals else 29)
+            action = 30 if "mask" not in examined_vitals else 29
+            take_action(action)  # Use Non-rebreather mask or BVM
             examined_vitals.add("mask")
             continue
 
