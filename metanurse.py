@@ -24,73 +24,54 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Check for critical conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compressions
+            take_action(17)
             continue
 
-        # Ensure required vitals are obtained
         if vitals["MAP"] is None:
-            if 27 not in actions_taken:
-                actions_taken.add(27)
-                take_action(27)  # Use Blood Pressure Cuff
-            elif 16 not in actions_taken:
-                actions_taken.add(16)
-                take_action(16)  # View Monitor
-            elif 38 not in actions_taken:
-                actions_taken.add(38)
-                take_action(38)  # Take Blood Pressure
+            take_action(27)
             continue
-
         if vitals["Sats"] is None:
-            if 25 not in actions_taken:
-                actions_taken.add(25)
-                take_action(25)  # Use Sats Probe
-            elif 16 not in actions_taken:
-                actions_taken.add(16)
-                take_action(16)  # View Monitor
+            take_action(25)
+            continue
+        if vitals["RR"] is None:
+            take_action(4)
             continue
 
-        # Stabilize oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            if 30 not in actions_taken:
+                actions_taken.add(30)
+                take_action(30)
             continue
 
-        # Stabilize respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
+            take_action(29)
             continue
 
-        # Stabilize mean arterial pressure
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
-        # Check and Treat cardiac arrhythmias
         significant_heart_rhythm_events = [27, 28, 29, 30, 31, 32]
         if any(events[i] > 0 for i in significant_heart_rhythm_events):
-            take_action(24)  # Apply monitor pads for closer rhythm examination
+            take_action(24)
             continue
-
-        # Perform ABCDE assessments when necessary
-        if any(events[i] > 0 for i in range(3, 7)):
-            take_action(3)  # Examine Airway
-            continue
-        if any(events[i] > 0 for i in range(7, 15)):
-            take_action(4)  # Examine Breathing
-            continue
-        if any(events[i] > 0 for i in range(15, 20)):
-            take_action(5)  # Examine Circulation
-            continue
-        if any(events[i] > 0 for i in range(20, 26)):
-            take_action(6)  # Examine Disability
-            continue
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)  # Examine Exposure
-            continue
-
-        take_action(48)  # Finish
+        
+        clear_assessments = [
+            (3, range(3, 7)),
+            (4, range(7, 15)),
+            (5, range(15, 20)),
+            (6, range(20, 26)),
+            (7, range(26, 33)),
+        ]
+        
+        for action, event_range in clear_assessments:
+            if any(events[i] > 0 for i in event_range):
+                take_action(action)
+                continue
+        
+        take_action(48)
         break
 
 if __name__ == "__main__":
