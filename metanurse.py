@@ -91,7 +91,7 @@ def stabilize():
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
-            take_action(10)
+            take_action(10)  # Consider an appropriate action based on identified arrhythmia
             continue
 
         take_action(48)
