@@ -5,8 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined_vitals = set()
-    
+    examined_vitals = {"airway": False, "breathing": False, "Sats": False, "MAP": False}
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -30,32 +29,32 @@ def stabilize():
             take_action(17)  # Start chest compressions for cardiac arrest
             continue
 
-        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+        if any(events[i] > 0 for i in range(3, 7)) and not examined_vitals["airway"]:
             take_action(3)  # Examine airway
-            examined_vitals.add("airway")
+            examined_vitals["airway"] = True
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use sats probe
-            examined_vitals.add("Sats")
+        if vitals["Sats"] is None and not examined_vitals["Sats"]:
+            take_action(25)  # Use Sats probe
+            examined_vitals["Sats"] = True
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
             continue
 
-        if vitals["RR"] is None and "RR" not in examined_vitals:
+        if vitals["RR"] is None and not examined_vitals["breathing"]:
             take_action(4)  # Examine breathing
-            examined_vitals.add("RR")
+            examined_vitals["breathing"] = True
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
 
-        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+        if vitals["MAP"] is None and not examined_vitals["MAP"]:
             take_action(27)  # Use blood pressure cuff
-            examined_vitals.add("MAP")
+            examined_vitals["MAP"] = True
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -77,8 +76,9 @@ def stabilize():
             examined_vitals.add("exposure")
             continue
 
-        take_action(48)  # Finish
-        break
+        if all(examined_vitals.values()):
+            take_action(48)  # Finish if all exams and treatments are done
+            break
 
 if __name__ == "__main__":
     stabilize()
