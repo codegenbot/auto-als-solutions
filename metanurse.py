@@ -5,19 +5,12 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
+    def need_vital_check(vital, action):
+        return vital is None and action not in actions_taken
+
     actions_taken = set()
     examined_vitals = set()
     
-    def need_examine(event_indices):
-        return any(events[i] > 0 for i in event_indices)
-    
-    def check_vital(vital, action, idx):
-        if vital is None and idx not in examined_vitals:
-            take_action(action)
-            examined_vitals.add(idx)
-            return True
-        return False
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -36,51 +29,57 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Start chest compressions immediately
+            take_action(17)
             continue
 
-        if check_vital(vitals["MAP"], 27, 4) or check_vital(vitals["Sats"], 25, 5):
+        if need_vital_check(vitals["MAP"], 27):
+            take_action(27)
+            actions_taken.add(27)
             continue
-        
+        if need_vital_check(vitals["Sats"], 25):
+            take_action(25)
+            actions_taken.add(25)
+            continue
+        if need_vital_check(vitals["RR"], 4):
+            take_action(4)
+            actions_taken.add(4)
+            continue
+        if need_vital_check(vitals["HR"], 16):
+            take_action(16)
+            actions_taken.add(16)
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if 30 not in actions_taken:
-                take_action(30)  # Use non-rebreather mask
+                take_action(30)
                 actions_taken.add(30)
                 continue
-            take_action(29)  # Use bag-valve mask
+            take_action(29)
             continue
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag-valve mask
-            continue
-        
-        if need_examine(range(3, 7)):
-            take_action(3)  # Examine airway
-            continue
-        if need_examine(range(7, 15)):
-            take_action(4)  # Examine breathing
-            continue
-        if need_examine(range(15, 20)):
-            take_action(5)  # Examine circulation
-            continue
-        if need_examine(range(20, 26)):
-            take_action(6)  # Examine disability
-            continue
-        if need_examine(range(26, 33)):
-            take_action(7)  # Examine exposure
-            continue
-        
-        # Check and treat heart rhythms
-        if any(events[28:33]):  # Check if any abnormal rhythm is present
-            take_action(2)  # Check rhythm
-            continue
-        if events[31] > 0 or events[32] > 0:  # VT or VF
-            take_action(40)  # Defibrillate
+            take_action(29)
             continue
 
-        take_action(48)  # Finish action
+        if any(events[3:7]):
+            take_action(3)
+            continue
+        if any(events[7:15]):
+            take_action(4)
+            continue
+        if any(events[15:20]):
+            take_action(5)
+            continue
+        if any(events[20:26]):
+            take_action(6)
+            continue
+        if any(events[26:33]):
+            take_action(7)
+            continue
+
+        take_action(48)
         break
 
 if __name__ == "__main__":
