@@ -80,11 +80,6 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if vitals["HR"] is None and 2 not in examined_vitals:
-            take_action(2)  # Check rhythm
-            examined_vitals.add(2)
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30 if 30 not in examined_vitals else 29)
             examined_vitals.add(30)
@@ -94,7 +89,11 @@ def stabilize():
             take_action(29)  # Use bag valve mask
             continue
 
-        # Finish if all vitals are examined and stable
+        if vitals["HR"] is None and 2 not in examined_vitals:
+            take_action(2)  # Check rhythm
+            examined_vitals.add(2)
+            continue
+
         if all(
             value is not None
             and (vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RR"] >= 8)
