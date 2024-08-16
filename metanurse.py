@@ -6,21 +6,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    examined = {
-        "Airway": False,
-        "Breathing": False,
-        "Circulation": False,
-        "Disability": False,
-        "Exposure": False,
-    }
-    vitals_checked = {
-        "Sats": False,
-        "RR": False,
-        "MAP": False,
-        "HR": False,
-        "BP": False,
-    }
-
+    examined = set()
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -47,69 +33,76 @@ def stabilize():
             take_action(17)
             continue
 
-        if not examined["Airway"]:
+        if "airway" not in examined:
             take_action(3)
-            examined["Airway"] = True
+            examined.add("airway")
             continue
 
-        if not examined["Breathing"]:
-            take_action(4)
-            examined["Breathing"] = True
-            continue
-
-        if not examined["Circulation"]:
-            take_action(5)
-            examined["Circulation"] = True
-            continue
-
-        if not examined["Disability"]:
-            take_action(6)
-            examined["Disability"] = True
-            continue
-
-        if not examined["Exposure"]:
-            take_action(7)
-            examined["Exposure"] = True
-            continue
-
-        if vitals["Sats"] is None and not vitals_checked["Sats"]:
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
-            vitals_checked["Sats"] = True
+            examined.add("Sats")
             continue
 
-        if vitals["MAP"] is None and not vitals_checked["MAP"]:
+        if vitals["RR"] is None and "RR" not in examined:
+            take_action(4)
+            examined.add("RR")
+            continue
+
+        if any(events[i] > 0 for i in range(3, 7)):
+            take_action(3)
+            continue
+
+        if "BP" not in examined:
             take_action(27)
-            vitals_checked["MAP"] = True
+            examined.add("BP")
+            continue
+        if vitals["MAP"] is None and times[4] > 0:
+            take_action(16)
             continue
 
-        if vitals["HR"] is None and not vitals_checked["HR"]:
+        if vitals["HR"] is None and "HR" not in examined:
             take_action(24)
-            vitals_checked["HR"] = True
+            examined.add("HR")
+            continue
+        elif vitals["HR"] is None and times[0] > 0:
+            take_action(16)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(9)
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
-        if vitals["BP"] is None and not vitals_checked["BP"]:
-            take_action(27)
-            vitals_checked["BP"] = True
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined:
+            take_action(6)
+            examined.add("disability")
             continue
 
-        take_action(48)
-        break
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined:
+            take_action(7)
+            examined.add("exposure")
+            continue
+
+        if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 150):
+            take_action(2)
+            continue
+
+        if (
+            (vitals["Sats"] is not None and vitals["Sats"] >= 88)
+            and (vitals["RR"] is not None and vitals["RR"] >= 8)
+            and (vitals["MAP"] is not None and vitals["MAP"] >= 60)
+        ):
+            take_action(48)
+            break
+
+        take_action(0)
 
 
 if __name__ == "__main__":
