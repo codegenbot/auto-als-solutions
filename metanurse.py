@@ -77,8 +77,12 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
+        if vitals["HR"] is not None and vitals["HR"] > 100 and vitals["MAP"] < 60:
+            take_action(9)  # Give adenosine (suspected unstable tachyarrhythmia)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30 if "mask" in examined_vitals else 29)  # Use NonRebreatherMask or Use bag valve mask
+            take_action(29 if "mask" not in examined_vitals else 30)  # Use bag valve mask or Use NonRebreatherMask
             examined_vitals.add("mask")
             continue
 
