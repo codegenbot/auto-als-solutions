@@ -46,7 +46,6 @@ def stabilize():
             take_action(17)  # StartChestCompression
             continue
 
-        # Perform ABCDE assessment
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("airway")
@@ -86,8 +85,7 @@ def stabilize():
         if "all_vitals_checked" not in examined:
             examined.add("all_vitals_checked")
             continue
-        
-        # Complete the assessment before finishing
+
         if "all_vitals_checked" in examined:
             take_action(48)  # Finish
 
