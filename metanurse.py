@@ -24,7 +24,6 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Check for emergency conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or \
            (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)  # Start CPR
@@ -74,7 +73,6 @@ def stabilize():
             take_action(7)  # Examine exposure
             continue
 
-        # Check and treat conditions
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
