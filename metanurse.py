@@ -73,12 +73,12 @@ def stabilize():
                 vitals["Sats"] >= 88,
                 vitals["RR"] >= 8
             ]):
-                take_action(48)
+                take_action(48)  # Finish when stable
                 break
         else:
             take_action(0)
     else:
-        take_action(48)
+        take_action(48)  # Finish after 350 steps
 
 if __name__ == "__main__":
     stabilize()
