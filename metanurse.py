@@ -41,27 +41,22 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
-        # Assess Airway
         if events[3] > 0:
             examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
             continue
 
-        # Check vital signs
         measure_vitals()
 
-        # Circulation intervention for hypotension
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # GiveFluids
             continue
 
-        # Breathing intervention for low oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # UseNonRebreatherMask
             continue
@@ -70,7 +65,6 @@ def stabilize():
             take_action(29)  # UseBagValveMask
             continue
 
-        # Check for unstable rhythm
         if (events[29] > 0 or events[30] > 0 or events[32] > 0 or 
             (vitals["HR"] and (vitals["HR"] < 50 or vitals["HR"] > 150))):
             take_action(28)  # AttachDefibPads
@@ -78,7 +72,6 @@ def stabilize():
             take_action(43)  # DefibrillatorPace
             continue
 
-        # Continue ABCDE assessment
         if "airway" in examined and "monitor" in examined and "bp" in examined and "sats" in examined and "resp_rate" in examined:
             take_action(48)  # Finish
             break
