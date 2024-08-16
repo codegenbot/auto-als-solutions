@@ -43,17 +43,22 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
+        
+        if vitals["MAP"] is None and "MAP-monitor" not in examined_vitals:
+            take_action(16)  # View monitor after blood pressure cuff
+            examined_vitals.add("MAP-monitor")
+            continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
-
+        
         if vitals["Sats"] is None and "monitor" not in examined_vitals:
             take_action(16)  # View monitor after sats probe
             examined_vitals.add("monitor")
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             if "mask" not in examined_vitals:
                 take_action(30)  # Use NonRebreatherMask
