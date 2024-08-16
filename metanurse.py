@@ -85,7 +85,7 @@ def stabilize():
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # ExamineExposure
             continue
-
+        
         take_action(48)  # Finish
         break
 
