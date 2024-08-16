@@ -7,17 +7,6 @@ def stabilize():
 
     examined_vitals = set()
 
-    actions_priority = [
-        (15, "vitals['MAP'] is not None and vitals['MAP'] < 60", 27),  # Give fluids if MAP < 60
-        (3, "airway not in examined_vitals", 5),  # Examine Airway
-        (4, "breathing not in examined_vitals", 6),  # Examine Breathing
-        (25, "Sats not in examined_vitals"),  # Use Sats Probe
-        (29, "vitals['RR'] is not None and vitals['RR'] < 8"),  # Bag-Valve Mask if RR < 8
-        (30, "vitals['Sats'] is not None and vitals['Sats'] < 88", 27),  # NonRebreatherMask if Sats < 88
-        (5, "circulation not in examined_vitals", 6),  # Examine Circulation
-        (38, "MAP not in examined_vitals")  # Take BP
-    ]
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -35,18 +24,66 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start CPR
             continue
 
-        for action, condition, fallback in actions_priority:
-            if eval(condition):
-                take_action(action)
-                examined_vitals.add(condition)
-                break
-        else:
-            take_action(48)
-            break
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)  # Examine airway
+            examined_vitals.add("airway")
+            continue
+
+        if vitals["Sats"] is None and "Sats" not in examined_vitals:
+            take_action(25)  # Use sats probe
+            examined_vitals.add("Sats")
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use NonRebreatherMask
+            continue
+
+        if vitals["RR"] is None and "RR" not in examined_vitals:
+            take_action(4)  # Examine breathing
+            examined_vitals.add("RR")
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use BagValveMask
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "circulation" not in examined_vitals
+        ):
+            take_action(5)  # Examine circulation
+            examined_vitals.add("circulation")
+            continue
+
+        if vitals["MAP"] is None and "MAP" not in examined_vitals:
+            take_action(27)  # Use blood pressure cuff
+            examined_vitals.add("MAP")
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "disability" not in examined_vitals
+        ):
+            take_action(6)  # Examine disability
+            examined_vitals.add("disability")
+            continue
+
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)  # Examine exposure
+            continue
+
+        take_action(48)  # Finish
+        break
 
 if __name__ == "__main__":
     stabilize()
