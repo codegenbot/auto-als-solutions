@@ -20,13 +20,7 @@ def stabilize():
             return
 
     examined = set()
-    steps = {
-        'airway': False,
-        'breathing': False,
-        'circulation': False,
-        'disability': False,
-        'exposure': False
-    }
+    steps = {'airway': False, 'breathing': False, 'circulation': False, 'disability': False, 'exposure': False}
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
