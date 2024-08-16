@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-
+    
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -17,7 +17,7 @@ def stabilize():
             examined.add("SatsProbe")
             return
         if "BP" not in examined:
-            take_action(27)
+            take_action(38)
             examined.add("BP")
             return
 
@@ -56,6 +56,13 @@ def stabilize():
 
         examine_vitals()
 
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
+            continue
+        
+        examine_vitals()
+
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -67,7 +74,7 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
