@@ -1,13 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined_vitals = set()
-    iv_accessed = False
+    monitor_viewed = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
@@ -30,81 +29,78 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Start CPR
+            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
-        if any(events[3:7]) and "airway" not in examined_vitals:
-            take_action(3)  # Examine airway
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
+            take_action(3)
             examined_vitals.add("airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             examined_vitals.add("Sats")
             continue
 
+        if "Sats" in examined_vitals and not monitor_viewed:
+            take_action(16)
+            monitor_viewed = True
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use NonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine breathing
+            take_action(4)
             examined_vitals.add("RR")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use BagValveMask
+            take_action(29)
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use BloodPressureCuff
+            take_action(27)
             examined_vitals.add("MAP")
             continue
 
+        if "MAP" in examined_vitals and not monitor_viewed:
+            take_action(16)
+            monitor_viewed = True
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if not iv_accessed:
-                take_action(14)  # Use Venflon IV Catheter
-                iv_accessed = True
-                continue
-            take_action(15)  # Give fluids
+            take_action(15)
             continue
 
         if events[15] > 0 and "circulation" not in examined_vitals:
-            take_action(5)  # Examine circulation
+            take_action(5)
             examined_vitals.add("circulation")
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            if not iv_accessed:
-                take_action(14)  # Use Venflon IV Catheter
-                iv_accessed = True
-                continue
-            take_action(2)  # Check rhythm
+            take_action(2)
+            continue
+        if events[28] > 0:
+            take_action(9)
+            continue
+        if events[30] > 0:
+            take_action(11)
             continue
 
-        if events[28] > 0 or events[30] > 0:
-            take_action(9)  # Give adenosine for SVT or amiodarone for AF
-            continue
-
-        if any(events[20:26]) and "disability" not in examined_vitals:
-            take_action(6)  # Examine disability
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
+            take_action(6)
             examined_vitals.add("disability")
             continue
 
-        if any(events[26:33]):
-            take_action(7)  # Examine exposure
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)
             continue
 
-        if "viewed_monitor" not in examined_vitals:
-            take_action(16)  # View monitor to see sats
-            examined_vitals.add("viewed_monitor")
-            continue
-
-        take_action(48)  # Finish
+        take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
