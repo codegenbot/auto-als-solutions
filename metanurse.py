@@ -25,7 +25,7 @@ def stabilize():
     while actions < 350:
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             actions += 1
             continue
 
@@ -44,11 +44,11 @@ def stabilize():
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             break
 
-        if events[3] == 0:
-            take_action(3)
+        if events[3] == 0:  # Check if airway clear
+            take_action(3)  # ExamineAirway
             actions += 1
             continue
 
@@ -56,26 +56,26 @@ def stabilize():
         actions += 1
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         hr = vitals["HR"]
         if hr and (hr < 50 or hr > 150):
-            take_action(28)
+            take_action(28)  # AttachDefibPads
             actions += 1
             continue
         
         break
 
-    take_action(48)
+    take_action(48)  # Finish the assessment
 
 if __name__ == "__main__":
     stabilize()
