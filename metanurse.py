@@ -28,17 +28,20 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
+        # Handle cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
         
+        # Airway assessment
         if "airway" not in examined_vitals:
             take_action(3)
             examined_vitals.add("airway")
             continue
 
+        # Breathing assessment and intervention
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals.add("Sats")
@@ -58,6 +61,7 @@ def stabilize():
             take_action(29)
             continue
         
+        # Circulation assessment and intervention
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)
             examined_vitals.add("MAP")
@@ -80,6 +84,7 @@ def stabilize():
             take_action(9)
             continue
 
+        # Disability and exposure assessment
         if (
             any(events[i] > 0 for i in range(20, 26))
             and "disability" not in examined_vitals
