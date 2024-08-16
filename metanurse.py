@@ -36,12 +36,12 @@ def stabilize():
             take_action(3)
             examined_vitals.add("airway")
             continue
-        
+
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)
             examined_vitals.add("Sats")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -64,9 +64,9 @@ def stabilize():
             take_action(15)
             continue
 
-        if vitals["HR"] is None and "HR" not in examined_vitals:
+        if events[15] > 0 and "circulation" not in examined_vitals:
             take_action(5)
-            examined_vitals.add("HR")
+            examined_vitals.add("circulation")
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
@@ -86,11 +86,8 @@ def stabilize():
             take_action(7)
             continue
 
-        if all(vitals[k] is not None for k in ["Sats", "RR", "MAP"]) and all(vitals[k] >= threshold for k, threshold in {"Sats": 88, "RR": 8, "MAP": 60}.items()):
-            take_action(48)
-            break
-
-        take_action(0)
+        take_action(48)
+        break
 
 if __name__ == "__main__":
     stabilize()
