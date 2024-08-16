@@ -98,6 +98,7 @@ def stabilize():
             take_action(7)  # Examine exposure
             continue
 
+        # End the scenario if patient is stabilized
         if (vitals["MAP"] is not None and vitals["MAP"] >= 60 and
             vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RR"] is not None and vitals["RR"] >= 8):
