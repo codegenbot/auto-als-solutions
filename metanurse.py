@@ -53,17 +53,17 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[3] > 0:
+        if "AirwayClear" in events:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
                 continue
 
-            if events[8] > 0:
+            if "BreathingSnoring" in events:
                 take_action(36)
                 continue
 
-            if events[14] > 0:
+            if "BreathingPneumothoraxSymptoms" in events:
                 take_action(19)
                 continue
 
