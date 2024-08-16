@@ -44,9 +44,9 @@ def stabilize():
                 examined_vitals.add("Sats")
                 continue
             
-            if vitals["RR"] is not None and vitals["RR"] > 0 and "breathing" not in examined_vitals:
+            if vitals["RR"] is None and "RR" not in examined_vitals:
                 take_action(4)
-                examined_vitals.add("breathing")
+                examined_vitals.add("RR")
                 continue
                 
             if vitals["MAP"] is None and "MAP" not in examined_vitals:
@@ -54,7 +54,7 @@ def stabilize():
                 examined_vitals.add("MAP")
                 continue
             
-            if vitals["HR"] is not None and "circulation" not in examined_vitals:
+            if vitals["HR"] is None and "circulation" not in examined_vitals:
                 take_action(5)
                 examined_vitals.add("circulation")
                 continue
