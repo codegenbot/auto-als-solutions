@@ -5,13 +5,26 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps_taken = 0
+    examined = set()
 
-    while steps_taken < 350:
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)
-            steps_taken += 1
             continue
 
         events = observations[:33]
@@ -19,8 +32,8 @@ def stabilize():
         values = observations[40:]
 
         vitals = {
-            "HeartRate": values[0] if times[0] != 0 else None,
-            "RespRate": values[1] if times[1] != 0 else None,
+            "HR": values[0] if times[0] != 0 else None,
+            "RR": values[1] if times[1] != 0 else None,
             "Glucose": values[2] if times[2] != 0 else None,
             "Temp": values[3] if times[3] != 0 else None,
             "MAP": values[4] if times[4] != 0 else None,
@@ -30,38 +43,40 @@ def stabilize():
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
-            steps_taken += 1
             continue
-        
-        if events[3] == 0:
+
+        if "airway" not in examined:
             take_action(3)
-        elif vitals["Sats"] is None:
-            take_action(25)
-        elif vitals["MAP"] is None:
-            take_action(27)
-        elif vitals["RespRate"] is None:
-            take_action(4)
-        elif vitals["MAP"] < 60:
+            examined.add("airway")
+            continue
+
+        if "airway_clear" not in examined and events[3] > 0:
+            examined.add("airway_clear")
+
+        measure_vitals()
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
-        elif vitals["Sats"] < 88:
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
-        elif vitals["RespRate"] < 8:
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
-        elif (
-            events[29] > 0 or events[30] > 0 or 
-            (vitals["HeartRate"] is not None and vitals["HeartRate"] > 150)
-        ):
+            continue
+
+        if events[29] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(28)
             take_action(40)
             take_action(41)
             take_action(43)
-        else:
-            take_action(48)
-            break
+            continue
 
-        steps_taken += 1
-
-    if steps_taken >= 350:
+        take_action(48)
+        break
+    else:
         take_action(48)
 
 if __name__ == "__main__":
