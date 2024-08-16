@@ -76,7 +76,7 @@ def stabilize():
         if events[28] > 0 or events[30] > 0:
             take_action(9)  # Give adenosine for SVT or amiodarone for AF
             continue
-
+            
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
