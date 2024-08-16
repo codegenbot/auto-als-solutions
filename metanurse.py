@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
