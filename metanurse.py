@@ -5,79 +5,81 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    assessed = {
-        "Airway": False,
-        "Breathing": False,
-        "Circulation": False,
-        "Disability": False,
-        "Exposure": False,
-    }
-    actions = {
-        "Airway": 3, "Breathing": 4, "Circulation": 5, "Disability": 6, "Exposure": 7,
-        "MeasureHR": 16, "MeasureMAP": 27, "MeasureSats": 25, "NonRebreatherMask": 30,
-        "GiveFluids": 15, "BagValveMask": 29, "AttachDefibPads": 28, "ChestCompression": 17,
-        "Finish": 48
-    }
+    def examine_vitals():
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+            return
+        if "BP" not in examined:
+            take_action(27)
+            examined.add("BP")
+            return
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+            return
+        if "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
+            return
 
-    def initial_checks():
-        if not assessed["Airway"]:
-            take_action(actions["Airway"])
-            assessed["Airway"] = True
-        elif not assessed["Breathing"]:
-            take_action(actions["Breathing"])
-            assessed["Breathing"] = True
-        elif not assessed["Circulation"]:
-            take_action(actions["Circulation"])
-            assessed["Circulation"] = True
-        elif not assessed["Disability"]:
-            take_action(actions["Disability"])
-            assessed["Disability"] = True
-        elif not assessed["Exposure"]:
-            take_action(actions["Exposure"])
-            assessed["Exposure"] = True
+    examined = set()
+    checked_prerequisites = False
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
 
-        vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
-        }
+        vitals = dict()
+        vitals["HR"] = values[0] if times[0] > 0 else None
+        vitals["RR"] = values[1] if times[1] > 0 else None
+        vitals["MAP"] = values[4] if times[4] > 0 else None
+        vitals["Sats"] = values[5] if times[5] > 0 else None
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(actions["ChestCompression"])
+            take_action(17)
             continue
 
-        initial_checks()
+        if not checked_prerequisites:
+            if events[3] == 0:
+                take_action(3)
+                continue
+            if events[7] == 0:
+                take_action(4)
+                continue
+            if events[16] == 0:
+                take_action(5)
+                continue
+            checked_prerequisites = True
+
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(actions["GiveFluids"])
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(actions["NonRebreatherMask"])
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(actions["BagValveMask"])
+            take_action(29)
             continue
 
-        take_action(actions["Finish"])
+        if vitals["HR"] and (vitals["HR"] > 150):
+            take_action(28)
+            continue
+
+        take_action(48)
         break
     else:
-        take_action(actions["Finish"])
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
