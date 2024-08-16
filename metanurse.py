@@ -29,7 +29,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start chest compressions in case of cardiac arrest
             continue
 
         if "monitor" not in examined_vitals:
@@ -55,7 +55,7 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30 if "mask" in examined_vitals else 29)
             examined_vitals.add("mask")
@@ -82,12 +82,6 @@ def stabilize():
             examined_vitals.add("circulation")
             continue
 
-        if vitals["HR"] is not None and (
-            events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
-        ):
-            take_action(9)  # Treat unstable tachyarrhythmia with Adenosine
-            continue
-
         if (
             any(events[i] > 0 for i in range(20, 26))
             and "disability" not in examined_vitals
@@ -104,7 +98,12 @@ def stabilize():
             take_action(29)
             continue
 
-        take_action(48)
+        # Check for rhythm as instructed
+        if vitals["HR"] is not None and vitals["HR"] > 100:
+            take_action(2)
+            continue
+
+        take_action(48)  # Finish action if all conditions are met and vitals are stable
         break
 
 if __name__ == "__main__":
