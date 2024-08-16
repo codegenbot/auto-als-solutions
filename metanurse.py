@@ -5,14 +5,26 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps = 0
     examined = set()
 
-    while steps < 350:
+    def measure_vitals():
+        if "Monitor" not in examined:
+            take_action(16)  # ViewMonitor
+            examined.add("Monitor")
+        elif "BP" not in examined:
+            take_action(27)  # UseBloodPressureCuff
+            examined.add("BP")
+        elif "SatsProbe" not in examined:
+            take_action(25)  # UseSatsProbe
+            examined.add("SatsProbe")
+        elif "RespRate" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("RespRate")
+
+    for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
-            steps += 1
             continue
 
         events = observations[:33]
@@ -29,36 +41,20 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        steps += 1
-
         # Immediate cardiac arrest check
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # StartChestCompression
             continue
 
         # Assess Airway
+        if events[3] > 0:
+            examined.add("airway")
         if "airway" not in examined:
             take_action(3)  # ExamineAirway
-            examined.add("airway")
             continue
 
         # Check vital signs
-        if "Monitor" not in examined:
-            take_action(16)  # ViewMonitor
-            examined.add("Monitor")
-            continue
-        if "BP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
-            examined.add("BP")
-            continue
-        if "SatsProbe" not in examined:
-            take_action(25)  # UseSatsProbe
-            examined.add("SatsProbe")
-            continue
-        if "RespRate" not in examined:
-            take_action(4)   # ExamineBreathing
-            examined.add("RespRate")
-            continue
+        measure_vitals()
 
         # Circulation intervention
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -82,10 +78,8 @@ def stabilize():
             take_action(43)  # DefibrillatorPace
             continue
 
-        # If all conditions are good, finish the scenario
-        if vitals["MAP"] and vitals["MAP"] >= 60 and vitals["Sats"] and vitals["Sats"] >= 88 and vitals["RR"] and vitals["RR"] >= 8:
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
     else:
         take_action(48)  # Finish
 
