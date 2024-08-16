@@ -25,52 +25,47 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
-        # Immediate life-threatening conditions
         if (vital_signs["Sats"] is not None and vital_signs["Sats"] < 65) or (vital_signs["MAP"] is not None and vital_signs["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        # Airway
-        if not any(events[3:7]):  # Airway events
-            take_action(3)  # ExamineAirway
+        if not any(events[3:7]):
+            take_action(3)
             continue
 
-        if events[2]:  # Check response
-            take_action(8)  # ExamineResponse
+        if events[2]:
+            take_action(8)
             continue
 
-        # Breathing
         if vital_signs["Sats"] is None:
-            take_action(25)  # UseSatsProbe
+            take_action(25)
             continue
         
         if vital_signs["RR"] is None:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             continue
 
         if vital_signs["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vital_signs["RR"] and vital_signs["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # Circulation
         if vital_signs["MAP"] is None:
-            take_action(27)  # UseBloodPressureCuff
+            take_action(27)
             continue
 
         if vital_signs["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        # Ensure all vitals are checked before finishing
         if None in vital_signs.values():
-            take_action(24)  # UseMonitorPads
+            take_action(24)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
 
 if __name__ == "__main__":
