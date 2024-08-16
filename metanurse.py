@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     examined = set()
-    
+
     def measure_all_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -20,7 +20,7 @@ def stabilize():
         elif "RespRate" not in examined:
             take_action(4)
             examined.add("RespRate")
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -56,7 +56,7 @@ def stabilize():
             examined.add("airway")
 
         measure_all_vitals()
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -64,20 +64,16 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if events[29] > 0 or events[30] > 0:
+        if any([events[28], events[29], events[30], events[31], events[32]]):
             take_action(40)
             take_action(41)
             take_action(43)
-        
-        if events[31] > 0 or events[33] > 0 or events[35] > 0:
-            take_action(9)
-            continue
-        
+
         take_action(48)
         break
     else:
