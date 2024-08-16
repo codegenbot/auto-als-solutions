@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -62,7 +61,7 @@ def stabilize():
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -71,7 +70,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
