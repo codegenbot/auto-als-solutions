@@ -72,10 +72,6 @@ def stabilize():
             take_action(29)  # Use bag valve mask
             continue
 
-        if vitals["HR"] is not None and (vitals["HR"] > 150 or vitals["HR"] < 50):
-            take_action(2)  # Check rhythm
-            continue
-
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine exposure
             continue
@@ -83,6 +79,10 @@ def stabilize():
         if any(events[i] > 0 for i in range(15, 20)):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
+            continue
+
+        if vitals["HR"] is not None and (events[31] > 0 or events[32] > 0):  
+            take_action(2)  # Check Rhythm (in case of arrhythmia)
             continue
 
         take_action(48)  # Finish
