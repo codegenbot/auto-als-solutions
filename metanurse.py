@@ -20,6 +20,12 @@ def stabilize():
         elif "RespRate" not in examined:
             take_action(4)   # ExamineBreathing
             examined.add("RespRate")
+        elif "Glucose" not in examined:
+            take_action(6)   # ExamineDisability
+            examined.add("Glucose")
+        elif "Temp" not in examined:
+            take_action(7)   # ExamineExposure
+            examined.add("Temp")
 
     for step in range(350):
         observations = list(map(float, input().strip().split()))
