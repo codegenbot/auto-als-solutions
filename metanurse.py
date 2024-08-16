@@ -71,11 +71,11 @@ def stabilize():
             take_action(29)
             continue
         
-        if vitals["HR"] is not None and (events[28] > 0 or events[29] > 0 or events[34] > 0 or events[35] > 0):
+        if vitals["HR"] is not None and (events[14] > 0 or events[21] > 0):
             take_action(40)
             continue
-
-        if vitals["HR"] is not None and (events[14] > 0 or events[21] > 0):
+        
+        if vitals["HR"] is not None and (events[28] > 0 or events[29] > 0 or events[34] > 0 or events[35] > 0):
             take_action(40)
             continue
 
