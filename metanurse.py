@@ -81,7 +81,7 @@ def stabilize():
             examined_vitals.add("circulation")
             continue
 
-        if vitals["HR"] is not None and (events[31] > 0 or events[32] > 0):  
+        if vitals["HR"] is not None and (events[31] or events[32]):  
             take_action(2)  # Check Rhythm (in case of arrhythmia)
             continue
 
