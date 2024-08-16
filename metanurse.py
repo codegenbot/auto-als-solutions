@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     examined_vitals = set()
-
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -27,10 +26,10 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start CPR
+            take_action(17)  # Start chest compressions for cardiac arrest
             continue
 
-        if "airway" not in examined_vitals:
+        if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
             take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
@@ -44,9 +43,9 @@ def stabilize():
             take_action(30)  # Use NonRebreatherMask
             continue
 
-        if "breathing" not in examined_vitals:
+        if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
-            examined_vitals.add("breathing")
+            examined_vitals.add("RR")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
@@ -62,17 +61,17 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if "circulation" not in examined_vitals:
+        if any(events[i] > 0 for i in range(15, 20)) and "circulation" not in examined_vitals:
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
 
-        if "disability" not in examined_vitals:
+        if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
-        if "exposure" not in examined_vitals:
+        if any(events[i] > 0 for i in range(26, 33)) and "exposure" not in examined_vitals:
             take_action(7)  # Examine exposure
             examined_vitals.add("exposure")
             continue
