@@ -10,7 +10,7 @@ def stabilize():
             if times[idx] == 0:
                 vitals[key] = None
             else:
-                vitals[key] = vitals[key]
+                vitals[key] = values[idx]
         return vitals
 
     actions_taken = set()
