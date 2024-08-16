@@ -4,35 +4,15 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
-    actions = {
-        "ViewMonitor": 16,
-        "UseSatsProbe": 25,
-        "TakeBloodPressure": 38,
-        "ExamineAirway": 3,
-        "ExamineBreathing": 4,
-        "ExamineCirculation": 5,
-        "GiveFluids": 15,
-        "UseNonRebreatherMask": 30,
-        "UseBagValveMask": 29,
-        "UseMonitorPads": 24,
-        "GiveAdenosine": 9,
-        "GiveAtropine": 12,
-        "OpenBreathingDrawer": 19,
-        "OpenCirculationDrawer": 20,
-        "StartChestCompression": 17,
-        "Finish": 48
-    }
 
     examined = set()
-    drawer_opened = set()
-    
+
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
-        
+
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
@@ -40,80 +20,74 @@ def stabilize():
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
+            "Glucose": values[2] if times[2] > 0 else None,
+            "Temp": values[3] if times[3] > 0 else None,
             "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None
+            "Sats": values[5] if times[5] > 0 else None,
+            "Resps": values[6] if times[6] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(actions["StartChestCompression"])
+            take_action(17)  # StartChestCompression
             continue
 
         if "Airway" not in examined:
-            take_action(actions["ExamineAirway"])
+            take_action(3)  # ExamineAirway
             examined.add("Airway")
-            if events[3] > 0:
-                examined.add("Breathing")
-                examined.add("Circulation")
             continue
 
         if "Breathing" not in examined:
-            take_action(actions["ExamineBreathing"])
+            take_action(4)  # ExamineBreathing
             examined.add("Breathing")
-            if events[33] == 0 and "BreathingDrawer" not in drawer_opened:
-                take_action(actions["OpenBreathingDrawer"])
-                drawer_opened.add("BreathingDrawer")
             continue
 
         if "Circulation" not in examined:
-            take_action(actions["ExamineCirculation"])
+            take_action(5)  # ExamineCirculation
             examined.add("Circulation")
-            if events[36] == 0 and "CirculationDrawer" not in drawer_opened:
-                take_action(actions["OpenCirculationDrawer"])
-                drawer_opened.add("CirculationDrawer")
             continue
 
         if "Monitor" not in examined:
-            take_action(actions["ViewMonitor"])
+            take_action(16)  # ViewMonitor
             examined.add("Monitor")
             continue
 
         if "SatsProbe" not in examined:
-            take_action(actions["UseSatsProbe"])
+            take_action(25)  # UseSatsProbe
             examined.add("SatsProbe")
             continue
 
         if "BP" not in examined:
-            take_action(actions["TakeBloodPressure"])
+            take_action(38)  # TakeBloodPressure
             examined.add("BP")
             continue
-
+        
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(actions["GiveFluids"])
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(actions["UseNonRebreatherMask"])
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(actions["UseBagValveMask"])
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(actions["UseMonitorPads"])
+                take_action(11)  # GiveAmiodarone (for arrhythmia)
                 continue
             elif vitals["HR"] > 100:
-                take_action(actions["GiveAdenosine"])
+                take_action(24)  # UseMonitorPads
                 continue
             elif vitals["HR"] < 50:
-                take_action(actions["GiveAtropine"])
+                take_action(12)  # GiveAtropine
                 continue
 
-        take_action(actions["Finish"])
+        take_action(48)  # Finish
         break
     else:
-        take_action(actions["Finish"])
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
