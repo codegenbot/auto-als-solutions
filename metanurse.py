@@ -42,10 +42,12 @@ def stabilize():
         vitals["MAP"] = values[4] if times[4] > 0 else None
         vitals["Sats"] = values[5] if times[5] > 0 else None
 
+        # Check for cardiac arrest scenario
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Perform Examinations
         if not checked_prerequisites:
             if events[3] == 0:
                 take_action(3)
@@ -58,6 +60,7 @@ def stabilize():
                 continue
             checked_prerequisites = True
 
+        # Analyze Vitals
         examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
@@ -76,6 +79,7 @@ def stabilize():
             take_action(28)
             continue
 
+        # If all conditions are stable
         take_action(48)
         break
     else:
