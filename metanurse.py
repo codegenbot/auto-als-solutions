@@ -1,13 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined_vitals = set()
-    oxygen_given = False
+    
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -44,9 +43,8 @@ def stabilize():
             examined_vitals.add("Sats")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88 and not oxygen_given:
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
-            oxygen_given = True
             continue
 
         if vitals["RR"] is None and "RR" not in examined_vitals:
@@ -67,34 +65,23 @@ def stabilize():
             take_action(15)
             continue
 
-        if events[15] > 0 and "circulation" not in examined_vitals:
-            take_action(5)
-            examined_vitals.add("circulation")
+        if "circulation" not in examined_vitals:
+            if events[15] > 0:
+                take_action(5)
+                examined_vitals.add("circulation")
+                continue
+
+        if "rhythm_checked" not in examined_vitals:
+            take_action(2)
+            examined_vitals.add("rhythm_checked")
             continue
 
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
-            take_action(2)
-            continue
-
-        if events[28] > 0 or events[30] > 0:
             take_action(9)
-            continue
-
-        if (
-            any(events[i] > 0 for i in range(20, 26))
-            and "disability" not in examined_vitals
-        ):
-            take_action(6)
-            examined_vitals.add("disability")
-            continue
-
-        if any(events[i] > 0 for i in range(26, 33)):
-            take_action(7)
             continue
 
         take_action(48)
         break
-
 
 if __name__ == "__main__":
     stabilize()
