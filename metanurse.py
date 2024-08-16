@@ -37,56 +37,56 @@ def stabilize():
             take_action(25)  # Use Sats Probe
             examined_vitals.add("Sats")
             continue
-        
+
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
             take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
-        
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
-        
+
         if vitals["RR"] is None and "RR" not in examined_vitals:
             take_action(4)  # Examine breathing
             examined_vitals.add("RR")
             continue
-        
+
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
             take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(16)  # View Monitor
+            take_action(16)  # View monitor
             continue
-        
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)  # Use BagValveMask
             continue
-        
+
         if events[15] > 0 and "circulation" not in examined_vitals:
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
-        
+
         if vitals["HR"] is not None and (vitals["HR"] < 60 or vitals["HR"] > 100):
             take_action(2)  # Check rhythm
             continue
-        
+
         if events[28] > 0 or events[30] > 0:
             take_action(9)  # Give adenosine for SVT or amiodarone for AF
             continue
-        
+
         if any(events[i] > 0 for i in range(20, 26)) and "disability" not in examined_vitals:
             take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
-        
+
         if any(events[i] > 0 for i in range(26, 33)):
             take_action(7)  # Examine exposure
             continue
-        
+
         if all(examined_vitals):
             take_action(48)  # Finish
             break
