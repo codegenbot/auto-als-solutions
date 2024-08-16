@@ -40,10 +40,6 @@ def stabilize():
             examined_vitals.add("MAP")
             continue
 
-        if "MAP" in examined_vitals and vitals["MAP"] is None:
-            take_action(16)  # View monitor for MAP
-            continue
-
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
@@ -51,10 +47,6 @@ def stabilize():
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
             take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
-            continue
-
-        if "Sats" in examined_vitals and vitals["Sats"] is None:
-            take_action(16)  # View monitor for Sats
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -88,10 +80,6 @@ def stabilize():
         ):
             take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
-            continue
-        
-        if events[29] > 0 or events[30] > 0 or (vitals["HR"] and vitals["HR"] > 100):
-            take_action(43)  # Cardioversion
             continue
 
         if (
