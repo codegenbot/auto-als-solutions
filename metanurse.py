@@ -27,9 +27,7 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
         
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -37,20 +35,20 @@ def stabilize():
             take_action(3)
             examined.add("airway")
             continue
-        
-        if "Monitor" not in examined:
+
+        if events[3] > 0 and "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
+            continue
+        
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
             continue
 
         if "BP" not in examined:
             take_action(27)
             examined.add("BP")
-            continue
-
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -64,7 +62,7 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
+
         if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and (vitals["HR"] < 50 or vitals["HR"] > 150)):
             take_action(40)
             take_action(41)
