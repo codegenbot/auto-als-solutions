@@ -85,7 +85,7 @@ def stabilize():
         if vitals["HR"] is not None and (
             events[29] > 0 or events[30] > 0 or events[31] > 0 or events[32] > 0
         ):
-            take_action(9)
+            take_action(9)  # Treat unstable tachyarrhythmia with Adenosine
             continue
 
         if (
