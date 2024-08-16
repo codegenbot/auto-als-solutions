@@ -41,12 +41,14 @@ def stabilize():
             "Resps": values[6] if times[6] != 0 else None,
         }
 
+        # Check for critical conditions
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
 
+        # Perform ABCDE assessment steps
         if "airway" not in examined:
             take_action(3)
             examined.add("airway")
@@ -68,8 +70,10 @@ def stabilize():
             examined.add("exposure")
             continue
 
+        # Measure all vitals if assessments are done
         measure_all_vitals()
 
+        # Treatment for unstable vitals
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
@@ -80,12 +84,14 @@ def stabilize():
             take_action(29)
             continue
 
+        # If respiration-related emergencies like a tension pneumothorax
         if events[29] > 0 or events[30] > 0:
             take_action(40)
             take_action(41)
             take_action(43)
             continue
 
+        # Finalize if all conditions are met
         if (vitals["Sats"] is not None and vitals["Sats"] >= 88 and
             vitals["RR"] is not None and vitals["RR"] >= 8 and
             vitals["MAP"] is not None and vitals["MAP"] >= 60):
