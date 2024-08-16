@@ -1,5 +1,4 @@
 import sys
-import math
 
 def stabilize():
     def take_action(action):
@@ -11,15 +10,13 @@ def stabilize():
     for step in range(350):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
-        # Parse observations
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
 
-        # Vital signs
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
             "RR": values[1] if times[1] > 0 else None,
@@ -27,59 +24,80 @@ def stabilize():
             "Sats": values[5] if times[5] > 0 else None,
         }
 
-        # Emergency conditions check
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start Chest Compressions (CPR)
+            take_action(17)  # Start CPR
             continue
 
-        # Check and treat Airway
         if any(events[i] > 0 for i in range(3, 7)) and "airway" not in examined_vitals:
-            take_action(3)  # Examine Airway
+            take_action(3)  # Examine airway
             examined_vitals.add("airway")
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined_vitals:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)  # Use blood pressure cuff
             examined_vitals.add("MAP")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
+        if vitals["MAP"] is not None:
+            if vitals["MAP"] < 60:
+                take_action(15)  # Give fluids
+                continue
+
+            if vitals["MAP"] < 100 and "monitor" not in examined_vitals:
+                take_action(16)  # View monitor for arrhythmia
+                examined_vitals.add("monitor")
+                continue
 
         if vitals["Sats"] is None and "Sats" not in examined_vitals:
-            take_action(25)  # Use Sats Probe
+            take_action(25)  # Use sats probe
             examined_vitals.add("Sats")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            if "mask" not in examined_vitals:
+                take_action(30)  # Use NonRebreatherMask
+                examined_vitals.add("mask")
+            else:
+                take_action(29)  # Use BagValveMask if oxygen drops further
             continue
-            
+
         if vitals["RR"] is None and "RR" not in examined_vitals:
-            take_action(4)  # Examine Breathing
+            take_action(4)  # Examine breathing
             examined_vitals.add("RR")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)  # Use BagValveMask
             continue
 
-        if "circulation" not in examined_vitals:
-            take_action(5)  # Examine Circulation
+        if (
+            any(events[i] > 0 for i in range(7, 15))
+            and "breathing" not in examined_vitals
+        ):
+            take_action(4)  # Examine breathing
+            examined_vitals.add("breathing")
+            continue
+
+        if (
+            any(events[i] > 0 for i in range(15, 20))
+            and "circulation" not in examined_vitals
+        ):
+            take_action(5)  # Examine circulation
             examined_vitals.add("circulation")
             continue
 
-        if "disability" not in examined_vitals:
-            take_action(6)  # Examine Disability
+        if (
+            any(events[i] > 0 for i in range(20, 26))
+            and "disability" not in examined_vitals
+        ):
+            take_action(6)  # Examine disability
             examined_vitals.add("disability")
             continue
 
-        if "exposure" not in examined_vitals:
-            take_action(7)  # Examine Exposure
-            examined_vitals.add("exposure")
+        if any(events[i] > 0 for i in range(26, 33)):
+            take_action(7)  # Examine exposure
             continue
 
         take_action(48)  # Finish
