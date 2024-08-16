@@ -77,11 +77,11 @@ def stabilize():
             take_action(15)  # Give fluids
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 100 and vitals["MAP"] < 60:
+        if vitals["HR"] is not None and vitals["HR"] > 100:
             take_action(2)  # Check rhythm
             if any(events[i] > 0 for i in range(28, 33)):  # Check for tachyarrhythmias
                 take_action(9)  # Give adenosine
-            continue
+                continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use NonRebreatherMask
