@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     examined = set()
 
     def measure_vitals():
@@ -30,7 +30,7 @@ def stabilize():
         events = observations[:33]
         times = observations[33:40]
         values = observations[40:]
-
+        
         vitals = {
             "HR": values[0] if times[0] != 0 else None,
             "RR": values[1] if times[1] != 0 else None,
@@ -45,12 +45,13 @@ def stabilize():
             vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
-
+        
         if events[3] > 0:
-            examined.add("airway")
-
-        if "airway" not in examined:
+            examined.add("Airway")
+            
+        if "Airway" not in examined:
             take_action(3)
+            examined.add("Airway")
             continue
 
         measure_vitals()
@@ -67,13 +68,13 @@ def stabilize():
             take_action(29)
             continue
 
-        if any([events[28], events[29], events[30], events[31], events[32]]):
+        if events[29] > 0 or events[30] > 0 or (vitals["HR"] is not None and vitals["HR"] > 150):
             take_action(28)
             take_action(40)
             take_action(41)
             take_action(43)
             continue
-
+        
         take_action(48)
         break
     else:
