@@ -7,9 +7,9 @@ def stabilize():
 
     def measure_vitals():
         for check, action in [
-            ("BP", 27),
-            ("SatsProbe", 25),
-            ("Monitor", 16),
+            ("BP", 27), 
+            ("SatsProbe", 25), 
+            ("Monitor", 16), 
             ("RespRate", 4)
         ]:
             if check not in examined:
