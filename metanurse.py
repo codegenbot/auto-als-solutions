@@ -34,7 +34,9 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -75,14 +77,15 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(2)
+            if vitals["HR"] > 150 and events[28] == 0:  # Check if tachyarrhythmia is unstable
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        take_action(16)
+        take_action(48)
+        break
     else:
         take_action(48)
 
