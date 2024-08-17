@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -37,7 +36,7 @@ def stabilize():
         ):
             take_action(17)
             continue
-
+        
         if not events[3] and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
@@ -57,10 +56,10 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-
+            
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24) 
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
@@ -85,7 +84,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
