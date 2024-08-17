@@ -12,7 +12,7 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
-    
+
         events = observations[:33]
         measurement_times = observations[33:40]
         measurements = observations[40:]
