@@ -62,7 +62,7 @@ def stabilize():
             take_action(16)
             examined.add("ViewMonitor")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
