@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
-
     for step in range(steps):
         try:
             observations = list(map(float, input().strip().split()))
@@ -17,87 +16,83 @@ def stabilize():
             take_action(0)
             continue
 
-        # Parse events and observations
         events = observations[:33]
-        measured_recent = observations[33:40]
         measurements = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if measured_recent[0] > 0 else None,
-            "RR": measurements[1] if measured_recent[1] > 0 else None,
-            "Glucose": measurements[2] if measured_recent[2] > 0 else None,
-            "Temp": measurements[3] if measured_recent[3] > 0 else None,
-            "MAP": measurements[4] if measured_recent[4] > 0 else None,
-            "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
+            "HR": measurements[0] if observations[33] > 0 else None,
+            "RR": measurements[1] if observations[34] > 0 else None,
+            "Glucose": measurements[2] if observations[35] > 0 else None,
+            "Temp": measurements[3] if observations[36] > 0 else None,
+            "MAP": measurements[4] if observations[37] > 0 else None,
+            "Sats": measurements[5] if observations[38] > 0 else None,
+            "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        # Immediate stabilization if critical
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # StartChestCompression
+            take_action(17)
             continue
 
-        # Check Airway
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # ExamineAirway
+            take_action(3)
             examined.add("Airway")
             continue
 
-        # Attach and check SATS probe
-        if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)  # UseSatsProbe
+        if "Sats" not in examined and vitals["Sats"] is None:
+            take_action(25)
             examined.add("Sats")
             continue
 
-        # Attach and check Blood Pressure Cuff
-        if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)  # UseBloodPressureCuff
+        if "MAP" not in examined and vitals["MAP"] is None:
+            take_action(27)
             examined.add("MAP")
             continue
 
-        # Examine Breathing
         if "Breathing" not in examined:
-            take_action(4)  # ExamineBreathing
+            take_action(4)
             examined.add("Breathing")
             continue
 
-        # Treat low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
-        # Treat low MAP
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
-        # Treat low respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
-        # Check and treat rhythm issues
-        rhythm_events = [events[i] for i in range(27, 33)]
+        rhythm_events = [
+            events[27], events[28], events[29], events[30], events[31], events[32]
+        ]
         if any(rhythm_events):
-            take_action(24)  # UseMonitorPads
+            take_action(24)
             continue
 
-        # Treat heart rate issues
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # UseMonitorPads
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
+                take_action(12)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)  # GiveAdenosine
+                take_action(9)
                 continue
 
-        take_action(48)  # Finish
-        break
+        for action in [1, 2, 6, 7, 8, 16]:
+            if action not in examined:
+                take_action(action)
+                examined.add(action)
+                break
+        else:
+            take_action(48)
+            break
     else:
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
