@@ -53,9 +53,23 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if "MapSatsChecked" not in examined:
-            take_action(16)
-            examined.add("MapSatsChecked")
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
+            continue
+
+        if vitals["RR"] and vitals["RR"] > 25:
+            take_action(29)
+            continue
+
+        if "Disability" not in examined:
+            take_action(6)
+            examined.add("Disability")
+            continue
+
+        if "Exposure" not in examined:
+            take_action(7)
+            examined.add("Exposure")
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
