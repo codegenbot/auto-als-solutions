@@ -59,21 +59,22 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        if "RR" not in examined and vitals["RR"] is None:
-            take_action(4)  # Examine Breathing again for accurate RR
-            examined.add("RR")
-            continue
-
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        if "HR" not in examined and vitals["HR"] is None:
+            take_action(2)  # Check Rhythm
+            examined.add("HR")
+            continue
+
+        if vitals["HR"] and any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads
+            continue
+
         if vitals["HR"]:
-            if any(events[i] for i in range(28, 33)):
-                take_action(24)  # Use Monitor Pads
-                continue
             if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads
+                take_action(24)  # Use Monitor Pads for cardioversion
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
@@ -81,14 +82,11 @@ def stabilize():
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
                 continue
-
-        if all([
-            vitals["Sats"] is not None, vitals["Sats"] >= 88,
-            vitals["MAP"] is not None, vitals["MAP"] >= 60,
-            vitals["RR"] is not None, vitals["RR"] >= 8
-        ]):
-            take_action(48)  # Finish
-            break
+        
+        if events[19]:  # HeartSoundsNormal
+            if vitals["HR"] and vitals["RR"] and vitals["MAP"] and vitals["Sats"] and vitals["RR"] >= 8 and vitals["MAP"] >= 60 and vitals["Sats"] >= 88:
+                take_action(48)  # Finish
+                break
 
 if __name__ == "__main__":
     stabilize()
