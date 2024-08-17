@@ -29,11 +29,11 @@ def stabilize():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
-
+        
         if not events[3]:  # If AirwayClear hasn't been detected:
             take_action(3)  # Examine Airway
             continue
-
+        
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
@@ -51,7 +51,7 @@ def stabilize():
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
-
+        
         if "HR" not in examined and vitals["HR"] is None:
             take_action(24)  # Use Monitor Pads
             examined.add("HR")
