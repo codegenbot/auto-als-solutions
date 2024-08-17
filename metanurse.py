@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,12 +9,11 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except Exception:
+        except:
             take_action(48)
             sys.exit()
 
     steps, examined = 350, set()
-    airway_cleared = False
 
     for _ in range(steps):
         observations = get_observations()
@@ -35,14 +35,15 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if not airway_cleared:
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
-            airway_cleared = True
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined:
@@ -50,40 +51,46 @@ def stabilize():
             examined.add("Sats")
             continue
 
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
-            continue
-
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
+        if vitals["RR"] is None and "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
+            continue
+
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
+        if any(events[27:33]) and "MonitorPads" not in examined:
+            take_action(24)
+            examined.add("MonitorPads")
+            continue
+
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
