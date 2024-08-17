@@ -59,13 +59,10 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-
-        if events[12] > 0:
-            if not vitals["Sats"]:
-                take_action(16)
-                continue
-
-            take_action(29)
+        
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -86,7 +83,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(2)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
