@@ -5,60 +5,48 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps = 350
-    examined = set()
-    actions = []
-
-    def check_measurements(vitals, measurement_times):
-        measures = ["HR", "RR", "Glucose", "Temp", "MAP", "Sats", "Resps"]
-        for i, measure in enumerate(measures):
-            if measure not in examined and measurement_times[i] == 0:
-                return actions_dict[measure]
-        return None
-
-    actions_dict = {
-        "MAP": 27,
-        "Sats": 25,
-        "HR": 16,
-    }
-
+    steps, examined = 350, set()
     for step in range(steps):
-        observations = list(map(float, input().strip().split()))
+        try:
+            observations = list(map(float, input().strip().split()))
+        except:
+            take_action(48)
+            return
+        
         if len(observations) != 53:
             take_action(0)
             continue
 
         events = observations[:33]
-        measurement_times = observations[33:40]
-        measurements = observations[40:]
+        measurements = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if measurement_times[0] else None,
-            "RR": measurements[1] if measurement_times[1] else None,
-            "Glucose": measurements[2] if measurement_times[2] else None,
-            "Temp": measurements[3] if measurement_times[3] else None,
-            "MAP": measurements[4] if measurement_times[4] else None,
-            "Sats": measurements[5] if measurement_times[5] else None,
-            "Resps": measurements[6] if measurement_times[6] else None,
+            "HR": measurements[0] if observations[33] > 0 else None,
+            "RR": measurements[1] if observations[34] > 0 else None,
+            "Glucose": measurements[2] if observations[35] > 0 else None,
+            "Temp": measurements[3] if observations[36] > 0 else None,
+            "MAP": measurements[4] if observations[37] > 0 else None,
+            "Sats": measurements[5] if observations[38] > 0 else None,
+            "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if "Airway" not in examined:
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        meas_action = check_measurements(vitals, measurement_times)
-        if meas_action:
-            take_action(meas_action)
-            vital_str = [k for k, v in actions_dict.items() if v == meas_action][0]
-            examined.add(vital_str)
+        if "Sats" not in examined and vitals["Sats"] is None:
+            take_action(25)
+            examined.add("Sats")
             continue
 
-        if not any(events[3:7]):
+        if "MAP" not in examined and vitals["MAP"] is None:
+            take_action(27)
+            examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
@@ -66,26 +54,32 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"] is not None:
+        if "HR" not in examined and vitals["HR"] is None:
+            take_action(2)
+            examined.add("HR")
+            continue
+
+        if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(2)
-                if any(events[28:32]):
-                    take_action(24)
-                    continue
+                take_action(24)
+                continue
             elif vitals["HR"] < 50:
                 take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
                 continue
 
         take_action(48)
