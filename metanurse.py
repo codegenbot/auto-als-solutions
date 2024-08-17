@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,7 +7,7 @@ def stabilize():
 
     steps = 350
     actions_taken = set()
-
+    
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
 
@@ -30,9 +29,7 @@ def stabilize():
             "Resps": measurements[6] if timestamps[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -40,7 +37,7 @@ def stabilize():
             take_action(3)
             actions_taken.add("ExamineAirway")
             continue
-
+        
         if any(events[3:7]):
             if events[5] or events[4]:
                 take_action(31)
@@ -57,7 +54,7 @@ def stabilize():
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
@@ -71,7 +68,7 @@ def stabilize():
             take_action(25)
             actions_taken.add("UseSatsProbe")
             continue
-
+        
         if "UseBloodPressureCuff" not in actions_taken:
             take_action(27)
             actions_taken.add("UseBloodPressureCuff")
@@ -111,7 +108,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
