@@ -77,7 +77,7 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 and events[28] == 0:
+            if vitals["HR"] > 150 and events[28] == 0:  # Check if tachyarrhythmia is unstable
                 take_action(17)
                 continue
             elif vitals["HR"] < 50:
