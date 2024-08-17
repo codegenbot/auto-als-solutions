@@ -38,7 +38,7 @@ def stabilize():
             take_action(17)
             continue
 
-        if not any(events[3:7]) and "Airway" not in examined:
+        if "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
@@ -47,30 +47,27 @@ def stabilize():
             take_action(25)
             examined.add("Sats")
             continue
+
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
 
-        if "Breathing" not in examined:
+        if vitals["RR"] is None and "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if (vitals["RR"] is not None and vitals["RR"] < 8):
             take_action(29)
-            continue
-
-        if any(events[i] > 0 for i in [28, 29, 31, 32]):
-            take_action(24)
             continue
 
         if vitals["HR"]:
