@@ -1,85 +1,76 @@
 import sys
 
+DO_NOTHING, EXAMINE_AIRWAY, EXAMINE_BREATHING, EXAMINE_CIRCULATION, USE_BP_CUFF, USE_SATS_PROBE, USE_NON_REBREATHER_MASK, GIVE_FLUIDS, PERFORM_CARDIOVERSION, FINISH = 0, 3, 4, 5, 27, 25, 30, 15, 24, 48
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    steps, examined = 350, set()
+    steps, examined, monitor_checked = 350, set(), False
     for step in range(steps):
-        try:
-            observations = list(map(float, input().strip().split()))
-        except:
-            take_action(48)
-            return
+        observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(DO_NOTHING)
             continue
 
-        events = observations[:33]
-        measurements = observations[46:]
+        events, measuring_times, measurements = observations[:33], observations[33:40], observations[46:]
+        vitals = ["HR", "RR", "Glucose", "Temp", "MAP", "Sats", "Resps"]
+        vitals_dict = {vitals[i]: measurements[i] if measuring_times[i] > 0 else None for i in range(7)}
 
-        vitals = {
-            "HR": measurements[0] if observations[33] > 0 else None,
-            "RR": measurements[1] if observations[34] > 0 else None,
-            "Glucose": measurements[2] if observations[35] > 0 else None,
-            "Temp": measurements[3] if observations[36] > 0 else None,
-            "MAP": measurements[4] if observations[37] > 0 else None,
-            "Sats": measurements[5] if observations[38] > 0 else None,
-            "Resps": measurements[6] if observations[39] > 0 else None,
-        }
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+        if (vitals_dict["Sats"] and vitals_dict["Sats"] < 65) or (vitals_dict["MAP"] and vitals_dict["MAP"] < 20):
+            take_action(PERFORM_CARDIOVERSION)
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(EXAMINE_AIRWAY)
             examined.add("Airway")
             continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)
+        if "Sats" not in examined and vitals_dict["Sats"] is None:
+            take_action(USE_SATS_PROBE)
             examined.add("Sats")
             continue
 
-        if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)
+        if "MAP" not in examined and vitals_dict["MAP"] is None:
+            take_action(USE_BP_CUFF)
             examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
-            take_action(4)
+            take_action(EXAMINE_BREATHING)
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+        if not monitor_checked:
+            take_action(EXAMINE_CIRCULATION)
+            monitor_checked = True
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+        if vitals_dict["Sats"] and vitals_dict["Sats"] < 88:
+            take_action(USE_NON_REBREATHER_MASK)
             continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+        if vitals_dict["MAP"] and vitals_dict["MAP"] < 60:
+            take_action(GIVE_FLUIDS)
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150:
-                take_action(24)
+        if vitals_dict["RR"] and vitals_dict["RR"] < 8:
+            take_action(USE_NON_REBREATHER_MASK)
+            continue
+
+        if vitals_dict["HR"]:
+            if vitals_dict["HR"] > 150:
+                take_action(PERFORM_CARDIOVERSION)
                 continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
+            elif vitals_dict["HR"] < 50:
+                take_action(GIVE_FLUIDS)
                 continue
 
-        take_action(48)
+        take_action(FINISH)
         break
     else:
-        take_action(48)
+        take_action(FINISH)
 
 if __name__ == "__main__":
     stabilize()
