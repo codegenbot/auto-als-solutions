@@ -1,3 +1,5 @@
+import sys
+
 def stabilize():
     def take_action(action):
         print(action)
