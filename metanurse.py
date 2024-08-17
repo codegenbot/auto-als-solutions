@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -12,23 +13,38 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    steps, examined, actions = 350, set(), {
-        "ExamineAirway": 3, "ExamineBreathing": 4, "ExamineCirculation": 5, 
-        "UseSatsProbe": 25, "UseBloodPressureCuff": 27, "ViewMonitor": 16,
-        "UseNonRebreatherMask": 30, "GiveFluids": 15, "UseBagValveMask": 29,
-        "GiveAtropine": 12, "GiveAdenosine": 9, "StartChestCompression": 17, 
-        "UseMonitorPads": 24, "Finish": 48
-    }
-    
+    steps, examined, actions = (
+        350,
+        set(),
+        {
+            "ExamineAirway": 3,
+            "ExamineBreathing": 4,
+            "ExamineCirculation": 5,
+            "UseSatsProbe": 25,
+            "UseBloodPressureCuff": 27,
+            "ViewMonitor": 16,
+            "UseNonRebreatherMask": 30,
+            "GiveFluids": 15,
+            "UseBagValveMask": 29,
+            "GiveAtropine": 12,
+            "GiveAdenosine": 9,
+            "StartChestCompression": 17,
+            "Finish": 48,
+            "CheckSignsOfLife": 1,
+        },
+    )
+
     for _ in range(steps):
         observations = get_observations()
         if len(observations) != 53:
             take_action(0)
             continue
 
-        events = observations[:33]
-        measured_recent = observations[33:40]
-        measurements = observations[46:]
+        events, measured_recent, measurements = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -66,6 +82,10 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if vitals["MAP"] is None or vitals["Sats"] is None:
+            take_action(actions["ViewMonitor"])  # Always get measurements
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(actions["UseNonRebreatherMask"])
             continue
@@ -78,9 +98,8 @@ def stabilize():
             take_action(actions["UseBagValveMask"])
             continue
 
-        if vitals["HR"] is not None:
+        if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(actions["UseMonitorPads"])
                 take_action(actions["GiveAdenosine"])
                 continue
             elif vitals["HR"] < 50:
@@ -91,6 +110,7 @@ def stabilize():
         break
     else:
         take_action(actions["Finish"])
+
 
 if __name__ == "__main__":
     stabilize()
