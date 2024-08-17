@@ -78,10 +78,9 @@ def stabilize():
             take_action(2)
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 100:
-                take_action(9)
-                continue
+        if vitals["HR"] and vitals["HR"] > 100:
+            take_action(9)
+            continue
 
         take_action(48)
         break
