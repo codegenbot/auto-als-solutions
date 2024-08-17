@@ -72,7 +72,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(2)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
