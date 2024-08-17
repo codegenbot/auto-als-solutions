@@ -11,7 +11,7 @@ def stabilize():
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)  # DoNothing
+            take_action(0)
             continue
 
         events = observations[:33]
@@ -29,53 +29,53 @@ def stabilize():
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # Start Chest Compression
+            take_action(17)
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # Examine Airway
+            take_action(3)
             examined.add("Airway")
             continue
 
         if events[3] and not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
+            take_action(4)
             examined.add("Breathing")
             continue
 
         if "Breathing" in examined and "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             examined.add("Sats")
             continue
 
         if "Sats" in examined and "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             examined.add("MAP")
             continue
 
         if "MAP" in examined and vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if "Sats" in examined and vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
+            take_action(29)
             continue
 
         if events[3] and vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
+                take_action(12)
                 continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
