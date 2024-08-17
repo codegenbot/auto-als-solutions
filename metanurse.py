@@ -89,18 +89,19 @@ def stabilize():
                 take_action(12)
                 continue
 
-        if not set(examined).intersection({"Monitor"}):
+        if "Monitor" not in examined:
             take_action(16)
             examined.add("Monitor")
             continue
 
-        if not set(examined).intersection({"MAP"}):
+        if "BPChecked" not in examined:
             take_action(38)
-            examined.add("MAP")
+            examined.add("BPChecked")
             continue
 
-        if not set(examined).intersection({"SatsProbe"}):
+        if "SatsProbeUsed" not in examined:
             take_action(25)
+            examined.add("SatsProbeUsed")
             continue
 
         take_action(48)
