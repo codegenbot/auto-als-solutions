@@ -8,11 +8,11 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except:
+        except Exception:
             take_action(48)
             sys.exit()
 
-    steps, examined, actions_taken = 350, set(), set()
+    steps, examined = 350, set()
 
     for _ in range(steps):
         observations = get_observations()
@@ -22,7 +22,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[40:]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -34,17 +34,18 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        # Cardiac arrest criteria
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Airway assessment
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
+        # Saturation and MAP assessment
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
@@ -55,53 +56,41 @@ def stabilize():
             examined.add("MAP")
             continue
 
+        # Breathing assessment
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if events[12] > 0 and "BreathingBibasalCrepitations" not in examined:
-            take_action(29)
-            examined.add("BreathingBibasalCrepitations")
-            continue
-
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        # Improve oxygenation if needed
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if "GiveFluids" not in actions_taken:
-                take_action(15)
-                actions_taken.add("GiveFluids")
-                continue
+        # Handle hypotension
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
+            take_action(15)
+            continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        # Check respiratory rate if it's lower than required
+        if (vitals["RR"] is not None and vitals["RR"] < 8):
             take_action(29)
             continue
 
+        # Handling unstable tachyarrhythmia if it exists
         if set(events[27:33]) & {i for i in range(27, 33)}:
             take_action(24)
             continue
 
+        # Check for elevated heart rate
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        take_action(16)  # View monitor to check BP and monitor rhythm
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
-
-        examined.add("MAPCheck")
         take_action(48)
         break
     else:
