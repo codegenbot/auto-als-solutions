@@ -91,8 +91,10 @@ def stabilize():
                 take_action(12)
                 continue
 
-        take_action(0)
-    take_action(48)
+        take_action(48)
+        break
+    else:
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
