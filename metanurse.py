@@ -23,7 +23,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[46:]
+        measurements = observations[40:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -71,11 +71,6 @@ def stabilize():
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
             continue
 
         rhythm_events = [events[i] for i in range(27, 33)]
