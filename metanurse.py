@@ -27,15 +27,17 @@ def stabilize():
             "Resps": measurements[6] if measurement_time[6] else None,
         }
 
+        # Check for immediate cardiac arrest risk
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
+        # ABCDE Assessment
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
-
+        
         if events[3]:  # AirwayClear
             if events[8]:  # BreathingSnoring
                 take_action(36)  # Perform Head Tilt Chin Lift
@@ -44,6 +46,11 @@ def stabilize():
                 take_action(4)  # Examine Breathing
                 examined.add("Breathing")
                 continue
+
+        if not any([events[9], events[10], events[12], events[13], events[14]]) and "BreathingTreatment" not in examined:
+            take_action(19)  # OpenBreathingDrawer
+            examined.add("BreathingTreatment")
+            continue
 
         if "Sats" not in examined:
             take_action(25)  # Use Sats Probe
@@ -60,10 +67,6 @@ def stabilize():
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            if "BreathingEquipment" not in examined:
-                take_action(19)  # Open Breathing Drawer
-                examined.add("BreathingEquipment")
-                continue
             take_action(30)  # Use Non Rebreather Mask
             continue
 
@@ -73,11 +76,7 @@ def stabilize():
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150 or vitals["HR"] < 50:
-                if "MonitorPads" not in examined:
-                    take_action(24)  # Use Monitor Pads
-                    examined.add("MonitorPads")
-                    continue
-                take_action(40)  # Defibrillator Charge
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
 
         take_action(48)  # Finish
