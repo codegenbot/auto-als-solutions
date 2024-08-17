@@ -44,7 +44,7 @@ def stabilize():
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
-        
+
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
