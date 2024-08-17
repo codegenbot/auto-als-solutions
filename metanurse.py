@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -30,7 +31,9 @@ def stabilize():
             "Resps": measurements[6] if vitals_measure_times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -66,13 +69,13 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[11]:  # Handling bibasal crepitations
-            take_action(29)  # Bag-valve mask ventilation
+        if events[11]:
+            take_action(29)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Cardiovert for unstable tachyarrhythmia
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
@@ -85,6 +88,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
