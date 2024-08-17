@@ -68,7 +68,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(24)  # Use Monitor Pads
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
 
         take_action(48)  # Finish
