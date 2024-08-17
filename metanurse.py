@@ -5,14 +5,17 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps, examined = 350, set()
-
-    for step in range(steps):
+    def get_observations():
         try:
-            observations = list(map(float, input().strip().split()))
+            return list(map(float, input().strip().split()))
         except:
             take_action(48)
-            return
+            sys.exit()
+
+    steps, examined = 350, set()
+
+    for _ in range(steps):
+        observations = get_observations()
         if len(observations) != 53:
             take_action(0)
             continue
@@ -31,7 +34,9 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -39,9 +44,6 @@ def stabilize():
             take_action(3)
             examined.add("Airway")
             continue
-
-        if events[3] > 0:
-            examined.add("Airway")
 
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
@@ -58,6 +60,11 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -66,21 +73,21 @@ def stabilize():
             take_action(15)
             continue
 
-        if events[11] > 0:
-            take_action(29)
-            continue
-
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if any(events[27:33]):
-            take_action(2)
+        if set(events[27:33]) & {i for i in range(27, 33)}:
+            take_action(24)
             continue
 
-        if vitals["HR"] and vitals["HR"] > 100:
-            take_action(9)
-            continue
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(17)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
 
         take_action(48)
         break
