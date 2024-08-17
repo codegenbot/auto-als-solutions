@@ -61,9 +61,10 @@ def stabilize():
             continue
 
         if events[12] > 0:
-            if vitals["Sats"] is None:
+            if not vitals["Sats"]:
                 take_action(16)
                 continue
+
             take_action(29)
             continue
 
