@@ -1,13 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     steps, examined = 350, set()
-
+    
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -27,9 +26,7 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -69,10 +66,8 @@ def stabilize():
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
-
-        if any(
-            events[i] for i in [28, 29, 30, 31]
-        ):  # Heart arrhythmia events needing cardioversion
+        
+        if any(events[i] for i in [28, 29, 30, 31]):  # Heart arrhythmia events needing cardioversion
             take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
 
@@ -85,7 +80,6 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
