@@ -14,22 +14,24 @@ def stabilize():
             continue
 
         events = observations[:33]
+        last_measured = observations[33:40]
         values = observations[46:]
 
         vitals = {
-            "HR": values[0] if observations[33] > 0 else None,
-            "RR": values[1] if observations[34] > 0 else None,
-            "Glucose": values[2] if observations[35] > 0 else None,
-            "Temp": values[3] if observations[36] > 0 else None,
-            "MAP": values[4] if observations[37] > 0 else None,
-            "Sats": values[5] if observations[38] > 0 else None,
-            "Resps": values[6] if observations[39] > 0 else None,
+            "HR": values[0] if observations[40] > 0 else None,
+            "RR": values[1] if observations[41] > 0 else None,
+            "Glucose": values[2] if observations[42] > 0 else None,
+            "Temp": values[3] if observations[43] > 0 else None,
+            "MAP": values[4] if observations[44] > 0 else None,
+            "Sats": values[5] if observations[45] > 0 else None,
+            "Resps": values[6] if observations[46] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
+        # Airway check (Examine Airway if never examined)
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
