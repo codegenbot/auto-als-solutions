@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,11 +27,12 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
-        # A - Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
@@ -45,10 +47,18 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        # B - Breathing
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
+            continue
+
+        if "MAP" not in examined and vitals["MAP"] is None:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined.add("MAP")
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -59,24 +69,9 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # C - Circulation
-        if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
-            examined.add("MAP")
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
-
-        # Check for arrhythmia
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads
-            continue
-
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
+                take_action(24)  # Use Monitor Pads
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
@@ -89,6 +84,7 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
