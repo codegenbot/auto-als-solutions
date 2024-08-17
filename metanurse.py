@@ -40,20 +40,20 @@ def stabilize():
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
-        
+
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
-        if "Breathing" not in examined:
+        if any(events[3:7]) and "Breathing" not in examined:
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
-
-        if "Circulation" not in examined:
-            take_action(5)  # Examine Circulation
-            examined.add("Circulation")
+        
+        if "HR" not in examined and vitals["HR"] is None:
+            take_action(2)  # Check Rhythm
+            examined.add("HR")
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -68,17 +68,22 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
-                continue
+        if vitals["HR"] and vitals["HR"] > 150:
+            take_action(24)  # Use Monitor Pads (for cardioversion)
+            continue
 
-        take_action(16)  # View Monitor to see vitals progress
-        if step >= 349:
-            take_action(48)  # Finish
+        if vitals["RR"] and vitals["RR"] > 20:
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        if vitals["HR"] and vitals["HR"] < 50:
+            take_action(12)  # Give Atropine
+            continue
+
+        take_action(48)  # Finish
+        break
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
