@@ -29,32 +29,27 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        # Check for cardiac arrest condition
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Perform ABCDE assessment
-        if not any(events[3:7]) and "Airway" not in examined:
+        if not any(events[3:7]) and not vitals["Sats"] and not vitals["MAP"] and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
-        
+
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)
+            take_action(4)
             examined.add("Sats")
             continue
-        
+
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)
+            take_action(5)
             examined.add("MAP")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-        
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -67,15 +62,26 @@ def stabilize():
             take_action(29)
             continue
 
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
             continue
 
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
+        if "CirculationTouch" not in examined:
+            take_action(5)
+            examined.add("CirculationTouch")
             continue
+
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
 
         take_action(48)
         break
