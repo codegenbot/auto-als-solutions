@@ -35,12 +35,12 @@ def stabilize():
             take_action(actions.pop(0))
             continue
 
-        if "Airway" not in examined:
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
+        if not any(events[7:15]) and "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
