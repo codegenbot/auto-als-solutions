@@ -30,69 +30,60 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Cardiac arrest -> Start CPR
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
 
         if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)
+            take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
         if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
-            take_action(4)
+            take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use Non-Rebreather Mask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use Bag-Valve-Mask
             continue
 
-        rhythm_events = [
-            events[27], events[28], events[29], events[30], events[31], events[32]
-        ]
-        if any(rhythm_events):
-            take_action(24)
+        if any(events[27:33]):  # Rhythm events indicating arrhythmia
+            take_action(24)  # Use Monitor Pads
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24)  # Use Monitor Pads
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # Give Atropine
                 continue
-            elif vitals["HR"] > 100:
-                take_action(9)
+            elif vitals["HR"] > 100:  # Address tachyarrhythmia
+                take_action(9)   # Give Adenosine
                 continue
 
-        for action in [1, 2, 6, 7, 8, 16]:
-            if action not in examined:
-                take_action(action)
-                examined.add(action)
-                break
-        else:
-            take_action(48)
-            break
+        take_action(48)  # Finish
+        break
     else:
-        take_action(48)
+        take_action(48)  # Finish after max steps
 
 if __name__ == "__main__":
     stabilize()
