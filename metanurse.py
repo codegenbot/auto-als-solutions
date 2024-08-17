@@ -7,11 +7,7 @@ def stabilize():
         sys.stdout.flush()
 
     def get_observations():
-        try:
-            return list(map(float, input().strip().split()))
-        except:
-            take_action(48)
-            sys.exit()
+        return list(map(float, input().strip().split()))
 
     steps, examined = 350, set()
 
@@ -46,11 +42,6 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
@@ -59,6 +50,11 @@ def stabilize():
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
+            continue
+
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
