@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
-
+    
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -68,17 +68,27 @@ def stabilize():
             continue
 
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
+            take_action(24)  # Use Monitor Pads
             continue
 
         if vitals["HR"]:
             if vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
                 continue
-
-            if vitals["HR"] > 150:
-                take_action(1)  # Check Signs of Life
+            elif vitals["HR"] > 150:
+                take_action(9)  # Give Adenosine
                 continue
+
+        # Perform full ABCDE check
+        if "Disability" not in examined:
+            take_action(6)  # Examine Disability
+            examined.add("Disability")
+            continue
+
+        if "Exposure" not in examined:
+            take_action(7)  # Examine Exposure
+            examined.add("Exposure")
+            continue
 
         take_action(48)  # Finish
         break
