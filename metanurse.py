@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -35,7 +36,8 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20):
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -59,11 +61,11 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is None:
-            take_action(16)
+        if events[12] > 0:
+            take_action(29)
             continue
-        
-        if vitals["Sats"] < 88:
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
@@ -75,22 +77,24 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[27:33]):  # Unstable rhythms
+        if any(events[27:32]):
             take_action(24)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        take_action(48)
-        break
+        take_action(16)
+        continue
+
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
