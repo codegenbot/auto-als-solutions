@@ -29,10 +29,12 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
+        # Check for cardiac arrest condition
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Perform ABCDE assessment
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
