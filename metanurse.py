@@ -34,60 +34,68 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
+            take_action(17)  # Start chest compressions
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(3)  # Examine airway
             examined.add("Airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             examined.add("Sats")
-            continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["RR"] is None and "Breathing" not in examined:
-            take_action(4)
+        if "Breathing" not in examined:
+            take_action(4)  # Examine breathing
             examined.add("Breathing")
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        if events[12] > 0:
+            if vitals["Sats"] is None:
+                take_action(16)  # View monitor
+                continue
+            take_action(29)  # Use bag valve mask
             continue
 
-        if "ViewMonitor" not in examined and "MAP" in examined and "Sats" in examined:
-            take_action(16)
-            examined.add("ViewMonitor")
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use non-rebreather mask
+            continue
+
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use bag valve mask
             continue
 
         if any(events[27:33]):
-            take_action(24)
+            take_action(24)  # Use defibrillator (e.g., for arrhythmias)
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(17)  # Start chest compressions
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # Give atropine
                 continue
 
-        take_action(48)
+        if "MAP" not in measured_recent and "Sats" not in measured_recent:
+            take_action(16)  # View monitor
+            continue
+
+        take_action(48)  # Finish
         break
     else:
         take_action(48)
