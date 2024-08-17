@@ -53,6 +53,10 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if vitals["Sats"] is None or vitals["MAP"] is None:
+            take_action(16)  # View Monitor to see SATs and MAP values
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
@@ -61,14 +65,22 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        if any(events[27:33]):  # Rhythm events indicating arrhythmia
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)  # Use Bag-Valve-Mask
+            continue
+
+        if events[29]:  # SVT (Stable Tachyarrhythmia)
+            take_action(9)  # Give Adenosine
+            continue
+
+        if events[31]:  # VT (Unstable Tachyarrhythmia)
+            take_action(28)  # Attach Defibrillator Pads
+            continue
+
+        if vitals["HR"] is not None and vitals["HR"] > 150:
             take_action(24)  # Use Monitor Pads
             continue
 
-        if vitals["HR"] is not None and vitals["HR"] > 150:  # Address tachyarrhythmia
-            take_action(24)  # Use Monitor Pads
-            continue
-        
         take_action(48)  # Finish
         break
     else:
