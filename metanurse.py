@@ -55,7 +55,7 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if vitals["RR"] is None and "Breathing" not in examined:
+        if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
@@ -77,12 +77,27 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 and events[28] == 0:  # Check if tachyarrhythmia is unstable
+            if vitals["HR"] > 150 and events[28] == 0:
                 take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
+
+        if "ExamineCirculation" not in examined:
+            take_action(5)
+            examined.add("ExamineCirculation")
+            continue
+
+        if "Disability" not in examined:
+            take_action(6)
+            examined.add("Disability")
+            continue
+
+        if "Exposure" not in examined:
+            take_action(7)
+            examined.add("Exposure")
+            continue
 
         take_action(48)
         break
