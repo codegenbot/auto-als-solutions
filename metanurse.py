@@ -6,85 +6,78 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
+
     for step in range(steps):
-        try:
-            observations = list(map(float, input().strip().split()))
-        except:
-            take_action(48)
-            return
+        observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
-        measurements = observations[46:]
+        measurement_times = observations[33:40]
+        measurements = observations[40:]
 
         vitals = {
-            "HR": measurements[0] if observations[33] > 0 else None,
-            "RR": measurements[1] if observations[34] > 0 else None,
-            "Glucose": measurements[2] if observations[35] > 0 else None,
-            "Temp": measurements[3] if observations[36] > 0 else None,
-            "MAP": measurements[4] if observations[37] > 0 else None,
-            "Sats": measurements[5] if observations[38] > 0 else None,
-            "Resps": measurements[6] if observations[39] > 0 else None,
+            "HR": measurements[0] if measurement_times[0] else None,
+            "RR": measurements[1] if measurement_times[1] else None,
+            "Glucose": measurements[2] if measurement_times[2] else None,
+            "Temp": measurements[3] if measurement_times[3] else None,
+            "MAP": measurements[4] if measurement_times[4] else None,
+            "Sats": measurements[5] if measurement_times[5] else None,
+            "Resps": measurements[6] if measurement_times[6] else None,
         }
 
+        # Check for immediate critical conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start Chest Compression
             continue
 
+        # Airway Assessment
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
 
+        # Breathing Assessment
+        if "Breathing" not in examined:
+            take_action(4)  # Examine Breathing
+            examined.add("Breathing")
+            continue
+        
+        # Check Oxygen Saturation
         if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)
+            take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)  # Use Non Rebreather Mask
+            continue
 
+        # Circulation Assessment
         if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)
+            take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["HR"]:
+        # Check and Treat Tachyarrhythmia
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(12)  # Give Atropine
                 continue
 
-        if "HR" not in examined:
-            take_action(2)
-            examined.add("HR")
-            continue
-
-        take_action(48)
+        # Stabilized
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
