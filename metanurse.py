@@ -63,24 +63,26 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if events[19]:  # HeartSoundsNormal
-            if vitals["HR"]:
-                if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-                    take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
-                    continue
-                if vitals["HR"] > 150:
-                    take_action(24)  # Use Monitor Pads (for cardioversion)
-                    continue
-                elif vitals["HR"] < 50:
-                    take_action(12)  # Give Atropine
-                    continue
-                elif vitals["HR"] > 100:
-                    take_action(9)  # Give Adenosine
-                    continue
-        
-        if not vitals["HR"] or not vitals["RR"] or not vitals["MAP"] or not vitals["Sats"]:
-            take_action(48)  # Finish
-            break
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
+            continue
+
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)  # Use Monitor Pads (for cardioversion)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)  # Give Atropine
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # Give Adenosine
+                continue
+
+        take_action(48)  # Finish
+        break
+
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
