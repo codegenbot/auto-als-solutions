@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,7 +27,9 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -43,6 +46,10 @@ def stabilize():
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
+            continue
+
+        if not vitals["RR"]:
+            take_action(16)  # View Monitor after using SATs probe
             continue
 
         if events[3] and "Breathing" not in examined:
@@ -70,22 +77,15 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
                 continue
-            elif vitals["HR"] > 100 and "HR_ADENOSINE" not in examined:
-                examined.add("HR_ADENOSINE")
+            elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
                 continue
 
-        if all([
-            event_set in examined 
-            for event_set in ["Airway", "Sats", "MAP", "Breathing", "HR_MONITOR"]
-        ]) and \
-        (vitals["Sats"] is not None and vitals["Sats"] >= 88) and \
-        (vitals["MAP"] is not None and vitals["MAP"] >= 60) and \
-        (vitals["RR"] is not None and vitals["RR"] >= 8):
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
