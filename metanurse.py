@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -35,9 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -50,14 +47,14 @@ def stabilize():
             take_action(25)
             examined.add("Sats")
             continue
-        if vitals["RR"] is None and "RR" not in examined:
-            take_action(5)
-            examined.add("RR")
-            continue
-
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
+            continue
+
+        if vitals["RR"] is None and "RespRate" not in examined:
+            take_action(4)
+            examined.add("RespRate")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -68,25 +65,22 @@ def stabilize():
             take_action(15)
             continue
 
-        cardiac_events = [28, 29, 31, 32, 33, 35, 37, 39, 40, 42]
-        if any(events[i] > 0 for i in cardiac_events):
+        if events[29] > 0 or events[31] > 0 or events[32] > 0:
             take_action(24)
             continue
 
-        if all(
-            [
-                vitals["Sats"] is not None and vitals["Sats"] >= 88,
-                vitals["RR"] is not None and vitals["RR"] >= 8,
-                vitals["MAP"] is not None and vitals["MAP"] >= 60,
-            ]
-        ):
+        if all([
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,
+            vitals["RR"] is not None and vitals["RR"] >= 8,
+            vitals["MAP"] is not None and vitals["MAP"] >= 60
+        ]):
             take_action(48)
             break
 
         take_action(0)
+
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
