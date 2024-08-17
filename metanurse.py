@@ -43,24 +43,33 @@ def stabilize():
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
-
-        if "Sats" not in examined and vitals["Sats"] is None:
+        
+        # Use Monitor for Sats after examining breathing
+        if "Sats" not in examined:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
+        if vitals["Sats"] is None:
+            take_action(16)  # View Monitor
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
 
-        if events[11]:  # BreathingBibasalCrepitations
-            take_action(30)  # Use Non Rebreather Mask
+        if events[12]:  # BreathingWheeze
+            take_action(13)  # Give Midazolam
             continue
 
         # Circulation Assessment
-        if "MAP" not in examined and vitals["MAP"] is None:
+        if "MAP" not in examined:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
+            continue
+
+        if vitals["MAP"] is None:
+            take_action(16)  # View Monitor
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
@@ -77,9 +86,8 @@ def stabilize():
                 continue
 
         # Stabilized
-        if vitals["Sats"] >= 88 and vitals["RR"] >= 8 and vitals["MAP"] >= 60 and events[3]:
-            take_action(48)  # Finish
-            break
+        take_action(48)  # Finish
+        break
     else:
         take_action(48)  # Finish
 
