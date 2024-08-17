@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -27,8 +28,10 @@ def stabilize():
             "Resps": measurements[6] if timestamps[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(22)  # BagDuringCPR
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
+            take_action(17)
             continue
 
         if "Monitor" not in examined:
@@ -52,8 +55,11 @@ def stabilize():
             continue
 
         if any(events[3:7]):
-            if events[7] or events[8]:  # BreathingNone or BreathingSnoring
-                take_action(35)  # PerformAirwayManoeuvres
+            if events[7]:
+                take_action(29)
+                continue
+            if events[8]:
+                take_action(36)
                 continue
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
@@ -61,32 +67,33 @@ def stabilize():
                 continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+            take_action(15)
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
+            take_action(30)
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # UseBagValveMask
+            take_action(29)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # UseMonitorPads
+                take_action(24)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)  # GiveAdenosine
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # GiveAtropine
+                take_action(12)
                 continue
 
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
