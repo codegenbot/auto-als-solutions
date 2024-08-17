@@ -78,7 +78,7 @@ def stabilize():
                 take_action(24)  # Attach Defib Pads
                 continue
             elif vitals["HR"] > 100:
-                take_action(24)  # Attach Defib Pads
+                take_action(9)  # Give Adenosine
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
