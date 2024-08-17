@@ -59,6 +59,11 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
+        if "Circulation" not in examined:
+            take_action(5)  # Examine Circulation
+            examined.add("Circulation")
+            continue
+
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
