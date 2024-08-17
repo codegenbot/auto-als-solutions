@@ -16,10 +16,10 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)
             continue
-
+        
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[40:]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -36,8 +36,8 @@ def stabilize():
         ):
             take_action(17)
             continue
-        
-        if not events[3] and "Airway" not in examined:
+
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
@@ -56,18 +56,7 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-            
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24) 
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
-                continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -75,10 +64,21 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
+            
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
 
         take_action(48)
         break
