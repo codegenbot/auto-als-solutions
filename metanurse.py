@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -30,82 +29,74 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)  # Initiate CPR if critical measurements
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # Examine airway
+            take_action(3)
             examined.add("Airway")
             continue
 
         if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats probe
+            take_action(25)
             examined.add("Sats")
             continue
-
+        
         if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
-            take_action(4)  # Examine breathing
+            take_action(4)
             examined.add("Breathing")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids if MAP is low
+            take_action(15)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask if RR is low
+            take_action(29)
             continue
 
         if "CardiacRhythm" not in examined:
-            take_action(2)  # Check rhythm
+            take_action(2)
             examined.add("CardiacRhythm")
             continue
 
         if "Monitor" not in examined and vitals["Sats"] is None:
-            take_action(16)  # View Monitor to check saturation
+            take_action(16)
             examined.add("Monitor")
             continue
 
         rhythm_events = [
-            events[27],
-            events[28],
-            events[29],
-            events[30],
-            events[31],
-            events[32],
+            events[27], events[28], events[29], events[30], events[31], events[32]
         ]
         if any(rhythm_events):
-            take_action(24)  # Attach defib pads if any critical rhythm events occur
+            take_action(24)
             continue
-
+        
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Attach defib pads if HR > 150 (tachy)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # Give atropine if HR < 50 (brady)
+                take_action(12)
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)  # Give adenosine if HR > 100 (stable tachy)
+                take_action(9)
                 continue
 
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
