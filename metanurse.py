@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -14,6 +13,7 @@ def stabilize():
             sys.exit()
 
     steps, examined = 350, set()
+    airway_cleared = False
 
     for _ in range(steps):
         observations = get_observations()
@@ -35,15 +35,14 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if not any(events[3:7]) and "Airway" not in examined:
+        if not airway_cleared:
             take_action(3)
             examined.add("Airway")
+            airway_cleared = True
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined:
@@ -61,10 +60,6 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if events[12] > 0:
-            take_action(29)
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -77,10 +72,6 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(events[27:32]):
-            take_action(24)
-            continue
-
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
@@ -89,12 +80,10 @@ def stabilize():
                 take_action(12)
                 continue
 
-        take_action(16)
-        continue
-
+        take_action(48)
+        break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
