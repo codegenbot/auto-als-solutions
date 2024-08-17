@@ -29,7 +29,9 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -53,26 +55,20 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if "Circulation" not in examined and (vitals["HR"] is None or vitals["MAP"] is None):
-            take_action(16)
-            examined.add("Circulation")
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        heart_rhythm_abnormal = any(events[27:38])
-        if heart_rhythm_abnormal and vitals["HR"] and (vitals["HR"] > 100 or vitals["HR"] < 60):
-            take_action(24)
+        if any(v is None for v in vitals.values()):
+            take_action(16)  # ViewMonitor to re-evaluate remaining vitals
             continue
 
         take_action(48)
