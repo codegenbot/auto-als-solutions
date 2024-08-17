@@ -6,7 +6,11 @@ def stabilize():
         sys.stdout.flush()
 
     def get_observations():
-        return list(map(float, input().strip().split()))
+        try:
+            return list(map(float, input().strip().split()))
+        except:
+            take_action(48)
+            sys.exit()
 
     steps, examined = 350, set()
 
@@ -30,9 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -72,9 +74,9 @@ def stabilize():
             take_action(24)
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
