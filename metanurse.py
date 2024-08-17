@@ -76,8 +76,15 @@ def stabilize():
                 take_action(9)
                 continue
 
-        take_action(48)
-        break
+        if all([
+            events[3], 
+            vitals["Sats"] >= 88 if vitals["Sats"] is not None else False,
+            vitals["RR"] >= 8 if vitals["RR"] is not None else False,
+            vitals["MAP"] >= 60 if vitals["MAP"] is not None else False
+        ]):
+            take_action(48)
+            break
+
     else:
         take_action(48)
 
