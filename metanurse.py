@@ -5,7 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps, examined, actions = 350, set(), [16, 25, 27]
+    steps = 350
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
@@ -26,58 +26,32 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        # Check for immediate danger
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if actions:
-            take_action(actions.pop(0))
-            continue
-
-        if not any(events[3:7]) and "Airway" not in examined:
+        if not any(events[3:7]):
             take_action(3)
-            examined.add("Airway")
-            continue
-
-        if not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
-
-        # Treat based on vital signs
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
+        elif events[7]:
             take_action(29)
-            continue
-
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-
-        take_action(48)
-        break
-    else:
-        take_action(48)
+        elif events[8]:
+            take_action(36)
+        elif vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)
+        elif vitals["Sats"] is not None and vitals["Sats"] < 88:
+            take_action(30)
+        elif vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+        else:
+            if observations[33] <= 0:
+                take_action(16)
+            elif observations[38] <= 0:
+                take_action(25)
+            elif observations[39] <= 0:
+                take_action(27)
+            else:
+                take_action(48)
+                break
 
 if __name__ == "__main__":
     stabilize()
