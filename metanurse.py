@@ -30,61 +30,61 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)  # Cardiac arrest -> Start CPR
+            take_action(17)
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # Examine Airway
+            take_action(3)
             examined.add("Airway")
             continue
 
         if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
+            take_action(25)
             examined.add("Sats")
             continue
 
         if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
+            take_action(27)
             examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
+            take_action(4)
             examined.add("Breathing")
             continue
 
         if vitals["Sats"] is None or vitals["MAP"] is None:
-            take_action(16)  # View Monitor to see SATs and MAP values
+            take_action(16)
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use Non-Rebreather Mask
+            take_action(30)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+            take_action(15)
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve-Mask
+            take_action(29)
             continue
 
-        if events[29]:  # SVT (Stable Tachyarrhythmia)
-            take_action(9)  # Give Adenosine
+        if events[29]:
+            take_action(9)
             continue
 
-        if events[31]:  # VT (Unstable Tachyarrhythmia)
-            take_action(28)  # Attach Defibrillator Pads
+        if events[31]:
+            take_action(28)
             continue
 
         if vitals["HR"] is not None and vitals["HR"] > 150:
-            take_action(24)  # Use Monitor Pads
+            take_action(24)
             continue
 
-        take_action(48)  # Finish
+        take_action(48)
         break
     else:
-        take_action(48)  # Finish after max steps
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
