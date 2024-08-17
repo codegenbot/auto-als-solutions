@@ -8,7 +8,7 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except Exception:
+        except:
             take_action(48)
             sys.exit()
 
@@ -34,7 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -57,30 +57,30 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-
-        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
+        
+        if vitals["Sats"] is not None and (vitals["Sats"] < 88):
             take_action(30)
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if (vitals["RR"] is not None and vitals["RR"] < 8):
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if set(events[27:33]) & {i for i in range(27, 33)}:
-            take_action(24)
-            continue
-
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
+
+        if set(events[27:33]) & {27, 28, 29, 30, 31, 32}:
+            take_action(24)
+            continue
 
         take_action(48)
         break
