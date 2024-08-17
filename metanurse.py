@@ -57,13 +57,26 @@ def stabilize():
             take_action(36)  # Perform Head Tilt Chin Lift
             continue
 
-        if vitals["Sats"] is None or vitals["MAP"] is None:
-            examine_vitals()
-            continue
-
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
+
+        if not vitals["MAP"] or vitals["MAP"] < 60:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined.add("BPCuff")
+            continue
+
+        if "Monitor" not in examined:
+            take_action(16)  # View Monitor
+            examined.add("Monitor")
+            continue
+
+        if "SatsProbe" not in examined:
+            take_action(25)  # Use Sats Probe
+            examined.add("SatsProbe")
+            continue
+
+        examine_vitals()
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
@@ -71,6 +84,10 @@ def stabilize():
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag Valve Mask
+            continue
+
+        if any(events[i] for i in range(28, 33)):
+            take_action(24)  # Attach Defib Pads
             continue
 
         if vitals["HR"]:
