@@ -61,15 +61,15 @@ def stabilize():
                 continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
         if vitals["HR"]:
