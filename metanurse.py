@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined, current_action_idx = 350, set(), 0
-    actions = [16, 25, 27]  # Monitor, SatsProbe, BPCuff
+    actions = [16, 25, 27]  # ViewMonitor, UseSatsProbe, UseBloodPressureCuff
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
@@ -37,39 +37,46 @@ def stabilize():
             current_action_idx += 1
             continue
 
+        # Airway Exam
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # ExamineAirway
             examined.add("Airway")
             continue
 
-        if events[3]:
-            if events[8]:
-                take_action(36)  # PerformHeadTiltChinLift
-                continue
-            if not any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)  # ExamineBreathing
-                examined.add("Breathing")
-                continue
-
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
+        # Breathing Exam
+        if not events[8] and "Breathing" not in examined:
+            take_action(4)  # ExamineBreathing
+            examined.add("Breathing")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # UseNonRebreatherMask
-            continue
-
+        # Breathing Intervention
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # UseBagValveMask
             continue
 
-        if any(events[i] for i in range(28, 33)) or (vitals["HR"] and vitals["HR"] > 150):
-            take_action(24)  # UseMonitorPads (implies cardioversion)
+        # Circulation Exam
+        if not events[17:19] and "Circulation" not in examined:
+            take_action(5)  # ExamineCirculation
+            examined.add("Circulation")
             continue
 
+        # MAP Checks for intervention
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        # Sats Checks for intervention
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+
+        # HR Checks for intervention
         if vitals["HR"]:
-            if vitals["HR"] > 100 and vitals["MAP"] < 60:
-                take_action(24)  # UseMonitorPads for potential cardioversion
+            if vitals["HR"] > 150:
+                take_action(24)  # UseMonitorPads
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # GiveAdenosine
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # GiveAtropine
