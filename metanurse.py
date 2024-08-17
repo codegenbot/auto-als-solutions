@@ -75,8 +75,7 @@ def stabilize():
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
             take_action(24)  # Use Monitor Pads (for defibrillation)
             continue
-        
-        # Check for tachyarrhythmia and perform cardioversion (HR >= 100)
+
         if vitals["HR"] and vitals["HR"] >= 100:
             take_action(24)  # Use Monitor Pads (for cardioversion)
             continue
@@ -92,7 +91,6 @@ def stabilize():
                 take_action(12)  # Give Atropine
                 continue
 
-        # Only finish if stabilized
         if (vitals["MAP"] and vitals["MAP"] >= 60) and \
            (vitals["Sats"] and vitals["Sats"] >= 88) and \
            (vitals["RR"] and vitals["RR"] >= 8):
