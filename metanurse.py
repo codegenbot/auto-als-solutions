@@ -38,12 +38,10 @@ def stabilize():
             take_action(17)
             continue
 
-        # Check Airway
         if not any(events[3:7]):
             take_action(3)
             continue
 
-        # Check Breathing
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
@@ -58,7 +56,6 @@ def stabilize():
             take_action(30)
             continue
 
-        # Check Circulation
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
@@ -68,19 +65,16 @@ def stabilize():
             take_action(15)
             continue
 
-        # Check Disability
         if "Disability" not in examined:
             take_action(6)
             examined.add("Disability")
             continue
 
-        # Check Exposure
         if "Exposure" not in examined:
             take_action(7)
             examined.add("Exposure")
             continue
 
-        # Final check and take measure actions
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
