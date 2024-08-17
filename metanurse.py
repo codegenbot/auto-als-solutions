@@ -30,16 +30,9 @@ def stabilize():
             take_action(17)  # Start Chest Compression
             continue
 
-        if not any(events[3:7]) and "Airway" not in examined:
+        if not events[3]:  # If AirwayClear hasn't been detected:
             take_action(3)  # Examine Airway
-            examined.add("Airway")
             continue
-
-        if events[3]:  # AirwayClear
-            if any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)  # Examine Breathing
-                examined.add("Breathing")
-                continue
 
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
@@ -59,34 +52,22 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
+        if "HR" not in examined and vitals["HR"] is None:
+            take_action(24)  # Use Monitor Pads
+            examined.add("HR")
+            continue
+
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if "HR" not in examined and vitals["HR"] is None:
-            take_action(2)  # Check Rhythm
-            examined.add("HR")
-            continue
-
-        if vitals["HR"] and any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+        if vitals["HR"] and vitals["HR"] > 150:
             take_action(24)  # Use Monitor Pads
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads for cardioversion
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)  # Give Adenosine
-                continue
-        
-        if events[19]:  # HeartSoundsNormal
-            if vitals["HR"] and vitals["RR"] and vitals["MAP"] and vitals["Sats"] and vitals["RR"] >= 8 and vitals["MAP"] >= 60 and vitals["Sats"] >= 88:
-                take_action(48)  # Finish
-                break
+        if vitals["Sats"] and vitals["Sats"] >= 88 and vitals["RR"] and vitals["RR"] >= 8 and vitals["MAP"] and vitals["MAP"] >= 60:
+            take_action(48)  # Finish
+            break
 
 if __name__ == "__main__":
     stabilize()
