@@ -25,31 +25,40 @@ def stabilize():
             "Sats": measurements[5] if observations[38] > 0 else None,
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
+        
+        def examine_vital(vital, action_code):
+            if vital not in examined:
+                take_action(action_code)
+                examined.add(vital)
+                return True
+            return False
 
+        # Check for critical values
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
-        if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)  # Examine Airway
-            examined.add("Airway")
+        # Examine Airway
+        if not any(events[3:7]) and examine_vital("Airway", 3):
             continue
 
-        if not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
-            examined.add("Breathing")
+        # Check Sats
+        if examine_vital("Sats", 25) and vitals["Sats"] is None:
             continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
-            examined.add("Sats")
+        # Check MAP
+        if examine_vital("MAP", 27) and vitals["MAP"] is None:
             continue
 
-        if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
-            examined.add("MAP")
+        # Examine Breathing
+        if examine_vital("Breathing", 4) and events[3]:
             continue
 
+        # Use Monitor to get updated vital measurements
+        if examine_vital("Monitor", 16):
+            continue
+
+        # Apply interventions based on vitals
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
@@ -72,21 +81,6 @@ def stabilize():
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
                 continue
-
-        if "Circulation" not in examined:
-            take_action(5)  # Examine Circulation
-            examined.add("Circulation")
-            continue
-
-        if "Disability" not in examined:
-            take_action(6)  # Examine Disability
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)  # Examine Exposure
-            examined.add("Exposure")
-            continue
 
         take_action(48)  # Finish
         break
