@@ -31,9 +31,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -42,49 +40,46 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Sats" not in examined:
+        if events[3] > 0:
+            examined.add("Airway")
+        
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
             continue
         
-        if "MAP" not in examined:
+        if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
         
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
-
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150:
-                take_action(2)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
-                continue
-
+        
+        if "ViewMonitor" not in examined:
+            take_action(16)
+            examined.add("ViewMonitor")
+            continue
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
-
+        
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-
+        
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-
+        
+        if vitals["HR"]:
+            if vitals["HR"] > 100:
+                take_action(9)
+                continue
+        
         take_action(48)
         break
     else:
