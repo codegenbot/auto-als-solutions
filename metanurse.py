@@ -6,7 +6,6 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
-
     for step in range(steps):
         try:
             observations = list(map(float, input().strip().split()))
@@ -20,7 +19,7 @@ def stabilize():
 
         events = observations[:33]
         measurements = observations[46:]
-        
+
         vitals = {
             "HR": measurements[0] if observations[33] > 0 else None,
             "RR": measurements[1] if observations[34] > 0 else None,
@@ -31,15 +30,18 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
+        # Check for immediate critical conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # Start CPR
             continue
-        
+
+        # Airway check
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
-        
+
+        # Measure vitals if necessary
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)
             examined.add("Sats")
@@ -49,12 +51,14 @@ def stabilize():
             take_action(27)
             examined.add("MAP")
             continue
-
+        
+        # Breathing check
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
-        
+
+        # Apply interventions if necessary
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -73,7 +77,7 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150:
+            if vitals["HR"] > 150 or events[30]:  # Consider unstable tachyarrhythmia
                 take_action(24)
                 continue
             elif vitals["HR"] < 50:
@@ -82,7 +86,7 @@ def stabilize():
             elif vitals["HR"] > 100:
                 take_action(9)
                 continue
-        
+
         take_action(48)
         break
     else:
