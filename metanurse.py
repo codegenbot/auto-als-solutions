@@ -13,6 +13,7 @@ def stabilize():
             sys.exit()
 
     steps, examined = 350, set()
+    airway_clear = False
 
     for _ in range(steps):
         observations = get_observations()
@@ -34,50 +35,61 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        # Cardiac arrest criteria
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        # Airway assessment
-        if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
-            examined.add("Airway")
+        if not airway_clear:
+            if events[3] > 0:
+                airway_clear = True
+            if not any(events[3:7]) and "Airway" not in examined:
+                take_action(3)
+                examined.add("Airway")
+                continue
+
+        if vitals["Sats"] is None:
+            if "Sats" not in examined:
+                take_action(25)
+                examined.add("Sats")
+                continue
+            take_action(16)
+            continue
+        if vitals["MAP"] is None:
+            if "MAP" not in examined:
+                take_action(27)
+                examined.add("MAP")
+                continue
+            take_action(16)
             continue
 
-        # Saturation and MAP assessment
-        if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
-            examined.add("Sats")
-            continue
-        if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)
-            examined.add("MAP")
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
             continue
 
-        # Oxygenation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        # Handle hypotension
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        # Handle unstable tachyarrhythmia
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
+            continue
+
         if any(events[i] > 0 for i in [28, 29, 31, 32]):
             take_action(24)
             continue
-        
-        # Finish if everything is stabilized
-        if all([
-            vitals["Sats"] is not None and vitals["Sats"] >= 88,
-            vitals["RR"] is not None and vitals["RR"] >= 8,
-            vitals["MAP"] is not None and vitals["MAP"] >= 60
-        ]):
-            take_action(48)
-            break
+
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
 
         take_action(48)
         break
