@@ -1,22 +1,18 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    def get_observations():
-        try:
-            return list(map(float, input().strip().split()))
-        except:
-            take_action(48)
-            sys.exit()
-
     steps, examined = 350, set()
 
-    for _ in range(steps):
-        observations = get_observations()
+    for step in range(steps):
+        try:
+            observations = list(map(float, input().strip().split()))
+        except:
+            take_action(48)
+            return
         if len(observations) != 53:
             take_action(0)
             continue
@@ -61,6 +57,17 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -73,27 +80,10 @@ def stabilize():
             take_action(29)
             continue
 
-        rhythm_events = [events[i] for i in range(27, 33)]
-        if any(rhythm_events):
-            take_action(24)
-            continue
-
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
-            elif vitals["HR"] > 100:
-                take_action(9)
-                continue
-
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
