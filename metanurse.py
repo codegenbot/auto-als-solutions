@@ -67,7 +67,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24)  # Cardiovert for unstable tachyarrhythmia
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
