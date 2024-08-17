@@ -32,7 +32,6 @@ def stabilize():
             "Temp": measurements[3] if measured_recent[3] > 0 else None,
             "MAP": measurements[4] if measured_recent[4] > 0 else None,
             "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
