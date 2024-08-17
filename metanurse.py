@@ -13,7 +13,6 @@ def stabilize():
             sys.exit()
 
     steps, examined = 350, set()
-    airway_clear = False
 
     for _ in range(steps):
         observations = get_observations()
@@ -39,27 +38,18 @@ def stabilize():
             take_action(17)
             continue
 
-        if not airway_clear:
-            if events[3] > 0:
-                airway_clear = True
-            if not any(events[3:7]) and "Airway" not in examined:
-                take_action(3)
-                examined.add("Airway")
-                continue
-
-        if vitals["Sats"] is None:
-            if "Sats" not in examined:
-                take_action(25)
-                examined.add("Sats")
-                continue
-            take_action(16)
+        if not any(events[3:7]) and "Airway" not in examined:
+            take_action(3)
+            examined.add("Airway")
             continue
-        if vitals["MAP"] is None:
-            if "MAP" not in examined:
-                take_action(27)
-                examined.add("MAP")
-                continue
-            take_action(16)
+
+        if vitals["Sats"] is None and "Sats" not in examined:
+            take_action(25)
+            examined.add("Sats")
+            continue
+        if vitals["MAP"] is None and "MAP" not in examined:
+            take_action(27)
+            examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
@@ -83,9 +73,9 @@ def stabilize():
             take_action(24)
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
