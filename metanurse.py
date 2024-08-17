@@ -66,11 +66,10 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
-                continue
-
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation)
+            continue
+        
         take_action(48)  # Finish
         break
     else:
