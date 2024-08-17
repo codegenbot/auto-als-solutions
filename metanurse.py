@@ -12,8 +12,7 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    steps = 350
-    examined = {"Airway": False, "Breathing": False, "Circulation": False, "HeartRate": False, "Sats": False, "MAP": False}
+    steps, examined = 350, set()
 
     for _ in range(steps):
         observations = get_observations()
@@ -23,7 +22,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[46:]
+        measurements = observations[40:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -35,61 +34,63 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
-        if not examined["Airway"]:
+        if events[3] == 0 and events[4] == 0 and events[5] == 0 and events[6] == 0 and "Airway" not in examined:
             take_action(3)
-            examined["Airway"] = True
+            examined.add("Airway")
             continue
 
-        if not vitals["Sats"] and not examined["Sats"]:
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
-            examined["Sats"] = True
+            examined.add("Sats")
             continue
-        
-        if not vitals["MAP"] and not examined["MAP"]:
+
+        if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
-            examined["MAP"] = True
+            examined.add("MAP")
             continue
 
-        if not vitals["RR"] and not examined["Breathing"]:
+        if "Breathing" not in examined:
             take_action(4)
-            examined["Breathing"] = True
+            examined.add("Breathing")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if vitals["Sats"] is None or vitals["MAP"] is None:
+            take_action(16)
+            continue
+
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"] and not examined["HeartRate"]:
-            take_action(16)
-            examined["HeartRate"] = True
-            continue
-
-        if vitals["HR"] and vitals["HR"] > 150:
+        if any(events[27:33]):
             take_action(24)
             continue
 
-        if vitals["HR"] and vitals["HR"] < 50:
-            take_action(12)
-            continue
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(28)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
 
-        if events[31] > 0:  # Assuming HeartRhythmNSR
-            take_action(16)
-            continue
-
-        take_action(48)
-        break
+        if all([vitals["Sats"] is not None and vitals["Sats"] >= 88, vitals["MAP"] is not None and vitals["MAP"] >= 60, vitals["RR"] is not None and vitals["RR"] >= 8]):
+            take_action(48)
+            break
     else:
         take_action(48)
 
