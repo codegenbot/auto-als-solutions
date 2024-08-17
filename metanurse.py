@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -8,7 +9,7 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except:
+        except Exception:
             take_action(48)
             sys.exit()
 
@@ -22,7 +23,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[46:]
+        measurements = observations[40:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -60,6 +61,10 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if events[12] > 0:
+            take_action(29)
+            continue
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -72,37 +77,23 @@ def stabilize():
             take_action(29)
             continue
 
-        if set(events[27:33]) & {i for i in range(27, 33)}:
+        if any(events[27:33]):
             take_action(24)
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 and events[28] == 0:  # Check if tachyarrhythmia is unstable
+            if vitals["HR"] > 150:
                 take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        if "ExamineCirculation" not in examined:
-            take_action(5)
-            examined.add("ExamineCirculation")
-            continue
-
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-            continue
-
         take_action(48)
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
