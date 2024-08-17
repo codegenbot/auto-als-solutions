@@ -77,7 +77,7 @@ def stabilize():
                 take_action(12)  # Give Atropine
                 continue
             elif vitals["HR"] > 100:  # Address tachyarrhythmia
-                take_action(9)   # Give Adenosine
+                take_action(9)  # Give Adenosine
                 continue
 
         take_action(48)  # Finish
