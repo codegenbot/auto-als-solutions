@@ -75,7 +75,7 @@ def stabilize():
         if set(events[27:33]) & {i for i in range(27, 33)}:
             take_action(24)
             continue
-
+        
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(17)
