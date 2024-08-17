@@ -12,7 +12,7 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    steps, examined = 350, set()
+    steps, examined, actions_taken = 350, set(), 0
 
     for _ in range(steps):
         observations = get_observations()
@@ -34,68 +34,58 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        # Detect cardiac arrest
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        MAP, Sats, RR, HR = vitals["MAP"], vitals["Sats"], vitals["RR"], vitals["HR"]
+
+        if (Sats and Sats < 65) or (MAP and MAP < 20):
             take_action(17)
             continue
 
-        # Examine Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        # Check Sats
-        if vitals["Sats"] is None and "Sats" not in examined:
+        if Sats is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
             continue
 
-        # Check MAP
-        if vitals["MAP"] is None and "MAP" not in examined:
+        if MAP is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
 
-        # Examine Breathing
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        # Administer Oxygen if Sats low
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if Sats and Sats < 88:
             take_action(30)
             continue
 
-        # Administer Fluids if MAP low
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if MAP and MAP < 60:
             take_action(15)
             continue
 
-        # Use BagValveMask if RR low
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if RR and RR < 8:
             take_action(29)
             continue
 
-        # Check Monitor for any unstable rhythms
-        if set(events[27:33]) & {i for i in range(27, 33)}:
-            take_action(24)
-            continue
-
-        # Treat tachyarrhythmia based on HR
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(17) # Cardiovert
+        if HR:
+            if HR > 150:
+                take_action(9)
                 continue
-            elif vitals["HR"] < 50:
-                take_action(12) # Atropine
+            elif HR < 50:
+                take_action(12)
                 continue
 
-        take_action(48) # Finish
-        break
-    else:
-        take_action(48)
+        actions_taken += 1
+        if actions_taken >= steps:
+            take_action(48)
+            break
+
+    take_action(48)
 
 if __name__ == "__main__":
     stabilize()
