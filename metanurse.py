@@ -15,7 +15,7 @@ def stabilize():
 
         events = observations[:33]
         times = observations[33:40]
-        values = observations[40:]
+        values = observations[46:]
 
         vitals = {
             "HR": values[0] if times[0] > 0 else None,
@@ -36,7 +36,7 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
+        if events[3] and not any(events[7:15]) and "Breathing" not in examined:
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
@@ -69,7 +69,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads
+                take_action(9)  # Give Adenosine
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
