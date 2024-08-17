@@ -30,50 +30,64 @@ def stabilize():
             take_action(17)  # Start Chest Compression
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
-            continue
-
-        if vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
-            continue
-
-        if (vitals["Sats"] and vitals["Sats"] < 88) or (vitals["MAP"] and vitals["MAP"] < 60):
-            if vitals["Sats"] and vitals["Sats"] < 88:
-                take_action(30)  # Use Non Rebreather Mask
-                continue
-            if vitals["MAP"] and vitals["MAP"] < 60:
-                take_action(15)  # Give Fluids
-                continue
-
-        if not any(events[3:7]):
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
-            continue
-
-        if any(events[7:15]):
-            take_action(4)  # Examine Breathing
+            examined.add("Airway")
             continue
 
         if events[3]:  # AirwayClear
-            take_action(4)  # Examine Breathing
+            if any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)  # Examine Breathing
+                examined.add("Breathing")
+                continue
+
+        if "Sats" not in examined and vitals["Sats"] is None:
+            take_action(25)  # Use Sats Probe
+            examined.add("Sats")
             continue
 
-        if events[19]:  # HeartSoundsNormal
-            if vitals["HR"]:
-                if any(events[i] for i in range(28, 33)):  # Heart arrhythmias
-                    take_action(24)  # Use Monitor Pads
-                    continue
-                if vitals["HR"] > 150:
-                    take_action(24)  # Use Monitor Pads
-                    continue
-                elif vitals["HR"] < 50:
-                    take_action(12)  # Give Atropine
-                    continue
-                elif vitals["HR"] > 100:
-                    take_action(9)  # Give Adenosine
-                    continue
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # Use Non Rebreather Mask
+            continue
 
-        if not vitals["HR"] or not vitals["RR"] or not vitals["MAP"] or not vitals["Sats"]:
+        if "MAP" not in examined and vitals["MAP"] is None:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined.add("MAP")
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
+            continue
+
+        if "RR" not in examined and vitals["RR"] is None:
+            take_action(4)  # Examine Breathing again for accurate RR
+            examined.add("RR")
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)  # Use Bag-Valve Mask
+            continue
+
+        if vitals["HR"]:
+            # Check for arrhythmia events or abnormal heart rate
+            if any(events[i] for i in range(28, 33)):
+                take_action(24)  # Use Monitor Pads
+                continue
+            if vitals["HR"] > 150:
+                take_action(24)  # Use Monitor Pads
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)  # Give Atropine
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # Give Adenosine
+                continue
+
+        if all([
+            vitals["Sats"] is not None, vitals["Sats"] >= 88,
+            vitals["MAP"] is not None, vitals["MAP"] >= 60,
+            vitals["RR"] is not None, vitals["RR"] >= 8
+        ]):
             take_action(48)  # Finish
             break
 
