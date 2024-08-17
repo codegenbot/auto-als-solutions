@@ -70,7 +70,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events 
             take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
 
