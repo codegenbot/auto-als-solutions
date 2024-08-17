@@ -34,9 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -45,22 +43,9 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
-            continue
-
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined:
@@ -68,32 +53,38 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
+            continue
+
+        if events[12] > 0:
+            take_action(29)
+            continue
+
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
+            take_action(30)
+            continue
+
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
             take_action(15)
             continue
 
-        if not any(events[27:33]) and "HeartRhythm" not in examined:
-            take_action(2)
-            examined.add("HeartRhythm")
+        if (vitals["RR"] is not None and vitals["RR"] < 8):
+            take_action(29)
             continue
 
-        if vitals["HR"] is not None:
+        if any(events[27:33]):
+            take_action(24)
+            continue
+
+        if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
-
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-            continue
 
         take_action(48)
         break
