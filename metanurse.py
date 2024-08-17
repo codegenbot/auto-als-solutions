@@ -21,27 +21,24 @@ def stabilize():
         measurements = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if observations[33] > 0 else None,
-            "RR": measurements[1] if observations[34] > 0 else None,
-            "Glucose": measurements[2] if observations[35] > 0 else None,
-            "Temp": measurements[3] if observations[36] > 0 else None,
-            "MAP": measurements[4] if observations[37] > 0 else None,
-            "Sats": measurements[5] if observations[38] > 0 else None,
-            "Resps": measurements[6] if observations[39] > 0 else None,
+            "HR": measurements[0] if observations[40] > 0 else None,
+            "RR": measurements[1] if observations[41] > 0 else None,
+            "Glucose": measurements[2] if observations[42] > 0 else None,
+            "Temp": measurements[3] if observations[43] > 0 else None,
+            "MAP": measurements[4] if observations[44] > 0 else None,
+            "Sats": measurements[5] if observations[45] > 0 else None,
+            "Resps": measurements[6] if observations[46] > 0 else None,
         }
 
-        # Check for immediate critical conditions
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
-            take_action(17)  # Start CPR
+            take_action(17)
             continue
 
-        # Airway check
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
-        # Measure vitals if necessary
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)
             examined.add("Sats")
@@ -51,14 +48,12 @@ def stabilize():
             take_action(27)
             examined.add("MAP")
             continue
-        
-        # Breathing check
+
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        # Apply interventions if necessary
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -77,7 +72,7 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 or events[30]:  # Consider unstable tachyarrhythmia
+            if vitals["HR"] > 150 or events[30]:
                 take_action(24)
                 continue
             elif vitals["HR"] < 50:
