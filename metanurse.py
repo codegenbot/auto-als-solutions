@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -28,9 +27,7 @@ def stabilize():
             "Resps": measurements[6] if timestamps[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(22)  # BagDuringCPR
             continue
 
@@ -63,12 +60,21 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # GiveFluids
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # UseNonRebreatherMask
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)  # UseBagValveMask
+            continue
+
         if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(39)  # TurnOnDefibrillator
-                continue
-            if vitals["HR"] > 100 and vitals["MAP"] < 60:
-                take_action(47)  # DefibrillatorSync
+            if vitals["HR"] > 150 and any(events[28:34]):
+                take_action(24)  # UseMonitorPads
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)  # GiveAdenosine
@@ -77,23 +83,10 @@ def stabilize():
                 take_action(12)  # GiveAtropine
                 continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # GiveFluids
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
