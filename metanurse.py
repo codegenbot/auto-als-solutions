@@ -1,5 +1,3 @@
-import sys
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -55,6 +53,11 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if "Sats" in examined and "ViewMonitor" not in examined:
+            take_action(16)
+            examined.add("ViewMonitor")
+            continue
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -67,12 +70,26 @@ def stabilize():
             take_action(29)
             continue
 
-        if any(v is None for v in vitals.values()):
-            take_action(16)
-            continue
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
 
-        take_action(48)
-        break
+        if all([
+            observations[3] > 0,                     # AirwayClear
+            vitals["Sats"] >= 88,
+            vitals["MAP"] >= 60,
+            vitals["RR"] >= 8
+        ]):
+            take_action(48)
+            break
+
     else:
         take_action(48)
 
