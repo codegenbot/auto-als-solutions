@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -73,6 +72,11 @@ def stabilize():
             take_action(29)
             continue
 
+        if events[12] > 0 and "BibasalCrepitations" not in examined:
+            take_action(19)
+            examined.add("BibasalCrepitations")
+            continue
+
         if set(events[27:33]) & {i for i in range(27, 33)}:
             take_action(24)
             continue
@@ -85,11 +89,7 @@ def stabilize():
                 take_action(12)
                 continue
 
-        take_action(48)
-        break
-    else:
-        take_action(48)
-
+        take_action(0)
 
 if __name__ == "__main__":
     stabilize()
