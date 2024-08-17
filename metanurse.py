@@ -29,7 +29,7 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -53,25 +53,6 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
-
-        if vitals["RR"] and vitals["RR"] > 25:
-            take_action(29)
-            continue
-
-        if "Disability" not in examined:
-            take_action(6)
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)
-            examined.add("Exposure")
-            continue
-
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -84,7 +65,7 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(24)
                 continue
