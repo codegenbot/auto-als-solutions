@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -34,8 +35,8 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
         ):
             take_action(17)
             continue
@@ -60,10 +61,6 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if events[12] > 0:
-            take_action(29)
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -71,15 +68,9 @@ def stabilize():
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
-        
-        if "Circulation" not in examined:
-            take_action(5)
-            examined.add("Circulation")
-            continue
 
-        if "HeartRhythm" not in examined:
-            take_action(2)
-            examined.add("HeartRhythm")
+        if vitals["RR"] is not None and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if set(events[27:33]) & {i for i in range(27, 33)}:
@@ -88,7 +79,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
@@ -98,6 +89,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
