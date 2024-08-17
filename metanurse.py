@@ -58,7 +58,7 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             take_action(30)
             continue
 
@@ -76,7 +76,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
