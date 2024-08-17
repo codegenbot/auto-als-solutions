@@ -6,10 +6,12 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps, examined = 350, set()
+    steps = 350
+    actions_taken = set()
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
+
         if len(observations) != 53:
             take_action(0)
             continue
@@ -34,40 +36,22 @@ def stabilize():
             take_action(17)
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
-        if "SatsProbe" not in examined:
-            take_action(25)
-            examined.add("SatsProbe")
-            continue
-
-        if "BPCuff" not in examined:
-            take_action(27)
-            examined.add("BPCuff")
-            continue
-
-        if not any(events[3:7]) and "Airway" not in examined:
+        if "ExamineAirway" not in actions_taken:
             take_action(3)
-            examined.add("Airway")
+            actions_taken.add("ExamineAirway")
             continue
 
         if any(events[3:7]):
-            if events[7]:
-                take_action(29)
+            if events[5] or events[4]:
+                take_action(31)
                 continue
-            if events[8]:
-                take_action(36)
-                continue
-            if not any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)
-                examined.add("Breathing")
+            elif events[6]:
+                take_action(35)
                 continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+        if "ExamineBreathing" not in actions_taken:
+            take_action(4)
+            actions_taken.add("ExamineBreathing")
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -76,6 +60,30 @@ def stabilize():
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
+            continue
+
+        if "ViewMonitor" not in actions_taken:
+            take_action(16)
+            actions_taken.add("ViewMonitor")
+            continue
+
+        if "UseSatsProbe" not in actions_taken:
+            take_action(25)
+            actions_taken.add("UseSatsProbe")
+            continue
+
+        if "UseBloodPressureCuff" not in actions_taken:
+            take_action(27)
+            actions_taken.add("UseBloodPressureCuff")
+            continue
+
+        if "ExamineCirculation" not in actions_taken:
+            take_action(5)
+            actions_taken.add("ExamineCirculation")
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)
             continue
 
         if vitals["HR"]:
@@ -88,6 +96,16 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
+
+        if "ExamineDisability" not in actions_taken:
+            take_action(6)
+            actions_taken.add("ExamineDisability")
+            continue
+
+        if "ExamineExposure" not in actions_taken:
+            take_action(7)
+            actions_taken.add("ExamineExposure")
+            continue
 
         take_action(48)
         break
