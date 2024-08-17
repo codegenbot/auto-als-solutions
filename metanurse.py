@@ -49,7 +49,7 @@ def stabilize():
             take_action(25)  # UseSatsProbe
             examined.add("Sats")
             continue
-
+        
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)  # UseBloodPressureCuff
             examined.add("MAP")
@@ -60,22 +60,19 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if events[12] > 0:
-            if vitals["Sats"] is None:
-                take_action(16)  # View monitor
-                continue
-            take_action(29)  # Use bag valve mask
+        if vitals["Sats"] is None or vitals["MAP"] is None:
+            take_action(16)  # ViewMonitor to see sats and MAP
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] < 88:
             take_action(30)  # Use non-rebreather mask
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        
+        if vitals["MAP"] < 60:
             take_action(15)  # Give fluids
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] < 8:
             take_action(29)  # Use bag valve mask
             continue
 
@@ -83,17 +80,13 @@ def stabilize():
             take_action(24)  # Use defibrillator (e.g., for arrhythmias)
             continue
 
-        if vitals["HR"] is not None:
+        if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)  # Start chest compressions
+                take_action(24)  # Use defibrillator for cardioversion
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give atropine
                 continue
-
-        if "MAP" not in measured_recent or "Sats" not in measured_recent:
-            take_action(16)  # View monitor
-            continue
 
         take_action(48)  # Finish
         break
