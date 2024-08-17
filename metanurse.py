@@ -84,7 +84,7 @@ def stabilize():
             take_action(12)
             continue
 
-        if events[31] > 0:
+        if events[31] > 0:  # Assuming HeartRhythmNSR
             take_action(16)
             continue
 
