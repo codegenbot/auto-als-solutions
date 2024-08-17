@@ -12,8 +12,7 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    actions_taken = set()
-    steps = 350
+    steps, examined, actions_taken = 350, set(), set()
 
     for _ in range(steps):
         observations = get_observations()
@@ -41,26 +40,34 @@ def stabilize():
             take_action(17)
             continue
 
-        if "Airway" not in actions_taken:
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
-            actions_taken.add("Airway")
+            examined.add("Airway")
             continue
 
-        if not any(events[3:7]):
-            take_action(3)
-            continue
-
-        if vitals["Sats"] is None:
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
+            examined.add("Sats")
             continue
 
-        if vitals["MAP"] is None:
+        if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
+            examined.add("MAP")
             continue
 
-        if "Breathing" not in actions_taken:
+        if "Breathing" not in examined:
             take_action(4)
-            actions_taken.add("Breathing")
+            examined.add("Breathing")
+            continue
+
+        if events[12] > 0 and "BreathingBibasalCrepitations" not in examined:
+            take_action(29)
+            examined.add("BreathingBibasalCrepitations")
+            continue
+
+        if "Circulation" not in examined:
+            take_action(5)
+            examined.add("Circulation")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -68,16 +75,17 @@ def stabilize():
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
+            if "GiveFluids" not in actions_taken:
+                take_action(15)
+                actions_taken.add("GiveFluids")
+                continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if "Circulation" not in actions_taken:
-            take_action(5)
-            actions_taken.add("Circulation")
+        if set(events[27:33]) & {i for i in range(27, 33)}:
+            take_action(24)
             continue
 
         if vitals["HR"]:
@@ -87,22 +95,11 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
-            elif vitals["HR"] > 100:
-                take_action(9)
-                continue
-
-        if "Disability" not in actions_taken:
-            take_action(6)
-            actions_taken.add("Disability")
-            continue
-
-        if "Exposure" not in actions_taken:
-            take_action(7)
-            actions_taken.add("Exposure")
-            continue
 
         take_action(48)
         break
+    else:
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
