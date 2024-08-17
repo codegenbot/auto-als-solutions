@@ -68,7 +68,7 @@ def stabilize():
             continue
 
         if any(v is None for v in vitals.values()):
-            take_action(16)  # ViewMonitor to re-evaluate remaining vitals
+            take_action(16)
             continue
 
         take_action(48)
