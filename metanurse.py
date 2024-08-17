@@ -8,7 +8,7 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except Exception:
+        except:
             take_action(48)
             sys.exit()
 
@@ -22,7 +22,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[40:47]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -34,7 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -43,14 +43,14 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
-            examined.add("Sats")
-            continue
-
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
+            continue
+
+        if vitals["Sats"] is None and "Sats" not in examined:
+            take_action(25)
+            examined.add("Sats")
             continue
 
         if "Breathing" not in examined:
@@ -58,23 +58,24 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
+        if vitals["Sats"] is None and "ViewMonitor" not in examined:
+            take_action(16)
+            examined.add("ViewMonitor")
+            continue
+        
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if (vitals["RR"] is not None and vitals["RR"] < 8):
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if set(events[27:33]) & {i for i in range(27, 33)}:
-            take_action(24)
-            continue
-
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(17)
                 continue
@@ -82,12 +83,8 @@ def stabilize():
                 take_action(12)
                 continue
 
-        if (vitals["Sats"] is not None and vitals["Sats"] >= 88) and \
-           (vitals["MAP"] is not None and vitals["MAP"] >= 60) and \
-           (vitals["RR"] is not None and vitals["RR"] >= 8):
-            take_action(48)
-            break
-
+        take_action(48)
+        break
     else:
         take_action(48)
 
