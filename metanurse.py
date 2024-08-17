@@ -5,8 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps = 350
-    action_queue = [16, 25, 27]
+    steps, examined = 350, set()
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
@@ -15,50 +14,65 @@ def stabilize():
             continue
 
         events = observations[:33]
-        values = observations[46:]
+        timestamps = observations[33:40]
+        measurements = observations[40:]
 
         vitals = {
-            "HR": values[0] if observations[33] > 0 else None,
-            "RR": values[1] if observations[34] > 0 else None,
-            "Glucose": values[2] if observations[35] > 0 else None,
-            "Temp": values[3] if observations[36] > 0 else None,
-            "MAP": values[4] if observations[37] > 0 else None,
-            "Sats": values[5] if observations[38] > 0 else None,
-            "Resps": values[6] if observations[39] > 0 else None,
+            "HR": measurements[0] if timestamps[0] > 0 else None,
+            "RR": measurements[1] if timestamps[1] > 0 else None,
+            "Glucose": measurements[2] if timestamps[2] > 0 else None,
+            "Temp": measurements[3] if timestamps[3] > 0 else None,
+            "MAP": measurements[4] if timestamps[4] > 0 else None,
+            "Sats": measurements[5] if timestamps[5] > 0 else None,
+            "Resps": measurements[6] if timestamps[6] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if action_queue:
-            take_action(action_queue.pop(0))
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
             continue
 
-        if not any(events[3:7]):
+        if "SatsProbe" not in examined:
+            take_action(25)
+            examined.add("SatsProbe")
+            continue
+
+        if "BPCuff" not in examined:
+            take_action(27)
+            examined.add("BPCuff")
+            continue
+
+        if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
-            continue
-        elif events[7]:
-            take_action(29)
-            continue
-        elif events[8]:
-            take_action(36)
+            examined.add("Airway")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if any(events[3:7]):
+            if events[7]:
+                take_action(29)
+                continue
+            if events[8]:
+                take_action(36)
+                continue
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)
+                examined.add("Breathing")
+                continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        if any(events[i] for i in range(28, 33)):
-            take_action(24)
             continue
 
         if vitals["HR"]:
