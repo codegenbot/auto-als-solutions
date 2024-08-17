@@ -54,12 +54,12 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
-            continue
-
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # Use Non Rebreather Mask
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
