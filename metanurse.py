@@ -76,9 +76,8 @@ def stabilize():
                 take_action(9)
                 continue
 
-        if vitals["Sats"] and vitals["Sats"] >= 88 and vitals["MAP"] and vitals["MAP"] >= 60 and vitals["RR"] and vitals["RR"] >= 8:
-            take_action(48)
-            break
+        take_action(48)
+        break
     else:
         take_action(48)
 
