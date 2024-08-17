@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
-    
+
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -49,7 +49,7 @@ def stabilize():
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
-        
+
         if "MAP" not in examined:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
@@ -74,7 +74,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
     else:
         take_action(48)  # Finish
 
