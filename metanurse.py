@@ -45,7 +45,7 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if events[3] and "Breathing" not in examined:
+        if "Breathing" not in examined:
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
@@ -63,9 +63,8 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 and "HR_MONITOR" not in examined:
+            if vitals["HR"] > 150:
                 take_action(24)  # Use Monitor Pads (for cardioversion)
-                examined.add("HR_MONITOR")
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
