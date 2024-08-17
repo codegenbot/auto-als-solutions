@@ -44,7 +44,6 @@ def stabilize():
             take_action(17)  # Start Chest Compression
             continue
 
-        # Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
@@ -59,8 +58,11 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        # Breathing
         examine_vitals()
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
+            continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
@@ -70,28 +72,22 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        # Circulation
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
-
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
             take_action(24)  # Use Monitor Pads (for defibrillation)
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(24)  # Use Monitor Pads (for cardioversion/defibrillation)
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
                 continue
-            elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
-                continue
 
-        take_action(48)  # Finish
-        break
+        if all(v is not None for v in vitals.values()[:5]):
+            take_action(48)  # Finish
+            break
+
     else:
         take_action(48)  # Finish
 
