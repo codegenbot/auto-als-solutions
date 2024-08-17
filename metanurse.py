@@ -80,7 +80,6 @@ def stabilize():
 
         take_action(48)  # Finish
         break
-
     else:
         take_action(48)  # Finish
 
