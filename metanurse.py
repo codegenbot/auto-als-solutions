@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -26,7 +27,9 @@ def stabilize():
             "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -67,32 +70,22 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads
+        if any(
+            events[i] for i in [28, 29, 30, 31]
+        ):  # Heart arrhythmia events needing cardioversion
+            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
                 continue
-            elif vitals["HR"] > 150:
-                take_action(9)  # Give Adenosine
-                continue
-
-        if "Disability" not in examined:
-            take_action(6)  # Examine Disability
-            examined.add("Disability")
-            continue
-
-        if "Exposure" not in examined:
-            take_action(7)  # Examine Exposure
-            examined.add("Exposure")
-            continue
 
         take_action(48)  # Finish
         break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
