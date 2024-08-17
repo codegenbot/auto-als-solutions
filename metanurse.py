@@ -37,7 +37,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)  # Start chest compression
+            take_action(17)
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
@@ -60,29 +60,40 @@ def stabilize():
             examined.add("Breathing")
             continue
 
+        if events[12] > 0 and "BreathingBibasalCrepitations" not in examined:
+            take_action(29)
+            examined.add("BreathingBibasalCrepitations")
+            continue
+
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)  # Use non-rebreather mask
+            take_action(30)
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give fluids
-            continue
+            if "GiveFluids" not in actions_taken:
+                take_action(15)
+                actions_taken.add("GiveFluids")
+                continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use bag valve mask
+            take_action(29)
+            continue
+
+        if set(events[27:33]) & {i for i in range(27, 33)}:
+            take_action(24)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)  # Use monitor pads
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)  # Give atropine
+                take_action(12)
                 continue
 
         take_action(16)  # View monitor to check BP and monitor rhythm
