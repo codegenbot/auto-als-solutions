@@ -25,13 +25,13 @@ def stabilize():
         measurements = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if measured_recent[0] > 0 else None,
-            "RR": measurements[1] if measured_recent[1] > 0 else None,
-            "Glucose": measurements[2] if measured_recent[2] > 0 else None,
-            "Temp": measurements[3] if measured_recent[3] > 0 else None,
-            "MAP": measurements[4] if measured_recent[4] > 0 else None,
-            "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
+            "HR": measurements[0] if measured_recent[0] else None,
+            "RR": measurements[1] if measured_recent[1] else None,
+            "Glucose": measurements[2] if measured_recent[2] else None,
+            "Temp": measurements[3] if measured_recent[3] else None,
+            "MAP": measurements[4] if measured_recent[4] else None,
+            "Sats": measurements[5] if measured_recent[5] else None,
+            "Resps": measurements[6] if measured_recent[6] else None,
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
@@ -73,7 +73,7 @@ def stabilize():
             take_action(24)
             continue
 
-        if vitals["HR"] is not None:
+        if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(17)
                 continue
