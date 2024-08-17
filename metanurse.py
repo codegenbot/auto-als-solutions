@@ -12,19 +12,19 @@ def stabilize():
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
-        
+    
         events = observations[:33]
         measurement_times = observations[33:40]
         measurements = observations[40:]
 
         vitals = {
-            "HR": measurements[0] if measurement_times[0] else None,
-            "RR": measurements[1] if measurement_times[1] else None,
-            "Glucose": measurements[2] if measurement_times[2] else None,
-            "Temp": measurements[3] if measurement_times[3] else None,
-            "MAP": measurements[4] if measurement_times[4] else None,
-            "Sats": measurements[5] if measurement_times[5] else None,
-            "Resps": measurements[6] if measurement_times[6] else None,
+            "HR": measurements[0] if measurement_times[0] > 0 else None,
+            "RR": measurements[1] if measurement_times[1] > 0 else None,
+            "Glucose": measurements[2] if measurement_times[2] > 0 else None,
+            "Temp": measurements[3] if measurement_times[3] > 0 else None,
+            "MAP": measurements[4] if measurement_times[4] > 0 else None,
+            "Sats": measurements[5] if measurement_times[5] > 0 else None,
+            "Resps": measurements[6] if measurement_times[6] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -46,24 +46,24 @@ def stabilize():
             examined.add("Sats")
             continue
 
-        if "Breathing" not in examined:
+        if any(events[3:7]) and "Breathing" not in examined:
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
-        
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
-        
-        if vitals["HR"] is not None:
+
+        if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
