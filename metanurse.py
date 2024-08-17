@@ -37,7 +37,7 @@ def stabilize():
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
-
+        
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
@@ -57,7 +57,7 @@ def stabilize():
             take_action(4)
             examined.add("Breathing")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
