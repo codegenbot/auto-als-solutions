@@ -51,12 +51,12 @@ def stabilize():
             take_action(27)
             examined.add("MAP")
             continue
-        
+
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
-        
+
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
@@ -72,10 +72,11 @@ def stabilize():
         if any(events[27:33]):
             take_action(24)
             continue
-        
-        if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 50):
-            take_action(2)
-            continue
+
+        if vitals["HR"]:
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(2)
+                continue
 
         take_action(48)
         break
