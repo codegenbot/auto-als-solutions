@@ -53,11 +53,6 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)  # View Monitor
-            examined.add("Monitor")
-            continue
-
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)  # Use Non-Rebreather Mask
             continue
@@ -66,25 +61,15 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve-Mask
-            continue
-
         if any(events[27:33]):  # Rhythm events indicating arrhythmia
             take_action(24)  # Use Monitor Pads
             continue
 
         if vitals["HR"] is not None:
-            if vitals["HR"] > 150:
+            if vitals["HR"] > 150: # Address tachyarrhythmia
                 take_action(24)  # Use Monitor Pads
                 continue
-            elif vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
-                continue
-            elif vitals["HR"] > 100:  # Address tachyarrhythmia
-                take_action(9)   # Give Adenosine
-                continue
-
+        
         take_action(48)  # Finish
         break
     else:
