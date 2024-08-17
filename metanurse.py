@@ -1,17 +1,17 @@
 import sys
 
-ACTIONS = {
-    "DoNothing": 0,
-    "ExamineAirway": 3,
-    "ExamineBreathing": 4,
-    "UseBloodPressureCuff": 27,
-    "UseSatsProbe": 25,
-    "UseNonRebreatherMask": 30,
-    "GiveFluids": 15,
-    "StartChestCompression": 17,
-    "UseBagValveMask": 29,
-    "Finish": 48
-}
+(
+    DO_NOTHING,
+    EXAMINE_AIRWAY,
+    EXAMINE_BREATHING,
+    USE_BP_CUFF,
+    USE_SATS_PROBE,
+    USE_NON_REBREATHER_MASK,
+    GIVE_FLUIDS,
+    PERFORM_CARDIOVERSION,
+    FINISH,
+) = (0, 3, 4, 27, 25, 30, 15, 24, 48)
+
 
 def stabilize():
     def take_action(action):
@@ -23,60 +23,67 @@ def stabilize():
         try:
             observations = list(map(float, input().strip().split()))
         except:
-            take_action(ACTIONS["Finish"])
+            take_action(FINISH)
             return
 
         if len(observations) != 53:
-            take_action(ACTIONS["DoNothing"])
+            take_action(DO_NOTHING)
             continue
-        
-        events = observations[:33]
-        measuring_times = observations[33:40]
-        measurements = observations[46:]
 
-        vitals = ["HeartRate", "RespRate", "Glucose", "Temp", "MAP", "Sats", "Resps"]
-        vitals_dict = {vitals[i]: measurements[i] if measuring_times[i] > 0 else None for i in range(7)]
+        events, measuring_times, measurements = (
+            observations[:33],
+            observations[33:40],
+            observations[40:],
+        )
+        vitals = ["HR", "RR", "Glucose", "Temp", "MAP", "Sats", "Resps"]
+        vitals_dict = {
+            vitals[i]: measurements[i] if measuring_times[i] > 0 else None
+            for i in range(len(vitals))
+        }
 
-        if (vitals_dict["Sats"] is not None and vitals_dict["Sats"] < 65) or (vitals_dict["MAP"] is not None and vitals_dict["MAP"] < 20):
-            take_action(ACTIONS["StartChestCompression"])
+        if (vitals_dict["Sats"] and vitals_dict["Sats"] < 65) or (
+            vitals_dict["MAP"] and vitals_dict["MAP"] < 20
+        ):
+            take_action(PERFORM_CARDIOVERSION)
             continue
-        
-        if "Airway" not in examined:
-            take_action(ACTIONS["ExamineAirway"])
+
+        if not events[3] and "Airway" not in examined:
+            take_action(EXAMINE_AIRWAY)
             examined.add("Airway")
             continue
-        
+
         if "Sats" not in examined and vitals_dict["Sats"] is None:
-            take_action(ACTIONS["UseSatsProbe"])
+            take_action(USE_SATS_PROBE)
             examined.add("Sats")
             continue
-        
+
         if "MAP" not in examined and vitals_dict["MAP"] is None:
-            take_action(ACTIONS["UseBloodPressureCuff"])
+            take_action(USE_BP_CUFF)
             examined.add("MAP")
             continue
-        
+
         if "Breathing" not in examined:
-            take_action(ACTIONS["ExamineBreathing"])
+            take_action(EXAMINE_BREATHING)
             examined.add("Breathing")
             continue
-        
-        if vitals_dict["Sats"] is not None and vitals_dict["Sats"] < 88:
-            take_action(ACTIONS["UseNonRebreatherMask"])
-            continue
-        
-        if vitals_dict["RespRate"] is not None and vitals_dict["RespRate"] < 8:
-            take_action(ACTIONS["UseBagValveMask"])
+
+        if vitals_dict["Sats"] and vitals_dict["Sats"] < 88:
+            take_action(USE_NON_REBREATHER_MASK)
             continue
 
-        if vitals_dict["MAP"] is not None and vitals_dict["MAP"] < 60:
-            take_action(ACTIONS["GiveFluids"])
+        if vitals_dict["MAP"] and vitals_dict["MAP"] < 60:
+            take_action(GIVE_FLUIDS)
             continue
 
-        take_action(ACTIONS["Finish"])
+        if vitals_dict["RR"] and vitals_dict["RR"] < 8:
+            take_action(USE_NON_REBREATHER_MASK)
+            continue
+
+        take_action(FINISH)
         break
     else:
-        take_action(ACTIONS["Finish"])
+        take_action(FINISH)
+
 
 if __name__ == "__main__":
     stabilize()
