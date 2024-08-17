@@ -29,17 +29,18 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        # Check for critical conditions and take immediate action
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Examine Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
+        # Probe for missing measurements (Sats and MAP)
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)
             examined.add("Sats")
@@ -50,48 +51,44 @@ def stabilize():
             examined.add("MAP")
             continue
 
+        # View monitor for all current stats
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+            continue
+
+        # Examine Breathing
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if "Sats" in examined and "ViewMonitor" not in examined:
-            take_action(16)
-            examined.add("ViewMonitor")
-            continue
-
+        # Corrective measures based on vitals
         if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask for low oxygen saturation
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # Give fluids for low MAP
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag valve mask for low respiratory rate
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24)  # Use monitor pads for tachyarrhythmia
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # Use atropine for bradycardia
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(9)   # Use adenosine for a stable tachycardia
                 continue
 
-        if all([
-            observations[3] > 0,                     # AirwayClear
-            vitals["Sats"] >= 88,
-            vitals["MAP"] >= 60,
-            vitals["RR"] >= 8
-        ]):
-            take_action(48)
-            break
-
+        take_action(48)
+        break
     else:
         take_action(48)
 
