@@ -45,26 +45,17 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
-            examined.add("Sats")
-            continue
-
-        if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)
-            examined.add("MAP")
-            continue
-
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if events[12] > 0:
-            if not vitals["Sats"]:
-                take_action(16)
-                continue
+        if vitals["Sats"] is None and "Sats" not in examined:
+            take_action(25)
+            examined.add("Sats")
+            continue
 
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
@@ -72,19 +63,21 @@ def stabilize():
             take_action(30)
             continue
 
+        if vitals["MAP"] is None and "MAP" not in examined:
+            take_action(27)
+            examined.add("MAP")
+            continue
+
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        if not any(events[27:33]) and "HeartRhythm" not in examined:
+            take_action(2)
+            examined.add("HeartRhythm")
             continue
 
-        if any(events[27:33]):
-            take_action(24)
-            continue
-
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(17)
                 continue
@@ -92,18 +85,14 @@ def stabilize():
                 take_action(12)
                 continue
 
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
+        if "Disability" not in examined:
+            take_action(6)
+            examined.add("Disability")
             continue
 
-        unstable_heart_rhythms = [28, 31, 32]
-        if (vitals["HR"] is not None and vitals["HR"] > 150 and any(events[i] > 0 for i in unstable_heart_rhythms)):
-            take_action(24)
-            continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+        if "Exposure" not in examined:
+            take_action(7)
+            examined.add("Exposure")
             continue
 
         take_action(48)
