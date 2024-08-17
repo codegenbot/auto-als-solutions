@@ -35,26 +35,21 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[3] and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
-            examined.add("Breathing")
-            continue
-
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
-            
+
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)  # View Monitor
-            examined.add("Monitor")
+        if events[3] and "Breathing" not in examined:
+            take_action(4)  # Examine Breathing
+            examined.add("Breathing")
             continue
-        
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
@@ -68,8 +63,9 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150:
+            if vitals["HR"] > 150 and "HR_MONITOR" not in examined:
                 take_action(24)  # Use Monitor Pads (for cardioversion)
+                examined.add("HR_MONITOR")
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
