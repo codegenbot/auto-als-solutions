@@ -8,7 +8,7 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except:
+        except ValueError:
             take_action(48)
             sys.exit()
 
@@ -28,11 +28,10 @@ def stabilize():
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
             "RR": measurements[1] if measured_recent[1] > 0 else None,
-            "Glucose": measurements[2] if measured_recent[2] > 0 else None,
-            "Temp": measurements[3] if measured_recent[3] > 0 else None,
-            "MAP": measurements[4] if measured_recent[4] > 0 else None,
-            "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
+            "Temp": measurements[2] if measured_recent[2] > 0 else None,
+            "MAP": measurements[3] if measured_recent[3] > 0 else None,
+            "Sats": measurements[4] if measured_recent[4] > 0 else None,
+            "Resps": measurements[5] if measured_recent[5] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -52,7 +51,7 @@ def stabilize():
             take_action(27)
             examined.add("MAP")
             continue
-        
+
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
@@ -80,7 +79,7 @@ def stabilize():
             else:
                 take_action(23)
             continue
-                
+
         take_action(48)
         break
     else:
