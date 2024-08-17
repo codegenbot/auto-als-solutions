@@ -1,11 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     steps, examined = 350, set()
+
     for step in range(steps):
         try:
             observations = list(map(float, input().strip().split()))
@@ -17,19 +19,22 @@ def stabilize():
             continue
 
         events = observations[:33]
+        measured_recent = observations[33:40]
         measurements = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if observations[33] > 0 else None,
-            "RR": measurements[1] if observations[34] > 0 else None,
-            "Glucose": measurements[2] if observations[35] > 0 else None,
-            "Temp": measurements[3] if observations[36] > 0 else None,
-            "MAP": measurements[4] if observations[37] > 0 else None,
-            "Sats": measurements[5] if observations[38] > 0 else None,
-            "Resps": measurements[6] if observations[39] > 0 else None,
+            "HR": measurements[0] if measured_recent[0] > 0 else None,
+            "RR": measurements[1] if measured_recent[1] > 0 else None,
+            "Glucose": measurements[2] if measured_recent[2] > 0 else None,
+            "Temp": measurements[3] if measured_recent[3] > 0 else None,
+            "MAP": measurements[4] if measured_recent[4] > 0 else None,
+            "Sats": measurements[5] if measured_recent[5] > 0 else None,
+            "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -38,12 +43,12 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
             continue
-        
-        if "MAP" not in examined and vitals["MAP"] is None:
+
+        if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
@@ -65,23 +70,11 @@ def stabilize():
             take_action(29)
             continue
 
-        if "CardiacRhythm" not in examined:
-            take_action(2)
-            examined.add("CardiacRhythm")
-            continue
-
-        if "Monitor" not in examined and vitals["Sats"] is None:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
-        rhythm_events = [
-            events[27], events[28], events[29], events[30], events[31], events[32]
-        ]
+        rhythm_events = [events[i] for i in range(27, 33)]
         if any(rhythm_events):
             take_action(24)
             continue
-        
+
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)
@@ -97,6 +90,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
