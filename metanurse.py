@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -68,11 +67,21 @@ def stabilize():
             take_action(29)
             continue
 
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)
+                continue
+
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
