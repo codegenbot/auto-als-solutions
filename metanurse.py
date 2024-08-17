@@ -31,7 +31,7 @@ def stabilize():
             "Temp": measurements[3] if measured_recent[3] > 0 else None,
             "MAP": measurements[4] if measured_recent[4] > 0 else None,
             "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
+            "Resps": measurements[6] if measured_recent[6] > 0 else None
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
@@ -61,9 +61,10 @@ def stabilize():
             continue
 
         if events[12] > 0:
-            if vitals["Sats"] is None:
+            if not vitals["Sats"]:
                 take_action(16)
                 continue
+
             take_action(29)
             continue
 
@@ -90,6 +91,16 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
+
+        if "Monitor" not in examined:
+            take_action(16)
+            examined.add("Monitor")
+            continue
+
+        unstable_heart_rhythms = [28, 31, 32]
+        if (vitals["HR"] is not None and vitals["HR"] > 150 and any(events[i] > 0 for i in unstable_heart_rhythms)):
+            take_action(24)
+            continue
 
         take_action(48)
         break
