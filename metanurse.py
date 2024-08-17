@@ -55,33 +55,27 @@ def stabilize():
 
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
-            examined.add("SatsTreatment")
             continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
-            examined.add("MAPTreatment")
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
-            examined.add("RRTreatment")
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(24)
-                examined.add("HRTreatment")
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
-                examined.add("HRTreatment")
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)
-                examined.add("HRTreatment")
                 continue
-        
+
         take_action(48)
         break
     else:
