@@ -5,26 +5,25 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps, examined = 350, set()
+    steps, examined, drawers_opened = 350, set(), set()
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
             take_action(0)  # DoNothing
             continue
-        
+
         events = observations[:33]
-        measurement_time = observations[33:40]
-        measurements = observations[40:]
+        values = observations[46:]
 
         vitals = {
-            "HR": measurements[0] if measurement_time[0] else None,
-            "RR": measurements[1] if measurement_time[1] else None,
-            "Glucose": measurements[2] if measurement_time[2] else None,
-            "Temp": measurements[3] if measurement_time[3] else None,
-            "MAP": measurements[4] if measurement_time[4] else None,
-            "Sats": measurements[5] if measurement_time[5] else None,
-            "Resps": measurements[6] if measurement_time[6] else None,
+            "HR": values[0] if observations[33] > 0 else None,
+            "RR": values[1] if observations[34] > 0 else None,
+            "Glucose": values[2] if observations[35] > 0 else None,
+            "Temp": values[3] if observations[36] > 0 else None,
+            "MAP": values[4] if observations[37] > 0 else None,
+            "Sats": values[5] if observations[38] > 0 else None,
+            "Resps": values[6] if observations[39] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -36,17 +35,43 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if events[3]:  # AirwayClear
-            if events[8]:  # BreathingSnoring
-                take_action(36)  # Perform Head Tilt Chin Lift
-                continue
-            if not any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)  # Examine Breathing
-                examined.add("Breathing")
-                continue
+        if not any(events[7:15]) and "Breathing" not in examined:
+            take_action(4)  # Examine Breathing
+            examined.add("Breathing")
+            continue
 
+        if "BreathingDrawer" not in drawers_opened:
+            take_action(19)  # OpenBreathingDrawer
+            drawers_opened.add("BreathingDrawer")
+            continue
+
+        if events[4]:  # AirwayVomit
+            take_action(31)  # Use Yankeur Suction Catheter
+            continue
+        
+        if events[5]:  # AirwayBlood
+            take_action(31)  # Use Yankeur Suction Catheter
+            continue
+
+        if events[6]:  # AirwayTongue
+            take_action(36)  # PerformHeadTiltChinLift
+            continue
+
+        if events[12]:  # BreathingWheeze
+            take_action(18)  # Open Airway Drawer
+            continue
+            
+        if events[13]:  # BreathingCoarseCrepitationsAtBase
+            take_action(30)  # Use Non Rebreather Mask
+            continue
+        
+        if events[14]:  # BreathingPneumothoraxSymptoms
+            take_action(4)  # ExamineBreathing
+            continue
+            
+        # Ensure patient is receiving oxygen, use Non Rebreather Mask
         if "Sats" not in examined:
-            take_action(25)  # Use Sats Probe
+            take_action(25)  # UseSatsProbe
             examined.add("Sats")
             continue
 
@@ -54,23 +79,22 @@ def stabilize():
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
-
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
-
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        
+        if not vitals["Sats"] or vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if not vitals["MAP"] or vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
+            continue
+
+        if not vitals["RR"] or vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(24)  # Use Monitor Pads (for cardioversion)
-                continue
+        if not vitals["HR"] or vitals["HR"] < 60 or vitals["HR"] > 100:
+            take_action(24)  # Use Monitor Pads
+            continue
 
         take_action(48)  # Finish
         break
