@@ -51,6 +51,10 @@ def stabilize():
             examined.add("Sats")
             continue
 
+        if "Sats" in examined and vitals["Sats"] is None:
+            take_action(16)  # View Monitor
+            continue
+
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
@@ -65,12 +69,12 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+        if "MAP" in examined and vitals["MAP"] is None:
+            take_action(16)  # View Monitor
             continue
 
-        if "MAP" in examined and vitals["MAP"] is None:  
-            take_action(16)  # View Monitor
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
         # Check for arrhythmia
