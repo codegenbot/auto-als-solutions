@@ -80,7 +80,7 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)  # Use adenosine for tachyarrhythmia
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
