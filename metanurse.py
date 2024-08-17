@@ -8,7 +8,7 @@ def stabilize():
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
-        except:
+        except Exception:
             take_action(48)
             sys.exit()
 
@@ -17,7 +17,7 @@ def stabilize():
     for _ in range(steps):
         observations = get_observations()
         if len(observations) != 53:
-            take_action(0)
+            take_action(0)  # DoNothing
             continue
 
         events = observations[:33]
@@ -35,58 +35,57 @@ def stabilize():
         }
 
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
-            take_action(17)
+            take_action(17)  # StartChestCompression
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(3)  # ExamineAirway
             examined.add("Airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             examined.add("Sats")
             continue
-
+        
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
         if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             examined.add("MAP")
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
         if vitals["RR"] is None and "Breathing" not in examined:
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             examined.add("Breathing")
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
+            continue
+
+        if any(events[27:33]):
+            take_action(24)  # UseMonitorPads
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(9)  # GiveAdenosine
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # GiveAtropine
                 continue
 
-        if any(events[27:33]) and "MonitorPads" not in examined:
-            take_action(24)
-            examined.add("MonitorPads")
-            continue
-
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
