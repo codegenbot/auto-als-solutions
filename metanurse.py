@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -38,7 +37,7 @@ def stabilize():
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
             vitals["MAP"] is not None and vitals["MAP"] < 20
         ):
-            take_action(17)
+            take_action(17)  # Start chest compression
             continue
 
         if not any(events[3:7]) and "Airway" not in examined:
@@ -61,44 +60,41 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if events[12] > 0 and "BreathingBibasalCrepitations" not in examined:
-            take_action(29)
-            examined.add("BreathingBibasalCrepitations")
-            continue
-
         if "Circulation" not in examined:
             take_action(5)
             examined.add("Circulation")
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # Use non-rebreather mask
             continue
 
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            if "GiveFluids" not in actions_taken:
-                take_action(15)
-                actions_taken.add("GiveFluids")
+            take_action(15)  # Give fluids
             continue
 
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # Use bag valve mask
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150 and "AttachDefibPads" not in actions_taken:
-                take_action(28)
-                actions_taken.add("AttachDefibPads")
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)  # Use monitor pads
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # Give atropine
                 continue
 
+        take_action(16)  # View monitor to check BP and monitor rhythm
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+            take_action(15)  # Give fluids
+            continue
+
+        examined.add("MAPCheck")
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
