@@ -5,12 +5,10 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps = 350
-    actions_taken = set()
-    
+    steps, examined = 350, set()
+
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
-
         if len(observations) != 53:
             take_action(0)
             continue
@@ -33,54 +31,43 @@ def stabilize():
             take_action(17)
             continue
 
-        if "ExamineAirway" not in actions_taken:
-            take_action(3)
-            actions_taken.add("ExamineAirway")
-            continue
-        
-        if any(events[3:7]):
-            if events[5] or events[4]:
-                take_action(31)
-                continue
-            elif events[6]:
-                take_action(35)
-                continue
-
-        if "ExamineBreathing" not in actions_taken:
-            take_action(4)
-            actions_taken.add("ExamineBreathing")
-            continue
-
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)
-            continue
-        
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)
-            continue
-
-        if "ViewMonitor" not in actions_taken:
+        if "Monitor" not in examined:
             take_action(16)
-            actions_taken.add("ViewMonitor")
+            examined.add("Monitor")
             continue
-
-        if "UseSatsProbe" not in actions_taken:
+        if "SatsProbe" not in examined:
             take_action(25)
-            actions_taken.add("UseSatsProbe")
+            examined.add("SatsProbe")
             continue
-        
-        if "UseBloodPressureCuff" not in actions_taken:
+        if "BPCuff" not in examined:
             take_action(27)
-            actions_taken.add("UseBloodPressureCuff")
+            examined.add("BPCuff")
             continue
 
-        if "ExamineCirculation" not in actions_taken:
-            take_action(5)
-            actions_taken.add("ExamineCirculation")
+        if not any(events[3:7]) and "Airway" not in examined:
+            take_action(3)
+            examined.add("Airway")
             continue
+        if any(events[3:7]):
+            if events[7]:
+                take_action(29)
+                continue
+            if events[8]:
+                take_action(36)
+                continue
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)
+                examined.add("Breathing")
+                continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
+            continue
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)
+            continue
+        if vitals["RR"] and vitals["RR"] < 8:
+            take_action(29)
             continue
 
         if vitals["HR"]:
@@ -93,17 +80,7 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
-
-        if "ExamineDisability" not in actions_taken:
-            take_action(6)
-            actions_taken.add("ExamineDisability")
-            continue
-
-        if "ExamineExposure" not in actions_taken:
-            take_action(7)
-            actions_taken.add("ExamineExposure")
-            continue
-
+        
         take_action(48)
         break
     else:
