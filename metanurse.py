@@ -48,11 +48,6 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if "Monitor" not in examined:
-            take_action(16)
-            examined.add("Monitor")
-            continue
-
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
@@ -81,8 +76,9 @@ def stabilize():
                 take_action(9)
                 continue
 
-        take_action(48)
-        break
+        if vitals["Sats"] and vitals["Sats"] >= 88 and vitals["MAP"] and vitals["MAP"] >= 60 and vitals["RR"] and vitals["RR"] >= 8:
+            take_action(48)
+            break
     else:
         take_action(48)
 
