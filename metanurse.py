@@ -14,17 +14,16 @@ def stabilize():
             continue
 
         events = observations[:33]
-        exam_times = observations[33:40]
-        values = observations[40:]
+        values = observations[46:]
 
         vitals = {
-            "HR": values[0] if exam_times[0] > 0 else None,
-            "RR": values[1] if exam_times[1] > 0 else None,
-            "Glucose": values[2] if exam_times[2] > 0 else None,
-            "Temp": values[3] if exam_times[3] > 0 else None,
-            "MAP": values[4] if exam_times[4] > 0 else None,
-            "Sats": values[5] if exam_times[5] > 0 else None,
-            "Resps": values[6] if exam_times[6] > 0 else None,
+            "HR": values[0] if observations[40] > 0 else None,
+            "RR": values[1] if observations[41] > 0 else None,
+            "Glucose": values[2] if observations[42] > 0 else None,
+            "Temp": values[3] if observations[43] > 0 else None,
+            "MAP": values[4] if observations[44] > 0 else None,
+            "Sats": values[5] if observations[45] > 0 else None,
+            "Resps": values[6] if observations[46] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -50,7 +49,7 @@ def stabilize():
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
-            
+
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
@@ -65,13 +64,24 @@ def stabilize():
             examined.add("HR")
             continue
 
-        if vitals["HR"] and (vitals["HR"] > 150 or any(events[i] for i in range(28, 33))):
-            take_action(24)  # Use Monitor Pads (for arrhythmia)
-            continue
-
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
+
+        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
+            continue
+
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)  # Use Monitor Pads (for cardioversion)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)  # Give Atropine
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # Give Adenosine
+                continue
 
         take_action(48)  # Finish
         break
