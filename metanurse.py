@@ -1,11 +1,10 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-
+    
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
@@ -93,7 +92,6 @@ def stabilize():
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
