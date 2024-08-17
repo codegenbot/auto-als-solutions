@@ -34,9 +34,7 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -72,11 +70,6 @@ def stabilize():
             take_action(29)
             continue
 
-        if events[12] > 0 and "BibasalCrepitations" not in examined:
-            take_action(19)
-            examined.add("BibasalCrepitations")
-            continue
-
         if set(events[27:33]) & {i for i in range(27, 33)}:
             take_action(24)
             continue
@@ -89,7 +82,14 @@ def stabilize():
                 take_action(12)
                 continue
 
-        take_action(0)
+        if any([v is None for v in vitals.values()]):
+            take_action(0)
+            continue
+        
+        take_action(48)
+        break
+    else:
+        take_action(48)
 
 if __name__ == "__main__":
     stabilize()
