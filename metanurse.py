@@ -31,11 +31,10 @@ def stabilize():
             "Temp": measurements[3] if measured_recent[3] > 0 else None,
             "MAP": measurements[4] if measured_recent[4] > 0 else None,
             "Sats": measurements[5] if measured_recent[5] > 0 else None,
+            "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -44,18 +43,14 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if vitals["Sats"] is None and "SatsProbe" not in examined:
+        if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
-            examined.add("SatsProbe")
+            examined.add("Sats")
             continue
 
-        if vitals["MAP"] is None and "BP_Cuff" not in examined:
+        if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
-            examined.add("BP_Cuff")
-            continue
-
-        if vitals["Sats"] is None or vitals["MAP"] is None:
-            take_action(16)
+            examined.add("MAP")
             continue
 
         if "Breathing" not in examined:
