@@ -6,7 +6,7 @@ def stabilize():
         sys.stdout.flush()
 
     steps, examined = 350, set()
-    
+
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
         if len(observations) != 53:
@@ -79,7 +79,6 @@ def stabilize():
                 take_action(9)  # Give Adenosine
                 continue
 
-        # Perform full ABCDE check
         if "Disability" not in examined:
             take_action(6)  # Examine Disability
             examined.add("Disability")
