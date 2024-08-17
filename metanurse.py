@@ -91,7 +91,7 @@ def stabilize():
                 take_action(12)  # Give atropine
                 continue
 
-        if "MAP" not in measured_recent and "Sats" not in measured_recent:
+        if "MAP" not in measured_recent or "Sats" not in measured_recent:
             take_action(16)  # View monitor
             continue
 
