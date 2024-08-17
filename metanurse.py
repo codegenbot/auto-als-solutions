@@ -54,25 +54,26 @@ def stabilize():
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
-
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
-        
+
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
             take_action(24)  # Use Monitor Pads (for defibrillation)
             continue
-        
-        if vitals["MAP"] and vitals["Sats"] and vitals["MAP"] >= 60 and vitals["Sats"] >= 88 and vitals["RR"] >= 8:
-            take_action(48)  # Finish
-            break
+
+        take_action(48)  # Finish
+        break
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
