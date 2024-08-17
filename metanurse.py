@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -73,30 +72,22 @@ def stabilize():
             take_action(29)
             continue
 
-        if "Response" not in examined:
-            take_action(8)
-            examined.add("Response")
+        if set(events[27:33]) & {i for i in range(27, 33)}:
+            take_action(24)
             continue
 
-        rhythms = events[27:37]
-        if any(rhythms) and "Rhythm" not in examined:
-            take_action(2)
-            examined.add("Rhythm")
-            continue
-
-        if vitals["HR"] and vitals["HR"] > 150:
-            take_action(17)
-            continue
-
-        if vitals["HR"] and vitals["HR"] < 50:
-            take_action(12)
-            continue
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(17)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)
+                continue
 
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
