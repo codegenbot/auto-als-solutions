@@ -31,10 +31,11 @@ def stabilize():
             "Temp": measurements[3] if measured_recent[3] > 0 else None,
             "MAP": measurements[4] if measured_recent[4] > 0 else None,
             "Sats": measurements[5] if measured_recent[5] > 0 else None,
-            "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
+            vitals["MAP"] is not None and vitals["MAP"] < 20
+        ):
             take_action(17)
             continue
 
@@ -70,22 +71,26 @@ def stabilize():
             take_action(29)
             continue
 
-        if set(events[27:33]) & {i for i in range(27, 33)}:
-            take_action(24)
+        if events[25] > 0:
+            take_action(33)
+            continue
+
+        if events[26] > 0:
+            take_action(14)
+            continue
+
+        if events[11] > 0:
+            take_action(9)
             continue
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(17)
+                take_action(9)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
 
-        if any([v is None for v in vitals.values()]):
-            take_action(0)
-            continue
-        
         take_action(48)
         break
     else:
