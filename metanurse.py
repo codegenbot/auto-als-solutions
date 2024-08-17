@@ -78,7 +78,7 @@ def stabilize():
             take_action(actions["UseBagValveMask"])
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(actions["CheckRhythm"])
                 continue
