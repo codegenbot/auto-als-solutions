@@ -29,7 +29,7 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
@@ -53,23 +53,21 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if "MapSatsChecked" not in examined:
+            take_action(16)
+            examined.add("MapSatsChecked")
+            continue
+
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
-            continue
-
-        rhythm_events = [
-            events[27], events[28], events[29], events[30], events[31], events[32]
-        ]
-        if any(rhythm_events):
-            take_action(24)
             continue
 
         if vitals["HR"]:
