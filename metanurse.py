@@ -1,12 +1,12 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
-    steps, examined = 350, set()
+    steps = 350
+    examined = set()
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
@@ -28,9 +28,7 @@ def stabilize():
             "Resps": values[6] if times[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
@@ -44,21 +42,21 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
+        if "Breathing" in examined and "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
-        if "MAP" not in examined and vitals["MAP"] is None:
+        if "Sats" in examined and "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
+        if "MAP" in examined and vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
+        if "Sats" in examined and vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
 
@@ -66,11 +64,7 @@ def stabilize():
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads
-            continue
-
-        if vitals["HR"]:
+        if events[3] and vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)  # Use Monitor Pads
                 continue
@@ -82,7 +76,6 @@ def stabilize():
         break
     else:
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
