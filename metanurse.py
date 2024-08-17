@@ -69,7 +69,6 @@ def stabilize():
             continue
 
         if vitals["HR"]:
-            # Check for arrhythmia events or abnormal heart rate
             if any(events[i] for i in range(28, 33)):
                 take_action(24)  # Use Monitor Pads
                 continue
