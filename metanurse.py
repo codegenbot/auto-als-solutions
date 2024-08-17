@@ -80,14 +80,14 @@ def stabilize():
 
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(9)  # Assuming cardioversion
                 continue
             elif vitals["HR"] < 50:
                 take_action(2)
                 continue
         
         if "Monitor" not in examined:
-            take_action(16)
+            take_action(16)  # ViewMonitor to get latest vitals
             examined.add("Monitor")
             continue
 
