@@ -43,14 +43,14 @@ def stabilize():
             examined.add("Sats")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)
             examined.add("MAP")
+            continue
+
+        if "Breathing" not in examined:
+            take_action(4)
+            examined.add("Breathing")
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -72,7 +72,7 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)
                 continue
-            elif vitals["HR"] > 100:
+            elif vitals["HR"] > 100 and vitals["MAP"] and vitals["MAP"] < 60:
                 take_action(9)
                 continue
 
