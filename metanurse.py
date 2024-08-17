@@ -5,7 +5,7 @@ def stabilize():
         print(action)
         sys.stdout.flush()
 
-    steps, examined, drawers_opened = 350, set(), set()
+    steps, examined = 350, set()
 
     for step in range(steps):
         observations = list(map(float, input().strip().split()))
@@ -35,43 +35,21 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if not any(events[7:15]) and "Breathing" not in examined:
-            take_action(4)  # Examine Breathing
-            examined.add("Breathing")
-            continue
-
-        if "BreathingDrawer" not in drawers_opened:
-            take_action(19)  # OpenBreathingDrawer
-            drawers_opened.add("BreathingDrawer")
-            continue
-
-        if events[4]:  # AirwayVomit
-            take_action(31)  # Use Yankeur Suction Catheter
-            continue
-        
-        if events[5]:  # AirwayBlood
-            take_action(31)  # Use Yankeur Suction Catheter
-            continue
-
-        if events[6]:  # AirwayTongue
-            take_action(36)  # PerformHeadTiltChinLift
-            continue
-
-        if events[12]:  # BreathingWheeze
-            take_action(18)  # Open Airway Drawer
-            continue
+        if events[3]:  # AirwayClear
+            if events[8]:  # BreathingSnoring
+                take_action(36)  # Perform Head Tilt Chin Lift
+                continue
+            if not any(events[7:15]) and "Breathing" not in examined:
+                take_action(4)  # Examine Breathing
+                examined.add("Breathing")
+                continue
             
-        if events[13]:  # BreathingCoarseCrepitationsAtBase
-            take_action(30)  # Use Non Rebreather Mask
-            continue
-        
         if events[14]:  # BreathingPneumothoraxSymptoms
-            take_action(4)  # ExamineBreathing
+            take_action(14)  # UseVenflonIVCatheter
             continue
-            
-        # Ensure patient is receiving oxygen, use Non Rebreather Mask
+
         if "Sats" not in examined:
-            take_action(25)  # UseSatsProbe
+            take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
@@ -79,21 +57,31 @@ def stabilize():
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
-        
-        if not vitals["Sats"] or vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
-            continue
 
-        if not vitals["MAP"] or vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        if not vitals["RR"] or vitals["RR"] < 8:
+        if vitals["Sats"] and vitals["Sats"] < 88:
+            take_action(30)  # Use Non Rebreather Mask
+            continue
+
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
-        if not vitals["HR"] or vitals["HR"] < 60 or vitals["HR"] > 100:
-            take_action(24)  # Use Monitor Pads
+        if vitals["HR"]:
+            if vitals["HR"] > 150 or vitals["HR"] < 50:
+                take_action(24)  # Use Monitor Pads
+                continue
+
+        if "Bibasal Crepitations" not in examined:
+            take_action(19)  # Open Breathing Drawer
+            examined.add("Bibasal Crepitations")
+            continue
+
+        if events[32] or events[33]:  # Heart Rhythm Issues
+            take_action(9)  # Give Adenosine
             continue
 
         take_action(48)  # Finish
