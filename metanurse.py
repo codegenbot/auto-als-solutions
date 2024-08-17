@@ -4,7 +4,7 @@ def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
-    
+
     def get_observations():
         try:
             return list(map(float, input().strip().split()))
@@ -13,20 +13,30 @@ def stabilize():
             sys.exit()
 
     steps, examined, actions = 350, set(), {
-        "ExamineAirway": 3, "ExamineBreathing": 4, "ExamineCirculation": 5, 
-        "UseSatsProbe": 25, "UseBloodPressureCuff": 27, "ViewMonitor": 16,
-        "UseNonRebreatherMask": 30, "GiveFluids": 15, "UseBagValveMask": 29,
-        "GiveAtropine": 12, "GiveAdenosine": 9, "StartChestCompression": 17, 
-        "Finish": 48, "CheckSignsOfLife": 1
+        "DoNothing": 0, "CheckSignsOfLife": 1, "CheckRhythm": 2, "ExamineAirway": 3, "ExamineBreathing": 4,
+        "ExamineCirculation": 5, "ExamineDisability": 6, "ExamineExposure": 7, "ExamineResponse": 8,
+        "GiveAdenosine": 9, "GiveAdrenaline": 10, "GiveAmiodarone": 11, "GiveAtropine": 12, "GiveMidazolam": 13,
+        "UseVenflonIVCatheter": 14, "GiveFluids": 15, "ViewMonitor": 16, "StartChestCompression": 17,
+        "OpenAirwayDrawer": 18, "OpenBreathingDrawer": 19, "OpenCirculationDrawer": 20, "OpenDrugsDrawer": 21,
+        "BagDuringCPR": 22, "ResumeCPR": 23, "UseMonitorPads": 24, "UseSatsProbe": 25, "UseAline": 26,
+        "UseBloodPressureCuff": 27, "AttachDefibPads": 28, "UseBagValveMask": 29, "UseNonRebreatherMask": 30,
+        "UseYankeurSacionCatheter": 31, "UseGuedelAirway": 32, "TakeBloodForArterialBloodGas": 33, "TakeRoutineBloods": 34,
+        "PerformAirwayManoeuvres": 35, "PerformHeadTiltChinLift": 36, "PerformJawThrust": 37, "TakeBloodPressure": 38,
+        "TurnOnDefibrillator": 39, "DefibrillatorCharge": 40, "DefibrillatorCurrentUp": 41,
+        "DefibrillatorCurrentDown": 42, "DefibrillatorPace": 43, "DefibrillatorPacePause": 44, "DefibrillatorRateUp": 45,
+        "DefibrillatorRateDown": 46, "DefibrillatorSync": 47, "Finish": 48
     }
 
     for _ in range(steps):
         observations = get_observations()
+
         if len(observations) != 53:
-            take_action(0)
+            take_action(actions["DoNothing"])
             continue
 
-        events, measured_recent, measurements = observations[:33], observations[33:40], observations[40:]
+        events = observations[:33]
+        measured_recent = observations[33:40]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -51,7 +61,7 @@ def stabilize():
             take_action(actions["UseSatsProbe"])
             examined.add("Sats")
             continue
-
+        
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(actions["UseBloodPressureCuff"])
             examined.add("MAP")
@@ -60,10 +70,6 @@ def stabilize():
         if "Breathing" not in examined:
             take_action(actions["ExamineBreathing"])
             examined.add("Breathing")
-            continue
-
-        if vitals["MAP"] is None or vitals["Sats"] is None:
-            take_action(actions["ViewMonitor"])
             continue
 
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
@@ -78,7 +84,7 @@ def stabilize():
             take_action(actions["UseBagValveMask"])
             continue
 
-        if vitals["HR"]:
+        if vitals["HR"] is not None:
             if vitals["HR"] > 150:
                 take_action(actions["GiveAdenosine"])
                 continue
