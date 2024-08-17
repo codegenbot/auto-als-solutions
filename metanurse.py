@@ -31,13 +31,13 @@ def stabilize():
         values = observations[46:]
 
         vitals = {
-            "HR": values[0] if observations[40] > 0 else None,
-            "RR": values[1] if observations[41] > 0 else None,
-            "Glucose": values[2] if observations[42] > 0 else None,
-            "Temp": values[3] if observations[43] > 0 else None,
-            "MAP": values[4] if observations[44] > 0 else None,
-            "Sats": values[5] if observations[45] > 0 else None,
-            "Resps": values[6] if observations[46] > 0 else None,
+            "HR": values[0] if observations[33] > 0 else None,
+            "RR": values[1] if observations[34] > 0 else None,
+            "Glucose": values[2] if observations[35] > 0 else None,
+            "Temp": values[3] if observations[36] > 0 else None,
+            "MAP": values[4] if observations[37] > 0 else None,
+            "Sats": values[5] if observations[38] > 0 else None,
+            "Resps": values[6] if observations[39] > 0 else None,
         }
 
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
@@ -75,19 +75,29 @@ def stabilize():
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
             take_action(24)  # Use Monitor Pads (for defibrillation)
             continue
+        
+        # Check for tachyarrhythmia and perform cardioversion (HR >= 100)
+        if vitals["HR"] and vitals["HR"] >= 100:
+            take_action(24)  # Use Monitor Pads (for cardioversion)
+            continue
 
         if vitals["HR"]:
-            if vitals["HR"] > 150 or vitals["HR"] < 50:
-                take_action(24)  # Use Monitor Pads (for cardioversion/defibrillation)
+            if vitals["HR"] > 150:
+                take_action(24)  # Use Monitor Pads (for cardioversion)
                 continue
             elif vitals["HR"] > 100:
                 take_action(9)  # Give Adenosine
                 continue
+            elif vitals["HR"] < 50:
+                take_action(12)  # Give Atropine
+                continue
 
-        if all(v is not None for v in vitals.values()[:5]):
+        # Only finish if stabilized
+        if (vitals["MAP"] and vitals["MAP"] >= 60) and \
+           (vitals["Sats"] and vitals["Sats"] >= 88) and \
+           (vitals["RR"] and vitals["RR"] >= 8):
             take_action(48)  # Finish
             break
-
     else:
         take_action(48)  # Finish
 
