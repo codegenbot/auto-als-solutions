@@ -20,7 +20,7 @@ def stabilize():
         "OpenAirwayDrawer": 18, "OpenBreathingDrawer": 19, "OpenCirculationDrawer": 20, "OpenDrugsDrawer": 21,
         "BagDuringCPR": 22, "ResumeCPR": 23, "UseMonitorPads": 24, "UseSatsProbe": 25, "UseAline": 26,
         "UseBloodPressureCuff": 27, "AttachDefibPads": 28, "UseBagValveMask": 29, "UseNonRebreatherMask": 30,
-        "UseYankeurSacionCatheter": 31, "UseGuedelAirway": 32, "TakeBloodForArterialBloodGas": 33, "TakeRoutineBloods": 34,
+        "UseYankeurSuctionCatheter": 31, "UseGuedelAirway": 32, "TakeBloodForArterialBloodGas": 33, "TakeRoutineBloods": 34,
         "PerformAirwayManoeuvres": 35, "PerformHeadTiltChinLift": 36, "PerformJawThrust": 37, "TakeBloodPressure": 38,
         "TurnOnDefibrillator": 39, "DefibrillatorCharge": 40, "DefibrillatorCurrentUp": 41,
         "DefibrillatorCurrentDown": 42, "DefibrillatorPace": 43, "DefibrillatorPacePause": 44, "DefibrillatorRateUp": 45,
