@@ -79,6 +79,11 @@ def stabilize():
             take_action(USE_NON_REBREATHER_MASK)
             continue
 
+        if "Circulation" not in examined:
+            take_action(EXAMINE_CIRCULATION)
+            examined.add("Circulation")
+            continue
+
         if vitals_dict["MAP"] and vitals_dict["MAP"] < 60:
             take_action(GIVE_FLUIDS)
             continue
