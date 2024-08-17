@@ -12,7 +12,8 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    steps, examined = 350, set()
+    steps = 350
+    examined = {"Airway": False, "Breathing": False, "Circulation": False, "HeartRate": False, "Sats": False, "MAP": False}
 
     for _ in range(steps):
         observations = get_observations()
@@ -38,45 +39,54 @@ def stabilize():
             take_action(17)
             continue
 
-        if "Airway" not in examined:
+        if not examined["Airway"]:
             take_action(3)
-            examined.add("Airway")
+            examined["Airway"] = True
             continue
 
-        if vitals["Sats"] is None and "Sats" not in examined:
+        if not vitals["Sats"] and not examined["Sats"]:
             take_action(25)
-            examined.add("Sats")
+            examined["Sats"] = True
             continue
-
-        if vitals["MAP"] is None and "MAP" not in examined:
+        
+        if not vitals["MAP"] and not examined["MAP"]:
             take_action(27)
-            examined.add("MAP")
+            examined["MAP"] = True
             continue
 
-        if vitals["RR"] is None and "Breathing" not in examined:
+        if not vitals["RR"] and not examined["Breathing"]:
             take_action(4)
-            examined.add("Breathing")
+            examined["Breathing"] = True
             continue
 
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
+        if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
+        if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(2)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
+        if vitals["HR"] and not examined["HeartRate"]:
+            take_action(16)
+            examined["HeartRate"] = True
+            continue
+
+        if vitals["HR"] and vitals["HR"] > 150:
+            take_action(24)
+            continue
+
+        if vitals["HR"] and vitals["HR"] < 50:
+            take_action(12)
+            continue
+
+        if events[31] > 0:
+            take_action(16)
+            continue
 
         take_action(48)
         break
