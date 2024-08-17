@@ -26,42 +26,51 @@ def stabilize():
             "Resps": measurements[6] if observations[39] > 0 else None,
         }
 
+        # Check for critical conditions first
         if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
+        # Examine Airway if not checked
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
             continue
 
+        # Ensure oxygen saturation measurement
         if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
+        # Ensure MAP measurement
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
 
+        # Examine Breathing if not checked
         if "Breathing" not in examined:
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
 
+        # Treat oxygen saturation
         if vitals["Sats"] and vitals["Sats"] < 88:
             take_action(30)  # Use Non Rebreather Mask
             continue
 
+        # Treat hypotension
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
+        # Treat low respiratory rate
         if vitals["RR"] and vitals["RR"] < 8:
             take_action(29)  # Use Bag-Valve Mask
             continue
 
+        # Treat heart rate abnormalities
         if vitals["HR"]:
             if vitals["HR"] > 150:
                 take_action(24)  # Use Monitor Pads (for cardioversion)
