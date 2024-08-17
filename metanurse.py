@@ -65,10 +65,9 @@ def stabilize():
             take_action(24)  # Use Monitor Pads
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150: # Address tachyarrhythmia
-                take_action(24)  # Use Monitor Pads
-                continue
+        if vitals["HR"] is not None and vitals["HR"] > 150:  # Address tachyarrhythmia
+            take_action(24)  # Use Monitor Pads
+            continue
         
         take_action(48)  # Finish
         break
