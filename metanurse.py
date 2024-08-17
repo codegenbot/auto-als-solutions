@@ -69,18 +69,19 @@ def stabilize():
         if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
-        
-        if events[28] > 0:
+
+        if "ViewMonitor" not in examined and "MAP" in examined and "Sats" in examined:
             take_action(16)
+            examined.add("ViewMonitor")
             continue
 
         if any(events[27:33]):
-            take_action(2)
+            take_action(24)
             continue
 
         if vitals["HR"] is not None:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(24)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
