@@ -36,14 +36,14 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
-            examined.add("Sats")
-            continue
-
         if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
+            continue
+
+        if "Sats" not in examined and vitals["Sats"] is None:
+            take_action(25)  # Use Sats Probe
+            examined.add("Sats")
             continue
 
         if any(events[3:7]) and "Breathing" not in examined:
@@ -70,10 +70,6 @@ def stabilize():
             elif vitals["HR"] < 50:
                 take_action(12)  # Give Atropine
                 continue
-
-        if vitals["RR"] and vitals["RR"] > 20:
-            take_action(29)  # Use Bag-Valve Mask
-            continue
 
         take_action(48)  # Finish
         break
