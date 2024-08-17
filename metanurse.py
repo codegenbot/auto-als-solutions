@@ -47,12 +47,18 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
+        if "Sats" not in examined:
+            take_action(25)  # Use Sats Probe
+            examined.add("Sats")
             continue
 
-        if vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
+        if "MAP" not in examined:
+            take_action(27)  # Use Blood Pressure Cuff
+            examined.add("MAP")
+            continue
+
+        if vitals["MAP"] and vitals["MAP"] < 60:
+            take_action(15)  # Give Fluids
             continue
 
         if vitals["Sats"] and vitals["Sats"] < 88:
@@ -60,11 +66,7 @@ def stabilize():
             continue
 
         if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use Bag Valve Mask
-            continue
-
-        if vitals["RR"] and vitals["RR"] > 20:
-            take_action(5)  # Examine Breathing
+            take_action(29)  # Use Bag-Valve Mask
             continue
 
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
