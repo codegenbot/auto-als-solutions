@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -16,7 +15,7 @@ def stabilize():
 
         events = observations[:33]
         values = observations[46:]
-
+    
         vitals = {
             "HR": values[0] if observations[33] > 0 else None,
             "RR": values[1] if observations[34] > 0 else None,
@@ -26,15 +25,11 @@ def stabilize():
             "Sats": values[5] if observations[38] > 0 else None,
             "Resps": values[6] if observations[39] > 0 else None,
         }
-
-        # Immediate critical checks
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)  # Start Chest Compression
             continue
 
-        # Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
@@ -49,7 +44,6 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        # Breathing
         if "Breathing" in examined:
             if vitals["Sats"] and vitals["Sats"] < 88:
                 take_action(30)  # Use Non Rebreather Mask
@@ -57,8 +51,7 @@ def stabilize():
             if vitals["RR"] and vitals["RR"] < 8:
                 take_action(29)  # Use Bag-Valve Mask
                 continue
-
-        # Circulation
+        
         if "Breathing" in examined and not any(events[17:20]):
             take_action(5)  # Examine Circulation
             examined.add("Circulation")
@@ -68,7 +61,6 @@ def stabilize():
             take_action(15)  # Give Fluids
             continue
 
-        # Heart Conditions
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
             take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
@@ -85,19 +77,12 @@ def stabilize():
                 take_action(12)  # Give Atropine
                 continue
 
-        # If all vitals are stable
-        if all(
-            vitals[v] is not None
-            and (88 <= vitals["Sats"] <= 100)
-            and (8 <= vitals["RR"] <= 20)
-            and (60 <= vitals["MAP"] <= 100)
-            for v in ["Sats", "RR", "MAP"]
-        ):
+        if all(vitals[v] is not None and (88 <= vitals["Sats"] <= 100) and
+               (8 <= vitals["RR"] <= 20) and (60 <= vitals["MAP"] <= 100) for v in ["Sats", "RR", "MAP"]):
             take_action(48)  # Finish
             break
     else:
         take_action(48)  # Finish
-
 
 if __name__ == "__main__":
     stabilize()
