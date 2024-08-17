@@ -22,7 +22,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[40:]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -34,52 +34,59 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
+        # Check for immediate cardiac arrest condition
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Check airway if not examined yet
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
+        # Check breathing
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
             continue
+        if vitals["RR"] is None and "RR" not in examined:
+            take_action(5)
+            examined.add("RR")
+            continue
 
+        # Check circulation
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
 
-        if "Breathing" not in examined:
-            take_action(4)
-            examined.add("Breathing")
-            continue
-
+        # Check immediate oxygen needs
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
+        # Check and stabilize blood pressure
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+        # Check for arrhythmia and respond
+        cardiac_events = [28, 29, 31, 32, 33, 35, 37, 39, 40, 42]
+        if any(events[i] > 0 for i in cardiac_events):
+            take_action(24)
             continue
 
-        if vitals["HR"]:
-            if vitals["HR"] > 150:
-                take_action(9)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
+        # Stabilized condition check
+        if all([
+            vitals["Sats"] is not None and vitals["Sats"] >= 88,
+            vitals["RR"] is not None and vitals["RR"] >= 8,
+            vitals["MAP"] is not None and vitals["MAP"] >= 60
+        ]):
+            take_action(48)
+            break
 
-        take_action(48)
-        break
+        take_action(0)  # Default to doing nothing if no actions needed
     else:
         take_action(48)
 
