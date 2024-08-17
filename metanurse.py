@@ -1,12 +1,13 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
         sys.stdout.flush()
 
     examined = set()
-    
+
     def examine_vitals():
         if "Monitor" not in examined:
             take_action(16)
@@ -52,7 +53,7 @@ def stabilize():
             examined.add("Airway")
             continue
 
-        if any(events[3:7]):
+        if "AirwayClear" in events:
             if not any(events[7:15]) and "Breathing" not in examined:
                 take_action(4)
                 examined.add("Breathing")
@@ -94,6 +95,7 @@ def stabilize():
         break
     else:
         take_action(48)
+
 
 if __name__ == "__main__":
     stabilize()
