@@ -4,14 +4,15 @@ import sys
     DO_NOTHING,
     EXAMINE_AIRWAY,
     EXAMINE_BREATHING,
+    EXAMINE_CIRCULATION,
+    EXAMINE_DISABILITY,
+    EXAMINE_EXPOSURE,
     USE_BP_CUFF,
     USE_SATS_PROBE,
     USE_NON_REBREATHER_MASK,
     GIVE_FLUIDS,
-    PERFORM_CARDIOVERSION,
     FINISH,
-) = (0, 3, 4, 27, 25, 30, 15, 24, 48)
-
+) = (0, 3, 4, 5, 6, 7, 27, 25, 30, 15, 48)
 
 def stabilize():
     def take_action(action):
@@ -33,18 +34,18 @@ def stabilize():
         events, measuring_times, measurements = (
             observations[:33],
             observations[33:40],
-            observations[40:],
+            observations[46:],
         )
         vitals = ["HR", "RR", "Glucose", "Temp", "MAP", "Sats", "Resps"]
         vitals_dict = {
             vitals[i]: measurements[i] if measuring_times[i] > 0 else None
-            for i in range(len(vitals))
+            for i in range(7)
         }
 
         if (vitals_dict["Sats"] and vitals_dict["Sats"] < 65) or (
             vitals_dict["MAP"] and vitals_dict["MAP"] < 20
         ):
-            take_action(PERFORM_CARDIOVERSION)
+            take_action(FINISH)
             continue
 
         if not events[3] and "Airway" not in examined:
@@ -83,7 +84,6 @@ def stabilize():
         break
     else:
         take_action(FINISH)
-
 
 if __name__ == "__main__":
     stabilize()
