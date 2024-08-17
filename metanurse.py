@@ -44,12 +44,12 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        if "Sats" not in examined and "Sats" not in values:
+        if "Sats" not in examined and vitals["Sats"] is None:
             take_action(25)  # Use Sats Probe
             examined.add("Sats")
             continue
 
-        if "MAP" not in examined and "MAP" not in values:
+        if "MAP" not in examined and vitals["MAP"] is None:
             take_action(27)  # Use Blood Pressure Cuff
             examined.add("MAP")
             continue
@@ -67,17 +67,24 @@ def stabilize():
             continue
 
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads (for defibrillation)
+            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
+        
+        if vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(24)  # Use Monitor Pads (for cardioversion)
+                continue
+            elif vitals["HR"] < 50:
+                take_action(12)  # Give Atropine
+                continue
+            elif vitals["HR"] > 100:
+                take_action(9)  # Give Adenosine
+                continue
 
-        if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 50):
-            take_action(24)  # Use Monitor Pads (for cardioversion)
-            continue
-
-        take_action(16)  # View Monitor to check heart rhythm
-        continue
-
-    take_action(48)  # Finish
+        take_action(48)  # Finish
+        break
+    else:
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
