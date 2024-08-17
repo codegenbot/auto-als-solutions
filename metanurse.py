@@ -1,5 +1,6 @@
 import sys
 
+
 def stabilize():
     def take_action(action):
         print(action)
@@ -14,23 +15,26 @@ def stabilize():
             continue
 
         events = observations[:33]
-        times = observations[33:40]
         values = observations[46:]
 
         vitals = {
-            "HR": values[0] if times[0] > 0 else None,
-            "RR": values[1] if times[1] > 0 else None,
-            "Glucose": values[2] if times[2] > 0 else None,
-            "Temp": values[3] if times[3] > 0 else None,
-            "MAP": values[4] if times[4] > 0 else None,
-            "Sats": values[5] if times[5] > 0 else None,
-            "Resps": values[6] if times[6] > 0 else None,
+            "HR": values[0] if observations[33] > 0 else None,
+            "RR": values[1] if observations[34] > 0 else None,
+            "Glucose": values[2] if observations[35] > 0 else None,
+            "Temp": values[3] if observations[36] > 0 else None,
+            "MAP": values[4] if observations[37] > 0 else None,
+            "Sats": values[5] if observations[38] > 0 else None,
+            "Resps": values[6] if observations[39] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
+        # Immediate critical checks
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (
+            vitals["MAP"] and vitals["MAP"] < 20
+        ):
             take_action(17)  # Start Chest Compression
             continue
 
+        # Airway
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)  # Examine Airway
             examined.add("Airway")
@@ -45,39 +49,28 @@ def stabilize():
                 examined.add("Breathing")
                 continue
 
-        if "Circulation" not in examined:
-            take_action(27)  # Use BloodPressureCuff
-            take_action(6)  # Examine Circulation
+        # Breathing
+        if "Breathing" in examined:
+            if vitals["Sats"] and vitals["Sats"] < 88:
+                take_action(30)  # Use Non Rebreather Mask
+                continue
+            if vitals["RR"] and vitals["RR"] < 8:
+                take_action(29)  # Use Bag-Valve Mask
+                continue
+
+        # Circulation
+        if "Breathing" in examined and not any(events[17:20]):
+            take_action(5)  # Examine Circulation
             examined.add("Circulation")
             continue
-        
-        if "BreathingDrawer" not in examined:
-            take_action(19)  # Open Breathing Drawer
-            examined.add("BreathingDrawer")
-            continue
-        
-        if "SatsProbe" not in examined:
-            take_action(25)  # Use Sats Probe
-            examined.add("SatsProbe")
-            continue
-        
-        take_action(16)  # View Monitor to get Sats
-        continue
 
         if vitals["MAP"] and vitals["MAP"] < 60:
             take_action(15)  # Give Fluids
             continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
-            continue
-
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
-            continue
-
+        # Heart Conditions
         if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads (for defibrillation)
+            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
             continue
 
         if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 50):
@@ -92,10 +85,19 @@ def stabilize():
                 take_action(12)  # Give Atropine
                 continue
 
-        take_action(48)  # Finish
-        break
+        # If all vitals are stable
+        if all(
+            vitals[v] is not None
+            and (88 <= vitals["Sats"] <= 100)
+            and (8 <= vitals["RR"] <= 20)
+            and (60 <= vitals["MAP"] <= 100)
+            for v in ["Sats", "RR", "MAP"]
+        ):
+            take_action(48)  # Finish
+            break
     else:
         take_action(48)  # Finish
+
 
 if __name__ == "__main__":
     stabilize()
