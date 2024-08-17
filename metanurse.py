@@ -40,49 +40,45 @@ def stabilize():
             continue
 
         if events[3]:  # AirwayClear
-            if any(events[7:15]) and "Breathing" not in examined:
-                take_action(4)  # Examine Breathing
-                examined.add("Breathing")
-                continue
+            if any(events[7:15]):
+                if "Breathing" not in examined:
+                    take_action(4)  # Examine Breathing
+                    examined.add("Breathing")
+                    continue
 
-        if "Sats" not in examined and vitals["Sats"] is None:
-            take_action(25)  # Use Sats Probe
-            examined.add("Sats")
-            continue
+                if "Sats" not in examined and vitals["Sats"] is None:
+                    take_action(25)  # Use Sats Probe
+                    examined.add("Sats")
+                    continue
 
-        if vitals["Sats"] and vitals["Sats"] < 88:
-            take_action(30)  # Use Non Rebreather Mask
-            continue
+                if vitals["Sats"] and vitals["Sats"] < 88:
+                    take_action(30)  # Use Non Rebreather Mask
+                    continue
 
-        if "MAP" not in examined and vitals["MAP"] is None:
-            take_action(27)  # Use Blood Pressure Cuff
-            examined.add("MAP")
-            continue
+                if "MAP" not in examined and vitals["MAP"] is None:
+                    take_action(27)  # Use Blood Pressure Cuff
+                    examined.add("MAP")
+                    continue
 
-        if vitals["MAP"] and vitals["MAP"] < 60:
-            take_action(15)  # Give Fluids
-            continue
+                if vitals["MAP"] and vitals["MAP"] < 60:
+                    take_action(15)  # Give Fluids
+                    continue
 
-        if vitals["RR"] and vitals["RR"] < 8:
-            take_action(29)  # Use Bag-Valve Mask
-            continue
+                if vitals["RR"] and vitals["RR"] < 8:
+                    take_action(29)  # Use Bag-Valve Mask
+                    continue
 
-        if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
-            take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
-            continue
+                if any(events[i] for i in range(28, 33)):  # Heart arrhythmia events
+                    take_action(24)  # Use Monitor Pads (for defibrillation/cardioversion)
+                    continue
 
-        if vitals["HR"]:
-            if vitals["HR"] < 50:
-                take_action(12)  # Give Atropine
-                continue
-
-            if 150 < vitals["HR"] < 160:
-                take_action(2)  # Check Rhythm
-                continue
-
-            if vitals["HR"] >= 160:
-                take_action(9)  # Give Adenosine
-                continue
+                if vitals["HR"]:
+                    if vitals["HR"] < 50:
+                        take_action(12)  # Give Atropine
+                        continue
+                    if vitals["HR"] > 150:
+                        take_action(1)  # Check Signs of Life
+                        continue
 
         take_action(48)  # Finish
         break
