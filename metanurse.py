@@ -34,15 +34,18 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
+        # Cardiac arrest criteria
         if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
             take_action(17)
             continue
 
+        # Airway assessment
         if not any(events[3:7]) and "Airway" not in examined:
             take_action(3)
             examined.add("Airway")
             continue
 
+        # Oxygenation and MAP assessment
         if vitals["Sats"] is None and "Sats" not in examined:
             take_action(25)
             examined.add("Sats")
@@ -53,34 +56,47 @@ def stabilize():
             examined.add("MAP")
             continue
 
+        # Breathing assessment
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
+        # Handle bibasal crepitations
         if events[12] > 0:
             take_action(29)
             continue
 
+        # Improve oxygenation if needed
         if (vitals["Sats"] is not None and vitals["Sats"] < 88):
             take_action(30)
             continue
 
+        # Handle hypotension
         if (vitals["MAP"] is not None and vitals["MAP"] < 60):
             take_action(15)
             continue
 
+        # Check respiratory rate if it's lower than required
         if (vitals["RR"] is not None and vitals["RR"] < 8):
             take_action(29)
             continue
 
+        # Check rhythm
+        if "Rhythm" not in examined:
+            take_action(2)
+            examined.add("Rhythm")
+            continue
+
+        # Handling unstable tachyarrhythmia if it exists
         if any(events[27:33]):
             take_action(24)
             continue
 
+        # Check for elevated heart rate
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(17)
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
