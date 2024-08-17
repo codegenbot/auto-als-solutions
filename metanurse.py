@@ -22,7 +22,7 @@ def stabilize():
 
         events = observations[:33]
         measured_recent = observations[33:40]
-        measurements = observations[40:]
+        measurements = observations[46:]
 
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
@@ -50,7 +50,6 @@ def stabilize():
             take_action(25)
             examined.add("Sats")
             continue
-
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
@@ -62,28 +61,23 @@ def stabilize():
             examined.add("Breathing")
             continue
 
-        # Handle bibasal crepitations
-        if events[12] > 0:
-            take_action(29)
-            continue
-
         # Improve oxygenation if needed
-        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
         # Handle hypotension
-        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
+        if vitals["MAP"] is not None and vitals["MAP"] < 60:
             take_action(15)
             continue
 
         # Check respiratory rate if it's lower than required
-        if (vitals["RR"] is not None and vitals["RR"] < 8):
+        if vitals["RR"] is not None and vitals["RR"] < 8:
             take_action(29)
             continue
 
         # Handling unstable tachyarrhythmia if it exists
-        if any(events[27:33]):
+        if any(events[i] > 0 for i in [28, 29, 31, 32]):
             take_action(24)
             continue
 
