@@ -47,7 +47,7 @@ def stabilize():
             checked_vitals["MAP"] = True
             continue
         
-        if "Breathing" not in examined and any(events[i] > 0 for i in (3, 4, 5, 6)):
+        if not examined and any(events[i] > 0 for i in (3, 4, 5, 6)):
             take_action(4)  # Examine Breathing
             examined.add("Breathing")
             continue
