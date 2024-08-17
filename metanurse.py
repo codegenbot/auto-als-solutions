@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -18,6 +17,7 @@ def stabilize():
             take_action(0)
             continue
 
+        # Parse events and observations
         events = observations[:33]
         measured_recent = observations[33:40]
         measurements = observations[46:]
@@ -32,65 +32,72 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (
-            vitals["MAP"] is not None and vitals["MAP"] < 20
-        ):
-            take_action(17)
+        # Immediate stabilization if critical
+        if (vitals["Sats"] is not None and vitals["Sats"] < 65) or (vitals["MAP"] is not None and vitals["MAP"] < 20):
+            take_action(17)  # StartChestCompression
             continue
 
+        # Check Airway
         if not any(events[3:7]) and "Airway" not in examined:
-            take_action(3)
+            take_action(3)  # ExamineAirway
             examined.add("Airway")
             continue
 
+        # Attach and check SATS probe
         if vitals["Sats"] is None and "Sats" not in examined:
-            take_action(25)
+            take_action(25)  # UseSatsProbe
             examined.add("Sats")
             continue
 
+        # Attach and check Blood Pressure Cuff
         if vitals["MAP"] is None and "MAP" not in examined:
-            take_action(27)
+            take_action(27)  # UseBloodPressureCuff
             examined.add("MAP")
             continue
 
+        # Examine Breathing
         if "Breathing" not in examined:
-            take_action(4)
+            take_action(4)  # ExamineBreathing
             examined.add("Breathing")
             continue
 
+        # Treat low oxygen saturation
         if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
+            take_action(30)  # UseNonRebreatherMask
             continue
 
+        # Treat low MAP
         if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
+            take_action(15)  # GiveFluids
             continue
 
+        # Treat low respiratory rate
         if vitals["RR"] is not None and vitals["RR"] < 8:
-            take_action(29)
+            take_action(29)  # UseBagValveMask
             continue
 
+        # Check and treat rhythm issues
         rhythm_events = [events[i] for i in range(27, 33)]
         if any(rhythm_events):
-            take_action(24)
+            take_action(24)  # UseMonitorPads
             continue
 
+        # Treat heart rate issues
         if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(24)
+                take_action(24)  # UseMonitorPads
                 continue
             elif vitals["HR"] < 50:
-                take_action(12)
+                take_action(12)  # GiveAtropine
                 continue
             elif vitals["HR"] > 100:
-                take_action(9)
+                take_action(9)  # GiveAdenosine
                 continue
 
-        take_action(48)
+        take_action(48)  # Finish
         break
     else:
-        take_action(48)
-
+        take_action(48)  # Finish
 
 if __name__ == "__main__":
     stabilize()
