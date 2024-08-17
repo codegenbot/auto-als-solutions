@@ -1,17 +1,6 @@
 import sys
 
-(
-    DO_NOTHING,
-    EXAMINE_AIRWAY,
-    EXAMINE_BREATHING,
-    USE_BP_CUFF,
-    USE_SATS_PROBE,
-    USE_NON_REBREATHER_MASK,
-    GIVE_FLUIDS,
-    PERFORM_CARDIOVERSION,
-    FINISH,
-) = (0, 3, 4, 27, 25, 30, 15, 24, 48)
-
+DO_NOTHING, EXAMINE_AIRWAY, EXAMINE_BREATHING, EXAMINE_CIRCULATION, USE_BP_CUFF, USE_SATS_PROBE, USE_NON_REBREATHER_MASK, GIVE_FLUIDS, PERFORM_CARDIOVERSION, FINISH = 0, 3, 4, 5, 27, 25, 30, 15, 24, 48
 
 def stabilize():
     def take_action(action):
@@ -30,20 +19,11 @@ def stabilize():
             take_action(DO_NOTHING)
             continue
 
-        events, measuring_times, measurements = (
-            observations[:33],
-            observations[33:40],
-            observations[46:],
-        )
+        events, measuring_times, measurements = observations[:33], observations[33:40], observations[46:]
         vitals = ["HR", "RR", "Glucose", "Temp", "MAP", "Sats", "Resps"]
-        vitals_dict = {
-            vitals[i]: measurements[i] if measuring_times[i] > 0 else None
-            for i in range(7)
-        }
+        vitals_dict = {vitals[i]: measurements[i] if measuring_times[i] > 0 else None for i in range(7)}
 
-        if (vitals_dict["Sats"] and vitals_dict["Sats"] < 65) or (
-            vitals_dict["MAP"] and vitals_dict["MAP"] < 20
-        ):
+        if (vitals_dict["Sats"] and vitals_dict["Sats"] < 65) or (vitals_dict["MAP"] and vitals_dict["MAP"] < 20):
             take_action(PERFORM_CARDIOVERSION)
             continue
 
@@ -83,7 +63,6 @@ def stabilize():
         break
     else:
         take_action(FINISH)
-
 
 if __name__ == "__main__":
     stabilize()
