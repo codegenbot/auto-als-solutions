@@ -1,6 +1,5 @@
 import sys
 
-
 def stabilize():
     def take_action(action):
         print(action)
@@ -13,8 +12,9 @@ def stabilize():
             take_action(48)
             sys.exit()
 
-    steps, examined = 350, set()
-
+    steps = 350
+    examined = set()
+    
     for _ in range(steps):
         observations = get_observations()
         if len(observations) != 53:
@@ -24,7 +24,7 @@ def stabilize():
         events = observations[:33]
         measured_recent = observations[33:40]
         measurements = observations[46:]
-
+        
         vitals = {
             "HR": measurements[0] if measured_recent[0] > 0 else None,
             "RR": measurements[1] if measured_recent[1] > 0 else None,
@@ -35,15 +35,12 @@ def stabilize():
             "Resps": measurements[6] if measured_recent[6] > 0 else None,
         }
 
-        if (vitals["Sats"] and vitals["Sats"] < 65) or (
-            vitals["MAP"] and vitals["MAP"] < 20
-        ):
+        if (vitals["Sats"] and vitals["Sats"] < 65) or (vitals["MAP"] and vitals["MAP"] < 20):
             take_action(17)
             continue
 
-        if not any(events[3:7]) and "Airway" not in examined:
+        if not any(events[3:7]):
             take_action(3)
-            examined.add("Airway")
             continue
 
         if vitals["Sats"] is None and "Sats" not in examined:
@@ -55,13 +52,13 @@ def stabilize():
             take_action(27)
             examined.add("MAP")
             continue
-
+        
         if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if vitals["Sats"] is not None and (vitals["Sats"] < 88):
+        if vitals["Sats"] is not None and vitals["Sats"] < 88:
             take_action(30)
             continue
 
@@ -73,22 +70,21 @@ def stabilize():
             take_action(29)
             continue
 
-        if vitals["HR"] is not None:
-            if vitals["HR"] > 150:
-                if events[30] > 0:
-                    take_action(9)
-                else:
-                    take_action(24)
-                continue
-            elif vitals["HR"] < 50:
-                take_action(12)
-                continue
+        if vitals["HR"] and (vitals["HR"] > 150 or vitals["HR"] < 50):
+            take_action(2)
+            continue
 
+        if any(events[27:33]) and vitals["HR"]:
+            if vitals["HR"] > 150:
+                take_action(9)
+            else:
+                take_action(23)
+            continue
+                
         take_action(48)
         break
     else:
         take_action(48)
-
 
 if __name__ == "__main__":
     stabilize()
