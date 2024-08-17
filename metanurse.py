@@ -47,26 +47,30 @@ def stabilize():
             take_action(25)
             examined.add("Sats")
             continue
-        
-        if vitals["Sats"] is not None and vitals["Sats"] < 88:
-            take_action(30)
-            continue
 
         if vitals["MAP"] is None and "MAP" not in examined:
             take_action(27)
             examined.add("MAP")
             continue
 
-        if vitals["MAP"] is not None and vitals["MAP"] < 60:
-            take_action(15)
-            continue
-
-        if vitals["RR"] is None and "Breathing" not in examined:
+        if "Breathing" not in examined:
             take_action(4)
             examined.add("Breathing")
             continue
 
-        if vitals["RR"] is not None and vitals["RR"] < 8:
+        if events[12] > 0:
+            take_action(29)
+            continue
+
+        if (vitals["Sats"] is not None and vitals["Sats"] < 88):
+            take_action(30)
+            continue
+
+        if (vitals["MAP"] is not None and vitals["MAP"] < 60):
+            take_action(15)
+            continue
+
+        if (vitals["RR"] is not None and vitals["RR"] < 8):
             take_action(29)
             continue
 
@@ -74,9 +78,9 @@ def stabilize():
             take_action(24)
             continue
 
-        if vitals["HR"] is not None:
+        if vitals["HR"]:
             if vitals["HR"] > 150:
-                take_action(9)
+                take_action(9)  # Use adenosine for tachyarrhythmia
                 continue
             elif vitals["HR"] < 50:
                 take_action(12)
